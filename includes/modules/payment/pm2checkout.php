@@ -133,7 +133,7 @@
 
         $payment_error_return = 'pm_2checkout_cc_owner_firstname=' . urlencode($_POST['pm_2checkout_cc_owner_firstname']) . '&pm_2checkout_cc_owner_lastname=' . urlencode($_POST['pm_2checkout_cc_owner_lastname']) . '&pm_2checkout_cc_expires_month=' . urlencode($_POST['pm_2checkout_cc_expires_month']) . '&pm_2checkout_cc_expires_year=' . urlencode($_POST['pm_2checkout_cc_expires_year']) . '&pm_2checkout_cc_cvv=' . urlencode($_POST['pm_2checkout_cc_cvv']);
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $payment_error_return, 'SSL'));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
       }
 
       $this->cc_card_type = $_POST['pm_2checkout_cc_type'];
@@ -194,7 +194,7 @@
                                osc_draw_hidden_field('x_ship_to_state', $order->delivery['state']) .
                                osc_draw_hidden_field('x_ship_to_zip', $order->delivery['postcode']) .
                                osc_draw_hidden_field('x_ship_to_country', $order->delivery['country']['title']) .
-                               osc_draw_hidden_field('x_receipt_link_url', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL')) .
+                               osc_draw_hidden_field('x_receipt_link_url', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
                                osc_draw_hidden_field('x_email_merchant', ((MODULE_PAYMENT_2CHECKOUT_EMAIL_MERCHANT == 'True') ? 'TRUE' : 'FALSE'));
 
       return $process_button_string;
@@ -210,7 +210,7 @@
       if ($_POST['x_response_code'] != '1') {
         $messageStack->add_session('checkout_payment', MODULE_PAYMENT_2CHECKOUT_TEXT_ERROR_MESSAGE, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
 

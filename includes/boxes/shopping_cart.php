@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: shopping_cart.php,v 1.20 2003/12/18 23:27:00 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -17,7 +17,7 @@
   $info_box_contents = array();
   $info_box_contents[] = array('text' => BOX_HEADING_SHOPPING_CART);
 
-  new infoBoxHeading($info_box_contents, false, true, tep_href_link(FILENAME_SHOPPING_CART));
+  new infoBoxHeading($info_box_contents, false, true, tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
 
   $cart_contents_string = '';
   if ($cart->count_contents() > 0) {

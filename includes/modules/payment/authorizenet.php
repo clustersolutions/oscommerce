@@ -250,7 +250,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
           $payment_error_return = 'payment_error=' . $this->code . '&error=' . urlencode($error) . '&authorizenet_cc_owner=' . urlencode($_POST['authorizenet_cc_owner']) . '&authorizenet_cc_expires_month=' . $_POST['authorizenet_cc_expires_month'] . '&authorizenet_cc_expires_year=' . $_POST['authorizenet_cc_expires_year'];
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $payment_error_return, 'SSL'));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
       }
 
         $this->cc_card_owner = $_POST['ipayment_cc_owner'];
@@ -378,7 +378,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
         $gw_vars = $this->make_gateway_vars();
         $sequence = rand(1, 1000);
         $gw_vars = array_merge($gw_vars, $this->InsertFP(MODULE_PAYMENT_AUTHORIZENET_LOGIN, MODULE_PAYMENT_AUTHORIZENET_TXNKEY, $gw_vars['X_Amount'], $sequence));
-        $gw_vars['x_Relay_URL'] = tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL', false);
+        $gw_vars['x_Relay_URL'] = tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', false);
         $gw_vars['x_Relay_Response'] = 'TRUE';
         $gw_vars['x_delim_data'] = 'TRUE';
         $gw_vars['x_delim_char'] = '|';
@@ -466,10 +466,10 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
       if ($x_response_code == '1') return;
       if ($x_response_code == '2') {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_DECLINED_MESSAGE.$x_response_reason_text), 'SSL', true, false));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_DECLINED_MESSAGE.$x_response_reason_text), 'SSL', true, false));
       }
       // Code 3 is an error - but anything else is an error too (IMHO)
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_ERROR_MESSAGE.$x_response_reason_text) . '&error=' . urlencode($x_response_reason_text), 'SSL', true, false));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_ERROR_MESSAGE.$x_response_reason_text) . '&error=' . urlencode($x_response_reason_text), 'SSL', true, false));
     }
 
     function after_process() {

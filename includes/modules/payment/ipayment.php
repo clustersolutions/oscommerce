@@ -136,7 +136,7 @@
 
         $payment_error_return = 'ipayment_cc_owner=' . urlencode($_POST['ipayment_cc_owner']) . '&ipayment_cc_expires_month=' . urlencode($_POST['ipayment_cc_expires_month']) . '&ipayment_cc_expires_year=' . urlencode($_POST['ipayment_cc_expires_year']) . '&ipayment_cc_checkcode=' . urlencode($_POST['ipayment_cc_checkcode']);
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $payment_error_return, 'SSL'));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
       }
 
       $this->cc_card_owner = $_POST['ipayment_cc_owner'];
@@ -214,8 +214,8 @@
                                osc_draw_hidden_field('addr_email', $order->customer['email_address']) .
                                osc_draw_hidden_field('error_lang', ($osC_Session->value('language') == 'english') ? 'en' : 'de') .
                                osc_draw_hidden_field('silent', '1') .
-                               osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&' . $payment_error_return, 'SSL')) .
-                               osc_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL')) .
+                               osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code . '&' . $payment_error_return, 'SSL')) .
+                               osc_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
                                osc_draw_hidden_field('cc_number', $this->cc_card_number) .
                                osc_draw_hidden_field('cc_expdate_month', $this->cc_expiry_month) .
                                osc_draw_hidden_field('cc_expdate_year', $this->cc_expiry_year);

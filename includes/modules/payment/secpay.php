@@ -141,8 +141,8 @@
                                osc_draw_hidden_field('currency', $sec_currency) .
                                osc_draw_hidden_field('order', $order_details) .
                                osc_draw_hidden_field('digest', $digest) .
-                               osc_draw_hidden_field('callback', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL', false) . ';' . tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL', false)) .
-                               osc_draw_hidden_field('backcallback', tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL', false)) .
+                               osc_draw_hidden_field('callback', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', false) . ';' . tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code, 'SSL', false)) .
+                               osc_draw_hidden_field('backcallback', tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', false)) .
                                osc_draw_hidden_field($osC_Session->name, $osC_Session->id) .
                                osc_draw_hidden_field('options', 'test_status=' . $test_status . ',dups=false,cb_flds=' . $osC_Session->name);
 
@@ -159,10 +159,10 @@
       if ($_GET['valid'] == 'true') {
         list($REQUEST_URI) = split("hash=", $_SERVER['REQUEST_URI']);
         if ($_GET['hash'] != MD5($REQUEST_URI . MODULE_PAYMENT_SECPAY_DIGEST_KEY)) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $osC_Session->name . '=' . $_GET[$osC_Session->name] . '&payment_error=' . $this->code, 'SSL', false, false));
+          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $osC_Session->name . '=' . $_GET[$osC_Session->name] . '&payment_error=' . $this->code, 'SSL', false, false));
         }
       } else {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $osC_Session->name . '=' . $_GET[$osC_Session->name] . '&payment_error=' . $this->code, 'SSL', false, false));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $osC_Session->name . '=' . $_GET[$osC_Session->name] . '&payment_error=' . $this->code, 'SSL', false, false));
       }
     }
 

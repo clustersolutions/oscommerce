@@ -19,7 +19,7 @@
     $info_box_contents = array();
     $info_box_contents[] = array('text' => BOX_HEADING_NOTIFICATIONS);
 
-    new infoBoxHeading($info_box_contents, false, false, tep_href_link(FILENAME_ACCOUNT_NOTIFICATIONS, '', 'SSL'));
+    new infoBoxHeading($info_box_contents, false, false, tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL'));
 
     if ($osC_Customer->isLoggedOn()) {
       $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');

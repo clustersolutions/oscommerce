@@ -517,13 +517,13 @@
       return $this->result;
     }
 
-    function setBatchLimit($batch_number, $maximum_rows, $select_field = '') {
+    function setBatchLimit($batch_number = 1, $maximum_rows = 20, $select_field = '') {
       $this->batch_query = true;
-      $this->batch_number = $batch_number;
+      $this->batch_number = (is_numeric($batch_number) ? $batch_number : 1);
       $this->batch_rows = $maximum_rows;
       $this->batch_select_field = (empty($select_field) ? '*' : $select_field);
 
-      $from = ($batch_number * $maximum_rows) - $maximum_rows;
+      $from = ($this->batch_number * $maximum_rows) - $maximum_rows;
 
       $this->sql_query = $this->db_class->setBatchLimit($this->sql_query, $from, $maximum_rows);
 

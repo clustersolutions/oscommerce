@@ -110,7 +110,7 @@
     }
 
     if (DISPLAY_CART == 'true') {
-      $goto =  FILENAME_SHOPPING_CART;
+      $goto =  FILENAME_CHECKOUT;
       $parameters = array('action', 'cPath', 'products_id', 'pid');
     } else {
       $goto = basename($_SERVER['PHP_SELF']);
@@ -122,14 +122,15 @@
     }
 
     switch ($_GET['action']) {
+      // customer wants to remove a product from their shopping cart
+      case 'cartRemove' :     $cart->remove($_GET['products_id']);
+
+                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
+                              break;
       // customer wants to update the product quantity in their shopping cart
       case 'update_product' : for ($i=0, $n=sizeof($_POST['products_id']); $i<$n; $i++) {
-                                if (isset($_POST['cart_delete']) && is_array($_POST['cart_delete']) && in_array($_POST['products_id'][$i], $_POST['cart_delete'])) {
-                                  $cart->remove($_POST['products_id'][$i]);
-                                } else {
-                                  $attributes = (isset($_POST['id']) && isset($_POST['id'][$_POST['products_id'][$i]])) ? $_POST['id'][$_POST['products_id'][$i]] : '';
-                                  $cart->add_cart($_POST['products_id'][$i], $_POST['cart_quantity'][$i], $attributes, false);
-                                }
+                                $attributes = (isset($_POST['id']) && isset($_POST['id'][$_POST['products_id'][$i]])) ? $_POST['id'][$_POST['products_id'][$i]] : '';
+                                $cart->add_cart($_POST['products_id'][$i], $_POST['cart_quantity'][$i], $attributes, false);
                               }
 
                               tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));

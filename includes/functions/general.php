@@ -146,8 +146,8 @@
     if (is_array($_GET) && (sizeof($_GET) > 0)) {
       reset($_GET);
       while (list($key, $value) = each($_GET)) {
-        if ( (is_string($value) && (strlen($value) > 0)) && ($key != $osC_Session->name) && ($key != 'error') && (!in_array($key, $exclude_array)) && ($key != 'x') && ($key != 'y') ) {
-          $get_url .= $key . '=' . rawurlencode($value) . '&';
+        if ( ($key != $osC_Session->name) && ($key != 'error') && (!in_array($key, $exclude_array)) && ($key != 'x') && ($key != 'y') ) {
+          $get_url .= $key . (empty($value) ? '&' : '=' . rawurlencode($value) . '&');
         }
       }
     }

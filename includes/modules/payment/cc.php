@@ -133,7 +133,7 @@
 
         $payment_error_return = 'cc_owner=' . urlencode($_POST['cc_owner']) . '&cc_expires_month=' . urlencode($_POST['cc_expires_month']) . '&cc_expires_year=' . urlencode($_POST['cc_expires_year']);
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $payment_error_return, 'SSL'));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
       }
 
       $this->cc_card_type = $_POST['cc_type'];

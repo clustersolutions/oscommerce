@@ -109,11 +109,11 @@
                                osc_draw_hidden_field('email', $order->customer['email_address']) .
                                osc_draw_hidden_field('shipping', number_format($order->info['shipping_cost'] * $osC_Currencies->value($my_currency), $osC_Currencies->decimalPlaces($my_currency))) .
                                osc_draw_hidden_field('currency_code', $my_currency) .
-                               osc_draw_hidden_field('return', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL')) .
+                               osc_draw_hidden_field('return', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
                                osc_draw_hidden_field('rm', '2') .
                                tep_draw_hidden_field('bn', 'osCommerce') .
                                osc_draw_hidden_field('no_note', '1') .
-                               osc_draw_hidden_field('cancel_return', tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+                               osc_draw_hidden_field('cancel_return', tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
 
       return $process_button_string;
     }

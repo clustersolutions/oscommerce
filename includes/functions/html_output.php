@@ -189,8 +189,8 @@
     return $field;
   }
 
-  function osc_draw_password_field($name, $value = '', $parameters = '', $required = false) {
-    return osc_draw_input_field($name, $value, $parameters, $required, 'password', false);
+  function osc_draw_password_field($name, $parameters = '', $required = false) {
+    return osc_draw_input_field($name, '', $parameters, $required, 'password', false);
   }
 
   function osc_draw_selection_field($name, $type, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
