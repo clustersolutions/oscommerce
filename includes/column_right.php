@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: column_right.php,v 1.19 2004/04/13 07:35:08 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,9 +18,13 @@
 
   if (isset($_GET['products_id'])) {
     if ($osC_Customer->isLoggedOn()) {
-      $check_query = tep_db_query("select count(*) as count from " . TABLE_CUSTOMERS_INFO . " where customers_info_id = '" . (int)$osC_Customer->id . "' and global_product_notifications = '1'");
-      $check = tep_db_fetch_array($check_query);
-      if ($check['count'] > 0) {
+      $Qcheck = $osC_Database->query('select count(*) as count from :table_customers_info where customers_info_id = :customers_info_id and global_product_notifications = :global_product_notifications');
+      $Qcheck->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
+      $Qcheck->bindInt(':customers_info_id', $osC_Customer->id);
+      $Qcheck->bindInt(':global_product_notifications', 1);
+      $Qcheck->execute();
+
+      if ($Qcheck->valueInt('count') > 0) {
         include(DIR_WS_BOXES . 'best_sellers.php');
       } else {
         include(DIR_WS_BOXES . 'product_notifications.php');
