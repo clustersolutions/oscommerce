@@ -1407,6 +1407,32 @@
     return $valid_address;
   }
 
+  function tep_validate_credit_card($card_number) {
+    $cardNumber = strrev($card_number);
+    $numSum = 0;
+
+    for ($i=0; $i<strlen($cardNumber); $i++) {
+      $currentNum = substr($cardNumber, $i, 1);
+
+// Double every second digit
+      if ($i % 2 == 1) {
+        $currentNum *= 2;
+      }
+
+// Add digits of 2-digit numbers together
+      if ($currentNum > 9) {
+        $firstNum = $currentNum % 10;
+        $secondNum = ($currentNum - $firstNum) / 10;
+        $currentNum = $firstNum + $secondNum;
+      }
+
+      $numSum += $currentNum;
+    }
+
+// If the total has no remainder it's OK
+    return ($numSum % 10 == 0);
+  }
+
 ////
 // Creates a pull-down list of countries
   function tep_get_country_list($name, $selected = '', $parameters = '', $required = false) {
