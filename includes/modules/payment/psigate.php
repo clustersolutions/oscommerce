@@ -175,7 +175,7 @@
     }
 
     function process_button() {
-      global $order, $osC_Currencies;
+      global $osC_Database, $order, $osC_Currencies;
 
       if (PHP_VERSION < 4.1) {
         global $_POST;
@@ -225,10 +225,12 @@
                                osc_draw_hidden_field('Bcity', $order->billing['city']);
 
       if ($order->billing['country']['iso_code_2'] == 'US') {
-        $billing_state_query = tep_db_query("select zone_code from " . TABLE_ZONES . " where zone_id = '" . (int)$order->billing['zone_id'] . "'");
-        $billing_state = tep_db_fetch_array($billing_state_query);
+        $Qstate = $osC_Database->query('select zone_code from :table_zones where zone_id = :zone_id');
+        $Qstate->bindTable(':table_zones', TABLE_ZONES);
+        $Qstate->bindInt(':zone_id', $order->billing['zone_id']);
+        $Qstate->execute();
 
-        $process_button_string .= osc_draw_hidden_field('Bstate', $billing_state['zone_code']);
+        $process_button_string .= osc_draw_hidden_field('Bstate', $Qstate->value('zone_code'));
       } else {
         $process_button_string .= osc_draw_hidden_field('Bstate', $order->billing['state']);
       }
