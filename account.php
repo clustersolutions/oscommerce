@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: account.php,v 1.62 2003/11/17 16:27:59 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -95,23 +95,31 @@ function rowOutEffect(object) {
                 <td class="main" align="center" valign="top" width="130"><?php echo '<b>' . OVERVIEW_PREVIOUS_ORDERS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
                 <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-    $orders_query = tep_db_query("select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from " . TABLE_ORDERS . " o, " . TABLE_ORDERS_TOTAL . " ot, " . TABLE_ORDERS_STATUS . " s where o.customers_id = '" . (int)$osC_Customer->id . "' and o.orders_id = ot.orders_id and ot.class = 'ot_total' and o.orders_status = s.orders_status_id and s.language_id = '" . (int)$osC_Session->value('languages_id') . "' order by orders_id desc limit 3");
-    while ($orders = tep_db_fetch_array($orders_query)) {
-      if (tep_not_null($orders['delivery_name'])) {
-        $order_name = $orders['delivery_name'];
-        $order_country = $orders['delivery_country'];
+    $Qorders = $osC_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = :class and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc limit 3');
+    $Qorders->bindTable(':table_orders', TABLE_ORDERS);
+    $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
+    $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+    $Qorders->bindInt(':customers_id', $osC_Customer->id);
+    $Qorders->bindValue(':class', 'ot_total');
+    $Qorders->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qorders->execute();
+
+    while ($Qorders->next()) {
+      if (tep_not_null($Qorders->value('delivery_name'))) {
+        $order_name = $Qorders->value('delivery_name');
+        $order_country = $Qorders->value('delivery_country');
       } else {
-        $order_name = $orders['billing_name'];
-        $order_country = $orders['billing_country'];
+        $order_name = $Qorders->value('billing_name');
+        $order_country = $Qorders->value('billing_country');
       }
 ?>
-                  <tr class="moduleRow" onMouseOver="rowOverEffect(this)" onMouseOut="rowOutEffect(this)" onClick="document.location.href='<?php echo tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $orders['orders_id'], 'SSL'); ?>'">
-                    <td class="main" width="80"><?php echo tep_date_short($orders['date_purchased']); ?></td>
-                    <td class="main"><?php echo '#' . $orders['orders_id']; ?></td>
+                  <tr class="moduleRow" onMouseOver="rowOverEffect(this)" onMouseOut="rowOutEffect(this)" onClick="document.location.href='<?php echo tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $Qorders->valueInt('orders_id'), 'SSL'); ?>'">
+                    <td class="main" width="80"><?php echo tep_date_short($Qorders->value('date_purchased')); ?></td>
+                    <td class="main"><?php echo '#' . $Qorders->valueInt('orders_id'); ?></td>
                     <td class="main"><?php echo tep_output_string_protected($order_name) . ', ' . $order_country; ?></td>
-                    <td class="main"><?php echo $orders['orders_status_name']; ?></td>
-                    <td class="main" align="right"><?php echo $orders['order_total']; ?></td>
-                    <td class="main" align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $orders['orders_id'], 'SSL') . '">' . tep_image_button('small_view.gif', SMALL_IMAGE_BUTTON_VIEW) . '</a>'; ?></td>
+                    <td class="main"><?php echo $Qorders->value('orders_status_name'); ?></td>
+                    <td class="main" align="right"><?php echo $Qorders->value('order_total'); ?></td>
+                    <td class="main" align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image_button('small_view.gif', SMALL_IMAGE_BUTTON_VIEW) . '</a>'; ?></td>
                   </tr>
 <?php
     }

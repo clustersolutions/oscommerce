@@ -1,4 +1,4 @@
-# $Id: oscommerce.sql,v 1.122 2004/11/01 09:49:02 sparky Exp $
+# $Id$
 #
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
@@ -494,7 +494,7 @@ CREATE TABLE osc_reviews (
   date_added datetime,
   last_modified datetime,
   reviews_read int(5) NOT NULL default '0',
-  reviews_status tinyint(1) NOT NULL,  
+  reviews_status tinyint(1) NOT NULL,
   PRIMARY KEY (reviews_id)
 );
 
@@ -776,6 +776,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Moderate Reviews', 'SERVICE_REVIEW_ENABLE_MODERATION', '-1', 'Should reviews be approved by store admin.', '6', '0', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Special Products', 'MAX_DISPLAY_SPECIAL_PRODUCTS', '9', 'Maximum number of products on special to display', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Selection of Products on Special', 'MAX_RANDOM_SELECT_SPECIALS', '10', 'How many records to select from to choose one random product special to display', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Duplicate Banners', 'SERVICE_BANNER_SHOW_DUPLICATE', 'False', 'Show duplicate banners in the same banner group on the same page?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
 
 INSERT INTO osc_configuration_group VALUES ('1', 'My Store', 'General information about my store', '1', '1');
 INSERT INTO osc_configuration_group VALUES ('2', 'Minimum Values', 'The minimum values for functions / data', '2', '1');

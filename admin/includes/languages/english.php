@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: english.php,v 1.128 2004/11/01 09:43:12 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -265,7 +265,7 @@ define('ICON_ORDERS', 'Orders');
 define('ICON_PRODUCTS', 'Products');
 
 // constants for use in tep_prev_next_display function
-define('TEXT_RESULT_PAGE', 'Page&nbsp;%s&nbsp;of %d');
+define('TEXT_RESULT_PAGE', 'Page&nbsp;%s&nbsp;of&nbsp;%d');
 define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> banners)');
 define('TEXT_DISPLAY_NUMBER_OF_CATEGORIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> categories)');
 define('TEXT_DISPLAY_NUMBER_OF_COUNTRIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> countries)');

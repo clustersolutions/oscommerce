@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: account_history_info.php,v 1.101 2003/12/18 23:27:00 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,10 +22,12 @@
     tep_redirect(tep_href_link(FILENAME_ACCOUNT_HISTORY, '', 'SSL'));
   }
 
-  $customer_info_query = tep_db_query("select customers_id from " . TABLE_ORDERS . " where orders_id = '". (int)$_GET['order_id'] . "'");
-  $customer_info = tep_db_fetch_array($customer_info_query);
+  $Qcheck = $osC_Database->query('select customers_id from :table_orders where orders_id = :orders_id');
+  $Qcheck->bindTable(':table_orders', TABLE_ORDERS);
+  $Qcheck->bindInt(':orders_id', $_GET['order_id']);
+  $Qcheck->execute();
 
-  if ($customer_info['customers_id'] != $osC_Customer->id) {
+  if ($Qcheck->valueInt('customers_id') != $osC_Customer->id) {
     tep_redirect(tep_href_link(FILENAME_ACCOUNT_HISTORY, '', 'SSL'));
   }
 
@@ -212,12 +214,18 @@
           <tr class="infoBoxContents">
             <td valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  $statuses_query = tep_db_query("select os.orders_status_name, osh.date_added, osh.comments from " . TABLE_ORDERS_STATUS . " os, " . TABLE_ORDERS_STATUS_HISTORY . " osh where osh.orders_id = '" . (int)$_GET['order_id'] . "' and osh.orders_status_id = os.orders_status_id and os.language_id = '" . (int)$osC_Session->value('languages_id') . "' order by osh.date_added");
-  while ($statuses = tep_db_fetch_array($statuses_query)) {
+  $Qstatus = $osC_Database->query('select os.orders_status_name, osh.date_added, osh.comments from :table_orders_status os, :table_orders_status_history osh where osh.orders_id = :orders_id and osh.orders_status_id = os.orders_status_id and os.language_id = :language_id order by osh.date_added');
+  $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+  $Qstatus->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
+  $Qstatus->bindInt(':orders_id', $_GET['order_id']);
+  $Qstatus->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qstatus->execute();
+
+  while ($Qstatus->next()) {
     echo '              <tr>' . "\n" .
-         '                <td class="main" valign="top" width="70">' . tep_date_short($statuses['date_added']) . '</td>' . "\n" .
-         '                <td class="main" valign="top" width="70">' . $statuses['orders_status_name'] . '</td>' . "\n" .
-         '                <td class="main" valign="top">' . (empty($statuses['comments']) ? '&nbsp;' : nl2br(tep_output_string_protected($statuses['comments']))) . '</td>' . "\n" .
+         '                <td class="main" valign="top" width="70">' . tep_date_short($Qstatus->value('date_added')) . '</td>' . "\n" .
+         '                <td class="main" valign="top" width="70">' . $Qstatus->value('orders_status_name') . '</td>' . "\n" .
+         '                <td class="main" valign="top">' . (tep_not_null($Qstatus->valueProtected('comments')) ? nl2br($Qstatus->valueProtected('comments')) : '&nbsp;') . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: checkout_shipping_address.php,v 1.20 2004/06/08 15:19:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -194,10 +194,13 @@
 
       $osC_Session->set('sendto', $_POST['address']);
 
-      $check_address_query = tep_db_query("select count(*) as total from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$osC_Customer->id . "' and address_book_id = '" . (int)$osC_Session->value('sendto') . "'");
-      $check_address = tep_db_fetch_array($check_address_query);
+      $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
+      $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+      $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+      $Qcheck->bindInt(':address_book_id', $osC_Session->value('sendto'));
+      $Qcheck->execute();
 
-      if ($check_address['total'] == '1') {
+      if ($Qcheck->valueInt('total') == 1) {
         if ($reset_shipping == true) {
           $osC_Session->remove('shipping');
         }
@@ -380,23 +383,27 @@ function check_form_optional(form_name) {
 <?php
       $radio_buttons = 0;
 
-      $addresses_query = tep_db_query("select address_book_id, entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$osC_Customer->id . "'");
-      while ($addresses = tep_db_fetch_array($addresses_query)) {
-        $format_id = tep_get_address_format_id($addresses['country_id']);
+      $Qaddresses = $osC_Database->query('select address_book_id, entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from :table_address_book where customers_id = :customers_id');
+      $Qaddresses->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+      $Qaddresses->bindInt(':customers_id', $osC_Customer->id);
+      $Qaddresses->execute();
+
+      while ($Qaddresses->next()) {
+        $format_id = tep_get_address_format_id($Qaddresses->valueInt('country_id'));
 ?>
               <tr>
                 <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
                 <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-       if ($addresses['address_book_id'] == $osC_Session->value('sendto')) {
+       if ($Qaddresses->valueInt('address_book_id') == $osC_Session->value('sendto')) {
           echo '                  <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
         } else {
           echo '                  <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
         }
 ?>
                     <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                    <td class="main" colspan="2"><b><?php echo tep_output_string_protected($addresses['firstname'] . ' ' . $addresses['lastname']); ?></b></td>
-                    <td class="main" align="right"><?php echo osc_draw_radio_field('address', $addresses['address_book_id'], $osC_Session->value('sendto')); ?></td>
+                    <td class="main" colspan="2"><b><?php echo $Qaddresses->valueProtected('firstname') . ' ' . $Qaddresses->valueProtected('lastname'); ?></b></td>
+                    <td class="main" align="right"><?php echo osc_draw_radio_field('address', $Qaddresses->valueInt('address_book_id'), $osC_Session->value('sendto')); ?></td>
                     <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
                   </tr>
                   <tr>
@@ -404,7 +411,7 @@ function check_form_optional(form_name) {
                     <td colspan="3"><table border="0" cellspacing="0" cellpadding="2">
                       <tr>
                         <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                        <td class="main"><?php echo tep_address_format($format_id, $addresses, true, ' ', ', '); ?></td>
+                        <td class="main"><?php echo tep_address_format($format_id, $Qaddresses->toArray(), true, ' ', ', '); ?></td>
                         <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
                       </tr>
                     </table></td>

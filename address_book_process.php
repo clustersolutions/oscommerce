@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: address_book_process.php,v 1.84 2004/05/24 10:53:21 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,9 +22,15 @@
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_ADDRESS_BOOK_PROCESS);
 
   if (isset($_GET['action']) && ($_GET['action'] == 'deleteconfirm') && isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    tep_db_query("delete from " . TABLE_ADDRESS_BOOK . " where address_book_id = '" . (int)$_GET['delete'] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
+    $Qdelete = $osC_Database->query('delete from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+    $Qdelete->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+    $Qdelete->bindInt(':address_book_id', $_GET['delete']);
+    $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+    $Qdelete->execute();
 
-    $messageStack->add_session('addressbook', SUCCESS_ADDRESS_BOOK_ENTRY_DELETED, 'success');
+    if ($Qdelete->affectedRows() === 1) {
+      $messageStack->add_session('addressbook', SUCCESS_ADDRESS_BOOK_ENTRY_DELETED, 'success');
+    }
 
     tep_redirect(tep_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL'));
   }
@@ -180,25 +186,32 @@
   }
 
   if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
-    $entry_query = tep_db_query("select entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_zone_id, entry_country_id, entry_telephone, entry_fax from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$osC_Customer->id . "' and address_book_id = '" . (int)$_GET['edit'] . "'");
+    $Qentry = $osC_Database->query('select entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_zone_id, entry_country_id, entry_telephone, entry_fax from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
+    $Qentry->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+    $Qentry->bindInt(':customers_id', $osC_Customer->id);
+    $Qentry->bindInt(':address_book_id', $_GET['edit']);
+    $Qentry->execute();
 
-    if (!tep_db_num_rows($entry_query)) {
+    if ($Qentry->numberOfRows() < 1) {
       $messageStack->add_session('addressbook', ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY);
 
       tep_redirect(tep_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL'));
     }
 
-    $entry = tep_db_fetch_array($entry_query);
+    $entry = $Qentry->toArray();
   } elseif (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     if ($_GET['delete'] == $osC_Customer->default_address_id) {
       $messageStack->add_session('addressbook', WARNING_PRIMARY_ADDRESS_DELETION, 'warning');
 
       tep_redirect(tep_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL'));
     } else {
-      $check_query = tep_db_query("select count(*) as total from " . TABLE_ADDRESS_BOOK . " where address_book_id = '" . (int)$_GET['delete'] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
-      $check = tep_db_fetch_array($check_query);
+      $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+      $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+      $Qcheck->bindInt(':address_book_id', $_GET['delete']);
+      $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+      $Qcheck->execute();
 
-      if ($check['total'] < 1) {
+      if ($Qcheck->valueInt('total') < 1) {
         $messageStack->add_session('addressbook', ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY);
 
         tep_redirect(tep_href_link(FILENAME_ADDRESS_BOOK, '', 'SSL'));

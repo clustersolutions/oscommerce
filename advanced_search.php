@@ -1,19 +1,20 @@
 <?php
 /*
-  $Id: advanced_search.php,v 1.54 2004/05/24 10:53:21 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
 
-  $products_date_query = tep_db_query("select min(year(products_date_added)) as min_year, max(year(products_date_added)) as max_year from " . TABLE_PRODUCTS . " limit 1");
-  $products_date = tep_db_fetch_array($products_date_query);
+  $Qproducts = $osC_Database->query('select min(year(products_date_added)) as min_year, max(year(products_date_added)) as max_year from :table_products limit 1');
+  $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+  $Qproducts->execute();
 
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_ADVANCED_SEARCH);
 
@@ -209,11 +210,11 @@ function popupWindow(url) {
               </tr>
               <tr>
                 <td class="fieldKey"><?php echo ENTRY_DATE_FROM; ?></td>
-                <td class="fieldValue"><?php echo tep_draw_date_pull_down_menu('datefrom', '', false, true, true, date('Y') - $products_date['min_year'], 0); ?></td>
+                <td class="fieldValue"><?php echo tep_draw_date_pull_down_menu('datefrom', '', false, true, true, date('Y') - $Qproducts->valueInt('min_year'), 0); ?></td>
               </tr>
               <tr>
                 <td class="fieldKey"><?php echo ENTRY_DATE_TO; ?></td>
-                <td class="fieldValue"><?php echo tep_draw_date_pull_down_menu('dateto', '', true, true, true, date('Y') - $products_date['max_year'], 0); ?></td>
+                <td class="fieldValue"><?php echo tep_draw_date_pull_down_menu('dateto', '', true, true, true, date('Y') - $Qproducts->valueInt('max_year'), 0); ?></td>
               </tr>
             </table></td>
           </tr>

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: checkout_success.php,v 1.53 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -34,18 +34,26 @@
   $breadcrumb->add(NAVBAR_TITLE_1);
   $breadcrumb->add(NAVBAR_TITLE_2);
 
-  $global_query = tep_db_query("select global_product_notifications from " . TABLE_CUSTOMERS_INFO . " where customers_info_id = '" . (int)$osC_Customer->id . "'");
-  $global = tep_db_fetch_array($global_query);
+  $Qglobal = $osC_Database->query('select global_product_notifications from :table_customers_info where customers_info_id =:customers_info_id');
+  $Qglobal->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
+  $Qglobal->bindInt(':customers_info_id', $osC_Customer->id);
+  $Qglobal->execute();
 
-  if ($global['global_product_notifications'] != '1') {
-    $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where customers_id = '" . (int)$osC_Customer->id . "' order by date_purchased desc limit 1");
-    $orders = tep_db_fetch_array($orders_query);
+  if ($Qglobal->valueInt('global_product_notifications') !== 1) {
+    $Qorder = $osC_Database->query('select orders_id from :table_orders where customers_id = :customers_id order by date_purchased desc limit 1');
+    $Qorder->bindTable(':table_orders', TABLE_ORDERS);
+    $Qorder->bindInt(':customers_id', $osC_Customer->id);
+    $Qorder->execute();
+
+    $Qproducts = $osC_Database->query('select products_id, products_name from :table_orders_products where orders_id = :orders_id order by products_name');
+    $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+    $Qproducts->bindInt(':orders_id', $Qorder->valueInt('orders_id'));
+    $Qproducts->execute();
 
     $products_array = array();
-    $products_query = tep_db_query("select products_id, products_name from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . (int)$orders['orders_id'] . "' order by products_name");
-    while ($products = tep_db_fetch_array($products_query)) {
-      $products_array[] = array('id' => $products['products_id'],
-                                'text' => $products['products_name']);
+    while ($Qproducts->next()) {
+      $products_array[] = array('id' => $Qproducts->valueInt('products_id'),
+                                'text' => $Qproducts->value('products_name'));
     }
   }
 ?>

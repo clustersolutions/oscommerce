@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: checkout_payment.php,v 1.124 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -57,10 +57,13 @@
     $osC_Session->set('billto', $osC_Customer->default_address_id);
   } else {
 // verify the selected billing address
-    $check_address_query = tep_db_query("select count(*) as total from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$osC_Customer->id . "' and address_book_id = '" . (int)$osC_Session->value('billto') . "'");
-    $check_address = tep_db_fetch_array($check_address_query);
+    $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
+    $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+    $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+    $Qcheck->bindInt(':address_book_id', $osC_Session->value('billto'));
+    $Qcheck->execute();
 
-    if ($check_address['total'] != '1') {
+    if ($Qcheck->valueInt('total') != 1) {
       $osC_Session->set('billto', $osC_Customer->default_address_id);
 
       $osC_Session->remove('payment');
