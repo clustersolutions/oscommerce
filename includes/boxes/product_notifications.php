@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: product_notifications.php,v 1.10 2004/04/13 07:33:53 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,10 +22,13 @@
     new infoBoxHeading($info_box_contents, false, false, tep_href_link(FILENAME_ACCOUNT_NOTIFICATIONS, '', 'SSL'));
 
     if ($osC_Customer->isLoggedOn()) {
-      $check_query = tep_db_query("select count(*) as count from " . TABLE_PRODUCTS_NOTIFICATIONS . " where products_id = '" . (int)$_GET['products_id'] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
-      $check = tep_db_fetch_array($check_query);
+      $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
+      $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
+      $Qcheck->bindInt(':products_id', $_GET['products_id']);
+      $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+      $Qcheck->execute();
 
-      $notification_exists = (($check['count'] > 0) ? true : false);
+      $notification_exists = (($Qcheck->valueInt('count') > 0) ? true : false);
     } else {
       $notification_exists = false;
     }
