@@ -30,7 +30,7 @@
     $updated = false;
 
     if (isset($_POST['product_global']) && is_numeric($_POST['product_global'])) {
-      $product_global = tep_db_prepare_input($_POST['product_global']);
+      $product_global = $_POST['product_global'];
     } else {
       $product_global = '0';
     }
