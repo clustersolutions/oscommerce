@@ -1,23 +1,29 @@
 <?php
 /*
-  $Id: product_listing.php,v 1.49 2004/04/14 17:20:29 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
-  $listing_split = new splitPageResults($listing_sql, MAX_DISPLAY_SEARCH_RESULTS, 'p.products_id');
+  if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+    $_GET['page'] = 1;
+  }
 
-  if ( ($listing_split->number_of_rows > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
+  $Qlisting = $osC_Database->query($listing_sql);
+  $Qlisting->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, 'p.products_id');
+  $Qlisting->execute();
+
+  if ( ($Qlisting->numberOfRows() > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
 ?>
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="smallText"><?php echo $listing_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
-    <td class="smallText" align="right"><?php echo TEXT_RESULT_PAGE . ' ' . $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+    <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
   </tr>
 </table>
 <?php
@@ -70,10 +76,10 @@
                                     'text' => '&nbsp;' . $lc_text . '&nbsp;');
   }
 
-  if ($listing_split->number_of_rows > 0) {
+  if ($Qlisting->numberOfRows() > 0) {
     $rows = 0;
-    $listing_query = tep_db_query($listing_split->sql_query);
-    while ($listing = tep_db_fetch_array($listing_query)) {
+
+    while ($Qlisting->next()) {
       $rows++;
 
       if (($rows/2) == floor($rows/2)) {
@@ -90,47 +96,47 @@
         switch ($column_list[$col]) {
           case 'PRODUCT_LIST_MODEL':
             $lc_align = '';
-            $lc_text = '&nbsp;' . $listing['products_model'] . '&nbsp;';
+            $lc_text = '&nbsp;' . $Qlisting->value('products_model') . '&nbsp;';
             break;
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
             if (isset($_GET['manufacturers_id'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $listing['products_id']) . '">' . $listing['products_name'] . '</a>';
+              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $Qlisting->valueInt('products_id')) . '">' . $Qlisting->value('products_name') . '</a>';
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $listing['products_id']) . '">' . $listing['products_name'] . '</a>&nbsp;';
+              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $Qlisting->valueInt('products_id')) . '">' . $Qlisting->value('products_name') . '</a>&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
             $lc_align = '';
-            $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers_id=' . $listing['manufacturers_id']) . '">' . $listing['manufacturers_name'] . '</a>&nbsp;';
+            $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers_id=' . $Qlisting->valueInt('manufacturers_id')) . '">' . $Qlisting->valueInt('manufacturers_name') . '</a>&nbsp;';
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
-            if (tep_not_null($listing['specials_new_products_price'])) {
-              $lc_text = '&nbsp;<s>' .  $osC_Currencies->displayPrice($listing['products_price'], $listing['products_tax_class_id']) . '</s>&nbsp;&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($listing['specials_new_products_price'], $listing['products_tax_class_id']) . '</span>&nbsp;';
+            if (tep_not_null($Qlisting->value('specials_new_products_price'))) {
+              $lc_text = '&nbsp;<s>' .  $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</s>&nbsp;&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qlisting->value('specials_new_products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</span>&nbsp;';
             } else {
-              $lc_text = '&nbsp;' . $osC_Currencies->displayPrice($listing['products_price'], $listing['products_tax_class_id']) . '&nbsp;';
+              $lc_text = '&nbsp;' . $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_QUANTITY':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $listing['products_quantity'] . '&nbsp;';
+            $lc_text = '&nbsp;' . $Qlisting->valueInt('products_quantity') . '&nbsp;';
             break;
           case 'PRODUCT_LIST_WEIGHT':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $osC_Weight->display($listing['products_weight'], $listing['products_weight_class']) . '&nbsp;';
+            $lc_text = '&nbsp;' . $osC_Weight->display($Qlisting->value('products_weight'), $Qlisting->value('products_weight_class')) . '&nbsp;';
             break;
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers_id'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>';
+              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>';
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>&nbsp;';
+              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $listing['products_id']) . '">' . tep_image_button('button_buy_now.gif', IMAGE_BUTTON_BUY_NOW) . '</a>&nbsp;';
+            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', IMAGE_BUTTON_BUY_NOW) . '</a>&nbsp;';
             break;
         }
 
@@ -151,12 +157,12 @@
     new productListingBox($list_box_contents);
   }
 
-  if ( ($listing_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
+  if ( ($Qlisting->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
 ?>
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="smallText"><?php echo $listing_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
-    <td class="smallText" align="right"><?php echo TEXT_RESULT_PAGE . ' ' . $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+    <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
   </tr>
 </table>
 <?php
