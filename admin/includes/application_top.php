@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: application_top.php,v 1.184 2004/11/29 14:33:43 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -33,9 +33,6 @@
   } else {
     define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
   }
-
-// set php_self in the local scope
-  if (!isset($PHP_SELF)) $PHP_SELF = (isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME']);
 
 // Used in the "Backup Manager" to compress backups
   define('LOCAL_EXE_GZIP', '/usr/bin/gzip');
@@ -104,7 +101,7 @@
 
   setlocale(LC_TIME, LANGUAGE_LOCALE);
 
-  $current_page = basename($PHP_SELF);
+  $current_page = basename($_SERVER['SCRIPT_FILENAME']);
   if (file_exists('includes/languages/' . $osC_Session->value('language') . '/' . $current_page)) {
     include('includes/languages/' . $osC_Session->value('language') . '/' . $current_page);
   }

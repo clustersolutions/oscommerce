@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: services.php,v 1.4 2004/10/28 18:50:12 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -18,7 +18,7 @@
 
   $installed = explode(';', MODULE_SERVICES_INSTALLED);
 
-  $file_extension = substr($PHP_SELF, strrpos($PHP_SELF, '.'));
+  $file_extension = substr(__FILE__, strrpos(__FILE__, '.'));
 
   if (!empty($action)) {
     switch ($action) {
