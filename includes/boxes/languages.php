@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: languages.php,v 1.18 2004/11/24 15:33:37 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
