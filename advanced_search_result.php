@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: advanced_search_result.php,v 1.75 2004/04/16 00:02:02 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -238,9 +238,9 @@
           $where_str .= " " . $search_keywords[$i] . " ";
           break;
         default:
-          $keyword = tep_db_prepare_input($search_keywords[$i]);
-          $where_str .= "(pd.products_name like '%" . tep_db_input($keyword) . "%' or p.products_model like '%" . tep_db_input($keyword) . "%' or m.manufacturers_name like '%" . tep_db_input($keyword) . "%'";
-          if (isset($_GET['search_in_description']) && ($_GET['search_in_description'] == '1')) $where_str .= " or pd.products_description like '%" . tep_db_input($keyword) . "%'";
+          $keyword = tep_sanitize_string($search_keywords[$i]);
+          $where_str .= "(pd.products_name like '%" . addslashes($keyword) . "%' or p.products_model like '%" . addslashes($keyword) . "%' or m.manufacturers_name like '%" . addslashes($keyword) . "%'";
+          if (isset($_GET['search_in_description']) && ($_GET['search_in_description'] == '1')) $where_str .= " or pd.products_description like '%" . addslashes($keyword) . "%'";
           $where_str .= ')';
           break;
       }
