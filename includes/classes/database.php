@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: database.php,v 1.8 2004/10/25 22:19:28 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -547,10 +547,8 @@
 
     function displayBatchLinksPullDown($batch_keyword = 'page', $parameters = '') {
       if (PHP_VERSION < 4.1) {
-        global $_GET;
+        global $_GET, $_SERVER;
       }
-
-      global $PHP_SELF;
 
       $number_of_pages = ceil($this->batch_size / $this->batch_rows);
 
@@ -574,10 +572,10 @@
           }
         }
 
-        $display_links = tep_draw_form($batch_keyword, basename($PHP_SELF), '', 'get');
+        $display_links = tep_draw_form($batch_keyword, basename($_SERVER['PHP_SELF']), '', 'get');
 
         if ($this->batch_number > 1) {
-          $display_links .= '<a href="' . tep_href_link(basename($PHP_SELF), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>';
+          $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>';
         } else {
           $display_links .= PREVNEXT_BUTTON_PREV;
         }
@@ -585,7 +583,7 @@
         $display_links .= '&nbsp;&nbsp;' . sprintf(TEXT_RESULT_PAGE, osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onChange="this.form.submit();"'), $number_of_pages) . '&nbsp;&nbsp;';
 
         if (($this->batch_number < $number_of_pages) && ($number_of_pages != 1)) {
-          $display_links .= '<a href="' . tep_href_link(basename($PHP_SELF), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
+          $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';
         } else {
           $display_links .= PREVNEXT_BUTTON_NEXT;
         }
