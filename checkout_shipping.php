@@ -106,7 +106,7 @@
 // process the selected shipping method
   if (isset($_POST['action']) && ($_POST['action'] == 'process')) {
     if (tep_not_null($_POST['comments'])) {
-      $osC_Session->set('comments', tep_db_prepare_input($_POST['comments']));
+      $osC_Session->set('comments', tep_sanitize_string($_POST['comments']));
     }
 
     if ( (tep_count_shipping_modules() > 0) || ($free_shipping == true) ) {
