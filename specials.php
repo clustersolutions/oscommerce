@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: specials.php,v 1.52 2004/10/30 14:11:51 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,11 @@
   if (!$osC_Services->isStarted('specials')) {
     tep_redirect(tep_href_link(FILENAME_DEFAULT));
   }
-  
+
+  if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+    $_GET['page'] = 1;
+  }
+
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_SPECIALS);
 
   $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_SPECIALS));
@@ -55,16 +59,21 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
 <?php
-  $specials_query_raw = "select p.products_id, pd.products_name, p.products_price, p.products_tax_class_id, p.products_image, s.specials_new_products_price from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_SPECIALS . " s where p.products_status = '1' and s.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = '" . (int)$osC_Session->value('languages_id') . "' and s.status = '1' order by s.specials_date_added DESC";
-  $specials_split = new splitPageResults($specials_query_raw, MAX_DISPLAY_SPECIAL_PRODUCTS);
+  $Qspecials = $osC_Database->query('select p.products_id, pd.products_name, p.products_price, p.products_tax_class_id, p.products_image, s.specials_new_products_price from :table_products p, :table_products_description pd, :table_specials s where p.products_status = 1 and s.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id and s.status = 1 order by s.specials_date_added desc');
+  $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
+  $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+  $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
+  $Qspecials->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qspecials->setBatchLimit($_GET['page'], MAX_DISPLAY_SPECIAL_PRODUCTS);
+  $Qspecials->execute();
 
-  if (($specials_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3'))) {
+  if (($Qspecials->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3'))) {
 ?>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="smallText"><?php echo $specials_split->display_count(TEXT_DISPLAY_NUMBER_OF_SPECIALS); ?></td>
-            <td align="right" class="smallText"><?php echo TEXT_RESULT_PAGE . ' ' . $specials_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+            <td class="smallText"><?php echo $Qspecials->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_SPECIALS); ?></td>
+            <td align="right" class="smallText"><?php echo $Qspecials->displayBatchLinksPullDown(); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -79,11 +88,11 @@
           <tr>
 <?php
     $row = 0;
-    $specials_query = tep_db_query($specials_split->sql_query);
-    while ($specials = tep_db_fetch_array($specials_query)) {
+
+    while ($Qspecials->next()) {
       $row++;
 
-      echo '            <td align="center" width="33%" class="smallText"><a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $specials['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $specials['products_image'], $specials['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br><a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $specials['products_id']) . '">' . $specials['products_name'] . '</a><br><s>' . $osC_Currencies->displayPrice($specials['products_price'], $specials['products_tax_class_id']) . '</s><br><span class="productSpecialPrice">' . $osC_Currencies->displayPrice($specials['specials_new_products_price'], $specials['products_tax_class_id']) . '</span></td>' . "\n";
+      echo '            <td align="center" width="33%" class="smallText"><a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $Qspecials->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qspecials->value('products_image'), $Qspecials->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br><a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $Qspecials->valueInt('products_id')) . '">' . $Qspecials->value('products_name') . '</a><br><s>' . $osC_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s><br><span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span></td>' . "\n";
 
       if ((($row / 3) == floor($row / 3))) {
 ?>
@@ -100,13 +109,13 @@
         </table></td>
       </tr>
 <?php
-  if (($specials_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3'))) {
+  if (($Qspecials->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3'))) {
 ?>
       <tr>
         <td><br><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="smallText"><?php echo $specials_split->display_count(TEXT_DISPLAY_NUMBER_OF_SPECIALS); ?></td>
-            <td align="right" class="smallText"><?php echo TEXT_RESULT_PAGE . ' ' . $specials_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+            <td class="smallText"><?php echo $Qspecials->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_SPECIALS); ?></td>
+            <td align="right" class="smallText"><?php echo $Qspecials->displayBatchLinksPullDown(); ?></td>
           </tr>
         </table></td>
       </tr>

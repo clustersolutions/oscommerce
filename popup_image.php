@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: popup_image.php,v 1.19 2003/11/17 16:28:01 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,14 +14,18 @@
 
   $navigation->remove_current_page();
 
-  $products_query = tep_db_query("select pd.products_name, p.products_image from " . TABLE_PRODUCTS . " p left join " . TABLE_PRODUCTS_DESCRIPTION . " pd on p.products_id = pd.products_id where p.products_status = '1' and p.products_id = '" . (int)$_GET['pID'] . "' and pd.language_id = '" . (int)$osC_Session->value('languages_id') . "'");
-  $products = tep_db_fetch_array($products_query);
+  $Qproducts = $osC_Database->query('select pd.products_name, p.products_image from :table_products p left join :table_products_description pd on p.products_id = pd.products_id where p.products_status = 1 and p.products_id = :products_id and pd.language_id = :language_id');
+  $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+  $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+  $Qproducts->bindInt(':products_id', $_GET['pID']);
+  $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qproducts->execute();
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
-<title><?php echo $products['products_name']; ?></title>
+<title><?php echo $Qproducts->value('products_name'); ?></title>
 <base href="<?php echo (($request_type == 'SSL') ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>">
 <script language="javascript"><!--
 var i=0;
@@ -33,7 +37,7 @@ function resize() {
 //--></script>
 </head>
 <body onload="resize();">
-<?php echo tep_image(DIR_WS_IMAGES . $products['products_image'], $products['products_name']); ?>
+<?php echo tep_image(DIR_WS_IMAGES . $Qproducts->value('products_image'), $Qproducts->value('products_name')); ?>
 </body>
 </html>
 <?php require('includes/application_bottom.php'); ?>

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: redirect.php,v 1.13 2004/11/28 18:32:34 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,27 +29,37 @@
 
     case 'manufacturer':
       if (isset($_GET['manufacturers_id']) && tep_not_null($_GET['manufacturers_id'])) {
-        $manufacturer_query = tep_db_query("select manufacturers_url from " . TABLE_MANUFACTURERS_INFO . " where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and languages_id = '" . (int)$osC_Session->value('languages_id') . "'");
-        if (tep_db_num_rows($manufacturer_query)) {
-// url exists in selected language
-          $manufacturer = tep_db_fetch_array($manufacturer_query);
+        $Qmanufacturer = $osC_Database->query('select manufacturers_url from :table_manufacturers_info where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
+        $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+        $Qmanufacturer->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
+        $Qmanufacturer->bindInt(':languages_id', $osC_Session->value('languages_id'));
+        $Qmanufacturer->execute();
 
-          if (tep_not_null($manufacturer['manufacturers_url'])) {
-            tep_db_query("update " . TABLE_MANUFACTURERS_INFO . " set url_clicked = url_clicked+1, date_last_click = now() where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and languages_id = '" . (int)$osC_Session->value('languages_id') . "'");
+        if ($Qmanufacturer->numberOfRows() && tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
+          $Qupdate = $osC_Database->query('update :table_manufacturers_info set url_clicked = url_clicked+1, date_last_click = now() where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
+          $Qupdate->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+          $Qupdate->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
+          $Qupdate->bindInt(':languages_id', $osC_Session->value('languages_id'));
+          $Qupdate->execute();
 
-            tep_redirect($manufacturer['manufacturers_url']);
-          }
+          tep_redirect($Qmanufacturer->value('manufacturers_url'));
         } else {
 // no url exists for the selected language, lets use the default language then
-          $manufacturer_query = tep_db_query("select mi.languages_id, mi.manufacturers_url from " . TABLE_MANUFACTURERS_INFO . " mi, " . TABLE_LANGUAGES . " l where mi.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and mi.languages_id = l.languages_id and l.code = '" . DEFAULT_LANGUAGE . "'");
-          if (tep_db_num_rows($manufacturer_query)) {
-            $manufacturer = tep_db_fetch_array($manufacturer_query);
+          $Qmanufacturer = $osC_Database->query('select mi.languages_id, mi.manufacturers_url from :table_manufacturers_info mi, :table_languages l where mi.manufacturers_id = :manufacturers_id and mi.languages_id = l.languages_id and l.code = :code');
+          $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+          $Qmanufacturer->bindTable(':table_languages', TABLE_LANGUAGES);
+          $Qmanufacturer->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
+          $Qmanufacturer->bindValue(':code', DEFAULT_LANGUAGE);
+          $Qmanufacturer->execute();
 
-            if (tep_not_null($manufacturer['manufacturers_url'])) {
-              tep_db_query("update " . TABLE_MANUFACTURERS_INFO . " set url_clicked = url_clicked+1, date_last_click = now() where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and languages_id = '" . (int)$manufacturer['languages_id'] . "'");
+          if ($Qmanufacturer->numberOfRows() && tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
+            $Qupdate = $osC_Database->query('update :table_manufacturers_info set url_clicked = url_clicked+1, date_last_click = now() where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
+            $Qupdate->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+            $Qupdate->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
+            $Qupdate->bindInt(':languages_id', $Qmanufacturer->valueInt('languages_id'));
+            $Qupdate->execute();
 
-              tep_redirect($manufacturer['manufacturers_url']);
-            }
+            tep_redirect($Qmanufacturer->value('manufacturers_url'));
           }
         }
       }

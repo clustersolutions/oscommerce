@@ -1,16 +1,20 @@
 <?php
 /*
-  $Id: products_new.php,v 1.31 2004/10/30 14:11:51 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
+
+  if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+    $_GET['page'] = 1;
+  }
 
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_PRODUCTS_NEW);
 
@@ -51,18 +55,21 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
 <?php
-  $products_new_array = array();
+  $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_image, p.products_price, p.products_tax_class_id, p.products_date_added, m.manufacturers_name from :table_products p left join :table_manufacturers m on (p.manufacturers_id = m.manufacturers_id), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc, pd.products_name');
+  $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+  $Qproducts->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+  $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+  $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_PRODUCTS_NEW);
+  $Qproducts->execute();
 
-  $products_new_query_raw = "select p.products_id, pd.products_name, p.products_image, p.products_price, p.products_tax_class_id, p.products_date_added, m.manufacturers_name from " . TABLE_PRODUCTS . " p left join " . TABLE_MANUFACTURERS . " m on (p.manufacturers_id = m.manufacturers_id), " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = pd.products_id and pd.language_id = '" . (int)$osC_Session->value('languages_id') . "' order by p.products_date_added DESC, pd.products_name";
-  $products_new_split = new splitPageResults($products_new_query_raw, MAX_DISPLAY_PRODUCTS_NEW);
-
-  if (($products_new_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3'))) {
+  if ((PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3')) {
 ?>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="smallText"><?php echo $products_new_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS_NEW); ?></td>
-            <td align="right" class="smallText"><?php echo TEXT_RESULT_PAGE . ' ' . $products_new_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+            <td class="smallText"><?php echo $Qproducts->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS_NEW); ?></td>
+            <td align="right" class="smallText"><?php echo $Qproducts->displayBatchLinksPullDown(); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -75,19 +82,18 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  if ($products_new_split->number_of_rows > 0) {
-    $products_new_query = tep_db_query($products_new_split->sql_query);
-    while ($products_new = tep_db_fetch_array($products_new_query)) {
-      if ( ($osC_Services->isStarted('specials')) && ($new_price = $osC_Specials->getPrice($products_new['products_id'])) ) {
-        $products_price = '<s>' . $osC_Currencies->displayPrice($products_new['products_price'], $products_new['products_tax_class_id']) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $products_new['products_tax_class_id']) . '</span>';
+  if ($Qproducts->numberOfRows() > 0) {
+    while ($Qproducts->next()) {
+      if ($osC_Services->isStarted('specials') && ($new_price = $osC_Specials->getPrice($Qproducts->valueInt('products_id')))) {
+        $products_price = '<s>' . $osC_Currencies->displayPrice($Qproducts->value('products_price'), $Qproducts->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $Qproducts->valueInt('products_tax_class_id')) . '</span>';
       } else {
-        $products_price = $osC_Currencies->displayPrice($products_new['products_price'], $products_new['products_tax_class_id']);
+        $products_price = $osC_Currencies->displayPrice($Qproducts->value('products_price'), $Qproducts->valueInt('products_tax_class_id'));
       }
 ?>
           <tr>
-            <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $products_new['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $products_new['products_image'], $products_new['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>'; ?></td>
-            <td valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $products_new['products_id']) . '"><b><u>' . $products_new['products_name'] . '</u></b></a><br>' . TEXT_DATE_ADDED . ' ' . tep_date_long($products_new['products_date_added']) . '<br>' . TEXT_MANUFACTURER . ' ' . $products_new['manufacturers_name'] . '<br><br>' . TEXT_PRICE . ' ' . $products_price; ?></td>
-            <td align="right" valign="middle" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS_NEW, tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $products_new['products_id']) . '">' . tep_image_button('button_in_cart.gif', IMAGE_BUTTON_IN_CART) . '</a>'; ?></td>
+            <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $Qproducts->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qproducts->value('products_image'), $Qproducts->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>'; ?></td>
+            <td valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $Qproducts->valueInt('products_id')) . '"><b><u>' . $Qproducts->value('products_name') . '</u></b></a><br>' . TEXT_DATE_ADDED . ' ' . tep_date_long($Qproducts->value('products_date_added')) . '<br>' . TEXT_MANUFACTURER . ' ' . $Qproducts->value('manufacturers_name') . '<br><br>' . TEXT_PRICE . ' ' . $products_price; ?></td>
+            <td align="right" valign="middle" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS_NEW, tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qproducts->value('products_id')) . '">' . tep_image_button('button_in_cart.gif', IMAGE_BUTTON_IN_CART) . '</a>'; ?></td>
           </tr>
           <tr>
             <td colspan="3"><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
@@ -108,13 +114,13 @@
         </table></td>
       </tr>
 <?php
-  if (($products_new_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3'))) {
+  if ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) {
 ?>
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="smallText"><?php echo $products_new_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS_NEW); ?></td>
-            <td align="right" class="smallText"><?php echo TEXT_RESULT_PAGE . ' ' . $products_new_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
+            <td class="smallText"><?php echo $Qproducts->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS_NEW); ?></td>
+            <td align="right" class="smallText"><?php echo $Qproducts->displayBatchLinksPullDown(); ?></td>
           </tr>
         </table></td>
       </tr>

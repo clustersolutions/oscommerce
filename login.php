@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: login.php,v 1.84 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -21,26 +21,29 @@
 
   $error = false;
   if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
-    $email_address = tep_db_prepare_input($_POST['email_address']);
-    $password = tep_db_prepare_input($_POST['password']);
-
 // Check if email exists
-    $check_customer_query = tep_db_query("select customers_id, customers_password from " . TABLE_CUSTOMERS . " where customers_email_address = '" . tep_db_input($email_address) . "'");
-    if (!tep_db_num_rows($check_customer_query)) {
+    $Qcheck = $osC_Database->query('select customers_id, customers_password from :table_customers where customers_email_address = :customers_email_address');
+    $Qcheck->bindTable(':table_customers', TABLE_CUSTOMERS);
+    $Qcheck->bindValue(':customers_email_address', $_POST['email_address']);
+    $Qcheck->execute();
+
+    if ($Qcheck->numberOfRows() < 1) {
       $error = true;
     } else {
-      $check_customer = tep_db_fetch_array($check_customer_query);
 // Check that password is good
-      if (!tep_validate_password($password, $check_customer['customers_password'])) {
+      if (!tep_validate_password($_POST['password'], $Qcheck->value('customers_password'))) {
         $error = true;
       } else {
         if (SERVICE_SESSION_REGENERATE_ID == 'True') {
           $osC_Session->recreate();
         }
 
-        $osC_Customer->setCustomerData($check_customer['customers_id']);
+        $osC_Customer->setCustomerData($Qcheck->valueInt('customers_id'));
 
-        tep_db_query("update " . TABLE_CUSTOMERS_INFO . " set customers_info_date_of_last_logon = now(), customers_info_number_of_logons = customers_info_number_of_logons+1 where customers_info_id = '" . (int)$osC_Customer->id . "'");
+        $Qupdate = $osC_Database->query('update :table_customers_info set customers_info_date_of_last_logon = now(), customers_info_number_of_logons = customers_info_number_of_logons+1 where customers_info_id = :customers_info_id');
+        $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
+        $Qupdate->bindInt(':customers_info_id', $osC_Customer->id);
+        $Qupdate->execute();
 
 // restore cart contents
         $cart->restore_contents();

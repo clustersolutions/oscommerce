@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: tell_a_friend.php,v 1.45 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,12 +19,17 @@
   }
 
   $valid_product = false;
-  if (isset($_GET['products_id'])) {
-    $product_info_query = tep_db_query("select pd.products_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$osC_Session->value('languages_id') . "'");
-    if (tep_db_num_rows($product_info_query)) {
-      $valid_product = true;
 
-      $product_info = tep_db_fetch_array($product_info_query);
+  if (isset($_GET['products_id'])) {
+    $Qproduct = $osC_Database->query('select pd.products_name from :table_products p, :table_products_description pd where p.products_status = 1 and p.products_id = :products_id and p.products_id = pd.products_id and pd.language_id = :language_id');
+    $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+    $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+    $Qproduct->bindInt(':products_id', $_GET['products_id']);
+    $Qproduct->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qproduct->execute();
+
+    if ($Qproduct->numberOfRows()) {
+      $valid_product = true;
     }
   }
 
@@ -69,7 +74,7 @@
 
     if ($error == false) {
       $email_subject = sprintf(TEXT_EMAIL_SUBJECT, $from_name, STORE_NAME);
-      $email_body = sprintf(TEXT_EMAIL_INTRO, $to_name, $from_name, $product_info['products_name'], STORE_NAME) . "\n\n";
+      $email_body = sprintf(TEXT_EMAIL_INTRO, $to_name, $from_name, $Qproduct->value('products_name'), STORE_NAME) . "\n\n";
 
       if (tep_not_null($message)) {
         $email_body .= $message . "\n\n";
@@ -80,16 +85,13 @@
 
       tep_mail($to_name, $to_email_address, $email_subject, $email_body, $from_name, $from_email_address);
 
-      $messageStack->add_session('header', sprintf(TEXT_EMAIL_SUCCESSFUL_SENT, $product_info['products_name'], tep_output_string_protected($to_name)), 'success');
+      $messageStack->add_session('header', sprintf(TEXT_EMAIL_SUCCESSFUL_SENT, $Qproduct->value('products_name'), tep_output_string_protected($to_name)), 'success');
 
       tep_redirect(tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['products_id']));
     }
   } elseif ($osC_Customer->isLoggedOn()) {
-    $account_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_id = '" . (int)$osC_Customer->id . "'");
-    $account = tep_db_fetch_array($account_query);
-
-    $from_name = $account['customers_firstname'] . ' ' . $account['customers_lastname'];
-    $from_email_address = $account['customers_email_address'];
+    $from_name = $osC_Customer->first_name . ' ' . $osC_Customer->last_name;
+    $from_email_address = $osC_Customer->email_address;
   }
 
   $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_TELL_A_FRIEND, 'products_id=' . $_GET['products_id']));
@@ -120,8 +122,8 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
-            <td class="pageHeading"><?php echo sprintf(HEADING_TITLE, $product_info['products_name']); ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', sprintf(HEADING_TITLE, $product_info['products_name']), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="pageHeading"><?php echo sprintf(HEADING_TITLE, $Qproduct->value('products_name')); ?></td>
+            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', sprintf(HEADING_TITLE, $Qproduct->value('products_name')), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -156,11 +158,11 @@
                 <td><table border="0" cellspacing="0" cellpadding="2">
                   <tr>
                     <td class="main"><?php echo FORM_FIELD_CUSTOMER_NAME; ?></td>
-                    <td class="main"><?php echo osc_draw_input_field('from_name', '', '', true); ?></td>
+                    <td class="main"><?php echo osc_draw_input_field('from_name', $from_name, '', true); ?></td>
                   </tr>
                   <tr>
                     <td class="main"><?php echo FORM_FIELD_CUSTOMER_EMAIL; ?></td>
-                    <td class="main"><?php echo osc_draw_input_field('from_email_address', '', '', true); ?></td>
+                    <td class="main"><?php echo osc_draw_input_field('from_email_address', $from_email_address, '', true); ?></td>
                   </tr>
                 </table></td>
               </tr>

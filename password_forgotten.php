@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: password_forgotten.php,v 1.52 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,18 +15,21 @@
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_PASSWORD_FORGOTTEN);
 
   if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
-    $email_address = tep_db_prepare_input($_POST['email_address']);
+    $Qcheck = $osC_Database->query('select customers_id, customers_firstname, customers_lastname, customers_password from :table_customers where customers_email_address = :customers_email_address');
+    $Qcheck->bindTable(':table_customers', TABLE_CUSTOMERS);
+    $Qcheck->bindValue(':customers_email_address', $_POST['email_address']);
+    $Qcheck->execute();
 
-    $check_customer_query = tep_db_query("select customers_firstname, customers_lastname, customers_password, customers_id from " . TABLE_CUSTOMERS . " where customers_email_address = '" . tep_db_input($email_address) . "'");
-    if (tep_db_num_rows($check_customer_query)) {
-      $check_customer = tep_db_fetch_array($check_customer_query);
-
+    if ($Qcheck->numberOfRows()) {
       $new_password = tep_create_random_value(ACCOUNT_PASSWORD);
-      $crypted_password = tep_encrypt_password($new_password);
 
-      tep_db_query("update " . TABLE_CUSTOMERS . " set customers_password = '" . tep_db_input($crypted_password) . "' where customers_id = '" . (int)$check_customer['customers_id'] . "'");
+      $Qupdate = $osC_Database->query('update :table_customers set customers_password = :customers_password where customers_id = :customers_id');
+      $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
+      $Qupdate->bindValue(':customers_password', tep_encrypt_password($new_password));
+      $Qupdate->bindInt(':customers_id', $Qcheck->valueInt('customers_id'));
+      $Qupdate->execute();
 
-      tep_mail($check_customer['customers_firstname'] . ' ' . $check_customer['customers_lastname'], $email_address, EMAIL_PASSWORD_REMINDER_SUBJECT, sprintf(EMAIL_PASSWORD_REMINDER_BODY, $new_password), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+      tep_mail($Qcheck->valueProtected('customers_firstname') . ' ' . $Qcheck->valueProtected('customers_lastname'), $_POST['email_address'], EMAIL_PASSWORD_REMINDER_SUBJECT, sprintf(EMAIL_PASSWORD_REMINDER_BODY, $new_password), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
       $messageStack->add_session('login', SUCCESS_PASSWORD_SENT, 'success');
 

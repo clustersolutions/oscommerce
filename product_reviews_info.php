@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: product_reviews_info.php,v 1.56 2004/11/01 09:49:01 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,33 +15,46 @@
   if (!$osC_Services->isStarted('reviews')) {
     tep_redirect(tep_href_link(FILENAME_DEFAULT));
   }
-  
-  if (isset($_GET['reviews_id']) && tep_not_null($_GET['reviews_id']) && isset($_GET['products_id']) && tep_not_null($_GET['products_id'])) {
-    $review_check_query = tep_db_query("select count(*) as total from " . TABLE_REVIEWS . " r where r.reviews_id = '" . (int)$_GET['reviews_id'] . "' and r.products_id = '" . (int)$_GET['products_id'] . "' and r.languages_id = '" . (int)$osC_Session->value('languages_id') . "'");
-    $review_check = tep_db_fetch_array($review_check_query);
 
-    if ($review_check['total'] < 1) {
+  if (isset($_GET['reviews_id']) && tep_not_null($_GET['reviews_id']) && isset($_GET['products_id']) && tep_not_null($_GET['products_id'])) {
+    $Qcheck = $osC_Database->query('select count(*) as total from :table_reviews where reviews_id = :reviews_id and products_id = :products_id and languages_id = :languages_id');
+    $Qcheck->bindTable(':table_reviews', TABLE_REVIEWS);
+    $Qcheck->bindInt(':reviews_id', $_GET['reviews_id']);
+    $Qcheck->bindInt(':products_id', $_GET['products_id']);
+    $Qcheck->bindInt(':languages_id', $osC_Session->value('languages_id'));
+    $Qcheck->execute();
+
+    if ($Qcheck->valueInt('total') < 1) {
       tep_redirect(tep_href_link(FILENAME_PRODUCT_REVIEWS, tep_get_all_get_params(array('reviews_id'))));
     }
   } else {
     tep_redirect(tep_href_link(FILENAME_PRODUCT_REVIEWS, tep_get_all_get_params(array('reviews_id'))));
   }
 
-  tep_db_query("update " . TABLE_REVIEWS . " set reviews_read = reviews_read+1 where reviews_id = '" . (int)$_GET['reviews_id'] . "'");
+  $Qupdate = $osC_Database->query('update :table_reviews set reviews_read = reviews_read+1 where reviews_id = :reviews_id');
+  $Qupdate->bindTable(':table_reviews', TABLE_REVIEWS);
+  $Qupdate->bindInt(':reviews_id', $_GET['reviews_id']);
+  $Qupdate->execute();
 
-  $review_query = tep_db_query("select r.reviews_text, r.reviews_rating, r.reviews_id, r.customers_name, r.date_added, r.reviews_read, p.products_id, p.products_price, p.products_tax_class_id, p.products_image, p.products_model, pd.products_name from " . TABLE_REVIEWS . " r, " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where r.reviews_id = '" . (int)$_GET['reviews_id'] . "' and r.languages_id = '" . (int)$osC_Session->value('languages_id') . "' and r.products_id = p.products_id and p.products_status = '1' and p.products_id = pd.products_id and pd.language_id = '". (int)$osC_Session->value('languages_id') . "' and r.reviews_status = 1");
-  $review = tep_db_fetch_array($review_query);
+  $Qreview = $osC_Database->query('select r.reviews_text, r.reviews_rating, r.reviews_id, r.customers_name, r.date_added, r.reviews_read, p.products_id, p.products_price, p.products_tax_class_id, p.products_image, p.products_model, pd.products_name from :table_reviews r, :table_products p, :table_products_description pd where r.reviews_id = :reviews_id and r.languages_id = :languages_id and r.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id and r.reviews_status = 1');
+  $Qreview->bindTable(':table_reviews', TABLE_REVIEWS);
+  $Qreview->bindTable(':table_products', TABLE_PRODUCTS);
+  $Qreview->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+  $Qreview->bindInt(':reviews_id', $_GET['reviews_id']);
+  $Qreview->bindInt(':languages_id', $osC_Session->value('languages_id'));
+  $Qreview->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qreview->execute();
 
-  if ( ($osC_Services->isStarted('specials')) && ($new_price = $osC_Specials->getPrice($review['products_id'])) ) {
-    $products_price = '<s>' . $osC_Currencies->displayPrice($review['products_price'], $review['products_tax_class_id']) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $review['products_tax_class_id']) . '</span>';
+  if ( ($osC_Services->isStarted('specials')) && ($new_price = $osC_Specials->getPrice($Qreview->valueInt('products_id'))) ) {
+    $products_price = '<s>' . $osC_Currencies->displayPrice($Qreview->value('products_price'), $Qreview->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $Qreview->valueInt('products_tax_class_id')) . '</span>';
   } else {
-    $products_price = $osC_Currencies->displayPrice($review['products_price'], $review['products_tax_class_id']);
+    $products_price = $osC_Currencies->displayPrice($Qreview->value('products_price'), $Qreview->valueInt('products_tax_class_id'));
   }
 
-  if (tep_not_null($review['products_model'])) {
-    $products_name = $review['products_name'] . '<br><span class="smallText">[' . $review['products_model'] . ']</span>';
+  if (tep_not_null($Qreview->value('products_model'))) {
+    $products_name = $Qreview->value('products_name') . '<br><span class="smallText">[' . $Qreview->value('products_model') . ']</span>';
   } else {
-    $products_name = $review['products_name'];
+    $products_name = $Qreview->value('products_name');
   }
 
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_PRODUCT_REVIEWS_INFO);
@@ -94,8 +107,8 @@ function popupWindow(url) {
               <tr>
                 <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
                   <tr>
-                    <td class="main"><?php echo '<b>' . sprintf(TEXT_REVIEW_BY, tep_output_string_protected($review['customers_name'])) . '</b>'; ?></td>
-                    <td class="smallText" align="right"><?php echo sprintf(TEXT_REVIEW_DATE_ADDED, tep_date_long($review['date_added'])); ?></td>
+                    <td class="main"><?php echo '<b>' . sprintf(TEXT_REVIEW_BY, $Qreview->valueProtected('customers_name')) . '</b>'; ?></td>
+                    <td class="smallText" align="right"><?php echo sprintf(TEXT_REVIEW_DATE_ADDED, tep_date_long($Qreview->value('date_added'))); ?></td>
                   </tr>
                 </table></td>
               </tr>
@@ -105,7 +118,7 @@ function popupWindow(url) {
                     <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
                       <tr>
                         <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                        <td valign="top" class="main"><?php echo tep_break_string(nl2br(tep_output_string_protected($review['reviews_text'])), 60, '-<br>') . '<br><br><i>' . sprintf(TEXT_REVIEW_RATING, tep_image(DIR_WS_IMAGES . 'stars_' . $review['reviews_rating'] . '.gif', sprintf(TEXT_OF_5_STARS, $review['reviews_rating'])), sprintf(TEXT_OF_5_STARS, $review['reviews_rating'])) . '</i>'; ?></td>
+                        <td valign="top" class="main"><?php echo tep_break_string(nl2br($Qreview->valueProtected('reviews_text')), 60, '-<br>') . '<br><br><i>' . sprintf(TEXT_REVIEW_RATING, tep_image(DIR_WS_IMAGES . 'stars_' . $Qreview->valueInt('reviews_rating') . '.gif', sprintf(TEXT_OF_5_STARS, $Qreview->valueInt('reviews_rating'))), sprintf(TEXT_OF_5_STARS, $Qreview->value('reviews_rating'))) . '</i>'; ?></td>
                         <td width="10" align="right"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
                       </tr>
                     </table></td>
@@ -145,13 +158,13 @@ function popupWindow(url) {
               <tr>
                 <td align="center" class="smallText">
 <?php
-  if (tep_not_null($review['products_image'])) {
+  if (tep_not_null($Qreview->value('products_image'))) {
 ?>
 <script language="javascript"><!--
-document.write('<?php echo '<a href="javascript:popupWindow(\\\'' . tep_href_link(FILENAME_POPUP_IMAGE, 'pID=' . $review['products_id']) . '\\\')">' . tep_image(DIR_WS_IMAGES . $review['products_image'], addslashes($review['products_name']), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br>' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>');
+document.write('<?php echo '<a href="javascript:popupWindow(\\\'' . tep_href_link(FILENAME_POPUP_IMAGE, 'pID=' . $Qreview->valueInt('products_id')) . '\\\')">' . tep_image(DIR_WS_IMAGES . $Qreview->value('products_image'), addslashes($Qreview->value('products_name')), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br>' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>');
 //--></script>
 <noscript>
-<?php echo '<a href="' . tep_href_link(DIR_WS_IMAGES . $review['products_image']) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $review['products_image'], $review['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br>' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>
+<?php echo '<a href="' . tep_href_link(DIR_WS_IMAGES . $Qreview->value('products_image')) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $Qreview->value('products_image'), $Qreview->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br>' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>
 </noscript>
 <?php
   }

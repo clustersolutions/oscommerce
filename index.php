@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: index.php,v 1.12 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,14 +15,20 @@
 // the following cPath references come from application_top.php
   $category_depth = 'top';
   if (isset($cPath) && tep_not_null($cPath)) {
-    $categories_products_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS_TO_CATEGORIES . " where categories_id = '" . (int)$current_category_id . "'");
-    $cateqories_products = tep_db_fetch_array($categories_products_query);
-    if ($cateqories_products['total'] > 0) {
+    $Qproducts = $osC_Database->query('select count(*) as total from :table_products_to_categories where categories_id = :categories_id');
+    $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+    $Qproducts->bindInt(':categories_id', $current_category_id);
+    $Qproducts->execute();
+
+    if ($Qproducts->valueInt('total') > 0) {
       $category_depth = 'products'; // display products
     } else {
-      $category_parent_query = tep_db_query("select count(*) as total from " . TABLE_CATEGORIES . " where parent_id = '" . (int)$current_category_id . "'");
-      $category_parent = tep_db_fetch_array($category_parent_query);
-      if ($category_parent['total'] > 0) {
+      $Qparent = $osC_Database->query('select count(*) as total from :table_categories where parent_id = :parent_id');
+      $Qparent->bindTable(':table_categories', TABLE_CATEGORIES);
+      $Qparent->bindInt(':parent_id', $current_category_id);
+      $Qparent->execute();
+
+      if ($Qparent->valueInt('total') > 0) {
         $category_depth = 'nested'; // navigate through the categories
       } else {
         $category_depth = 'products'; // category has no products, but display the 'no products' message
@@ -56,15 +62,19 @@
 <!-- body_text //-->
 <?php
   if ($category_depth == 'nested') {
-    $category_query = tep_db_query("select cd.categories_name, c.categories_image from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . (int)$current_category_id . "' and cd.categories_id = '" . (int)$current_category_id . "' and cd.language_id = '" . (int)$osC_Session->value('languages_id') . "'");
-    $category = tep_db_fetch_array($category_query);
+    $Qcategory = $osC_Database->query('select cd.categories_name, c.categories_image from :table_categories c, :table_categories_description cd where c.categories_id = :categories_id and c.categories_id = cd.categories_id and cd.language_id = :language_id');
+    $Qcategory->bindTable(':table_categories', TABLE_CATEGORIES);
+    $Qcategory->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+    $Qcategory->bindInt(':categories_id', $current_category_id);
+    $Qcategory->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qcategory->execute();
 ?>
     <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td class="pageHeading"><?php echo HEADING_TITLE; ?></td>
-            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . $category['categories_image'], $category['categories_name'], HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td class="pageHeading" align="right"><?php echo tep_image(DIR_WS_IMAGES . $Qcategory->value('categories_image'), $Qcategory->value('categories_name'), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -81,27 +91,42 @@
 // check to see if there are deeper categories within the current category
       $category_links = array_reverse($cPath_array);
       for($i=0, $n=sizeof($category_links); $i<$n; $i++) {
-        $categories_query = tep_db_query("select count(*) as total from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$osC_Session->value('languages_id') . "'");
-        $categories = tep_db_fetch_array($categories_query);
-        if ($categories['total'] < 1) {
+        $Qcategories = $osC_Database->query('select count(*) as total from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id');
+        $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
+        $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+        $Qcategories->bindInt(':parent_id', $category_links[$i]);
+        $Qcategories->bindInt(':language_id', $osC_Session->value('languages_id'));
+        $Qcategories->execute();
+
+        if ($Qcategories->valueInt('total') < 1) {
           // do nothing, go through the loop
         } else {
-          $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$osC_Session->value('languages_id') . "' order by sort_order, cd.categories_name");
+          $Qcategories = $osC_Database->query('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
+          $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
+          $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+          $Qcategories->bindInt(':parent_id', $category_links[$i]);
+          $Qcategories->bindInt(':language_id', $osC_Session->value('languages_id'));
+          $Qcategories->execute();
           break; // we've found the deepest category the customer is in
         }
       }
     } else {
-      $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$osC_Session->value('languages_id') . "' order by sort_order, cd.categories_name");
+      $Qcategories = $osC_Database->query('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
+      $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
+      $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+      $Qcategories->bindInt(':parent_id', $current_category_id);
+      $Qcategories->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qcategories->execute();
     }
 
-    $number_of_categories = tep_db_num_rows($categories_query);
+    $number_of_categories = $Qcategories->numberOfRows();
 
     $rows = 0;
-    while ($categories = tep_db_fetch_array($categories_query)) {
+    while ($Qcategories->next()) {
       $rows++;
-      $cPath_new = tep_get_path($categories['categories_id']);
+      $cPath_new = tep_get_path($Qcategories->valueInt('categories_id'));
       $width = (int)(100 / MAX_DISPLAY_CATEGORIES_PER_ROW) . '%';
-      echo '                <td align="center" class="smallText" width="' . $width . '" valign="top"><a href="' . tep_href_link(FILENAME_DEFAULT, $cPath_new) . '">' . tep_image(DIR_WS_IMAGES . $categories['categories_image'], $categories['categories_name'], SUBCATEGORY_IMAGE_WIDTH, SUBCATEGORY_IMAGE_HEIGHT) . '<br>' . $categories['categories_name'] . '</a></td>' . "\n";
+      echo '                <td align="center" class="smallText" width="' . $width . '" valign="top"><a href="' . tep_href_link(FILENAME_DEFAULT, $cPath_new) . '">' . tep_image(DIR_WS_IMAGES . $Qcategories->value('categories_image'), $Qcategories->value('categories_name'), SUBCATEGORY_IMAGE_WIDTH, SUBCATEGORY_IMAGE_HEIGHT) . '<br>' . $Qcategories->value('categories_name') . '</a></td>' . "\n";
       if ((($rows / MAX_DISPLAY_CATEGORIES_PER_ROW) == floor($rows / MAX_DISPLAY_CATEGORIES_PER_ROW)) && ($rows != $number_of_categories)) {
         echo '              </tr>' . "\n";
         echo '              <tr>' . "\n";
@@ -233,10 +258,13 @@
       if (isset($_GET['manufacturers_id']) && tep_not_null($_GET['manufacturers_id'])) {
         $filterlist_sql = "select distinct c.categories_id as id, cd.categories_name as name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where p.products_status = '1' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id and p2c.categories_id = cd.categories_id and cd.language_id = '" . (int)$osC_Session->value('languages_id') . "' and p.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' order by cd.categories_name";
       } else {
-        $filterlist_sql= "select distinct m.manufacturers_id as id, m.manufacturers_name as name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, " . TABLE_MANUFACTURERS . " m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . (int)$current_category_id . "' order by m.manufacturers_name";
+        $filterlist_sql = "select distinct m.manufacturers_id as id, m.manufacturers_name as name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, " . TABLE_MANUFACTURERS . " m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . (int)$current_category_id . "' order by m.manufacturers_name";
       }
-      $filterlist_query = tep_db_query($filterlist_sql);
-      if (tep_db_num_rows($filterlist_query) > 1) {
+
+      $Qfilterlist = $osC_Database->query($filterlist_sql);
+      $Qfilterlist->execute();
+
+      if ($Qfilterlist->numberOfRows() > 1) {
         echo '            <td align="center" class="main">' . tep_draw_form('filter', FILENAME_DEFAULT, 'get') . TEXT_SHOW . '&nbsp;';
         if (isset($_GET['manufacturers_id']) && tep_not_null($_GET['manufacturers_id'])) {
           echo osc_draw_hidden_field('manufacturers_id', $_GET['manufacturers_id']);
@@ -246,8 +274,9 @@
           $options = array(array('id' => '', 'text' => TEXT_ALL_MANUFACTURERS));
         }
         echo osc_draw_hidden_field('sort', $_GET['sort']);
-        while ($filterlist = tep_db_fetch_array($filterlist_query)) {
-          $options[] = array('id' => $filterlist['id'], 'text' => $filterlist['name']);
+
+        while ($Qfilterlist->next()) {
+          $options[] = array('id' => $Qfilterlist->valueInt('id'), 'text' => $Qfilterlist->value('name'));
         }
         echo osc_draw_pull_down_menu('filter_id', $options, (isset($_GET['filter_id']) ? $_GET['filter_id'] : ''), 'onchange="this.form.submit()"');
         echo '</form></td>' . "\n";
@@ -257,16 +286,20 @@
 // Get the right image for the top-right
     $image = 'table_background_list.gif';
     if (isset($_GET['manufacturers_id']) && tep_not_null($_GET['manufacturers_id'])) {
-      $image = tep_db_query("select manufacturers_image from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
-      $image = tep_db_fetch_array($image);
-      $image = $image['manufacturers_image'];
+      $Qimage = $osC_Database->query('select manufacturers_name as name, manufacturers_image as image from :table_manufacturers where manufacturers_id = :manufacturers_id');
+      $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+      $Qimage->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
+      $Qimage->execute();
     } elseif ($current_category_id) {
-      $image = tep_db_query("select categories_image from " . TABLE_CATEGORIES . " where categories_id = '" . (int)$current_category_id . "'");
-      $image = tep_db_fetch_array($image);
-      $image = $image['categories_image'];
+      $Qimage = $osC_Database->query('select cd.categories_name as name, c.categories_image as image from :table_categories c, :table_categories_description cd where c.categories_id = :categories_id and c.categories_id = cd.categories_id and cd.language_id = :language_id');
+      $Qimage->bindTable(':table_categories', TABLE_CATEGORIES);
+      $Qimage->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+      $Qimage->bindInt(':categories_id', $current_category_id);
+      $Qimage->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qimage->execute();
     }
 ?>
-            <td align="right"><?php echo tep_image(DIR_WS_IMAGES . $image, HEADING_TITLE, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
+            <td align="right"><?php echo tep_image(DIR_WS_IMAGES . $Qimage->value('image'), $Qimage->value('name'), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></td>
           </tr>
         </table></td>
       </tr>
