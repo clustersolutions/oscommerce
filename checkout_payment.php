@@ -156,12 +156,6 @@ function rowOutEffect(object) {
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
-      <tr>
-        <td><?php require(DIR_WS_MODULES . 'checkout_trail.php');?></td>
-      </tr>
-      <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
-      </tr>
 <?php
   if ($messageStack->size('checkout_payment') > 0) {
 ?>
