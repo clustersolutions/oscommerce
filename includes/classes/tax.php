@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: tax.php,v 1.2 2003/11/17 13:30:25 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -20,7 +20,7 @@
 
 // class methods
     function getTaxRate($class_id, $country_id = -1, $zone_id = -1) {
-      global $osC_Customer;
+      global $osC_Database, $osC_Customer;
 
       if ( ($country_id == -1) && ($zone_id == -1) ) {
         if ($osC_Customer->isLoggedOn()) {
@@ -33,11 +33,19 @@
       }
 
       if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['rate']) == false) {
-        $tax_query = tep_db_query("select sum(tax_rate) as tax_rate from " . TABLE_TAX_RATES . " tr left join " . TABLE_ZONES_TO_GEO_ZONES . " za on (tr.tax_zone_id = za.geo_zone_id) left join " . TABLE_GEO_ZONES . " tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = '0' or za.zone_country_id = '" . (int)$country_id . "') and (za.zone_id is null or za.zone_id = '0' or za.zone_id = '" . (int)$zone_id . "') and tr.tax_class_id = '" . (int)$class_id . "' group by tr.tax_priority");
-        if (tep_db_num_rows($tax_query)) {
+        $Qtax = $osC_Database->query('select sum(tax_rate) as tax_rate from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
+        $Qtax->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+        $Qtax->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
+        $Qtax->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+        $Qtax->bindInt(':zone_country_id', $country_id);
+        $Qtax->bindInt(':zone_id', $zone_id);
+        $Qtax->bindInt(':tax_class_id', $class_id);
+        $Qtax->execute();
+
+        if ($Qtax->numberOfRows()) {
           $tax_multiplier = 1.0;
-          while ($tax = tep_db_fetch_array($tax_query)) {
-            $tax_multiplier *= 1.0 + ($tax['tax_rate'] / 100);
+          while ($Qtax->next()) {
+            $tax_multiplier *= 1.0 + ($Qtax->value('tax_rate') / 100);
           }
 
           $tax_rate = ($tax_multiplier - 1.0) * 100;
@@ -52,13 +60,23 @@
     }
 
     function getTaxRateDescription($class_id, $country_id, $zone_id) {
+      global $osC_Database;
+
       if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['description']) == false) {
-        $tax_query = tep_db_query("select tax_description from " . TABLE_TAX_RATES . " tr left join " . TABLE_ZONES_TO_GEO_ZONES . " za on (tr.tax_zone_id = za.geo_zone_id) left join " . TABLE_GEO_ZONES . " tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = '0' or za.zone_country_id = '" . (int)$country_id . "') and (za.zone_id is null or za.zone_id = '0' or za.zone_id = '" . (int)$zone_id . "') and tr.tax_class_id = '" . (int)$class_id . "' order by tr.tax_priority");
-        if (tep_db_num_rows($tax_query)) {
+        $Qtax = $osC_Database->query('select tax_description from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
+        $Qtax->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+        $Qtax->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
+        $Qtax->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+        $Qtax->bindInt(':zone_country_id', $country_id);
+        $Qtax->bindInt(':zone_id', $zone_id);
+        $Qtax->bindInt(':tax_class_id', $class_id);
+        $Qtax->execute();
+
+        if ($Qtax->numberOfRows()) {
           $tax_description = '';
 
-          while ($tax = tep_db_fetch_array($tax_query)) {
-            $tax_description .= $tax['tax_description'] . ' + ';
+          while ($Qtax->next()) {
+            $tax_description .= $Qtax->value('tax_description') . ' + ';
           }
 
           $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = substr($tax_description, 0, -3);

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: session_compatible.php,v 1.7 2004/11/24 16:43:18 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -221,39 +221,80 @@
     }
 
     function _read($key) {
-      $value_query = tep_db_query("select value from " . TABLE_SESSIONS . " where sesskey = '" . tep_db_input($key) . "' and expiry > '" . time() . "'");
-      if (tep_db_num_rows($value_query)) {
-        $value = tep_db_fetch_array($value_query);
+      global $osC_Database;
 
-        return $value['value'];
+      $Qsession = $osC_Database->query('select value from :table_sessions where sesskey = :sesskey and expiry > :expiry');
+      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
+      $Qsession->bindValue(':sesskey', $key);
+      $Qsession->bindRaw(':expiry', time());
+      $Qsession->execute();
+
+      if ($Qsession->numberOfRows() > 0) {
+        $value = $Qsession->value('value');
+
+        $Qsession->freeResult();
+
+        return $value;
       }
 
       return false;
     }
 
     function _write($key, $value) {
+      global $osC_Database;
+
       if (!$SESS_LIFE = get_cfg_var('session.gc_maxlifetime')) {
         $SESS_LIFE = 1440;
       }
 
       $expiry = time() + $SESS_LIFE;
 
-      $check_query = tep_db_query("select count(*) as total from " . TABLE_SESSIONS . " where sesskey = '" . tep_db_input($key) . "'");
-      $check = tep_db_fetch_array($check_query);
+      $Qsession = $osC_Database->query('select count(*) as total from :table_sessions where sesskey = :sesskey');
+      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
+      $Qsession->bindValue(':sesskey', $key);
+      $Qsession->execute();
 
-      if ($check['total'] > 0) {
-        return tep_db_query("update " . TABLE_SESSIONS . " set expiry = '" . tep_db_input($expiry) . "', value = '" . tep_db_input($value) . "' where sesskey = '" . tep_db_input($key) . "'");
+      if ($Qsession->valueInt('total') > 0) {
+        $Qsession = $osC_Database->query('update :table_sessions set expiry = :expiry, value = :value where sesskey = :sesskey');
       } else {
-        return tep_db_query("insert into " . TABLE_SESSIONS . " values ('" . tep_db_input($key) . "', '" . tep_db_input($expiry) . "', '" . tep_db_input($value) . "')");
+        $Qsession = $osC_Database->query('insert into :table_sessions values (:sesskey, :expiry, :value)');
       }
+      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
+      $Qsession->bindValue(':sesskey', $key);
+      $Qsession->bindValue(':expiry', $expiry);
+      $Qsession->bindValue(':value', $value);
+
+      if ($Qsession->execute()) {
+        $write = true;
+      } else {
+        $write = false;
+      }
+
+      $Qsession->freeResult();
+
+      return $write;
     }
 
     function _destroy($key) {
-      return tep_db_query("delete from " . TABLE_SESSIONS . " where sesskey = '" . tep_db_input($key) . "'");
+      global $osC_Database;
+
+      $Qsession = $osC_Database->query('delete from :table_sessions where sesskey = :sesskey');
+      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
+      $Qsession->bindValue(':sesskey', $key);
+      $Qsession->execute();
+
+      $Qsession->freeResult();
     }
 
     function _gc($maxlifetime) {
-      return tep_db_query("delete from " . TABLE_SESSIONS . " where expiry < '" . time() . "'");
+      global $osC_Database;
+
+      $Qsession = $osC_Database->query('delete from :table_sessions where expiry < :expiry');
+      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
+      $Qsession->bindValue(':expiry', time());
+      $Qsession->execute();
+
+      $Qsession->freeResult();
     }
   }
 ?>
