@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: mysql.php,v 1.10 2004/11/28 20:03:58 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -226,8 +226,30 @@
       if (strpos($sql_query, 'SQL_CALC_FOUND_ROWS') !== false) {
         $bb = $this->query('select found_rows() as total');
       } else {
-        $total_query = substr($sql_query, 0, strpos($sql_query, ' limit'));
-        $bb = $this->query('select count(' . $select_field . ') as total ' . substr($total_query, strpos($sql_query, 'from ')));
+        $total_query = substr($sql_query, 0, strpos($sql_query, ' limit '));
+
+        $pos_to = strlen($total_query);
+        $pos_from = strpos($total_query, ' from ');
+
+        if (($pos_group_by = strpos($total_query, ' group by ', $pos_from)) !== false) {
+          if ($pos_group_by < $pos_to) {
+            $pos_to = $pos_group_by;
+          }
+        }
+
+        if (($pos_having = strpos($total_query, ' having ', $pos_from)) !== false) {
+          if ($pos_having < $pos_to) {
+            $pos_to = $pos_having;
+          }
+        }
+
+        if (($pos_order_by = strpos($total_query, ' order by ', $pos_from)) !== false) {
+          if ($pos_order_by < $pos_to) {
+            $pos_to = $pos_order_by;
+          }
+        }
+
+        $bb = $this->query('select count(' . $select_field . ') as total ' . substr($total_query, $pos_from, ($pos_to - $pos_from)));
       }
 
       return $bb->value('total');
