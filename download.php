@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: download.php,v 1.10 2003/11/17 16:28:01 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -20,42 +20,55 @@
   }
 
 // Check that order_id, customer id and filename match
-  $downloads_query = tep_db_query("select date_format(o.date_purchased, '%Y-%m-%d') as date_purchased_day, opd.download_maxdays, opd.download_count, opd.download_maxdays, opd.orders_products_filename from " . TABLE_ORDERS . " o, " . TABLE_ORDERS_PRODUCTS . " op, " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " opd where o.customers_id = '" . $osC_Customer->id . "' and o.orders_id = '" . (int)$_GET['order'] . "' and o.orders_id = op.orders_id and op.orders_products_id = opd.orders_products_id and opd.orders_products_download_id = '" . (int)$_GET['id'] . "' and opd.orders_products_filename != ''");
-  if (!tep_db_num_rows($downloads_query)) die;
-  $downloads = tep_db_fetch_array($downloads_query);
+  $Qdownloads = $osC_Database->query('select date_format(o.date_purchased, "%Y-%m-%d") as date_purchased_day, opd.download_maxdays, opd.download_count, opd.download_maxdays, opd.orders_products_filename from :table_orders o, :table_orders_products op, :table_orders_products_download opd where o.customers_id = :customers_id and o.orders_id = :orders_id and o.orders_id = op.orders_id and op.orders_products_id = opd.orders_products_id and opd.orders_products_download_id = :orders_products_download_id and opd.orders_products_filename != ""');
+  $Qdownloads->bindTable(':table_orders', TABLE_ORDERS);
+  $Qdownloads->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+  $Qdownloads->bindTable(':table_orders_products_download', TABLE_ORDERS_PRODUCTS_DOWNLOAD);
+  $Qdownloads->bindInt(':customers_id', $osC_Customer->id);
+  $Qdownloads->bindInt(':orders_id', $_GET['order']);
+  $Qdownloads->bindInt(':orders_products_download_id', $_GET['id']);
+  $Qdownloads->execute();
+
+  if ($Qdownloads->numberOfRows() < 1) {
+    die();
+  }
+
 // MySQL 3.22 does not have INTERVAL
-  list($dt_year, $dt_month, $dt_day) = explode('-', $downloads['date_purchased_day']);
-  $download_timestamp = mktime(23, 59, 59, $dt_month, $dt_day + $downloads['download_maxdays'], $dt_year);
+  list($dt_year, $dt_month, $dt_day) = explode('-', $Qdownloads->value('date_purchased_day'));
+  $download_timestamp = mktime(23, 59, 59, $dt_month, $dt_day + $Qdownloads->value('download_maxdays'), $dt_year);
 
 // Die if time expired (maxdays = 0 means no time limit)
-  if (($downloads['download_maxdays'] != 0) && ($download_timestamp <= time())) die;
+  if (($Qdownloads->value('download_maxdays') != 0) && ($download_timestamp <= time())) die;
 // Die if remaining count is <=0
-  if ($downloads['download_count'] <= 0) die;
+  if ($Qdownloads->value('download_count') <= 0) die;
 // Die if file is not there
-  if (!file_exists(DIR_FS_DOWNLOAD . $downloads['orders_products_filename'])) die;
+  if (!file_exists(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'))) die;
 
 // Now decrement counter
-  tep_db_query("update " . TABLE_ORDERS_PRODUCTS_DOWNLOAD . " set download_count = download_count-1 where orders_products_download_id = '" . (int)$_GET['id'] . "'");
+  $Qupdate = $osC_Database->query('update :table_orders_products_download set download_count = download_count-1 where orders_products_download_id = :orders_products_download_id');
+  $Qupdate->bindTable(':table_orders_products_download', TABLE_ORDERS_PRODUCTS_DOWNLOAD);
+  $Qupdate->bindInt(':orders_products_download_id', $_GET['id']);
+  $Qupdate->execute();
 
 // Returns a random name, 16 to 20 characters long
 // There are more than 10^28 combinations
 // The directory is "hidden", i.e. starts with '.'
-function tep_random_name()
-{
+function tep_random_name() {
   $letters = 'abcdefghijklmnopqrstuvwxyz';
   $dirname = '.';
   $length = floor(tep_rand(16,20));
+
   for ($i = 1; $i <= $length; $i++) {
    $q = floor(tep_rand(1,26));
    $dirname .= $letters[$q];
   }
+
   return $dirname;
 }
 
 // Unlinks all subdirectories and files in $dir
 // Works only on one subdir level, will not recurse
-function tep_unlink_temp_dir($dir)
-{
+function tep_unlink_temp_dir($dir) {
   $h1 = opendir($dir);
   while ($subdir = readdir($h1)) {
 // Ignore non directories
@@ -81,7 +94,7 @@ function tep_unlink_temp_dir($dir)
   header("Cache-Control: no-cache, must-revalidate");
   header("Pragma: no-cache");
   header("Content-Type: Application/octet-stream");
-  header("Content-disposition: attachment; filename=" . $downloads['orders_products_filename']);
+  header("Content-disposition: attachment; filename=" . $Qdownloads->value('orders_products_filename'));
 
   if (DOWNLOAD_BY_REDIRECT == 'true') {
 // This will work only on Unix/Linux hosts
@@ -89,11 +102,11 @@ function tep_unlink_temp_dir($dir)
     $tempdir = tep_random_name();
     umask(0000);
     mkdir(DIR_FS_DOWNLOAD_PUBLIC . $tempdir, 0777);
-    symlink(DIR_FS_DOWNLOAD . $downloads['orders_products_filename'], DIR_FS_DOWNLOAD_PUBLIC . $tempdir . '/' . $downloads['orders_products_filename']);
-    tep_redirect(DIR_WS_DOWNLOAD_PUBLIC . $tempdir . '/' . $downloads['orders_products_filename']);
+    symlink(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'), DIR_FS_DOWNLOAD_PUBLIC . $tempdir . '/' . $Qdownloads->value('orders_products_filename'));
+    tep_redirect(DIR_WS_DOWNLOAD_PUBLIC . $tempdir . '/' . $Qdownloads->value('orders_products_filename'));
   } else {
 // This will work on all systems, but will need considerable resources
 // We could also loop with fread($fp, 4096) to save memory
-    readfile(DIR_FS_DOWNLOAD . $downloads['orders_products_filename']);
+    readfile(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'));
   }
 ?>
