@@ -42,11 +42,11 @@
   if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
     $error = false;
 
-    $to_email_address = tep_db_prepare_input($_POST['to_email_address']);
-    $to_name = tep_db_prepare_input($_POST['to_name']);
-    $from_email_address = tep_db_prepare_input($_POST['from_email_address']);
-    $from_name = tep_db_prepare_input($_POST['from_name']);
-    $message = tep_db_prepare_input($_POST['message']);
+    $to_email_address = tep_sanitize_string($_POST['to_email_address']);
+    $to_name = tep_sanitize_string($_POST['to_name']);
+    $from_email_address = tep_sanitize_string($_POST['from_email_address']);
+    $from_name = tep_sanitize_string($_POST['from_name']);
+    $message = tep_sanitize_string($_POST['message']);
 
     if (empty($from_name)) {
       $error = true;
