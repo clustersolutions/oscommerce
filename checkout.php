@@ -12,12 +12,6 @@
 
   require('includes/application_top.php');
 
-  if ($osC_Customer->isLoggedOn() == false) {
-    $navigation->set_snapshot();
-
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
-  }
-
   require('includes/classes/order.php');
 
   require(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/' . FILENAME_CHECKOUT);
@@ -30,6 +24,12 @@
     $_checkout_module = tep_sanitize_string(basename(key(array_slice($_GET, 0, 1))));
 
     if (file_exists('includes/modules/checkout/' . $_checkout_module . '.php')) {
+      if ($osC_Customer->isLoggedOn() == false) {
+        $navigation->set_snapshot();
+
+        tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+      }
+
       include('includes/modules/checkout/' . $_checkout_module . '.php');
 
       $_checkout_module_name = 'osC_Checkout_' . ucfirst($_checkout_module);
