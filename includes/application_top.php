@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: application_top.php,v 1.296 2004/11/24 15:33:37 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -172,10 +172,19 @@
 
                                 if (!is_array($notify)) $notify = array($notify);
                                 for ($i=0, $n=sizeof($notify); $i<$n; $i++) {
-                                  $check_query = tep_db_query("select count(*) as count from " . TABLE_PRODUCTS_NOTIFICATIONS . " where products_id = '" . (int)$notify[$i] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
-                                  $check = tep_db_fetch_array($check_query);
-                                  if ($check['count'] < 1) {
-                                    tep_db_query("insert into " . TABLE_PRODUCTS_NOTIFICATIONS . " (products_id, customers_id, date_added) values ('" . (int)$notify[$i] . "', '" . (int)$osC_Customer->id . "', now())");
+                                  $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
+                                  $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
+                                  $Qcheck->bindInt(':products_id', $notify[$i]);
+                                  $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+                                  $Qcheck->execute();
+
+                                  if ($Qcheck->valueInt('count') < 1) {
+                                    $Qn = $osC_Database->query('insert into :table_products_notifications (products_id, customers_id, date_added) values (:products_id, :customers_id, :date_added)');
+                                    $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
+                                    $Qn->bindInt(':products_id', $notify[$i]);
+                                    $Qn->bindInt(':customers_id', $osC_Customer->id);
+                                    $Qn->bindRaw(':date_added', 'now()');
+                                    $Qn->execute();
                                   }
                                 }
 
@@ -187,10 +196,18 @@
                               }
                               break;
       case 'notify_remove' :  if ($osC_Customer->isLoggedOn() && isset($_GET['products_id'])) {
-                                $check_query = tep_db_query("select count(*) as count from " . TABLE_PRODUCTS_NOTIFICATIONS . " where products_id = '" . (int)$_GET['products_id'] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
-                                $check = tep_db_fetch_array($check_query);
-                                if ($check['count'] > 0) {
-                                  tep_db_query("delete from " . TABLE_PRODUCTS_NOTIFICATIONS . " where products_id = '" . (int)$_GET['products_id'] . "' and customers_id = '" . (int)$osC_Customer->id . "'");
+                                $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
+                                $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
+                                $Qcheck->bindInt(':products_id', $_GET['products_id']);
+                                $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+                                $Qcheck->execute();
+
+                                if ($Qcheck->valueInt('count') > 0) {
+                                  $Qn = $osC_Database->query('delete from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
+                                  $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
+                                  $Qn->bindInt(':products_id', $_GET['products_id']);
+                                  $Qn->bindInt(':customers_id', $osC_Customer->id);
+                                  $Qn->execute();
                                 }
 
                                 tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action'))));
