@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: column_left.php,v 1.17 2004/02/16 06:17:18 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
