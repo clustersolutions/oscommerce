@@ -238,9 +238,6 @@
   require('includes/classes/mime.php');
   require('includes/classes/email.php');
 
-// split-page-results
-  require('includes/classes/split_page_results.php');
-
 // infobox
   require('includes/classes/boxes.php');
 ?>
