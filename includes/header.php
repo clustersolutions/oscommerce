@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: header.php,v 1.45 2004/04/13 07:35:08 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
