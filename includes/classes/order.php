@@ -62,7 +62,7 @@
 
       $Qstatus = $osC_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-      $Qstatus->bindInt(':orders_status', $Qorder->valueInt('orders_status'));
+      $Qstatus->bindInt(':orders_status_id', $Qorder->valueInt('orders_status'));
       $Qstatus->bindInt(':language_id', $osC_Session->value('languages_id'));
       $Qstatus->execute();
 
