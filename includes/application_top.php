@@ -61,9 +61,6 @@
   require('includes/classes/cache.php');
   $osC_Cache = new osC_Cache;
 
-// include the database functions
-  require('includes/functions/database.php');
-
 // include the database class
   require('includes/classes/database.php');
 
