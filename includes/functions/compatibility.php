@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: compatibility.php,v 1.24 2004/07/22 16:29:56 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
