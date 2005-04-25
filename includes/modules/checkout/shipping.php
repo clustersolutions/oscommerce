@@ -36,7 +36,7 @@
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->page_contents = 'shipping_address.php';
+        $this->page_contents = 'checkout_shipping_address.php';
       }
 
 // if no shipping destination address was selected, use the customers own address as default

@@ -58,7 +58,7 @@
 
 // redirect to the billing address page when no default address exists
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->page_contents = 'payment_address.php';
+        $this->page_contents = 'checkout_payment_address.php';
       }
 
 // if no billing destination address was selected, use the customers own address as default
