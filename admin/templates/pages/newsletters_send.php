@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: newsletters_send.php,v 1.2 2004/08/17 23:35:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,7 @@
   $Qnewsletter->bindInt(':newsletters_id', $_GET['nmID']);
   $Qnewsletter->execute();
 
-  include('includes/languages/' . $osC_Session->value('language') . '/modules/newsletters/' . $Qnewsletter->value('module') . '.php');
+  $osC_Language->load('modules/newsletters/' . $Qnewsletter->value('module') . '.php');
   include('includes/modules/newsletters/' . $Qnewsletter->value('module') . '.php');
 
   $module_name = 'osC_Newsletter_' . $Qnewsletter->value('module');

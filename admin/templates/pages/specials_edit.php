@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: specials_edit.php,v 1.4 2004/10/30 14:13:31 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,7 +16,7 @@
     $Qspecial->bindTable(':table_products', TABLE_PRODUCTS);
     $Qspecial->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
     $Qspecial->bindInt(':specials_id', $_GET['sID']);
-    $Qspecial->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qspecial->bindInt(':language_id', $osC_Language->getID());
     $Qspecial->execute();
 
     $sInfo = new objectInfo($Qspecial->toArray());
@@ -27,7 +27,7 @@
     $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
     $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
     $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-    $Qspecials->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qspecials->bindInt(':language_id', $osC_Language->getID());
     $Qspecials->execute();
 
     while ($Qspecials->next()) {

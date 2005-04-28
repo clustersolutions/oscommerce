@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: categories.php,v 1.7 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -53,7 +53,7 @@
 
   $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
   $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
-  $Qcategories->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qcategories->bindInt(':language_id', $osC_Language->getID());
   $Qcategories->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qcategories->execute();
 
@@ -123,8 +123,8 @@
 <?php
   echo TEXT_CATEGORIES_NAME;
 
-  foreach ($osC_Language->getAll() as $language) {
-    echo '<br>' . tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $language['id'] . ']');
+  foreach ($osC_Language->getAll() as $l) {
+    echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']');
   }
 ?>
     </p>
@@ -192,8 +192,8 @@
       $categories_name[$Qcd->valueInt('language_id')] = $Qcd->value('categories_name');
     }
 
-    foreach ($osC_Language->getAll() as $language) {
-      echo '<br>' . tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $language['id'] . ']', (isset($categories_name[$language['id']]) ? $categories_name[$language['id']] : ''));
+    foreach ($osC_Language->getAll() as $l) {
+      echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']', (isset($categories_name[$l['id']]) ? $categories_name[$l['id']] : ''));
     }
 ?>
     </p>

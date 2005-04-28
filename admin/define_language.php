@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: define_language.php,v 1.20 2004/11/20 02:08:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,17 +16,17 @@
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
-  $lng = (isset($_GET['lng']) ? $_GET['lng'] : $osC_Session->value('language'));
+  $lng = (isset($_GET['lng']) ? $_GET['lng'] : $osC_Language->getDirectory());
 
   $languages_array = array();
   $exists = false;
-  foreach ($osC_Language->getAll() as $language) {
-    if ($language['directory'] == $lng) {
+  foreach ($osC_Language->getAll() as $l) {
+    if ($l['directory'] == $lng) {
       $exists = true;
     }
 
-    $languages_array[] = array('id' => $language['directory'],
-                               'text' => $language['name']);
+    $languages_array[] = array('id' => $l['directory'],
+                               'text' => $l['name']);
   }
 
   if ($exists === false) {

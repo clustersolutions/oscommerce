@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_preview.php,v 1.6 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -55,8 +55,8 @@
   <tr bgcolor="#fff3e7">
     <td>
 <?php
-  foreach ($osC_Language->getAll() as $language) {
-    echo '<span id="lang_' . $language['code'] . '"' . (($language['directory'] == $osC_Session->value('language')) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $language['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $language['code'] . '\', \'highlight\', \'span\');">' . tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '</a></span>&nbsp;&nbsp;';
+  foreach ($osC_Language->getAll() as $l) {
+    echo '<span id="lang_' . $l['code'] . '"' . (($l['directory'] == $osC_Language->getDirectory()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
   }
 ?>
     </td>
@@ -64,22 +64,22 @@
 </table>
 
 <?php
-  foreach ($osC_Language->getAll() as $language) {
+  foreach ($osC_Language->getAll() as $l) {
 ?>
 
-<div id="pName_<?php echo $language['code']; ?>" <?php echo (($language['directory'] != $osC_Session->value('language')) ? ' style="display: none;"' : ''); ?>>
+<div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['directory'] != $osC_Language->getDirectory()) ? ' style="display: none;"' : ''); ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><h1><?php echo $pInfo->products_name[$language['id']]; ?></h1></td>
+      <td><h1><?php echo $pInfo->products_name[$l['id']]; ?></h1></td>
       <td align="right"><h1><?php echo $osC_Currencies->format($pInfo->products_price); ?></h1></td>
     </tr>
   </table>
 
-  <p class="main"><?php echo tep_image('../images/' . $products_image_name, $pInfo->products_name[$language['id']], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . $pInfo->products_description[$language['id']]; ?></p>
+  <p class="main"><?php echo tep_image('../images/' . $products_image_name, $pInfo->products_name[$l['id']], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . $pInfo->products_description[$l['id']]; ?></p>
 
 <?php
-    if (!empty($pInfo->products_url[$language['id']])) {
-      echo '<p class="main">' . sprintf(TEXT_PRODUCT_MORE_INFORMATION, $pInfo->products_url[$language['id']]) . '</p>';
+    if (!empty($pInfo->products_url[$l['id']])) {
+      echo '<p class="main">' . sprintf(TEXT_PRODUCT_MORE_INFORMATION, $pInfo->products_url[$l['id']]) . '</p>';
     }
 ?>
 

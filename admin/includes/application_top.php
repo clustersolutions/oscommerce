@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -95,16 +95,12 @@
     $osC_Language->set($_GET['language']);
   }
 
-  require('includes/languages/' . $osC_Session->value('language') . '.php');
+  $osC_Language->load();
 
   header('Content-Type: text/html; charset=' . CHARSET);
-
   setlocale(LC_TIME, LANGUAGE_LOCALE);
 
-  $current_page = basename($_SERVER['SCRIPT_FILENAME']);
-  if (file_exists('includes/languages/' . $osC_Session->value('language') . '/' . $current_page)) {
-    include('includes/languages/' . $osC_Session->value('language') . '/' . $current_page);
-  }
+  $osC_Language->load(basename($_SERVER['SCRIPT_FILENAME']));
 
 // define our localization functions
   require('includes/functions/localization.php');

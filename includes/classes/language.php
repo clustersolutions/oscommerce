@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: language.php,v 1.10 2004/11/29 00:07:21 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -48,27 +48,27 @@
 
 /* Public methods */
 
-    function set($language = '') {
+    function set($lang = '') {
       if (PHP_VERSION < 4.1) {
         global $_COOKIE;
       }
 
       global $osC_Session;
 
-      if (empty($language) && $osC_Session->exists('language')) {
+      if (empty($lang) && $osC_Session->exists('language')) {
         foreach ($this->_languages as $l) {
           if ($l['directory'] == $osC_Session->value('language')) {
-            $language = $l['code'];
+            $lang = $l['code'];
             break;
           }
         }
       }
 
-      if (empty($language) || ($this->exists($language) === false)) {
-        $language = DEFAULT_LANGUAGE;
+      if (empty($lang) || ($this->exists($lang) === false)) {
+        $lang = DEFAULT_LANGUAGE;
       }
 
-      $this->language = $this->get($language);
+      $this->language = $this->get($lang);
 
       if (!isset($_COOKIE['language']) || (isset($_COOKIE['language']) && ($_COOKIE['language'] != $this->language['code']))) {
         tep_setcookie('language', $this->language['code'], time()+60*60*24*90);
@@ -146,20 +146,44 @@
       $this->set(DEFAULT_LANGUAGE);
     }
 
-    function get($language) {
-      return $this->_languages[$language];
+    function get($lang) {
+      return $this->_languages[$lang];
     }
 
     function getAll() {
       return $this->_languages;
     }
 
-    function exists($language) {
-      if (isset($this->_languages[$language])) {
-        return true;
-      }
+    function exists($lang) {
+      return array_key_exists($lang, $this->_languages);
+    }
 
-      return false;
+    function getID() {
+      return $this->language['id'];
+    }
+
+    function getName() {
+      return $this->language['name'];
+    }
+
+    function getCode() {
+      return $this->language['code'];
+    }
+
+    function getImage() {
+      return $this->language['image'];
+    }
+
+    function getDirectory() {
+      return $this->language['directory'];
+    }
+
+    function load($definition = false) {
+      if (is_string($definition)) {
+        include('includes/languages/' . $this->getDirectory() . '/' . $definition);
+      } else {
+        include('includes/languages/' . $this->getDirectory() . '.php');
+      }
     }
   }
 ?>

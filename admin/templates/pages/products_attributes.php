@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_attributes.php,v 1.4 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -60,7 +60,7 @@
 <?php
   $Qgroups = $osC_Database->query('select products_options_id, products_options_name from :table_products_options where language_id = :language_id order by products_options_name');
   $Qgroups->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-  $Qgroups->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qgroups->bindInt(':language_id', $osC_Language->getID());
   $Qgroups->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qgroups->execute();
 
@@ -127,8 +127,8 @@
         <td class="smallText" width="40%" valign="top"><?php echo '<b>' . TEXT_INFO_ATTRIBUTE_GROUP_NAME . '</b>'; ?></td>
         <td class="smallText" width="60%">
 <?php
-  foreach ($osC_Language->getAll() as $language) {
-    echo tep_image('../includes/languages/' . $language['directory'] . '/images/icon.gif', $language['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $language['id'] . ']') . '<br>';
+  foreach ($osC_Language->getAll() as $l) {
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br>';
   }
 ?>
         </td>
@@ -167,8 +167,8 @@
       $group_names[$Qgd->valueInt('language_id')] = $Qgd->value('products_options_name');
     }
 
-    foreach ($osC_Language->getAll() as $language) {
-      echo tep_image('../includes/languages/' . $language['directory'] . '/images/icon.gif', $language['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $language['id'] . ']', (isset($group_names[$language['id']]) ? $group_names[$language['id']] : '')) . '<br>';
+    foreach ($osC_Language->getAll() as $l) {
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : '')) . '<br>';
     }
 ?>
         </td>

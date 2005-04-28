@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: language.php,v 1.4 2004/11/29 14:33:43 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -18,6 +18,16 @@
 
     function osC_Language_Admin() {
       $this->osC_Language();
+    }
+
+/* Public methods */
+
+    function load($definition = false) {
+      if (is_string($definition) && file_exists('includes/languages/' . $this->getDirectory() . '/' . $definition)) {
+        include('includes/languages/' . $this->getDirectory() . '/' . $definition);
+      } else {
+        include('includes/languages/' . $this->getDirectory() . '.php');
+      }
     }
 
     function insert($language, $default = false) {

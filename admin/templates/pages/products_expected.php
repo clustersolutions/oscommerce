@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_expected.php,v 1.3 2004/08/02 12:30:09 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,7 +32,7 @@
   $Qproducts = $osC_Database->query('select p.products_id, p.products_date_available, pd.products_name from :table_products p, :table_products_description pd where p.products_date_available is not null and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_available');
   $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
   $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qproducts->bindInt(':language_id', $osC_Language->getID());
   $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qproducts->execute();
 

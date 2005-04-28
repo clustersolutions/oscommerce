@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: orders_status.php,v 1.25 2004/11/20 02:08:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -37,7 +37,7 @@
 
         $osC_Database->startTransaction();
 
-        foreach ($osC_Language->getAll() as $language) {
+        foreach ($osC_Language->getAll() as $l) {
           if (isset($_GET['osID']) && is_numeric($_GET['osID'])) {
             $Qstatus = $osC_Database->query('update :table_orders_status set orders_status_name = :orders_status_name where orders_status_id = :orders_status_id and language_id = :language_id');
           } else {
@@ -45,8 +45,8 @@
           }
           $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
           $Qstatus->bindInt(':orders_status_id', $orders_status_id);
-          $Qstatus->bindValue(':orders_status_name', $_POST['orders_status_name'][$language['id']]);
-          $Qstatus->bindInt(':language_id', $language['id']);
+          $Qstatus->bindValue(':orders_status_name', $_POST['orders_status_name'][$l['id']]);
+          $Qstatus->bindInt(':language_id', $l['id']);
           $Qstatus->execute();
 
           if ($osC_Database->isError()) {

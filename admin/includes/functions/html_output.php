@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: html_output.php,v 1.37 2004/12/03 22:42:04 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -59,9 +59,9 @@
 // The HTML form submit button wrapper function
 // Outputs a button in the selected language
   function tep_image_submit($image, $alt = '', $parameters = '') {
-    global $language;
+    global $osC_Language;
 
-    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $language . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
+    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getDirectory() . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
 
     if (tep_not_null($alt)) $image_submit .= ' title=" ' . tep_output_string($alt) . ' "';
 
@@ -81,9 +81,9 @@
 ////
 // Output a function button in the selected language
   function tep_image_button($image, $alt = '', $params = '') {
-    global $language;
+    global $osC_Language;
 
-    return tep_image('includes/languages/' . $language . '/images/buttons/' . $image, $alt, '', '', $params);
+    return tep_image('includes/languages/' . $osC_Language->getDirectory() . '/images/buttons/' . $image, $alt, '', '', $params);
   }
 
 ////

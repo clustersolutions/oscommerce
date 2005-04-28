@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: general.php,v 1.183 2004/11/24 15:34:49 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -281,10 +281,10 @@
   }
 
   function tep_get_weight_class_title($weight_class_id, $language_id = '') {
-    global $osC_Database, $osC_Session;
+    global $osC_Database, $osC_Language;
 
     if (empty($language_id)) {
-      $language_id = $osC_Session->value('languages_id');
+      $language_id = $osC_Language->getID();
     }
 
     $Qweight = $osC_Database->query('select weight_class_title from :table_weight_class where weight_class_id = :weight_class_id and language_id = :language_id');
@@ -512,7 +512,7 @@
   }
 
   function tep_cfg_pull_down_weight_classes($weight_class_id, $key = '') {
-    global $osC_Database, $osC_Session;
+    global $osC_Database, $osC_Language;
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . ']';
 
@@ -520,7 +520,7 @@
 
     $Qclasses = $osC_Database->query('select weight_class_id, weight_class_title from :table_weight_class where language_id = :language_id order by weight_class_title');
     $Qclasses->bindTable(':table_weight_class', TABLE_WEIGHT_CLASS);
-    $Qclasses->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qclasses->bindInt(':language_id', $osC_Language->getID());
     $Qclasses->execute();
 
     while ($Qclasses->next()) {
@@ -605,7 +605,7 @@
   }
 
   function tep_generate_category_path($id, $from = 'category', $categories_array = '', $index = 0) {
-    global $osC_Database, $osC_Session;
+    global $osC_Database, $osC_Language;
 
     if (!is_array($categories_array)) $categories_array = array();
 
@@ -623,7 +623,7 @@
           $Qcategory->bindTable(':table_categories', TABLE_CATEGORIES);
           $Qcategory->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
           $Qcategory->bindInt(':categories_id', $Qcategories->valueInt('categories_id'));
-          $Qcategory->bindInt(':language_id', $osC_Session->value('languages_id'));
+          $Qcategory->bindInt(':language_id', $osC_Language->getID());
           $Qcategory->execute();
 
           $categories_array[$index][] = array('id' => $Qcategories->valueInt('categories_id'), 'text' => $Qcategory->value('categories_name'));
@@ -641,7 +641,7 @@
       $Qcategory->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qcategory->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
       $Qcategory->bindInt(':categories_id', $id);
-      $Qcategory->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qcategory->bindInt(':language_id', $osC_Language->getID());
       $Qcategory->execute();
 
       $categories_array[$index][] = array('id' => $id, 'text' => $Qcategory->value('categories_name'));
@@ -1270,7 +1270,7 @@
   }
 
   function tep_cfg_pull_down_order_statuses($order_status_id, $key = '') {
-    global $osC_Database, $osC_Session;
+    global $osC_Database, $osC_Language;
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . ']';
 
@@ -1278,7 +1278,7 @@
 
     $Qstatuses = $osC_Database->query('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id order by orders_status_name');
     $Qstatuses->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-    $Qstatuses->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qstatuses->bindInt(':language_id', $osC_Language->getID());
     $Qstatuses->execute();
 
     while ($Qstatuses->next()) {
@@ -1290,14 +1290,14 @@
   }
 
   function tep_get_order_status_name($order_status_id, $language_id = '') {
-    global $osC_Database, $osC_Session;
+    global $osC_Database, $osC_Language;
 
     if ($order_status_id < 1) {
       return TEXT_DEFAULT;
     }
 
     if (!is_numeric($language_id)) {
-      $language_id = $osC_Session->value('languages_id');
+      $language_id = $osC_Language->getID();
     }
 
     $Qstatus = $osC_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');

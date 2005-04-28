@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_purchased.php,v 1.2 2004/07/22 22:25:16 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,9 +19,9 @@
 // Class constructor
 
     function osC_Statistics_Products_Purchased() {
-      global $osC_Session;
+      global $osC_Language;
 
-      include('includes/languages/' . $osC_Session->value('language') . '/modules/statistics/products_purchased.php');
+      $osC_Language->load('modules/statistics/products_purchased.php');
 
       $this->_setIcon();
       $this->_setTitle();
@@ -54,7 +54,7 @@
       $this->_resultset = $osC_Database->query('select p.products_id, p.products_ordered, pd.products_name from :table_products p, :table_products_description pd where p.products_ordered > 0 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_ordered desc, pd.products_name');
       $this->_resultset->bindTable(':table_products', TABLE_PRODUCTS);
       $this->_resultset->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $this->_resultset->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $this->_resultset->bindInt(':language_id', $osC_Language->getID());
       $this->_resultset->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
       $this->_resultset->execute();
 

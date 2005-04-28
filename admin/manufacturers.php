@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: manufacturers.php,v 1.62 2004/11/20 02:08:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -58,7 +58,7 @@
         }
 
         if ($error === false) {
-          foreach ($osC_Language->getAll() as $language) {
+          foreach ($osC_Language->getAll() as $l) {
             if (isset($_GET['mID']) && is_numeric($_GET['mID'])) {
               $Qurl = $osC_Database->query('update :table_manufacturers_info set manufacturers_url = :manufacturers_url where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
             } else {
@@ -66,8 +66,8 @@
             }
             $Qurl->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
             $Qurl->bindInt(':manufacturers_id', $manufacturers_id);
-            $Qurl->bindInt(':languages_id', $language['id']);
-            $Qurl->bindValue(':manufacturers_url', $_POST['manufacturers_url'][$language['id']]);
+            $Qurl->bindInt(':languages_id', $l['id']);
+            $Qurl->bindValue(':manufacturers_url', $_POST['manufacturers_url'][$l['id']]);
             $Qurl->execute();
 
             if ($osC_Database->isError()) {

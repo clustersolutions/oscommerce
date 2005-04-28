@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products.php,v 1.3 2004/10/30 22:11:50 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_PRODUCTS_TITLE')) {
-    include('includes/languages/' . $osC_Session->value('language') . '/modules/summary/products.php');
+    $osC_Language->load('modules/summary/products.php');
   }
 
   class osC_Summary_products extends osC_Summary {
@@ -32,7 +32,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database, $osC_Session, $osC_Currencies, $template;
+      global $osC_Database, $osC_Language, $osC_Currencies, $template;
 
       if (!isset($osC_Currencies)) {
         if (!class_exists('osC_Currencies')) {
@@ -56,7 +56,7 @@
       $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_price, greatest(p.products_date_added, p.products_last_modified) as date_last_modified, p.products_status from :table_products p, :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id order by date_last_modified desc, pd.products_name limit 6');
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
 
       while ($Qproducts->next()) {

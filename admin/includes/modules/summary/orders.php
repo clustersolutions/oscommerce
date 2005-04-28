@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: orders.php,v 1.2 2004/08/24 00:56:43 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_ORDERS_TITLE')) {
-    include('includes/languages/' . $osC_Session->value('language') . '/modules/summary/orders.php');
+    $osC_Language->load('modules/summary/orders.php');
   }
 
   class osC_Summary_orders extends osC_Summary {
@@ -32,7 +32,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database, $osC_Session, $template;
+      global $osC_Database, $osC_Language, $template;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
@@ -49,7 +49,7 @@
       $Qorders->bindTable(':table_orders', TABLE_ORDERS);
       $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
       $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-      $Qorders->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qorders->bindInt(':language_id', $osC_Language->getID());
       $Qorders->execute();
 
       while ($Qorders->next()) {

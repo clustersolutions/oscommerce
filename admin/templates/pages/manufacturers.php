@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: manufacturers.php,v 1.5 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -92,8 +92,8 @@
 <?php
   echo TEXT_MANUFACTURERS_URL;
 
-  foreach ($osC_Language->getAll() as $language) {
-    echo '<br>' . tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $language['id'] . ']');
+  foreach ($osC_Language->getAll() as $l) {
+    echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
   }
 ?>
     </p>
@@ -121,8 +121,8 @@
 <?php
     echo TEXT_MANUFACTURERS_URL;
 
-    foreach ($osC_Language->getAll() as $language) {
-      echo '<br>' . tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $language['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $language['id']));
+    foreach ($osC_Language->getAll() as $l) {
+      echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
     }
 ?>
     </p>

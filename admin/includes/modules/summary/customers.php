@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: customers.php,v 1.2 2004/08/24 00:56:43 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_CUSTOMERS_TITLE')) {
-    include('includes/languages/' . $osC_Session->value('language') . '/modules/summary/customers.php');
+    $osC_Language->load('modules/summary/customers.php');
   }
 
   class osC_Summary_customers extends osC_Summary {

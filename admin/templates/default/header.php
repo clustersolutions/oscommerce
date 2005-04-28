@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: header.php,v 1.11 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -94,8 +94,8 @@
        '        ],' . "\n" .
        '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(HEADER_TITLE_LANGUAGES) . '\', null, null, null,' . "\n";
 
-  foreach ($osC_Language->getAll() as $language) {
-    echo '            [\'' . tep_image('../includes/languages/' . $language['directory'] . '/images/icon.gif') . '\', \'' . addslashes($language['name']) . '\', \'' . tep_href_link(FILENAME_DEFAULT, 'language=' . $language['code']) . '\', null, null],' . "\n";
+  foreach ($osC_Language->getAll() as $l) {
+    echo '            [\'' . tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif') . '\', \'' . addslashes($l['name']) . '\', \'' . tep_href_link(FILENAME_DEFAULT, 'language=' . $l['code']) . '\', null, null],' . "\n";
   }
 
   echo '        ],' . "\n" .

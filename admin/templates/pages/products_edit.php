@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_edit.php,v 1.7 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -55,7 +55,7 @@
 
   $Qwc = $osC_Database->query('select weight_class_id, weight_class_title from :table_weight_class where language_id = :language_id order by weight_class_title');
   $Qwc->bindTable(':table_weight_class', TABLE_WEIGHT_CLASS);
-  $Qwc->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qwc->bindInt(':language_id', $osC_Language->getID());
   $Qwc->execute();
 
   $weight_class_array = array();
@@ -254,36 +254,36 @@
       //--></script>
 
 <?php
-  foreach ($osC_Language->getAll() as $language) {
+  foreach ($osC_Language->getAll() as $l) {
 ?>
 
-      <div class="tab-page" id="tabDescriptionLanguages_<?php echo $language['code']; ?>">
-        <h2 class="tab"><?php echo tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . $language['name']; ?></h2>
+      <div class="tab-page" id="tabDescriptionLanguages_<?php echo $l['code']; ?>">
+        <h2 class="tab"><?php echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . $l['name']; ?></h2>
 
         <script type="text/javascript"><!--
-          descriptionTabPane.addTabPage( document.getElementById( "tabDescriptionLanguages_<?php echo $language['code']; ?>" ) );
+          descriptionTabPane.addTabPage( document.getElementById( "tabDescriptionLanguages_<?php echo $l['code']; ?>" ) );
         //--></script>
 
         <table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_NAME; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $language['id'] . ']', (isset($pInfo) && is_array($pInfo->products_name) && isset($pInfo->products_name[$language['id']]) ? $pInfo->products_name[$language['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_name) && isset($pInfo->products_name[$l['id']]) ? $pInfo->products_name[$l['id']] : '')); ?></td>
           </tr>
           <tr>
             <td class="smallText" valign="top"><?php echo TEXT_PRODUCTS_DESCRIPTION; ?></td>
-            <td class="smallText"><?php echo tep_draw_textarea_field('products_description[' . $language['id'] . ']', 'soft', '70', '15', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$language['id']]) ? $pInfo->products_description[$language['id']] : ''), 'id="fckpd_' . $language['code'] . '" style="width: 100%;"'); ?></td>
+            <td class="smallText"><?php echo tep_draw_textarea_field('products_description[' . $l['id'] . ']', 'soft', '70', '15', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$l['id']]) ? $pInfo->products_description[$l['id']] : ''), 'id="fckpd_' . $l['code'] . '" style="width: 100%;"'); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_URL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $language['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$language['id']]) ? $pInfo->products_url[$language['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : '')); ?></td>
           </tr>
         </table>
 
         <script type="text/javascript"><!--
-          var fckpd_<?php echo $language['code']; ?> = new FCKeditor('fckpd_<?php echo $language['code']; ?>');
-          fckpd_<?php echo $language['code']; ?>.BasePath = "<?php echo DIR_WS_CATALOG . 'admin/external/FCKeditor/2.0b1/'; ?>";
-          fckpd_<?php echo $language['code']; ?>.Height = "400";
-          fckpd_<?php echo $language['code']; ?>.ReplaceTextarea();
+          var fckpd_<?php echo $l['code']; ?> = new FCKeditor('fckpd_<?php echo $l['code']; ?>');
+          fckpd_<?php echo $l['code']; ?>.BasePath = "<?php echo DIR_WS_CATALOG . 'admin/external/FCKeditor/2.0b1/'; ?>";
+          fckpd_<?php echo $l['code']; ?>.Height = "400";
+          fckpd_<?php echo $l['code']; ?>.ReplaceTextarea();
         //--></script>
       </div>
 
@@ -442,7 +442,7 @@
 <?php
   $Qoptions = $osC_Database->query('select products_options_id, products_options_name from :table_products_options where language_id = :language_id order by products_options_name');
   $Qoptions->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-  $Qoptions->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qoptions->bindInt(':language_id', $osC_Language->getID());
   $Qoptions->execute();
 
   while ($Qoptions->next()) {
@@ -452,7 +452,7 @@
     $Qvalues->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
     $Qvalues->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
     $Qvalues->bindInt(':products_options_id', $Qoptions->valueInt('products_options_id'));
-    $Qvalues->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qvalues->bindInt(':language_id', $osC_Language->getID());
     $Qvalues->execute();
 
     while ($Qvalues->next()) {
@@ -477,8 +477,8 @@
   $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
   $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
   $Qattributes->bindInt(':products_id', $_GET['pID']);
-  $Qattributes->bindInt(':language_id', $osC_Session->value('languages_id'));
-  $Qattributes->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qattributes->bindInt(':language_id', $osC_Language->getID());
+  $Qattributes->bindInt(':language_id', $osC_Language->getID());
   $Qattributes->execute();
 
   $current_attribute_group = '';

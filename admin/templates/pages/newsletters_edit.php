@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: newsletters_edit.php,v 1.2 2004/08/17 23:35:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,7 +29,7 @@
   for ($i=0, $n=sizeof($files); $i<$n; $i++) {
     $module = substr($files[$i]['name'], 0, strrpos($files[$i]['name'], '.'));
 
-    include('includes/languages/' . $osC_Session->value('language') . '/modules/newsletters/' . $files[$i]['name']);
+    $osC_Language->load('modules/newsletters/' . $files[$i]['name']);
     include('includes/modules/newsletters/' . $files[$i]['name']);
 
     $newsletter_module_class = 'osC_Newsletter_' . $module;

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: weight_classes.php,v 1.4 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -26,7 +26,7 @@
 <?php
   $Qclasses = $osC_Database->query('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id order by weight_class_title');
   $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-  $Qclasses->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qclasses->bindInt(':language_id', $osC_Language->getID());
   $Qclasses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qclasses->execute();
 
@@ -88,8 +88,8 @@
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_WEIGHT_CLASS_TITLE . '</b>'; ?></td>
         <td class="smallText" width="60%">
 <?php
-  foreach ($osC_Language->getAll() as $language) {
-    echo tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $language['id'] . ']') . osc_draw_input_field('weight_class_key[' . $language['id'] . ']', '', 'size="4"') . '<br>';
+  foreach ($osC_Language->getAll() as $l) {
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']') . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', '', 'size="4"') . '<br>';
   }
 ?>
         </td>
@@ -101,7 +101,7 @@
 <?php
     $Qrules = $osC_Database->query('select weight_class_id, weight_class_title from :table_weight_classes where language_id = :language_id order by weight_class_title');
     $Qrules->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-    $Qrules->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qrules->bindInt(':language_id', $osC_Language->getID());
     $Qrules->execute();
 
     while ($Qrules->next()) {
@@ -153,8 +153,8 @@
                                                          'title' => $Qwc->value('weight_class_title'));
     }
 
-    foreach ($osC_Language->getAll() as $language) {
-      echo tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $language['id'] . ']', $class_name[$language['id']]['title']) . osc_draw_input_field('weight_class_key[' . $language['id'] . ']', $class_name[$language['id']]['key'], 'size="4"') . '<br>';
+    foreach ($osC_Language->getAll() as $l) {
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']', $class_name[$l['id']]['title']) . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', $class_name[$l['id']]['key'], 'size="4"') . '<br>';
     }
 ?>
         </td>
@@ -169,7 +169,7 @@
     $Qrules->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
     $Qrules->bindInt(':weight_class_from_id', $wcInfo->weight_class_id);
     $Qrules->bindInt(':weight_class_to_id', $wcInfo->weight_class_id);
-    $Qrules->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qrules->bindInt(':language_id', $osC_Language->getID());
     $Qrules->execute();
 
     while ($Qrules->next()) {

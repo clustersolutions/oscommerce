@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: products_viewed.php,v 1.3 2004/11/07 20:38:51 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,9 +19,9 @@
 // Class constructor
 
     function osC_Statistics_Products_Viewed() {
-      global $osC_Session;
+      global $osC_Language;
 
-      include('includes/languages/' . $osC_Session->value('language') . '/modules/statistics/products_viewed.php');
+      $osC_Language->load('modules/statistics/products_viewed.php');
 
       $this->_setIcon();
       $this->_setTitle();

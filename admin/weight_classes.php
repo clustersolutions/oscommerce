@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: weight_classes.php,v 1.25 2004/11/20 02:08:19 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -37,7 +37,7 @@
 
         $osC_Database->startTransaction();
 
-        foreach ($osC_Language->getAll() as $language) {
+        foreach ($osC_Language->getAll() as $l) {
           if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
             $Qwc = $osC_Database->query('update :table_weight_classes set weight_class_key = :weight_class_key, weight_class_title = :weight_class_title where weight_class_id = :weight_class_id and language_id = :language_id');
           } else {
@@ -45,9 +45,9 @@
           }
           $Qwc->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
           $Qwc->bindInt(':weight_class_id', $weight_class_id);
-          $Qwc->bindInt(':language_id', $language['id']);
-          $Qwc->bindValue(':weight_class_key', $_POST['weight_class_key'][$language['id']]);
-          $Qwc->bindValue(':weight_class_title', $_POST['weight_class_title'][$language['id']]);
+          $Qwc->bindInt(':language_id', $l['id']);
+          $Qwc->bindValue(':weight_class_key', $_POST['weight_class_key'][$l['id']]);
+          $Qwc->bindValue(':weight_class_title', $_POST['weight_class_title'][$l['id']]);
           $Qwc->execute();
 
           if ($osC_Database->isError()) {
@@ -81,7 +81,7 @@
             $Qclasses = $osC_Database->query('select weight_class_id from :table_weight_classes where weight_class_id != :weight_class_id and language_id = :language_id');
             $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
             $Qclasses->bindInt(':weight_class_id', $weight_class_id);
-            $Qclasses->bindInt(':language_id', $osC_Session->value('languages_id'));
+            $Qclasses->bindInt(':language_id', $osC_Language->getID());
             $Qclasses->execute();
 
             while ($Qclasses->next()) {

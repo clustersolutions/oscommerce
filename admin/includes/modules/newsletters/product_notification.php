@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: product_notification.php,v 1.10 2004/08/17 23:41:04 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -50,14 +50,14 @@
         global $_GET;
       }
 
-      global $osC_Database, $osC_Session;
+      global $osC_Database, $osC_Language;
 
       $products_array = array();
 
       $Qproducts = $osC_Database->query('select pd.products_id, pd.products_name from :table_products p, :table_products_description pd where pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = 1 order by pd.products_name');
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
 
       while ($Qproducts->next()) {

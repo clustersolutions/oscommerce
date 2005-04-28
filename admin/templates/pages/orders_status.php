@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: orders_status.php,v 1.4 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,7 +25,7 @@
 <?php
   $Qstatuses = $osC_Database->query('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id order by orders_status_name');
   $Qstatuses->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-  $Qstatuses->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qstatuses->bindInt(':language_id', $osC_Language->getID());
   $Qstatuses->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qstatuses->execute();
 
@@ -86,8 +86,8 @@
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ORDERS_STATUS_NAME . '</b>'; ?></td>
         <td class="smallText" width="60%">
 <?php
-  foreach ($osC_Language->getAll() as $language) {
-    echo tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $language['id'] . ']') . '<br>';
+  foreach ($osC_Language->getAll() as $l) {
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br>';
   }
 ?>
         </td>
@@ -130,8 +130,8 @@
       $status_name[$Qsd->valueInt('language_id')] = $Qsd->value('orders_status_name');
     }
 
-    foreach ($osC_Language->getAll() as $language) {
-      echo tep_image('../includes/languages/' . $language['directory'] . '/images/' . $language['image'], $language['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $language['id'] . ']', (isset($status_name[$language['id']]) ? $status_name[$language['id']] : '')) . '<br>';
+    foreach ($osC_Language->getAll() as $l) {
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br>';
     }
 ?>
         </td>

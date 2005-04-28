@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: specials.php,v 1.2 2004/07/22 22:45:17 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,7 +29,7 @@
   $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
   $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
   $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-  $Qspecials->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qspecials->bindInt(':language_id', $osC_Language->getID());
   $Qspecials->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qspecials->execute();
 

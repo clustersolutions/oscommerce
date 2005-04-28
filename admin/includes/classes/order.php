@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: order.php,v 1.8 2004/07/22 22:17:44 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -86,15 +86,15 @@
     }
 
     function _getStatus() {
-      global $osC_Database, $osC_Session;
+      global $osC_Database, $osC_Language;
 
       $Qstatus = $osC_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qstatus->bindInt(':orders_status_id', $this->_status_id);
 
-/* HPDL - LANGUAGE_ID is the language code, not the language id :( */
+/* HPDL - DEFAULT_LANGUAGE is the language code, not the language id */
 //        $Qstatus->bindInt(':language_id', ($osC_Session->exists('languages_id') ? $osC_Session->value('languages_id') : DEFAULT_LANGUAGE));
-      $Qstatus->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qstatus->bindInt(':language_id', $osC_Language->getID());
       $Qstatus->execute();
 
       if ($Qstatus->numberOfRows() === 1) {
@@ -105,7 +105,7 @@
     }
 
     function _getStatusHistory() {
-      global $osC_Database, $osC_Session;
+      global $osC_Database, $osC_Language;
 
       $history_array = array();
 
@@ -113,9 +113,9 @@
       $Qhistory->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
       $Qhistory->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
 
-/* HPDL - LANGUAGE_ID is the language code, not the language id :( */
+/* HPDL - DEFAULT_LANGUAGE is the language code, not the language id */
 //        $Qstatus->bindInt(':language_id', ($osC_Session->exists('languages_id') ? $osC_Session->value('languages_id') : DEFAULT_LANGUAGE));
-      $Qhistory->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qhistory->bindInt(':language_id', $osC_Language->getID());
 
       $Qhistory->bindInt(':orders_id', $this->_order_id);
       $Qhistory->execute();
