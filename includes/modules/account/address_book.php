@@ -12,50 +12,59 @@
 
   class osC_Account_Address_book {
 
-/* Public variables */
-
-    var $page_contents = 'address_book.php';
-
 /* Private variables */
 
-    var $_module = 'address_book';
+    var $_module = 'address_book', 
+        $_page_title = HEADING_TITLE_ADDRESS_BOOK,
+        $_page_contents = 'address_book.php';
 
 /* Class constructor */
 
     function osC_Account_Address_book() {
-      global $osC_Services, $breadcrumb, $osC_Customer;
+      global $osC_Template, $osC_Services, $breadcrumb, $osC_Customer;
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->page_contents = 'address_book_process.php';
+        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY;
+        $this->_page_contents = 'address_book_process.php';
+
+        $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['new'])) {
         if ($osC_Services->isStarted('breadcrumb')) {
           $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_ADD_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
         }
 
-        $this->page_contents = 'address_book_process.php';
+        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY;
+        $this->_page_contents = 'address_book_process.php';
+
+        $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['edit']) && is_numeric($_GET[$this->_module])) {
         if ($osC_Services->isStarted('breadcrumb')) {
           $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
         }
 
-        $this->page_contents = 'address_book_process.php';
+        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY;
+        $this->_page_contents = 'address_book_process.php';
+
+        $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['delete']) && is_numeric($_GET[$this->_module])) {
         if ($osC_Services->isStarted('breadcrumb')) {
           $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
         }
 
-        $this->page_contents = 'address_book_delete.php';
+        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY;
+        $this->_page_contents = 'address_book_delete.php';
       }
 
       if (isset($_GET['new']) && ($_GET['new'] == 'save')) {
         if (tep_count_customer_address_book_entries() >= MAX_ADDRESS_BOOK_ENTRIES) {
           $messageStack->add('address_book', ERROR_ADDRESS_BOOK_FULL);
 
-          $this->page_contents = 'address_book.php';
+          $this->_page_title = HEADING_TITLE_ADDRESS_BOOK;
+          $this->_page_contents = 'address_book.php';
         } else {
           $this->_process();
         }
@@ -68,8 +77,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

@@ -25,11 +25,9 @@
   }
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('address_book') > 0) {

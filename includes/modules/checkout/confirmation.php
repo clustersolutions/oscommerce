@@ -12,13 +12,11 @@
 
   class osC_Checkout_Confirmation {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_confirmation.php';
-
 /* Private variables */
 
-    var $_module = 'confirmation';
+    var $_module = 'confirmation',
+        $_page_title = HEADING_TITLE_CHECKOUT_CONFIRMATION,
+        $_page_contents = 'checkout_confirmation.php';
 
 /* Class constructor */
 
@@ -45,8 +43,8 @@
         $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_CONFIRMATION, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
-      if (isset($_POST['payment'])) {
-        $osC_Session->set('payment', $_POST['payment']);
+      if (isset($_POST['payment_mod_sel'])) {
+        $osC_Session->set('payment', $_POST['payment_mod_sel']);
       }
       $payment =& $osC_Session->value('payment');
 
@@ -99,15 +97,19 @@
         }
 // Out of Stock
         if ( (STOCK_ALLOW_CHECKOUT != 'true') && ($any_out_of_stock == true) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT));
+          tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'AUTO'));
         }
       }
     }
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

@@ -12,13 +12,11 @@
 
   class osC_Account_Notifications {
 
-/* Public variables */
-
-    var $page_contents = 'account_notifications.php';
-
 /* Private variables */
 
-    var $_module = 'notifications';
+    var $_module = 'notifications',
+        $_page_title = HEADING_TITLE_NOTIFICATIONS,
+        $_page_contents = 'account_notifications.php';
 
 /* Class constructor */
 
@@ -42,8 +40,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

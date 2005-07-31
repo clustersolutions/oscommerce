@@ -11,11 +11,9 @@
 */
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', HEADING_TITLE_ACCOUNT, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo HEADING_TITLE_ACCOUNT; ?></h1>
-</div>
+<h1><?php echo$osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('account') > 0) {
@@ -27,13 +25,18 @@
   <div class="outsideHeading"><?php echo MY_ACCOUNT_TITLE; ?></div>
 
   <div class="content">
-    <div style="float: left; width: 130px;"><?php echo tep_image(DIR_WS_IMAGES . 'account_personal.gif'); ?></div>
-
-    <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif'); ?>);">
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . MY_ACCOUNT_INFORMATION . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . MY_ACCOUNT_ADDRESS_BOOK . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'password', 'SSL') . '">' . MY_ACCOUNT_PASSWORD . '</a>'; ?></li>
-    </ul>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_personal.gif'); ?></td>
+        <td>
+          <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . MY_ACCOUNT_INFORMATION . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . MY_ACCOUNT_ADDRESS_BOOK . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'password', 'SSL') . '">' . MY_ACCOUNT_PASSWORD . '</a>'; ?></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -41,11 +44,13 @@
   <div class="outsideHeading"><?php echo MY_ORDERS_TITLE; ?></div>
 
   <div class="content">
-    <div style="float: left; width: 130px;"><?php echo tep_image(DIR_WS_IMAGES . 'account_orders.gif'); ?></div>
-
-    <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif'); ?>);">
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . MY_ORDERS_VIEW . '</a>'; ?></li>
-    </ul>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_orders.gif'); ?></td>
+        <td>
+          <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . MY_ORDERS_VIEW . '</a>'; ?></li>
+          </ul>
 
 <?php
   if (tep_count_customer_orders() > 0) {
@@ -58,7 +63,7 @@
     $Qorders->execute();
 ?>
 
-    <table border="0" cellspacing="0" cellpadding="5">
+          <table border="0" width="100%" cellspacing="0" cellpadding="5">
 
 <?php
     while ($Qorders->next()) {
@@ -71,26 +76,29 @@
       }
 ?>
 
-      <tr class="moduleRow" onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">
-        <td width="16"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/package.png') . '</a>'; ?></td>
-        <td><?php echo '#' . $Qorders->valueInt('orders_id'); ?></td>
-        <td><?php echo tep_date_short($Qorders->value('date_purchased')); ?></td>
-        <td><?php echo $order_name . ', ' . $order_country; ?></td>
-        <td><?php echo $Qorders->value('orders_status_name'); ?></td>
-        <td align="right"><?php echo $Qorders->value('order_total'); ?></td>
-        <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image_button('small_view.gif', SMALL_IMAGE_BUTTON_VIEW) . '</a>'; ?></td>
-      </tr>
+            <tr class="moduleRow" onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">
+              <td width="50" align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image('templates/' . $osC_Template->getTemplate() . '/images/icons/16x16/package.png') . '</a>'; ?></td>
+              <td><?php echo '#' . $Qorders->valueInt('orders_id'); ?></td>
+              <td><?php echo tep_date_short($Qorders->value('date_purchased')); ?></td>
+              <td><?php echo $order_name . ', ' . $order_country; ?></td>
+              <td><?php echo $Qorders->value('orders_status_name'); ?></td>
+              <td align="right"><?php echo $Qorders->value('order_total'); ?></td>
+              <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image_button('small_view.gif', SMALL_IMAGE_BUTTON_VIEW) . '</a>'; ?></td>
+            </tr>
 
 <?php
     }
 ?>
 
-    </table>
+          </table>
 
 <?php
   }
 ?>
 
+        </td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -98,11 +106,16 @@
   <div class="outsideHeading"><?php echo MY_EMAIL_NOTIFICATIONS_TITLE; ?></div>
 
   <div class="content">
-    <div style="float: left; width: 130px;"><?php echo tep_image(DIR_WS_IMAGES . 'account_notifications.gif'); ?></div>
-
-    <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif'); ?>);">
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_NEWSLETTERS . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_PRODUCTS . '</a>'; ?></li>
-    </ul>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_notifications.gif'); ?></td>
+        <td>
+          <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_NEWSLETTERS . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_PRODUCTS . '</a>'; ?></li>
+          </ul>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>

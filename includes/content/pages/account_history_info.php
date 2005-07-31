@@ -14,11 +14,9 @@
   $order = new order($_GET['orders']);
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', sprintf(NAVBAR_TITLE_ORDER_INFORMATION, $_GET['orders']), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo sprintf(NAVBAR_TITLE_ORDER_INFORMATION, $_GET['orders']); ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <div class="moduleBox">
   <div class="outsideHeading">

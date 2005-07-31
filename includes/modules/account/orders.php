@@ -12,13 +12,11 @@
 
   class osC_Account_Orders {
 
-/* Public variables */
-
-    var $page_contents = 'account_history.php';
-
 /* Private variables */
 
-    var $_module = 'orders';
+    var $_module = 'orders',
+        $_page_title = HEADING_TITLE_ORDERS,
+        $_page_contents = 'account_history.php';
 
 /* Class constructor */
 
@@ -34,7 +32,8 @@
       }
 
       if (is_numeric($_GET[$this->_module])) {
-        $this->page_contents = 'account_history_info.php';
+        $this->_page_title = sprintf(NAVBAR_TITLE_ORDER_INFORMATION, $_GET[$this->_module]);
+        $this->_page_contents = 'account_history_info.php';
       }
 
       if (tep_not_null($_GET[$this->_module])) {
@@ -44,8 +43,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

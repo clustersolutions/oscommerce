@@ -10,6 +10,7 @@
   Released under the GNU General Public License
 */
 
+  define('NAVBAR_TITLE_LOGIN', 'Anmelden');
   define('NAVBAR_TITLE_MY_ACCOUNT', 'Ihr Konto');
   define('NAVBAR_TITLE_EDIT_ACCOUNT', 'Ihre pers&ouml;nliche Daten &auml;ndern');
   define('NAVBAR_TITLE_EDIT_PASSWORD', 'Ihre Passwort &auml;ndern');
@@ -22,6 +23,7 @@
   define('NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Eintrag &auml;ndern');
   define('NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Eintrag L&ouml;schen');
 
+  define('HEADING_TITLE_LOGIN', 'Wilkommen, Bitte Melden Sie sich an');
   define('HEADING_TITLE_ACCOUNT', 'Ihre pers&ouml;nlichen Daten');
   define('HEADING_TITLE_ACCOUNT_EDIT', 'Ihre pers&ouml;nlichen Daten &auml;ndern');
   define('HEADING_TITLE_ACCOUNT_PASSWORD', 'Ihre Passwort &auml;ndern');
@@ -33,6 +35,18 @@
   define('HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY', 'Neuer Adressbuch Eintrag');
   define('HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Adressbuch Eintrag &auml;ndern');
   define('HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Adressbuch Eintrag l&ouml;schen');
+
+  define('HEADING_LOGIN_NEW_CUSTOMER', 'Neuer Kunde');
+  define('TEXT_LOGIN_NEW_CUSTOMER', 'Ich bin ein neuer Kunde.');
+  define('TEXT_LOGIN_NEW_CUSTOMER_INTRODUCTION', 'Durch Ihre Anmeldung bei uns sind Sie in der Lage schneller zu bestellen, kennen jederzeit den Status Ihrer Bestellungen und haben immer eine aktuelle &Uuml;bersicht &uuml;ber Ihre bisherigen Bestellungen.');
+
+  define('HEADING_LOGIN_RETURNING_CUSTOMER', 'Bereits Kunde');
+  define('TEXT_LOGIN_RETURNING_CUSTOMER', 'Ich bin bereits Kunde.');
+
+  define('TEXT_LOGIN_PASSWORD_FORGOTTEN', 'Sie haben Ihr Passwort vergessen? Dann klicken Sie <u>hier</u>');
+
+  define('TEXT_LOGIN_ERROR', 'Fehler: Keine &Uuml;bereinstimmung der eingebenen eMail-Adresse und/oder dem Passwort.');
+  define('TEXT_LOGIN_VISITORS_CART', '<font color="#ff0000"><b>Achtung:</b></font> Ihre Besuchereingaben werden automatisch mit Ihrem Kundenkonto verbunden. <a href="javascript:%s;">[Mehr Information]</a>');
 
   define('MY_ACCOUNT_TITLE', 'Ihr Konto');
   define('MY_ACCOUNT_INFORMATION', 'Meine Kontoinformationen anzeigen oder &auml;ndern');

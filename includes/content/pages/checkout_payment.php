@@ -11,38 +11,9 @@
 */
 ?>
 
-<script language="javascript"><!--
-var selected;
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_payment.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-function selectRowEffect(object, buttonSelect) {
-  if (!selected) {
-    if (document.getElementById) {
-      selected = document.getElementById('defaultSelected');
-    } else {
-      selected = document.all['defaultSelected'];
-    }
-  }
-
-  if (selected) selected.className = 'moduleRow';
-  object.className = 'moduleRowSelected';
-  selected = object;
-
-// one button is not an array
-  if (document.checkout_payment.payment[0]) {
-    document.checkout_payment.payment[buttonSelect].checked=true;
-  } else {
-    document.checkout_payment.payment.checked=true;
-  }
-}
-//--></script>
-
-<?php echo $payment_modules->javascript_validation(); ?>
-
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_payment.gif', HEADING_TITLE_CHECKOUT_PAYMENT, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
-
-  <h1><?php echo HEADING_TITLE_CHECKOUT_PAYMENT; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('checkout_payment') > 0) {
@@ -72,15 +43,13 @@ function selectRowEffect(object, buttonSelect) {
   <div class="outsideHeading"><?php echo TABLE_HEADING_BILLING_ADDRESS; ?></div>
 
   <div class="content">
-    <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->id, $osC_Session->value('billto'), true, ' ', '<br>'); ?>
-    </div>
-
-    <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_BILLING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
-    </div>
-
-    <?php echo TEXT_SELECTED_BILLING_DESTINATION; ?><br><br><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', IMAGE_BUTTON_CHANGE_ADDRESS) . '</a>'; ?>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td valign="top"><?php echo TEXT_SELECTED_BILLING_DESTINATION; ?><br><br><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', IMAGE_BUTTON_CHANGE_ADDRESS) . '</a>'; ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . TITLE_BILLING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->id, $osC_Session->value('billto'), true, ' ', '<br>'); ?></td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -129,7 +98,7 @@ function selectRowEffect(object, buttonSelect) {
 ?>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
             <td class="main" colspan="3"><b><?php echo $selection[$i]['module']; ?></b></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('payment', $selection[$i]['id'], $osC_Session->value('payment')); ?></td>
+            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_mod_sel', $selection[$i]['id'], $osC_Session->value('payment')); ?></td>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
 <?php

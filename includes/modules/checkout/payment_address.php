@@ -12,22 +12,23 @@
 
   class osC_Checkout_Payment_address {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_payment_address.php';
-
 /* Private variables */
 
-    var $_module = 'payment_address';
+    var $_module = 'payment_address',
+        $_page_title = HEADING_TITLE_CHECKOUT_PAYMENT_ADDRESS,
+        $_page_contents = 'checkout_payment_address.php';
 
 /* Class constructor */
 
     function osC_Checkout_Payment_address() {
-      global $osC_Session, $osC_Services, $breadcrumb, $cart;
+      global $osC_Session, $osC_Template, $osC_Services, $breadcrumb, $cart;
 
       if ($cart->count_contents() < 1) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
+
+      $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_payment_address.js');
+      $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
 // if no billing destination address was selected, use their own address as default
       if ($osC_Session->exists('billto') == false) {
@@ -46,8 +47,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

@@ -12,18 +12,18 @@
 
   class osC_Account_Edit {
 
-/* Public variables */
-
-    var $page_contents = 'account_edit.php';
-
 /* Private variables */
 
-    var $_module = 'edit';
+    var $_module = 'edit',
+        $_page_title = HEADING_TITLE_ACCOUNT_EDIT,
+        $_page_contents = 'account_edit.php';
 
 /* Class constructor */
 
     function osC_Account_Edit() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Template, $osC_Services, $breadcrumb;
+
+      $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add(NAVBAR_TITLE_EDIT_ACCOUNT, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
@@ -36,8 +36,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

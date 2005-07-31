@@ -12,10 +12,6 @@
 
   class osC_Checkout_Process {
 
-/* Public variables */
-
-    var $page_contents = 'shopping_cart.php';
-
 /* Private variables */
 
     var $_module = 'process';
@@ -46,12 +42,6 @@
       }
 
       $this->_process();
-    }
-
-/* Public methods */
-
-    function getPageContentsFile() {
-      return $this->page_contents;
     }
 
 /* Private methods */

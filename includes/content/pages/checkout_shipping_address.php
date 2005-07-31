@@ -13,52 +13,9 @@
   $addresses_count = tep_count_customer_address_book_entries();
 ?>
 
-<script language="javascript"><!--
-var selected;
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-function selectRowEffect(object, buttonSelect) {
-  if (!selected) {
-    if (document.getElementById) {
-      selected = document.getElementById('defaultSelected');
-    } else {
-      selected = document.all['defaultSelected'];
-    }
-  }
-
-  if (selected) selected.className = 'moduleRow';
-  object.className = 'moduleRowSelected';
-  selected = object;
-
-// one button is not an array
-  if (document.checkout_address.address[0]) {
-    document.checkout_address.address[buttonSelect].checked=true;
-  } else {
-    document.checkout_address.address.checked=true;
-  }
-}
-
-function check_form_optional(form_name) {
-  var form = form_name;
-
-  var firstname = form.elements['firstname'].value;
-  var lastname = form.elements['lastname'].value;
-  var street_address = form.elements['street_address'].value;
-
-  if (firstname == '' && lastname == '' && street_address == '') {
-    return true;
-  } else {
-    return check_form(form_name);
-  }
-}
-//--></script>
-
-<?php require('includes/form_check.js.php'); ?>
-
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', HEADING_TITLE_CHECKOUT_SHIPPING_ADDRESS, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
-
-  <h1><?php echo HEADING_TITLE_CHECKOUT_SHIPPING_ADDRESS; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('checkout_address') > 0) {
@@ -77,15 +34,13 @@ function check_form_optional(form_name) {
   <div class="outsideHeading"><?php echo TABLE_HEADING_SHIPPING_ADDRESS; ?></div>
 
   <div class="content">
-    <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->id, $osC_Session->value('sendto'), true, ' ', '<br>'); ?>
-    </div>
-
-    <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_SHIPPING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
-    </div>
-
-    <?php echo TEXT_SELECTED_SHIPPING_DESTINATION; ?>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td valign="top"><?php echo TEXT_SELECTED_SHIPPING_DESTINATION; ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . TITLE_SHIPPING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->id, $osC_Session->value('sendto'), true, ' ', '<br>'); ?></td>
+      </tr>
+    </table>
   </div>
 </div>
 

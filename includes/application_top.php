@@ -84,6 +84,10 @@
   require('includes/functions/general.php');
   require('includes/functions/html_output.php');
 
+// include the template class
+  require('includes/classes/template.php');
+  $osC_Template = new osC_Template();
+
 // include shopping cart class
   require('includes/classes/shopping_cart.php');
 
@@ -190,7 +194,7 @@
                               } else {
                                 $navigation->set_snapshot();
 
-                                tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+                                tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
                               break;
       case 'notify_remove' :  if ($osC_Customer->isLoggedOn() && isset($_GET['products_id'])) {
@@ -212,7 +216,7 @@
                               } else {
                                 $navigation->set_snapshot();
 
-                                tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+                                tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
                               break;
       case 'cust_order' :     if ($osC_Customer->isLoggedOn() && isset($_GET['pid'])) {

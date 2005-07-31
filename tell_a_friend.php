@@ -15,7 +15,7 @@
   if ((ALLOW_GUEST_TO_TELL_A_FRIEND == 'false') && ($osC_Customer->isLoggedOn() == false)) {
     $navigation->set_snapshot();
 
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
   }
 
   $valid_product = false;

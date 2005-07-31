@@ -11,36 +11,9 @@
 */
 ?>
 
-<script language="javascript"><!--
-var selected;
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-function selectRowEffect(object, buttonSelect) {
-  if (!selected) {
-    if (document.getElementById) {
-      selected = document.getElementById('defaultSelected');
-    } else {
-      selected = document.all['defaultSelected'];
-    }
-  }
-
-  if (selected) selected.className = 'moduleRow';
-  object.className = 'moduleRowSelected';
-  selected = object;
-
-// one button is not an array
-  if (document.checkout_address.shipping[0]) {
-    document.checkout_address.shipping[buttonSelect].checked=true;
-  } else {
-    document.checkout_address.shipping.checked=true;
-  }
-}
-//--></script>
-
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', HEADING_TITLE_CHECKOUT_SHIPPING, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
-
-  <h1><?php echo HEADING_TITLE_CHECKOUT_SHIPPING; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <form name="checkout_address" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'shipping=process', 'SSL'); ?>" method="post">
 
@@ -48,15 +21,13 @@ function selectRowEffect(object, buttonSelect) {
   <div class="outsideHeading"><?php echo TABLE_HEADING_SHIPPING_ADDRESS; ?></div>
 
   <div class="content">
-    <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->id, $osC_Session->value('sendto'), true, ' ', '<br>'); ?>
-    </div>
-
-    <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_SHIPPING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
-    </div>
-
-    <?php echo TEXT_CHOOSE_SHIPPING_DESTINATION . '<br><br><a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', IMAGE_BUTTON_CHANGE_ADDRESS) . '</a>'; ?>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td valign="top"><?php echo TEXT_CHOOSE_SHIPPING_DESTINATION . '<br><br><a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', IMAGE_BUTTON_CHANGE_ADDRESS) . '</a>'; ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . TITLE_SHIPPING_ADDRESS . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->id, $osC_Session->value('sendto'), true, ' ', '<br>'); ?></td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -103,7 +74,7 @@ function selectRowEffect(object, buttonSelect) {
           </tr>
           <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, 0)">
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-            <td class="main" width="100%"><?php echo sprintf(FREE_SHIPPING_DESCRIPTION, $osC_Currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) . osc_draw_hidden_field('shipping', 'free_free'); ?></td>
+            <td class="main" width="100%"><?php echo sprintf(FREE_SHIPPING_DESCRIPTION, $osC_Currencies->format(MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER)) . osc_draw_hidden_field('shipping_mod_sel', 'free_free'); ?></td>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
         </table></td>
@@ -143,11 +114,11 @@ function selectRowEffect(object, buttonSelect) {
             if ( ($n > 1) || ($n2 > 1) ) {
 ?>
             <td class="main"><?php echo $osC_Currencies->format(tep_add_tax($quotes[$i]['methods'][$j]['cost'], (isset($quotes[$i]['tax']) ? $quotes[$i]['tax'] : 0))); ?></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('shipping', $quotes[$i]['id'] . '_' . $quotes[$i]['methods'][$j]['id'], $osC_Session->value('shipping')); ?></td>
+            <td class="main" align="right"><?php echo osc_draw_radio_field('shipping_mod_sel', $quotes[$i]['id'] . '_' . $quotes[$i]['methods'][$j]['id'], $osC_Session->value('shipping')); ?></td>
 <?php
             } else {
 ?>
-            <td class="main" align="right" colspan="2"><?php echo $osC_Currencies->format(tep_add_tax($quotes[$i]['methods'][$j]['cost'], $quotes[$i]['tax'])) . osc_draw_hidden_field('shipping', $quotes[$i]['id'] . '_' . $quotes[$i]['methods'][$j]['id']); ?></td>
+            <td class="main" align="right" colspan="2"><?php echo $osC_Currencies->format(tep_add_tax($quotes[$i]['methods'][$j]['cost'], $quotes[$i]['tax'])) . osc_draw_hidden_field('shipping_mod_sel', $quotes[$i]['id'] . '_' . $quotes[$i]['methods'][$j]['id']); ?></td>
 <?php
             }
 ?>

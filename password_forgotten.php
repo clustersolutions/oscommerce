@@ -33,13 +33,13 @@
 
       $messageStack->add_session('login', SUCCESS_PASSWORD_SENT, 'success');
 
-      tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
     } else {
       $messageStack->add('password_forgotten', TEXT_NO_EMAIL_ADDRESS_FOUND);
     }
   }
 
-  $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
   $breadcrumb->add(NAVBAR_TITLE_2, tep_href_link(FILENAME_PASSWORD_FORGOTTEN, '', 'SSL'));
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -120,7 +120,7 @@
             <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                <td><?php echo '<a href="' . tep_href_link(FILENAME_LOGIN, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?></td>
+                <td><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?></td>
                 <td align="right"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></td>
                 <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
               </tr>

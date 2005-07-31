@@ -12,13 +12,11 @@
 
   class osC_Account_Newsletters {
 
-/* Public variables */
-
-    var $page_contents = 'account_newsletters.php';
-
 /* Private variables */
 
-    var $_module = 'newsletters';
+    var $_module = 'newsletters',
+        $_page_title = HEADING_TITLE_NEWSLETTERS,
+        $_page_contents = 'account_newsletters.php';
 
 /* Class constructor */
 
@@ -42,8 +40,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

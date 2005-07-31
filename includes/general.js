@@ -47,3 +47,7 @@ function rowOutEffect(object) {
 function checkBox(object) {
   document.account_newsletter.elements[object].checked = !document.account_newsletter.elements[object].checked;
 }
+
+function popupWindow(url, name, params) {
+  window.open(url, name, params).focus();
+}

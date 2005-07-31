@@ -11,11 +11,9 @@
 */
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', HEADING_TITLE_ADDRESS_BOOK, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo HEADING_TITLE_ADDRESS_BOOK; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('address_book') > 0) {
@@ -27,15 +25,13 @@
   <div class="outsideHeading"><?php echo PRIMARY_ADDRESS_TITLE; ?></div>
 
   <div class="content">
-    <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->id, $osC_Customer->default_address_id, true, ' ', '<br>'); ?>
-    </div>
-
-    <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . PRIMARY_ADDRESS_TITLE . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
-    </div>
-
-    <?php echo PRIMARY_ADDRESS_DESCRIPTION; ?>
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td valign="top"><?php echo PRIMARY_ADDRESS_DESCRIPTION; ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . PRIMARY_ADDRESS_TITLE . '</b><br>' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->id, $osC_Customer->default_address_id, true, ' ', '<br>'); ?></td>
+      </tr>
+    </table>
   </div>
 </div>
 
@@ -53,11 +49,7 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-  $counter = 0;
-
   while ($Qaddresses->next()) {
-    $counter++;
-
     $format_id = tep_get_address_format_id($Qaddresses->valueInt('country_id'));
 ?>
 
@@ -89,7 +81,7 @@
 <div class="submitFormButtons">
   <span style="float: right;">
 <?php
-  if ($counter < MAX_ADDRESS_BOOK_ENTRIES) {
+  if ($Qaddresses->numberOfRows() < MAX_ADDRESS_BOOK_ENTRIES) {
     echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book&new', 'SSL') . '">' . tep_image_button('button_add_address.gif', IMAGE_BUTTON_ADD_ADDRESS) . '</a>';
   } else {
     echo sprintf(TEXT_MAXIMUM_ENTRIES, MAX_ADDRESS_BOOK_ENTRIES);

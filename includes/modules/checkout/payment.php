@@ -12,25 +12,19 @@
 
   class osC_Checkout_Payment {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_payment.php';
-
 /* Private variables */
 
-    var $_module = 'payment';
+    var $_module = 'payment',
+        $_page_title = HEADING_TITLE_CHECKOUT_PAYMENT,
+        $_page_contents = 'checkout_payment.php';
 
 /* Class constructor */
 
     function osC_Checkout_Payment() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $breadcrumb, $cart, $total_weight, $total_count, $payment_modules;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Template, $osC_Services, $breadcrumb, $cart, $total_weight, $total_count, $payment_modules;
 
       if ($cart->count_contents() < 1) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
-      }
-
-      if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_PAYMENT, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
@@ -56,9 +50,19 @@
         }
       }
 
+      if ($osC_Services->isStarted('breadcrumb')) {
+        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_PAYMENT, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+      }
+
 // redirect to the billing address page when no default address exists
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->page_contents = 'checkout_payment_address.php';
+        $this->_page_title = HEADING_TITLE_CHECKOUT_PAYMENT_ADDRESS;
+        $this->_page_contents = 'checkout_payment_address.php';
+
+        $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_payment_address.js');
+        $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      } else {
+        $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_payment.js');
       }
 
 // if no billing destination address was selected, use the customers own address as default
@@ -86,6 +90,10 @@
       require(DIR_WS_CLASSES . 'payment.php');
       $payment_modules = new payment;
 
+      if ($this->_page_contents == 'checkout_payment.php') {
+        $osC_Template->addJavascriptBlock($payment_modules->javascript_validation());
+      }
+
       if (isset($_GET['payment_error']) && is_object(${$_GET['payment_error']}) && ($error = ${$_GET['payment_error']}->get_error())) {
         $messageStack->add('checkout_payment', $error['error'], 'error');
       }
@@ -93,8 +101,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

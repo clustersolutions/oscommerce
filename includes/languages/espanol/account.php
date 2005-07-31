@@ -10,6 +10,7 @@
   Released under the GNU General Public License
 */
 
+  define('NAVBAR_TITLE_LOGIN', 'Entrar');
   define('NAVBAR_TITLE_MY_ACCOUNT', 'Mi Cuenta');
   define('NAVBAR_TITLE_EDIT_ACCOUNT', 'Editar Cuenta');
   define('NAVBAR_TITLE_EDIT_PASSWORD', 'Modificar Contrase&ntilde;a');
@@ -22,6 +23,7 @@
   define('NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Modificar Direcci&oacute;n');
   define('NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Eliminar Direcci&oacute;n');
 
+  define('HEADING_TITLE_LOGIN', 'Dejame Entrar!');
   define('HEADING_TITLE_ACCOUNT', 'Datos de Mi Cuenta');
   define('HEADING_TITLE_ACCOUNT_EDIT', 'Datos de Mi Cuenta');
   define('HEADING_TITLE_ACCOUNT_PASSWORD', 'My Account Password');
@@ -33,6 +35,18 @@
   define('HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY', 'Nueva Direcci&oacute;n');
   define('HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Modificar Direcci&oacute;n');
   define('HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Elminar Direcci&oacute;n');
+
+  define('HEADING_LOGIN_NEW_CUSTOMER', 'Nuevo Cliente');
+  define('TEXT_LOGIN_NEW_CUSTOMER', 'Soy un nuevo cliente.');
+  define('TEXT_LOGIN_NEW_CUSTOMER_INTRODUCTION', 'Al crear una cuenta podrá realizar sus compras rapidamente, revisar el estado de sus pedidos y consultar sus operaciones anteriores.');
+
+  define('HEADING_LOGIN_RETURNING_CUSTOMER', 'Ya Soy Cliente');
+  define('TEXT_LOGIN_RETURNING_CUSTOMER', 'He comprado otras veces.');
+
+  define('TEXT_LOGIN_PASSWORD_FORGOTTEN', '&iquest;Ha olvidado su contrase&ntilde;a? Siga este enlace y se la enviamos.');
+
+  define('TEXT_LOGIN_ERROR', 'Error: El E-Mail y/o Contrase&ntilde;a no figuran en nuestros datos.');
+  define('TEXT_LOGIN_VISITORS_CART', '<font color="#ff0000"><b>Nota:</b></font> El contenido de su &quot;Cesta de Visitante&quot; ser&aacute; a&ntilde;adido a su &quot;Cesta de Asociado&quot; una vez que haya entrado. <a href="javascript:%s;">[M&aacute;s Informaci&oacute;n]</a>');
 
   define('MY_ACCOUNT_TITLE', 'Mi Cuenta');
   define('MY_ACCOUNT_INFORMATION', 'Ver o modificar datos de mi cuenta.');

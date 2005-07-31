@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: session.php,v 1.5 2004/11/28 18:34:32 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -89,7 +89,7 @@
         } elseif ($osC_Session->value('SESSION_USER_AGENT') != $http_user_agent) {
           $osC_Session->destroy();
 
-          tep_redirect(tep_href_link(FILENAME_LOGIN));
+          tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 
@@ -104,7 +104,7 @@
         if ($osC_Session->value('SESSION_IP_ADDRESS') != $ip_address) {
           $osC_Session->destroy();
 
-          tep_redirect(tep_href_link(FILENAME_LOGIN));
+          tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 

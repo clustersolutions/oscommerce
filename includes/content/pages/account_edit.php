@@ -10,19 +10,15 @@
   Released under the GNU General Public License
 */
 
-  require('includes/form_check.js.php');
-
   $Qaccount = $osC_Database->query('select customers_gender, customers_firstname, customers_lastname, unix_timestamp(customers_dob) as customers_dob, customers_email_address from :table_customers where customers_id = :customers_id');
   $Qaccount->bindTable(':table_customers', TABLE_CUSTOMERS);
   $Qaccount->bindInt(':customers_id', $osC_Customer->id);
   $Qaccount->execute();
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', HEADING_TITLE_ACCOUNT_EDIT, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo HEADING_TITLE_ACCOUNT_EDIT; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('account_edit') > 0) {

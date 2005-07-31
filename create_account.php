@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: create_account.php,v 1.79 2004/05/24 10:53:22 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -170,7 +170,7 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
       <tr>
-        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link(FILENAME_LOGIN, tep_get_all_get_params(), 'SSL')); ?></td>
+        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link(FILENAME_ACCOUNT, 'login&' . tep_get_all_get_params('login'), 'SSL')); ?></td>
       </tr>
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>

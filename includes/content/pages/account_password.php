@@ -9,23 +9,19 @@
 
   Released under the GNU General Public License
 */
-
-  require('includes/form_check.js.php');
 ?>
 
-<form name="account_password" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'password=save', 'SSL'); ?>" method="post" onSubmit="return check_form(account_password);">
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', HEADING_TITLE_ACCOUNT_PASSWORD, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
-
-  <h1><?php echo HEADING_TITLE_ACCOUNT_PASSWORD; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('account_password') > 0) {
     echo $messageStack->output('account_password');
   }
 ?>
+
+<form name="account_password" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'password=save', 'SSL'); ?>" method="post" onSubmit="return check_form(account_password);">
 
 <div class="moduleBox">
   <div class="outsideHeading">

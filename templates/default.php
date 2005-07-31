@@ -18,11 +18,8 @@
   GNU General Public License:
   http://www.gnu.org/licenses/gpl.html
 */
-
-  $template = 'default';
 ?>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html <?php echo HTML_PARAMS; ?>>
 
@@ -30,25 +27,33 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
 
-<title><?php echo TITLE; ?></title>
+<title><?php echo TITLE . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
-<link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css">
+<base href="<?php echo tep_href_link('', '', 'AUTO', false); ?>">
 
-<script language="javascript" src="includes/general.js"></script>
+<link rel="stylesheet" type="text/css" href="templates/<?php echo $osC_Template->getTemplate(); ?>/stylesheet.css">
+
+<?php
+  if ($osC_Template->hasJavascript()) {
+    $osC_Template->getJavascript();
+  }
+?>
 
 </head>
 
 <body>
 
-<div id="pageHeader">
-  <div style="height: 50px">
-    <div style="float: left;">
-      <?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce') . '</a>'; ?>
-    </div>
+<div id="pageContent">
+  <?php require('includes/content/pages/' . $osC_Template->getPageContentsFilename()); ?>
+</div>
 
-    <div style="text-align: right; padding-top: 20px;">
-      <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', HEADER_TITLE_MY_ACCOUNT) . '</a>&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', HEADER_TITLE_CART_CONTENTS) . '</a>&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', HEADER_TITLE_CHECKOUT) . '</a>'; ?>
-    </div>
+<div id="pageHeader">
+  <div style="float: left;">
+    <?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce') . '</a>'; ?>
+  </div>
+
+  <div style="text-align: right; padding-top: 20px;">
+    <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', HEADER_TITLE_MY_ACCOUNT) . '</a>&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', HEADER_TITLE_CART_CONTENTS) . '</a>&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', HEADER_TITLE_CHECKOUT) . '</a>'; ?>
   </div>
 
   <div id="headerBar">
@@ -85,10 +90,6 @@
   </table>
 </div>
 
-<div id="pageContent">
-  <?php require('includes/content/pages/' . $page_contents); ?>
-</div>
-
 <div id="pageFooter">
   <div id="footerBar">
     <div style="float: left;"><?php echo strftime(DATE_FORMAT_LONG); ?></div>
@@ -96,31 +97,14 @@
     <div style="text-align: right;"><?php if ($messageStack->size('counter')) echo $messageStack->outputPlain('counter'); ?></div>
   </div>
 
+  <?php echo '<p align="center">' . FOOTER_TEXT_BODY . '</p>'; ?>
+</div>
+
 <?php
-/*
-  The following copyright announcement can only be
-  appropriately modified or removed if the layout of
-  the site theme has been modified to distinguish
-  itself from the default osCommerce-copyrighted
-  theme.
-
-  For more information please read the osCommerce
-  copyright policy found here:
-
-  http://www.oscommerce.com/about/copyright
-
-  Please leave this comment intact together with the
-  following copyright announcement.
-*/
-
-  echo '<p align="center">' . FOOTER_TEXT_BODY . '</p>';
-
   if ($osC_Services->isStarted('banner') && $osC_Banner->exists('468x60')) {
     echo '<p align="center">' . $osC_Banner->display() . '</p>';
   }
 ?>
-
-</div>
 
 </body>
 

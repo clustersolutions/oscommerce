@@ -21,7 +21,7 @@
   if ( ($osC_Customer->isLoggedOn() == false ) && (SERVICE_REVIEW_ENABLE_REVIEWS == 1) ) {
     $navigation->set_snapshot();
 
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
   }
 
   $Qproduct = $osC_Database->query('select p.products_id, p.products_model, p.products_image, p.products_price, p.products_tax_class_id, pd.products_name from :table_products p, :table_products_description pd where p.products_id = :products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id');

@@ -10,6 +10,7 @@
   Released under the GNU General Public License
 */
 
+  define('NAVBAR_TITLE_LOGIN', 'Login');
   define('NAVBAR_TITLE_MY_ACCOUNT', 'My Account');
   define('NAVBAR_TITLE_EDIT_ACCOUNT', 'Edit Account');
   define('NAVBAR_TITLE_EDIT_PASSWORD', 'Change Password');
@@ -22,6 +23,7 @@
   define('NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Edit Entry');
   define('NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Delete Entry');
 
+  define('HEADING_TITLE_LOGIN', 'Welcome, Please Sign In');
   define('HEADING_TITLE_ACCOUNT', 'My Account');
   define('HEADING_TITLE_ACCOUNT_EDIT', 'My Account Information');
   define('HEADING_TITLE_ACCOUNT_PASSWORD', 'My Account Password');
@@ -33,6 +35,18 @@
   define('HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY', 'New Address Book Entry');
   define('HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Edit Address Book Entry');
   define('HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Remove Address Book Entry');
+
+  define('HEADING_LOGIN_NEW_CUSTOMER', 'New Customer');
+  define('TEXT_LOGIN_NEW_CUSTOMER', 'I am a new customer and do not yet have an account here.');
+  define('TEXT_LOGIN_NEW_CUSTOMER_INTRODUCTION', 'By creating an account you will be able to take advantage of this store by shopping faster, be kept up to date on the status of an order, and keep track of the orders you have made.');
+
+  define('HEADING_LOGIN_RETURNING_CUSTOMER', 'Returning Customer');
+  define('TEXT_LOGIN_RETURNING_CUSTOMER', 'I am a returning customer and already have an account here.');
+
+  define('TEXT_LOGIN_PASSWORD_FORGOTTEN', 'Password forgotten? Click <u>here</u>.');
+
+  define('TEXT_LOGIN_ERROR', 'Error: No match for E-Mail Address and/or Password.');
+  define('TEXT_LOGIN_VISITORS_CART', '<font color="#ff0000"><b>Note:</b></font> Your &quot;Visitors Cart&quot; contents will be merged with your &quot;Members Cart&quot; contents once you have logged on. <a href="javascript:%s;">[More Info]</a>');
 
   define('MY_ACCOUNT_TITLE', 'My Account');
   define('MY_ACCOUNT_INFORMATION', 'View or change my account information.');

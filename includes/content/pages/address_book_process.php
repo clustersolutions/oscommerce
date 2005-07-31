@@ -20,24 +20,16 @@
     if ($Qentry->numberOfRows() < 1) {
       $messageStack->add('address_book', ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY, 'error');
     }
-
-    $page_heading_title = HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY;
   } else {
     if (($counter = tep_count_customer_address_book_entries()) >= MAX_ADDRESS_BOOK_ENTRIES) {
       $messageStack->add('address_book', ERROR_ADDRESS_BOOK_FULL);
     }
-
-    $page_heading_title = HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY;
   }
-
-  require('includes/form_check.js.php');
 ?>
 
-<div class="pageHeading">
-  <span class="pageHeadingImage"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $page_heading_title, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT); ?></span>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
 
-  <h1><?php echo $page_heading_title; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
   if ($messageStack->size('address_book') > 0) {

@@ -15,10 +15,8 @@
   function tep_redirect($url) {
     global $osC_Services, $request_type;
 
-    if ( (ENABLE_SSL == true) && ($request_type == 'SSL') ) { // We are loading an SSL page
-      if (substr($url, 0, strlen(HTTP_SERVER)) == HTTP_SERVER) { // NONSSL url
-        $url = HTTPS_SERVER . substr($url, strlen(HTTP_SERVER)); // Change it to SSL
-      }
+    if (strpos($url, '&amp;') !== false) {
+      $url = str_replace('&amp;', '&', $url);
     }
 
     header('Location: ' . $url);
@@ -969,7 +967,7 @@
     if ($osC_Customer->isLoggedOn()) {
       $greeting_string = sprintf(TEXT_GREETING_PERSONAL, tep_output_string_protected($osC_Customer->first_name), tep_href_link(FILENAME_PRODUCTS_NEW));
     } else {
-      $greeting_string = sprintf(TEXT_GREETING_GUEST, tep_href_link(FILENAME_LOGIN, '', 'SSL'), tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'SSL'));
+      $greeting_string = sprintf(TEXT_GREETING_GUEST, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'SSL'));
     }
 
     return $greeting_string;

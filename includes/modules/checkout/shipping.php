@@ -14,18 +14,16 @@
 
   class osC_Checkout_Shipping {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_shipping.php';
-
 /* Private variables */
 
-    var $_module = 'shipping';
+    var $_module = 'shipping',
+        $_page_title = HEADING_TITLE_CHECKOUT_SHIPPING,
+        $_page_contents = 'checkout_shipping.php';
 
 /* Class constructor */
 
     function osC_Checkout_Shipping() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $breadcrumb, $order, $cart, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Template, $osC_Services, $breadcrumb, $order, $cart, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
 
       if ($cart->count_contents() < 1) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
@@ -36,7 +34,13 @@
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->page_contents = 'checkout_shipping_address.php';
+        $this->_page_title = HEADING_TITLE_CHECKOUT_SHIPPING_ADDRESS;
+        $this->_page_contents = 'checkout_shipping_address.php';
+
+        $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_shipping_address.js');
+        $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      } else {
+        $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_shipping.js');
       }
 
 // if no shipping destination address was selected, use the customers own address as default
@@ -128,8 +132,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */
@@ -142,8 +150,8 @@
       }
 
       if ( (tep_count_shipping_modules() > 0) || ($free_shipping == true) ) {
-        if (isset($_POST['shipping']) && strpos($_POST['shipping'], '_')) {
-          $osC_Session->set('shipping', $_POST['shipping']);
+        if (isset($_POST['shipping_mod_sel']) && strpos($_POST['shipping_mod_sel'], '_')) {
+          $osC_Session->set('shipping', $_POST['shipping_mod_sel']);
 
           list($module, $method) = explode('_', $osC_Session->value('shipping'));
           if (is_object($GLOBALS[$module]) || ($osC_Session->value('shipping') == 'free_free')) {

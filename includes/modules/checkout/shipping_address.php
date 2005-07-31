@@ -12,22 +12,23 @@
 
   class osC_Checkout_Shipping_address {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_shipping_address.php';
-
 /* Private variables */
 
-    var $_module = 'shipping_address';
+    var $_module = 'shipping_address',
+        $_page_title = HEADING_TITLE_CHECKOUT_SHIPPING_ADDRESS,
+        $_page_contents = 'checkout_shipping_address.php';
 
 /* Class constructor */
 
     function osC_Checkout_Shipping_address() {
-      global $osC_Session, $osC_Services, $breadcrumb, $cart, $order;
+      global $osC_Session, $osC_Template, $osC_Services, $breadcrumb, $cart, $order;
 
       if ($cart->count_contents() < 1) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
+
+      $osC_Template->addJavascriptFilename('includes/content/javascript/checkout_shipping_address.js');
+      $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
       $order = new order();
 
@@ -57,8 +58,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

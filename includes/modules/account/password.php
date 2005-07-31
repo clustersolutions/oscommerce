@@ -12,18 +12,18 @@
 
   class osC_Account_Password {
 
-/* Public variables */
-
-    var $page_contents = 'account_password.php';
-
 /* Private variables */
 
-    var $_module = 'password';
+    var $_module = 'password',
+        $_page_title = HEADING_TITLE_ACCOUNT_PASSWORD,
+        $_page_contents = 'account_password.php';
 
 /* Class constructor */
 
     function osC_Account_Password() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Template, $osC_Services, $breadcrumb;
+
+      $osC_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add(NAVBAR_TITLE_EDIT_PASSWORD, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
@@ -36,8 +36,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */

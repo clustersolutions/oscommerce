@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: ssl_check.php,v 1.3 2003/11/17 16:28:01 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -64,7 +64,7 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
       <tr>
-        <td align="right" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_LOGIN) . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></td>
+        <td align="right" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL') . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->

@@ -34,9 +34,7 @@
   }
 ?>
 
-<div class="pageHeading">
-  <h1><?php echo HEADING_TITLE_CHECKOUT_SUCCESS; ?></h1>
-</div>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <form name="order" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'success=update', 'SSL'); ?>" method="post">
 
@@ -66,7 +64,7 @@
 ?>
     </p>
 
-    <h1 style="text-align: center;"><?php echo TEXT_THANKS_FOR_SHOPPING; ?></h1>
+    <h2 style="text-align: center;"><?php echo TEXT_THANKS_FOR_SHOPPING; ?></h2>
   </div>
 </div>
 

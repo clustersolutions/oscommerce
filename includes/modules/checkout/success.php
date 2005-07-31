@@ -12,13 +12,11 @@
 
   class osC_Checkout_Success {
 
-/* Public variables */
-
-    var $page_contents = 'checkout_success.php';
-
 /* Private variables */
 
-    var $_module = 'success';
+    var $_module = 'success',
+        $_page_title = HEADING_TITLE_CHECKOUT_SUCCESS,
+        $_page_contents = 'checkout_success.php';
 
 /* Class constructor */
 
@@ -36,8 +34,12 @@
 
 /* Public methods */
 
-    function getPageContentsFile() {
-      return $this->page_contents;
+    function getPageTitle() {
+      return $this->_page_title;
+    }
+
+    function getPageContentsFilename() {
+      return $this->_page_contents;
     }
 
 /* Private methods */
@@ -54,7 +56,7 @@
 
       if (strlen($notify_string) > 0) $notify_string = substr($notify_string, 0, -1);
 
-      tep_redirect(tep_href_link(FILENAME_DEFAULT, $notify_string));
+      tep_redirect(tep_href_link(FILENAME_DEFAULT, $notify_string, 'AUTO'));
     }
   }
 ?>
