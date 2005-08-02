@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: mysql_innodb.php,v 1.2 2004/05/17 01:03:28 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

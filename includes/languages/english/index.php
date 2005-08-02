@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: index.php,v 1.3 2003/11/17 14:54:10 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

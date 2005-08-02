@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: upcoming_products.php,v 1.29 2004/03/17 16:42:15 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

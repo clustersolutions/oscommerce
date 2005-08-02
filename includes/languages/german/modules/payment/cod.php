@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: cod.php,v 1.7 2002/04/17 20:31:18 harley_vb Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

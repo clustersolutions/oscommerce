@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: checkout_trail.php,v 1.3 2004/04/25 17:50:15 mattice Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

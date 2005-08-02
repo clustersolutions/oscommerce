@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: categories.php,v 1.24 2004/08/27 21:59:50 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

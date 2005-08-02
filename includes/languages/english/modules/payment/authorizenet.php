@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: authorizenet.php,v 1.14 2003/11/22 13:18:55 w2vy Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: breadcrumb.php,v 1.3 2003/02/11 00:02:56 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

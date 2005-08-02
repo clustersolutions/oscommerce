@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: directory_listing.php,v 1.3 2004/08/29 22:01:34 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

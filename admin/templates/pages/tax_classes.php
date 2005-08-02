@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: tax_classes.php,v 1.3 2004/11/07 20:38:52 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

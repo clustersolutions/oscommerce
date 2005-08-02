@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: also_purchased_products.php,v 1.23 2004/02/16 06:17:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

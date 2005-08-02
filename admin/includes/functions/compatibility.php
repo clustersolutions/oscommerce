@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: compatibility.php,v 1.14 2004/11/20 02:08:20 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

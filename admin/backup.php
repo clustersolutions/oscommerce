@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: backup.php,v 1.65 2004/11/02 00:47:55 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

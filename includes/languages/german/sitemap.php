@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: sitemap.php,v 1.2 2004/01/24 13:22:21 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

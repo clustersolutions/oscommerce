@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: upgrade_2.php,v 1.4 2004/05/24 11:06:58 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

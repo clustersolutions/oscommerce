@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: ip_locator.php,v 1.2 2004/08/06 21:32:31 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

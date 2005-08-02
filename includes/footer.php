@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: footer.php,v 1.32 2004/12/03 22:44:04 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

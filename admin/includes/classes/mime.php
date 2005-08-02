@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: mime.php,v 1.4 2003/06/16 16:36:06 dgw_ Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

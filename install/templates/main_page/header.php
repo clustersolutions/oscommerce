@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: header.php,v 1.3 2004/02/02 20:15:15 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

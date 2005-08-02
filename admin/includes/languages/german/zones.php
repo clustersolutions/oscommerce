@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: zones.php,v 1.7 2004/07/22 22:33:54 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: create_account_success.php,v 1.31 2003/11/17 16:28:01 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

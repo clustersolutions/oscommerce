@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: message_stack.php,v 1.7 2004/04/13 07:32:51 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

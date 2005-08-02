@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: file_manager_edit.php,v 1.2 2004/08/15 17:58:47 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

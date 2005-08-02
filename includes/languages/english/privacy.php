@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: privacy.php,v 1.5 2003/12/13 15:43:58 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

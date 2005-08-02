@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: install.php,v 1.6 2004/11/07 20:39:49 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

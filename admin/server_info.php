@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: server_info.php,v 1.8 2004/08/15 22:58:13 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: create_account.php,v 1.12 2003/12/13 15:43:58 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

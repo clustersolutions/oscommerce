@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: checkout_new_address.php,v 1.6 2004/05/17 01:03:30 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

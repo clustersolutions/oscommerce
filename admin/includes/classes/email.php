@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: email.php,v 1.9 2003/06/26 21:48:28 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

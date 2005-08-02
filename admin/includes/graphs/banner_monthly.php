@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: banner_monthly.php,v 1.5 2004/10/30 22:49:00 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

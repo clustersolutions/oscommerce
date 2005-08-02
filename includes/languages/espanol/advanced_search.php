@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: advanced_search.php,v 1.18 2003/07/11 16:09:08 dgw_ Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

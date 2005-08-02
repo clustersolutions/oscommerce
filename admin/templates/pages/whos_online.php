@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: whos_online.php,v 1.4 2004/10/28 12:53:30 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

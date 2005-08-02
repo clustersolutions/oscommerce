@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: general.php,v 1.7 2004/04/15 17:49:29 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

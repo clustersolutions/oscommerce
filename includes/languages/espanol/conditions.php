@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: conditions.php,v 1.6 2003/12/03 17:09:26 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

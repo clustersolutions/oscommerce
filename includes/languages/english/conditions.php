@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: conditions.php,v 1.6 2003/12/01 21:40:37 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

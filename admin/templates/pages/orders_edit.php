@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: orders_edit.php,v 1.3 2004/10/28 18:50:14 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

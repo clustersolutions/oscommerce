@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: ups.php,v 1.5 2002/04/17 16:52:31 harley_vb Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

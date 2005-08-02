@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: languages.php,v 1.4 2004/11/29 14:27:24 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

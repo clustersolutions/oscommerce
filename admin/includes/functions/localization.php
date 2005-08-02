@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: localization.php,v 1.12 2003/06/25 20:27:57 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

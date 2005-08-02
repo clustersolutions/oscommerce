@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: weight.php,v 1.6 2004/04/15 17:46:24 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

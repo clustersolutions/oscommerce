@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: password_funcs.php,v 1.2 2004/01/30 20:00:51 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

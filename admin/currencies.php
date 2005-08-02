@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: currencies.php,v 1.52 2004/10/28 18:50:12 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

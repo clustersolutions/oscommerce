@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: cache.php,v 1.11 2004/08/18 11:31:53 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

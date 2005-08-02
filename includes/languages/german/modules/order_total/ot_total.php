@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: ot_total.php,v 1.2 2002/04/17 12:01:46 harley_vb Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

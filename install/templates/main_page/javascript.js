@@ -1,5 +1,5 @@
 /*
-  $Id: javascript.js,v 1.2 2003/07/08 19:13:16 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

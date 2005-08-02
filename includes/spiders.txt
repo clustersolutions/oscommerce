@@ -1,4 +1,4 @@
-$Id: spiders.txt,v 1.4 2004/02/15 13:12:30 sparky Exp $
+$Id$
 almaden.ibm.com
 appie 1.1
 architext

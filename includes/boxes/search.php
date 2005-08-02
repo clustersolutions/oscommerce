@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: search.php,v 1.24 2004/10/31 09:55:32 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

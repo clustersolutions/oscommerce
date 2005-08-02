@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: manufacturers.php,v 1.13 2004/07/22 22:28:49 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

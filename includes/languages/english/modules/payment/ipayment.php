@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: ipayment.php,v 1.4 2002/11/01 05:35:33 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

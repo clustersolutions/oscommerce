@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: specials.php,v 1.12 2004/10/30 14:13:31 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: advanced_search.php,v 1.21 2003/09/14 09:07:03 hpdl Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

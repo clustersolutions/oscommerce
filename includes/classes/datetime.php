@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: datetime.php,v 1.2 2004/02/02 06:31:08 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com

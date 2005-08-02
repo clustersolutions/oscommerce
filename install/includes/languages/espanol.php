@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: espanol.php,v 1.3 2004/04/15 17:49:29 sparky Exp $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
