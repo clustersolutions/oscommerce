@@ -16,26 +16,26 @@
 
   define('OSC_ADMIN_FILE_MANAGER_ROOT_PATH', realpath('../'));
 
-  if ($osC_Session->exists('fm_directory')) {
-    $current_path = $osC_Session->value('fm_directory');
+  if (isset($_SESSION['fm_directory'])) {
+    $current_path = $_SESSION['fm_directory'];
   } else {
     $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
-    $osC_Session->set('fm_directory', $current_path);
+    $_SESSION['fm_directory'] = $current_path;
   }
 
   if (isset($_GET['directory'])) {
     $current_path .= '/' . $_GET['directory'];
-    $osC_Session->set('fm_directory', $current_path);
+    $_SESSION['fm_directory'] = $current_path;
   } elseif (isset($_GET['goto'])) {
     $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH . '/' . urldecode($_GET['goto']);
-    $osC_Session->set('fm_directory', $current_path);
+    $_SESSION['fm_directory'] = $current_path;
   }
 
   $current_path = realpath($current_path);
 
   if ( (substr($current_path, 0, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)) != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) || (is_dir($current_path) === false) ) {
     $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
-    $osC_Session->set('fm_directory', $current_path);
+    $_SESSION['fm_directory'] = $current_path;
   }
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
@@ -43,7 +43,7 @@
   if (!empty($action)) {
     switch ($action) {
       case 'reset':
-        $osC_Session->remove('fm_directory');
+        unset($_SESSION['fm_directory']);
 
         tep_redirect(tep_href_link(FILENAME_FILE_MANAGER));
         break;

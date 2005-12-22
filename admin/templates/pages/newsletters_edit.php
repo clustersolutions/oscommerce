@@ -64,6 +64,6 @@
   </tr>
 </table>
 
-<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
 
 </form>

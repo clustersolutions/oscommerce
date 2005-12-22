@@ -30,6 +30,7 @@ define('TEXT_BANNERS_EXPIRES_ON', 'Caduca el:');
 define('TEXT_BANNERS_OR_AT', ', o tras');
 define('TEXT_BANNERS_IMPRESSIONS', 'vistas.');
 define('TEXT_BANNERS_SCHEDULED_AT', 'Programado el:');
+define('TEXT_BANNERS_STATUS', 'Status:');
 define('TEXT_BANNERS_BANNER_NOTE', '<b>Notas sobre el Banner:</b><ul><li>Use una imagen o texto HTML para el banner - no ambos.</li><li>Texto HTML tiene prioridad sobre una imagen</li></ul>');
 define('TEXT_BANNERS_INSERT_NOTE', '<b>Notas sobre la Imagen:</b><ul><li>El directorio donde suba la imagen debe de tener configurados los permisos de escritura necesarios!</li><li>No rellene el campo \'Grabar en\' si no va a subir una imagen al servidor (por ejemplo, cuando use una imagen ya existente en el servidor -fichero local).</li><li>El campo \'Grabar en\' debe de ser un directorio que exista y terminado en una barra (por ejemplo: banners/).</li></ul>');
 define('TEXT_BANNERS_EXPIRCY_NOTE', '<b>Notas sobre la Caducidad:</b><ul><li>Solo se debe de rellenar uno de los dos campos</li><li>Si el banner no debe de caducar no rellene ninguno de los campos</li></ul>');
@@ -41,13 +42,17 @@ define('TEXT_BANNERS_EXPIRES_AT_DATE', 'Caduca el: <b>%s</b>');
 define('TEXT_BANNERS_EXPIRES_AT_IMPRESSIONS', 'Caduca tras: <b>%s</b> vistas');
 define('TEXT_BANNERS_STATUS_CHANGE', 'Cambio Estado: %s');
 
-define('TEXT_BANNERS_DATA', 'D<br>A<br>T<br>O<br>S');
+define('TEXT_BANNERS_DATA', 'D<br />A<br />T<br />O<br />S');
 define('TEXT_BANNERS_LAST_3_DAYS', 'Ultimos 3 dias');
 define('TEXT_BANNERS_BANNER_VIEWS', 'Vistas');
 define('TEXT_BANNERS_BANNER_CLICKS', 'Clicks');
 
+define('TEXT_INFO_INSERT_INTRO', 'Introduzca los datos de la nueva banner');
+define('TEXT_INFO_EDIT_INTRO', 'Haga los cambios necesarios');
 define('TEXT_INFO_DELETE_INTRO', 'Seguro que quiere eliminar este banner?');
 define('TEXT_INFO_DELETE_IMAGE', 'Borrar imagen');
+
+define('TEXT_INFO_HEADING_NEW_BANNER', 'Nueva Banner');
 
 define('SUCCESS_BANNER_INSERTED', 'Exito: Se ha a&ntilde;adido el banner.');
 define('SUCCESS_BANNER_UPDATED', 'Exito: Se ha actualizado el banner.');

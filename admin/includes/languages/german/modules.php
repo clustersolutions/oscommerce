@@ -21,5 +21,5 @@ define('TABLE_HEADING_ACTION', 'Aktion');
 
 define('TEXT_MODULE_DIRECTORY', 'Modul Verzeichnis:');
 
-define('INFO_MODULE_UNINSTALL_INTRO', 'Sind Sie sicher, dass Sie diesen Modul deinstallieren m&ouml;chten?<br><br>(Alle Modul-Parametern werden dann entfernt)');
+define('INFO_MODULE_UNINSTALL_INTRO', 'Sind Sie sicher, dass Sie diesen Modul deinstallieren m&ouml;chten?<br /><br />(Alle Modul-Parametern werden dann entfernt)');
 ?>

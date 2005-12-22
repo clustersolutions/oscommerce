@@ -30,6 +30,7 @@ define('TEXT_BANNERS_EXPIRES_ON', 'Expires On:');
 define('TEXT_BANNERS_OR_AT', ', or at');
 define('TEXT_BANNERS_IMPRESSIONS', 'impressions/views.');
 define('TEXT_BANNERS_SCHEDULED_AT', 'Scheduled At:');
+define('TEXT_BANNERS_STATUS', 'Status:');
 define('TEXT_BANNERS_BANNER_NOTE', '<b>Banner Notes:</b><ul><li>Use an image or HTML text for the banner - not both.</li><li>HTML Text has priority over an image</li></ul>');
 define('TEXT_BANNERS_INSERT_NOTE', '<b>Image Notes:</b><ul><li>Uploading directories must have proper user (write) permissions setup!</li><li>Do not fill out the \'Save To\' field if you are not uploading an image to the webserver (ie, you are using a local (serverside) image).</li><li>The \'Save To\' field must be an existing directory with an ending slash (eg, banners/).</li></ul>');
 define('TEXT_BANNERS_EXPIRCY_NOTE', '<b>Expiry Notes:</b><ul><li>Only one of the two fields should be submitted</li><li>If the banner is not to expire automatically, then leave these fields blank</li></ul>');
@@ -41,13 +42,17 @@ define('TEXT_BANNERS_EXPIRES_AT_DATE', 'Expires At: <b>%s</b>');
 define('TEXT_BANNERS_EXPIRES_AT_IMPRESSIONS', 'Expires At: <b>%s</b> impressions');
 define('TEXT_BANNERS_STATUS_CHANGE', 'Status Change: %s');
 
-define('TEXT_BANNERS_DATA', 'D<br>A<br>T<br>A');
+define('TEXT_BANNERS_DATA', 'D<br />A<br />T<br />A');
 define('TEXT_BANNERS_LAST_3_DAYS', 'Last 3 Days');
 define('TEXT_BANNERS_BANNER_VIEWS', 'Banner Views');
 define('TEXT_BANNERS_BANNER_CLICKS', 'Banner Clicks');
 
+define('TEXT_INFO_INSERT_INTRO', 'Please enter the new banner with its related data');
+define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this banner?');
 define('TEXT_INFO_DELETE_IMAGE', 'Delete banner image');
+
+define('TEXT_INFO_HEADING_NEW_BANNER', 'New Banner');
 
 define('SUCCESS_BANNER_INSERTED', 'Success: The banner has been inserted.');
 define('SUCCESS_BANNER_UPDATED', 'Success: The banner has been updated.');

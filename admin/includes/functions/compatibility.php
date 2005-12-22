@@ -5,86 +5,55 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (PHP_VERSION < 4.1) {
-    if (isset($HTTP_SERVER_VARS)) $_SERVER =& $HTTP_SERVER_VARS;
-    if (isset($HTTP_GET_VARS)) $_GET =& $HTTP_GET_VARS;
-    if (isset($HTTP_POST_VARS)) $_POST =& $HTTP_POST_VARS;
-    if (isset($HTTP_COOKIE_VARS)) $_COOKIE =& $HTTP_COOKIE_VARS;
-    if (isset($HTTP_POST_FILES)) $_FILES =& $HTTP_POST_FILES;
-    if (isset($HTTP_ENV_VARS)) $_ENV =& $HTTP_ENV_VARS;
-  }
-
-// unset variables in the global scope if register_globals is enabled
-  if (ini_get('register_globals')) {
-    $superglobals = array($_SERVER, $_ENV, $_FILES, $_COOKIE, $_POST, $_GET);
-
-    if (isset($_SESSION)) {
-      array_unshift($superglobals, $_SESSION);
+// Based from work by Richard Heyes (http://www.phpguru.org)
+  if ((int)ini_get('register_globals') > 0) {
+    if (isset($_REQUEST['GLOBALS'])) {
+      die('GLOBALS overwrite attempt detected');
     }
 
-    foreach ($superglobals as $superglobal) {
-      foreach ($superglobal as $name => $global) {
-        unset($GLOBALS[$name]);
+// variables that shouldn't be unset
+    $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
+
+    $input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) ? (array)$_SESSION : array());
+
+    foreach ($input as $k => $v) {
+      if (!in_array($k, $noUnset) && isset($GLOBALS[$k])) {
+        unset($GLOBALS[$k]);
       }
     }
 
-    ini_set('register_globals', false);
+    unset($noUnset);
+    unset($input);
+    unset($k);
+    unset($v);
   }
 
-// remove slashes from variables if magic_quotes is enabled
-  function osc_remove_magic_quotes(&$array) {
-    if (!is_array($array) || (sizeof($array) < 1)) {
-      return false;
-    }
+// Based from work by Ilia Alshanetsky (Advanced PHP Security)
+  if ((int)get_magic_quotes_gpc() > 0) {
+    $in = array(&$_GET, &$_POST, &$_COOKIE);
 
-    foreach ($array as $key => $value) {
-      if (is_array($value)) {
-        osc_remove_magic_quotes($array[$key]);
-      } else {
-        $array[$key] = stripslashes($value);
+    while (list($k,$v) = each($in)) {
+      foreach ($v as $key => $val) {
+        if (!is_array($val)) {
+          $in[$k][$key] = stripslashes($val);
+
+          continue;
+        }
+
+        $in[] =& $in[$k][$key];
       }
     }
-  }
 
-  if (get_magic_quotes_gpc() > 0) {
-    if (isset($_GET)) {
-      osc_remove_magic_quotes($_GET);
-    }
-
-    if (isset($_POST)) {
-      osc_remove_magic_quotes($_POST);
-    }
-
-    if (isset($_COOKIE)) {
-      osc_remove_magic_quotes($_COOKIE);
-    }
-  }
-
-  if (!function_exists('is_uploaded_file')) {
-    function is_uploaded_file($filename) {
-      if (!$tmp_file = get_cfg_var('upload_tmp_dir')) {
-        $tmp_file = dirname(tempnam('', ''));
-      }
-
-      if (strchr($tmp_file, '/')) {
-        if (substr($tmp_file, -1) != '/') $tmp_file .= '/';
-      } elseif (strchr($tmp_file, '\\')) {
-        if (substr($tmp_file, -1) != '\\') $tmp_file .= '\\';
-      }
-
-      return file_exists($tmp_file . basename($filename));
-    }
-  }
-
-  if (!function_exists('move_uploaded_file')) {
-    function move_uploaded_file($file, $target) {
-      return copy($file, $target);
-    }
+    unset($in);
+    unset($k);
+    unset($v);
+    unset($key);
+    unset($val);
   }
 
   if (!function_exists('checkdnsrr')) {
@@ -101,21 +70,6 @@
     }
   }
 
-  if (!function_exists('array_map')) {
-    function array_map($callback, $array) {
-      if (is_array($array)) {
-        $_new_array = array();
-        reset($array);
-        while (list($key, $value) = each($array)) {
-          $_new_array[$key] = array_map($callback, $array[$key]);
-        }
-        return $_new_array;
-      } else {
-        return $callback($array);
-      }
-    }
-  }
-
   if (!function_exists('file_get_contents')) {
     function file_get_contents($filename) {
       if ($handle = @fopen($filename, 'rb')) {
@@ -126,14 +80,6 @@
       } else {
         return false;
       }
-    }
-  }
-
-  if (!function_exists('constant')) {
-    function constant($constant) {
-      eval("\$temp=$constant;");
-
-      return $temp;
     }
   }
 

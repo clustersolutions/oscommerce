@@ -2,6 +2,19 @@
 // directory of where all the images are
 var cmThemeOfficeBase = 'external/jscookmenu/ThemeOffice/';
 
+// the follow block allows user to re-define theme base directory
+// before it is loaded.
+try
+{
+	if (myThemeOfficeBase)
+	{
+		cmThemeOfficeBase = myThemeOfficeBase;
+	}
+}
+catch (e)
+{
+}
+
 var cmThemeOffice =
 {
   	// main menu display attributes
@@ -40,6 +53,6 @@ var cmThemeOffice =
 };
 
 // for horizontal menu split
-var cmThemeOfficeHSplit = [_cmNoAction, '<td class="ThemeOfficeMenuItemLeft"></td><td colspan="2"><div class="ThemeOfficeMenuSplit"></div></td>'];
-var cmThemeOfficeMainHSplit = [_cmNoAction, '<td class="ThemeOfficeMainItemLeft"></td><td colspan="2"><div class="ThemeOfficeMenuSplit"></div></td>'];
-var cmThemeOfficeMainVSplit = [_cmNoAction, '|'];
+var cmThemeOfficeHSplit = [_cmNoClick, '<td class="ThemeOfficeMenuItemLeft"></td><td colspan="2"><div class="ThemeOfficeMenuSplit"></div></td>'];
+var cmThemeOfficeMainHSplit = [_cmNoClick, '<td class="ThemeOfficeMainItemLeft"></td><td colspan="2"><div class="ThemeOfficeMenuSplit"></div></td>'];
+var cmThemeOfficeMainVSplit = [_cmNoClick, '|'];

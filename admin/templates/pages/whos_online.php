@@ -86,7 +86,7 @@
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo gmdate('H:i:s', time() - $Qwho->value('time_entry')); ?></td>
@@ -99,7 +99,7 @@
         <td align="right">
 <?php
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'wInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . '</a>';
     }
@@ -222,7 +222,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'wDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'wDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

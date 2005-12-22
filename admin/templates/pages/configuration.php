@@ -63,7 +63,7 @@
     if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
       echo '      <tr class="selected" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id')) . '\';" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id')) . '\';" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
     }
 ?>
         <td><?php echo $Qcfg->value('configuration_title'); ?></td>
@@ -71,7 +71,7 @@
         <td align="right">
 <?php
     if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
     }
@@ -110,7 +110,7 @@
 
     <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (!empty($cInfo->last_modified) ? tep_date_short($cInfo->last_modified) : tep_date_short($cInfo->date_added)); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

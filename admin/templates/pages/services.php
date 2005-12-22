@@ -11,9 +11,9 @@
 */
 
   $directory_array = array();
-  if ($dir = @dir('../includes/modules/services/')) {
+  if ($dir = @dir('../includes/services/')) {
     while ($file = $dir->read()) {
-      if (!is_dir('../includes/modules/services/' . $file)) {
+      if (!is_dir('../includes/services/' . $file)) {
         if (substr($file, strrpos($file, '.')) == $file_extension) {
           $directory_array[] = $file;
         }
@@ -37,7 +37,7 @@
     <tbody>
 <?php
   foreach ($directory_array as $service_module) {
-    include('../includes/modules/services/' . $service_module);
+    include('../includes/services/' . $service_module);
     $class_code = substr($service_module, 0, strrpos($service_module, '.'));
     $class = 'osC_Services_' . $class_code;
     $module = new $class();
@@ -74,7 +74,7 @@
     if (isset($sInfo) && ($class_code == $sInfo->code) ) {
       echo '      <tr class="selected" title="' . $module->description . '">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code) . '\';" title="' . $module->description . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code) . '\';" title="' . $module->description . '">' . "\n";
     }
 ?>
         <td><?php echo (isset($module->title) ? $module->title : $class_code); ?></td>
@@ -84,7 +84,7 @@
       echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;';
     } elseif ($module->uninstallable) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onClick="toggleInfoBox(\'sUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        echo '<a href="#" onclick="toggleInfoBox(\'sUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
       } else {
         echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=sDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
       }
@@ -94,7 +94,7 @@
 
     if (is_array($module_keys) && (sizeof($module_keys) > 0)) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onClick="toggleInfoBox(\'sEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+        echo '<a href="#" onclick="toggleInfoBox(\'sEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
       } else {
         echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=sEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
       }
@@ -110,7 +110,7 @@
     </tbody>
   </table>
 
-  <p class="smallText"><?php echo TEXT_MODULE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/modules/services/'); ?></p>
+  <p class="smallText"><?php echo TEXT_MODULE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/services/'); ?></p>
 </div>
 
 <?php
@@ -122,7 +122,7 @@
   <div class="infoBoxContent">
     <p><?php echo TEXT_UNINSTALL_INTRO; ?></p>
     <p><?php echo '<b>' . $sInfo->title . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 
@@ -141,7 +141,7 @@
       }
 ?>
       <tr>
-        <td class="smallText" width="40%" valign="top"><?php echo '<b>' . $value['title'] . '</b><br>' . $value['description']; ?></td>
+        <td class="smallText" width="40%" valign="top"><?php echo '<b>' . $value['title'] . '</b><br />' . $value['description']; ?></td>
         <td class="smallText" width="60%" valign="top"><?php echo $value_field; ?></td>
       </tr>
 <?php
@@ -149,7 +149,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

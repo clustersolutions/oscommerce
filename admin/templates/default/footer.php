@@ -23,10 +23,10 @@
   following copyright announcement.
 */
 ?>
-<br>
+<br />
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td align="center" class="smallText">E-Commerce Engine Copyright &copy; 2000-2004 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br>osCommerce provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License</a><br>(This copyright anouncement is in accordance with section 2c of the GPL license and must be shown)</td>
+    <td align="center" class="smallText">E-Commerce Engine Copyright &copy; 2000-2005 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License</a></td>
   </tr>
   <tr>
     <td><?php echo tep_image('images/pixel_trans.gif', '', '1', '5'); ?></td>

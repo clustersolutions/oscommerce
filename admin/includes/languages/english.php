@@ -40,7 +40,7 @@ define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
 
 // Global entries for the <html> tag
-define('HTML_PARAMS','dir="ltr" lang="en"');
+define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en" lang="en"');
 
 // charset for web pages and emails
 define('CHARSET', 'iso-8859-1');
@@ -64,6 +64,8 @@ define('FEMALE', 'Female');
 
 // text for date of birth example
 define('DOB_FORMAT_STRING', 'mm/dd/yyyy');
+
+define('BOX_CONFIGURATION_ADMINISTRATORS', 'Administrators');
 
 // configuration box text in includes/boxes/configuration.php
 define('BOX_HEADING_CONFIGURATION', 'Configuration');
@@ -122,6 +124,8 @@ define('BOX_LOCALIZATION_CURRENCIES', 'Currencies');
 define('BOX_LOCALIZATION_LANGUAGES', 'Languages');
 define('BOX_LOCALIZATION_ORDERS_STATUS', 'Orders Status');
 define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
+
+define('BOX_HEADING_LOGOFF', 'Logoff');
 
 // javascript messages
 define('JS_ERROR', 'Errors have occured during the process of your form!\nPlease make the following corrections:\n\n');
@@ -187,6 +191,7 @@ define('IMAGE_ANI_SEND_EMAIL', 'Sending E-Mail');
 define('IMAGE_APPROVE', 'Approve');
 define('IMAGE_BACK', 'Back');
 define('IMAGE_BACKUP', 'Backup');
+define('IMAGE_BOX_REMOVE', 'Remove Box');
 define('IMAGE_CANCEL', 'Cancel');
 define('IMAGE_CONFIRM', 'Confirm');
 define('IMAGE_COPY', 'Copy');
@@ -203,6 +208,7 @@ define('IMAGE_ICON_STATUS_RED_LIGHT', 'Set Inactive');
 define('IMAGE_ICON_INFO', 'Info');
 define('IMAGE_INSERT', 'Insert');
 define('IMAGE_LOCK', 'Lock');
+define('IMAGE_LOGIN', 'Login');
 define('IMAGE_MODULE_INSTALL', 'Install Module');
 define('IMAGE_MODULE_REMOVE', 'Remove Module');
 define('IMAGE_MOVE', 'Move');
@@ -266,6 +272,7 @@ define('ICON_PRODUCTS', 'Products');
 
 // constants for use in tep_prev_next_display function
 define('TEXT_RESULT_PAGE', 'Page&nbsp;%s&nbsp;of&nbsp;%d');
+define('TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> administrators)');
 define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> banners)');
 define('TEXT_DISPLAY_NUMBER_OF_CATEGORIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> categories)');
 define('TEXT_DISPLAY_NUMBER_OF_COUNTRIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> countries)');
@@ -277,6 +284,8 @@ define('TEXT_DISPLAY_NUMBER_OF_MANUFACTURERS', 'Displaying <b>%d</b> to <b>%d</b
 define('TEXT_DISPLAY_NUMBER_OF_NEWSLETTERS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> newsletters)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> orders)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS_STATUS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> orders status)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES_GROUPS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes groups)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> products)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS_EXPECTED', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> products expected)');
 define('TEXT_DISPLAY_NUMBER_OF_REVIEWS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product reviews)');

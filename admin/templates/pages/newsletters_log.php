@@ -41,7 +41,7 @@
     if (isset($nmlInfo) && ($Qlog->value('email_address') == $nmlInfo->email_address) ) {
       echo '    <tr class="selected">' . "\n";
     } else {
-      echo '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmLog&lpage=' . $_GET['lpage'] . '&nmlAddress=' . $Qlog->value('email_address')) . '\';">' . "\n";
+      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmLog&lpage=' . $_GET['lpage'] . '&nmlAddress=' . $Qlog->value('email_address')) . '\';">' . "\n";
     }
 ?>
       <td><?php echo $Qlog->value('email_address'); ?></td>
@@ -61,4 +61,4 @@
   </tr>
 </table>
 
-<p align="right"><?php echo '<input type="button" value="' . BUTTON_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="infoBoxButton">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="infoBoxButton">'; ?></p>

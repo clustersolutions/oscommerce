@@ -20,7 +20,7 @@
        HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') .
        osc_draw_pull_down_menu('cPath', array_merge(array(array('id' => '', 'text' => '-- ' . TEXT_TOP . ' --')), $categories_array)) .
        '<input type="submit" value="GO" class="operationButton">' .
-       '<input type="button" value="RESET" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS) . '\';" class="sectionButton"' . ((!empty($_GET['search']) || ($current_category_id > 0)) ? '' : ' disabled') . '>' .
+       '<input type="button" value="RESET" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS) . '\';" class="sectionButton"' . ((!empty($_GET['search']) || ($current_category_id > 0)) ? '' : ' disabled') . '>' .
        '</form>';
 ?>
     </td>
@@ -76,7 +76,7 @@
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product_preview&read=only') . '">' . tep_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name') . '</a>'; ?></td>
@@ -89,11 +89,11 @@
 
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
       if ($current_category_id > 0) {
-        echo '<a href="#" onClick="toggleInfoBox(\'pMove\');">' . tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . '</a>&nbsp;';
+        echo '<a href="#" onclick="toggleInfoBox(\'pMove\');">' . tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . '</a>&nbsp;';
       }
 
-      echo '<a href="#" onClick="toggleInfoBox(\'pCopyTo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/copy.png', IMAGE_COPY_TO, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'pDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'pCopyTo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/copy.png', IMAGE_COPY_TO, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'pDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       if ($current_category_id > 0) {
         echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pMove') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . '</a>&nbsp;';
@@ -118,7 +118,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_NEW_PRODUCT . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&action=new_product') . '\';" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_NEW_PRODUCT . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&action=new_product') . '\';" class="infoBoxButton">'; ?></p>
 </div>
 
 <?php
@@ -132,10 +132,10 @@
     <?php echo tep_draw_form('pMove', FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=move_product_confirm'); ?>
 
     <p><?php echo sprintf(TEXT_MOVE_PRODUCTS_INTRO, $pInfo->products_name); ?></p>
-    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br>' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
-    <p><?php echo sprintf(TEXT_MOVE, $pInfo->products_name) . '<br>' . osc_draw_pull_down_menu('move_to_category_id', $categories_array, $cPath); ?></p>
+    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
+    <p><?php echo sprintf(TEXT_MOVE, $pInfo->products_name) . '<br />' . osc_draw_pull_down_menu('move_to_category_id', $categories_array, $cPath); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_MOVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_MOVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -151,11 +151,11 @@
     <?php echo tep_draw_form('pCopyTo', FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=copy_to_confirm'); ?>
 
     <p><?php echo TEXT_INFO_COPY_TO_INTRO; ?></p>
-    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br>' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
-    <p><?php echo TEXT_CATEGORIES . '<br>' . osc_draw_pull_down_menu('categories_id', $categories_array, $cPath); ?></p>
-    <p><?php echo TEXT_HOW_TO_COPY . '<br>' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', '', false, '<br>'); ?></p>
+    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
+    <p><?php echo TEXT_CATEGORIES . '<br />' . osc_draw_pull_down_menu('categories_id', $categories_array, $cPath); ?></p>
+    <p><?php echo TEXT_HOW_TO_COPY . '<br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', '', false, '<br />'); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_COPY . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_COPY . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -182,11 +182,11 @@
       $product_categories_array[] = array('id' => $product_categories[$i][sizeof($product_categories[$i])-1]['id'], 'text' => $category_path);
     }
 
-    echo osc_draw_checkbox_field('product_categories[]', $product_categories_array, true, '', false, '<br>');
+    echo osc_draw_checkbox_field('product_categories[]', $product_categories_array, true, '', false, '<br />');
 ?>
     </p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

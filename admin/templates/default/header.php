@@ -19,72 +19,89 @@
 <link rel="stylesheet" href="external/jscookmenu/ThemeOffice/theme.css" type="text/css">
 <script language="javascript" src="external/jscookmenu/ThemeOffice/theme.js"></script>
 
-<script language="javascript"><!--
+<script type="text/javascript">
+<!--
+
 <?php
   echo 'var administrationMenu =' . "\n" .
-       '[' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_CONFIGURATION) . '\', null, null, null,' . "\n";
+       '[' . "\n";
 
-  $Qgroups = $osC_Database->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order');
-  $Qgroups->bindTable(':table_configuration_group', TABLE_CONFIGURATION_GROUP);
-  $Qgroups->execute();
+  if (isset($_SESSION['admin'])) {
+    echo '    [null, \'' . addslashes(BOX_HEADING_CONFIGURATION) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/people.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_ADMINISTRATORS) . '\', \'' . tep_href_link(FILENAME_ADMINISTRATORS) . '\', null, null],' . "\n";
 
-  while ($Qgroups->next()) {
-    echo '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', '', '16', '16') . '\', \'' . addslashes($Qgroups->value('configuration_group_title')) . '\', \'' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $Qgroups->valueInt('configuration_group_id')) . '\', null, null],' . "\n";
+    $Qgroups = $osC_Database->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order');
+    $Qgroups->bindTable(':table_configuration_group', TABLE_CONFIGURATION_GROUP);
+    $Qgroups->execute();
+
+    while ($Qgroups->next()) {
+      echo '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', '', '16', '16') . '\', \'' . addslashes($Qgroups->value('configuration_group_title')) . '\', \'' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $Qgroups->valueInt('configuration_group_id')) . '\', null, null],' . "\n";
+    }
+
+    echo '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/services.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_SERVICES) . '\', \'' . tep_href_link(FILENAME_SERVICES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/wallet.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_CREDIT_CARDS) . '\', \'' . tep_href_link(FILENAME_CREDIT_CARDS) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_CATALOG) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/folder_red.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_CATEGORIES) . '\', \'' . tep_href_link(FILENAME_CATEGORIES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/products.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_PRODUCTS) . '\', \'' . tep_href_link(FILENAME_PRODUCTS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/attributes.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES) . '\', \'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES) . '\', \'\', null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/run.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_MANUFACTURERS) . '\', \'' . tep_href_link(FILENAME_MANUFACTURERS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_REVIEWS) . '\', \'' . tep_href_link(FILENAME_REVIEWS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/specials.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_SPECIALS) . '\', \'' . tep_href_link(FILENAME_SPECIALS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/date.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_PRODUCTS_EXPECTED) . '\', \'' . tep_href_link(FILENAME_PRODUCTS_EXPECTED) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_MODULES) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/payment.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_PAYMENT) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=payment') . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/install.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_SHIPPING) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=shipping') . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/calculator.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_ORDER_TOTAL) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=ordertotal') . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_CUSTOMERS) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/people.png', '', '16', '16') . '\', \'' . addslashes(BOX_CUSTOMERS_CUSTOMERS) . '\', \'' . tep_href_link(FILENAME_CUSTOMERS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', '', '16', '16') . '\', \'' . addslashes(BOX_CUSTOMERS_ORDERS) . '\', \'' . tep_href_link(FILENAME_ORDERS) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_LOCATION_AND_TAXES) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/world.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_COUNTRIES) . '\', \'' . tep_href_link(FILENAME_COUNTRIES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/remote.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_ZONES) . '\', \'' . tep_href_link(FILENAME_ZONES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/relationships.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_GEO_ZONES) . '\', \'' . tep_href_link(FILENAME_GEO_ZONES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/classes.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_TAX_CLASSES) . '\', \'' . tep_href_link(FILENAME_TAX_CLASSES) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_LOCALIZATION) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/currencies.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_CURRENCIES) . '\', \'' . tep_href_link(FILENAME_CURRENCIES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_LANGUAGES) . '\', \'' . tep_href_link(FILENAME_LANGUAGES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/status.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_ORDERS_STATUS) . '\', \'' . tep_href_link(FILENAME_ORDERS_STATUS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/weight.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_WEIGHT_CLASSES) . '\', \'' . tep_href_link(FILENAME_WEIGHT_CLASSES) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes('Templates') . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/file.png', '', '16', '16') . '\', \'' . addslashes('Templates') . '\', \'' . tep_href_link(FILENAME_TEMPLATES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/modules.png', '', '16', '16') . '\', \'' . addslashes('Boxes') . '\', \'' . tep_href_link(FILENAME_TEMPLATES_BOXES) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', '', '16', '16') . '\', \'' . addslashes('Modules') . '\', \'' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=content') . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/file.png', '', '16', '16') . '\', \'' . addslashes('Layouts') . '\', null, null, null,' . "\n" .
+         '            [\'' . tep_image('templates/' . $template . '/images/icons/16x16/modules.png', '', '16', '16') . '\', \'' . addslashes('Boxes') . '\', \'' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT) . '\', null, null],' . "\n" .
+         '            [\'' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', '', '16', '16') . '\', \'' . addslashes('Modules') . '\', \'' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=content') . '\', null, null],' . "\n" .
+         '        ],' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_TOOLS) . '\', null, null, null,' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/tape.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_BACKUP) . '\', \'' . tep_href_link(FILENAME_BACKUP) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_BANNER_MANAGER) . '\', \'' . tep_href_link(FILENAME_BANNER_MANAGER) . '\', \'\', null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/log.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_CACHE) . '\', \'' . tep_href_link(FILENAME_CACHE) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_DEFINE_LANGUAGE) . '\', \'' . tep_href_link(FILENAME_DEFINE_LANGUAGE) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/file_manager.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_FILE_MANAGER) . '\', \'' . tep_href_link(FILENAME_FILE_MANAGER) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/email_send.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_NEWSLETTER_MANAGER) . '\', \'' . tep_href_link(FILENAME_NEWSLETTERS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/server_info.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_SERVER_INFO) . '\', \'' . tep_href_link(FILENAME_SERVER_INFO) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/statistics.png', '', '16', '16') . '\', \'' . addslashes(BOX_REPORTS_STATISTICS) . '\', \'' . tep_href_link(FILENAME_STATISTICS) . '\', null, null],' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/people.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_WHOS_ONLINE) . '\', \'' . tep_href_link(FILENAME_WHOS_ONLINE) . '\', null, null]' . "\n" .
+         '    ],' . "\n" .
+         '    _cmSplit,' . "\n";
   }
 
-  echo '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/services.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_SERVICES) . '\', \'' . tep_href_link(FILENAME_SERVICES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/wallet.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_CREDIT_CARDS) . '\', \'' . tep_href_link(FILENAME_CREDIT_CARDS) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_CATALOG) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/folder_red.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_CATEGORIES) . '\', \'' . tep_href_link(FILENAME_CATEGORIES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/products.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_PRODUCTS) . '\', \'' . tep_href_link(FILENAME_PRODUCTS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/attributes.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES) . '\', \'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES) . '\', \'\', null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/run.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_MANUFACTURERS) . '\', \'' . tep_href_link(FILENAME_MANUFACTURERS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_REVIEWS) . '\', \'' . tep_href_link(FILENAME_REVIEWS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/specials.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_SPECIALS) . '\', \'' . tep_href_link(FILENAME_SPECIALS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/date.png', '', '16', '16') . '\', \'' . addslashes(BOX_CATALOG_PRODUCTS_EXPECTED) . '\', \'' . tep_href_link(FILENAME_PRODUCTS_EXPECTED) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_MODULES) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/payment.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_PAYMENT) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=payment') . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/install.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_SHIPPING) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=shipping') . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/calculator.png', '', '16', '16') . '\', \'' . addslashes(BOX_MODULES_ORDER_TOTAL) . '\', \'' . tep_href_link(FILENAME_MODULES, 'set=ordertotal') . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_CUSTOMERS) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/people.png', '', '16', '16') . '\', \'' . addslashes(BOX_CUSTOMERS_CUSTOMERS) . '\', \'' . tep_href_link(FILENAME_CUSTOMERS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', '', '16', '16') . '\', \'' . addslashes(BOX_CUSTOMERS_ORDERS) . '\', \'' . tep_href_link(FILENAME_ORDERS) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_LOCATION_AND_TAXES) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/world.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_COUNTRIES) . '\', \'' . tep_href_link(FILENAME_COUNTRIES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/remote.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_ZONES) . '\', \'' . tep_href_link(FILENAME_ZONES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/relationships.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_GEO_ZONES) . '\', \'' . tep_href_link(FILENAME_GEO_ZONES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/classes.png', '', '16', '16') . '\', \'' . addslashes(BOX_TAXES_TAX_CLASSES) . '\', \'' . tep_href_link(FILENAME_TAX_CLASSES) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_LOCALIZATION) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/currencies.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_CURRENCIES) . '\', \'' . tep_href_link(FILENAME_CURRENCIES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_LANGUAGES) . '\', \'' . tep_href_link(FILENAME_LANGUAGES) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/status.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_ORDERS_STATUS) . '\', \'' . tep_href_link(FILENAME_ORDERS_STATUS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/weight.png', '', '16', '16') . '\', \'' . addslashes(BOX_LOCALIZATION_WEIGHT_CLASSES) . '\', \'' . tep_href_link(FILENAME_WEIGHT_CLASSES) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(BOX_HEADING_TOOLS) . '\', null, null, null,' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/tape.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_BACKUP) . '\', \'' . tep_href_link(FILENAME_BACKUP) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_BANNER_MANAGER) . '\', \'' . tep_href_link(FILENAME_BANNER_MANAGER) . '\', \'\', null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/log.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_CACHE) . '\', \'' . tep_href_link(FILENAME_CACHE) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_DEFINE_LANGUAGE) . '\', \'' . tep_href_link(FILENAME_DEFINE_LANGUAGE) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/file_manager.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_FILE_MANAGER) . '\', \'' . tep_href_link(FILENAME_FILE_MANAGER) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/email_send.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_NEWSLETTER_MANAGER) . '\', \'' . tep_href_link(FILENAME_NEWSLETTERS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/server_info.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_SERVER_INFO) . '\', \'' . tep_href_link(FILENAME_SERVER_INFO) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/statistics.png', '', '16', '16') . '\', \'' . addslashes(BOX_REPORTS_STATISTICS) . '\', \'' . tep_href_link(FILENAME_STATISTICS) . '\', null, null],' . "\n" .
-       '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/people.png', '', '16', '16') . '\', \'' . addslashes(BOX_TOOLS_WHOS_ONLINE) . '\', \'' . tep_href_link(FILENAME_WHOS_ONLINE) . '\', null, null]' . "\n" .
-       '    ],' . "\n" .
-       '    _cmSplit,' . "\n" .
-       '    [null, \'' . addslashes(HEADER_TITLE_HELP) . '\', null, null, null,' . "\n" .
+  echo '    [null, \'' . addslashes(HEADER_TITLE_HELP) . '\', null, null, null,' . "\n" .
        '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/oscommerce.png', '', '16', '16') . '\', \'' . addslashes(HEADER_TITLE_OSCOMMERCE_SUPPORT_SITE) . '\', null, null, null,' . "\n" .
        '            [\'' . tep_image('templates/' . $template . '/images/icons/16x16/oscommerce.png', '', '16', '16') . '\', \'Support Site\', \'http://www.oscommerce.com\', \'_blank\', null],' . "\n" .
        '            [\'' . tep_image('templates/' . $template . '/images/icons/16x16/log.png', '', '16', '16') . '\', \'Knowledge Base\', \'http://www.oscommerce.info\', \'_blank\', null],' . "\n" .
@@ -100,10 +117,18 @@
 
   echo '        ],' . "\n" .
        '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/home.png', '', '16', '16') . '\', \'' . addslashes(HEADER_TITLE_ONLINE_CATALOG) . '\', \'' . tep_href_link('', '', 'NONSSL', false) . '\', \'_blank\', null],' . "\n" .
-       '    ]' . "\n" .
-       '];' . "\n";
+       '    ]' . "\n";
+
+  if (isset($_SESSION['admin'])) {
+    echo ',    _cmSplit,' . "\n" .
+         '    [null, \'' . addslashes(BOX_HEADING_LOGOFF) . '\', \'' . tep_href_link(FILENAME_LOGIN, 'action=logoff') . '\', \'\', null]' . "\n";
+  }
+
+  echo '];' . "\n";
 ?>
---></script>
+
+//-->
+</script>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
@@ -126,6 +151,6 @@
   </tr>
 </table>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
   cmDraw('administrationMenuID', administrationMenu, 'hbr', cmThemeOffice, 'ThemeOffice');
 --></script>

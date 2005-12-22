@@ -26,7 +26,7 @@
 
   define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie dieses Newsletter l&ouml;schen m&ouml;chten?');
 
-  define('TEXT_PLEASE_WAIT', 'Bitte warten Sie .. Newslettern werden gesendet ..<br><br>Bitte unterbrechen Sie diesen Prozess nicht!');
+  define('TEXT_PLEASE_WAIT', 'Bitte warten Sie .. Newslettern werden gesendet ..<br /><br />Bitte unterbrechen Sie diesen Prozess nicht!');
   define('TEXT_REFRESHING_PAGE', 'Refreshing page to avoid a server timeout ..');
   define('TEXT_CONTINUE_MANUALLY', '.. or click here to continue if no redirection within 2 seconds occurs ..');
   define('TEXT_FINISHED_SENDING_NEWSLETTERS', 'Newslettern wurden versendet!');

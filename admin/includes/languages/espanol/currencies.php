@@ -32,7 +32,7 @@ define('TEXT_INFO_CURRENCY_SYMBOL_RIGHT', 'S&iacute;mbolo a la derecha:');
 define('TEXT_INFO_CURRENCY_DECIMAL_PLACES', 'Lugares decimales:');
 define('TEXT_INFO_CURRENCY_VALUE', 'Valor:');
 
-define('TEXT_INFO_SET_AS_DEFAULT', TEXT_SET_DEFAULT . '<br><small>(requiere una actualizaci&oacute;n manual de los cambios de moneda)</small>');
+define('TEXT_INFO_SET_AS_DEFAULT', TEXT_SET_DEFAULT . '<br /><small>(requiere una actualizaci&oacute;n manual de los cambios de moneda)</small>');
 define('TEXT_INFO_SERVICE_TERMS', 'By using the selected currency update service you are agreeing to the terms and conditions of the service involved.');
 
 define('TEXT_INFO_CURRENCY_UPDATED', 'El valor de %s (%s) se ha actualizado via %s.');

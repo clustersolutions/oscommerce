@@ -18,5 +18,5 @@ define('TABLE_HEADING_ACTION', 'Action');
 
 define('TEXT_MODULE_DIRECTORY', 'Module Directory:');
 
-define('TEXT_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br><br>(All module parameters would then be removed)');
+define('TEXT_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br /><br />(All module parameters would then be removed)');
 ?>

@@ -42,7 +42,7 @@
     if (isset($zInfo) && ($Qzones->valueInt('geo_zone_id') == $zInfo->geo_zone_id)) {
       echo '      <tr class="selected" title="' . $Qzones->valueProtected('geo_zone_description') . '">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id')) . '\';"  title="' . $Qzones->valueProtected('geo_zone_description') . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id')) . '\';"  title="' . $Qzones->valueProtected('geo_zone_description') . '">' . "\n";
     }
 ?>
         <td><?php echo '<a href="' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id') . '&action=list') . '">' . tep_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qzones->value('geo_zone_name') . '</a>'; ?></td>
@@ -50,8 +50,8 @@
         <td align="right">
 <?php
     if (isset($zInfo) && ($Qzones->valueInt('geo_zone_id') == $zInfo->geo_zone_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'zEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'zDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'zEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'zDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id') . '&action=zEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id') . '&action=zDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -72,7 +72,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'zNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'zNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_zNew" <?php if ($action != 'zNew') { echo 'style="display: none;"'; } ?>>
@@ -91,7 +91,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -117,7 +117,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -135,7 +135,7 @@
     if ($Qcheck->numberOfRows() > 0) {
 ?>
     <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 <?php
     } else {
 ?>
@@ -146,7 +146,7 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_ZONE_WARNING, $zInfo->total_entries) . '</b></p>' . "\n";
       }
 ?>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->geo_zone_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->geo_zone_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

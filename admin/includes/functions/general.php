@@ -170,7 +170,7 @@
 
     while ($Qzones->next()) {
       $select_string .= '<option value="' . $Qzones->valueInt('geo_zone_id') . '"';
-      if ($selected == $Qzones->valueInt('geo_zone_id')) $select_string .= ' SELECTED';
+      if ($selected == $Qzones->valueInt('geo_zone_id')) $select_string .= ' selected="selected"';
       $select_string .= '>' . $Qzones->value('geo_zone_name') . '</option>';
     }
     $select_string .= '</select>';
@@ -231,8 +231,8 @@
       $HR = '<hr>';
       $hr = '<hr>';
       if ( ($boln == '') && ($eoln == "\n") ) { // Values not specified, use rational defaults
-        $CR = '<br>';
-        $cr = '<br>';
+        $CR = '<br />';
+        $cr = '<br />';
         $eoln = $cr;
       } else { // Use values supplied
         $CR = $eoln . $boln;
@@ -548,9 +548,9 @@
     for ($i=0, $n=sizeof($select_array); $i<$n; $i++) {
       $name = ((tep_not_null($key)) ? 'configuration[' . $key . ']' : 'configuration_value');
 
-      $string .= '<br><input type="radio" name="' . $name . '" value="' . $select_array[$i] . '"';
+      $string .= '<br /><input type="radio" name="' . $name . '" value="' . $select_array[$i] . '"';
 
-      if ($key_value == $select_array[$i]) $string .= ' CHECKED';
+      if ($key_value == $select_array[$i]) $string .= ' checked="checked"';
 
       $string .= '> ' . $select_array[$i];
     }
@@ -564,8 +564,8 @@
     reset($select_array);
     while (list($key, $value) = each($select_array)) {
       if (is_int($key)) $key = $value;
-      $string .= '<br><input type="radio" name="configuration[' . $key_name . ']" value="' . $key . '"';
-      if ($key_value == $key) $string .= ' CHECKED';
+      $string .= '<br /><input type="radio" name="configuration[' . $key_name . ']" value="' . $key . '"';
+      if ($key_value == $key) $string .= ' checked="checked"';
       $string .= '> ' . $value;
     }
 
@@ -575,10 +575,6 @@
 ////
 // Retreive server information
   function osc_get_system_information() {
-    if (PHP_VERSION < 4.1) {
-      global $_SERVER;
-    }
-
     global $osC_Database;
 
     $Qdb_date = $osC_Database->query('select now() as datetime');
@@ -661,7 +657,7 @@
       for ($j=0, $k=sizeof($calculated_category_path[$i]); $j<$k; $j++) {
         $calculated_category_path_string .= $calculated_category_path[$i][$j]['text'] . '&nbsp;&gt;&nbsp;';
       }
-      $calculated_category_path_string = substr($calculated_category_path_string, 0, -16) . '<br>';
+      $calculated_category_path_string = substr($calculated_category_path_string, 0, -16) . '<br />';
     }
     $calculated_category_path_string = substr($calculated_category_path_string, 0, -4);
 
@@ -677,7 +673,7 @@
       for ($j=0, $k=sizeof($calculated_category_path[$i]); $j<$k; $j++) {
         $calculated_category_path_string .= $calculated_category_path[$i][$j]['id'] . '_';
       }
-      $calculated_category_path_string = substr($calculated_category_path_string, 0, -1) . '<br>';
+      $calculated_category_path_string = substr($calculated_category_path_string, 0, -1) . '<br />';
     }
     $calculated_category_path_string = substr($calculated_category_path_string, 0, -4);
 
@@ -1144,12 +1140,7 @@
 ////
 // Wrapper function for round() for php3 compatibility
   function tep_round($value, $precision) {
-    if (PHP_VERSION < 4) {
-      $exp = pow(10, $precision);
-      return round($value * $exp) / $exp;
-    } else {
-      return round($value, $precision);
-    }
+    return round($value, $precision);
   }
 
 ////
@@ -1175,10 +1166,10 @@
 // Returns the tax rate for a zone / class
 // TABLES: tax_rates, zones_to_geo_zones
   function tep_get_tax_rate($class_id, $country_id = -1, $zone_id = -1) {
-    global $customer_zone_id, $customer_country_id, $osC_Database, $osC_Session;
+    global $customer_zone_id, $customer_country_id, $osC_Database;
 
     if ( ($country_id == -1) && ($zone_id == -1) ) {
-      if ($osC_Session->exists('customer_id')) {
+      if (isset($_SESSION['customer_id'])) {
         $country_id = $customer_country_id;
         $zone_id = $customer_zone_id;
       } else {
@@ -1228,8 +1219,6 @@
   function tep_call_function($function, $parameter, $object = '') {
     if ($object == '') {
       return call_user_func($function, $parameter);
-    } elseif (PHP_VERSION < 4) {
-      return call_user_method($function, $object, $parameter);
     } else {
       return call_user_func(array($object, $function), $parameter);
     }
@@ -1332,11 +1321,7 @@
 
 // nl2br() prior PHP 4.2.0 did not convert linefeeds on all OSs (it only converted \n)
   function tep_convert_linefeeds($from, $to, $string) {
-    if ((PHP_VERSION < "4.0.5") && is_array($from)) {
-      return ereg_replace('(' . implode('|', $from) . ')', $to, $string);
-    } else {
-      return str_replace($from, $to, $string);
-    }
+    return str_replace($from, $to, $string);
   }
 
   function tep_string_to_int($string) {
@@ -1391,7 +1376,7 @@
     }
   }
 
-  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&') {
+  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&amp;') {
     if (!is_array($exclude)) $exclude = array();
 
     $get_string = '';

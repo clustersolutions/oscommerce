@@ -63,7 +63,7 @@
         break;
       case 'remove':
         if (($key = array_search($_GET['service'], $installed)) !== false) {
-          include('../includes/modules/services/' . $_GET['service'] . $file_extension);
+          include('../includes/services/' . $_GET['service'] . $file_extension);
           $class = 'osC_Services_' . $_GET['service'];
           $module = new $class;
           $module->remove();
@@ -89,7 +89,7 @@
         break;
       case 'install':
         if (array_search($_GET['service'], $installed) === false) {
-          include('../includes/modules/services/' . $_GET['service'] . $file_extension);
+          include('../includes/services/' . $_GET['service'] . $file_extension);
           $class = 'osC_Services_' . $_GET['service'];
           $module = new $class;
           $module->install();

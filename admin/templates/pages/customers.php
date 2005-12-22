@@ -79,7 +79,7 @@
     if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
@@ -88,15 +88,15 @@
         <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
         <td align="right">
 <?php
-    echo '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
+    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
 
     if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
+      echo '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
     }
 
-    echo '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, 'cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', IMAGE_ORDERS, '16', '16') . '</a>';
+    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, 'cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', IMAGE_ORDERS, '16', '16') . '</a>';
 ?>
         </td>
       </tr>
@@ -116,10 +116,10 @@
   <p align="right">
 <?php
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS) . '\';"> ';
+      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS) . '\';"> ';
     }
 
-    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, 'page=' . $_GET['page'] . '&action=cNew') . '\';">';
+    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, 'page=' . $_GET['page'] . '&action=cNew') . '\';">';
 ?>
   </p>
 </div>
@@ -142,7 +142,7 @@
     }
 ?>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

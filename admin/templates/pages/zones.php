@@ -39,7 +39,7 @@
     if (isset($zInfo) && ($Qzones->valueInt('zone_id') == $zInfo->zone_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id')) . '\'">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id')) . '\'">' . "\n";
     }
 ?>
         <td><?php echo $Qzones->value('countries_name'); ?></td>
@@ -48,8 +48,8 @@
         <td align="right">
 <?php
     if (isset($zInfo) && ($Qzones->valueInt('zone_id') == $zInfo->zone_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'zEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'zDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'zEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'zDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -70,7 +70,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'zNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'zNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_zNew" <?php if ($action != 'zNew') { echo 'style="display: none;"'; } ?>>
@@ -93,7 +93,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_INSERT . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_INSERT . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -123,7 +123,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -161,9 +161,9 @@
       echo '    <p>' . TEXT_INFO_DELETE_INTRO . '</p>' . "\n" .
            '    <p><b>' . $zInfo->zone_name . '</b></p>' . "\n";
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
     } else {
-      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
     }
 ?>
   </div>

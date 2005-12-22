@@ -46,7 +46,7 @@
 
 <p><font color="#ff0000"><b><?php echo TEXT_FINISHED_SENDING_NEWSLETTERS; ?></b></font></p>
 
-<p align="right"><?php echo '<input type="button" value="' . BUTTON_OK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . BUTTON_OK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton">'; ?></p>
 
 <?php
   }

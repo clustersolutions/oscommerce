@@ -39,7 +39,7 @@
 
 <p><?php echo osc_draw_textarea_field('contents', $contents, '80', '20', 'off', 'style="width: 100%;"' . (($file_writeable) ? '' : ' readonly')); ?></p>
 
-<p align="right"><?php if ($file_writeable === true) { echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton">&nbsp;'; } echo '<input type="button" value="' . IMAGE_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php if ($file_writeable === true) { echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton">&nbsp;'; } echo '<input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng) . '\';" class="operationButton">'; ?></p>
 
 <?php
   } else {
@@ -47,7 +47,7 @@
 
 <p><?php echo TEXT_FILE_DOES_NOT_EXIST; ?></p>
 
-<p><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng) . '\';" class="operationButton">'; ?></p>
+<p><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng) . '\';" class="operationButton">'; ?></p>
 
 <?php
   }

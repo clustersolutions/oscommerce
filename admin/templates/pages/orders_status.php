@@ -37,7 +37,7 @@
     if (isset($osInfo) && ($Qstatuses->valueInt('orders_status_id') == $osInfo->orders_status_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id')) . '\';">' . "\n";
     }
 
     if (DEFAULT_ORDERS_STATUS_ID == $Qstatuses->valueInt('orders_status_id')) {
@@ -49,8 +49,8 @@
         <td align="right">
 <?php
     if (isset($osInfo) && ($Qstatuses->valueInt('orders_status_id') == $osInfo->orders_status_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'osEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'osDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'osEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'osDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -71,7 +71,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'osNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'osNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_osNew" <?php if ($action != 'osNew') { echo 'style="display: none;"'; } ?>>
@@ -87,7 +87,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br>';
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -98,7 +98,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -131,7 +131,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br>';
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
     }
 ?>
         </td>
@@ -148,7 +148,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -181,12 +181,12 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_HISTORY, $Qhistory->valueInt('total')) . '</b></p>' . "\n";
       }
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'osDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton"></p>' . "\n";
     } else {
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $osInfo->orders_status_name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

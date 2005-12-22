@@ -113,14 +113,13 @@
           $osC_Database->startTransaction();
 
           if (isset($_GET['pID']) && is_numeric($_GET['pID'])) {
-            $Qproduct = $osC_Database->query('update :table_products set products_quantity = :products_quantity, products_model = :products_model, products_price = :products_price, products_date_available = :products_date_available, products_weight = :products_weight, products_weight_class = :products_weight_class, products_status = :products_status, products_tax_class_id = :products_tax_class_id, manufacturers_id = :manufacturers_id, products_last_modified = now() where products_id = :products_id');
+            $Qproduct = $osC_Database->query('update :table_products set products_quantity = :products_quantity, products_price = :products_price, products_date_available = :products_date_available, products_weight = :products_weight, products_weight_class = :products_weight_class, products_status = :products_status, products_tax_class_id = :products_tax_class_id, manufacturers_id = :manufacturers_id, products_last_modified = now() where products_id = :products_id');
             $Qproduct->bindInt(':products_id', $_GET['pID']);
           } else {
             $Qproduct = $osC_Database->query('insert into :table_products (products_quantity, products_model, products_price, products_date_available, products_weight, products_weight_class, products_status, products_tax_class_id, manufacturers_id, products_date_added) values (:products_quantity, :products_model, :products_price, :products_date_available, :products_weight, :products_weight_class, :products_status, :products_tax_class_id, :manufacturers_id, now())');
           }
           $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
           $Qproduct->bindInt(':products_quantity', $_POST['products_quantity']);
-          $Qproduct->bindValue(':products_model', $_POST['products_model']);
           $Qproduct->bindValue(':products_price', $_POST['products_price']);
           if (date('Y-m-d') < $_POST['products_date_available']) {
             $Qproduct->bindValue(':products_date_available', $_POST['products_date_available']);
@@ -185,15 +184,18 @@
           if ($error === false) {
             foreach ($osC_Language->getAll() as $l) {
               if (isset($_GET['pID']) && is_numeric($_GET['pID'])) {
-                $Qpd = $osC_Database->query('update :table_products_description set products_name = :products_name, products_description = :products_description, products_url = :products_url where products_id = :products_id and language_id = :language_id');
+                $Qpd = $osC_Database->query('update :table_products_description set products_name = :products_name, products_description = :products_description, products_model = :products_model, products_keyword = :products_keyword, products_tags = :products_tags, products_url = :products_url where products_id = :products_id and language_id = :language_id');
               } else {
-                $Qpd = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_url)');
+                $Qpd = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_model, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_model, :products_keyword, :products_tags, :products_url)');
               }
               $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
               $Qpd->bindInt(':products_id', $products_id);
               $Qpd->bindInt(':language_id', $l['id']);
               $Qpd->bindValue(':products_name', $_POST['products_name'][$l['id']]);
               $Qpd->bindValue(':products_description', $_POST['products_description'][$l['id']]);
+              $Qpd->bindValue(':products_model', $_POST['products_model'][$l['id']]);
+              $Qpd->bindValue(':products_keyword', $_POST['products_keyword'][$l['id']]);
+              $Qpd->bindValue(':products_tags', $_POST['products_tags'][$l['id']]);
               $Qpd->bindValue(':products_url', $_POST['products_url'][$l['id']]);
               $Qpd->execute();
 
@@ -317,7 +319,7 @@
               $osC_MessageStack->add_session('header', ERROR_CANNOT_LINK_TO_SAME_CATEGORY, 'error');
             }
           } elseif ($_POST['copy_as'] == 'duplicate') {
-            $Qproduct = $osC_Database->query('select products_quantity, products_model, products_image, products_price, products_date_available, products_weight, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+            $Qproduct = $osC_Database->query('select products_quantity, products_image, products_price, products_date_available, products_weight, products_weight_class, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
             $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
             $Qproduct->bindInt(':products_id', $_GET['pID']);
             $Qproduct->execute();
@@ -327,14 +329,20 @@
 
               $osC_Database->startTransaction();
 
-              $Qnew = $osC_Database->query('insert into :table_products (products_quantity, products_model, products_image, products_price, products_date_added, products_date_available, products_weight, products_status, products_tax_class_id, manufacturers_id) values (:products_quantity, :products_model, :products_image, :products_price, now(), :products_date_available, :products_weight, 0, :products_tax_class_id, :manufacturers_id)');
+              $Qnew = $osC_Database->query('insert into :table_products (products_quantity, products_image, products_price, products_date_added, products_date_available, products_weight, products_weight_class, products_status, products_tax_class_id, manufacturers_id) values (:products_quantity, :products_image, :products_price, now(), :products_date_available, :products_weight, :products_weight_class, 0, :products_tax_class_id, :manufacturers_id)');
               $Qnew->bindTable(':table_products', TABLE_PRODUCTS);
               $Qnew->bindInt(':products_quantity', $Qproduct->valueInt('products_quantity'));
-              $Qnew->bindValue(':products_model', $Qproduct->value('products_model'));
               $Qnew->bindValue(':products_image', $Qproduct->value('products_image'));
               $Qnew->bindValue(':products_price', $Qproduct->value('products_price'));
-              $Qnew->bindValue(':products_date_available', $Qproduct->value('products_date_available'));
+
+              if (tep_not_null($Qproduct->value('products_date_available'))) {
+                $Qnew->bindValue(':products_date_available', $Qproduct->value('products_date_available'));
+              } else {
+                $Qnew->bindRaw(':products_date_available', 'null');
+              }
+
               $Qnew->bindValue(':products_weight', $Qproduct->value('products_weight'));
+              $Qnew->bindInt(':products_weight_class', $Qproduct->valueInt('products_weight_class'));
               $Qnew->bindInt(':products_tax_class_id', $Qproduct->valueInt('products_tax_class_id'));
               $Qnew->bindInt(':manufacturers_id', $Qproduct->valueInt('manufacturers_id'));
               $Qnew->execute();
@@ -342,17 +350,19 @@
               if ($Qnew->affectedRows()) {
                 $new_product_id = $osC_Database->nextID();
 
-                $Qdesc = $osC_Database->query('select language_id, products_name, products_description, products_url from :table_products_description where products_id = :products_id');
+                $Qdesc = $osC_Database->query('select language_id, products_name, products_description, products_model, products_tags, products_url from :table_products_description where products_id = :products_id');
                 $Qdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
                 $Qdesc->bindInt(':products_id', $_GET['pID']);
                 $Qdesc->execute();
 
                 while ($Qdesc->next()) {
-                  $Qnewdesc = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_url, products_viewed) values (:products_id, :language_id, :products_name, :products_description, :products_url, 0)');
+                  $Qnewdesc = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_model, products_tags, products_url, products_viewed) values (:products_id, :language_id, :products_name, :products_description, :products_model, :products_tags, :products_url, 0)');
                   $Qnewdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
                   $Qnewdesc->bindInt(':products_id', $new_product_id);
                   $Qnewdesc->bindInt(':language_id', $Qdesc->valueInt('language_id'));
                   $Qnewdesc->bindValue(':products_name', $Qdesc->value('products_name'));
+                  $Qnewdesc->bindValue(':products_model', $Qdesc->value('products_model'));
+                  $Qnewdesc->bindValue(':products_tags', $Qdesc->value('products_tags'));
                   $Qnewdesc->bindValue(':products_description', $Qdesc->value('products_description'));
                   $Qnewdesc->bindValue(':products_url', $Qdesc->value('products_url'));
                   $Qnewdesc->execute();

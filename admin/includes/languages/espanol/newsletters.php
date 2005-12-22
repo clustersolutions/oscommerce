@@ -26,7 +26,7 @@
 
   define('TEXT_INFO_DELETE_INTRO', 'Seguro que quiere eliminar este bolet&iacute;n?');
 
-  define('TEXT_PLEASE_WAIT', 'Por favor espere .. enviando boletines ..<br><br>No interrumpa este proceso!');
+  define('TEXT_PLEASE_WAIT', 'Por favor espere .. enviando boletines ..<br /><br />No interrumpa este proceso!');
   define('TEXT_REFRESHING_PAGE', 'Refreshing page to avoid a server timeout ..');
   define('TEXT_CONTINUE_MANUALLY', '.. or click here to continue if no redirection within 2 seconds occurs ..');
   define('TEXT_FINISHED_SENDING_NEWSLETTERS', 'Finalizado el env&iacute;o de boletines!');

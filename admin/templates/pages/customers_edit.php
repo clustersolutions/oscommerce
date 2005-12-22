@@ -213,6 +213,6 @@
   </table>
 </div>
 
-<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '')) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '')) . '\';">'; ?></p>
 
 </form>

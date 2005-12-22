@@ -23,7 +23,7 @@
   error_reporting(E_ALL & ~E_NOTICE);
 
 // Define the project version
-  define('PROJECT_VERSION', 'osCommerce 2.2-MS3-CVS');
+  define('PROJECT_VERSION', 'osCommerce 3.0a1');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
@@ -76,16 +76,15 @@
   require('includes/functions/html_output.php');
 
 // include session class
-  if (PHP_VERSION < 4.1) {
-    include('../includes/classes/session_compatible.php');
-  } else {
-    include('../includes/classes/session.php');
-  }
-  $osC_Session = new osC_Session();
-  $osC_Session->setName('osCAdminID');
-
-// lets start our session
+  include('../includes/classes/session.php');
+  $osC_Session = new osC_Session('osCAdminID');
   $osC_Session->start();
+
+  if (isset($_SESSION['admin']) === false) {
+    if (basename($_SERVER['SCRIPT_FILENAME']) != 'login.php') {
+      tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    }
+  }
 
 // set the language
   require('includes/classes/language.php');

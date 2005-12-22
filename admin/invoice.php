@@ -50,7 +50,7 @@
             <td class="main"><b><?php echo ENTRY_SOLD_TO; ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br>'); ?></td>
+            <td class="main"><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></td>
           </tr>
           <tr>
             <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '5'); ?></td>
@@ -67,7 +67,7 @@
             <td class="main"><b><?php echo ENTRY_SHIP_TO; ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br>'); ?></td>
+            <td class="main"><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br />'); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -106,7 +106,7 @@
 
       if (isset($product['attributes']) && (sizeof($product['attributes']) > 0)) {
         foreach ($product['attributes'] as $attribute) {
-          echo '<br><nobr><small>&nbsp;<i> - ' . $attribute['option'] . ': ' . $attribute['value'];
+          echo '<br /><nobr><small>&nbsp;<i> - ' . $attribute['option'] . ': ' . $attribute['value'];
           if ($attribute['price'] != '0') echo ' (' . $attribute['prefix'] . $osC_Currencies->format($attribute['price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . ')';
           echo '</i></small></nobr>';
         }
@@ -139,7 +139,7 @@
 </table>
 <!-- body_text_eof //-->
 
-<br>
+<br />
 </body>
 </html>
 <?php require('includes/application_bottom.php'); ?>

@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL', $administration = true) {
+  function tep_href_link($page = '', $parameters = '', $connection = 'SSL', $administration = true) {
     $path = ($administration === true) ? DIR_WS_CATALOG . 'admin/' : DIR_WS_CATALOG;
 
     $link = ((($connection == 'SSL') && (ENABLE_SSL == 'true') ) ? HTTPS_SERVER : HTTP_SERVER) . $path;
@@ -215,7 +215,7 @@
     if (tep_not_null($value)) $selection .= ' value="' . tep_output_string($value) . '"';
 
     if ( ($checked == true) || (isset($GLOBALS[$name]) && is_string($GLOBALS[$name]) && ($GLOBALS[$name] == 'on')) || (isset($value) && isset($GLOBALS[$name]) && ($GLOBALS[$name] == $value)) || (tep_not_null($value) && tep_not_null($compare) && ($value == $compare)) ) {
-      $selection .= ' CHECKED';
+      $selection .= ' checked="checked"';
     }
 
     $selection .= '>';
@@ -256,10 +256,6 @@
   }
 
   function osc_draw_textarea_field($name, $value = '', $width = '60', $height = '5', $wrap = 'soft', $parameters = '', $reinsert_value = true, $required = false) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if ($reinsert_value === true) {
       if (isset($_GET[$name])) {
         $value = $_GET[$name];
@@ -315,7 +311,7 @@
     for ($i=0, $n=sizeof($values); $i<$n; $i++) {
       $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
       if ($default == $values[$i]['id']) {
-        $field .= ' SELECTED';
+        $field .= ' selected="selected"';
       }
 
       $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
@@ -328,10 +324,6 @@
   }
 
   function osc_draw_selection_field($name, $type, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if (!is_array($values)) {
       $values = array($values);
     }
@@ -363,7 +355,7 @@
       }
 
       if ((is_bool($default) && $default === true) || (!empty($default) && ($default == $selection_value))) {
-        $field .= ' CHECKED';
+        $field .= ' checked="checked"';
       }
 
       if (!empty($parameters)) {
@@ -391,10 +383,6 @@
   }
 
   function osc_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     $field_value = $value;
 
     $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
@@ -429,9 +417,7 @@
   }
 
   function osc_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
+    $group = false;
 
     $field = '<select name="' . tep_output_string($name) . '"';
 
@@ -448,13 +434,25 @@
     }
 
     for ($i=0, $n=sizeof($values); $i<$n; $i++) {
+      if (isset($values[$i]['group'])) {
+        if ($group != $values[$i]['group']) {
+          $group = $values[$i]['group'];
+          $field .= '<optgroup label="' . tep_output_string($values[$i]['group']) . '">';
+        }
+      }
       $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
 
       if ($default_value == $values[$i]['id']) {
-        $field .= ' SELECTED';
+        $field .= ' selected="selected"';
       }
 
       $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+
+      if (($group !== false) && ( ($group != $values[$i]['group']) || (isset($values[$i+1]) === false) )) {
+        $group = false;
+
+        $field .= '</optgroup>';
+      }
     }
 
     $field .= '</select>';
@@ -467,10 +465,6 @@
   }
 
   function osc_draw_hidden_field($name, $value = '', $parameters = '') {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if (empty($value)) {
       if (isset($_GET[$name])) {
         $value = $_GET[$name];
@@ -501,7 +495,7 @@
     $days_select_string = '';
 
     if ($show_days === true) {
-      $params = 'onChange="updateDatePullDownMenu(this.form, \'' . $name . '\');"';
+      $params = 'onchange="updateDatePullDownMenu(this.form, \'' . $name . '\');"';
 
       $days_in_month = ($default_today === true) ? date('t') : 31;
 

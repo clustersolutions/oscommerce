@@ -40,7 +40,7 @@ define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
 
 // Global entries for the <html> tag
-define('HTML_PARAMS','dir="ltr" lang="de"');
+define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="de" lang="de"');
 
 // charset for web pages and emails
 define('CHARSET', 'iso-8859-1');
@@ -64,6 +64,8 @@ define('FEMALE', 'Frau');
 
 // text for date of birth example
 define('DOB_FORMAT_STRING', 'tt.mm.jjjj');
+
+define('BOX_CONFIGURATION_ADMINISTRATORS', 'Administratoren');
 
 // configuration box text in includes/boxes/configuration.php
 define('BOX_HEADING_CONFIGURATION', 'Konfiguration');
@@ -123,17 +125,19 @@ define('BOX_LOCALIZATION_LANGUAGES', 'Sprachen');
 define('BOX_LOCALIZATION_ORDERS_STATUS', 'Bestellstatus');
 define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
 
+define('BOX_HEADING_LOGOFF', 'Abmelden');
+
 // javascript messages
-define('JS_ERROR', 'WÃ¤hrend der Eingabe sind Fehler aufgetreten!\nBitte korrigieren Sie folgendes:\n\n');
-define('JS_OPTIONS_VALUE_PRICE', '* Sie mÃ¼ssen diesem Wert einen Preis zuordnen\n');
-define('JS_OPTIONS_VALUE_PRICE_PREFIX', '* Sie mÃ¼ssen ein Vorzeichen fÃ¼r den Preis angeben (+/-)\n');
+define('JS_ERROR', 'Während der Eingabe sind Fehler aufgetreten!\nBitte korrigieren Sie folgendes:\n\n');
+define('JS_OPTIONS_VALUE_PRICE', '* Sie müssen diesem Wert einen Preis zuordnen\n');
+define('JS_OPTIONS_VALUE_PRICE_PREFIX', '* Sie müssen ein Vorzeichen für den Preis angeben (+/-)\n');
 define('JS_PRODUCTS_NAME', '* Der neue Artikel muss einen Namen haben\n');
 define('JS_PRODUCTS_DESCRIPTION', '* Der neue Artikel muss eine Beschreibung haben\n');
 define('JS_PRODUCTS_PRICE', '* Der neue Artikel muss einen Preis haben\n');
 define('JS_PRODUCTS_WEIGHT', '* Der neue Artikel muss eine Gewichtsangabe haben\n');
-define('JS_PRODUCTS_QUANTITY', '* Sie mÃ¼ssen dem neuen Artikel eine verfÃ¼gbare Anzahl zuordnen\n');
-define('JS_PRODUCTS_MODEL', '* Sie mÃ¼ssen dem neuen Artikel eine Artikel-Nr. zuordnen\n');
-define('JS_PRODUCTS_IMAGE', '* Sie mÃ¼ssen dem Artikel ein Bild zuordnen\n');
+define('JS_PRODUCTS_QUANTITY', '* Sie müssen dem neuen Artikel eine verfügbare Anzahl zuordnen\n');
+define('JS_PRODUCTS_MODEL', '* Sie müssen dem neuen Artikel eine Artikel-Nr. zuordnen\n');
+define('JS_PRODUCTS_IMAGE', '* Sie müssen dem Artikel ein Bild zuordnen\n');
 define('JS_SPECIALS_PRODUCTS_PRICE', '* Es muss ein neuer Preis fr diesen Artikel festgelegt werden\n');
 define('JS_ORDER_DOES_NOT_EXIST', 'Auftragsnummer %s existiert nicht!');
 
@@ -187,6 +191,7 @@ define('IMAGE_ANI_SEND_EMAIL', 'eMail versenden');
 define('IMAGE_APPROVE', 'Approve');
 define('IMAGE_BACK', 'Zur&uuml;ck');
 define('IMAGE_BACKUP', 'Datensicherung');
+define('IMAGE_BOX_REMOVE', 'Box Entfernen');
 define('IMAGE_CANCEL', 'Abbruch');
 define('IMAGE_CONFIRM', 'Best&auml;tigen');
 define('IMAGE_COPY', 'Kopieren');
@@ -203,6 +208,7 @@ define('IMAGE_ICON_STATUS_RED_LIGHT', 'deaktivieren');
 define('IMAGE_ICON_INFO', 'Information');
 define('IMAGE_INSERT', 'Einf&uuml;gen');
 define('IMAGE_LOCK', 'Sperren');
+define('IMAGE_LOGIN', 'Login');
 define('IMAGE_MODULE_INSTALL', 'Module Installieren');
 define('IMAGE_MODULE_REMOVE', 'Module Entfernen');
 define('IMAGE_MOVE', 'Verschieben');
@@ -266,6 +272,7 @@ define('ICON_PRODUCTS', 'Products');
 
 // constants for use in tep_prev_next_display function
 define('TEXT_RESULT_PAGE', 'Seite&nbsp;%s&nbsp;von&nbsp;%d');
+define('TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Administratoren)');
 define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bannern)');
 define('TEXT_DISPLAY_NUMBER_OF_CATEGORIES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Kategorien)');
 define('TEXT_DISPLAY_NUMBER_OF_COUNTRIES', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> L&auml;ndern)');
@@ -277,6 +284,8 @@ define('TEXT_DISPLAY_NUMBER_OF_MANUFACTURERS', 'Angezeigt werden <b>%d</b> bis <
 define('TEXT_DISPLAY_NUMBER_OF_NEWSLETTERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Rundschreiben)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bestellungen)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS_STATUS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bestellstatus)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES_GROUPS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes groups)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Artikeln)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS_EXPECTED', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> erwarteten Artikeln)');
 define('TEXT_DISPLAY_NUMBER_OF_REVIEWS', 'Angezeigt werden <b>%d</b> bis <b>%d</b> (von insgesamt <b>%d</b> Bewertungen)');

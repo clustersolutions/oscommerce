@@ -11,6 +11,7 @@
 */
 
 // define the filenames used in the project
+  define('FILENAME_ADMINISTRATORS', 'administrators.php');
   define('FILENAME_BACKUP', 'backup.php');
   define('FILENAME_BANNER_MANAGER', 'banner_manager.php');
   define('FILENAME_CACHE', 'cache.php');
@@ -26,6 +27,7 @@
   define('FILENAME_FILE_MANAGER', 'file_manager.php');
   define('FILENAME_GEO_ZONES', 'geo_zones.php');
   define('FILENAME_LANGUAGES', 'languages.php');
+  define('FILENAME_LOGIN', 'login.php');
   define('FILENAME_MANUFACTURERS', 'manufacturers.php');
   define('FILENAME_MODULES', 'modules.php');
   define('FILENAME_NEWSLETTERS', 'newsletters.php');
@@ -42,6 +44,11 @@
   define('FILENAME_SPECIALS', 'specials.php');
   define('FILENAME_STATISTICS', 'statistics.php');
   define('FILENAME_TAX_CLASSES', 'tax_classes.php');
+  define('FILENAME_TEMPLATES', 'templates.php');
+  define('FILENAME_TEMPLATES_BOXES', 'templates_boxes.php');
+  define('FILENAME_TEMPLATES_BOXES_LAYOUT', 'templates_boxes_layout.php');
+  define('FILENAME_TEMPLATES_MODULES', 'templates_modules.php');
+  define('FILENAME_TEMPLATES_MODULES_LAYOUT', 'templates_modules_layout.php');
   define('FILENAME_WEIGHT_CLASSES', 'weight_classes.php');
   define('FILENAME_WHOS_ONLINE', 'whos_online.php');
   define('FILENAME_ZONES', 'zones.php');

@@ -50,16 +50,16 @@
     <td class="smallText" align="right">
 <?php
   echo tep_draw_form('type', FILENAME_BANNER_MANAGER, '', 'get') . osc_draw_hidden_field('page', $_GET['page']) . osc_draw_hidden_field('bID', $_GET['bID']) . osc_draw_hidden_field('action', 'statistics') .
-       TITLE_TYPE . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onChange="this.form.submit();"');
+       TITLE_TYPE . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onchange="this.form.submit();"');
 
   switch ($type) {
     case 'yearly': break;
     case 'monthly':
-      echo TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onChange="this.form.submit();"');
+      echo TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
       break;
     default:
     case 'daily':
-      echo TITLE_MONTH . ' ' . osc_draw_pull_down_menu('month', $months_array, date('n'), 'onChange="this.form.submit();"') . TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onChange="this.form.submit();"');
+      echo TITLE_MONTH . ' ' . osc_draw_pull_down_menu('month', $months_array, date('n'), 'onchange="this.form.submit();"') . TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
       break;
   }
 
@@ -110,4 +110,4 @@
   </tbody>
 </table>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>

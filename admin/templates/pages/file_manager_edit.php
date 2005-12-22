@@ -17,7 +17,7 @@
     <td class="smallText" align="right">
 <?php
   echo tep_draw_form('file_manager', FILENAME_FILE_MANAGER, '', 'get') .
-       osc_draw_pull_down_menu('goto', $goto_array, substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onChange="this.form.submit();"') .
+       osc_draw_pull_down_menu('goto', $goto_array, substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onchange="this.form.submit();"') .
        '</form>';
 ?>
     </td>
@@ -70,7 +70,7 @@
     echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton">&nbsp;';
   }
 
-  echo '<input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, (isset($_GET['entry']) ? 'entry=' . $_GET['entry'] : '')) . '\';">';
+  echo '<input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, (isset($_GET['entry']) ? 'entry=' . $_GET['entry'] : '')) . '\';">';
 ?>
 </p>
 

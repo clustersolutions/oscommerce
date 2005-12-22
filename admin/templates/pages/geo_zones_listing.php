@@ -11,7 +11,7 @@
 */
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 function update_zone(theForm) {
   var NumState = theForm.zone_id.options.length;
   var SelectedCountry = "";
@@ -60,7 +60,7 @@ function update_zone(theForm) {
     if (isset($zeInfo) && ($Qentries->valueInt('association_id') == $zeInfo->association_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $Qentries->valueInt('association_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $Qentries->valueInt('association_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo (($Qentries->valueInt('zone_country_id') > 0) ? $Qentries->value('countries_name') : TEXT_ALL_COUNTRIES); ?></td>
@@ -68,8 +68,8 @@ function update_zone(theForm) {
         <td align="right">
 <?php
     if (isset($zeInfo) && ($Qentries->valueInt('association_id') == $zeInfo->association_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'zeEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'zeDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'zeEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'zeDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $Qentries->valueInt('association_id') . '&entriesAction=zeEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $Qentries->valueInt('association_id') . '&entriesAction=zeDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -90,7 +90,7 @@ function update_zone(theForm) {
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID']) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'zeNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID']) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'zeNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_zeNew" <?php if ($entriesAction != 'zeNew') { echo 'style="display: none;"'; } ?>>
@@ -101,7 +101,7 @@ function update_zone(theForm) {
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), '', 'onChange="update_zone(this.form);"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), '', 'onchange="update_zone(this.form);"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_ZONE . '</b>'; ?></td>
@@ -109,7 +109,7 @@ function update_zone(theForm) {
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -127,7 +127,7 @@ function update_zone(theForm) {
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), $zeInfo->zone_country_id, 'onChange="update_zone(this.form);"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), $zeInfo->zone_country_id, 'onchange="update_zone(this.form);"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_ZONE . '</b>'; ?></td>
@@ -135,7 +135,7 @@ function update_zone(theForm) {
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -146,7 +146,7 @@ function update_zone(theForm) {
   <div class="infoBoxContent">
     <p><?php echo TEXT_INFO_DELETE_SUB_ZONE_INTRO; ?></p>
     <p><?php echo '<b>' . $zeInfo->countries_name . ': ' . $zeInfo->zone_name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $zeInfo->association_id . '&entriesAction=zeDeleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $zeInfo->association_id . '&entriesAction=zeDeleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zeDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

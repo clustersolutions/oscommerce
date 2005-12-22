@@ -53,7 +53,7 @@
       $Qorders->execute();
 
       while ($Qorders->next()) {
-        $this->_data .= '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td><a href="' . tep_href_link(FILENAME_ORDERS, 'oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qorders->valueProtected('customers_name') . '</a></td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .

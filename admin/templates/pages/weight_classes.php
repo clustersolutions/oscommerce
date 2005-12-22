@@ -38,7 +38,7 @@
     if (isset($wcInfo) && ($Qclasses->valueInt('weight_class_id') == $wcInfo->weight_class_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id')) . '\';">' . "\n";
     }
 
     if (SHIPPING_WEIGHT_UNIT == $Qclasses->valueInt('weight_class_id')) {
@@ -51,8 +51,8 @@
         <td align="right">
 <?php
     if (isset($wcInfo) && ($Qclasses->valueInt('weight_class_id') == $wcInfo->weight_class_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'wcEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'wcDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'wcEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'wcDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=wcEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $Qclasses->valueInt('weight_class_id') . '&action=wcDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -73,7 +73,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'wcNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'wcNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_wcNew" <?php if ($action != 'wcNew') { echo 'style="display: none;"'; } ?>>
@@ -89,7 +89,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']') . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', '', 'size="4"') . '<br>';
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']') . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', '', 'size="4"') . '<br />';
   }
 ?>
         </td>
@@ -120,7 +120,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -154,7 +154,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']', $class_name[$l['id']]['title']) . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', $class_name[$l['id']]['key'], 'size="4"') . '<br>';
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('weight_class_title[' . $l['id'] . ']', $class_name[$l['id']]['title']) . osc_draw_input_field('weight_class_key[' . $l['id'] . ']', $class_name[$l['id']]['key'], 'size="4"') . '<br />';
     }
 ?>
         </td>
@@ -194,7 +194,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -218,12 +218,12 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_PRODUCTS, $Qcheck->valueInt('total')) . '</b></p>' . "\n";
       }
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'wcDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'wcDefault\');" class="operationButton"></p>' . "\n";
     } else {
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><b><?php echo $wcInfo->weight_class_title; ?></b></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $wcInfo->weight_class_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $wcInfo->weight_class_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'wcDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

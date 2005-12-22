@@ -77,7 +77,7 @@
       if (isset($mInfo) && ($class == $mInfo->code) ) {
         echo '      <tr class="selected">' . "\n";
       } else {
-        echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class) . '\';">' . "\n";
+        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class) . '\';">' . "\n";
       }
 ?>
         <td><?php echo $module->title; ?></td>
@@ -87,8 +87,8 @@
 <?php
     if (isset($mInfo) && ($class == $mInfo->code)) {
       if ($mInfo->installed === true) {
-        echo '<a href="#" onClick="toggleInfoBox(\'mUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;' .
-             '<a href="#" onClick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+        echo '<a href="#" onclick="toggleInfoBox(\'mUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;' .
+             '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
       } else {
         echo '<a href="' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
              tep_image('images/pixel_trans.gif', '', '16', '16');
@@ -136,7 +136,7 @@
   <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo INFO_MODULE_UNINSTALL_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onClick="toggleInfoBox(\'mDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
   </div>
 </div>
 
@@ -148,20 +148,20 @@
 <?php
     $keys = '';
     foreach ($mInfo->keys as $key => $value) {
-      $keys .= '<b>' . $value['title'] . '</b><br>' . $value['description'] . '<br>';
+      $keys .= '<b>' . $value['title'] . '</b><br />' . $value['description'] . '<br />';
 
       if ($value['set_function']) {
         eval('$keys .= ' . $value['set_function'] . "'" . $value['value'] . "', '" . $key . "');");
       } else {
         $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }
-      $keys .= '<br><br>';
+      $keys .= '<br /><br />';
     }
-    $keys = substr($keys, 0, strrpos($keys, '<br><br>'));
+    $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
 ?>
     <p><?php echo $keys; ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

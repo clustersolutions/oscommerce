@@ -60,7 +60,7 @@
       $Qproducts->execute();
 
       while ($Qproducts->next()) {
-        $this->_data .= '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td><a href="' . tep_href_link(FILENAME_PRODUCTS, 'pID=' . $Qproducts->valueInt('products_id') . '&action=new_product') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/products.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qproducts->value('products_name') . '</a></td>' .
                         '      <td>' . $osC_Currencies->format($Qproducts->value('products_price')) . '</td>' .
                         '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .

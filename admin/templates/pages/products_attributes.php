@@ -82,7 +82,7 @@
     if (isset($paInfo) && ($Qgroups->valueInt('products_options_id') == $paInfo->products_options_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=list') . '">' . tep_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('products_options_name') . '</a>'; ?></td>
@@ -90,8 +90,8 @@
         <td align="right">
 <?php
     if (isset($paInfo) && ($Qgroups->valueInt('products_options_id') == $paInfo->products_options_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'paEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'paDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'paEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'paDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -107,12 +107,12 @@
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td class="smallText"><?php echo $Qgroups->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+      <td class="smallText"><?php echo $Qgroups->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES_GROUPS); ?></td>
       <td class="smallText" align="right"><?php echo $Qgroups->displayBatchLinksPullDown(); ?></td>
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'paNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'paNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_paNew" <?php if ($action != 'paNew') { echo 'style="display: none;"'; } ?>>
@@ -128,14 +128,14 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br>';
+    echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'paDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -168,14 +168,14 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : '')) . '<br>';
+      echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : '')) . '<br />';
     }
 ?>
         </td>
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'paDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -188,7 +188,7 @@
 <?php
     if ($paInfo->total_products > 0) {
       echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_ATTRIBUTE_GROUP_PROHIBITED, $paInfo->total_products) . '</b></p>' . "\n" .
-           '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
+           '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
     } else {
       echo '    <p>' . TEXT_INFO_DELETE_ATTRIBUTE_INTRO . '</p>' . "\n" .
            '    <p><b>' . $paInfo->products_options_name . '</b></p>' . "\n";
@@ -197,7 +197,7 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_ATTRIBUTE_GROUP_WARNING, $paInfo->total_entries) . '</b></p>' . "\n";
       }
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=deleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=deleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
     }
 ?>
 

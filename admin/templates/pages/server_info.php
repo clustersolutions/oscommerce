@@ -56,7 +56,7 @@
   </tr>
 </table>
 
-<br>
+<br />
 
 <table border="0" width="100%" cellspacing="0" cellpadding="3" style="border: 1px #000000 solid;">
   <tr>

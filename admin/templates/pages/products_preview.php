@@ -11,12 +11,12 @@
 */
 
   if (isset($_GET['pID']) && empty($_POST)) {
-    $Qp = $osC_Database->query('select products_id, products_quantity, products_model, products_image, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+    $Qp = $osC_Database->query('select products_id, products_quantity, products_image, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
     $Qp->bindTable(':table_products', TABLE_PRODUCTS);
     $Qp->bindInt(':products_id', $_GET['pID']);
     $Qp->execute();
 
-    $Qpd = $osC_Database->query('select products_name, products_description, products_url, language_id from :table_products_description where products_id = :products_id');
+    $Qpd = $osC_Database->query('select products_name, products_description, products_model, products_url, language_id from :table_products_description where products_id = :products_id');
     $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
     $Qpd->bindInt(':products_id', $_GET['pID']);
     $Qpd->execute();
@@ -25,6 +25,7 @@
     while ($Qpd->next()) {
       $pd_extra['products_name'][$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
       $pd_extra['products_description'][$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
+      $pd_extra['products_model'][$Qpd->valueInt('language_id')] = $Qpd->value('products_model');
       $pd_extra['products_url'][$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
     }
 
@@ -70,7 +71,7 @@
 <div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['directory'] != $osC_Language->getDirectory()) ? ' style="display: none;"' : ''); ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><h1><?php echo $pInfo->products_name[$l['id']]; ?></h1></td>
+      <td><h1><?php echo $pInfo->products_name[$l['id']] . (!empty($pInfo->products_model[$l['id']]) ? '<br /><span class="smallText">' . $pInfo->products_model[$l['id']] . '</span>': ''); ?></h1></td>
       <td align="right"><h1><?php echo $osC_Currencies->format($pInfo->products_price); ?></h1></td>
     </tr>
   </table>
@@ -97,7 +98,7 @@
   }
 
   if (isset($_GET['read']) && ($_GET['read'] == 'only')) {
-    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id) . '\';" class="operationButton"></p>';
+    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id) . '\';" class="operationButton"></p>';
   } else {
     echo '<p align="right">';
 
@@ -107,7 +108,7 @@
 
     echo osc_draw_hidden_field('products_image', $products_image_name);
 
-    echo '<input type="submit" value="' . IMAGE_BACK . '" name="product_edit" class="operationButton"> <input type="submit" value="' . (isset($_GET['pID']) ? IMAGE_UPDATE : IMAGE_INSERT) . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">';
+    echo '<input type="submit" value="' . IMAGE_BACK . '" name="product_edit" class="operationButton"> <input type="submit" value="' . (isset($_GET['pID']) ? IMAGE_UPDATE : IMAGE_INSERT) . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">';
 
     echo '</p>';
   }

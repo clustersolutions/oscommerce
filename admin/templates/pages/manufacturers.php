@@ -47,7 +47,7 @@
     if (isset($mInfo) && ($Qmanufacturers->valueInt('manufacturers_id') == $mInfo->manufacturers_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qmanufacturers->value('manufacturers_name'); ?></td>
@@ -55,8 +55,8 @@
         <td align="right">
 <?php
     if (isset($mInfo) && ($Qmanufacturers->valueInt('manufacturers_id') == $mInfo->manufacturers_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'mDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'mDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -77,7 +77,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'mNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'mNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_mNew" <?php if ($action != 'mNew') { echo 'style="display: none;"'; } ?>>
@@ -86,19 +86,19 @@
     <?php echo tep_draw_form('mNew', FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&action=save', 'post', 'enctype="multipart/form-data"'); ?>
 
     <p><?php echo TEXT_NEW_INTRO; ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_NAME . '<br>' . osc_draw_input_field('manufacturers_name'); ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br>' . osc_draw_file_field('manufacturers_image'); ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_NAME . '<br />' . osc_draw_input_field('manufacturers_name'); ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image'); ?></p>
     <p>
 <?php
   echo TEXT_MANUFACTURERS_URL;
 
   foreach ($osC_Language->getAll() as $l) {
-    echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
+    echo '<br />' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
   }
 ?>
     </p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -114,20 +114,20 @@
     <?php echo tep_draw_form('mEdit', FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $mInfo->manufacturers_id . '&action=save', 'post', 'enctype="multipart/form-data"'); ?>
 
     <p><?php echo TEXT_EDIT_INTRO; ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_NAME . '<br>' . osc_draw_input_field('manufacturers_name', $mInfo->manufacturers_name); ?></p>
-    <p><?php echo tep_image('../images/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br>' . DIR_WS_CATALOG . 'images/<br><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br>' . osc_draw_file_field('manufacturers_image'); ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_NAME . '<br />' . osc_draw_input_field('manufacturers_name', $mInfo->manufacturers_name); ?></p>
+    <p><?php echo tep_image('../images/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br />' . DIR_WS_CATALOG . 'images/<br /><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image'); ?></p>
     <p>
 <?php
     echo TEXT_MANUFACTURERS_URL;
 
     foreach ($osC_Language->getAll() as $l) {
-      echo '<br>' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
+      echo '<br />' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
     }
 ?>
     </p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -152,7 +152,7 @@
     }
 ?>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

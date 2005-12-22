@@ -93,7 +93,7 @@
       $Qstatus->bindInt(':orders_status_id', $this->_status_id);
 
 /* HPDL - DEFAULT_LANGUAGE is the language code, not the language id */
-//        $Qstatus->bindInt(':language_id', ($osC_Session->exists('languages_id') ? $osC_Session->value('languages_id') : DEFAULT_LANGUAGE));
+//        $Qstatus->bindInt(':language_id', (isset($_SESSION['languages_id']) ? $_SESSION['languages_id'] : DEFAULT_LANGUAGE));
       $Qstatus->bindInt(':language_id', $osC_Language->getID());
       $Qstatus->execute();
 
@@ -114,7 +114,7 @@
       $Qhistory->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
 
 /* HPDL - DEFAULT_LANGUAGE is the language code, not the language id */
-//        $Qstatus->bindInt(':language_id', ($osC_Session->exists('languages_id') ? $osC_Session->value('languages_id') : DEFAULT_LANGUAGE));
+//        $Qstatus->bindInt(':language_id', (isset($_SESSION['languages_id']) ? $_SESSION['languages_id'] : DEFAULT_LANGUAGE));
       $Qhistory->bindInt(':language_id', $osC_Language->getID());
 
       $Qhistory->bindInt(':orders_id', $this->_order_id);

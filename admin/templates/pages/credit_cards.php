@@ -39,7 +39,7 @@
     if (isset($ccInfo) && ($Qcc->valueInt('credit_card_id') == $ccInfo->credit_card_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('credit_card_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('credit_card_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qcc->valueProtected('credit_card_code'); ?></td>
@@ -49,8 +49,8 @@
         <td align="right">
 <?php
     if (isset($ccInfo) && ($Qcc->valueInt('credit_card_id') == $ccInfo->credit_card_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'ccEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'ccDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'ccEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'ccDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('credit_card_id') . '&action=ccEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('credit_card_id') . '&action=ccDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -71,7 +71,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'ccNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'ccNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_ccNew" <?php if ($action != 'ccNew') { echo 'style="display: none;"'; } ?>>
@@ -98,7 +98,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -132,7 +132,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -143,7 +143,7 @@
   <div class="infoBoxContent">
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $ccInfo->credit_card_name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->credit_card_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->credit_card_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

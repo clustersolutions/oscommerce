@@ -50,10 +50,6 @@
     }
 
     function showConfirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       global $osC_Database;
 
       $Qrecipients = $osC_Database->query('select count(*) as total from :table_customers c left join :table_newsletters_log nl on (c.customers_email_address = nl.email_address and nl.newsletters_id = :newsletters_id) where c.customers_newsletter = 1 and nl.email_address is null');
@@ -70,19 +66,15 @@
                              '<p align="right">';
 
       if ($this->_audience_size > 0) {
-        $confirmation_string .= '<input type="button" value="' . BUTTON_SEND . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '\';" class="operationButton">&nbsp;';
+        $confirmation_string .= '<input type="button" value="' . BUTTON_SEND . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '\';" class="operationButton">&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>';
+      $confirmation_string .= '<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>';
 
       return $confirmation_string;
     }
 
     function sendEmail() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       global $osC_Database;
 
       $max_execution_time = 0.8 * (int)ini_get('max_execution_time');

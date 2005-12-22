@@ -46,10 +46,6 @@
     }
 
     function showAudienceSelectionForm() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       global $osC_Database;
 
       $customers_array = array(array('id' => '***', 'text' => MODULE_NEWSLETTER_EMAIL_TEXT_ALL_CUSTOMERS));
@@ -67,17 +63,13 @@
 
       $audience_form = tep_draw_form('customers', FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm') .
                        '  <p align="center">' . osc_draw_pull_down_menu('customer', $customers_array, '', 'size="20" style="width: 100%;"') . '</p>' .
-                       '  <p align="right"><input type="submit" value="' . BUTTON_OK . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></p>' .
+                       '  <p align="right"><input type="submit" value="' . BUTTON_OK . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></p>' .
                        '</form>';
 
       return $audience_form;
     }
 
     function showConfirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET, $_POST;
-      }
-
       global $osC_Database;
 
       if (isset($_POST['customer']) && !empty($_POST['customer'])) {
@@ -107,17 +99,13 @@
                                 '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton">&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
+      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
                               '</form>';
 
       return $confirmation_string;
     }
 
     function sendEmail() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET, $_POST;
-      }
-
       global $osC_Database;
 
       $max_execution_time = 0.8 * (int)ini_get('max_execution_time');

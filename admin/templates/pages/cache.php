@@ -55,7 +55,7 @@
 <?php
   foreach($cached_files as $cache => $stats) {
 ?>
-    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">
+    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo $cache; ?></td>
       <td align="center"><?php echo $stats['total']; ?></td>
       <td align="right"><?php echo strftime(DATE_TIME_FORMAT, $stats['last_modified']); ?></td>

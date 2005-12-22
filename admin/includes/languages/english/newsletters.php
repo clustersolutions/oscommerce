@@ -26,7 +26,7 @@
 
   define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this newsletter?');
 
-  define('TEXT_PLEASE_WAIT', 'Please wait .. sending newsletters ..<br><br>Please do not interrupt this process!');
+  define('TEXT_PLEASE_WAIT', 'Please wait .. sending newsletters ..<br /><br />Please do not interrupt this process!');
   define('TEXT_REFRESHING_PAGE', 'Automatically refreshing page to avoid a server timeout ..');
   define('TEXT_CONTINUE_MANUALLY', '.. or click here to continue if no redirection within 2 seconds occurs ..');
   define('TEXT_FINISHED_SENDING_NEWSLETTERS', 'Finished sending newsletters!');

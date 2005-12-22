@@ -46,10 +46,6 @@
     }
 
     function showAudienceSelectionForm() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       global $osC_Database, $osC_Language;
 
       $products_array = array();
@@ -67,7 +63,7 @@
 
       $Qproducts->freeResult();
 
-      $audience_form = '<script language="javascript"><!--
+      $audience_form = '<script type="text/javascript"><!--
 function mover(move) {
   if (move == \'remove\') {
     for (x=0; x<(document.notifications.products.length); x++) {
@@ -111,12 +107,12 @@ function selectAll(FormName, SelectBox) {
 }
 //--></script>';
 
-      $audience_form .= tep_draw_form('notifications', FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm', 'post', 'onSubmit="return selectAll(\'notifications\', \'chosen[]\');"') .
+      $audience_form .= tep_draw_form('notifications', FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm', 'post', 'onsubmit="return selectAll(\'notifications\', \'chosen[]\');"') .
                         '  <table border="0" width="100%" cellspacing="0" cellpadding="2">' .
                         '    <tr>' .
-                        '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_PRODUCTS . '</b><br>' . osc_draw_pull_down_menu('products', $products_array, '', 'size="20" style="width: 20em;" multiple') . '</td>' .
-                        '      <td align="center" class="main">&nbsp;<br><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_GLOBAL . '" style="width: 90px;" onClick="document.location=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm&global=true') . '\';" class="operationButton"><br><br><br><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_SELECT . '" style="width: 90px;" onClick="mover(\'remove\');" class="infoBoxButton"><br><br><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_UNSELECT . '" style="width: 90px;" onClick="mover(\'add\');" class="infoBoxButton"><br><br><br><input type="submit" value="' . BUTTON_OK . '" style="width: 90px;" class="operationButton"><br><br><input type="button" value="' . BUTTON_CANCEL . '" style="width: 90px;" onClick="document.location=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></td>' .
-                        '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_SELECTED_PRODUCTS . '</b><br>' . osc_draw_pull_down_menu('chosen[]', array(), '', 'size="20" style="width: 20em;" multiple') . '</td>' .
+                        '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('products', $products_array, '', 'size="20" style="width: 20em;" multiple') . '</td>' .
+                        '      <td align="center" class="main">&nbsp;<br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_GLOBAL . '" style="width: 90px;" onclick="document.location=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm&global=true') . '\';" class="operationButton"><br /><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_SELECT . '" style="width: 90px;" onclick="mover(\'remove\');" class="infoBoxButton"><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_UNSELECT . '" style="width: 90px;" onclick="mover(\'add\');" class="infoBoxButton"><br /><br /><br /><input type="submit" value="' . BUTTON_OK . '" style="width: 90px;" class="operationButton"><br /><br /><input type="button" value="' . BUTTON_CANCEL . '" style="width: 90px;" onclick="document.location=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></td>' .
+                        '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_SELECTED_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('chosen[]', array(), '', 'size="20" style="width: 20em;" multiple') . '</td>' .
                         '    </tr>' .
                         '  </table>' .
                         '</form>';
@@ -125,10 +121,6 @@ function selectAll(FormName, SelectBox) {
     }
 
     function showConfirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET, $_POST;
-      }
-
       global $osC_Database;
 
       if ( (isset($_POST['chosen']) && !empty($_POST['chosen'])) || (isset($_GET['global']) && ($_GET['global'] == 'true')) ) {
@@ -172,17 +164,13 @@ function selectAll(FormName, SelectBox) {
         $confirmation_string .= '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton">&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
+      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
                               '</form>';
 
       return $confirmation_string;
     }
 
     function sendEmail() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET, $_POST;
-      }
-
       global $osC_Database;
 
       $max_execution_time = 0.8 * (int)ini_get('max_execution_time');

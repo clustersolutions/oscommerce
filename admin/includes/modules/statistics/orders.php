@@ -51,10 +51,6 @@
     }
 
     function _setData() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       global $osC_Database, $osC_Currencies;
 
       $this->_data = array();

@@ -29,7 +29,7 @@
     <td class="smallText" align="right">
 <?php
   echo tep_draw_form('language', FILENAME_DEFINE_LANGUAGE, '', 'get') .
-       tep_draw_pull_down_menu('lng', $languages_array, $lng, 'onChange="this.form.submit();"') .
+       tep_draw_pull_down_menu('lng', $languages_array, $lng, 'onchange="this.form.submit();"') .
        '</form>';
 ?>
     </td>
@@ -53,7 +53,7 @@
     if (($files[$i]['name'] != '../' . $lng . '.php') && (strpos($files[$i]['name'], '/') !== false)) {
       $subdirectories[] = $files[$i]['name'];
     } else {
-      echo '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' . "\n" .
+      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
            '      <td><a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng . '&file=' . $files[$i]['name'] . '&action=edit') . '">'. tep_image('templates/' . $template . '/images/icons/16x16/file.png', ICON_FILES, '16', '16') . '&nbsp;' . $files[$i]['name'] . '</a></td>' . "\n" .
            '      <td align="right">' . number_format(filesize($osC_DirectoryListing->getDirectory() . '/' . $files[$i]['name'])) . '</td>' . "\n" .
            '      <td align="center">' . tep_image('templates/' . $template . '/images/icons/' . (is_writable($osC_DirectoryListing->getDirectory() . '/' . $files[$i]['name']) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')) . '</td>' . "\n" .
@@ -63,7 +63,7 @@
   }
 
   for ($i=0, $n=sizeof($subdirectories); $i<$n; $i++) {
-    echo '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' . "\n" .
+    echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
          '      <td><a href="' . tep_href_link(FILENAME_DEFINE_LANGUAGE, 'lng=' . $lng . '&file=' . $subdirectories[$i] . '&action=edit') . '">'. tep_image('templates/' . $template . '/images/icons/16x16/file.png', ICON_FILES, '16', '16') . '&nbsp;' . $subdirectories[$i] . '</a></td>' . "\n" .
          '      <td align="right">' . number_format(filesize($osC_DirectoryListing->getDirectory() . '/' . $subdirectories[$i])) . '</td>' . "\n" .
          '      <td align="center">' . tep_image('templates/' . $template . '/images/icons/' . (is_writable($osC_DirectoryListing->getDirectory() . '/' . $subdirectories[$i]) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')) . '</td>' . "\n" .

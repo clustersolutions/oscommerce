@@ -40,7 +40,7 @@ define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
 
 // Global entries for the <html> tag
-define('HTML_PARAMS','dir="ltr" lang="es"');
+define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="es" lang="es"');
 
 // charset for web pages and emails
 define('CHARSET', 'iso-8859-1');
@@ -64,6 +64,8 @@ define('FEMALE', 'Mujer');
 
 // text for date of birth example
 define('DOB_FORMAT_STRING', 'dd/mm/aaaa');
+
+define('BOX_CONFIGURATION_ADMINISTRATORS', 'Administrators');
 
 // configuration box text in includes/boxes/configuration.php
 define('BOX_HEADING_CONFIGURATION', 'Configuraci&oacute;n');
@@ -122,6 +124,8 @@ define('BOX_LOCALIZATION_CURRENCIES', 'Monedas');
 define('BOX_LOCALIZATION_LANGUAGES', 'Idiomas');
 define('BOX_LOCALIZATION_ORDERS_STATUS', 'Estado Pedidos');
 define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
+
+define('BOX_HEADING_LOGOFF', 'Logoff');
 
 // javascript messages
 define('JS_ERROR', 'Ha habido errores procesando su formulario!\nPor favor, haga las siguientes modificaciones:\n\n');
@@ -187,6 +191,7 @@ define('IMAGE_ANI_SEND_EMAIL', 'Enviando E-Mail');
 define('IMAGE_APPROVE', 'Approve');
 define('IMAGE_BACK', 'Volver');
 define('IMAGE_BACKUP', 'Copiar');
+define('IMAGE_BOX_REMOVE', 'Remove Box');
 define('IMAGE_CANCEL', 'Cancelar');
 define('IMAGE_CONFIRM', 'Confirmar');
 define('IMAGE_COPY', 'Copiar');
@@ -203,6 +208,7 @@ define('IMAGE_ICON_STATUS_RED_LIGHT', 'Desactivar');
 define('IMAGE_ICON_INFO', 'Datos');
 define('IMAGE_INSERT', 'Insertar');
 define('IMAGE_LOCK', 'Bloqueado');
+define('IMAGE_LOGIN', 'Login');
 define('IMAGE_MODULE_INSTALL', 'Instalar M&oacute;dulo');
 define('IMAGE_MODULE_REMOVE', 'Quitar M&oacute;dulo');
 define('IMAGE_MOVE', 'Mover');
@@ -266,10 +272,11 @@ define('ICON_PRODUCTS', 'Products');
 
 // constants for use in tep_prev_next_display function
 define('TEXT_RESULT_PAGE', 'P&aacute;gina&nbsp;%s&nbsp;de&nbsp;%d');
+define('TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> administrators)');
 define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> banners)');
-define('TEXT_DISPLAY_NUMBER_OF_CATEGORIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> categories)');
+define('TEXT_DISPLAY_NUMBER_OF_CATEGORIES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> categories)');
 define('TEXT_DISPLAY_NUMBER_OF_COUNTRIES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> paises)');
-define('TEXT_DISPLAY_NUMBER_OF_CREDIT_CARDS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> credit cards)');
+define('TEXT_DISPLAY_NUMBER_OF_CREDIT_CARDS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> credit cards)');
 define('TEXT_DISPLAY_NUMBER_OF_CUSTOMERS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> clientes)');
 define('TEXT_DISPLAY_NUMBER_OF_CURRENCIES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> monedas)');
 define('TEXT_DISPLAY_NUMBER_OF_LANGUAGES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> idiomas)');
@@ -277,6 +284,8 @@ define('TEXT_DISPLAY_NUMBER_OF_MANUFACTURERS', 'Viendo del <b>%d</b> al <b>%d</b
 define('TEXT_DISPLAY_NUMBER_OF_NEWSLETTERS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> boletines)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> pedidos)');
 define('TEXT_DISPLAY_NUMBER_OF_ORDERS_STATUS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> estado de pedidos)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes)');
+define('TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES_GROUPS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> product attributes groups)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> productos)');
 define('TEXT_DISPLAY_NUMBER_OF_PRODUCTS_EXPECTED', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> productos esperados)');
 define('TEXT_DISPLAY_NUMBER_OF_REVIEWS', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> comentarios)');
@@ -284,7 +293,7 @@ define('TEXT_DISPLAY_NUMBER_OF_SPECIALS', 'Viendo del <b>%d</b> al <b>%d</b> (de
 define('TEXT_DISPLAY_NUMBER_OF_TAX_CLASSES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> tipos de impuesto)');
 define('TEXT_DISPLAY_NUMBER_OF_TAX_ZONES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> zonas de impuestos)');
 define('TEXT_DISPLAY_NUMBER_OF_TAX_RATES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> porcentajes de impuestos)');
-define('TEXT_DISPLAY_NUMBER_OF_WEIGHT_CLASSES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> weight classes)');
+define('TEXT_DISPLAY_NUMBER_OF_WEIGHT_CLASSES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> weight classes)');
 define('TEXT_DISPLAY_NUMBER_OF_ZONES', 'Viendo del <b>%d</b> al <b>%d</b> (de <b>%d</b> zonas)');
 
 define('PREVNEXT_BUTTON_PREV', '&lt;&lt;');

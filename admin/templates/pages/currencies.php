@@ -39,7 +39,7 @@
     if (isset($cInfo) && ($Qcurrencies->valueInt('currencies_id') == $cInfo->currencies_id) ) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id')) . '\';">' . "\n";
     }
 ?>
         <td>
@@ -57,8 +57,8 @@
         <td align="right">
 <?php
     if (isset($cInfo) && ($Qcurrencies->valueInt('currencies_id') == $cInfo->currencies_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onClick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
            '<a href="' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
@@ -82,10 +82,10 @@
   <p align="right">
 <?php
   if (isset($cInfo)) {
-    echo '<input type="button" value="' . IMAGE_UPDATE_CURRENCIES . '" onClick="toggleInfoBox(\'cUpdate\');" class="infoBoxButton">&nbsp;';
+    echo '<input type="button" value="' . IMAGE_UPDATE_CURRENCIES . '" onclick="toggleInfoBox(\'cUpdate\');" class="infoBoxButton">&nbsp;';
   }
 
-  echo '<input type="button" value="' . IMAGE_INSERT . '" onClick="toggleInfoBox(\'cNew\');" class="infoBoxButton">';
+  echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'cNew\');" class="infoBoxButton">';
 ?>
   </p>
 </div>
@@ -128,7 +128,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -150,13 +150,13 @@
     $services = array(array('id' => 'oanda', 'text' => 'Oanda (http://www.oanda.com)'),
                       array('id' => 'xe', 'text' => 'XE (http://www.xe.com)'));
 
-    echo osc_draw_radio_field('service', $services, '', '', false, '<br>');
+    echo osc_draw_radio_field('service', $services, '', '', false, '<br />');
 ?>
     </p>
 
     <p><?php echo TEXT_INFO_SERVICE_TERMS; ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -206,7 +206,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo ((DEFAULT_CURRENCY == $cInfo->code) ? osc_draw_hidden_field('is_default', 'true') : '') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo ((DEFAULT_CURRENCY == $cInfo->code) ? osc_draw_hidden_field('is_default', 'true') : '') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>
@@ -219,13 +219,13 @@
     if (DEFAULT_CURRENCY == $cInfo->code) {
 ?>
     <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 <?php
     } else {
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $cInfo->title . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

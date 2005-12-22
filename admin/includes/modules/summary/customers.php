@@ -50,7 +50,7 @@
       $Qcustomers->execute();
 
       while ($Qcustomers->next()) {
-        $this->_data .= '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td><a href="' . tep_href_link(FILENAME_CUSTOMERS, 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/personal.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname') . '</a></td>' .
                         '      <td>' . $Qcustomers->value('customers_info_date_account_created') . '</td>' .
                         '      <td align="center">' . tep_image('templates/' . $template . '/images/icons/' . (($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')) . '</td>' .

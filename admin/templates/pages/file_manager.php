@@ -23,7 +23,7 @@
     <td class="smallText" align="right">
 <?php
   echo tep_draw_form('file_manager', FILENAME_FILE_MANAGER, '', 'get') .
-       osc_draw_pull_down_menu('goto', $goto_array, substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onChange="this.form.submit();"') .
+       osc_draw_pull_down_menu('goto', $goto_array, substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onchange="this.form.submit();"') .
        '</form>';
 ?>
     </td>
@@ -47,7 +47,7 @@
     <tbody>
 <?php
   if ($current_path != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) {
-    echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' . "\n" .
+    echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
          '        <td colspan="8"><a href="' . tep_href_link(FILENAME_FILE_MANAGER, 'goto=' . $goto_array[sizeof($goto_array)-2]['id']) . '">' . tep_image('templates/' . $template . '/images/icons/16x16/2uparrow.png', '', '16', '16') . '&nbsp;--Parent--</a></td>' . "\n" .
          '      </tr>' . "\n";
   }
@@ -71,7 +71,7 @@
     if (isset($fmInfo) && ($files[$i]['name'] == $fmInfo->name)) {
         echo '      <tr class="selected">' . "\n";
       } else {
-        echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name']) . '\';">' . "\n";
+        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name']) . '\';">' . "\n";
       }
 ?>
         <td><?php echo '<a href="' . $entry_url . '">' . $entry_icon . '&nbsp;' . $files[$i]['name'] . '</a>'; ?></td>
@@ -84,17 +84,17 @@
         <td align="right">
 <?php
     if ($files[$i]['is_directory'] === false) {
-      echo '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=fmEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT, '16', '16') . '</a>' . '&nbsp;' .
-           '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=download') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/save.png', IMAGE_SAVE, '16', '16') . '</a>' . '&nbsp;';
+      echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=fmEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT, '16', '16') . '</a>' . '&nbsp;' .
+           '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=download') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/save.png', IMAGE_SAVE, '16', '16') . '</a>' . '&nbsp;';
     } else {
       echo tep_image('images/pixel_trans.gif') . '&nbsp;' .
            tep_image('images/pixel_trans.gif') . '&nbsp;';
     }
 
     if (isset($fmInfo) && ($files[$i]['name'] == $fmInfo->name)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'fmDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'fmDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
-      echo '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=fmDelete') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $files[$i]['name'] . '&action=fmDelete') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     }
 ?>
         </td>
@@ -111,10 +111,10 @@
     <tr valign="top">
 <?php
   if ($current_path != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) {
-    echo '      <td class="smallText"><input type="button" value="' . IMAGE_RESET . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=reset') . '\';" class="infoBoxButton"></td>' . "\n";
+    echo '      <td class="smallText"><input type="button" value="' . IMAGE_RESET . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=reset') . '\';" class="infoBoxButton"></td>' . "\n";
   }
 ?>
-      <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_UPLOAD . '" onClick="toggleInfoBox(\'fmUpload\');" class="infoBoxButton">&nbsp;<input type="button" value="' . IMAGE_NEW_FILE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmEdit') . '\';" class="infoBoxButton">&nbsp;<input type="button" value="' . IMAGE_NEW_FOLDER . '" onClick="toggleInfoBox(\'fmNewDirectory\');" class="infoBoxButton">'; ?></td>
+      <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_UPLOAD . '" onclick="toggleInfoBox(\'fmUpload\');" class="infoBoxButton">&nbsp;<input type="button" value="' . IMAGE_NEW_FILE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmEdit') . '\';" class="infoBoxButton">&nbsp;<input type="button" value="' . IMAGE_NEW_FOLDER . '" onclick="toggleInfoBox(\'fmNewDirectory\');" class="infoBoxButton">'; ?></td>
     </tr>
   </table>
 </div>
@@ -138,7 +138,7 @@
       </tr>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
     </form>
 
@@ -148,7 +148,7 @@
 
     <p><?php echo sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path); ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="Retry" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmNewDirectory') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="Retry" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmNewDirectory') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
 <?php
   }
@@ -182,7 +182,7 @@
 ?>
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPLOAD . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPLOAD . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
     </form>
 
@@ -192,7 +192,7 @@
 
     <p><?php echo sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path); ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="Retry" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmUpload') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="Retry" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'action=fmUpload') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
 <?php
   }
@@ -215,7 +215,7 @@
 
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $current_path . '/' . $fmInfo->name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $fmInfo->name . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $fmInfo->name . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
 <?php
     } else {
@@ -223,7 +223,7 @@
 
     <p><?php echo sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path . '/' . $fmInfo->name); ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="Retry" onClick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $fmInfo->name . '&action=fmDelete') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="Retry" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, 'entry=' . $fmInfo->name . '&action=fmDelete') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'fmDefault\');" class="operationButton">'; ?></p>
 
 <?php
     }

@@ -48,7 +48,7 @@
     if (isset($nmInfo) && ($Qnewsletters->valueInt('newsletters_id') == $nmInfo->newsletters_id) ) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmPreview') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/file.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qnewsletters->value('title') . '</a>'; ?></td>
@@ -66,7 +66,7 @@
     }
 
     if (isset($nmInfo) && ($Qnewsletters->valueInt('newsletters_id') == $nmInfo->newsletters_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'nmDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'nmDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     }
@@ -86,7 +86,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . BUTTON_INSERT . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'action=nmEdit') . '\';" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . BUTTON_INSERT . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'action=nmEdit') . '\';" class="infoBoxButton">'; ?></p>
 </div>
 
 <?php
@@ -99,7 +99,7 @@
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $nmInfo->title . '</b>'; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . BUTTON_DELETE . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmInfo->newsletters_id . '&action=deleteconfirm') . '\';" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onClick="toggleInfoBox(\'nmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . BUTTON_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmInfo->newsletters_id . '&action=deleteconfirm') . '\';" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="toggleInfoBox(\'nmDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

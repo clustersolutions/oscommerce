@@ -68,7 +68,7 @@
     if (isset($oInfo) && ($Qorders->valueInt('orders_id') == $oInfo->orders_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo '<a href="' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit') . '">' . tep_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name') . '</a>'; ?></td>
@@ -77,10 +77,10 @@
         <td><?php echo $Qorders->value('orders_status_name'); ?></td>
         <td align="right">
 <?php
-    echo '<a href="#" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
+    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
 
     if (isset($oInfo) && ($Qorders->valueInt('orders_id') == $oInfo->orders_id)) {
-      echo '<a href="#" onClick="toggleInfoBox(\'oDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'oDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     } else {
       echo '<a href="' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id') . '&action=oDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
     }
@@ -103,7 +103,7 @@
 <?php
   if ( (isset($_GET['oID']) && !empty($_GET['oID'])) || (isset($_GET['cID']) && !empty($_GET['cID'])) || (isset($_GET['status']) && !empty($_GET['status'])) ) {
 ?>
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS) . '\';"> '; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS) . '\';"> '; ?></p>
 <?php
   }
 ?>
@@ -122,7 +122,7 @@
     <p><?php echo '<b>' . $oInfo->customers_name . '</b>'; ?></p>
     <p><?php echo osc_draw_checkbox_field('restock', array(array('id' => '', 'text' => TEXT_INFO_RESTOCK_PRODUCT_QUANTITY))); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="toggleInfoBox(\'oDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'oDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

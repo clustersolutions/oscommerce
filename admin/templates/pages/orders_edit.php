@@ -16,7 +16,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><h1><?php echo HEADING_TITLE; ?></h1></td>
-    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
+    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
   </tr>
 </table>
 
@@ -28,8 +28,8 @@
 ?>
 
 <p>
-  <input type="button" value="Summary" class="sectionButton" onClick="toggleDivBlocks('section', 'sectionSummary');"> <input type="button" value="Products" class="sectionButton" onClick="toggleDivBlocks('section', 'sectionProducts');"> <input type="button" value="Status History" class="sectionButton" onClick="toggleDivBlocks('section', 'sectionStatusHistory');">
-  <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onClick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onClick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
+  <input type="button" value="Summary" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionSummary');"> <input type="button" value="Products" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionProducts');"> <input type="button" value="Status History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionStatusHistory');">
+  <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
 </p>
 
 <div id="sectionSummary" <?php if (!empty($section)) { echo 'style="display: none;"'; } ?>>
@@ -38,26 +38,26 @@
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/personal.png', ENTRY_CUSTOMER, '16', '16') . ' ' . ENTRY_CUSTOMER; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getCustomer('format_id'), $osC_Order->getCustomer(), 1, '', '<br>'); ?></p>
-          <p><?php echo tep_image('templates/' . $template . '/images/icons/16x16/telephone.png', ENTRY_TELEPHONE_NUMBER, '16', '16') . ' ' . $osC_Order->getCustomer('telephone') . '<br>' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', ENTRY_EMAIL_ADDRESS, '16', '16') . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
+          <p><?php echo tep_address_format($osC_Order->getCustomer('format_id'), $osC_Order->getCustomer(), 1, '', '<br />'); ?></p>
+          <p><?php echo tep_image('templates/' . $template . '/images/icons/16x16/telephone.png', ENTRY_TELEPHONE_NUMBER, '16', '16') . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', ENTRY_EMAIL_ADDRESS, '16', '16') . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/home.png', ENTRY_SHIPPING_ADDRESS, '16', '16') . ' ' . ENTRY_SHIPPING_ADDRESS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br>'); ?></p>
+          <p><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br />'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/bill.png', ENTRY_BILLING_ADDRESS, '16', '16') . ' ' . ENTRY_BILLING_ADDRESS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br>'); ?></p>
+          <p><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></p>
         </div>
       </td>
     </tr>
   </table>
 
-  <br>
+  <br />
 
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="infoBoxContent">
     <tr>
@@ -94,7 +94,7 @@
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/history.png', ENTRY_STATUS, '16', '16') . ' ' . ENTRY_STATUS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo $osC_Order->getStatus() . '<br>' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? tep_datetime_short($osC_Order->getDateLastModified()) : tep_datetime_short($osC_Order->getDateCreated())); ?></p>
+          <p><?php echo $osC_Order->getStatus() . '<br />' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? tep_datetime_short($osC_Order->getDateLastModified()) : tep_datetime_short($osC_Order->getDateCreated())); ?></p>
           <p><?php echo 'Comments: ' . $osC_Order->getNumberOfComments(); ?></p>
         </div>
       </td>
@@ -102,7 +102,7 @@
         <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/calculator.png', ENTRY_TOTAL, '16', '16') . ' ' . ENTRY_TOTAL; ?></div>
         <div class="infoBoxContent">
           <p><?php echo $osC_Order->getTotal(); ?></p>
-          <p><?php echo 'Products: ' . $osC_Order->getNumberOfProducts() . '<br>Items: ' . $osC_Order->getNumberOfItems(); ?></p>
+          <p><?php echo 'Products: ' . $osC_Order->getNumberOfProducts() . '<br />Items: ' . $osC_Order->getNumberOfItems(); ?></p>
         </div>
       </td>
     </tr>
@@ -131,7 +131,7 @@
 
       if (isset($products['attributes']) && is_array($products['attributes']) && (sizeof($products['attributes']) > 0)) {
         foreach ($products['attributes'] as $attributes) {
-          echo '<br><nobr><small>&nbsp;<i> - ' . $attributes['option'] . ': ' . $attributes['value'];
+          echo '<br /><nobr><small>&nbsp;<i> - ' . $attributes['option'] . ': ' . $attributes['value'];
 
           if ($attributes['price'] != '0') {
             echo ' (' . $attributes['prefix'] . $osC_Currencies->format($attributes['price'] * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . ')';
@@ -190,7 +190,7 @@
 ?>
   </table>
 
-  <br>
+  <br />
 
   <?php echo tep_draw_form('status', FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_order'); ?>
 

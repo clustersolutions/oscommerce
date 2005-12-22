@@ -52,7 +52,7 @@
       $Qreviews->execute();
 
       while ($Qreviews->next()) {
-        $this->_data .= '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td><a href="' . tep_href_link(FILENAME_REVIEWS, 'rID=' . $Qreviews->valueInt('reviews_id') . '&action=rEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qreviews->value('products_name') . '</a></td>' .
                         '      <td align="center">' . tep_image('../includes/languages/' . $Qreviews->value('languages_directory') . '/images/' . $Qreviews->value('languages_image'), $Qreviews->value('languages_name')) . '</td>' .
                         '      <td align="center">' . tep_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .

@@ -30,6 +30,7 @@ define('TEXT_BANNERS_EXPIRES_ON', 'G&uuml;ltigkeit bis:');
 define('TEXT_BANNERS_OR_AT', ', oder bei');
 define('TEXT_BANNERS_IMPRESSIONS', 'Impressionen/Anzeigen.');
 define('TEXT_BANNERS_SCHEDULED_AT', 'G&uuml;ltigkeit ab:');
+define('TEXT_BANNERS_STATUS', 'Status:');
 define('TEXT_BANNERS_BANNER_NOTE', '<b>Banner Bemerkung:</b><ul><li>Sie k&ouml;nnen Bild- oder HTML-Text-Banner verwenden, beides gleichzeitig ist nicht m&ouml;glich.</li><li>Wenn Sie beide Bannerarten gleichzeitig verwenden, wird nur der HTML-Text Banner angezeigt.</li></ul>');
 define('TEXT_BANNERS_INSERT_NOTE', '<b>Bemerkung:</b><ul><li>Auf das Bildverzeichnis muss ein Schreibrecht bestehen!</li><li>F&uuml;llen Sie das Feld \'Bildziel (Speichern nach)\' nicht aus, wenn Sie kein Bild auf Ihren Server kopieren m&ouml;chten (z.B. wenn sich das Bild bereits auf dem Server befindet).</li><li>Das \'Bildziel (Speichern nach)\' Feld muss ein bereits existierendes Verzeichnis mit \'/\' am Ende sein (z.B. banners/).</li></ul>');
 define('TEXT_BANNERS_EXPIRCY_NOTE', '<b>G&uuml;ltigkeit Bemerkung:</b><ul><li>Nur ein Feld ausf&uuml;llen!</li><li>Wenn der Banner unbegrenzt angezeigt werden soll, tragen Sie in diesen Feldern nichts ein.</li></ul>');
@@ -41,13 +42,17 @@ define('TEXT_BANNERS_EXPIRES_AT_DATE', 'G&uuml;ltigkeit bis zum: <b>%s</b>');
 define('TEXT_BANNERS_EXPIRES_AT_IMPRESSIONS', 'G&uuml;ltigkeit bis: <b>%s</b> impressionen/anzeigen');
 define('TEXT_BANNERS_STATUS_CHANGE', 'Status ge&auml;ndert: %s');
 
-define('TEXT_BANNERS_DATA', 'D<br>A<br>T<br>E<br>N');
+define('TEXT_BANNERS_DATA', 'D<br />A<br />T<br />E<br />N');
 define('TEXT_BANNERS_LAST_3_DAYS', 'letzten 3 Tage');
 define('TEXT_BANNERS_BANNER_VIEWS', 'Banneranzeigen');
 define('TEXT_BANNERS_BANNER_CLICKS', 'Bannerklicks');
 
+define('TEXT_INFO_INSERT_INTRO', 'Bitte geben Sie die neue Banner mit allen relevanten Daten ein');
+define('TEXT_INFO_EDIT_INTRO', 'Bitte f&uuml;hren Sie alle notwendigen &Auml;nderungen durch');
 define('TEXT_INFO_DELETE_INTRO', 'Sind Sie sicher, dass Sie diesen Banner l&ouml;schen m&ouml;chten?');
 define('TEXT_INFO_DELETE_IMAGE', 'Bannerbild l&ouml;schen');
+
+define('TEXT_INFO_HEADING_NEW_BANNER', 'neue Banner');
 
 define('SUCCESS_BANNER_INSERTED', 'Erfolg: Der Banner wurde eingef&uuml;gt.');
 define('SUCCESS_BANNER_UPDATED', 'Erfolg: Der Banner wurde aktualisiert.');

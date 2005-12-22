@@ -33,17 +33,17 @@
 
 <h1><?php echo HEADING_TITLE; ?></h1>
 
-<p class="main"><?php echo tep_image('../images/' . $rInfo->products_image, $rInfo->products_name, SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br><br><b>' . ENTRY_DATE . '</b> ' . tep_date_short($rInfo->date_added); ?></p>
+<p class="main"><?php echo tep_image('../images/' . $rInfo->products_image, $rInfo->products_name, SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'align="right" hspace="5" vspace="5"') . '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . tep_date_short($rInfo->date_added); ?></p>
 
-<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br>' . nl2br(tep_output_string_protected($rInfo->reviews_text)); ?></p>
+<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . nl2br(tep_output_string_protected($rInfo->reviews_text)); ?></p>
 
 <p class="main"><?php echo '<b>' . ENTRY_RATING . '</b>&nbsp;' . tep_image('../images/stars_' . $rInfo->reviews_rating . '.gif', sprintf(TEXT_OF_5_STARS, $rInfo->reviews_rating)) . '&nbsp;<small>[' . sprintf(TEXT_OF_5_STARS, $rInfo->reviews_rating) . ']</small>'; ?></p>
 
 <?php
   if (empty($_POST)) {
-    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
+    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
     if ( (defined('SERVICE_REVIEW_ENABLE_MODERATION')) && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {
-      echo '<p align="right"><input type="button" value="' . IMAGE_APPROVE . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . IMAGE_REJECT . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
+      echo '<p align="right"><input type="button" value="' . IMAGE_APPROVE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . IMAGE_REJECT . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
     }
   } else {
     echo tep_draw_form('update', FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=update', 'post', 'enctype="multipart/form-data"');
@@ -52,7 +52,7 @@
       echo osc_draw_hidden_field($key, $value);
     }
 
-    echo '<p align="right"><input type="submit" value="' . IMAGE_BACK . '" name="review_edit" class="operationButton"> <input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onClick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
+    echo '<p align="right"><input type="submit" value="' . IMAGE_BACK . '" name="review_edit" class="operationButton"> <input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
 
     echo '</form>';
   }

@@ -11,12 +11,12 @@
 */
 
   if (isset($_GET['pID']) && empty($_POST)) {
-    $Qp = $osC_Database->query('select products_id, products_quantity, products_model, products_image, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+    $Qp = $osC_Database->query('select products_id, products_quantity, products_image, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
     $Qp->bindTable(':table_products', TABLE_PRODUCTS);
     $Qp->bindInt(':products_id', $_GET['pID']);
     $Qp->execute();
 
-    $Qpd = $osC_Database->query('select products_name, products_description, products_url, language_id from :table_products_description where products_id = :products_id');
+    $Qpd = $osC_Database->query('select products_name, products_description, products_model, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
     $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
     $Qpd->bindInt(':products_id', $_GET['pID']);
     $Qpd->execute();
@@ -25,6 +25,9 @@
     while ($Qpd->next()) {
       $pd_extra['products_name'][$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
       $pd_extra['products_description'][$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
+      $pd_extra['products_model'][$Qpd->valueInt('language_id')] = $Qpd->value('products_model');
+      $pd_extra['products_keyword'][$Qpd->valueInt('language_id')] = $Qpd->value('products_keyword');
+      $pd_extra['products_tags'][$Qpd->valueInt('language_id')] = $Qpd->value('products_tags');
       $pd_extra['products_url'][$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
     }
 
@@ -94,7 +97,7 @@
 }
 </style>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
   var tax_rates = new Array();
 <?php
   foreach ($tax_class_array as $tc_entry) {
@@ -274,6 +277,18 @@
             <td class="smallText"><?php echo tep_draw_textarea_field('products_description[' . $l['id'] . ']', 'soft', '70', '15', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$l['id']]) ? $pInfo->products_description[$l['id']] : ''), 'id="fckpd_' . $l['code'] . '" style="width: 100%;"'); ?></td>
           </tr>
           <tr>
+            <td class="smallText"><?php echo TEXT_PRODUCTS_MODEL; ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_model) && isset($pInfo->products_model[$l['id']]) ? $pInfo->products_model[$l['id']] : '')); ?></td>
+          </tr>
+          <tr>
+            <td class="smallText"><?php echo TEXT_PRODUCTS_KEYWORD; ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_keyword) && isset($pInfo->products_keyword[$l['id']]) ? $pInfo->products_keyword[$l['id']] : '')); ?></td>
+          </tr>
+          <tr>
+            <td class="smallText"><?php echo TEXT_PRODUCTS_TAGS; ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_tags) && isset($pInfo->products_tags[$l['id']]) ? $pInfo->products_tags[$l['id']] : '')); ?></td>
+          </tr>
+          <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_URL; ?></td>
             <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : '')); ?></td>
           </tr>
@@ -322,7 +337,7 @@
               </tr>
             </table>
 
-            <script language="javascript"><!--
+            <script type="text/javascript"><!--
               updateGross();
             //--></script>
           </fieldset>
@@ -335,10 +350,6 @@
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_MANUFACTURER; ?></td>
                 <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($pInfo) ? $pInfo->manufacturers_id : '')); ?></td>
-              </tr>
-              <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_MODEL; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_model', (isset($pInfo) ? $pInfo->products_model : '')); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_QUANTITY; ?></td>
@@ -357,7 +368,7 @@
           <fieldset style="height: 100%;">
             <legend><?php echo TEXT_PRODUCTS_STATUS; ?></legend>
 
-            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($pInfo) ? $pInfo->products_status : '0'), '', false, '<br>'); ?>
+            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($pInfo) ? $pInfo->products_status : '0'), '', false, '<br />'); ?>
           </fieldset>
         </td>
         <td class="smallText" width="50%" height="100%" valign="top">
@@ -392,7 +403,7 @@
                 <fieldset style="height: 100%;">
                   <legend>Image Location</legend>
 
-                  <p><?php echo DIR_WS_CATALOG . 'images/' . osc_draw_input_field('products_image', (isset($pInfo) ? $pInfo->products_image : '')) . '&nbsp;<input type="button" value="Preview" onClick="reloadImage();" class="infoBoxButton">'; ?></p>
+                  <p><?php echo DIR_WS_CATALOG . 'images/' . osc_draw_input_field('products_image', (isset($pInfo) ? $pInfo->products_image : '')) . '&nbsp;<input type="button" value="Preview" onclick="reloadImage();" class="infoBoxButton">'; ?></p>
                 </fieldset>
               </td>
             </tr>
@@ -464,7 +475,7 @@
 ?>
         </select></td>
         <td align="center" width="10%" class="smallText">
-          <input type="button" value=">>" onClick="moreFields()" class="infoBoxButton">
+          <input type="button" value=">>" onclick="moreFields()" class="infoBoxButton">
         </td>
         <td width="60%" valign="top" class="smallText">
           <fieldset>
@@ -495,7 +506,7 @@
     echo '              <tr id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '">' . "\n" .
          '                <td class="smallText" width="50%">' . $Qattributes->value('products_options_values_name') . '</td>' . "\n" .
          '                <td class="smallText">' . osc_draw_pull_down_menu('attribute_prefix[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), $Qattributes->value('price_prefix')) . '&nbsp;' . osc_draw_input_field('attribute_price[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', $Qattributes->value('options_values_price')) . '</td>' . "\n" .
-         '                <td class="smallText" align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onClick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
+         '                <td class="smallText" align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onclick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>
@@ -511,7 +522,7 @@
                 <tr class="attributeAdd">
                   <td class="smallText" width="50%"><span id="attributeKey">&nbsp;</span></td>
                   <td class="smallText"><?php echo osc_draw_pull_down_menu('new_attribute_prefix', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), '+', 'disabled') . '&nbsp;' . osc_draw_input_field('new_attribute_price', '', 'disabled'); ?></td>
-                  <td class="smallText" align="right"><input type="button" value="-" onClick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);" class="infoBoxButton"></td>
+                  <td class="smallText" align="right"><input type="button" value="-" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);" class="infoBoxButton"></td>
                 </tr>
               </table>
             </div>
@@ -553,8 +564,8 @@
   $assignedCategoryTree->setSpacerString('&nbsp;', 5);
 
   foreach ($assignedCategoryTree->getTree() as $value) {
-    echo '          <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' . "\n" .
-         '            <td class="smallText"><a href="#" onClick="document.new_product.categories_' . $value['id'] . '.checked=!document.new_product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
+    echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
+         '            <td class="smallText"><a href="#" onclick="document.new_product.categories_' . $value['id'] . '.checked=!document.new_product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
          '            <td class="smallText" align="right">' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" .
          '          </tr>' . "\n";
   }
@@ -564,7 +575,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo osc_draw_hidden_field('products_date_added', (isset($pInfo) && isset($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d'))) . '<input type="submit" value="' . IMAGE_PREVIEW . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
+  <p align="right"><?php echo osc_draw_hidden_field('products_date_added', (isset($pInfo) && isset($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d'))) . '<input type="submit" value="' . IMAGE_PREVIEW . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
 
   </form>
 </div>

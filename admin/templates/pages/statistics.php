@@ -19,7 +19,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><h1><?php echo HEADING_TITLE . ': ' . $osC_Statistics->getTitle(); ?></h1></td>
-    <td align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onClick="document.location.href=\'' . tep_href_link(FILENAME_STATISTICS) . '\';" class="operationButton">'; ?></td>
+    <td align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_STATISTICS) . '\';" class="operationButton">'; ?></td>
   </tr>
 </table>
 
@@ -40,7 +40,7 @@
       $columns = sizeof($data);
     }
 
-    echo '    <tr onMouseOver="rowOverEffect(this);" onMouseOut="rowOutEffect(this);">' . "\n";
+    echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n";
 
     for ($i=0; $i<$columns; $i++) {
       echo '      <td>' . $data[$i] . '</td>' . "\n";

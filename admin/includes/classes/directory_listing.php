@@ -27,7 +27,7 @@
 /* Class constructor */
 
     function osC_DirectoryListing($directory = '', $stats = false) {
-      $this->setDirectory($directory);
+      $this->setDirectory(realpath($directory));
       $this->setStats($stats);
     }
 
@@ -104,7 +104,7 @@
         $this->_listing = array();
       }
 
-      if ($dir = dir($directory)) {
+      if ($dir = @dir($directory)) {
         while (($entry = $dir->read()) !== false) {
           if (in_array($entry, $this->_exclude_entries) === false) {
             if (($this->_include_files === true) && is_file($dir->path . '/' . $entry)) {
@@ -160,13 +160,15 @@
       }
     }
 
-    function getFiles() {
+    function getFiles($sort_by_directories = true) {
       if (is_array($this->_listing) === false) {
         $this->read();
       }
 
       if (is_array($this->_listing) && (sizeof($this->_listing) > 0)) {
-        usort($this->_listing, array($this, '_sortListing'));
+        if ($sort_by_directories === true) {
+          usort($this->_listing, array($this, '_sortListing'));
+        }
 
         return $this->_listing;
       }
