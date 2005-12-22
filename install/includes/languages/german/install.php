@@ -1,124 +1,99 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2005 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+page_title_installation = New Installation
 
-  Copyright (c) 2004 osCommerce
+page_heading_step_1 = Installation Options
+page_heading_step_2 = Database Server
+page_heading_step_3 = Web Server
+page_heading_step_4 = Online Store Settings
+page_heading_step_5 = Finished!
 
-  Released under the GNU General Public License
-*/
+text_installation = <p>This web-based installation routine will correctly setup and configure osCommerce to run on this server.</p><p>Please following the on-screen instructions that will take you through the database server, web server, and store configuration options. If help is needed at any stage, please consult the documentation or seek help at the community support forums.</p>
+text_successful_installation = The installation and configuration was successful!
 
-  define('PAGE_TITLE_INSTALLATION', 'New Installation');
-  define('TEXT_CUSTOMIZE_INSTALLATION', 'Please customize the new installation with the following options:');
+param_import_database = Import Catalog Database
+param_import_database_description = Import the database structure and configuration parameters. (Required for first time installations)
 
-  define('CONFIG_IMPORT_CATALOG_DATABASE', 'Import Catalog Database:');
-  define('CONFIG_IMPORT_CATALOG_DATABASE_DESCRIPTION', 'Install the database and add the sample data');
-  define('CONFIG_IMPORT_CATALOG_DATABASE_DESCRIPTION_LONG', 'Checking this box will import the database structure, required data, and some sample data. (required for first time installations)');
+param_automatic_configuration = Automatic Configuration
+param_automatic_configuration_description = Save configuration patemeters entered during the installation procedure to the server.
 
-  define('CONFIG_AUTOMATIC_CONFIGURATION', 'Automatic Configuration:');
-  define('CONFIG_AUTOMATIC_CONFIGURATION_DESCRIPTION', 'Save configuration values');
-  define('CONFIG_AUTOMATIC_CONFIGURATION_DESCRIPTION_LONG', 'Checking this box will save all entered data during the installation procedure to the appropriate configuration files on the server.');
+param_database_server = Database Server
+param_database_server_description = The address of the database server in the form of a hostname or IP address.
+param_database_username = Username
+param_database_username_description = The username used to connect to the database server.
+param_database_password = Password
+param_database_password_description = The password that is used together with the username to connect to the database server.
+param_database_name = Database Name
+param_database_name_description = The name of the database to hold the data in.
+param_database_type = Database Type
+param_database_type_description = The database server software that is used.
+param_database_prefix = Database Table Prefix
+param_database_prefix_description = The prefix to use for the database tables.
 
-  define('PAGE_SUBTITLE_DATABASE_IMPORT', 'Database Import');
-  define('TEXT_ENTER_DATABASE_INFORMATION', 'Please enter the database server information:');
+param_database_import_sample_data = Import Sample Data
+param_database_import_sample_data_description = Inserting sample data into the database is recommended for first time installations.
 
-  define('CONFIG_DATABASE_SERVER', 'Database Server:');
-  define('CONFIG_DATABASE_SERVER_DESCRIPTION', 'Hostame or IP-address of the database server');
-  define('CONFIG_DATABASE_SERVER_DESCRIPTION_LONG', 'The database server can be in the form of a hostname, such as db1.myserver.com, or as an IP-address, such as 192.168.0.1');
+param_web_address = WWW Address
+param_web_address_description = The web address to the online store.
+param_web_root_directory = Webserver Root Directory
+param_web_root_directory_description = The directory where the online store is installed on the server.
+param_web_work_directory = Work Directory
+param_web_work_directory_description = The working directory for temporarily created files. This directory should be located outside the public webserver root directory for security reasons. (Shared hosting servers should not use /tmp/)
 
-  define('CONFIG_DATABASE_USERNAME', 'Username:');
-  define('CONFIG_DATABASE_USERNAME_DESCRIPTION', 'Database username');
-  define('CONFIG_DATABASE_USERNAME_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br><br>Note: Create and Drop permissions <b>are required</b> at this point of the installation procedure.');
-  define('CONFIG_DATABASE_USERNAME_RESTRICTED_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br><br>Note: Create and Drop permissions <b>are not required</b> for the general use of osCommerce.');
+param_store_name = Store Name
+param_store_name_description = The name of the online store that is presented to the public.
+param_store_owner_name = Store Owner Name
+param_store_owner_name_description = The name of the store owner that is presented to the public.
+param_store_owner_email_address = Store Owner E-Mail Address
+param_store_owner_email_address_description = The e-mail address of the store owner that is presented to the public.
+param_administrator_username = Administrator Username
+param_administrator_username_description = The administrator username to use for the administration tool.
+param_administrator_password = Administrator Password
+param_administrator_password_description = The password to use for the administrator account.
 
-  define('CONFIG_DATABASE_PASSWORD', 'Password:');
-  define('CONFIG_DATABASE_PASSWORD_DESCRIPTION', 'Database password');
-  define('CONFIG_DATABASE_PASSWORD_DESCRIPTION_LONG', 'The password is used together with the username, which forms the database user account.');
+box_steps_step_1 = Installation Options
+box_steps_step_2 = Database Server
+box_steps_step_3 = Web Server
+box_steps_step_4 = Online Store Settings
+box_steps_step_5 = Finished!
 
-  define('CONFIG_DATABASE_NAME', 'Database Name:');
-  define('CONFIG_DATABASE_NAME_DESCRIPTION', 'Database name');
-  define('CONFIG_DATABASE_NAME_DESCRIPTION_LONG', 'The database used to hold the data. An example database name is \'osCommerce\'.');
+box_info_step_1_title = Step 1: Installation Options
+box_info_step_1_text = <p>Here you can choose to import the database structure only, to automatically configure an existing installation, or to do both for new installations.</p><p>For new installations it is required to perform both in order to install the software correctly.</p>
 
-  define('CONFIG_DATABASE_TABLE_PREFIX', 'Database Table Prefix:');
-  define('CONFIG_DATABASE_TABLE_PREFIX_DESCRIPTION', 'Database table prefix');
-  define('CONFIG_DATABASE_TABLE_PREFIX_DESCRIPTION_LONG', 'The prefix to use for the database tables created. An example table prefix is \'osc_\' which would create a table name of osc_products.');
+box_info_step_2_title = Step 2: Database Server
+box_info_step_2_text = <p>The database server stores the content of the online store such as product information, customer information, and the orders that have been made.</p><p>Please consult your server administrator if your database server parameters are not yet known.</p>
 
-  define('CONFIG_DATABASE_PERSISTENT_CONNECTIONS', 'Persistent Connections:');
-  define('CONFIG_DATABASE_PERSISTENT_CONNECTIONS_DESCRIPTION', '');
-  define('CONFIG_DATABASE_PERSISTENT_CONNECTIONS_DESCRIPTION_LONG', 'Enable persistent database connections.<br><br>Note: Persistent connections should be disabled for shared servers.');
+box_info_step_3_title = Step 3: Web Server
+box_info_step_3_text = <p>The web server takes care of serving the pages of the online store to the visitors and customers. The web server parameters make sure the links to the pages point to the correct location.</p><p>Temporary files such as session data and cache files are stored in the work directory. It is important that this directory is located outside the web server root directory and is protected from public access.</p>
 
-  define('CONFIG_DATABASE_TABLE_TYPE', 'Database Table Type:');
-  define('CONFIG_DATABASE_TABLE_TYPE_DESCRIPTION', '');
-  define('CONFIG_DATABASE_TABLE_TYPE_DESCRIPTION_LONG', 'The database table type to use.<br><br>The "InnoDB" table type is recommended for transaction-safe queries, however it will only be used if the database server supports this table type.');
+box_info_step_4_title = Step 4: Online Store Settings
+box_info_step_4_text = <p>Here you can define the name of your online store, and the contact information for the store owner.</p><p>The administrator username and password are used to log into the protected administration tool section.</p>
 
-  define('CONFIG_SESSION_STORAGE', 'Session Storage:');
-  define('CONFIG_SESSION_STORAGE_FILES', 'Files');
-  define('CONFIG_SESSION_STORAGE_DATABASE', 'Database');
-  define('CONFIG_SESSION_STORAGE_DESCRIPTION', '');
-  define('CONFIG_SESSION_STORAGE_DESCRIPTION_LONG', 'Store user session data as files on the server, or in the database.<br><br>Note: Due to security related issues, database session storage is recommended for shared servers.');
+box_info_step_5_title = Step 5: Finished!
+box_info_step_5_text = <p>Congratulations on installing and configuring osCommerce as your online store solution!</p><p>We hope you all the best with your online store and welcome you to join and participate in our community.</p><p align="right">- The osCommerce Team</p>
 
-  define('CONFIG_IMPORT_SAMPLE_DATA', 'Import Sample Data:');
-  define('CONFIG_IMPORT_SAMPLE_DATA_DESCRIPTION', '');
-  define('CONFIG_IMPORT_SAMPLE_DATA_DESCRIPTION_LONG', 'Insert sample data into the database (recommended for first time installations).');
+error_configuration_file_not_writeable = <p>The webserver was not able to write the online store parameters to its configuration file due to file permission problems.</p><p>Please verify the permissions of the configuration file to allow the webserver to write to it, and try again by clicking on the Retry button below.</p><p>The configuration file is located at:</p><p>%s</p>
+error_configuration_file_alternate_method = <p>Alternatively you can copy and save the contents of the textbox below to the configuration file by hand.</p>
 
-  define('ERROR_UNSUCCESSFUL_DATABASE_CONNECTION', '<p>A test connection made to the database was <b><u>NOT</u></b> successful.</p><p>The error message returned is:</p><p class="boxme">%s</p><p>Please click on the <i>Back</i> button below to review your database server settings.</p><p>If you require help with your database server settings, please consult your hosting company.</p>');
-  define('ERROR_UNSUCCESSFUL_DATABASE_CONNECTION', '<p>Eine Testverbindung zu Ihrem Datenbankserver war <b><u>Nicht</u></b> erfolgreich.</p><p>Folgende Fehlermeldung hat Ihr Server zurück gegeben:</p><p class="boxme">%s</p><p>Bitte klicken Sie auf den <i>Zurück</i> Button und kontrolieren Sie Ihre Datenbankserver Einstellungen.</p><p>Sollte diese Problem weiter bestehen, kontaktieren Sie bitte Ihren Provider.</p>');
+rpc_database_connection_test = Testing database connection..
+rpc_database_connection_error = There was a problem connecting to the database server. The following error had occured:</p><p><b>%s</b></p><p>Please verify the connection parameters and try again.
+rpc_database_connected = Successfully connected to the database.
+rpc_database_importing = The database structure is now being imported. Please be patient during this procedure.
+rpc_database_imported = Database imported successfully.
+rpc_database_import_error = There was a problem importing the database. The following error had occured:</p><p><b>%s</b></p><p>Please verify the connection parameters and try again.
 
-  define('TEXT_SUCCESSFUL_DATABASE_CONNECTION', '<p>A test connection made to the database was <b><u>successful</u></b>.</p><p>Please continue the installation process to perform the database import procedure.</p><p>It is important this procedure is not interrupted, otherwise the database may end up corrupt.</p>');
-  define('TEXT_IMPORT_SQL', '<p>The file to import must be located and named at:</p><p>%s</p>');
-  define('TEXT_IMPORT_DATA_SAMPLE_SQL', '<p>The sample data file to import must be located and named at:</p><p>%s</p>');
+rpc_work_directory_test = Testing work directory..
+rpc_work_directory_error_non_existent = There was a problem accessing the working directory. The following error had occured:<br /><br /><b>The directory does not exist:<br /><br />%s</b><br /><br />Please verify the directory and try again.
+rpc_work_directory_error_not_writeable = There was a problem accessing the working directory. The following error had occured:<br /><br /><b>The webserver does not have write permissions to the directory:<br /><br />%s</b><br /><br />Please verify the permissions of the directory and try again.
+rpc_work_directory_configured = Working directory successfully configured.
 
-  define('ERROR_UNSUCCESSFUL_DATABASE_IMPORT', '<p>The following error has occurred:</p><p class="boxme">%s</p>');
-
-  define('TEXT_SUCCESSFUL_DATABASE_IMPORT', 'The database import was <b><u>successful</u></b>!');
-
-  define('PAGE_SUBTITLE_OSCOMMERCE_CONFIGURATION', 'osCommerce Configuration');
-  define('TEXT_ENTER_WEBSERVER_INFORMATION', 'Please enter the web server information:');
-
-  define('CONFIG_WWW_ADDRESS', 'WWW Address:');
-  define('CONFIG_WWW_ADDRESS_DESCRIPTION', 'The full website address to the online store');
-  define('CONFIG_WWW_ADDRESS_DESCRIPTION_LONG', 'The web address to the online store, for example <i>http://www.my-server.com/catalog/</i>');
-
-  define('CONFIG_WWW_ROOT_DIRECTORY', 'Webserver Root Directory:');
-  define('CONFIG_WWW_ROOT_DIRECTORY_DESCRIPTION', 'The server path to the online store');
-  define('CONFIG_WWW_ROOT_DIRECTORY_DESCRIPTION_LONG', 'The directory where osCommerce is installed on the server, for example <i>/home/myname/public_html/osCommerce/</i>');
-
-  define('CONFIG_WWW_HTTP_COOKIE_DOMAIN', 'HTTP Cookie Domain:');
-  define('CONFIG_WWW_HTTP_COOKIE_DOMAIN_DESCRIPTION', 'The domain to store cookies in');
-  define('CONFIG_WWW_HTTP_COOKIE_DOMAIN_DESCRIPTION_LONG', 'The full or top-level domain to store the cookies in, for example <i>.my-server.com</i>');
-
-  define('CONFIG_WWW_HTTP_COOKIE_PATH', 'HTTP Cookie Path:');
-  define('CONFIG_WWW_HTTP_COOKIE_PATH_DESCRIPTION', 'The path to store cookies under');
-  define('CONFIG_WWW_HTTP_COOKIE_PATH_DESCRIPTION_LONG', 'The web address to limit the cookie to, for example <i>/catalog/</i>');
-
-  define('CONFIG_ENABLE_SSL', 'Enable SSL Connections:');
-  define('CONFIG_ENABLE_SSL_DESCRIPTION', '');
-  define('CONFIG_ENABLE_SSL_DESCRIPTION_LONG', 'Enable secure SSL/HTTPS connections (requires a secure certificate installed on the web server)');
-
-  define('CONFIG_WWW_WORK_DIRECTORY', 'Work Directory:');
-  define('CONFIG_WWW_WORK_DIRECTORY_DESCRIPTION', 'The path to store osCommerce work data under (cache, sessions)');
-  define('CONFIG_WWW_WORK_DIRECTORY_DESCRIPTION_LONG', 'This path should be located <u>outside</u> the public HTML directory. (please avoid /tmp/ for security reasons)');
-
-  define('ERROR_WORK_DIRECTORY_NON_EXISTANT', '<p>The following error has occurred:</p><p><div class="boxMe"><b>The work directory does not exist.</b><br><br>Please perform the following actions:<ul class="boxMe"><li>mkdir %s</li></ul></div></p>');
-  define('ERROR_WORK_DIRECTORY_NOT_WRITEABLE', '<p>The following error has occurred:</p><p><div class="boxMe"><b>The work directory cannot be written to by the web server.</b><br><br>Please perform the following actions:<ul class="boxMe"><li>chmod 706 %s</li></ul></div></p><p class="noteBox">If <i>chmod 706</i> does not work, please try <i>chmod 777</i>.</p>');
-
-  define('TEXT_ENTER_SECURE_WEBSERVER_INFORMATION', 'Please enter the secure web server information:');
-
-  define('CONFIG_WWW_HTTPS_ADDRESS', 'Secure WWW Address:');
-  define('CONFIG_WWW_HTTPS_ADDRESS_DESCRIPTION', 'The full website address to the online store on the secure server');
-  define('CONFIG_WWW_HTTPS_ADDRESS_DESCRIPTION_LONG', 'The secure web address to the online store, for example <i>https://ssl.my-hosting-company.com/my_name/catalog/</i>');
-
-  define('CONFIG_WWW_HTTPS_COOKIE_DOMAIN', 'Secure Cookie Domain:');
-  define('CONFIG_WWW_HTTPS_COOKIE_DOMAIN_DESCRIPTION', 'The secure domain to store cookies in');
-  define('CONFIG_WWW_HTTPS_COOKIE_DOMAIN_DESCRIPTION_LONG', 'The full or top-level domain of the secure server to store the cookies in, for example <i>ssl.my-hosting-company.com</i>');
-
-  define('CONFIG_WWW_HTTPS_COOKIE_PATH', 'Secure Cookie Path:');
-  define('CONFIG_WWW_HTTPS_COOKIE_PATH_DESCRIPTION', 'The secure path to store cookies under');
-  define('CONFIG_WWW_HTTPS_COOKIE_PATH_DESCRIPTION_LONG', 'The web address of the secure server to limit the cookie to, for example <i>/my_name/catalog/</i>');
-
-  define('ERROR_CONFIG_FILE_NOT_WRITEABLE', '<p>The following error has occurred:</p><p><div class="boxMe"><b>The configuration file does not exist, or permission levels are not set.</b><br><br>Please perform the following actions:<ul class="boxMe"><li>cd %sincludes/</li><li>touch configure.php</li><li>chmod 706 configure.php</li></ul></div></p><p class="noteBox">If <i>chmod 706</i> does not work, please try <i>chmod 777</i>.</p><p class="noteBox">If you are running this installation procedure under a Microsoft Windows environment, try renaming the existing configuration file so a new file can be created.</p>');
-
-  define('TEXT_SUCCESSFUL_CONFIGURATION', 'The configuration was successful!');
-?>
+rpc_database_sample_data_importing = The sample data is now being imported into the database. Please be patient during this procedure.
+rpc_database_sample_data_imported = Database sample data imported successfully.
+rpc_database_sample_data_import_error = There was a problem importing the database sample data. The following error had occured:</p><p><b>%s</b></p><p>Please verify the database server and try again.

@@ -32,28 +32,28 @@
   echo str_repeat(' ', 300) . "\n";
 ?>
 
-<p><span id="addressBook"><span id="addressBookMarker">-</span> <?php echo TEXT_ADDRESS_BOOK; ?></span><br>
-<span id="banners"><span id="bannersMarker">-</span> <?php echo TEXT_BANNERS; ?></span><br>
-<span id="categories"><span id="categoriesMarker">-</span> <?php echo TEXT_CATEGORIES; ?></span><br>
-<span id="configuration"><span id="configurationMarker">-</span> <?php echo TEXT_CONFIGURATION; ?></span><br>
-<span id="currencies"><span id="currenciesMarker">-</span> <?php echo TEXT_CURRENCIES; ?></span><br>
-<span id="customers"><span id="customersMarker">-</span> <?php echo TEXT_CUSTOMERS; ?></span><br>
-<span id="images"><span id="imagesMarker">-</span> <?php echo TEXT_IMAGES; ?></span><br>
-<span id="languages"><span id="languagesMarker">-</span> <?php echo TEXT_LANGUAGES; ?></span><br>
-<span id="manufacturers"><span id="manufacturersMarker">-</span> <?php echo TEXT_MANUFACTURERS; ?></span><br>
-<span id="orders"><span id="ordersMarker">-</span> <?php echo TEXT_ORDERS; ?></span><br>
-<span id="products"><span id="productsMarker">-</span> <?php echo TEXT_PRODUCTS; ?></span><br>
-<span id="reviews"><span id="reviewsMarker">-</span> <?php echo TEXT_REVIEWS; ?></span><br>
-<span id="sessions"><span id="sessionsMarker">-</span> <?php echo TEXT_SESSIONS; ?></span><br>
-<span id="specials"><span id="specialsMarker">-</span> <?php echo TEXT_SPECIALS; ?></span><br>
-<span id="taxes"><span id="taxesMarker">-</span> <?php echo TEXT_TAXES; ?></span><br>
+<p><span id="addressBook"><span id="addressBookMarker">-</span> <?php echo TEXT_ADDRESS_BOOK; ?></span><br />
+<span id="banners"><span id="bannersMarker">-</span> <?php echo TEXT_BANNERS; ?></span><br />
+<span id="categories"><span id="categoriesMarker">-</span> <?php echo TEXT_CATEGORIES; ?></span><br />
+<span id="configuration"><span id="configurationMarker">-</span> <?php echo TEXT_CONFIGURATION; ?></span><br />
+<span id="currencies"><span id="currenciesMarker">-</span> <?php echo TEXT_CURRENCIES; ?></span><br />
+<span id="customers"><span id="customersMarker">-</span> <?php echo TEXT_CUSTOMERS; ?></span><br />
+<span id="images"><span id="imagesMarker">-</span> <?php echo TEXT_IMAGES; ?></span><br />
+<span id="languages"><span id="languagesMarker">-</span> <?php echo TEXT_LANGUAGES; ?></span><br />
+<span id="manufacturers"><span id="manufacturersMarker">-</span> <?php echo TEXT_MANUFACTURERS; ?></span><br />
+<span id="orders"><span id="ordersMarker">-</span> <?php echo TEXT_ORDERS; ?></span><br />
+<span id="products"><span id="productsMarker">-</span> <?php echo TEXT_PRODUCTS; ?></span><br />
+<span id="reviews"><span id="reviewsMarker">-</span> <?php echo TEXT_REVIEWS; ?></span><br />
+<span id="sessions"><span id="sessionsMarker">-</span> <?php echo TEXT_SESSIONS; ?></span><br />
+<span id="specials"><span id="specialsMarker">-</span> <?php echo TEXT_SPECIALS; ?></span><br />
+<span id="taxes"><span id="taxesMarker">-</span> <?php echo TEXT_TAXES; ?></span><br />
 <span id="whosOnline"><span id="whosOnlineMarker">-</span> <?php echo TEXT_WHOS_ONLINE; ?></span></p>
 
 <p><?php echo TEXT_STATUS; ?> <span id="statusText"><?php echo TEXT_PREPARING; ?></span></p>
 
 <?php flush(); ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('addressBook', 'bold');
 changeText('addressBookMarker', '?');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_ADDRESS_BOOK); ?>');
@@ -108,7 +108,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_ADDRESS_BOOK); 
 
   $osC_Database->simpleQuery('drop table address_book_to_customers');
 ?>
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('addressBook', 'normal');
 changeText('addressBookMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_ADDRESS_BOOK); ?>');
@@ -126,7 +126,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_BANNERS); ?>');
 
   $osC_Database->simpleQuery("insert into banners (banners_id, banners_title, banners_url, banners_image, banners_group, banners_html_text, expires_impressions, expires_date, date_scheduled, date_added, date_status_change, status) values (1, 'osCommerce', 'http://www.oscommerce.com', 'banners/oscommerce.gif', '468x50', '', 0, null, null, now(), null, 1)");
 ?>
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('banners', 'normal');
 changeText('bannersMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_BANNERS); ?>');
@@ -161,7 +161,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_CATEGORIES); ?>
   $osC_Database->simpleQuery("alter table categories add last_modified datetime after date_added");
   $osC_Database->simpleQuery("alter table categories add index idx_categories_parent_id (parent_id)");
 ?>
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('categories', 'normal');
 changeText('categoriesMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_CATEGORIES); ?>');
@@ -327,7 +327,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_CONFIGURATION);
 
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('configuration', 'normal');
 changeText('configurationMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_CONFIGURATION); ?>');
@@ -347,7 +347,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_CURRENCIES); ?>
   $osC_Database->simpleQuery("update currencies set value = '1'");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('currencies', 'normal');
 changeText('currenciesMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_CURRENCIES); ?>');
@@ -385,7 +385,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_CUSTOMERS); ?>'
   $osC_Database->simpleQuery("create table newsletters ( newsletters_id int(5) not null auto_increment, title varchar(255) not null, content text not null, module varchar(255) not null, date_added datetime not null, date_sent datetime, status int(1), locked int(1) default '0', primary key (newsletters_id))");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('customers', 'normal');
 changeText('customersMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_CUSTOMERS); ?>');
@@ -432,7 +432,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_IMAGES); ?>');
   $Qproducts->freeResult();
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('images', 'normal');
 changeText('imagesMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_IMAGES); ?>');
@@ -448,7 +448,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_LANGUAGES); ?>'
   $osC_Database->simpleQuery("update languages set image = 'icon.gif'");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('languages', 'normal');
 changeText('languagesMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_LANGUAGES); ?>');
@@ -465,7 +465,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_MANUFACTURERS);
   $osC_Database->simpleQuery("create table manufacturers_info (manufacturers_id int(5) not null, languages_id int(5) not null, manufacturers_url varchar(255) not null, url_clicked int(5) not null default '0', date_last_click datetime, primary key (manufacturers_id, languages_id))");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('manufacturers', 'normal');
 changeText('manufacturersMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_MANUFACTURERS); ?>');
@@ -652,7 +652,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_ORDERS); ?>');
   $osC_Database->simpleQuery("alter table orders drop shipping_cost");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('orders', 'normal');
 changeText('ordersMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_ORDERS); ?>');
@@ -757,7 +757,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_PRODUCTS); ?>')
   $osC_Database->simpleQuery("create table products_notifications ( products_id int(5) not null, customers_id int(5) not null, date_added datetime not null, primary key (products_id, customers_id))");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('products', 'normal');
 changeText('productsMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_PRODUCTS); ?>');
@@ -814,7 +814,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_REVIEWS); ?>');
   $osC_Database->simpleQuery("drop table reviews_extra");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('reviews', 'normal');
 changeText('reviewsMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_REVIEWS); ?>');
@@ -830,7 +830,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_SESSIONS); ?>')
   $osC_Database->simpleQuery("create table sessions (sesskey varchar(32) not null, expiry int(11) unsigned not null, value text not null, primary key (sesskey))");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('sessions', 'normal');
 changeText('sessionsMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_SESSIONS); ?>');
@@ -852,7 +852,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_SPECIALS); ?>')
   $osC_Database->simpleQuery("alter table specials add status int(1) NOT NULL default '1'");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('specials', 'normal');
 changeText('specialsMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_SPECIALS); ?>');
@@ -883,7 +883,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_TAXES); ?>');
   $osC_Database->simpleQuery("INSERT INTO zones_to_geo_zones (zone_country_id,zone_id,geo_zone_id,date_added) SELECT z.zone_country_id, z.zone_id,tr.tax_zone_id,now() FROM tax_rates tr, zones z WHERE z.zone_id=tr.tax_zone_id GROUP BY tr.tax_zone_id");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('taxes', 'normal');
 changeText('taxesMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_TAXES); ?>');
@@ -899,7 +899,7 @@ changeText('statusText', '<?php echo sprintf(TEXT_UPDATING, TEXT_WHOS_ONLINE); ?
   $osC_Database->simpleQuery("create table whos_online (customer_id int(5),  full_name varchar(64) not null, session_id varchar(128) not null, ip_address varchar(15) not null, time_entry varchar(14) not null, time_last_click varchar(14) not null, last_page_url varchar(255) not null)");
 ?>
 
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 changeStyle('whosOnline', 'normal');
 changeText('whosOnlineMarker', '*');
 changeText('statusText', '<?php echo sprintf(TEXT_UPDATING_DONE, TEXT_WHOS_ONLINE); ?>');

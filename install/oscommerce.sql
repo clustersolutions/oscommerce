@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2004 osCommerce
+# Copyright (c) 2005 osCommerce
 #
 # Released under the GNU General Public License
 #
@@ -46,6 +46,14 @@ CREATE TABLE osc_address_format (
   address_format varchar(128) NOT NULL,
   address_summary varchar(48) NOT NULL,
   PRIMARY KEY (address_format_id)
+);
+
+DROP TABLE IF EXISTS osc_administrators;
+CREATE TABLE osc_administrators (
+  id int NOT NULL auto_increment,
+  user_name varchar(32) NOT NULL,
+  user_password varchar(40) NOT NULL,
+  PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS osc_banners;
@@ -395,7 +403,6 @@ DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
   products_id int NOT NULL auto_increment,
   products_quantity int(4) NOT NULL,
-  products_model varchar(12),
   products_image varchar(64),
   products_price decimal(15,4) NOT NULL,
   products_date_added datetime NOT NULL,
@@ -437,10 +444,14 @@ CREATE TABLE osc_products_description (
   language_id int NOT NULL default '1',
   products_name varchar(64) NOT NULL default '',
   products_description text,
-  products_url varchar(255) default NULL,
+  products_model varchar(16),
+  products_keyword varchar(64),
+  products_tags varchar(255),
+  products_url varchar(255),
   products_viewed int(5) default '0',
   PRIMARY KEY  (products_id,language_id),
-  KEY products_name (products_name)
+  KEY products_name (products_name),
+  KEY products_description_keyword (products_keyword)
 );
 
 DROP TABLE IF EXISTS osc_products_notifications;
@@ -553,6 +564,43 @@ CREATE TABLE osc_geo_zones (
   PRIMARY KEY (geo_zone_id)
 );
 
+DROP TABLE IF EXISTS osc_templates;
+CREATE TABLE osc_templates (
+  id int NOT NULL auto_increment,
+  title varchar(64) not null,
+  code varchar(32) not null,
+  author_name varchar(64) not null,
+  author_www varchar(255),
+  markup_version varchar(32),
+  css_based tinyint,
+  medium varchar(32),
+  PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS osc_templates_boxes;
+CREATE TABLE osc_templates_boxes (
+  id int NOT NULL auto_increment,
+  title varchar(64) not null,
+  code varchar(32) not null,
+  author_name varchar(64) not null,
+  author_www varchar(255),
+  modules_group varchar(32) not null,
+  PRIMARY KEY (id)
+);
+
+DROP TABLE IF EXISTS osc_templates_boxes_to_pages;
+CREATE TABLE osc_templates_boxes_to_pages (
+  id int NOT NULL auto_increment,
+  templates_boxes_id int not null,
+  templates_id int not null,
+  content_page varchar(255) not null,
+  boxes_group varchar(32) not null,
+  sort_order int default 0,
+  page_specific int default 0,
+  PRIMARY KEY (id),
+  INDEX (templates_boxes_id, templates_id, content_page, boxes_group)
+);
+
 DROP TABLE IF EXISTS osc_weight_classes;
 CREATE TABLE osc_weight_classes (
   weight_class_id int NOT NULL default '0',
@@ -614,9 +662,9 @@ INSERT INTO osc_address_format VALUES (11, '$firstname $lastname$cr$streets$cr$c
 INSERT INTO osc_address_format VALUES (12, '$firstname $lastname$cr$streets$cr$city$cr$country $postcode','$city / $country');
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Name', 'STORE_NAME', 'osCommerce', 'The name of my store', '1', '1', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Owner', 'STORE_OWNER', 'Harald Ponce de Leon', 'The name of my store owner', '1', '2', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Owner', 'STORE_OWNER', 'Store Owner', 'The name of my store owner', '1', '2', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail Address', 'STORE_OWNER_EMAIL_ADDRESS', 'root@localhost', 'The e-mail address of my store owner', '1', '3', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail From', 'EMAIL_FROM', 'osCommerce <root@localhost>', 'The e-mail address used in (sent) e-mails', '1', '4', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail From', 'EMAIL_FROM', '"Store Owner" <root@localhost>', 'The e-mail address used in (sent) e-mails', '1', '4', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country', 'STORE_COUNTRY', '223', 'The country my store is located in <br><br><b>Note: Please remember to update the store zone.</b>', '1', '6', 'tep_get_country_name', 'tep_cfg_pull_down_country_list(', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Zone', 'STORE_ZONE', '18', 'The zone my store is located in', '1', '7', 'tep_cfg_get_zone_name', 'tep_cfg_pull_down_zone_list(', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Expected Sort Order', 'EXPECTED_PRODUCTS_SORT', 'desc', 'This is the sort order used in the expected products box.', '1', '8', 'tep_cfg_select_option(array(\'asc\', \'desc\'), ', now());
@@ -632,25 +680,13 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Credit Card Owner Name', 'CC_OWNER_MIN_LENGTH', '3', 'Minimum length of credit card owner name', '2', '12', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Credit Card Number', 'CC_NUMBER_MIN_LENGTH', '10', 'Minimum length of credit card number', '2', '13', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Review Text', 'REVIEW_TEXT_MIN_LENGTH', '50', 'Minimum length of review text', '2', '14', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Best Sellers', 'MIN_DISPLAY_BESTSELLERS', '1', 'Minimum number of best sellers to display', '2', '15', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Also Purchased', 'MIN_DISPLAY_ALSO_PURCHASED', '1', 'Minimum number of products to display in the \'This Customer Also Purchased\' box', '2', '16', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Address Book Entries', 'MAX_ADDRESS_BOOK_ENTRIES', '5', 'Maximum address book entries a customer is allowed to have', '3', '1', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Search Results', 'MAX_DISPLAY_SEARCH_RESULTS', '20', 'Amount of products to list', '3', '2', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Page Links', 'MAX_DISPLAY_PAGE_LINKS', '5', 'Number of \'number\' links use for page-sets', '3', '3', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('New Products Module', 'MAX_DISPLAY_NEW_PRODUCTS', '9', 'Maximum number of new products to display in a category', '3', '5', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Products Expected', 'MAX_DISPLAY_UPCOMING_PRODUCTS', '10', 'Maximum number of products expected to display', '3', '6', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Manufacturers List', 'MAX_DISPLAY_MANUFACTURERS_IN_A_LIST', '0', 'Used in manufacturers box; when the number of manufacturers exceeds this number, a drop-down list will be displayed instead of the default list', '3', '7', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Manufacturers Select Size', 'MAX_MANUFACTURERS_LIST', '1', 'Used in manufacturers box; when this value is \'1\' the classic drop-down list will be used for the manufacturers box. Otherwise, a list-box with the specified number of rows will be displayed.', '3', '7', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Length of Manufacturers Name', 'MAX_DISPLAY_MANUFACTURER_NAME_LEN', '15', 'Used in manufacturers box; maximum length of manufacturers name to display', '3', '8', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Selection of Random New Products', 'MAX_RANDOM_SELECT_NEW', '10', 'How many records to select from to choose one random new product to display', '3', '11', now());
-
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Categories To List Per Row', 'MAX_DISPLAY_CATEGORIES_PER_ROW', '3', 'How many categories to list per row', '3', '13', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('New Products Listing', 'MAX_DISPLAY_PRODUCTS_NEW', '10', 'Maximum number of new products to display in new products page', '3', '14', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Best Sellers', 'MAX_DISPLAY_BESTSELLERS', '10', 'Maximum number of best sellers to display', '3', '15', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Also Purchased', 'MAX_DISPLAY_ALSO_PURCHASED', '6', 'Maximum number of products to display in the \'This Customer Also Purchased\' box', '3', '16', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Customer Order History Box', 'MAX_DISPLAY_PRODUCTS_IN_ORDER_HISTORY_BOX', '6', 'Maximum number of products to display in the customer order history box', '3', '17', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Order History', 'MAX_DISPLAY_ORDER_HISTORY', '10', 'Maximum number of orders to display in the order history page', '3', '18', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Small Image Width', 'SMALL_IMAGE_WIDTH', '100', 'The pixel width of small images', '4', '1', now());
@@ -710,6 +746,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Sort Order', 'MODULE_ORDER_TOTAL_TAX_SORT_ORDER', '3', 'Sort order of display.', '6', '2', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Total', 'MODULE_ORDER_TOTAL_TOTAL_STATUS', 'true', 'Do you want to display the total order value?', '6', '1','tep_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Sort Order', 'MODULE_ORDER_TOTAL_TOTAL_SORT_ORDER', '4', 'Sort order of display.', '6', '2', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Template', 'DEFAULT_TEMPLATE', 'default', 'Default Template', '6', '0', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country of Origin', 'SHIPPING_ORIGIN_COUNTRY', '223', 'Select the country of origin to be used in shipping quotes.', '7', '1', 'tep_get_country_name', 'tep_cfg_pull_down_country_list(', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Postal Code', 'SHIPPING_ORIGIN_ZIP', 'NONE', 'Enter the Postal Code (ZIP) of the Store to be used in shipping quotes.', '7', '2', now());
@@ -749,8 +786,8 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Confirm Terms and Conditions During Checkout Procedure', 'DISPLAY_CONDITIONS_ON_CHECKOUT', 'false', 'Show the Terms and Conditions during the checkout procedure which the customer must agree to.', '16', '1', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Confirm Privacy Notice During Account Creation Procedure', 'DISPLAY_PRIVACY_CONDITIONS', 'false', 'Show the Privacy Notice during the account creation procedure which the customer must agree to.', '16', '2', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Service Modules', 'MODULE_SERVICES_INSTALLED',  'output_compression;session;language;currencies;simple_counter;category_path;breadcrumb;whos_online;banner;specials;debug;reviews', 'Installed services modules', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Show Number Of Products In Each Category', 'SHOW_COUNTS', 'true', 'Recursively count how many products are in each category.', '6', '0', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Service Modules', 'MODULE_SERVICES_INSTALLED',  'output_compression;session;language;currencies;simple_counter;category_path;breadcrumb;whos_online;banner;specials;debug;reviews;recently_visited', 'Installed services modules', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Calculate Number Of Products In Each Category', 'SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT', '1', 'Recursively calculate how many products are in each category.', '6', '0', 'tep_cfg_select_option(array(\'1\', \'0\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Use Default Language Currency', 'USE_DEFAULT_LANGUAGE_CURRENCY', 'false', 'Automatically use the currency set with the language (eg, German->Euro).', '6', '0', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Page Execution Time Log File', 'SERVICE_DEBUG_EXECUTION_TIME_LOG', '', 'Location of the page execution time log file (eg, /www/log/page_parse.log).', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Show The Page Execution Time', 'SERVICE_DEBUG_EXECUTION_DISPLAY', 'True', 'Show the page execution time.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
@@ -771,12 +808,19 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Regenerate Session ID', 'SERVICE_SESSION_REGENERATE_ID', 'False', 'Regenerate the session ID when a customer logs on or creates an account (requires PHP >= 4.1).', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Detect Search Engine Spider Robots', 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION', 'True', 'Detect search engine spider robots (GoogleBot, Yahoo, etc).', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('New Reviews', 'MAX_DISPLAY_NEW_REVIEWS', '6', 'Maximum number of new reviews to display', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Selection of Random Reviews', 'MAX_RANDOM_SELECT_REVIEWS', '10', 'How many records to select from to choose one random product review', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Review Level', 'SERVICE_REVIEW_ENABLE_REVIEWS', '1', 'Customer level required to write a review.', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\', \'2\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Moderate Reviews', 'SERVICE_REVIEW_ENABLE_MODERATION', '-1', 'Should reviews be approved by store admin.', '6', '0', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Special Products', 'MAX_DISPLAY_SPECIAL_PRODUCTS', '9', 'Maximum number of products on special to display', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Selection of Products on Special', 'MAX_RANDOM_SELECT_SPECIALS', '10', 'How many records to select from to choose one random product special to display', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Duplicate Banners', 'SERVICE_BANNER_SHOW_DUPLICATE', 'False', 'Show duplicate banners in the same banner group on the same page?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Duplicate Banners', 'SERVICE_BANNER_SHOW_DUPLICATE', 'False', 'Show duplicate banners in the same banner group on the same page?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest products', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS', 'True', 'Display recently visited products.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display product images', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES', 'True', 'Display the product image.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display product prices', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES', 'True', 'Display the products price.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum products to show', 'SERVICE_RECENTLY_VISITED_MAX_PRODUCTS', '5', 'Maximum number of recently visited products to show', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest categories', 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES', 'True', 'Display recently visited categories.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display category images', 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORY_IMAGES', 'True', 'Display the category image.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum categories to show', 'SERVICE_RECENTLY_VISITED_MAX_CATEGORIES', '3', 'Mazimum number of recently visited categories to show', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest searches', 'SERVICE_RECENTLY_VISITED_SHOW_SEARCHES', 'True', 'Show recent searches.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum searches to show', 'SERVICE_RECENTLY_VISITED_MAX_SEARCHES', '3', 'Mazimum number of recent searches to display', '6', '0', now());
 
 INSERT INTO osc_configuration_group VALUES ('1', 'My Store', 'General information about my store', '1', '1');
 INSERT INTO osc_configuration_group VALUES ('2', 'Minimum Values', 'The minimum values for functions / data', '2', '1');
@@ -1062,6 +1106,70 @@ INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of pr
 INSERT INTO osc_tax_rates VALUES (1, 1, 1, 1, 7.0, 'FL TAX 7.0%', now(), now());
 INSERT INTO osc_geo_zones (geo_zone_id,geo_zone_name,geo_zone_description,date_added) VALUES (1,"Florida","Florida local sales tax zone",now());
 INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_zone_id,date_added) VALUES (1,223,18,1,now());
+
+# Templates
+
+INSERT INTO osc_templates VALUES (1, 'osCommerce Default Template', 'default', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
+
+INSERT INTO osc_templates_boxes VALUES (1,'Best Sellers','best_sellers','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (2,'Categories','categories','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (3,'Currencies','currencies','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (4,'Information','information','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (5,'Languages','languages','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (6,'Manufacturer Info','manufacturer_info','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (7,'Manufacturers','manufacturers','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (8,'Order History','order_history','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (9,'Product Notifications','product_notifications','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (10,'Reviews','reviews','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (11,'Search','search','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (12,'Shopping Cart','shopping_cart','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (13,'Specials','specials','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (14,'Tell a Friend','tell_a_friend','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (15,'What\'s New','whats_new','osCommerce','http://www.oscommerce.com','boxes');
+INSERT INTO osc_templates_boxes VALUES (16,'New Products','new_products','osCommerce','http://www.oscommerce.com','content');
+INSERT INTO osc_templates_boxes VALUES (17,'Upcoming Products','upcoming_products','osCommerce','http://www.oscommerce.com','content');
+INSERT INTO osc_templates_boxes VALUES (18,'Recently Visited','recently_visited','osCommerce','http://www.oscommerce.com','content');
+INSERT INTO osc_templates_boxes VALUES (19,'Also Purchased Products','also_purchased_products','osCommerce','http://www.oscommerce.com','content');
+
+INSERT INTO osc_templates_boxes_to_pages VALUES (1,2,1,'*','left',100,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (2,7,1,'*','left',200,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (3,15,1,'*','left',300,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (4,11,1,'*','left',400,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (5,4,1,'*','left',500,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (6,12,1,'*','right',100,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (7,6,1,'products/info','right',200,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (8,8,1,'*','right',300,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (9,1,1,'*','right',400,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (10,9,1,'products/info','right',500,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (11,14,1,'products/info','right',600,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (12,13,1,'*','right',700,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (13,10,1,'*','right',800,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (14,5,1,'*','right',900,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (15,3,1,'*','right',1000,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (16,16,1,'index/category_listing','after',400,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (17,16,1,'index/index','after',400,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (18,17,1,'index/index','after',450,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (19,18,1,'*','after',500,0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (20,19,1,'products/info','after',100,0);
+
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Minimum List Size', 'BOX_BEST_SELLERS_MIN_LIST', '3', 'Minimum amount of products that must be shown in the listing', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_BEST_SELLERS_MAX_LIST', '10', 'Maximum amount of products to show in the listing', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'BOX_BEST_SELLERS_CACHE', '60', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Show Product Count', 'BOX_CATEGORIES_SHOW_PRODUCT_COUNT', '1', 'Show the amount of products each category has', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Manufacturers List Size', 'BOX_MANUFACTURERS_LIST_SIZE', '1', 'The size of the manufacturers pull down menu listing.', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_ORDER_HISTORY_MAX_LIST', '5', 'Maximum amount of products to show in the listing', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Random Review Selection', 'BOX_REVIEWS_RANDOM_SELECT', '10', 'Select a random review from this amount of the newest reviews available', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'BOX_REVIEWS_CACHE', '1', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Random Product Specials Selection', 'BOX_SPECIALS_RANDOM_SELECT', '10', 'Select a random product on special from this amount of the newest products on specials available', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'BOX_SPECIALS_CACHE', '1', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Random New Product Selection', 'BOX_WHATS_NEW_RANDOM_SELECT', '10', 'Select a random new product from this amount of the newest products available', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'BOX_WHATS_NEW_CACHE', '1', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum Entries To Display', 'MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY', '9', 'Maximum number of new products to display', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'MODULE_CONTENT_NEW_PRODUCTS_CACHE', '60', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Minimum Entries To Display', 'MODULE_CONTENT_ALSO_PURCHASED_MIN_DISPLAY', '1', 'Minimum number of also purchased products to display', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum Entries To Display', 'MODULE_CONTENT_ALSO_PURCHASED_MAX_DISPLAY', '6', 'Maximum number of also purchased products to display', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'MODULE_CONTENT_ALSO_PURCHASED_PRODUCTS_CACHE', '60', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum Entries To Display', 'MODULE_CONTENT_UPCOMING_PRODUCTS_MAX_DISPLAY', '10', 'Maximum number of upcoming products to display', '6', '0', now());
 
 # Weight Classes
 INSERT INTO osc_weight_classes VALUES (1, 'g', 1, 'Gram(s)');

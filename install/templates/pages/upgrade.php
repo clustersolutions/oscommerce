@@ -24,7 +24,7 @@
     <td width="30%" valign="top"><?php echo CONFIG_DATABASE_SERVER; ?></td>
     <td width="70%" class="smallDesc">
       <?php echo osc_draw_input_field('DB_SERVER'); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onClick="toggleBox('dbHost');"><br>
+      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onclick="toggleBox('dbHost');"><br />
       <div id="dbHostSD"><?php echo CONFIG_DATABASE_SERVER_DESCRIPTION; ?></div>
       <div id="dbHost" class="longDescription"><?php echo CONFIG_DATABASE_SERVER_DESCRIPTION_LONG; ?></div>
     </td>
@@ -33,7 +33,7 @@
     <td width="30%" valign="top"><?php echo CONFIG_DATABASE_USERNAME; ?></td>
     <td width="70%" class="smallDesc">
       <?php echo osc_draw_input_field('DB_SERVER_USERNAME'); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif"  onClick="toggleBox('dbUser');"><br>
+      <img src="templates/<?php echo $template; ?>/images/help_icon.gif"  onclick="toggleBox('dbUser');"><br />
       <div id="dbUserSD"><?php echo CONFIG_DATABASE_USERNAME_DESCRIPTION; ?></div>
       <div id="dbUser" class="longDescription"><?php echo CONFIG_DATABASE_USERNAME_DESCRIPTION_LONG; ?></div>
     </td>
@@ -42,7 +42,7 @@
     <td width="30%" valign="top"><?php echo CONFIG_DATABASE_PASSWORD; ?></td>
     <td width="70%" class="smallDesc">
       <?php echo osc_draw_password_field('DB_SERVER_PASSWORD'); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onClick="toggleBox('dbPass');"><br>
+      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onclick="toggleBox('dbPass');"><br />
       <div id="dbPassSD"><?php echo CONFIG_DATABASE_PASSWORD_DESCRIPTION; ?></div>
       <div id="dbPass" class="longDescription"><?php echo CONFIG_DATABASE_PASSWORD_DESCRIPTION_LONG; ?></div>
     </td>
@@ -51,7 +51,7 @@
     <td width="30%" valign="top"><?php echo CONFIG_DATABASE_NAME; ?></td>
     <td width="70%" class="smallDesc">
       <?php echo osc_draw_input_field('DB_DATABASE'); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onClick="toggleBox('dbName');"><br>
+      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onclick="toggleBox('dbName');"><br />
       <div id="dbNameSD"><?php echo CONFIG_DATABASE_NAME_DESCRIPTION; ?></div>
       <div id="dbName" class="longDescription"><?php echo CONFIG_DATABASE_NAME_DESCRIPTION_LONG; ?></div>
     </td>

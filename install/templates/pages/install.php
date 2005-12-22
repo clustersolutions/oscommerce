@@ -5,45 +5,55 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<p class="pageTitle"><?php echo PAGE_TITLE_INSTALLATION; ?></p>
+<div class="mainBlock">
+  <div class="stepsBox">
+    <ol>
+      <li style="font-weight: bold;"><?php echo $osC_Language->get('box_steps_step_1'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_2'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_3'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_4'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_5'); ?></li>
+    </ol>
+  </div>
 
-<form name="install" action="install.php?step=2" method="post">
+  <h1><?php echo $osC_Language->get('page_title_installation'); ?></h1>
 
-<p><?php echo TEXT_CUSTOMIZE_INSTALLATION; ?></p>
+  <?php echo $osC_Language->get('text_installation'); ?>
+</div>
 
-<table width="95%" border="0" cellpadding="2" class="formPage">
-  <tr>
-    <td width="30%" valign="top"><?php echo CONFIG_IMPORT_CATALOG_DATABASE; ?></td>
-    <td width="70%" class="smallDesc">
-      <?php echo osc_draw_checkbox_field('install[]', 'database', true); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onClick="toggleBox('dbImport');"><br>
-      <div id="dbImportSD"><?php echo CONFIG_IMPORT_CATALOG_DATABASE_DESCRIPTION; ?></div>
-      <div id="dbImport" class="longDescription"><?php echo CONFIG_IMPORT_CATALOG_DATABASE_DESCRIPTION_LONG; ?></div>
-    </td>
-  </tr>
-  <tr>
-    <td width="30%" valign="top"><?php echo CONFIG_AUTOMATIC_CONFIGURATION; ?></td>
-    <td width="70%" class="smallDesc">
-      <?php echo osc_draw_checkbox_field('install[]', 'configure', true); ?>
-      <img src="templates/<?php echo $template; ?>/images/help_icon.gif" onClick="toggleBox('autoConfig');"><br>
-      <div id="autoConfigSD"><?php echo CONFIG_AUTOMATIC_CONFIGURATION_DESCRIPTION; ?></div>
-      <div id="autoConfig" class="longDescription"><?php echo CONFIG_AUTOMATIC_CONFIGURATION_DESCRIPTION_LONG;?></div>
-    </td>
-  </tr>
-</table>
+<div class="contentBlock">
+  <div class="infoPane">
+    <h3><?php echo $osC_Language->get('box_info_step_1_title'); ?></h3>
 
-<p>&nbsp;</p>
+    <div class="infoPaneContents">
+      <?php echo $osC_Language->get('box_info_step_1_text'); ?>
+    </div>
+  </div>
 
-<table width="95%" border="0" cellspacing="2">
-  <tr>
-    <td align="right"><input type="image" src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/continue.gif" border="0" alt="<?php echo IMAGE_BUTTON_CONTINUE; ?>">&nbsp;&nbsp;<a href="index.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/cancel.gif" border="0" alt="<?php echo IMAGE_BUTTON_CANCEL; ?>"></a></td>
-  </tr>
-</table>
+  <div class="contentPane">
+    <h2><?php echo $osC_Language->get('page_heading_step_1'); ?></h2>
 
-</form>
+    <form name="install" action="install.php?step=2" method="post">
+
+    <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
+      <tr>
+        <td class="inputField"><?php echo osc_draw_checkbox_field('install[]', 'database', true) . '&nbsp;' . $osC_Language->get('param_import_database'); ?></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_import_database_description'); ?></td>
+      </tr>
+      <tr>
+        <td class="inputField"><?php echo osc_draw_checkbox_field('install[]', 'configure', true) . '&nbsp;' . $osC_Language->get('param_automatic_configuration'); ?></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_automatic_configuration_description'); ?></td>
+      </tr>
+    </table>
+
+    <p align="right"><input type="image" src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/continue.gif" border="0" alt="<?php echo $osC_Language->get('image_button_continue'); ?>">&nbsp;&nbsp;<a href="index.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/cancel.gif" border="0" alt="<?php echo $osC_Language->get('image_button_cancel'); ?>"></a></p>
+
+    </form>
+  </div>
+</div>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,18 +15,10 @@
 
   require('../includes/functions/compatibility.php');
 
-  if (isset($_GET['language'])) {
-    setcookie('osC_Language', $_GET['language']);
+  require('includes/classes/language.php');
+  $osC_Language = new osC_Language();
 
-    $language = $_GET['language'];
-  } elseif (isset($_COOKIE['osC_Language'])) {
-    $language = $_COOKIE['osC_Language'];
-  } else {
-    $language = 'english';
-  }
-
-  require('languages/' . $language . '.php');
-  require('languages/' . $language . '/' . basename($_SERVER['PHP_SELF']));
+  $language = $osC_Language->_languages[$osC_Language->language];
 
   require('../includes/functions/general.php');
   require('functions/general.php');

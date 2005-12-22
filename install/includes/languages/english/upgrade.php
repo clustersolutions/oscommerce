@@ -20,8 +20,8 @@
 
   define('CONFIG_DATABASE_USERNAME', 'Username:');
   define('CONFIG_DATABASE_USERNAME_DESCRIPTION', 'Database username');
-  define('CONFIG_DATABASE_USERNAME_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br><br>Note: Create and Drop permissions <b>are required</b> at this point of the installation procedure.');
-  define('CONFIG_DATABASE_USERNAME_RESTRICTED_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br><br>Note: Create and Drop permissions <b>are not required</b> for the general use of osCommerce.');
+  define('CONFIG_DATABASE_USERNAME_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br /><br />Note: Create and Drop permissions <b>are required</b> at this point of the installation procedure.');
+  define('CONFIG_DATABASE_USERNAME_RESTRICTED_DESCRIPTION_LONG', 'The username used to connect to the database server. An example username is \'mysql_10\'.<br /><br />Note: Create and Drop permissions <b>are not required</b> for the general use of osCommerce.');
 
   define('CONFIG_DATABASE_PASSWORD', 'Password:');
   define('CONFIG_DATABASE_PASSWORD_DESCRIPTION', 'Database password');

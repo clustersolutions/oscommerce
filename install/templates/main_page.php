@@ -12,7 +12,7 @@
 
   $template = 'main_page';
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
 <html>
 
@@ -24,23 +24,36 @@
 
 <link rel="stylesheet" type="text/css" href="templates/main_page/stylesheet.css">
 
-<script language="javascript" src="templates/main_page/javascript.js"></script>
+<link rel="stylesheet" type="text/css" href="ext/niftycorners/niftyCorners.css">
+<script type="text/javascript" src="ext/niftycorners/nifty.js"></script>
 
 </head>
 
-<body text="#000000" bgcolor="#ffffff" leftmargin="0" topmargin="0" marginheight="0" marginwidth="0">
+<body>
 
-<?php require('templates/main_page/header.php'); ?>
+<div id="pageHeader">
+  <div>
+    <div style="float: right; padding-top: 40px; padding-right: 15px; color: #000000; font-weight: bold;"><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a> &nbsp;|&nbsp; <a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a> &nbsp;|&nbsp; <a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></div>
 
-<table cellspacing="0" cellpadding="0" width="100%" border="0" align="center">
-  <tr>
-    <td width="5%" class="leftColumn" valign="top" background="templates/main_page/images/left_column_background.gif"><img src="templates/main_page/images/left_column_top.gif"></td>
-    <td width="85%" valign="top"><?php require('templates/pages/' . $page_contents); ?></td>
-    <td width="5%" class="rightColumn" valign="top"><img src="templates/main_page/images/right_column_upper_curve.gif" width="47"></td>
-  </tr>
-</table>
+    <a href="index.php"><img src="images/oscommerce_logo-silver.jpg" border="0" width="250" height="50" title="osCommerce, Open Source E-Commerce Solutions" style="margin: 10px 10px 0px 10px;" /></a>
+  </div>
+</div>
 
-<?php require('templates/main_page/footer.php'); ?>
+<script type="text/javascript">
+<!--
+  if (NiftyCheck()) {
+    Rounded("div#pageHeader", "all", "#FFFFFF", "#f7f7f5", "smooth border #b3b6b0");
+  }
+//-->
+</script>
+
+<div id="pageContent">
+<?php require('templates/pages/' . $page_contents); ?>
+</div>
+
+<div id="pageFooter">
+  Copyright &copy; 2000-2005 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License</a>
+</div>
 
 </body>
 

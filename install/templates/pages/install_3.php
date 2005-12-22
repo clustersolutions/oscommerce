@@ -5,159 +5,145 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
-  $script_filename = getenv('PATH_TRANSLATED');
-  if (empty($script_filename)) {
-    $script_filename = getenv('SCRIPT_FILENAME');
+  $www_location = 'http://' . getenv('HTTP_HOST') . getenv('SCRIPT_NAME');
+  $www_location = substr($www_location, 0, strpos($www_location, 'install'));
+
+  $dir_fs_www_root = tep_realpath(dirname(__FILE__) . '/../../../') . '/';
+?>
+
+<script language="javascript" type="text/javascript" src="../includes/javascript/xmlhttp/xmlhttp.js"></script>
+<script language="javascript" type="text/javascript" src="../includes/javascript/xmlhttp/autocomplete.js"></script>
+<script language="javascript" type="text/javascript">
+<!--
+
+  var cfgWork;
+  var formSubmited = false;
+
+  function handleHttpResponse() {
+    if (http.readyState == 4) {
+      if (http.status == 200) {
+        var result = http.responseText.split(':osCRPC:', 2);
+
+        if (result[0] == '1') {
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_configured'); ?></p>';
+
+          setTimeout("document.getElementById('installForm').submit();", 2000);
+        } else if (result[0] == '0') {
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_not_writeable'); ?></p>'.replace('%s', result[1]);
+        } else {
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_non_existent'); ?></p>'.replace('%s', result[1]);
+        }
+      }
+
+      formSubmited = false;
+    }
   }
 
-  $script_filename = str_replace('\\', '/', $script_filename);
-  $script_filename = str_replace('//', '/', $script_filename);
+  function prepareWork() {
+    if (formSubmited == true) {
+      return false;
+    }
 
-  $dir_fs_www_root_array = explode('/', dirname($script_filename));
-  $dir_fs_www_root = array();
-  for ($i=0, $n=sizeof($dir_fs_www_root_array)-1; $i<$n; $i++) {
-    $dir_fs_www_root[] = $dir_fs_www_root_array[$i];
+    if (returnUsed == true) {
+      returnUsed = false;
+
+      return false;
+    }
+
+    formSubmited = true;
+
+    showDiv(document.getElementById('mBox'));
+
+    document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_test'); ?></p>';
+
+    cfgWork = document.getElementById("cfg_workdir").value;
+
+    loadXMLDoc("rpc.php?action=checkWorkDir&dir=" + urlEncode(cfgWork), handleHttpResponse);
   }
-  $dir_fs_www_root = implode('/', $dir_fs_www_root) . '/';
-?>
 
-<p class="pageTitle"><?php echo PAGE_TITLE_INSTALLATION; ?></p>
+//-->
+</script>
 
-<p class="pageSubTitle"><?php echo PAGE_SUBTITLE_DATABASE_IMPORT; ?></p>
+<div class="mainBlock">
+  <div class="stepsBox">
+    <ol>
+      <li><?php echo $osC_Language->get('box_steps_step_1'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_2'); ?></li>
+      <li style="font-weight: bold;"><?php echo $osC_Language->get('box_steps_step_3'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_4'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_5'); ?></li>
+    </ol>
+  </div>
+
+  <h1><?php echo $osC_Language->get('page_title_installation'); ?></h1>
+
+  <?php echo $osC_Language->get('text_installation'); ?>
+</div>
+
+<div class="contentBlock">
+  <div class="infoPane">
+    <h3><?php echo $osC_Language->get('box_info_step_3_title'); ?></h3>
+
+    <div class="infoPaneContents">
+      <?php echo $osC_Language->get('box_info_step_3_text'); ?>
+    </div>
+  </div>
+
+  <div id="mBox">
+    <div id="mBoxContents"></div>
+  </div>
+
+  <div class="contentPane">
+    <h2><?php echo $osC_Language->get('page_heading_step_3'); ?></h2>
+
+    <form name="install" id="installForm" action="install.php?step=4" method="post" onsubmit="prepareWork(); return false;">
+
+    <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
+      <tr>
+        <td class="inputField"><?php echo $osC_Language->get('param_web_address') . '<br />' . osc_draw_input_field('HTTP_WWW_ADDRESS', $www_location, 'class="text"'); ?></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_web_address_description'); ?></td>
+      </tr>
+      <tr>
+        <td class="inputField"><?php echo $osC_Language->get('param_web_root_directory') . '<br />' . osc_draw_input_field('DIR_FS_DOCUMENT_ROOT', $dir_fs_www_root, 'class="text"'); ?></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_web_root_directory_description'); ?></td>
+      </tr>
+      <tr>
+        <td class="inputField"><?php echo $osC_Language->get('param_web_work_directory') . '<br /><span style="white-space: nowrap;">' . osc_draw_input_field('HTTP_WORK_DIRECTORY', $dir_fs_www_root . 'includes/work', 'id="cfg_workdir" class="text"'); ?><img src="images/progress_pending.gif" border="0" width="22" height="22" id="cfg_workdir_icon" /></span><div class="autoComplete" id="divAutoComplete"></div></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_web_work_directory_description'); ?></td>
+      </tr>
+    </table>
+
+    <p align="right"><input type="image" src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/continue.gif" border="0" alt="<?php echo $osC_Language->get('image_button_continue'); ?>" />&nbsp;&nbsp;<a href="index.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/cancel.gif" border="0" alt="<?php echo $osC_Language->get('image_button_cancel'); ?>" /></a></p>
 
 <?php
-  if (in_array('database', $_POST['install'])) {
-    $db = array('DB_SERVER' => trim($_POST['DB_SERVER']),
-                'DB_SERVER_USERNAME' => trim($_POST['DB_SERVER_USERNAME']),
-                'DB_SERVER_PASSWORD' => trim($_POST['DB_SERVER_PASSWORD']),
-                'DB_DATABASE' => trim($_POST['DB_DATABASE']),
-                'DB_TABLE_PREFIX' => trim($_POST['DB_TABLE_PREFIX']),
-                'DB_DATABASE_CLASS' => trim($_POST['DB_DATABASE_CLASS']));
-
-    $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE_CLASS']);
-
-    if ($osC_Database->isError() === false) {
-      $osC_Database->setErrorReporting(false);
-
-      if ($osC_Database->selectDatabase($db['DB_DATABASE']) === false) {
-        $osC_Database->setErrorReporting(true);
-
-        $osC_Database->query('create database ' . $db['DB_DATABASE']);
-      }
-
-      $osC_Database->setErrorReporting(true);
-    }
-
-    if ($osC_Database->isError() === false) {
-      $sql_file = $dir_fs_www_root . 'install/oscommerce.sql';
-
-      $osC_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
-    }
-
-    if (($osC_Database->isError() === false) && isset($_POST['DB_INSERT_SAMPLE_DATA']) && ($_POST['DB_INSERT_SAMPLE_DATA'] == 'true')) {
-      $sql_file = $dir_fs_www_root . 'install/oscommerce_sample_data.sql';
-
-      $osC_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
-    }
-
-    if ($_POST['DB_DATABASE_CLASS'] == 'mysql_innodb') {
-      $Qinno = $osC_Database->query('show variables like "have_innodb"');
-      if (($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes')) {
-        $database_tables = array('address_book', 'categories', 'categories_description', 'customers', 'customers_basket', 'customers_basket_attributes', 'customers_info', 'manufacturers', 'manufacturers_info', 'orders', 'orders_products', 'orders_status', 'orders_status_history', 'orders_products_attributes', 'orders_products_download', 'orders_total', 'products', 'products_attributes', 'products_attributes_download', 'products_description', 'products_options', 'products_options_values', 'products_options_values_to_products_options', 'products_to_categories', 'reviews', 'weight_classes', 'weight_classes_rules');
-
-        foreach ($database_tables as $table) {
-          $osC_Database->simpleQuery('alter table ' . $db['DB_TABLE_PREFIX'] . $table . ' type = innodb');
+  foreach ($_POST as $key => $value) {
+    if (($key != 'x') && ($key != 'y')) {
+      if (is_array($value)) {
+        for ($i=0, $n=sizeof($value); $i<$n; $i++) {
+          echo osc_draw_hidden_field($key . '[]', $value[$i]);
         }
-      }
-    }
-
-    if ($osC_Database->isError()) {
-?>
-<form name="install" action="install.php?step=3" method="post">
-
-<table width="95%" border="0" cellpadding="2" class="formPage">
-  <tr>
-    <td><?php echo sprintf(ERROR_UNSUCCESSFUL_DATABASE_IMPORT, $osC_Database->getError()); ?></td>
-  </tr>
-</table>
-
-<?php
-      foreach ($_POST as $key => $value) {
-        if (($key != 'x') && ($key != 'y') && ($key != 'DB_TEST_CONNECTION')) {
-          if (is_array($value)) {
-            for ($i=0, $n=sizeof($value); $i<$n; $i++) {
-              echo osc_draw_hidden_field($key . '[]', $value[$i]);
-            }
-          } else {
-            echo osc_draw_hidden_field($key, $value);
-          }
-        }
-      }
-?>
-
-<p>&nbsp;</p>
-
-<table width="95%" border="0" cellspacing="2">
-  <tr>
-    <td align="right"><input type="image" src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/retry.gif" border="0" alt="<?php echo IMAGE_BUTTON_RETRY; ?>">&nbsp;&nbsp;<a href="index.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/cancel.gif" border="0" alt="<?php echo IMAGE_BUTTON_CANCEL; ?>"></a></td>
-  </tr>
-</table>
-
-</form>
-
-<?php
-    } else {
-?>
-<form name="install" action="install.php?step=4" method="post">
-
-<table width="95%" border="0" cellpadding="2" class="formPage">
-  <tr>
-    <td>
-      <p><?php echo TEXT_SUCCESSFUL_DATABASE_IMPORT; ?></p>
-    </td>
-  </tr>
-</table>
-
-<?php
-      foreach ($_POST as $key => $value) {
-        if (($key != 'x') && ($key != 'y') && ($key != 'DB_TEST_CONNECTION')) {
-          if (is_array($value)) {
-            for ($i=0, $n=sizeof($value); $i<$n; $i++) {
-              echo osc_draw_hidden_field($key . '[]', $value[$i]);
-            }
-          } else {
-            echo osc_draw_hidden_field($key, $value);
-          }
-        }
-      }
-?>
-
-<p>&nbsp;</p>
-
-<table width="95%" border="0" cellspacing="2">
-  <tr>
-<?php
-      if (in_array('configure', $_POST['install'])) {
-?>
-    <td align="right"><input type="image" src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/continue.gif" border="0" alt="<?php echo IMAGE_BUTTON_CONTINUE; ?>"></td>
-<?php
       } else {
-?>
-    <td align="right"><a href="index.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/buttons/continue.gif" border="0" alt="<?php echo IMAGE_BUTTON_CONTINUE; ?>"></a></td>
-<?php
+        echo osc_draw_hidden_field($key, $value);
       }
-?>
-  </tr>
-</table>
-
-</form>
-
-<?php
     }
   }
+
+  echo osc_draw_hidden_field('install[]', 'configure');
 ?>
+
+    </form>
+  </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+<!--
+
+  new autoComplete(document.getElementById('cfg_workdir'), 'divAutoComplete');
+
+//-->
+</script>

@@ -10,6 +10,10 @@
   Released under the GNU General Public License
 */
 
+  function tep_realpath($directory) {
+    return str_replace('\\', '/', realpath($directory));
+  }
+
   function tep_get_languages() {
     global $osC_Database;
 
