@@ -32,14 +32,14 @@
         $Qmanufacturer = $osC_Database->query('select manufacturers_url from :table_manufacturers_info where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
         $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
         $Qmanufacturer->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
-        $Qmanufacturer->bindInt(':languages_id', $osC_Session->value('languages_id'));
+        $Qmanufacturer->bindInt(':languages_id', $_SESSION['languages_id']);
         $Qmanufacturer->execute();
 
         if ($Qmanufacturer->numberOfRows() && tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
           $Qupdate = $osC_Database->query('update :table_manufacturers_info set url_clicked = url_clicked+1, date_last_click = now() where manufacturers_id = :manufacturers_id and languages_id = :languages_id');
           $Qupdate->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
           $Qupdate->bindInt(':manufacturers_id', $_GET['manufacturers_id']);
-          $Qupdate->bindInt(':languages_id', $osC_Session->value('languages_id'));
+          $Qupdate->bindInt(':languages_id', $_SESSION['languages_id']);
           $Qupdate->execute();
 
           tep_redirect($Qmanufacturer->value('manufacturers_url'));

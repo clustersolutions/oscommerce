@@ -12,13 +12,13 @@
 
   require('includes/application_top.php');
 
-  $navigation->remove_current_page();
+  $osC_NavigationHistory->removeCurrentPage();
 
   $Qproducts = $osC_Database->query('select pd.products_name, p.products_image from :table_products p left join :table_products_description pd on p.products_id = pd.products_id where p.products_status = 1 and p.products_id = :products_id and pd.language_id = :language_id');
   $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
   $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qproducts->bindInt(':products_id', $_GET['pID']);
-  $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+  $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
   $Qproducts->execute();
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -27,7 +27,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>">
 <title><?php echo $Qproducts->value('products_name'); ?></title>
 <base href="<?php echo (($request_type == 'SSL') ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>">
-<script language="javascript"><!--
+<script type="text/javascript"><!--
 var i=0;
 function resize() {
   if (navigator.appName == 'Netscape') i=40;

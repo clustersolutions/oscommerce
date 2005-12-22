@@ -24,7 +24,7 @@
   $Qdownloads->bindTable(':table_orders', TABLE_ORDERS);
   $Qdownloads->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
   $Qdownloads->bindTable(':table_orders_products_download', TABLE_ORDERS_PRODUCTS_DOWNLOAD);
-  $Qdownloads->bindInt(':customers_id', $osC_Customer->id);
+  $Qdownloads->bindInt(':customers_id', $osC_Customer->getID());
   $Qdownloads->bindInt(':orders_id', $_GET['order']);
   $Qdownloads->bindInt(':orders_products_download_id', $_GET['id']);
   $Qdownloads->execute();

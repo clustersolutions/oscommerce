@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: account.php 65 2005-03-12 16:43:41Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -12,9 +12,13 @@
 
   require('includes/application_top.php');
 
-  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_DEFAULT);
+  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_INFO);
 
-  $osC_Template = osC_Template::setup('index');
+  if ($osC_Services->isStarted('breadcrumb')) {
+    $breadcrumb->add(BREADCRUMB_INFO, tep_href_link(FILENAME_INFO));
+  }
+
+  $osC_Template = osC_Template::setup('info');
 
   require('templates/' . $osC_Template->getCode() . '.php');
 
