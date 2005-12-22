@@ -30,7 +30,7 @@
   }
 
 // define the project version
-  define('PROJECT_VERSION', 'osCommerce 2.2-MS3-CVS');
+  define('PROJECT_VERSION', 'osCommerce 3.0a1');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
@@ -50,9 +50,6 @@
 // include the list of project database tables
   require('includes/database_tables.php');
 
-// customization for the design layout
-  define('BOX_WIDTH', 125); // how wide the boxes should be in pixels (default: 125)
-
 // initialize the message stack for output messages
   require('includes/classes/message_stack.php');
   $messageStack = new messageStack;
@@ -70,7 +67,7 @@
 
 // set the application parameters
   $Qcfg = $osC_Database->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-  $Qcfg->bindRaw(':table_configuration', TABLE_CONFIGURATION);
+  $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
   $Qcfg->setCache('configuration');
   $Qcfg->execute();
 
@@ -86,16 +83,14 @@
 
 // include the template class
   require('includes/classes/template.php');
-  $osC_Template = new osC_Template();
+
+  require('includes/classes/modules.php');
 
 // include shopping cart class
   require('includes/classes/shopping_cart.php');
 
-// include customer class
-  require('includes/classes/customer.php');
-
-// include navigation history class
-  require('includes/classes/navigation_history.php');
+  require('includes/classes/category.php');
+  require('includes/classes/product.php');
 
 // include and start the services
   require('includes/classes/services.php');
@@ -109,8 +104,8 @@
 // Shopping cart actions
   if (isset($_GET['action'])) {
 // redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled
-    if ($osC_Session->is_started == false) {
-      tep_redirect(tep_href_link(FILENAME_COOKIE_USAGE));
+    if ($osC_Session->hasStarted() === false) {
+      tep_redirect(tep_href_link(FILENAME_INFO, 'cookie'));
     }
 
     if (DISPLAY_CART == 'true') {
@@ -127,14 +122,14 @@
 
     switch ($_GET['action']) {
       // customer wants to remove a product from their shopping cart
-      case 'cartRemove' :     $cart->remove($_GET['products_id']);
+      case 'cartRemove' :     $_SESSION['cart']->remove($_GET['products_id']);
 
                               tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
       // customer wants to update the product quantity in their shopping cart
       case 'update_product' : for ($i=0, $n=sizeof($_POST['products_id']); $i<$n; $i++) {
                                 $attributes = (isset($_POST['id']) && isset($_POST['id'][$_POST['products_id'][$i]])) ? $_POST['id'][$_POST['products_id'][$i]] : '';
-                                $cart->add_cart($_POST['products_id'][$i], $_POST['cart_quantity'][$i], $attributes, false);
+                                $_SESSION['cart']->add_cart($_POST['products_id'][$i], $_POST['cart_quantity'][$i], $attributes, false);
                               }
 
                               tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
@@ -142,9 +137,9 @@
       // customer adds a product from the products page
       case 'add_product' :    if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
                                 if (isset($_POST['id']) && is_array($_POST['id'])) {
-                                  $cart->add_cart($_POST['products_id'], $cart->get_quantity(tep_get_uprid($_POST['products_id'], $_POST['id']))+1, $_POST['id']);
+                                  $_SESSION['cart']->add_cart($_POST['products_id'], $_SESSION['cart']->get_quantity(tep_get_uprid($_POST['products_id'], $_POST['id']))+1, $_POST['id']);
                                 } else {
-                                  $cart->add_cart($_POST['products_id'], $cart->get_quantity($_POST['products_id'])+1);
+                                  $_SESSION['cart']->add_cart($_POST['products_id'], $_SESSION['cart']->get_quantity($_POST['products_id'])+1);
                                 }
                               }
 
@@ -153,9 +148,9 @@
       // performed by the 'buy now' button in product listings and review page
       case 'buy_now' :        if (isset($_GET['products_id'])) {
                                 if (tep_has_product_attributes($_GET['products_id'])) {
-                                  tep_redirect(tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['products_id']));
+                                  tep_redirect(tep_href_link(FILENAME_PRODUCTS, $_GET['products_id']));
                                 } else {
-                                  $cart->add_cart($_GET['products_id'], $cart->get_quantity($_GET['products_id'])+1);
+                                  $_SESSION['cart']->add_cart($_GET['products_id'], $_SESSION['cart']->get_quantity($_GET['products_id'])+1);
                                 }
                               }
 
@@ -177,14 +172,14 @@
                                   $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
                                   $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
                                   $Qcheck->bindInt(':products_id', $notify[$i]);
-                                  $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+                                  $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
                                   $Qcheck->execute();
 
                                   if ($Qcheck->valueInt('count') < 1) {
                                     $Qn = $osC_Database->query('insert into :table_products_notifications (products_id, customers_id, date_added) values (:products_id, :customers_id, :date_added)');
                                     $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
                                     $Qn->bindInt(':products_id', $notify[$i]);
-                                    $Qn->bindInt(':customers_id', $osC_Customer->id);
+                                    $Qn->bindInt(':customers_id', $osC_Customer->getID());
                                     $Qn->bindRaw(':date_added', 'now()');
                                     $Qn->execute();
                                   }
@@ -192,7 +187,7 @@
 
                                 tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action', 'notify'))));
                               } else {
-                                $navigation->set_snapshot();
+                                $osC_NavigationHistory->setSnapshot();
 
                                 tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
@@ -201,29 +196,29 @@
                                 $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
                                 $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
                                 $Qcheck->bindInt(':products_id', $_GET['products_id']);
-                                $Qcheck->bindInt(':customers_id', $osC_Customer->id);
+                                $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
                                 $Qcheck->execute();
 
                                 if ($Qcheck->valueInt('count') > 0) {
                                   $Qn = $osC_Database->query('delete from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
                                   $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
                                   $Qn->bindInt(':products_id', $_GET['products_id']);
-                                  $Qn->bindInt(':customers_id', $osC_Customer->id);
+                                  $Qn->bindInt(':customers_id', $osC_Customer->getID());
                                   $Qn->execute();
                                 }
 
                                 tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action'))));
                               } else {
-                                $navigation->set_snapshot();
+                                $osC_NavigationHistory->setSnapshot();
 
                                 tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
                               break;
       case 'cust_order' :     if ($osC_Customer->isLoggedOn() && isset($_GET['pid'])) {
                                 if (tep_has_product_attributes($_GET['pid'])) {
-                                  tep_redirect(tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['pid']));
+                                  tep_redirect(tep_href_link(FILENAME_PRODUCTS, $_GET['pid']));
                                 } else {
-                                  $cart->add_cart($_GET['pid'], $cart->get_quantity($_GET['pid'])+1);
+                                  $_SESSION['cart']->add_cart($_GET['pid'], $_SESSION['cart']->get_quantity($_GET['pid'])+1);
                                 }
                               }
 
@@ -239,7 +234,4 @@
 // include the mail classes
   require('includes/classes/mime.php');
   require('includes/classes/email.php');
-
-// infobox
-  require('includes/classes/boxes.php');
 ?>
