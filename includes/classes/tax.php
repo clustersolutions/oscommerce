@@ -24,8 +24,8 @@
 
       if ( ($country_id == -1) && ($zone_id == -1) ) {
         if ($osC_Customer->isLoggedOn()) {
-          $country_id = $osC_Customer->country_id;
-          $zone_id = $osC_Customer->zone_id;
+          $country_id = $osC_Customer->getCountryID();
+          $zone_id = $osC_Customer->getZoneID();
         } else {
           $country_id = STORE_COUNTRY;
           $zone_id = STORE_ZONE;

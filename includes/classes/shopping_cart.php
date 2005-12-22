@@ -20,7 +20,7 @@
     function restore_contents() {
       global $osC_Database, $osC_Customer;
 
-      if ($osC_Customer->isLoggedOn() == false) return false;
+      if ($osC_Customer->isLoggedOn() === false) return false;
 
 // insert current cart contents in database
       if (is_array($this->contents)) {
@@ -30,14 +30,14 @@
 
           $Qproduct = $osC_Database->query('select products_id from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
           $Qproduct->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-          $Qproduct->bindInt(':customers_id', $osC_Customer->id);
+          $Qproduct->bindInt(':customers_id', $osC_Customer->getID());
           $Qproduct->bindValue(':products_id', $products_id);
           $Qproduct->execute();
 
           if ($Qproduct->numberOfRows() < 1) {
             $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, :customers_basket_date_added)');
             $Qnew->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-            $Qnew->bindInt(':customers_id', $osC_Customer->id);
+            $Qnew->bindInt(':customers_id', $osC_Customer->getID());
             $Qnew->bindValue(':products_id', $products_id);
             $Qnew->bindInt(':customers_basket_quantity', $qty);
             $Qnew->bindValue(':customers_basket_date_added', date('Ymd'));
@@ -48,7 +48,7 @@
               while (list($option, $value) = each($this->contents[$products_id]['attributes'])) {
                 $Qnew = $osC_Database->query('insert into :table_customers_basket_attributes (customers_id, products_id, products_options_id, products_options_value_id) values (:customers_id, :products_id, :products_options_id, :products_options_value_id)');
                 $Qnew->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-                $Qnew->bindInt(':customers_id', $osC_Customer->id);
+                $Qnew->bindInt(':customers_id', $osC_Customer->getID());
                 $Qnew->bindValue(':products_id', $products_id);
                 $Qnew->bindInt(':products_options_id', $option);
                 $Qnew->bindInt(':products_options_value_id', $value);
@@ -59,7 +59,7 @@
             $Qupdate = $osC_Database->query('update :table_customers_basket set customers_basket_quantity = :customers_basket_quantity where customers_id = :customers_id and products_id = :products_id');
             $Qupdate->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qupdate->bindInt(':customers_basket_quantity', $qty);
-            $Qupdate->bindInt(':customers_id', $osC_Customer->id);
+            $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
             $Qupdate->bindValue(':products_id', $products_id);
             $Qupdate->execute();
           }
@@ -71,7 +71,7 @@
 
       $Qproducts = $osC_Database->query('select products_id, customers_basket_quantity from :table_customers_basket where customers_id = :customers_id');
       $Qproducts->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-      $Qproducts->bindInt(':customers_id', $osC_Customer->id);
+      $Qproducts->bindInt(':customers_id', $osC_Customer->getID());
       $Qproducts->execute();
 
       while ($Qproducts->next()) {
@@ -79,7 +79,7 @@
 // attributes
         $Qattributes = $osC_Database->query('select products_options_id, products_options_value_id from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
         $Qattributes->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qattributes->bindInt(':customers_id', $osC_Customer->id);
+        $Qattributes->bindInt(':customers_id', $osC_Customer->getID());
         $Qattributes->bindValue(':products_id', $Qproducts->value('products_id'));
         $Qattributes->execute();
 
@@ -92,7 +92,7 @@
     }
 
     function reset($reset_database = false) {
-      global $osC_Database, $osC_Session, $osC_Customer;
+      global $osC_Database, $osC_Customer;
 
       $this->contents = array();
       $this->total = 0;
@@ -102,21 +102,21 @@
       if (($reset_database == true) && $osC_Customer->isLoggedOn()) {
         $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id');
         $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
         $Qdelete->execute();
 
         $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id');
         $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
         $Qdelete->execute();
       }
 
       unset($this->cartID);
-      $osC_Session->remove('cartID');
+      unset($_SESSION['cartID']);
     }
 
     function add_cart($products_id, $qty = '1', $attributes = '', $notify = true) {
-      global $osC_Database, $osC_Session, $osC_Customer;
+      global $osC_Database, $osC_Customer;
 
       $products_id_string = tep_get_uprid($products_id, $attributes);
       $products_id = tep_get_prid($products_id_string);
@@ -129,7 +129,7 @@
 
         if (($check_product !== false) && ($Qcheck->valueInt('products_status') == '1')) {
           if ($notify == true) {
-            $osC_Session->set('new_products_id_in_cart', $products_id_string);
+            $_SESSION['new_products_id_in_cart'] = $products_id_string;
           }
 
           if ($this->in_cart($products_id_string)) {
@@ -140,7 +140,7 @@
             if ($osC_Customer->isLoggedOn()) {
               $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, :customers_basket_date_added)');
               $Qnew->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-              $Qnew->bindInt(':customers_id', $osC_Customer->id);
+              $Qnew->bindInt(':customers_id', $osC_Customer->getID());
               $Qnew->bindValue(':products_id', $products_id_string);
               $Qnew->bindInt(':customers_basket_quantity', $qty);
               $Qnew->bindValue(':customers_basket_date_added', date('Ymd'));
@@ -155,7 +155,7 @@
                 if ($osC_Customer->isLoggedOn()) {
                   $Qnew = $osC_Database->query('insert into :table_customers_basket_attributes (customers_id, products_id, products_options_id, products_options_value_id) values (:customers_id, :products_id, :products_options_id, :products_options_value_id)');
                   $Qnew->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-                  $Qnew->bindInt(':customers_id', $osC_Customer->id);
+                  $Qnew->bindInt(':customers_id', $osC_Customer->getID());
                   $Qnew->bindValue(':products_id', $products_id_string);
                   $Qnew->bindInt(':products_options_id', $option);
                   $Qnew->bindInt(':products_options_value_id', $value);
@@ -186,7 +186,7 @@
           $Qupdate = $osC_Database->query('update :table_customers_basket set customers_basket_quantity = :customers_basket_quantity where customers_id = :customers_id and products_id = :products_id');
           $Qupdate->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
           $Qupdate->bindInt(':customers_basket_quantity', $quantity);
-          $Qupdate->bindInt(':customers_id', $osC_Customer->id);
+          $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
           $Qupdate->bindValue(':products_id', $products_id_string);
           $Qupdate->execute();
         }
@@ -200,7 +200,7 @@
               $Qupdate = $osC_Database->query('update :table_customers_basket_attributes set products_options_value_id = :products_options_value_id where customers_id = :customers_id and products_id = :products_id and products_options_id = :products_options_id');
               $Qupdate->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
               $Qupdate->bindInt(':products_options_value_id', $value);
-              $Qupdate->bindInt(':customers_id', $osC_Customer->id);
+              $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
               $Qupdate->bindValue(':products_id', $products_id_string);
               $Qupdate->bindInt(':products_options_id', $option);
               $Qupdate->execute();
@@ -221,13 +221,13 @@
           if ($osC_Customer->isLoggedOn()) {
             $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
             $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-            $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+            $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
             $Qdelete->bindValue(':products_id', $key);
             $Qdelete->execute();
 
             $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
             $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-            $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+            $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
             $Qdelete->bindValue(':products_id', $key);
             $Qdelete->execute();
           }
@@ -271,13 +271,13 @@
       if ($osC_Customer->isLoggedOn()) {
         $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
         $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
         $Qdelete->bindValue(':products_id', $products_id);
         $Qdelete->execute();
 
         $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
         $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->id);
+        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
         $Qdelete->bindValue(':products_id', $products_id);
         $Qdelete->execute();
       }
@@ -388,18 +388,18 @@
     }
 
     function get_products() {
-      global $osC_Database, $osC_Session;
+      global $osC_Database;
 
       if (!is_array($this->contents)) return false;
 
       $products_array = array();
       reset($this->contents);
       while (list($products_id, ) = each($this->contents)) {
-        $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_model, p.products_image, p.products_price, p.products_weight, p.products_tax_class_id from :table_products p, :table_products_description pd where p.products_id = :products_id and pd.products_id = p.products_id and pd.language_id = :language_id');
+        $Qproducts = $osC_Database->query('select p.products_id, p.products_image, p.products_price, p.products_weight, p.products_tax_class_id, pd.products_name, pd.products_model, pd.products_keyword from :table_products p, :table_products_description pd where p.products_id = :products_id and pd.products_id = p.products_id and pd.language_id = :language_id');
         $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
         $Qproducts->bindInt(':products_id', $products_id);
-        $Qproducts->bindInt(':language_id', $osC_Session->value('languages_id'));
+        $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
         $Qproducts->execute();
 
         if ($Qproducts->numberOfRows()) {
@@ -419,6 +419,7 @@
           $products_array[] = array('id' => $products_id,
                                     'name' => $Qproducts->value('products_name'),
                                     'model' => $Qproducts->value('products_model'),
+                                    'keyword' => $Qproducts->value('products_keyword'),
                                     'image' => $Qproducts->value('products_image'),
                                     'price' => $products_price,
                                     'quantity' => $this->contents[$products_id]['qty'],

@@ -11,7 +11,7 @@
 */
 
   define('MODULE_PAYMENT_IPAYMENT_TEXT_TITLE', 'iPayment');
-  define('MODULE_PAYMENT_IPAYMENT_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br><br>Numero: 4111111111111111<br>Caducidad: Cualquiera');
+  define('MODULE_PAYMENT_IPAYMENT_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br /><br />Numero: 4111111111111111<br />Caducidad: Cualquiera');
   define('IPAYMENT_ERROR_HEADING', 'Ha ocurrido un error procesando su tarjeta de cr&eacute;dito');
   define('IPAYMENT_ERROR_MESSAGE', '¡Revise los datos de su tarjeta de cr&eacute;dito!');
   define('MODULE_PAYMENT_IPAYMENT_TEXT_CREDIT_CARD_OWNER', 'Titular de la Tarjeta:');

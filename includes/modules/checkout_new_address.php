@@ -18,18 +18,18 @@
 ?>
   <tr>
     <td class="main"><?php echo ENTRY_GENDER; ?></td>
-    <td class="main"><?php echo osc_draw_radio_field('gender', $gender_array, (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->gender : ''), '', (ACCOUNT_GENDER > 0)); ?></td>
+    <td class="main"><?php echo osc_draw_radio_field('gender', $gender_array, (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getGender() : ''), '', (ACCOUNT_GENDER > 0)); ?></td>
   </tr>
 <?php
   }
 ?>
   <tr>
     <td class="main"><?php echo ENTRY_FIRST_NAME; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('firstname', (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->first_name : ''), '', true); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('firstname', (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getFirstName() : ''), '', true); ?></td>
   </tr>
   <tr>
     <td class="main"><?php echo ENTRY_LAST_NAME; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('lastname', (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->last_name : ''), '', true); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('lastname', (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getLastName() : ''), '', true); ?></td>
   </tr>
 <?php
   if (ACCOUNT_COMPANY > -1) {

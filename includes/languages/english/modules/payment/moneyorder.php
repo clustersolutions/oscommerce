@@ -11,6 +11,6 @@
 */
 
   define('MODULE_PAYMENT_MONEYORDER_TEXT_TITLE', 'Check/Money Order');
-  define('MODULE_PAYMENT_MONEYORDER_TEXT_DESCRIPTION', 'Make Payable To:&nbsp;%s<br><br>Send To:<br>' . nl2br(STORE_NAME_ADDRESS) . '<br><br>' . 'Your order will not ship until we receive payment.');
+  define('MODULE_PAYMENT_MONEYORDER_TEXT_DESCRIPTION', 'Make Payable To:&nbsp;%s<br /><br />Send To:<br />' . nl2br(STORE_NAME_ADDRESS) . '<br /><br />' . 'Your order will not ship until we receive payment.');
   define('MODULE_PAYMENT_MONEYORDER_TEXT_EMAIL_FOOTER', 'Make Payable To: %s' . "\n\n" . 'Send To:' . "\n" . STORE_NAME_ADDRESS . "\n\n" . 'Your order will not ship until we receive payment.');
 ?>

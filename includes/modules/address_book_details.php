@@ -18,18 +18,18 @@
 ?>
   <tr>
     <td class="main"><?php echo ENTRY_GENDER; ?></td>
-    <td class="main"><?php echo osc_draw_radio_field('gender', $gender_array, (isset($Qentry) ? $Qentry->value('entry_gender') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->gender : '')), '', (ACCOUNT_GENDER > 0)); ?></td>
+    <td class="main"><?php echo osc_draw_radio_field('gender', $gender_array, (isset($Qentry) ? $Qentry->value('entry_gender') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getGender() : '')), '', (ACCOUNT_GENDER > 0)); ?></td>
   </tr>
 <?php
   }
 ?>
   <tr>
     <td class="main"><?php echo ENTRY_FIRST_NAME; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('firstname', (isset($Qentry) ? $Qentry->value('entry_firstname') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->first_name : '')), '', true); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('firstname', (isset($Qentry) ? $Qentry->value('entry_firstname') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getFirstName() : '')), '', true); ?></td>
   </tr>
   <tr>
     <td class="main"><?php echo ENTRY_LAST_NAME; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('lastname', (isset($Qentry) ? $Qentry->value('entry_lastname') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->last_name : '')), '', true); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('lastname', (isset($Qentry) ? $Qentry->value('entry_lastname') : (($osC_Customer->hasDefaultAddress() === false) ? $osC_Customer->getLastName() : '')), '', true); ?></td>
   </tr>
 <?php
   if (ACCOUNT_COMPANY > -1) {
@@ -120,7 +120,7 @@
   }
 ?>
 <?php
-  if ($osC_Customer->hasDefaultAddress() && ((isset($_GET['edit']) && ($osC_Customer->default_address_id != $_GET['address_book'])) || isset($_GET['new'])) ) {
+  if ($osC_Customer->hasDefaultAddress() && ((isset($_GET['edit']) && ($osC_Customer->getDefaultAddressID() != $_GET['address_book'])) || isset($_GET['new'])) ) {
 ?>
   <tr>
     <td colspan="2"><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>

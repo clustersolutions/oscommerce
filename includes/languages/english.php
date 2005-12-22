@@ -30,7 +30,7 @@ define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
 
 // Global entries for the <html> tag
-define('HTML_PARAMS','dir="LTR" lang="en"');
+define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en" lang="en"');
 
 // charset for web pages and emails
 define('CHARSET', 'iso-8859-1');
@@ -92,7 +92,7 @@ define('BOX_HEADING_CUSTOMER_ORDERS', 'Order History');
 
 // best_sellers box text in includes/boxes/best_sellers.php
 define('BOX_HEADING_BESTSELLERS', 'Bestsellers');
-define('BOX_HEADING_BESTSELLERS_IN', 'Bestsellers in<br>&nbsp;&nbsp;');
+define('BOX_HEADING_BESTSELLERS_IN', 'Bestsellers in<br />&nbsp;&nbsp;');
 
 // notifications box text in includes/boxes/products_notifications.php
 define('BOX_HEADING_NOTIFICATIONS', 'Notifications');
@@ -113,8 +113,8 @@ define('BOX_HEADING_CURRENCIES', 'Currencies');
 // information box text in includes/boxes/information.php
 define('BOX_HEADING_INFORMATION', 'Information');
 define('BOX_INFORMATION_PRIVACY', 'Privacy Notice');
-define('BOX_INFORMATION_CONDITIONS', 'Terms & Conditions');
-define('BOX_INFORMATION_SHIPPING', 'Shipping & Returns');
+define('BOX_INFORMATION_CONDITIONS', 'Terms &amp; Conditions');
+define('BOX_INFORMATION_SHIPPING', 'Shipping &amp; Returns');
 define('BOX_INFORMATION_CONTACT', 'Contact Us');
 define('BOX_INFORMATION_SITEMAP', 'Sitemap');
 
@@ -280,30 +280,14 @@ define('TEXT_REQUIRED', '<span class="errorText">Required</span>');
 define('ERROR_TEP_MAIL', '<font face="Verdana, Arial" size="2" color="#ff0000"><b><small>TEP ERROR:</small> Cannot send the email through the specified SMTP server. Please check your php.ini setting and correct the SMTP server if necessary.</b></font>');
 define('WARNING_INSTALL_DIRECTORY_EXISTS', 'Warning: Installation directory exists at: ' . dirname($_SERVER['SCRIPT_FILENAME']) . '/install. Please remove this directory for security reasons.');
 define('WARNING_CONFIG_FILE_WRITEABLE', 'Warning: I am able to write to the configuration file: ' . dirname($_SERVER['SCRIPT_FILENAME']) . '/includes/configure.php. This is a potential security risk - please set the right user permissions on this file.');
-define('WARNING_SESSION_DIRECTORY_NON_EXISTENT', 'Warning: The sessions directory does not exist: ' . $osC_Session->save_path . '. Sessions will not work until this directory is created.');
-define('WARNING_SESSION_DIRECTORY_NOT_WRITEABLE', 'Warning: I am not able to write to the sessions directory: ' . $osC_Session->save_path . '. Sessions will not work until the right user permissions are set.');
+define('WARNING_SESSION_DIRECTORY_NON_EXISTENT', 'Warning: The sessions directory does not exist: ' . $osC_Session->getSavePath() . '. Sessions will not work until this directory is created.');
+define('WARNING_SESSION_DIRECTORY_NOT_WRITEABLE', 'Warning: I am not able to write to the sessions directory: ' . $osC_Session->getSavePath() . '. Sessions will not work until the right user permissions are set.');
 define('WARNING_SESSION_AUTO_START', 'Warning: session.auto_start is enabled - please disable this php feature in php.ini and restart the web server.');
 define('WARNING_DOWNLOAD_DIRECTORY_NON_EXISTENT', 'Warning: The downloadable products directory does not exist: ' . DIR_FS_DOWNLOAD . '. Downloadable products will not work until this directory is valid.');
 
-define('TEXT_CCVAL_ERROR_INVALID_DATE', 'The expiry date entered for the credit card is invalid.<br>Please check the date and try again.');
-define('TEXT_CCVAL_ERROR_INVALID_NUMBER', 'The credit card number entered is invalid.<br>Please check the number and try again.');
-define('TEXT_CCVAL_ERROR_UNKNOWN_CARD', 'The first four digits of the number entered are: %s<br>If that number is correct, we do not accept that type of credit card.<br>If it is wrong, please try again.');
+define('TEXT_CCVAL_ERROR_INVALID_DATE', 'The expiry date entered for the credit card is invalid.<br />Please check the date and try again.');
+define('TEXT_CCVAL_ERROR_INVALID_NUMBER', 'The credit card number entered is invalid.<br />Please check the number and try again.');
+define('TEXT_CCVAL_ERROR_UNKNOWN_CARD', 'The first four digits of the number entered are: %s<br />If that number is correct, we do not accept that type of credit card.<br />If it is wrong, please try again.');
 
-/*
-  The following copyright announcement can only be
-  appropriately modified or removed if the layout of
-  the site theme has been modified to distinguish
-  itself from the default osCommerce-copyrighted
-  theme.
-
-  For more information please read the following
-  Frequently Asked Questions entry on the osCommerce
-  support site:
-
-  http://www.oscommerce.com/community.php/faq,26/q,50
-
-  Please leave this comment intact together with the
-  following copyright announcement.
-*/
-define('FOOTER_TEXT_BODY', 'Copyright &copy; 2003 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a><br>Powered by <a href="http://www.oscommerce.com" target="_blank">osCommerce</a>');
+define('FOOTER_TEXT_BODY', 'Copyright &copy; ' . date('Y') . ' <a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . STORE_NAME . '</a><br />Powered by <a href="http://www.oscommerce.com" target="_blank">osCommerce</a>');
 ?>

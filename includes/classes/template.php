@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: html_output.php 53 2005-03-09 05:11:10Z hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -23,7 +23,34 @@
  * @access private
  */
 
-    var $_template = 'default';
+    var $_template;
+
+/**
+ * Holds the template ID value
+ *
+ * @var int
+ * @access private
+ */
+
+    var $_template_id;
+
+/**
+ * Holds the title of the page module
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_module;
+
+/**
+ * Holds the group name of the page
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_group;
 
 /**
  * Holds the title of the page
@@ -35,13 +62,31 @@
     var $_page_title;
 
 /**
+ * Holds the image of the page
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_page_image;
+
+/**
  * Holds the filename of the content to be added to the page
  *
  * @var string
  * @access private
  */
 
-    var $_page_contents_filename;
+    var $_page_contents;
+
+/**
+ * Holds the meta tags of the page
+ *
+ * @var array
+ * @access private
+ */
+
+    var $_page_tags = array('generator' => array('osCommerce, Open Source E-Commerce Solutions'));
 
 /**
  * Holds javascript filenames to be included in the page
@@ -77,14 +122,86 @@
     var $_javascript_blocks = array();
 
 /**
+ * Setup the template class with the requested page module
+ *
+ * @param string $module The default page module to setup
+ * @return object
+ */
+
+    function &setup($module) {
+      $group = basename($_SERVER['PHP_SELF']);
+
+      if (($pos = strrpos($group, '.')) !== false) {
+        $group = substr($group, 0, $pos);
+      }
+
+      if (empty($_GET) === false) {
+        $first_array = array_slice($_GET, 0, 1);
+        $_module = tep_sanitize_string(basename(key($first_array)));
+
+        if (file_exists('includes/content/' . $group . '/' . $_module . '.php')) {
+          $module = $_module;
+        }
+      }
+
+      include('includes/content/' . $group . '/' . $module . '.php');
+
+      $_page_module_name = 'osC_' . ucfirst($group) . '_' . ucfirst($module);
+      $object = new $_page_module_name();
+
+      return $object;
+    }
+
+/**
+ * Returns the template ID
+ *
+ * @access public
+ * @return int
+ */
+
+    function getID() {
+      if (isset($this->_template) === false) {
+        $this->set();
+      }
+
+      return $this->_template_id;
+    }
+
+/**
  * Returns the template name
  *
  * @access public
  * @return string
  */
 
-    function getTemplate() {
+    function getCode() {
+      if (isset($this->_template) === false) {
+        $this->set();
+      }
+
       return $this->_template;
+    }
+
+/**
+ * Returns the page module name
+ *
+ * @access public
+ * @return string
+ */
+
+    function getModule() {
+      return $this->_module;
+    }
+
+/**
+ * Returns the page group name
+ *
+ * @access public
+ * @return string
+ */
+
+    function getGroup() {
+      return $this->_group;
     }
 
 /**
@@ -99,6 +216,64 @@
     }
 
 /**
+ * Returns the tags of the page separated by a comma
+ *
+ * @access public
+ * @return string
+ */
+
+    function getPageTags() {
+      $tag_string = '';
+
+      foreach ($this->_page_tags as $key => $values) {
+        $tag_string .= '<meta name="' . $key . '" content="' . implode(', ', $values) . '" />' . "\n";
+      }
+
+      return $tag_string . "\n";
+    }
+
+/**
+ * Return the box modules assigned to the page
+ *
+ * @param string $group The group name of box modules to include that the template has provided
+ * @return array
+ */
+
+    function getBoxModules($group) {
+      if (isset($this->osC_Modules_Boxes) === false) {
+        $this->osC_Modules_Boxes = new osC_Modules('boxes');
+      }
+
+      return $this->osC_Modules_Boxes->getGroup($group);
+    }
+
+/**
+ * Return the content modules assigned to the page
+ *
+ * @param string $group The group name of content modules to include that the template has provided
+ * @return array
+ */
+
+    function getContentModules($group) {
+      if (isset($this->osC_Modules_Content) === false) {
+        $this->osC_Modules_Content = new osC_Modules('content');
+      }
+
+      return $this->osC_Modules_Content->getGroup($group);
+    }
+
+/**
+ * Returns the image of the page
+ *
+ * @access public
+ * @return string
+ */
+
+    function getPageImage() {
+      return $this->_page_image;
+    }
+
+/**
  * Returns the content filename of the page
  *
  * @access public
@@ -106,7 +281,7 @@
  */
 
     function getPageContentsFilename() {
-      return $this->_page_contents_filename;
+      return $this->_page_contents;
     }
 
 /**
@@ -131,6 +306,32 @@
     }
 
 /**
+ * Return all templates in an array
+ *
+ * @access public
+ * @return array
+ */
+
+    function &getTemplates() {
+      global $osC_Database;
+
+      $templates = array();
+
+      $Qtemplates = $osC_Database->query('select id, code, title from :table_templates');
+      $Qtemplates->bindTable(':table_templates', TABLE_TEMPLATES);
+      $Qtemplates->setCache('templates');
+      $Qtemplates->execute();
+
+      while ($Qtemplates->next()) {
+        $templates [] = $Qtemplates->toArray();
+      }
+
+      $Qtemplates->freeResult();
+
+      return $templates;
+    }
+
+/**
  * Checks to see if the page has a title set
  *
  * @access public
@@ -139,6 +340,17 @@
 
     function hasPageTitle() {
       return !empty($this->_page_title);
+    }
+
+/**
+ * Checks to see if the page has a meta tag set
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function hasPageTags() {
+      return !empty($this->_page_tags);
     }
 
 /**
@@ -153,14 +365,37 @@
     }
 
 /**
- * Sets the name of the template to use
+ * Sets the template to use
  *
- * @param string $template The name of the template to set
  * @access public
  */
 
-    function setTemplate($template) {
-      $this->_template = $template;
+    function set() {
+      global $osC_Database;
+
+      if ( (isset($_SESSION['template']) === false) || (isset($_GET['template']) && !empty($_GET['template'])) ) {
+        $set_template = (isset($_GET['template']) && !empty($_GET['template'])) ? $_GET['template'] : DEFAULT_TEMPLATE;
+
+        $data = array();
+        $data_default = array();
+
+        foreach ($this->getTemplates() as $template) {
+          if ($template['code'] == DEFAULT_TEMPLATE) {
+            $data_default = array('id' => $template['id'], 'code' => $template['code']);
+          } elseif ($template['code'] == $set_template) {
+            $data = array('id' => $template['id'], 'code' => $template['code']);
+          }
+        }
+
+        if (empty($data)) {
+          $data =& $data_default;
+        }
+
+        $_SESSION['template'] =& $data;
+      }
+
+      $this->_template_id =& $_SESSION['template']['id'];
+      $this->_template =& $_SESSION['template']['code'];
     }
 
 /**
@@ -175,6 +410,17 @@
     }
 
 /**
+ * Sets the image of the page
+ *
+ * @param string $image The image of the page to set to
+ * @access public
+ */
+
+    function setPageImage($image) {
+      $this->_page_image = $image;
+    }
+
+/**
  * Sets the content of the page
  *
  * @param string $filename The content filename to include on the page
@@ -183,6 +429,18 @@
 
     function setPageContentsFilename($filename) {
       $this->_page_contents_filename = $filename;
+    }
+
+/**
+ * Adds a tag to the meta keywords array
+ *
+ * @param string $key The keyword for the meta tag
+ * @param string $value The value for the meta tag using the key
+ * @access public
+ */
+
+    function addPageTags($key, $value) {
+      $this->_page_tags[$key][] = $value;
     }
 
 /**

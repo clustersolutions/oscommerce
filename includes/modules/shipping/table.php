@@ -52,10 +52,10 @@
 
 // class methods
     function quote($method = '') {
-      global $osC_Tax, $order, $cart, $shipping_weight, $shipping_num_boxes, $osC_Weight;
+      global $osC_Tax, $order, $shipping_weight, $shipping_num_boxes, $osC_Weight;
 
       if (MODULE_SHIPPING_TABLE_MODE == 'price') {
-        $order_total = $cart->show_total();
+        $order_total = $_SESSION['cart']->show_total();
       } else {
         $order_total = $shipping_weight = $osC_Weight->convert($shipping_weight, SHIPPING_WEIGHT_UNIT, MODULE_SHIPPING_TABLE_WEIGHT_UNIT);
       }

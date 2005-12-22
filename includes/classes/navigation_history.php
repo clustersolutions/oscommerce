@@ -5,54 +5,58 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
-  class navigationHistory {
-    var $path, $snapshot, $set_global;
+  class osC_NavigationHistory {
 
-    function navigationHistory() {
-      $this->reset();
+/* Private variables */
 
-      $this->setGlobal();
-    }
+    var $_data = array(),
+        $_snapshot = array();
 
-    function reset() {
-      $this->path = array();
-      $this->snapshot = array();
-    }
+/* Class constructor */
 
-    function add_current_page() {
-      if (PHP_VERSION < 4.1) {
-        global $_SERVER;
+    function osC_NavigationHistory($add_current_page = false) {
+      if (isset($_SESSION['osC_NavigationHistory_data']) && is_array($_SESSION['osC_NavigationHistory_data']) && (empty($_SESSION['osC_NavigationHistory_data']) === false)) {
+        $this->_data =& $_SESSION['osC_NavigationHistory_data'];
       }
 
+      if (isset($_SESSION['osC_NavigationHistory_snapshot']) && is_array($_SESSION['osC_NavigationHistory_snapshot']) && (empty($_SESSION['osC_NavigationHistory_snapshot']) === false)) {
+        $this->_snapshot =& $_SESSION['osC_NavigationHistory_snapshot'];
+      }
+
+      if ($add_current_page === true) {
+        $this->addCurrentPage();
+      }
+    }
+
+/* Public methods */
+
+    function addCurrentPage() {
       global $request_type, $cPath;
 
-      if ($this->set_global) {
-        global $_GET, $_POST;
-      }
-
       $set = 'true';
-      for ($i=0, $n=sizeof($this->path); $i<$n; $i++) {
-        if ($this->path[$i]['page'] == basename($_SERVER['PHP_SELF'])) {
+
+      for ($i=0, $n=sizeof($this->_data); $i<$n; $i++) {
+        if ($this->_data[$i]['page'] == basename($_SERVER['PHP_SELF'])) {
           if (isset($cPath)) {
-            if (!isset($this->path[$i]['get']['cPath'])) {
+            if (!isset($this->_data[$i]['get']['cPath'])) {
               continue;
             } else {
-              if ($this->path[$i]['get']['cPath'] == $cPath) {
-                array_splice($this->path, ($i+1));
+              if ($this->_data[$i]['get']['cPath'] == $cPath) {
+                array_splice($this->_data, ($i+1));
                 $set = 'false';
                 break;
               } else {
-                $old_cPath = explode('_', $this->path[$i]['get']['cPath']);
+                $old_cPath = explode('_', $this->_data[$i]['get']['cPath']);
                 $new_cPath = explode('_', $cPath);
 
                 for ($j=0, $n2=sizeof($old_cPath); $j<$n2; $j++) {
                   if ($old_cPath[$j] != $new_cPath[$j]) {
-                    array_splice($this->path, ($i));
+                    array_splice($this->_data, ($i));
                     $set = 'true';
                     break 2;
                   }
@@ -60,7 +64,7 @@
               }
             }
           } else {
-            array_splice($this->path, $i);
+            array_splice($this->_data, $i);
             $set = 'true';
             break;
           }
@@ -68,86 +72,142 @@
       }
 
       if ($set == 'true') {
-        $this->path[] = array('page' => basename($_SERVER['PHP_SELF']),
-                              'mode' => $request_type,
-                              'get' => $_GET,
-                              'post' => $_POST);
+        $this->_data[] = array('page' => basename($_SERVER['PHP_SELF']),
+                               'mode' => $request_type,
+                               'get' => $_GET,
+                               'post' => $_POST);
+
+        if (isset($_SESSION['osC_NavigationHistory_data']) === false) {
+          $_SESSION['osC_NavigationHistory_data'] = $this->_data;
+        }
       }
     }
 
-    function remove_current_page() {
-      if (PHP_VERSION < 4.1) {
-        global $_SERVER;
-      }
+    function removeCurrentPage() {
+      $last_entry_position = sizeof($this->_data) - 1;
 
-      $last_entry_position = sizeof($this->path) - 1;
-      if ($this->path[$last_entry_position]['page'] == basename($_SERVER['PHP_SELF'])) {
-        unset($this->path[$last_entry_position]);
+      if ($this->_data[$last_entry_position]['page'] == basename($_SERVER['PHP_SELF'])) {
+        unset($this->_data[$last_entry_position]);
+
+        if (sizeof($this->_data) > 0) {
+          if (isset($_SESSION['osC_NavigationHistory_data']) === false) {
+            $_SESSION['osC_NavigationHistory_data'] = $this->_data;
+          }
+        } else {
+          $this->resetPath();
+        }
       }
     }
 
-    function set_snapshot($page = '') {
-      if (PHP_VERSION < 4.1) {
-        global $_SERVER;
+    function hasPath($back = 1) {
+      if ( (is_numeric($back) === false) || (is_numeric($back) && ($back < 1)) ) {
+        $back = 1;
       }
 
+      return isset($this->_data[sizeof($this->_data) - $back]);
+    }
+
+    function getPathURL($back = 1, $exclude = array()) {
+      if ( (is_numeric($back) === false) || (is_numeric($back) && ($back < 1)) ) {
+        $back = 1;
+      }
+
+      $back = sizeof($this->_data) - $back;
+
+      return tep_href_link($this->_data[$back]['page'], $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
+    }
+
+    function setSnapshot($page = '') {
       global $request_type;
 
-      if ($this->set_global) {
-        global $_GET, $_POST;
-      }
-
       if (is_array($page)) {
-        $this->snapshot = array('page' => $page['page'],
-                                'mode' => $page['mode'],
-                                'get' => $page['get'],
-                                'post' => $page['post']);
+        $this->_snapshot = array('page' => $page['page'],
+                                 'mode' => $page['mode'],
+                                 'get' => $page['get'],
+                                 'post' => $page['post']);
       } else {
-        $this->snapshot = array('page' => basename($_SERVER['PHP_SELF']),
-                                'mode' => $request_type,
-                                'get' => $_GET,
-                                'post' => $_POST);
+        $this->_snapshot = array('page' => basename($_SERVER['PHP_SELF']),
+                                 'mode' => $request_type,
+                                 'get' => $_GET,
+                                 'post' => $_POST);
+      }
+
+      if (isset($_SESSION['osC_NavigationHistory_snapshot']) === false) {
+        $_SESSION['osC_NavigationHistory_snapshot'] = $this->_snapshot;
       }
     }
 
-    function clear_snapshot() {
-      $this->snapshot = array();
+    function hasSnapshot() {
+      return !empty($this->_snapshot);
     }
 
-    function set_path_as_snapshot($history = 0) {
-      $pos = (sizeof($this->path)-1-$history);
-      $this->snapshot = array('page' => $this->path[$pos]['page'],
-                              'mode' => $this->path[$pos]['mode'],
-                              'get' => $this->path[$pos]['get'],
-                              'post' => $this->path[$pos]['post']);
+    function getSnapshot($key) {
+      if (isset($this->_snapshot[$key])) {
+        return $this->_snapshot[$key];
+      }
     }
 
-    function setGlobal() {
-      $this->set_global = (PHP_VERSION < 4.1) ? true : false;
+    function getSnapshotURL($auto_mode = false) {
+      if ($this->hasSnapshot()) {
+        $target = tep_href_link($this->_snapshot['page'], $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+      } else {
+        $target = tep_href_link(FILENAME_DEFAULT, '', ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+      }
+
+      return $target;
     }
 
-    function debug() {
+    function redirectToSnapshot() {
+      $target = $this->getSnapshotURL(true);
+
+      $this->resetSnapshot();
+
+      tep_redirect($target);
+    }
+
+    function resetPath() {
+      $this->_data = array();
+
+      if (isset($_SESSION['osC_NavigationHistory_data'])) {
+        unset($_SESSION['osC_NavigationHistory_data']);
+      }
+    }
+
+    function resetSnapshot() {
+      $this->_snapshot = array();
+
+      if (isset($_SESSION['osC_NavigationHistory_snapshot'])) {
+        unset($_SESSION['osC_NavigationHistory_snapshot']);
+      }
+    }
+
+    function reset() {
+      $this->resetPath();
+      $this->resetSnapshot();
+    }
+
+    function _parseParameters($array, $additional_exclude = array()) {
       global $osC_Session;
 
-      for ($i=0, $n=sizeof($this->path); $i<$n; $i++) {
-        echo $this->path[$i]['page'] . '?';
-        while (list($key, $value) = each($this->path[$i]['get'])) {
-          echo $key . '=' . $value . '&';
-        }
-        if (sizeof($this->path[$i]['post']) > 0) {
-          echo '<br>';
-          while (list($key, $value) = each($this->path[$i]['post'])) {
-            echo '&nbsp;&nbsp;<b>' . $key . '=' . $value . '</b><br>';
+      $exclude = array('x', 'y', $osC_Session->getName());
+
+      if (is_array($additional_exclude) && (empty($additional_exclude) === false)) {
+        $exclude = array_merge($exclude, $additional_exclude);
+      }
+
+      $string = '';
+
+      if (is_array($array) && (empty($array) === false)) {
+        foreach ($array as $key => $value) {
+          if (in_array($key, $exclude) === false) {
+            $string .= $key . '=' . $value . '&';
           }
         }
-        echo '<br>';
+
+        $string = substr($string, 0, -1);
       }
 
-      if (sizeof($this->snapshot) > 0) {
-        echo '<br><br>';
-
-        echo $this->snapshot['mode'] . ' ' . $this->snapshot['page'] . '?' . tep_array_to_string($this->snapshot['get'], array($osC_Session->name)) . '<br>';
-      }
+      return $string;
     }
   }
 ?>

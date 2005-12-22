@@ -14,7 +14,7 @@
 // Get last order id for checkout_success
     $Qorder = $osC_Database->query('select orders_id from :table_orders where customers_id = :customers_id order by orders_id desc limit 1');
     $Qorder->bindTable(':table_orders', TABLE_ORDERS);
-    $Qorder->bindInt(':customers_id', $osC_Customer->id);
+    $Qorder->bindInt(':customers_id', $osC_Customer->getID());
     $Qorder->execute();
 
     $last_order = $Qorders->valueInt('orders_id');
@@ -27,7 +27,7 @@
   $Qdownloads->bindTable(':table_orders', TABLE_ORDERS);
   $Qdownloads->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
   $Qdownloads->bindTable(':table_orders_products_downloads', TABLE_ORDERS_PRODUCTS_DOWNLOADS);
-  $Qdownloads->bindInt(':customers_id', $osC_Customer->id);
+  $Qdownloads->bindInt(':customers_id', $osC_Customer->getID());
   $Qdownloads->bindInt(':orders_id', $last_order);
   $Qdownloads->execute();
 

@@ -1,0 +1,54 @@
+<?php
+/*
+  $Id$
+
+  osCommerce, Open Source E-Commerce Solutions
+  http://www.oscommerce.com
+
+  Copyright (c) 2005 osCommerce
+
+  Released under the GNU General Public License
+*/
+
+  class osC_Boxes_categories extends osC_Modules {
+    var $_title = 'Categories',
+        $_code = 'categories',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
+        $_group = 'boxes';
+
+    function osC_Boxes_categories() {
+//      $this->_title = BOX_HEADING_CATEGORIES;
+    }
+
+    function initialize() {
+      global $osC_CategoryTree, $cPath;
+
+      $osC_CategoryTree->reset();
+      $osC_CategoryTree->setCategoryPath($cPath, '<b>', '</b>');
+      $osC_CategoryTree->setParentGroupString('', '');
+      $osC_CategoryTree->setParentString('', '-&gt;');
+      $osC_CategoryTree->setChildString('', '<br />');
+      $osC_CategoryTree->setSpacerString('&nbsp;', 2);
+      $osC_CategoryTree->setShowCategoryProductCount((BOX_CATEGORIES_SHOW_PRODUCT_COUNT == '1') ? true : false);
+
+      $this->_content = $osC_CategoryTree->buildTree();
+    }
+
+    function install() {
+      global $osC_Database;
+
+      parent::install();
+
+      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Show Product Count', 'BOX_CATEGORIES_SHOW_PRODUCT_COUNT', '1', 'Show the amount of products each category has', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\'), ', now())");
+    }
+
+    function getKeys() {
+      if (!isset($this->_keys)) {
+        $this->_keys = array('BOX_CATEGORIES_SHOW_PRODUCT_COUNT');
+      }
+
+      return $this->_keys;
+    }
+  }
+?>

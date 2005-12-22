@@ -84,10 +84,10 @@
     }
 
     function process_button() {
-      global $osC_Session, $order, $osC_Currencies;
+      global $order, $osC_Currencies;
 
       if (MODULE_PAYMENT_PAYPAL_CURRENCY == 'Selected Currency') {
-        $my_currency = $osC_Session->value('currency');
+        $my_currency = $_SESSION['currency'];
       } else {
         $my_currency = substr(MODULE_PAYMENT_PAYPAL_CURRENCY, 5);
       }

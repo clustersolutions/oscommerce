@@ -34,10 +34,8 @@
 
 // class methods
     function format($number, $currency_code = '', $currency_value = '') {
-      global $osC_Session;
-
       if (empty($currency_code) || ($this->exists($currency_code) == false)) {
-        $currency_code = ($osC_Session->exists('currency') ? $osC_Session->value('currency') : DEFAULT_CURRENCY);
+        $currency_code = (isset($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY);
       }
 
       if (empty($currency_value) || (is_numeric($currency_value) == false)) {

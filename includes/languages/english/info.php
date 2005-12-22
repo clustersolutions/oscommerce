@@ -1,0 +1,65 @@
+<?php
+/*
+  $Id: shipping.php 5 2005-01-31 01:40:15Z hpdl $
+
+  osCommerce, Open Source E-Commerce Solutions
+  http://www.oscommerce.com
+
+  Copyright (c) 2005 osCommerce
+
+  Released under the GNU General Public License
+*/
+
+  define('BREADCRUMB_INFO', 'Information');
+  define('BREADCRUMB_INFO_CONDITIONS', 'Conditions');
+  define('BREADCRUMB_INFO_CONTACT', 'Contact');
+  define('BREADCRUMB_INFO_PRIVACY', 'Privacy');
+  define('BREADCRUMB_INFO_SHIPPING', 'Shipping');
+  define('BREADCRUMB_INFO_SITEMAP', 'Sitemap');
+  define('BREADCRUMB_INFO_COOKIE_USAGE', 'Cookie Usage');
+  define('BREADCRUMB_INFO_SSL_CHECK', 'Security Check');
+
+  define('HEADING_INFO', 'Information and Help');
+  define('HEADING_INFO_CONDITIONS', 'Terms and Conditions');
+  define('HEADING_INFO_CONTACT', 'Contact');
+  define('HEADING_INFO_PRIVACY', 'Privacy Notice');
+  define('HEADING_INFO_SHIPPING', 'Shipping and Returns');
+  define('HEADING_INFO_SITEMAP', 'Sitemap');
+  define('HEADING_INFO_COOKIE_USAGE', 'Cookie Usage');
+  define('HEADING_INFO_SSL_CHECK', 'Security Check');
+
+  define('TEXT_INFO_CONDITIONS', 'Put here the required information.');
+  define('TEXT_INFO_CONTACT', 'Put here the required information.');
+  define('TEXT_INFO_PRIVACY', 'Put here the required information.');
+  define('TEXT_INFO_SHIPPING', 'Put here the required information.');
+  define('TEXT_INFO_COOKIE_USAGE', 'We have detected that your browser does not support cookies, or has set cookies to be disabled.<br /><br />To continue shopping online, we encourage you to enable cookies on your browser.<br /><br />For <b>Internet Explorer</b> browsers, please follow these instructions:<br /><ol><li>Click on the Tools menubar, and select Internet Options</li><li>Select the Security tab, and reset the security level to Medium</li></ol>We have taken this measurement of security for your benefit, and apologize upfront if any inconveniences are caused.<br /><br />Please contact the store owner if you have any questions relating to this requirement, or to continue purchasing products offline.');
+  define('TEXT_INFO_SSL_CHECK', 'We have detected that your browser has generated a different SSL Session ID used throughout our secure pages.<br /><br />For security measures you will need to logon to your account again to continue shopping online.<br /><br />Some browsers such as Konqueror 3.1 does not have the capability of generating a secure SSL Session ID automatically which we require. If you use such a browser, we recommend switching to another browser such as <a href="http://www.microsoft.com/ie/" target="_blank">Microsoft Internet Explorer</a>, <a href="http://channels.netscape.com/ns/browsers/download_other.jsp" target="_blank">Netscape</a>, or <a href="http://www.mozilla.org/releases/" target="_blank">Mozilla</a>, to continue your online shopping experience.<br /><br />We have taken this measurement of security for your benefit, and apologize upfront if any inconveniences are caused.<br /><br />Please contact the store owner if you have any questions relating to this requirement, or to continue purchasing products offline.');
+
+  define('TITLE_CONTACT_INFORMATION', 'Contact Information');
+  define('TITLE_STORE_ADDRESS', 'Store Address');
+
+  define('TEXT_INFO_CONTACT_ENTRY_NAME', 'Full Name:');
+  define('TEXT_INFO_CONTACT_ENTRY_EMAIL', 'E-Mail Address:');
+  define('TEXT_INFO_CONTACT_ENTRY_ENQUIRY', 'Enquiry:');
+
+  define('TEXT_INFO_CONTACT_TEXT_SUCCESS', 'Your enquiry has been successfully sent to the store owner.');
+  define('TEXT_INFO_CONTACT_EMAIL_SUBJECT', 'Contact Enquiry');
+
+  define('TEXT_INFO_SITEMAP_PAGE_ACCOUNT', 'My Account');
+  define('TEXT_INFO_SITEMAP_PAGE_ACCOUNT_EDIT', 'Account Information');
+  define('TEXT_INFO_SITEMAP_PAGE_ADDRESS_BOOK', 'Address Book');
+  define('TEXT_INFO_SITEMAP_PAGE_ACCOUNT_HISTORY', 'Order History');
+  define('TEXT_INFO_SITEMAP_PAGE_ACCOUNT_NOTIFICATIONS', 'Newsletter Subscriptions');
+  define('TEXT_INFO_SITEMAP_PAGE_SHOPPING_CART', 'Shopping Cart');
+  define('TEXT_INFO_SITEMAP_PAGE_CHECKOUT_SHIPPING', 'Checkout');
+  define('TEXT_INFO_SITEMAP_PAGE_ADVANCED_SEARCH', 'Advanced Search');
+  define('TEXT_INFO_SITEMAP_PAGE_PRODUCTS_NEW', 'New Products');
+  define('TEXT_INFO_SITEMAP_PAGE_SPECIALS', 'Specials');
+  define('TEXT_INFO_SITEMAP_PAGE_REVIEWS', 'Reviews');
+
+  define('BOX_INFO_COOKIE_USAGE_HEADING', 'Cookie Privacy and Security');
+  define('BOX_INFO_COOKIE_USAGE_CONTENT', 'Cookies must be enabled to purchase online on this store to embrace privacy and security related issues regarding your visit to this site.<br /><br />By enabling cookie support on your browser, the communication between you and this site is strengthened to be certain it is you who are making transactions on your own behalf, and to prevent leakage of your privacy information.');
+
+  define('BOX_INFO_SSL_CHECK_HEADING', 'Privacy and Security');
+  define('BOX_INFO_SSL_CHECK_CONTENT', 'We validate the SSL Session ID automatically generated by your browser on every secure page request made to this server.<br /><br />This validation assures that it is you who is navigating on this site with your account and not somebody else.');
+?>

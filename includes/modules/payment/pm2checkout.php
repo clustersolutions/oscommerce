@@ -124,10 +124,6 @@
     function pre_confirmation_check() {
       global $messageStack;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (!tep_validate_credit_card($_POST['pm_2checkout_cc_number'])) {
         $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
 
@@ -144,10 +140,6 @@
     }
 
     function confirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
                             'fields' => array(array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER,
                                                     'field' => $_POST['pm_2checkout_cc_owner_firstname'] . ' ' . $_POST['pm_2checkout_cc_owner_lastname']),
@@ -166,10 +158,6 @@
 
     function process_button() {
       global $order;
-
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
 
       $process_button_string = osc_draw_hidden_field('x_login', MODULE_PAYMENT_2CHECKOUT_LOGIN) .
                                osc_draw_hidden_field('x_amount', number_format($order->info['total'], 2)) .
@@ -202,10 +190,6 @@
 
     function before_process() {
       global $messageStack;
-
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
 
       if ($_POST['x_response_code'] != '1') {
         $messageStack->add_session('checkout_payment', MODULE_PAYMENT_2CHECKOUT_TEXT_ERROR_MESSAGE, 'error');

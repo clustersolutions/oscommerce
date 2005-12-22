@@ -13,7 +13,17 @@
   class order {
     var $info, $totals, $products, $customer, $delivery, $content_type;
 
+/* Private variables */
+
+    var $_id;
+
+/* Class constructor */
+
     function order($order_id = '') {
+      if (is_numeric($order_id)) {
+        $this->_id = $order_id;
+      }
+
       $this->info = array();
       $this->totals = array();
       $this->products = array();
@@ -27,8 +37,97 @@
       }
     }
 
+/* Public methods */
+
+    function &getListing($limit = null, $page_keyword = 'page') {
+      global $osC_Database, $osC_Customer;
+
+      $Qorders = $osC_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "ot_total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc');
+      $Qorders->bindTable(':table_orders', TABLE_ORDERS);
+      $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
+      $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+      $Qorders->bindInt(':customers_id', $osC_Customer->getID());
+      $Qorders->bindInt(':language_id', $_SESSION['languages_id']);
+
+      if (is_numeric($limit)) {
+        $Qorders->setBatchLimit(isset($_GET[$page_keyword]) && is_numeric($_GET[$page_keyword]) ? $_GET[$page_keyword] : 1, $limit);
+      }
+
+      $Qorders->execute();
+
+      return $Qorders;
+    }
+
+    function &getStatusListing($id = null) {
+      global $osC_Database;
+
+      if ( ($id === null) && isset($this) ) {
+        $id = $this->_id;
+      }
+
+      $Qstatus = $osC_Database->query('select os.orders_status_name, osh.date_added, osh.comments from :table_orders_status os, :table_orders_status_history osh where osh.orders_id = :orders_id and osh.orders_status_id = os.orders_status_id and os.language_id = :language_id order by osh.date_added');
+      $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
+      $Qstatus->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
+      $Qstatus->bindInt(':orders_id', $id);
+      $Qstatus->bindInt(':language_id', $_SESSION['languages_id']);
+
+      return $Qstatus;
+    }
+
+    function getCustomerID($id = null) {
+      global $osC_Database;
+
+      if ( ($id === null) && isset($this) ) {
+        $id = $this->_id;
+      }
+
+      $Qcustomer = $osC_Database->query('select customers_id from :table_orders where orders_id = :orders_id');
+      $Qcustomer->bindTable(':table_orders', TABLE_ORDERS);
+      $Qcustomer->bindInt(':orders_id', $id);
+      $Qcustomer->execute();
+
+      return $Qcustomer->valueInt('customers_id');
+    }
+
+    function numberOfEntries() {
+      global $osC_Database, $osC_Customer;
+      static $total_entries;
+
+      if (is_numeric($total_entries) === false) {
+        if ($osC_Customer->isLoggedOn()) {
+          $Qorders = $osC_Database->query('select count(*) as total from :table_orders where customers_id = :customers_id');
+          $Qorders->bindTable(':table_orders', TABLE_ORDERS);
+          $Qorders->bindInt(':customers_id', $osC_Customer->getID());
+          $Qorders->execute();
+
+          $total_entries = $Qorders->valueInt('total');
+        } else {
+          $total_entries = 0;
+        }
+      }
+
+      return $total_entries;
+    }
+
+    function numberOfProducts($id = null) {
+      global $osC_Database;
+
+      if ( ($id === null) && isset($this) ) {
+        $id = $this->_id;
+      }
+
+      $Qproducts = $osC_Database->query('select count(*) as total from :table_orders_products where orders_id = :orders_id');
+      $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+      $Qproducts->bindInt(':orders_id', $id);
+      $Qproducts->execute();
+
+      return $Qproducts->valueInt('total');
+    }
+
+
+
     function query($order_id) {
-      global $osC_Database, $osC_Session;
+      global $osC_Database;
 
       $Qorder = $osC_Database->query('select customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, orders_status, last_modified from :table_orders where orders_id = :orders_id');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
@@ -63,7 +162,7 @@
       $Qstatus = $osC_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qstatus->bindInt(':orders_status_id', $Qorder->valueInt('orders_status'));
-      $Qstatus->bindInt(':language_id', $osC_Session->value('languages_id'));
+      $Qstatus->bindInt(':language_id', $_SESSION['languages_id']);
       $Qstatus->execute();
 
       $this->info = array('currency' => $Qorder->value('currency'),
@@ -158,48 +257,48 @@
     }
 
     function cart() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Tax, $cart, $osC_Currencies;
+      global $osC_Database, $osC_Customer, $osC_Tax, $osC_Currencies;
 
-      $this->content_type = $cart->get_content_type();
+      $this->content_type = $_SESSION['cart']->get_content_type();
 
-      $shipping =& $osC_Session->value('shipping');
-      $payment =& $osC_Session->value('payment');
+      $shipping =& $_SESSION['shipping'];
+      $payment =& $_SESSION['payment'];
 
       $Qcustomer = $osC_Database->query('select c.customers_firstname, c.customers_lastname, c.customers_telephone, c.customers_email_address, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, z.zone_name, co.countries_id, co.countries_name, co.countries_iso_code_2, co.countries_iso_code_3, co.address_format_id, ab.entry_state from :table_customers c, :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries co on (ab.entry_country_id = co.countries_id) where c.customers_id = :customers_id and ab.customers_id = :customers_id and c.customers_default_address_id = ab.address_book_id');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomer->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qcustomer->bindTable(':table_zones', TABLE_ZONES);
       $Qcustomer->bindTable(':table_countries', TABLE_COUNTRIES);
-      $Qcustomer->bindInt(':customers_id', $osC_Customer->id);
-      $Qcustomer->bindInt(':customers_id', $osC_Customer->id);
+      $Qcustomer->bindInt(':customers_id', $osC_Customer->getID());
+      $Qcustomer->bindInt(':customers_id', $osC_Customer->getID());
       $Qcustomer->execute();
 
       $Qshipping = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, z.zone_name, ab.entry_country_id, c.countries_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format_id, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
       $Qshipping->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qshipping->bindTable(':table_zones', TABLE_ZONES);
       $Qshipping->bindTable(':table_countries', TABLE_COUNTRIES);
-      $Qshipping->bindInt(':customers_id', $osC_Customer->id);
-      $Qshipping->bindInt(':address_book_id', $osC_Session->value('sendto'));
+      $Qshipping->bindInt(':customers_id', $osC_Customer->getID());
+      $Qshipping->bindInt(':address_book_id', $_SESSION['sendto']);
       $Qshipping->execute();
 
       $Qbilling = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, z.zone_name, ab.entry_country_id, c.countries_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format_id, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
       $Qbilling->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qbilling->bindTable(':table_zones', TABLE_ZONES);
       $Qbilling->bindTable(':table_countries', TABLE_COUNTRIES);
-      $Qbilling->bindInt(':customers_id', $osC_Customer->id);
-      $Qbilling->bindInt(':address_book_id', $osC_Session->value('billto'));
+      $Qbilling->bindInt(':customers_id', $osC_Customer->getID());
+      $Qbilling->bindInt(':address_book_id', $_SESSION['billto']);
       $Qbilling->execute();
 
       $Qtax = $osC_Database->query('select ab.entry_country_id, ab.entry_zone_id from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
       $Qtax->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qtax->bindTable(':table_zones', TABLE_ZONES);
-      $Qtax->bindInt(':customers_id', $osC_Customer->id);
-      $Qtax->bindInt(':address_book_id', ($this->content_type == 'virtual' ? $osC_Session->value('billto') : $osC_Session->value('sendto')));
+      $Qtax->bindInt(':customers_id', $osC_Customer->getID());
+      $Qtax->bindInt(':address_book_id', ($this->content_type == 'virtual' ? $_SESSION['billto'] : $_SESSION['sendto']));
       $Qtax->execute();
 
       $this->info = array('order_status' => DEFAULT_ORDERS_STATUS_ID,
-                          'currency' => $osC_Session->value('currency'),
-                          'currency_value' => $osC_Currencies->currencies[$osC_Session->value('currency')]['value'],
+                          'currency' => $_SESSION['currency'],
+                          'currency_value' => $osC_Currencies->currencies[$_SESSION['currency']]['value'],
                           'payment_method' => $payment,
                           'cc_type' => (isset($GLOBALS['cc_type']) ? $GLOBALS['cc_type'] : ''),
                           'cc_owner' => (isset($GLOBALS['cc_owner']) ? $GLOBALS['cc_owner'] : ''),
@@ -210,7 +309,7 @@
                           'subtotal' => 0,
                           'tax' => 0,
                           'tax_groups' => array(),
-                          'comments' => ($osC_Session->exists('comments') ? $osC_Session->value('comments') : ''));
+                          'comments' => (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''));
 
       if (isset($GLOBALS[$payment]) && is_object($GLOBALS[$payment])) {
         $this->info['payment_method'] = $GLOBALS[$payment]->title;
@@ -261,7 +360,7 @@
                              'format_id' => $Qbilling->valueInt('address_format_id'));
 
       $index = 0;
-      $products = $cart->get_products();
+      $products = $_SESSION['cart']->get_products();
       for ($i=0, $n=sizeof($products); $i<$n; $i++) {
         $this->products[$index] = array('qty' => $products[$i]['quantity'],
                                         'name' => $products[$i]['name'],
@@ -270,7 +369,7 @@
                                         'tax_description' => $osC_Tax->getTaxRateDescription($products[$i]['tax_class_id'], $Qtax->valueInt('entry_country_id'), $Qtax->valueInt('entry_zone_id')),
                                         'tax_class_id' => $products[$i]['tax_class_id'],
                                         'price' => $products[$i]['price'],
-                                        'final_price' => $products[$i]['price'] + $cart->attributes_price($products[$i]['id']),
+                                        'final_price' => $products[$i]['price'] + $_SESSION['cart']->attributes_price($products[$i]['id']),
                                         'weight' => $products[$i]['weight'],
                                         'id' => $products[$i]['id']);
 
@@ -285,8 +384,8 @@
             $Qattributes->bindInt(':products_id', $products[$i]['id']);
             $Qattributes->bindInt(':options_id', $option);
             $Qattributes->bindInt(':options_values_id', $value);
-            $Qattributes->bindInt(':language_id', $osC_Session->value('languages_id'));
-            $Qattributes->bindInt(':language_id', $osC_Session->value('languages_id'));
+            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
+            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
             $Qattributes->execute();
 
             $this->products[$index]['attributes'][$subindex] = array('option' => $Qattributes->value('products_options_name'),

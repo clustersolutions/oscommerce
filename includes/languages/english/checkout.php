@@ -68,15 +68,15 @@
   define('SUB_TITLE_SUB_TOTAL', 'Sub-Total:');
   define('SUB_TITLE_TOTAL', 'Total:');
 
-  define('OUT_OF_STOCK_CANT_CHECKOUT', 'Products marked with ' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . ' don\'t exist in desired quantity in our stock.<br>Please alter the quantity of products marked with (' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '), Thank you');
-  define('OUT_OF_STOCK_CAN_CHECKOUT', 'Products marked with ' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . ' don\'t exist in desired quantity in our stock.<br>You can buy them anyway and check the quantity we have in stock for immediate delivery in the checkout process.');
+  define('OUT_OF_STOCK_CANT_CHECKOUT', 'Products marked with ' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . ' don\'t exist in desired quantity in our stock.<br />Please alter the quantity of products marked with (' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '), Thank you');
+  define('OUT_OF_STOCK_CAN_CHECKOUT', 'Products marked with ' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . ' don\'t exist in desired quantity in our stock.<br />You can buy them anyway and check the quantity we have in stock for immediate delivery in the checkout process.');
 
   define('TABLE_HEADING_BILLING_ADDRESS', 'Billing Address');
   define('TEXT_SELECTED_BILLING_DESTINATION', 'Please choose from your address book where you would like the invoice to be sent to.');
   define('TITLE_BILLING_ADDRESS', 'Billing Address:');
 
   define('TABLE_HEADING_CONDITIONS', 'Terms and Conditions');
-  define('TEXT_CONDITIONS_DESCRIPTION', 'Please acknowledge the terms and conditions bound to this order by ticking the following box. The terms and conditions can be read <a href="' . tep_href_link(FILENAME_CONDITIONS, '', 'SSL') . '"><u>here</u></a>.');
+  define('TEXT_CONDITIONS_DESCRIPTION', 'Please acknowledge the terms and conditions bound to this order by ticking the following box. The terms and conditions can be read <a href="' . tep_href_link(FILENAME_INFO, 'conditions', 'SSL') . '"><u>here</u></a>.');
   define('TEXT_CONDITIONS_CONFIRM', 'I have read and agreed to the terms and conditions bound to this order.');
 
   define('TABLE_HEADING_PAYMENT_METHOD', 'Payment Method');
@@ -115,7 +115,7 @@
   define('TEXT_SUCCESS', 'Your order has been successfully processed! Your products will arrive at their destination within 2-5 working days.');
   define('TEXT_NOTIFY_PRODUCTS', 'Please notify me of updates to the products I have selected below:');
   define('TEXT_SEE_ORDERS', 'You can view your order history by going to the <a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">\'My Account\'</a> page and by clicking on <a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">\'History\'</a>.');
-  define('TEXT_CONTACT_STORE_OWNER', 'Please direct any questions you have to the <a href="' . tep_href_link(FILENAME_CONTACT_US) . '">store owner</a>.');
+  define('TEXT_CONTACT_STORE_OWNER', 'Please direct any questions you have to the <a href="' . tep_href_link(FILENAME_INFO, 'contact') . '">store owner</a>.');
   define('TEXT_THANKS_FOR_SHOPPING', 'Thanks for shopping with us online!');
 
   define('TABLE_HEADING_DOWNLOAD_DATE', 'Expiry date: ');

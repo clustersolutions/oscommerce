@@ -21,7 +21,7 @@
       $this->title = MODULE_SHIPPING_UPS_TEXT_TITLE;
       $this->description = MODULE_SHIPPING_UPS_TEXT_DESCRIPTION;
       $this->sort_order = MODULE_SHIPPING_UPS_SORT_ORDER;
-      $this->icon = DIR_WS_ICONS . 'shipping_ups.gif';
+      $this->icon = DIR_WS_IMAGES . 'icons/shipping_ups.gif';
       $this->tax_class = MODULE_SHIPPING_UPS_TAX_CLASS;
       $this->enabled = ((MODULE_SHIPPING_UPS_STATUS == 'True') ? true : false);
 
@@ -118,7 +118,7 @@
         }
       } else {
         $this->quotes = array('module' => $this->title,
-                              'error' => 'An error occured with the UPS shipping calculations.<br>' . $upsQuote . '<br>If you prefer to use UPS as your shipping method, please contact the store owner.');
+                              'error' => 'An error occured with the UPS shipping calculations.<br />' . $upsQuote . '<br />If you prefer to use UPS as your shipping method, please contact the store owner.');
       }
 
       if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->title);

@@ -13,7 +13,7 @@
 ////
 // The HTML href link wrapper function
   function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
-    global $request_type, $osC_Session, $SID, $osC_Services;
+    global $request_type, $osC_Session, $osC_Services;
 
     if ($connection == 'AUTO') {
       if ( ($request_type == 'SSL') && (ENABLE_SSL === true) ) {
@@ -53,12 +53,12 @@
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
-    if ( ($add_session_id === true) && ($osC_Session->is_started === true) && (SERVICE_SESSION_FORCE_COOKIE_USAGE == 'False') ) {
-      if (!empty($SID)) {
-        $_sid = $SID;
+    if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == 'False') ) {
+      if (osc_empty(SID) === false) {
+        $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
-          $_sid = $osC_Session->name . '=' . $osC_Session->id;
+          $_sid = $osC_Session->getName() . '=' . $osC_Session->getID();
         }
       }
     }
@@ -116,7 +116,7 @@
 
     if (tep_not_null($parameters)) $image .= ' ' . $parameters;
 
-    $image .= '>';
+    $image .= ' />';
 
     return $image;
   }
@@ -125,15 +125,13 @@
 // The HTML form submit button wrapper function
 // Outputs a button in the selected language
   function tep_image_submit($image, $alt = '', $parameters = '') {
-    global $osC_Session;
-
-    $image_submit = '<input type="image" src="' . tep_output_string(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
+    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $_SESSION['language'] . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
 
     if (tep_not_null($alt)) $image_submit .= ' title=" ' . tep_output_string($alt) . ' "';
 
     if (tep_not_null($parameters)) $image_submit .= ' ' . $parameters;
 
-    $image_submit .= '>';
+    $image_submit .= ' />';
 
     return $image_submit;
   }
@@ -141,9 +139,7 @@
 ////
 // Output a function button in the selected language
   function tep_image_button($image, $alt = '', $parameters = '') {
-    global $osC_Session;
-
-    return tep_image(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/images/buttons/' . $image, $alt, '', '', $parameters);
+    return tep_image('includes/languages/' . $_SESSION['language'] . '/images/buttons/' . $image, $alt, '', '', $parameters);
   }
 
 ////
@@ -165,10 +161,6 @@
   }
 
   function osc_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     $field_value = $value;
 
     $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
@@ -189,7 +181,7 @@
       $field .= ' ' . $parameters;
     }
 
-    $field .= '>';
+    $field .= ' />';
 
     if ($required === true) {
       $field .= '&nbsp;<span class="inputRequirement">*</span>';
@@ -203,10 +195,6 @@
   }
 
   function osc_draw_selection_field($name, $type, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if (!is_array($values)) {
       $values = array($values);
     }
@@ -235,14 +223,14 @@
       }
 
       if ((is_bool($default) && $default === true) || (!empty($default) && ($default == $selection_value))) {
-        $field .= ' CHECKED';
+        $field .= '  checked="checked"';
       }
 
       if (!empty($parameters)) {
         $field .= ' ' . $parameters;
       }
 
-      $field .= '>' . $selection_text . $separator;
+      $field .= ' />' . $selection_text . $separator;
     }
 
     $field = substr($field, 0, strlen($field)-strlen($separator));
@@ -263,10 +251,6 @@
   }
 
   function osc_draw_textarea_field($name, $value = '', $width = '60', $height = '5', $wrap = 'soft', $parameters = '', $reinsert_value = true, $required = false) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if ($reinsert_value === true) {
       if (isset($_GET[$name])) {
         $value = $_GET[$name];
@@ -291,10 +275,6 @@
   }
 
   function osc_draw_hidden_field($name, $value = '', $parameters = '') {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     if (empty($value)) {
       if (isset($_GET[$name])) {
         $value = $_GET[$name];
@@ -313,7 +293,7 @@
       $field .= ' ' . $parameters;
     }
 
-    $field .= '>';
+    $field .= ' />';
 
     return $field;
   }
@@ -321,18 +301,14 @@
 ////
 // Hide form elements
   function tep_hide_session_id() {
-    global $osC_Session, $SID;
+    global $osC_Session;
 
-    if (($osC_Session->is_started == true) && tep_not_null($SID)) {
-      return osc_draw_hidden_field($osC_Session->name, $osC_Session->id);
+    if ($osC_Session->hasStarted() && (osc_empty(SID) === false)) {
+      return osc_draw_hidden_field($osC_Session->getName(), $osC_Session->getID());
     }
   }
 
   function osc_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
-    if (PHP_VERSION < 4.1) {
-      global $_GET, $_POST;
-    }
-
     $field = '<select name="' . tep_output_string($name) . '"';
 
     if (!empty($parameters)) $field .= ' ' . $parameters;
@@ -351,7 +327,7 @@
       $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
 
       if ($default_value == $values[$i]['id']) {
-        $field .= ' SELECTED';
+        $field .= ' selected="selected"';
       }
 
       $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
@@ -373,7 +349,7 @@
     $days_select_string = '';
 
     if ($show_days === true) {
-      $params = 'onChange="updateDatePullDownMenu(this.form, \'' . $name . '\');"';
+      $params = 'onchange="updateDatePullDownMenu(this.form, \'' . $name . '\');"';
 
       $days_in_month = ($default_today === true) ? date('t') : 31;
 

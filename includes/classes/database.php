@@ -13,9 +13,10 @@
   class osC_Database {
     var $is_connected = false,
         $link,
-        $error_number,
-        $error = false,
         $error_reporting = true,
+        $error = false,
+        $error_number,
+        $error_query,
         $server,
         $username,
         $password,
@@ -31,10 +32,9 @@
       require('database/' . $type . '.php');
 
       $class = 'osC_Database_' . $type;
+      $object = new $class($server, $username, $password);
 
-      $database_object =& new $class($server, $username, $password);
-
-      return $database_object;
+      return $object;
     }
 
     function setConnected($boolean) {
@@ -60,12 +60,13 @@
       return $osC_Database_Result;
     }
 
-    function setError($error, $error_number = '') {
+    function setError($error, $error_number = '', $query = '') {
       global $messageStack;
 
       if ($this->error_reporting === true) {
         $this->error = $error;
         $this->error_number = $error_number;
+        $this->error_query = $query;
 
         if (isset($messageStack)) {
           $messageStack->add('debug', $this->getError());
@@ -90,6 +91,10 @@
         }
 
         $error .= $this->error;
+
+        if (!empty($this->error_query)) {
+          $error .= '; ' . htmlentities($this->error_query);
+        }
 
         return $error;
       } else {
@@ -189,7 +194,7 @@
                 }
               }
 
-              $sql_queries[] = $sql_query;
+              $sql_queries[] = trim($sql_query);
 
               $import_queries = ltrim(substr($import_queries, $i+1));
               $sql_length = strlen($import_queries);
@@ -200,6 +205,10 @@
 
         for ($i=0, $n=sizeof($sql_queries); $i<$n; $i++) {
           $this->simpleQuery($sql_queries[$i]);
+
+          if ($this->isError()) {
+            break;
+          }
         }
       }
 
@@ -353,6 +362,9 @@
         case 'int':
           $value = intval($value);
           break;
+        case 'float':
+          $value = floatval($value);
+          break;
         case 'raw':
           break;
         case 'string':
@@ -390,6 +402,10 @@
 
     function bindInt($place_holder, $value) {
       $this->bindValueMixed($place_holder, $value, 'int');
+    }
+
+    function bindFloat($place_holder, $value) {
+      $this->bindValueMixed($place_holder, $value, 'float');
     }
 
     function bindRaw($place_holder, $value) {
@@ -477,7 +493,7 @@
         $this->query_handler = $this->db_class->simpleQuery($this->sql_query, $this->debug);
 
         if ($this->batch_query === true) {
-          $this->batchSize();
+          $this->getBatchSize();
 
           $this->batch_to = ($this->batch_rows * $this->batch_number);
           if ($this->batch_to > $this->batch_size) {
@@ -517,6 +533,45 @@
       return $this->result;
     }
 
+    function prepareSearch($keywords, $columns, $embedded = false) {
+      if ($embedded === true) {
+        $this->sql_query .= ' and ';
+      }
+
+      $keywords_array = explode(' ', $keywords);
+
+      if ($this->db_class->use_fulltext === true) {
+        if ($this->db_class->use_fulltext_boolean === true) {
+          $keywords = '';
+
+          foreach ($keywords_array as $keyword) {
+            if ((substr($keyword, 0, 1) != '-') && (substr($keyword, 0, 1) != '+')) {
+              $keywords .= '+';
+            }
+
+            $keywords .= $keyword . ' ';
+          }
+
+          $keywords = substr($keywords, 0, -1);
+        }
+
+        $this->sql_query .= $this->db_class->prepareSearch($columns);
+        $this->bindValue(':keywords', $keywords);
+      } else {
+        foreach ($keywords_array as $keyword) {
+          $this->sql_query .= $this->db_class->prepareSearch($columns);
+
+          foreach ($columns as $column) {
+            $this->bindValue(':keyword', '%' . $keyword . '%');
+          }
+
+          $this->sql_query .= ' and ';
+        }
+
+        $this->sql_query = substr($this->sql_query, 0, -5);
+      }
+    }
+
     function setBatchLimit($batch_number = 1, $maximum_rows = 20, $select_field = '') {
       $this->batch_query = true;
       $this->batch_number = (is_numeric($batch_number) ? $batch_number : 1);
@@ -529,13 +584,11 @@
 
     }
 
-    function batchSize() {
+    function getBatchSize() {
       global $osC_Database;
 
       if (!isset($this->batch_size)) {
-
-
-        $this->batch_size = $this->db_class->batchSize($this->sql_query, $this->batch_select_field);
+        $this->batch_size = $this->db_class->getBatchSize($this->sql_query, $this->batch_select_field);
       }
 
       return $this->batch_size;
@@ -546,10 +599,6 @@
     }
 
     function displayBatchLinksPullDown($batch_keyword = 'page', $parameters = '') {
-      if (PHP_VERSION < 4.1) {
-        global $_GET, $_SERVER;
-      }
-
       $number_of_pages = ceil($this->batch_size / $this->batch_rows);
 
       if ($number_of_pages > 1) {
@@ -561,18 +610,18 @@
         $get_parameter = '';
         $hidden_parameter = '';
         if (!empty($parameters)) {
-          $parameters = explode('&', $parameters);
+          $parameters = explode('&amp;', $parameters);
           foreach ($parameters as $parameter) {
             list($key, $value) = explode('=', $parameter);
 
             if ($key != $batch_keyword) {
-              $get_parameter .= $key . '=' . $value . '&';
+              $get_parameter .= $key . '=' . $value . '&amp;';
               $hidden_parameter .= osc_draw_hidden_field($key, $value);
             }
           }
         }
 
-        $display_links = tep_draw_form($batch_keyword, basename($_SERVER['PHP_SELF']), '', 'get');
+        $display_links = tep_draw_form($batch_keyword, basename($_SERVER['PHP_SELF']), 'get');
 
         if ($this->batch_number > 1) {
           $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_PREV . '</a>';
@@ -580,7 +629,7 @@
           $display_links .= PREVNEXT_BUTTON_PREV;
         }
 
-        $display_links .= '&nbsp;&nbsp;' . sprintf(TEXT_RESULT_PAGE, osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onChange="this.form.submit();"'), $number_of_pages) . '&nbsp;&nbsp;';
+        $display_links .= '&nbsp;&nbsp;' . sprintf(TEXT_RESULT_PAGE, osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onchange="this.form.submit();"'), $number_of_pages) . '&nbsp;&nbsp;';
 
         if (($this->batch_number < $number_of_pages) && ($number_of_pages != 1)) {
           $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)) . '" class="splitPageLink">' . PREVNEXT_BUTTON_NEXT . '</a>';

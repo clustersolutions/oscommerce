@@ -12,7 +12,9 @@
 
   class osC_Services {
     var $services,
-        $started_services;
+        $started_services,
+        $call_before_page_content = array(),
+        $call_after_page_content = array();
 
     function osC_Services() {
       $this->services = explode(';', MODULE_SERVICES_INSTALLED);
@@ -44,7 +46,7 @@
     }
 
     function startService($service) {
-      include('includes/modules/services/' . $service . '.php');
+      include('includes/services/' . $service . '.php');
 
       if (@call_user_func(array('osC_Services_' . $service, 'start'))) {
         $this->started_services[] = $service;
@@ -58,6 +60,30 @@
 
     function isStarted($service) {
       return in_array($service, $this->started_services);
+    }
+
+    function addCallBeforePageContent($object, $method) {
+      $this->call_before_page_content[] = array($object, $method);
+    }
+
+    function addCallAfterPageContent($object, $method) {
+      $this->call_after_page_content[] = array($object, $method);
+    }
+
+    function hasBeforePageContentCalls() {
+      return !empty($this->call_before_page_content);
+    }
+
+    function hasAfterPageContentCalls() {
+      return !empty($this->call_after_page_content);
+    }
+
+    function getCallBeforePageContent() {
+      return $this->call_before_page_content;
+    }
+
+    function getCallAfterPageContent() {
+      return $this->call_after_page_content;
     }
   }
 ?>

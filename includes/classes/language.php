@@ -22,7 +22,7 @@
 /* Class constructor */
 
     function osC_Language() {
-      global $osC_Database, $osC_Session;
+      global $osC_Database;
 
       $Qlanguages = $osC_Database->query('select * from :table_languages order by sort_order, name');
       $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
@@ -39,7 +39,7 @@
 
       $Qlanguages->freeResult();
 
-      if ($osC_Session->exists('language')) {
+      if (isset($_SESSION['language'])) {
         $this->set();
       } else {
         $this->setToBrowser();
@@ -49,15 +49,9 @@
 /* Public methods */
 
     function set($lang = '') {
-      if (PHP_VERSION < 4.1) {
-        global $_COOKIE;
-      }
-
-      global $osC_Session;
-
-      if (empty($lang) && $osC_Session->exists('language')) {
+      if (empty($lang) && isset($_SESSION['language'])) {
         foreach ($this->_languages as $l) {
-          if ($l['directory'] == $osC_Session->value('language')) {
+          if ($l['directory'] == $_SESSION['language']) {
             $lang = $l['code'];
             break;
           }
@@ -74,17 +68,13 @@
         tep_setcookie('language', $this->language['code'], time()+60*60*24*90);
       }
 
-      if (($osC_Session->exists('language') === false) || ($osC_Session->exists('language') && ($osC_Session->value('language') != $this->language['directory']))) {
-        $osC_Session->set('language', $this->language['directory']);
-        $osC_Session->set('languages_id', $this->language['id']);
+      if ((isset($_SESSION['language']) === false) || (isset($_SESSION['language']) && ($_SESSION['language'] != $this->language['directory']))) {
+        $_SESSION['language'] = $this->language['directory'];
+        $_SESSION['languages_id'] = $this->language['id'];
       }
     }
 
     function setToBrowser() {
-      if (PHP_VERSION < 4.1) {
-        global $_COOKIE, $_SERVER;
-      }
-
       if (isset($_COOKIE['language'])) {
         if ($this->exists($_COOKIE['language'])) {
           $this->set($_COOKIE['language']);

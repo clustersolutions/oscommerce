@@ -11,6 +11,7 @@
 */
 
   define('NAVBAR_TITLE_LOGIN', 'Anmelden');
+  define('NAVBAR_TITLE_LOGOFF', 'Abmeldung');
   define('NAVBAR_TITLE_MY_ACCOUNT', 'Ihr Konto');
   define('NAVBAR_TITLE_EDIT_ACCOUNT', 'Ihre pers&ouml;nliche Daten &auml;ndern');
   define('NAVBAR_TITLE_EDIT_PASSWORD', 'Ihre Passwort &auml;ndern');
@@ -22,8 +23,11 @@
   define('NAVBAR_TITLE_ADDRESS_BOOK_ADD_ENTRY', 'Neuer Eintrag');
   define('NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Eintrag &auml;ndern');
   define('NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Eintrag L&ouml;schen');
+  define('NAVBAR_TITLE_CREATE', 'Konto erstellen');
+  define('NAVBAR_TITLE_PASSWORD_FORGOTTEN', 'Passwort vergessen');
 
   define('HEADING_TITLE_LOGIN', 'Wilkommen, Bitte Melden Sie sich an');
+  define('HEADING_TITLE_LOGOFF', 'Abmeldung');
   define('HEADING_TITLE_ACCOUNT', 'Ihre pers&ouml;nlichen Daten');
   define('HEADING_TITLE_ACCOUNT_EDIT', 'Ihre pers&ouml;nlichen Daten &auml;ndern');
   define('HEADING_TITLE_ACCOUNT_PASSWORD', 'Ihre Passwort &auml;ndern');
@@ -35,6 +39,9 @@
   define('HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY', 'Neuer Adressbuch Eintrag');
   define('HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY', 'Adressbuch Eintrag &auml;ndern');
   define('HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY', 'Adressbuch Eintrag l&ouml;schen');
+  define('HEADING_TITLE_CREATE', 'Konto erstellen');
+  define('HEADING_TITLE_CREATE_SUCCESS', 'Ihr Konto wurde mit Erfolg er&ouml;ffnet!');
+ define('HEADING_TITLE_PASSWORD_FORGOTTEN', 'Passwort vergessen');
 
   define('HEADING_LOGIN_NEW_CUSTOMER', 'Neuer Kunde');
   define('TEXT_LOGIN_NEW_CUSTOMER', 'Ich bin ein neuer Kunde.');
@@ -47,6 +54,8 @@
 
   define('TEXT_LOGIN_ERROR', 'Fehler: Keine &Uuml;bereinstimmung der eingebenen eMail-Adresse und/oder dem Passwort.');
   define('TEXT_LOGIN_VISITORS_CART', '<font color="#ff0000"><b>Achtung:</b></font> Ihre Besuchereingaben werden automatisch mit Ihrem Kundenkonto verbunden. <a href="javascript:%s;">[Mehr Information]</a>');
+
+  define('TEXT_LOGOFF', 'Sie wurden soeben sicher abgemeldet, so dass niemand mehr Ihre Daten einsehen kann.<br /><br />Ihr Warenkorb wurde zwischengespeichert und steht Ihnen nach der n&auml;chsten Anmeldung wieder zur Verf&uuml;gung.');
 
   define('MY_ACCOUNT_TITLE', 'Ihr Konto');
   define('MY_ACCOUNT_INFORMATION', 'Meine Kontoinformationen anzeigen oder &auml;ndern');
@@ -101,17 +110,17 @@
   define('MY_NEWSLETTERS_GENERAL_NEWSLETTER_DESCRIPTION', 'Beinhaltet allgemeine Nachrichten &uuml;nseren Shop, Informationen &uuml;ber neue Produkte, Sonderangebote und andere Informationen von allgemeinem Interesse.');
 
   define('MY_NOTIFICATIONS_TITLE', 'Meine Produktbenachrichtigungen');
-  define('MY_NOTIFICATIONS_DESCRIPTION', 'Diese Benachrichtigungen erlabuben es Ihnen, &uuml;ber alle &Auml;nderungen an einem Produkt informiert zu werden.<br><br>Wenn Sie Benachrichtigungen f&uuml; unser komplettes Angebot erhalten wollen, sollte Sie die allgemeinen Benachrichtigungen aktivieren.');
+  define('MY_NOTIFICATIONS_DESCRIPTION', 'Diese Benachrichtigungen erlabuben es Ihnen, &uuml;ber alle &Auml;nderungen an einem Produkt informiert zu werden.<br /><br />Wenn Sie Benachrichtigungen f&uuml; unser komplettes Angebot erhalten wollen, sollte Sie die allgemeinen Benachrichtigungen aktivieren.');
 
   define('GLOBAL_NOTIFICATIONS_TITLE', 'Allgemeine Benachrichtungen');
   define('GLOBAL_NOTIFICATIONS_DESCRIPTION', '&Uuml;ber alle &Auml;nderungen informiert werden.');
 
   define('NOTIFICATIONS_TITLE', 'Produktspezifische Benachrichtungen.');
   define('NOTIFICATIONS_DESCRIPTION', 'Um eine aktivierte Benachrichtigung zu entfernen, einfach die Checkbox deaktivieren und auf den <b>Weiter<b>-Button klicken.');
-  define('NOTIFICATIONS_NON_EXISTING', 'Sie haben momentan keine Prouktbenachrichtigungen aktiviert.<br><br>Wenn Sie Produktbenachrichtigungen aktivieren wollen, k&ouml;nnen Sie dies direkt auf der Produktseite aktivieren.');
+  define('NOTIFICATIONS_NON_EXISTING', 'Sie haben momentan keine Prouktbenachrichtigungen aktiviert.<br /><br />Wenn Sie Produktbenachrichtigungen aktivieren wollen, k&ouml;nnen Sie dies direkt auf der Produktseite aktivieren.');
 
   define('PRIMARY_ADDRESS_TITLE', 'Standardadresse');
-  define('PRIMARY_ADDRESS_DESCRIPTION', 'Diese Adresse wird automatisch als Liefer- und Rechnungsadresse gew&auml;hlt wenn Sie eine Bestellung aufgeben.<br><br>Diese Adresse wird auch als Basis f&uuml;r die Berechnung eventueller Steuern udn Versandkosten verwendet.');
+  define('PRIMARY_ADDRESS_DESCRIPTION', 'Diese Adresse wird automatisch als Liefer- und Rechnungsadresse gew&auml;hlt wenn Sie eine Bestellung aufgeben.<br /><br />Diese Adresse wird auch als Basis f&uuml;r die Berechnung eventueller Steuern udn Versandkosten verwendet.');
   define('ADDRESS_BOOK_TITLE', 'Adressbucheintr&auml;ge');
   define('PRIMARY_ADDRESS', '(Standardadresse)');
   define('TEXT_MAXIMUM_ENTRIES', '<font color="#ff0000"><b>Hinweis:</b></font> Ihnen stehen %s Adressbucheintr&auml;ge zur Verf&uuml;gung!');
@@ -124,16 +133,41 @@
   define('SELECTED_ADDRESS', 'Standardadresse');
   define('SET_AS_PRIMARY', 'Als Standardadresse gesetzt.');
 
+  define('TEXT_CREATE_ORIGIN_LOGIN', '<font color="#FF0000"><small><b>ACHTUNG:</b></font></small> Wenn Sie bereits ein Konto besitzen, so melden Sie sich bitte <a href="%s"><u><b>hier</b></u></a> an.');
+
+  define('HEADING_PRIVACY_CONDITIONS', 'Privacy Statement');
+  define('TEXT_PRIVACY_CONDITIONS_DESCRIPTION', 'Please acknowledge you agree with our privacy statement by ticking the following box. The privacy statement can be read <a href="' . tep_href_link(FILENAME_INFO, 'privacy', 'SSL') . '"><u>here</u></a>.');
+  define('TEXT_PRIVACY_CONDITIONS_CONFIRM', 'I have read and agreed to your privacy statement.');
+
+  define('EMAIL_SUBJECT', 'Willkommen zu ' . STORE_NAME);
+  define('EMAIL_GREET_MR', 'Sehr geehrter Herr %s,' . "\n\n");
+  define('EMAIL_GREET_MS', 'Sehr geehrte Frau %s,' . "\n\n");
+  define('EMAIL_GREET_NONE', 'Sehr geehrte %s,' . "\n\n");
+  define('EMAIL_WELCOME', 'willkommen zu <b>' . STORE_NAME . '</b>.' . "\n\n");
+  define('EMAIL_TEXT', 'Sie können jetzt unseren <b>Online-Service</b> nutzen. Der Service bietet unter anderem:' . "\n\n" . '<li><b>Kundenwarenkorb</b> - Jeder Artikel bleibt registriert bis Sie zur Kasse gehen, oder die Produkte aus dem Warenkorb entfernen.' . "\n" . '<li><b>Adressbuch</b> - Wir können jetzt die Produkte zu der von Ihnen ausgesuchten Adresse senden. Der perfekte Weg ein Geburtstagsgeschenk zu versenden.' . "\n" . '<li><b>Vorherige Bestellungen</b> - Sie können jederzeit Ihre vorherigen Bestellungen überprüfen.' . "\n" . '<li><b>Meinungen über Produkte</b> - Teilen Sie Ihre Meinung zu unseren Produkten mit anderen Kunden.' . "\n\n");
+  define('EMAIL_CONTACT', 'Falls Sie Fragen zu unserem Kunden-Service haben, wenden Sie sich bitte an den Vertrieb: ' . STORE_OWNER_EMAIL_ADDRESS . '.' . "\n\n");
+  define('EMAIL_WARNING', '<b>Achtung:</b> Diese eMail-Adresse wurde uns von einem Kunden bekannt gegeben. Falls Sie sich nicht angemeldet haben, senden Sie bitte eine eMail an ' . STORE_OWNER_EMAIL_ADDRESS . '.' . "\n");
+
+  define('HEADING_PASSWORD_FORGOTTEN', 'Passwort vergessen');
+
+  define('TEXT_PASSWORD_FORGOTTEN', 'Sollten Sie Ihr Passwort nicht mehr wissen, geben Sie bitte unten Ihre eMail-Adresse ein um umgehend ein neues Passwort per eMail zu erhalten.');
+
+  define('EMAIL_PASSWORD_REMINDER_SUBJECT', STORE_NAME . ' - Ihr neues Passwort.');
+  define('EMAIL_PASSWORD_REMINDER_BODY', 'Über die Adresse ' . getenv('REMOTE_ADDR') . ' haben wir eine Anfrage zur Passworterneuerung erhalten.' . "\n\n" . 'Ihr neues Passwort für \'' . STORE_NAME . '\' lautet ab sofort:' . "\n\n" . '   %s' . "\n\n");
+
+  define('SUCCESS_ACCOUNT_CREATED', 'Herzlichen Gl&uuml;ckwunsch! Ihr neues Konto wurde erfolgreich er&ouml;ffnet! Sie k&ouml;nnen jetzt &uuml;ber Ihr Kundenkonto unseren \'Online-Service\' effizienter nutzen. Wenn Sie Fragen zum diesem Online-Shop haben, wenden Sie sich bitte an den <a href="' . tep_href_link(FILENAME_INFO, 'contact') . '"><u>Vertrieb</u></a>.<br /><br />Eine Best&auml;tigung &uuml;ber Ihr neues Konto wird Ihnen zugesandt. Falls Sie diese eMail nicht innerhalb einer Stunde erhalten, wenden Sie sich bitte an den <a href="' . tep_href_link(FILENAME_INFO, 'contact') . '"><u>Vertrieb</u></a>.');
   define('SUCCESS_ACCOUNT_UPDATED', 'Ihre Daten wurden erfolgreich aktualisiert!');
   define('SUCCESS_PASSWORD_UPDATED', 'Ihr Passwort wurde erfolgreich ge&auml;ndert!');
   define('SUCCESS_NEWSLETTER_UPDATED', 'Ihre Newsletter Abonnements wurden erfolgreich aktualisiert!');
   define('SUCCESS_NOTIFICATIONS_UPDATED', 'Ihre Produktbenachrichtigungen wurden erfolgreich aktualisiert!');
   define('SUCCESS_ADDRESS_BOOK_ENTRY_DELETED', 'Der ausgew&auml;hlte Eintrag wurde erflogreich gel&ouml;scht.');
   define('SUCCESS_ADDRESS_BOOK_ENTRY_UPDATED', 'Ihr Adressbuch wurde erfolgreich aktualisiert!');
+  define('SUCCESS_PASSWORD_FORGOTTEN_SENT', 'Success: Ein neues Passwort wurde per eMail verschickt.');
 
   define('WARNING_PRIMARY_ADDRESS_DELETION', 'Die Standardadresse kann nicht gel&ouml;scht werden. Bitte erst eine andere Standardadresse w&auml;hlen. Danach kann der Eintrag gel&ouml;scht werden.');
 
   define('ERROR_CURRENT_PASSWORD_NOT_MATCHING', 'Das eingegebene Passwort stimmt nicht mit dem gespeichertem Passwort &uuml;berein. Bitte probieren Sie es noch einmal.');
   define('ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY', 'Dieser Adressbucheintrag ist nicht vorhanden.');
   define('ERROR_ADDRESS_BOOK_FULL', 'Ihr Adressbuch kann keine weiteren Adressen aufnehmen. Bitte l&ouml;schen Sie eine nicht mehr ben&ouml;tigte Adresse. Danach k&ouml;nnen Sie einen neuen Eintrag speichern.');
+  define('ERROR_PASSWORD_FORGOTTEN_NO_EMAIL_ADDRESS_FOUND', 'Fehler: Die eingegebene eMail-Adresse ist nicht registriert. Bitte versuchen Sie es noch einmal.');
 ?>

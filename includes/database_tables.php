@@ -11,6 +11,7 @@
 */
 
 // define the database table names used in the project
+  define('TABLE_ADMINISTRATORS', DB_TABLE_PREFIX . 'administrators');
   define('TABLE_ADDRESS_BOOK', DB_TABLE_PREFIX . 'address_book');
   define('TABLE_ADDRESS_FORMAT', DB_TABLE_PREFIX . 'address_format');
   define('TABLE_BANNERS', DB_TABLE_PREFIX . 'banners');
@@ -55,6 +56,9 @@
   define('TABLE_SPECIALS', DB_TABLE_PREFIX . 'specials');
   define('TABLE_TAX_CLASS', DB_TABLE_PREFIX . 'tax_class');
   define('TABLE_TAX_RATES', DB_TABLE_PREFIX . 'tax_rates');
+  define('TABLE_TEMPLATES', DB_TABLE_PREFIX . 'templates');
+  define('TABLE_TEMPLATES_BOXES', DB_TABLE_PREFIX . 'templates_boxes');
+  define('TABLE_TEMPLATES_BOXES_TO_PAGES', DB_TABLE_PREFIX . 'templates_boxes_to_pages');
   define('TABLE_WEIGHT_CLASS', DB_TABLE_PREFIX . 'weight_classes');
   define('TABLE_WEIGHT_CLASS_RULES', DB_TABLE_PREFIX . 'weight_classes_rules');
   define('TABLE_WHOS_ONLINE', DB_TABLE_PREFIX . 'whos_online');

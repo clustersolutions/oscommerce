@@ -30,7 +30,7 @@ define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
 
 // Global entries for the <html> tag
-define('HTML_PARAMS','dir="LTR" lang="es"');
+define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="es" lang="es"');
 
 // charset for web pages and emails
 define('CHARSET', 'iso-8859-1');
@@ -92,7 +92,7 @@ define('BOX_HEADING_CUSTOMER_ORDERS', 'Mis Pedidos');
 
 // best_sellers box text in includes/boxes/best_sellers.php
 define('BOX_HEADING_BESTSELLERS', 'Los Mas Vendidos');
-define('BOX_HEADING_BESTSELLERS_IN', 'Los Mas Vendidos en <br>&nbsp;&nbsp;');
+define('BOX_HEADING_BESTSELLERS_IN', 'Los Mas Vendidos en <br />&nbsp;&nbsp;');
 
 // notifications box text in includes/boxes/products_notifications.php
 define('BOX_HEADING_NOTIFICATIONS', 'Notificaciones');
@@ -280,30 +280,14 @@ define('TEXT_REQUIRED', '<span class="errorText">Obligatorio</span>');
 define('ERROR_TEP_MAIL', '<font face="Verdana, Arial" size="2" color="#ff0000"><b><small>TEP ERROR:</small> No he podido enviar el email con el servidor SMTP especificado. Configura tu servidor SMTP en la secci&oacute;n adecuada del fichero php.ini.</b></font>');
 define('WARNING_INSTALL_DIRECTORY_EXISTS', 'Advertencia: El directorio de instalaci&oacute;n existe en: ' . dirname($_SERVER['SCRIPT_FILENAME']) . '/install. Por razones de seguridad, elimine este directorio completamente.');
 define('WARNING_CONFIG_FILE_WRITEABLE', 'Advertencia: Puedo escribir en el fichero de configuraci&oacute;n: ' . dirname($_SERVER['SCRIPT_FILENAME']) . '/includes/configure.php. En determinadas circunstancias esto puede suponer un riesgo - por favor corriga los permisos de este fichero.');
-define('WARNING_SESSION_DIRECTORY_NON_EXISTENT', 'Advertencia: El directorio para guardar datos de sesi&oacute;n no existe: ' . $osC_Session->save_path . '. Las sesiones no funcionar&aacute;n hasta que no se corriga este error.');
-define('WARNING_SESSION_DIRECTORY_NOT_WRITEABLE', 'Avertencia: No puedo escribir en el directorio para datos de sesi&oacute;n: ' . $osC_Session->save_path . '. Las sesiones no funcionar&aacute;n hasta que no se corriga este error.');
+define('WARNING_SESSION_DIRECTORY_NON_EXISTENT', 'Advertencia: El directorio para guardar datos de sesi&oacute;n no existe: ' . $osC_Session->getSavePath() . '. Las sesiones no funcionar&aacute;n hasta que no se corriga este error.');
+define('WARNING_SESSION_DIRECTORY_NOT_WRITEABLE', 'Avertencia: No puedo escribir en el directorio para datos de sesi&oacute;n: ' . $osC_Session->getSavePath() . '. Las sesiones no funcionar&aacute;n hasta que no se corriga este error.');
 define('WARNING_SESSION_AUTO_START', 'Advertencia: session.auto_start esta activado - desactive esta caracteristica en el fichero php.ini and reinicie el servidor web.');
 define('WARNING_DOWNLOAD_DIRECTORY_NON_EXISTENT', 'Advertencia: El directorio para productos descargables no existe: ' . DIR_FS_DOWNLOAD . '. Los productos descargables no funcionar&aacute;n hasta que no se corriga este error.');
 
-define('TEXT_CCVAL_ERROR_INVALID_DATE', 'La fecha de caducidad de la tarjeta de cr&eacute;dito es incorrecta.<br>Compruebe la fecha e int&eacute;ntelo de nuevo.');
-define('TEXT_CCVAL_ERROR_INVALID_NUMBER', 'El n&uacute;mero de la tarjeta de cr&eacute;dito es incorrecto.<br>Compruebe el numero e int&eacute;ntelo de nuevo.');
-define('TEXT_CCVAL_ERROR_UNKNOWN_CARD', 'Los primeros cuatro digitos de su tarjeta son: %s<br>Si este n&uacute;mero es correcto, no aceptamos este tipo de tarjetas.<br>Si es incorrecto, int&eacute;ntelo de nuevo.');
+define('TEXT_CCVAL_ERROR_INVALID_DATE', 'La fecha de caducidad de la tarjeta de cr&eacute;dito es incorrecta.<br />Compruebe la fecha e int&eacute;ntelo de nuevo.');
+define('TEXT_CCVAL_ERROR_INVALID_NUMBER', 'El n&uacute;mero de la tarjeta de cr&eacute;dito es incorrecto.<br />Compruebe el numero e int&eacute;ntelo de nuevo.');
+define('TEXT_CCVAL_ERROR_UNKNOWN_CARD', 'Los primeros cuatro digitos de su tarjeta son: %s<br />Si este n&uacute;mero es correcto, no aceptamos este tipo de tarjetas.<br />Si es incorrecto, int&eacute;ntelo de nuevo.');
 
-/*
-  The following copyright announcement can only be
-  appropriately modified or removed if the layout of
-  the site theme has been modified to distinguish
-  itself from the default osCommerce-copyrighted
-  theme.
-
-  For more information please read the following
-  Frequently Asked Questions entry on the osCommerce
-  support site:
-
-  http://www.oscommerce.com/community.php/faq,26/q,50
-
-  Please leave this comment intact together with the
-  following copyright announcement.
-*/
-define('FOOTER_TEXT_BODY', 'Copyright &copy; 2003 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a><br>Powered by <a href="http://www.oscommerce.com" target="_blank">osCommerce</a>');
+define('FOOTER_TEXT_BODY', 'Copyright &copy; ' . date('Y') . ' <a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . STORE_NAME . '</a><br />Powered by <a href="http://www.oscommerce.com" target="_blank">osCommerce</a>');
 ?>

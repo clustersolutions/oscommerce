@@ -10,13 +10,23 @@
   Released under the GNU General Public License
 */
 
-  if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
-    $_GET['page'] = 1;
-  }
+// create column list
+  $define_list = array('PRODUCT_LIST_MODEL' => PRODUCT_LIST_MODEL,
+                       'PRODUCT_LIST_NAME' => PRODUCT_LIST_NAME,
+                       'PRODUCT_LIST_MANUFACTURER' => PRODUCT_LIST_MANUFACTURER,
+                       'PRODUCT_LIST_PRICE' => PRODUCT_LIST_PRICE,
+                       'PRODUCT_LIST_QUANTITY' => PRODUCT_LIST_QUANTITY,
+                       'PRODUCT_LIST_WEIGHT' => PRODUCT_LIST_WEIGHT,
+                       'PRODUCT_LIST_IMAGE' => PRODUCT_LIST_IMAGE,
+                       'PRODUCT_LIST_BUY_NOW' => PRODUCT_LIST_BUY_NOW);
 
-  $Qlisting = $osC_Database->query($listing_sql);
-  $Qlisting->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, 'p.products_id');
-  $Qlisting->execute();
+  asort($define_list);
+
+  $column_list = array();
+  reset($define_list);
+  while (list($key, $value) = each($define_list)) {
+    if ($value > 0) $column_list[] = $key;
+  }
 
   if ( ($Qlisting->numberOfRows() > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
 ?>
@@ -28,65 +38,71 @@
 </table>
 <?php
   }
-
-  $list_box_contents = array();
-
-  for ($col=0, $n=sizeof($column_list); $col<$n; $col++) {
-    switch ($column_list[$col]) {
-      case 'PRODUCT_LIST_MODEL':
-        $lc_text = TABLE_HEADING_MODEL;
-        $lc_align = '';
-        break;
-      case 'PRODUCT_LIST_NAME':
-        $lc_text = TABLE_HEADING_PRODUCTS;
-        $lc_align = '';
-        break;
-      case 'PRODUCT_LIST_MANUFACTURER':
-        $lc_text = TABLE_HEADING_MANUFACTURER;
-        $lc_align = '';
-        break;
-      case 'PRODUCT_LIST_PRICE':
-        $lc_text = TABLE_HEADING_PRICE;
-        $lc_align = 'right';
-        break;
-      case 'PRODUCT_LIST_QUANTITY':
-        $lc_text = TABLE_HEADING_QUANTITY;
-        $lc_align = 'right';
-        break;
-      case 'PRODUCT_LIST_WEIGHT':
-        $lc_text = TABLE_HEADING_WEIGHT;
-        $lc_align = 'right';
-        break;
-      case 'PRODUCT_LIST_IMAGE':
-        $lc_text = TABLE_HEADING_IMAGE;
-        $lc_align = 'center';
-        break;
-      case 'PRODUCT_LIST_BUY_NOW':
-        $lc_text = TABLE_HEADING_BUY_NOW;
-        $lc_align = 'center';
-        break;
-    }
-
-    if ( ($column_list[$col] != 'PRODUCT_LIST_BUY_NOW') && ($column_list[$col] != 'PRODUCT_LIST_IMAGE') ) {
-      $lc_text = tep_create_sort_heading($_GET['sort'], $col+1, $lc_text);
-    }
-
-    $list_box_contents[0][] = array('align' => $lc_align,
-                                    'params' => 'class="productListing-heading"',
-                                    'text' => '&nbsp;' . $lc_text . '&nbsp;');
-  }
-
+?>
+<div>
+<?php
   if ($Qlisting->numberOfRows() > 0) {
+?>
+  <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr>
+<?php
+    for ($col=0, $n=sizeof($column_list); $col<$n; $col++) {
+      $lc_key = false;
+      $lc_align = '';
+
+      switch ($column_list[$col]) {
+        case 'PRODUCT_LIST_MODEL':
+          $lc_text = TABLE_HEADING_MODEL;
+          $lc_key = 'model';
+          break;
+        case 'PRODUCT_LIST_NAME':
+          $lc_text = TABLE_HEADING_PRODUCTS;
+          $lc_key = 'name';
+          break;
+        case 'PRODUCT_LIST_MANUFACTURER':
+          $lc_text = TABLE_HEADING_MANUFACTURER;
+          $lc_key = 'manufacturer';
+          break;
+        case 'PRODUCT_LIST_PRICE':
+          $lc_text = TABLE_HEADING_PRICE;
+          $lc_key = 'price';
+          $lc_align = 'right';
+          break;
+        case 'PRODUCT_LIST_QUANTITY':
+          $lc_text = TABLE_HEADING_QUANTITY;
+          $lc_key = 'quantity';
+          $lc_align = 'right';
+          break;
+        case 'PRODUCT_LIST_WEIGHT':
+          $lc_text = TABLE_HEADING_WEIGHT;
+          $lc_key = 'weight';
+          $lc_align = 'right';
+          break;
+        case 'PRODUCT_LIST_IMAGE':
+          $lc_text = TABLE_HEADING_IMAGE;
+          $lc_align = 'center';
+          break;
+        case 'PRODUCT_LIST_BUY_NOW':
+          $lc_text = TABLE_HEADING_BUY_NOW;
+          $lc_align = 'center';
+          break;
+      }
+
+      if ($lc_key !== false) {
+        $lc_text = tep_create_sort_heading($lc_key, $lc_text);
+      }
+
+      echo '      <td align="' . $lc_align . '" class="productListing-heading">&nbsp;' . $lc_text . '&nbsp;</td>' . "\n";
+    }
+?>
+    </tr>
+<?php
     $rows = 0;
 
     while ($Qlisting->next()) {
       $rows++;
 
-      if (($rows/2) == floor($rows/2)) {
-        $list_box_contents[] = array('params' => 'class="productListing-even"');
-      } else {
-        $list_box_contents[] = array('params' => 'class="productListing-odd"');
-      }
+      echo '    <tr class="' . ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd') . '">' . "\n";
 
       $cur_row = sizeof($list_box_contents) - 1;
 
@@ -100,15 +116,15 @@
             break;
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
-            if (isset($_GET['manufacturers_id'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $Qlisting->valueInt('products_id')) . '">' . $Qlisting->value('products_name') . '</a>';
+            if (isset($_GET['manufacturers'])) {
+              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . $Qlisting->value('products_name') . '</a>';
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $Qlisting->valueInt('products_id')) . '">' . $Qlisting->value('products_name') . '</a>&nbsp;';
+              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . $Qlisting->value('products_name') . '</a>&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
             $lc_align = '';
-            $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers_id=' . $Qlisting->valueInt('manufacturers_id')) . '">' . $Qlisting->valueInt('manufacturers_name') . '</a>&nbsp;';
+            $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qlisting->valueInt('manufacturers_id')) . '">' . $Qlisting->valueInt('manufacturers_name') . '</a>&nbsp;';
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
@@ -128,35 +144,37 @@
             break;
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
-            if (isset($_GET['manufacturers_id'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>';
+            if (isset($_GET['manufacturers'])) {
+              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>';
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>&nbsp;';
+              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', IMAGE_BUTTON_BUY_NOW) . '</a>&nbsp;';
+            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', IMAGE_BUTTON_BUY_NOW) . '</a>&nbsp;';
             break;
         }
 
-        $list_box_contents[$cur_row][] = array('align' => $lc_align,
-                                               'params' => 'class="productListing-data"',
-                                               'text'  => $lc_text);
+        echo '      <td ' . ((empty($lc_align) === false) ? 'align="' . $lc_align . '" ' : '') . 'class="productListing-data">' . $lc_text . '</td>' . "\n";
       }
+
+      echo '    </tr>' . "\n";
     }
 
-    new productListingBox($list_box_contents);
+    echo '  </table>' . "\n";
   } else {
-    $list_box_contents = array();
-
-    $list_box_contents[0] = array('params' => 'class="productListing-odd"');
-    $list_box_contents[0][] = array('params' => 'class="productListing-data"',
-                                   'text' => TEXT_NO_PRODUCTS);
-
-    new productListingBox($list_box_contents);
+?>
+  <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr>
+      <td><?php echo TEXT_NO_PRODUCTS; ?></td>
+    </tr>
+  </table>
+<?php
   }
-
+?>
+</div>
+<?php
   if ( ($Qlisting->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
 ?>
 <table border="0" width="100%" cellspacing="0" cellpadding="2">

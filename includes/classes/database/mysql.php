@@ -19,7 +19,9 @@
   class osC_Database_mysql extends osC_Database {
     var $sql_parse_string = 'addslashes',
         $sql_parse_string_with_connection_handler = false,
-        $use_transactions = false;
+        $use_transactions = false,
+        $use_fulltext = false,
+        $use_fulltext_boolean = false;
 
     function osC_Database_mysql($server, $username, $password) {
       $this->server = $server;
@@ -125,9 +127,13 @@
         }
 
         if ($resource !== false) {
+          $this->error = false;
+          $this->error_number = null;
+          $this->error_query = null;
+
           return $resource;
         } else {
-          $this->setError(mysql_error($this->link), mysql_errno($this->link));
+          $this->setError(mysql_error($this->link), mysql_errno($this->link), $query);
 
           return false;
         }
@@ -222,7 +228,7 @@
       return $sql_query . ' limit ' . $from . ', ' . $maximum_rows;
     }
 
-    function batchSize($sql_query, $select_field = '*') {
+    function getBatchSize($sql_query, $select_field = '*') {
       if (strpos($sql_query, 'SQL_CALC_FOUND_ROWS') !== false) {
         $bb = $this->query('select found_rows() as total');
       } else {
@@ -253,6 +259,22 @@
       }
 
       return $bb->value('total');
+    }
+
+    function prepareSearch($columns) {
+      if ($this->use_fulltext === true) {
+        return 'match (' . implode(', ', $columns) . ') against (:keywords' . (($this->use_fulltext_boolean === true) ? ' in boolean mode' : '') . ')';
+      } else {
+        $search_sql = '(';
+
+        foreach ($columns as $column) {
+          $search_sql .= $column . ' like :keyword or ';
+        }
+
+        $search_sql = substr($search_sql, 0, -4) . ')';
+
+        return $search_sql;
+      }
     }
   }
 ?>

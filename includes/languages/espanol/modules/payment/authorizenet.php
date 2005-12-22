@@ -11,7 +11,7 @@
 */
 
   define('MODULE_PAYMENT_AUTHORIZENET_TEXT_TITLE', 'Authorize.net');
-  define('MODULE_PAYMENT_AUTHORIZENET_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br><br>Numero: 4111111111111111<br>Caducidad: Cualquiera');
+  define('MODULE_PAYMENT_AUTHORIZENET_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br /><br />Numero: 4111111111111111<br />Caducidad: Cualquiera');
   define('MODULE_PAYMENT_AUTHORIZENET_TEXT_TYPE', 'Tipo de Tarjeta:');
   define('MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_OWNER', 'Titular de la Tarjeta:');
   define('MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_NUMBER', 'N&uacute;mero de la Tarjeta:');

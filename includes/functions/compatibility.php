@@ -10,51 +10,50 @@
   Released under the GNU General Public License
 */
 
-  if (PHP_VERSION < 4.1) {
-    if (isset($HTTP_SERVER_VARS)) $_SERVER =& $HTTP_SERVER_VARS;
-    if (isset($HTTP_GET_VARS)) $_GET =& $HTTP_GET_VARS;
-    if (isset($HTTP_POST_VARS)) $_POST =& $HTTP_POST_VARS;
-    if (isset($HTTP_COOKIE_VARS)) $_COOKIE =& $HTTP_COOKIE_VARS;
-    if (isset($HTTP_POST_FILES)) $_FILES =& $HTTP_POST_FILES;
-    if (isset($HTTP_ENV_VARS)) $_ENV =& $HTTP_ENV_VARS;
-  }
-
-// Recursively handle magic_quotes_gpc turned off.
-  function osc_remove_magic_quotes(&$array) {
-    if (!is_array($array) || (sizeof($array) < 1)) {
-      return false;
+// Based from work by Richard Heyes (http://www.phpguru.org)
+  if ((int)ini_get('register_globals') > 0) {
+    if (isset($_REQUEST['GLOBALS'])) {
+      die('GLOBALS overwrite attempt detected');
     }
 
-    foreach ($array as $key => $value) {
-      if (is_array($value)) {
-        osc_remove_magic_quotes($array[$key]);
-      } else {
-        $array[$key] = stripslashes($value);
+// variables that shouldn't be unset
+    $noUnset = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_REQUEST', '_SERVER', '_ENV', '_FILES');
+
+    $input = array_merge($_GET, $_POST, $_COOKIE, $_SERVER, $_ENV, $_FILES, isset($_SESSION) ? (array)$_SESSION : array());
+
+    foreach ($input as $k => $v) {
+      if (!in_array($k, $noUnset) && isset($GLOBALS[$k])) {
+        unset($GLOBALS[$k]);
       }
     }
+
+    unset($noUnset);
+    unset($input);
+    unset($k);
+    unset($v);
   }
 
-// handle magic_quotes_gpc turned off.
-  if (get_magic_quotes_gpc() > 0) {
-    if (isset($_GET)) {
-      osc_remove_magic_quotes($_GET);
+// Based from work by Ilia Alshanetsky (Advanced PHP Security)
+  if ((int)get_magic_quotes_gpc() > 0) {
+    $in = array(&$_GET, &$_POST, &$_COOKIE);
+
+    while (list($k,$v) = each($in)) {
+      foreach ($v as $key => $val) {
+        if (!is_array($val)) {
+          $in[$k][$key] = stripslashes($val);
+
+          continue;
+        }
+
+        $in[] =& $in[$k][$key];
+      }
     }
 
-    if (isset($_POST)) {
-      osc_remove_magic_quotes($_POST);
-    }
-
-    if (isset($_COOKIE)) {
-      osc_remove_magic_quotes($_COOKIE);
-    }
-  }
-
-  if (!function_exists('constant')) {
-    function constant($constant) {
-      eval("\$temp=$constant;");
-
-      return $temp;
-    }
+    unset($in);
+    unset($k);
+    unset($v);
+    unset($key);
+    unset($val);
   }
 
   if (!function_exists('checkdnsrr')) {
@@ -71,32 +70,35 @@
     }
   }
 
-  if (!function_exists('array_unique')) {
-    function array_unique($array) {
-      $tmp_array = array();
-
-      for ($i=0, $n=sizeof($array); $i<$n; $i++) {
-        if (!in_array($array[$i], $tmp_array)) {
-          $tmp_array[] = $array[$i];
-        }
-      }
-
-      return $tmp_array;
+  if (!function_exists('ctype_alnum')) {
+    function ctype_alnum($string) {
+      return (eregi('^[a-z0-9]*$', $string) > 0);
     }
   }
 
-  if (!function_exists('array_search')) {
-    function array_search($needle, $haystack) {
-      $match = false;
+  if (!function_exists('ctype_xdigit')) {
+    function ctype_xdigit($string) {
+      return (eregi('^([a-f0-9][a-f0-9])*$', $string) > 0);
+    }
+  }
 
-      foreach ($haystack as $key => $value) {
-        if ($value == $needle) {
-          $match = $key;
-          break;
-        }
+  if (!function_exists('is_a')) {
+    function is_a($object, $class) {
+      if (!is_object($object)) {
+        return false;
       }
 
-      return $match;
+      if (get_class($object) == strtolower($class)) {
+        return true;
+      } else {
+        return is_subclass_of($object, $class);
+      }
+    }
+  }
+
+  if (!function_exists('floatval')) {
+    function floatval($float) {
+      return doubleval($float);
     }
   }
 ?>

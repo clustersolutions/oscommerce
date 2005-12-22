@@ -5,23 +5,23 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Session {
-    var $is_started,
-        $save_path,
-        $name,
-        $id;
 
 /* Private variables */
-    var $_cookie_parameters;
+    var $_cookie_parameters,
+        $_is_started = false,
+        $_id,
+        $_name,
+        $_save_path;
 
 // class constructor
-    function osC_Session() {
-      $this->setName('osCsid');
+    function osC_Session($name = 'sid') {
+      $this->setName($name);
       $this->setSavePath(DIR_FS_WORK);
       $this->setCookieParameters();
 
@@ -33,39 +33,28 @@
                                  array(&$this, '_destroy'),
                                  array(&$this, '_gc'));
       }
-
-      $this->setStarted(false);
     }
 
 // class methods
     function start() {
       $sane_session_id = true;
 
-      if (isset($_GET[$this->name])) {
-        if (preg_match('/^[a-zA-Z0-9]+$/', $_GET[$this->name]) == false) {
-          unset($_GET[$this->name]);
-
-          $sane_session_id = false;
-        }
-      } elseif (isset($_POST[$this->name])) {
-        if (preg_match('/^[a-zA-Z0-9]+$/', $_POST[$this->name]) == false) {
-          unset($_POST[$this->name]);
-
-          $sane_session_id = false;
-        }
-      } elseif (isset($_COOKIE[$this->name])) {
-        if (preg_match('/^[a-zA-Z0-9]+$/', $_COOKIE[$this->name]) == false) {
-          unset($_COOKIE[$this->name]);
-
-          $sane_session_id = false;
-        }
+      if (isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || (ctype_alnum($_GET[$this->_name]) === false))) {
+        $sane_session_id = false;
+      } elseif (isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || (ctype_alnum($_POST[$this->_name]) === false))) {
+        $sane_session_id = false;
+      } elseif (isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || (ctype_alnum($_COOKIE[$this->_name]) === false))) {
+        $sane_session_id = false;
       }
 
-      if ($sane_session_id == false) {
+      if ($sane_session_id === false) {
+        if (isset($_COOKIE[$this->_name])) {
+          setcookie($this->getName(), '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
+        }
+
         tep_redirect(tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false));
       } elseif (session_start()) {
         $this->setStarted(true);
-
         $this->setID();
 
         return true;
@@ -74,58 +63,22 @@
       return false;
     }
 
-    function exists($variable) {
-      if (isset($_SESSION[$variable])) {
-        return true;
-      }
-
-      return false;
-    }
-
-    function set($variable, &$value) {
-      if ($this->is_started == true) {
-        $_SESSION[$variable] = $value;
-
-        return true;
-      }
-
-      return false;
-    }
-
-    function remove($variable) {
-      if ($this->exists($variable)) {
-        unset($_SESSION[$variable]);
-
-        return true;
-      }
-
-      return false;
-    }
-
-    function &value($variable) {
-      if (isset($_SESSION[$variable])) {
-        return $_SESSION[$variable];
-      }
-
-      return false;
+    function hasStarted() {
+      return $this->_is_started;
     }
 
     function close() {
-      if (function_exists('session_write_close')) {
-        return session_write_close();
-      }
-
-      return true;
+      return session_write_close();
     }
 
     function destroy() {
-      if (isset($_COOKIE[$this->name])) {
-        unset($_COOKIE[$this->name]);
+      if (isset($_COOKIE[$this->_name])) {
+        unset($_COOKIE[$this->_name]);
       }
 
       if (STORE_SESSIONS == '') {
-        if (file_exists($this->save_path . $this->id)) {
-          @unlink($this->save_path . $this->id);
+        if (file_exists($this->_save_path . $this->_id)) {
+          @unlink($this->_save_path . $this->_id);
         }
       }
 
@@ -147,21 +100,25 @@
     }
 
     function getSavePath() {
-      return $this->save_path;
+      return $this->_save_path;
+    }
+
+    function getID() {
+      return $this->_id;
+    }
+
+    function getName() {
+      return $this->_name;
     }
 
     function setName($name) {
       session_name($name);
 
-      $this->name = session_name();
-
-      return true;
+      $this->_name = session_name();
     }
 
     function setID() {
-      $this->id = session_id();
-
-      return true;
+      $this->_id = session_id();
     }
 
     function setSavePath($path) {
@@ -171,16 +128,14 @@
 
       session_save_path($path);
 
-      $this->save_path = session_save_path();
-
-      return true;
+      $this->_save_path = session_save_path();
     }
 
     function setStarted($state) {
-      if ($state == true) {
-        $this->is_started = true;
+      if ($state === true) {
+        $this->_is_started = true;
       } else {
-        $this->is_started = false;
+        $this->_is_started = false;
       }
     }
 

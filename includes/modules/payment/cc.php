@@ -123,11 +123,6 @@
     function pre_confirmation_check() {
       global $messageStack;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
-
       if (!tep_validate_credit_card($_POST['cc_number'])) {
         $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
 
@@ -141,10 +136,6 @@
     }
 
     function confirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
                             'fields' => array(array('title' => MODULE_PAYMENT_CC_TEXT_CREDIT_CARD_OWNER,
                                                     'field' => $_POST['cc_owner']),
@@ -157,10 +148,6 @@
     }
 
     function process_button() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       $process_button_string = osc_draw_hidden_field('cc_owner', $_POST['cc_owner']) .
                                osc_draw_hidden_field('cc_expires', $_POST['cc_expires_month'] . $_POST['cc_expires_year']) .
                                osc_draw_hidden_field('cc_type', $this->cc_card_type) .
@@ -171,10 +158,6 @@
 
     function before_process() {
       global $order;
-
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
 
       if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (tep_validate_email(MODULE_PAYMENT_CC_EMAIL)) ) {
         $len = strlen($_POST['cc_number']);

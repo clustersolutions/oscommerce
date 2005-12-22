@@ -11,7 +11,7 @@
 */
 
   define('MODULE_PAYMENT_PSIGATE_TEXT_TITLE', 'PSiGate');
-  define('MODULE_PAYMENT_PSIGATE_TEXT_DESCRIPTION', 'Kreditkarten Test Info:<br><br>CC#: 4111111111111111<br>G&uuml;ltig bis: Any');
+  define('MODULE_PAYMENT_PSIGATE_TEXT_DESCRIPTION', 'Kreditkarten Test Info:<br /><br />CC#: 4111111111111111<br />G&uuml;ltig bis: Any');
   define('MODULE_PAYMENT_PSIGATE_TEXT_CREDIT_CARD_OWNER', 'Kreditkarteninhaber:');
   define('MODULE_PAYMENT_PSIGATE_TEXT_CREDIT_CARD_NUMBER', 'Kreditkarten-Nr.:');
   define('MODULE_PAYMENT_PSIGATE_TEXT_CREDIT_CARD_EXPIRES', 'G&uuml;ltig bis:');

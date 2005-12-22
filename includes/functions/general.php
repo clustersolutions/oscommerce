@@ -58,10 +58,10 @@
 // Return a product's name
 // TABLES: products
   function tep_get_products_name($product_id, $language_id = '') {
-    global $osC_Session, $osC_Database;
+    global $osC_Database;
 
     if (empty($language_id) || !is_numeric($language_id)) {
-      $language_id = $osC_Session->value('languages_id');
+      $language_id = $_SESSION['languages_id'];
     }
 
     $Qproduct = $osC_Database->query('select products_name from :table_products_description where products_id = :products_id and language_id = :language_id');
@@ -134,18 +134,14 @@
   function tep_get_all_get_params($exclude_array = '') {
     global $osC_Session;
 
-    if (PHP_VERSION < 4.1) {
-      global $_GET;
-    }
-
     if (!is_array($exclude_array)) $exclude_array = array();
 
     $get_url = '';
     if (is_array($_GET) && (sizeof($_GET) > 0)) {
       reset($_GET);
       while (list($key, $value) = each($_GET)) {
-        if ( ($key != $osC_Session->name) && ($key != 'error') && (!in_array($key, $exclude_array)) && ($key != 'x') && ($key != 'y') ) {
-          $get_url .= $key . (empty($value) ? '&' : '=' . rawurlencode($value) . '&');
+        if ( ($key != $osC_Session->getName()) && ($key != 'error') && (!in_array($key, $exclude_array)) && ($key != 'x') && ($key != 'y') ) {
+          $get_url .= $key . (empty($value) ? '&amp;' : '=' . rawurlencode($value) . '&amp;');
         }
       }
     }
@@ -244,10 +240,6 @@
 ////
 // Returns the clients browser
   function tep_browser_detect($component) {
-    if (PHP_VERSION < 4.1) {
-      global $_SERVER;
-    }
-
     return stristr($_SERVER['HTTP_USER_AGENT'], $component);
   }
 
@@ -401,8 +393,8 @@
       $HR = '<hr>';
       $hr = '<hr>';
       if ( ($boln == '') && ($eoln == "\n") ) { // Values not specified, use rational defaults
-        $CR = '<br>';
-        $cr = '<br>';
+        $CR = '<br />';
+        $cr = '<br />';
         $eoln = $cr;
       } else { // Use values supplied
         $CR = $eoln . $boln;
@@ -456,7 +448,7 @@
   }
 
   function tep_get_categories($categories_array = '', $parent_id = '0', $indent = '') {
-    global $osC_Database, $osC_Session;
+    global $osC_Database;
 
     if (!is_array($categories_array)) $categories_array = array();
 
@@ -464,7 +456,7 @@
     $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
     $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
     $Qcategories->bindInt(':parent_id', $parent_id);
-    $Qcategories->bindInt(':language_id', $osC_Session->value('languages_id'));
+    $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
     $Qcategories->execute();
 
     while ($Qcategories->next()) {
@@ -821,20 +813,27 @@
 
 ////
 // Return table heading with sorting capabilities
-  function tep_create_sort_heading($sortby, $colnum, $heading) {
-    if (PHP_VERSION < 4.1) {
-      global $_SERVER;
+  function tep_create_sort_heading($key, $heading) {
+    $current = false;
+    $direction = false;
+
+    if (!isset($_GET['sort'])) {
+      $current = 'name';
+    } elseif (($_GET['sort'] == $key) || ($_GET['sort'] == $key . '|d')) {
+      $current = $key;
     }
 
-    $sort_prefix = '';
-    $sort_suffix = '';
-
-    if ($sortby) {
-      $sort_prefix = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'info', 'sort')) . 'page=1&sort=' . $colnum . ($sortby == $colnum . 'a' ? 'd' : 'a')) . '" title="' . tep_output_string(TEXT_SORT_PRODUCTS . ($sortby == $colnum . 'd' || substr($sortby, 0, 1) != $colnum ? TEXT_ASCENDINGLY : TEXT_DESCENDINGLY) . TEXT_BY . $heading) . '" class="productListing-heading">' ;
-      $sort_suffix = (substr($sortby, 0, 1) == $colnum ? (substr($sortby, 1, 1) == 'a' ? '+' : '-') : '') . '</a>';
+    if ($key == $current) {
+      if (isset($_GET['sort'])) {
+        $direction = ($_GET['sort'] == $key) ? '+' : '-';
+      } else {
+        $direction = '+';
+      }
     }
 
-    return $sort_prefix . $heading . $sort_suffix;
+    $sort_heading = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'sort')) . '&amp;sort=' . $key . ($direction == '+' ? '|d' : '')) . '" title="' . tep_output_string(TEXT_SORT_PRODUCTS . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? TEXT_ASCENDINGLY : TEXT_DESCENDINGLY) . TEXT_BY . $heading) . '" class="productListing-heading">' . $heading . (($key == $current) ? $direction : '') . '</a>';
+
+    return $sort_heading;
   }
 
 ////
@@ -965,9 +964,9 @@
     global $osC_Customer;
 
     if ($osC_Customer->isLoggedOn()) {
-      $greeting_string = sprintf(TEXT_GREETING_PERSONAL, tep_output_string_protected($osC_Customer->first_name), tep_href_link(FILENAME_PRODUCTS_NEW));
+      $greeting_string = sprintf(TEXT_GREETING_PERSONAL, tep_output_string_protected($osC_Customer->getFirstName()), tep_href_link(FILENAME_PRODUCTS, 'new'));
     } else {
-      $greeting_string = sprintf(TEXT_GREETING_GUEST, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'SSL'));
+      $greeting_string = sprintf(TEXT_GREETING_GUEST, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), tep_href_link(FILENAME_ACCOUNT, 'create', 'SSL'));
     }
 
     return $greeting_string;
@@ -1081,7 +1080,7 @@
     return $rand_value;
   }
 
-  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&') {
+  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&amp;') {
     if (!is_array($exclude)) $exclude = array();
 
     $get_string = '';
@@ -1110,6 +1109,22 @@
         return true;
       } else {
         return false;
+      }
+    }
+  }
+
+  function osc_empty($value) {
+    if (is_array($value)) {
+      if (sizeof($value) > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if ((strtolower($value) != 'null') && (strlen(trim($value)) > 0)) {
+        return false;
+      } else {
+        return true;
       }
     }
   }
@@ -1207,10 +1222,6 @@
   }
 
   function tep_get_ip_address() {
-    if (PHP_VERSION < 4.1) {
-      global $_SERVER;
-    }
-
     if (isset($_SERVER)) {
       if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -1237,14 +1248,14 @@
 
     if (is_numeric($id) == false) {
       if ($osC_Customer->isLoggedOn()) {
-        $id = $osC_Customer->id;
+        $id = $osC_Customer->getID();
       } else {
         return 0;
       }
     }
 
     if ($check_session == true) {
-      if ( ($osC_Customer->isLoggedOn() == false) || ($id != $osC_Customer->id) ) {
+      if ( ($osC_Customer->isLoggedOn() == false) || ($id != $osC_Customer->getID()) ) {
         return 0;
       }
     }
@@ -1262,14 +1273,14 @@
 
     if (is_numeric($id) == false) {
       if ($osC_Customer->isLoggedOn()) {
-        $id = $osC_Customer->id;
+        $id = $osC_Customer->getID();
       } else {
         return 0;
       }
     }
 
     if ($check_session == true) {
-      if ( ($osC_Customer->isLoggedOn() == false) || ($id != $osC_Customer->id) ) {
+      if ( ($osC_Customer->isLoggedOn() == false) || ($id != $osC_Customer->getID()) ) {
         return 0;
       }
     }
@@ -1284,11 +1295,7 @@
 
 // nl2br() prior PHP 4.2.0 did not convert linefeeds on all OSs (it only converted \n)
   function tep_convert_linefeeds($from, $to, $string) {
-    if ((PHP_VERSION < "4.0.5") && is_array($from)) {
-      return ereg_replace('(' . implode('|', $from) . ')', $to, $string);
-    } else {
-      return str_replace($from, $to, $string);
-    }
+    return str_replace($from, $to, $string);
   }
 
 ////
@@ -1367,7 +1374,7 @@
               if (eregi('^[a-z][a-z]$', $top_level_domain) != 1) {
                 $tld_pattern = '';
                 // Get authorized TLDs from text file
-                $tlds = file(DIR_WS_INCLUDES . 'tld.txt');
+                $tlds = file('includes/tld.txt');
                 while (list(,$line) = each($tlds)) {
                   // Get rid of comments
                   $words = explode('#', $line);

@@ -11,7 +11,7 @@
 */
 
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_TITLE', '2CheckOut');
-  define('MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION', 'Credit Card Test Info:<br><br>CC#: 4111111111111111<br>Expiry: Any');
+  define('MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION', 'Credit Card Test Info:<br /><br />CC#: 4111111111111111<br />Expiry: Any');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_TYPE', 'Type:');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER', 'Credit Card Owner:');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER_FIRST_NAME', 'Credit Card Owner First Name:');

@@ -11,7 +11,7 @@
 */
 
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_TITLE', '2CheckOut');
-  define('MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br><br>Numero: 4111111111111111<br>Caducidad: Cualquiera');
+  define('MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION', 'Tarjeta de Cr&eacute;dito para Pruebas:<br /><br />Numero: 4111111111111111<br />Caducidad: Cualquiera');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_TYPE', 'Tipo:');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER', 'Titular de la Tarjeta:');
   define('MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER_FIRST_NAME', 'Nombre del Titular:');

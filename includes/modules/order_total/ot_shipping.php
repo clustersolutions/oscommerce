@@ -24,7 +24,7 @@
     }
 
     function process() {
-      global $osC_Session, $osC_Tax, $order, $osC_Currencies;
+      global $osC_Tax, $order, $osC_Currencies;
 
       if (MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING == 'true') {
         switch (MODULE_ORDER_TOTAL_SHIPPING_DESTINATION) {
@@ -45,7 +45,7 @@
         }
       }
 
-      $shipping =& $osC_Session->value('shipping');
+      $shipping =& $_SESSION['shipping'];
 
       $module = substr($shipping['id'], 0, strpos($shipping['id'], '_'));
 

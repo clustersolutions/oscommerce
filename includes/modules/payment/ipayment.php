@@ -127,10 +127,6 @@
     function pre_confirmation_check() {
       global $messageStack;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
         $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
 
@@ -148,10 +144,6 @@
     }
 
     function confirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
                             'fields' => array(array('title' => MODULE_PAYMENT_IPAYMENT_TEXT_CREDIT_CARD_OWNER,
                                                     'field' => $this->cc_card_owner),
@@ -169,11 +161,7 @@
     }
 
     function process_button() {
-      global $osC_Session, $order, $osC_Currencies;
-
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
+      global $order, $osC_Currencies;
 
       switch (MODULE_PAYMENT_IPAYMENT_CURRENCY) {
         case 'Always EUR':
@@ -183,15 +171,15 @@
           $trx_currency = 'USD';
           break;
         case 'Either EUR or USD, else EUR':
-          if ( ($osC_Session->value('currency') == 'EUR') || ($osC_Session->value('currency') == 'USD') ) {
-            $trx_currency = $osC_Session->value('currency');
+          if ( ($_SESSION['currency'] == 'EUR') || ($_SESSION['currency'] == 'USD') ) {
+            $trx_currency = $_SESSION['currency'];
           } else {
             $trx_currency = 'EUR';
           }
           break;
         case 'Either EUR or USD, else USD':
-          if ( ($osC_Session->value('currency') == 'EUR') || ($osC_Session->value('currency') == 'USD') ) {
-            $trx_currency = $osC_Session->value('currency');
+          if ( ($_SESSION['currency'] == 'EUR') || ($_SESSION['currency'] == 'USD') ) {
+            $trx_currency = $_SESSION['currency'];
           } else {
             $trx_currency = 'USD';
           }
@@ -212,7 +200,7 @@
                                osc_draw_hidden_field('addr_country', $order->billing['country']['iso_code_2']) .
                                osc_draw_hidden_field('addr_telefon', $order->customer['telephone']) .
                                osc_draw_hidden_field('addr_email', $order->customer['email_address']) .
-                               osc_draw_hidden_field('error_lang', ($osC_Session->value('language') == 'english') ? 'en' : 'de') .
+                               osc_draw_hidden_field('error_lang', ($_SESSION['language'] == 'english') ? 'en' : 'de') .
                                osc_draw_hidden_field('silent', '1') .
                                osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code . '&' . $payment_error_return, 'SSL')) .
                                osc_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
@@ -241,10 +229,6 @@
     }
 
     function get_error() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       $error = array('title' => IPAYMENT_ERROR_HEADING,
                      'error' => (isset($_GET['ret_errormsg']) ? urldecode($_GET['ret_errormsg']) : IPAYMENT_ERROR_MESSAGE));
 

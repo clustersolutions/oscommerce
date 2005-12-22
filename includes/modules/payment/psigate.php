@@ -129,10 +129,6 @@
     function pre_confirmation_check() {
       global $messageStack;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
         if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
           $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
@@ -155,10 +151,6 @@
     function confirmation() {
       global $order;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
         $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
                               'fields' => array(array('title' => MODULE_PAYMENT_PSIGATE_TEXT_CREDIT_CARD_OWNER,
@@ -176,10 +168,6 @@
 
     function process_button() {
       global $osC_Database, $order, $osC_Currencies;
-
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
 
       switch (MODULE_PAYMENT_PSIGATE_TRANSACTION_MODE) {
         case 'Always Good':
@@ -267,10 +255,6 @@
     }
 
     function get_error() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       if (isset($_GET['ErrMsg']) && tep_not_null($_GET['ErrMsg'])) {
         $error = urldecode($_GET['ErrMsg']);
       } elseif (isset($_GET['Err']) && tep_not_null($_GET['Err'])) {

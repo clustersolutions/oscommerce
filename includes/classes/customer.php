@@ -5,35 +5,149 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2005 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Customer {
-    var $is_logged_on,
-        $id,
-        $gender,
-        $first_name,
-        $last_name,
-        $full_name,
-        $email_address,
-        $default_address_id,
-        $country_id,
-        $zone_id;
 
-// class constructor
+/* Private variables */
+
+    var $_is_logged_on = false,
+        $_data = array();
+
+/* Class constructor */
+
     function osC_Customer() {
-      $this->setIsLoggedOn(false);
+      if (isset($_SESSION['osC_Customer_data']) && is_array($_SESSION['osC_Customer_data']) && isset($_SESSION['osC_Customer_data']['id']) && is_numeric($_SESSION['osC_Customer_data']['id'])) {
+        $this->setIsLoggedOn(true);
+        $this->_data =& $_SESSION['osC_Customer_data'];
+      }
     }
 
-// class methods
-    function setCustomerData($customer_id = -1) {
-      if (is_numeric($customer_id) && ($customer_id > 0)) {
-        global $osC_Database;
+/* Public methods */
 
+    function getID() {
+      if (isset($this->_data['id']) && is_numeric($this->_data['id'])) {
+        return $this->_data['id'];
+      }
+
+      return false;
+    }
+
+    function getFirstName() {
+      static $first_name = null;
+
+      if (is_null($first_name)) {
+        if (isset($this->_data['first_name'])) {
+          $first_name = $this->_data['first_name'];
+        }
+      }
+
+      return $first_name;
+    }
+
+    function getLastName() {
+      static $last_name = null;
+
+      if (is_null($last_name)) {
+        if (isset($this->_data['last_name'])) {
+          $last_name = $this->_data['last_name'];
+        }
+      }
+
+      return $last_name;
+    }
+
+    function getName() {
+      static $name = '';
+
+      if (empty($name)) {
+        if (isset($this->_data['first_name'])) {
+          $name .= $this->_data['first_name'];
+        }
+
+        if (isset($this->_data['last_name'])) {
+          if (empty($name) === false) {
+            $name .= ' ';
+          }
+
+          $name .= $this->_data['last_name'];
+        }
+      }
+
+      return $name;
+    }
+
+    function getGender() {
+      static $gender = null;
+
+      if (is_null($gender)) {
+        if (isset($this->_data['gender'])) {
+          $gender = $this->_data['gender'];
+        }
+      }
+
+      return $gender;
+    }
+
+    function getEmailAddress() {
+      static $email_address = null;
+
+      if (is_null($email_address)) {
+        if (isset($this->_data['email_address'])) {
+          $email_address = $this->_data['email_address'];
+        }
+      }
+
+      return $email_address;
+    }
+
+    function getCountryID() {
+      static $country_id = null;
+
+      if (is_null($country_id)) {
+        if (isset($this->_data['country_id'])) {
+          $country_id = $this->_data['country_id'];
+        }
+      }
+
+      return $country_id;
+    }
+
+    function getZoneID() {
+      static $zone_id = null;
+
+      if (is_null($zone_id)) {
+        if (isset($this->_data['zone_id'])) {
+          $zone_id = $this->_data['zone_id'];
+        }
+      }
+
+      return $zone_id;
+    }
+
+    function getDefaultAddressID() {
+      static $id = null;
+
+      if (is_null($id)) {
+        if (isset($this->_data['default_address_id'])) {
+          $id = $this->_data['default_address_id'];
+        }
+      }
+
+      return $id;
+    }
+
+    function setCustomerData($customer_id = -1) {
+      global $osC_Database;
+
+      $this->_data = array();
+
+      if (is_numeric($customer_id) && ($customer_id > 0)) {
         $Qcustomer = $osC_Database->query('select customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id from :table_customers where customers_id = :customers_id');
-        $Qcustomer->bindRaw(':table_customers', TABLE_CUSTOMERS);
+        $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
         $Qcustomer->bindInt(':customers_id', $customer_id);
         $Qcustomer->execute();
 
@@ -43,12 +157,11 @@
           $this->setGender($Qcustomer->value('customers_gender'));
           $this->setFirstName($Qcustomer->value('customers_firstname'));
           $this->setLastName($Qcustomer->value('customers_lastname'));
-          $this->setFullName();
           $this->setEmailAddress($Qcustomer->value('customers_email_address'));
 
           if (is_numeric($Qcustomer->value('customers_default_address_id')) && ($Qcustomer->value('customers_default_address_id') > 0)) {
             $Qab = $osC_Database->query('select entry_country_id, entry_zone_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
-            $Qab->bindRaw(':table_address_book', TABLE_ADDRESS_BOOK);
+            $Qab->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
             $Qab->bindInt(':address_book_id', $Qcustomer->value('customers_default_address_id'));
             $Qab->bindInt(':customers_id', $customer_id);
             $Qab->execute();
@@ -65,74 +178,89 @@
 
         $Qcustomer->freeResult();
       }
+
+      if (sizeof($this->_data) > 0) {
+        $_SESSION['osC_Customer_data'] = $this->_data;
+      } elseif (isset($_SESSION['osC_Customer_data'])) {
+        $this->reset();
+      }
     }
 
     function setIsLoggedOn($state) {
       if ($state === true) {
-        $this->is_logged_on = true;
+        $this->_is_logged_on = true;
       } else {
-        $this->is_logged_on = false;
+        $this->_is_logged_on = false;
       }
     }
 
     function isLoggedOn() {
-      if ($this->is_logged_on === true) {
+      if ($this->_is_logged_on === true) {
         return true;
       }
 
       return false;
     }
 
-    function isGuest() {
-      return !$this->isLoggedOn();
-    }
-
     function setID($id) {
-      $this->id = $id;
+      if (is_numeric($id) && ($id > 0)) {
+        $this->_data['id'] = $id;
+      } else {
+        $this->_data['id'] = false;
+      }
     }
 
     function setDefaultAddressID($id) {
-      $this->default_address_id = $id;
+      if (is_numeric($id) && ($id > 0)) {
+        $this->_data['default_address_id'] = $id;
+      } else {
+        $this->_data['default_address_id'] = false;
+      }
     }
 
     function hasDefaultAddress() {
-      if (is_numeric($this->default_address_id) && ($this->default_address_id > 0)) {
+      if (isset($this->_data['default_address_id']) && is_numeric($this->_data['default_address_id'])) {
         return true;
-      } else {
-        return false;
       }
+
+      return false;
     }
 
     function setGender($gender) {
-      $this->gender = $gender;
-    }
-
-    function setFirstName($firstname) {
-      $this->first_name = $firstname;
-    }
-
-    function setLastName($lastname) {
-      $this->last_name = $lastname;
-    }
-
-    function setFullName($fullname = '') {
-      if (empty($fullname)) {
-        $this->full_name = $this->first_name . ' ' . $this->last_name;
+      if ( (strtolower($gender) == 'm') || (strtolower($gender) == 'f') ) {
+        $this->_data['gender'] = strtolower($gender);
       } else {
-        $this->full_name = $fullname;
+        $this->_data['gender'] = false;
       }
     }
 
+    function setFirstName($first_name) {
+      $this->_data['first_name'] = $first_name;
+    }
+
+    function setLastName($last_name) {
+      $this->_data['last_name'] = $last_name;
+    }
+
     function setEmailAddress($email_address) {
-      $this->email_address = $email_address;
+      $this->_data['email_address'] = $email_address;
     }
 
     function setCountryID($id) {
-      $this->country_id = $id;
+      $this->_data['country_id'] = $id;
     }
 
     function setZoneID($id) {
-      $this->zone_id = $id;
+      $this->_data['zone_id'] = $id;
+    }
+
+    function reset() {
+      $this->_is_logged_on = false;
+      $this->_data = array();
+
+      if (isset($_SESSION['osC_Customer_data'])) {
+        unset($_SESSION['osC_Customer_data']);
+      }
     }
   }
 ?>

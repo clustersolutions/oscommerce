@@ -24,17 +24,15 @@
     }
 
     function add_session($class, $message, $type = 'error') {
-      global $osC_Session;
-
-      if ($osC_Session->exists('messageToStack')) {
-        $messageToStack = $osC_Session->value('messageToStack');
+      if (isset($_SESSION['messageToStack'])) {
+        $messageToStack = $_SESSION['messageToStack'];
       } else {
         $messageToStack = array();
       }
 
       $messageToStack[] = array('class' => $class, 'text' => $message, 'type' => $type);
 
-      $osC_Session->set('messageToStack', $messageToStack);
+      $_SESSION['messageToStack'] = $messageToStack;
 
       $this->add($class, $message, $type);
     }
@@ -49,16 +47,16 @@
         if ($this->messages[$i]['class'] == $class) {
           switch ($this->messages[$i]['type']) {
             case 'error':
-              $bullet_image = DIR_WS_ICONS . 'error.gif';
+              $bullet_image = DIR_WS_IMAGES . 'icons/error.gif';
               break;
             case 'warning':
-              $bullet_image = DIR_WS_ICONS . 'warning.gif';
+              $bullet_image = DIR_WS_IMAGES . 'icons/warning.gif';
               break;
             case 'success':
-              $bullet_image = DIR_WS_ICONS . 'success.gif';
+              $bullet_image = DIR_WS_IMAGES . 'icons/success.gif';
               break;
             default:
-              $bullet_image = DIR_WS_ICONS . 'bullet_default.gif';
+              $bullet_image = DIR_WS_IMAGES . 'icons/bullet_default.gif';
           }
 
           $messages .= '<li style="list-style-image: url(\'' . $bullet_image . '\')">' . tep_output_string($this->messages[$i]['message']) . '</li>';
@@ -95,16 +93,14 @@
     }
 
     function loadFromSession() {
-      global $osC_Session;
-
-      if ($osC_Session->exists('messageToStack')) {
-        $messageToStack = $osC_Session->value('messageToStack');
+      if (isset($_SESSION['messageToStack'])) {
+        $messageToStack = $_SESSION['messageToStack'];
 
         for ($i=0, $n=sizeof($messageToStack); $i<$n; $i++) {
           $this->add($messageToStack[$i]['class'], $messageToStack[$i]['text'], $messageToStack[$i]['type']);
         }
 
-        $osC_Session->remove('messageToStack');
+        unset($_SESSION['messageToStack']);
       }
     }
   }

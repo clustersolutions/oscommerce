@@ -15,12 +15,6 @@
 
 // class constructor
     function payment($module = '') {
-      if (PHP_VERSION < 4.1) {
-        global $_SERVER;
-      }
-
-      global $osC_Session;
-
       if (defined('MODULE_PAYMENT_INSTALLED') && tep_not_null(MODULE_PAYMENT_INSTALLED)) {
         $this->modules = explode(';', MODULE_PAYMENT_INSTALLED);
 
@@ -39,8 +33,8 @@
         }
 
         for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include(DIR_WS_LANGUAGES . $osC_Session->value('language') . '/modules/payment/' . $include_modules[$i]['file']);
-          include(DIR_WS_MODULES . 'payment/' . $include_modules[$i]['file']);
+          include('includes/languages/' . $_SESSION['language'] . '/modules/payment/' . $include_modules[$i]['file']);
+          include('includes/modules/payment/' . $include_modules[$i]['file']);
 
           $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];
         }
@@ -48,8 +42,8 @@
 // if there is only one payment method, select it as default because in
 // checkout_confirmation.php the $payment variable is being assigned the
 // $_POST['payment_mod_sel'] value which will be empty (no radio button selection possible)
-        if ( (tep_count_payment_modules() == 1) && (!isset($GLOBALS[$osC_Session->value('payment')]) || (isset($GLOBALS[$osC_Session->value('payment')]) && !is_object($GLOBALS[$osC_Session->value('payment')]))) ) {
-          $osC_Session->set('payment', $include_modules[0]['class']);
+        if ( (tep_count_payment_modules() == 1) && (!isset($GLOBALS[$_SESSION['payment']]) || (isset($GLOBALS[$_SESSION['payment']]) && !is_object($GLOBALS[$_SESSION['payment']]))) ) {
+          $_SESSION['payment'] = $include_modules[0]['class'];
         }
 
         if ( (tep_not_null($module)) && (in_array($module, $this->modules)) && (isset($GLOBALS[$module]->form_action_url)) ) {
@@ -80,7 +74,7 @@
     function javascript_validation() {
       $js = '';
       if (is_array($this->modules)) {
-        $js = '<script language="javascript"><!-- ' . "\n" .
+        $js = '<script type="text/javascript"><!-- ' . "\n" .
               'function check_form() {' . "\n" .
               '  var error = 0;' . "\n" .
               '  var error_message = "' . JS_ERROR . '";' . "\n" .

@@ -240,10 +240,6 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     function pre_confirmation_check() {
       global $messageStack;
 
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
         if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
           $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
@@ -262,10 +258,6 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function confirmation() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
         $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
                               'fields' => array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_OWNER,
@@ -342,7 +334,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
                         'x_tran_key' => MODULE_PAYMENT_AUTHORIZENET_TXNKEY,
                         'x_Amount' => number_format($order->info['total'], 2, '.', ''),
                         'x_Version' => '3.0',
-                        'x_Cust_ID' => $osC_Customer,
+                        'x_Cust_ID' => $osC_Customer->getID(),
                         'x_Email_Customer' => ((MODULE_PAYMENT_AUTHORIZENET_EMAIL_CUSTOMER == 'True') ? 'TRUE': 'FALSE'),
                         'x_first_name' => $order->billing['firstname'],
                         'x_last_name' => $order->billing['lastname'],
@@ -368,10 +360,6 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function process_button() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       $process_button_string = '';
 
       if (MODULE_PAYMENT_AUTHORIZENET_GATEWAY_METHOD == 'SIM') {
@@ -383,7 +371,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
         $gw_vars['x_delim_data'] = 'TRUE';
         $gw_vars['x_delim_char'] = '|';
         if (MODULE_PAYMENT_AUTHORIZENET_TESTMODE == 'Test') $gw_vars['x_Test_Request'] = 'TRUE';
-        $gw_vars[$osC_Session->name] = $osC_Session->id;
+        $gw_vars[session_name()] = session_id();
         reset($gw_vars);
         while (list($key, $value) = each($gw_vars)) {
           $process_button_string .= osc_draw_hidden_field($key, $value) . "\n";
@@ -412,10 +400,6 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function before_process() {
-      if (PHP_VERSION < 4.1) {
-        global $_POST;
-      }
-
       if (MODULE_PAYMENT_AUTHORIZENET_GATEWAY_METHOD == 'AIM') {
         if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
           $this->cc_card_number = $_POST['authorizenet_cc_number'];
@@ -439,7 +423,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
         $sequence = rand(1, 1000);
         // $gw_vars = array_merge($gw_vars, $this->InsertFP(MODULE_PAYMENT_AUTHORIZENET_LOGIN, MODULE_PAYMENT_AUTHORIZENET_TXNKEY, $gw_vars['X_Amount'], $sequence));
         if (MODULE_PAYMENT_AUTHORIZENET_TESTMODE == 'Test') $gw_vars['x_Test_Request'] = 'TRUE';
-        $gw_vars[$osC_Session->name] = $osC_Session->id;
+        $gw_vars[session_name()] = session_id();
         $gw_vars['x_delim_data'] = 'TRUE';
         $gw_vars['x_delim_char'] = '|';
         $gw_vars['x_relay_response'] = 'FALSE';
@@ -477,10 +461,6 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function get_error() {
-      if (PHP_VERSION < 4.1) {
-        global $_GET;
-      }
-
       $error = array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_ERROR,
                      'error' => urldecode($_GET['error']));
 
