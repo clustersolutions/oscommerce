@@ -22,14 +22,14 @@
     }
 
     function initialize() {
-      global $osC_Product, $osC_Database;
+      global $osC_Database, $osC_Language, $osC_Product;
 
       if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
         $Qmanufacturer = $osC_Database->query('select m.manufacturers_id, m.manufacturers_name, m.manufacturers_image, mi.manufacturers_url from :table_manufacturers m left join :table_manufacturers_info mi on (m.manufacturers_id = mi.manufacturers_id and mi.languages_id = :languages_id), :table_products p  where p.products_id = :products_id and p.manufacturers_id = m.manufacturers_id');
         $Qmanufacturer->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
         $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
         $Qmanufacturer->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qmanufacturer->bindInt(':languages_id', $_SESSION['languages_id']);
+        $Qmanufacturer->bindInt(':languages_id', $osC_Language->getID());
         $Qmanufacturer->bindInt(':products_id', $osC_Product->getID());
         $Qmanufacturer->execute();
 

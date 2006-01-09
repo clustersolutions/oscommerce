@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,12 +36,17 @@
     $code = substr($file['name'], 0, strrpos($file['name'], '.'));
     $class = 'osC_Template_' . $code;
 
-   if (class_exists($class)) {
+    if (class_exists($class)) {
       $module = new $class();
 
       if (!isset($tInfo) && (!isset($_GET['template']) || (isset($_GET['template']) && ($_GET['template'] == $code)))) {
         $template_info = array('code' => $module->getCode(),
                                'title' => $module->getTitle(),
+                               'author_name' => $module->getAuthorName(),
+                               'author_www' => $module->getAuthorAddress(),
+                               'markup' => $module->getMarkup(),
+                               'css_based' => ($module->isCSSBased() ? 'Yes' : 'No'),
+                               'medium' => $module->getMedium(),
                                'installed' => $module->isInstalled());
 
         $keys_extra = array();
@@ -73,37 +78,37 @@
         <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
         <td align="right">
 <?php
-    if (isset($tInfo) && ($code == $tInfo->code)) {
-      if ($tInfo->installed === true) {
-        echo '<a href="#" onclick="toggleInfoBox(\'tInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-             '<a href="#" onclick="toggleInfoBox(\'tUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+      if (isset($tInfo) && ($code == $tInfo->code)) {
+        if ($tInfo->installed === true) {
+          echo '<a href="#" onclick="toggleInfoBox(\'tInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
+               '<a href="#" onclick="toggleInfoBox(\'tUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
 
-        if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-          echo '<a href="#" onclick="toggleInfoBox(\'tEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
+            echo '<a href="#" onclick="toggleInfoBox(\'tEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          } else {
+            echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          }
         } else {
-          echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
+               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
+               tep_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-             '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-             tep_image('images/pixel_trans.gif', '', '16', '16');
-      }
-    } else {
-      if ($module->isInstalled() && $module->isActive()) {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-             '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        if ($module->isInstalled() && $module->isActive()) {
+          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
+               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
 
-        if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
+            echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          } else {
+            echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          }
         } else {
-          echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
+               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
+               tep_image('images/pixel_trans.gif', '', '16', '16');
         }
-      } else {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-             '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-             tep_image('images/pixel_trans.gif', '', '16', '16');
       }
-    }
 ?>
         </td>
       </tr>
@@ -111,6 +116,7 @@
     }
   }
 ?>
+
     </tbody>
   </table>
 
@@ -127,23 +133,23 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td>Title:</td>
-        <td><?php echo $module->getTitle(); ?></td>
+        <td><?php echo $tInfo->title; ?></td>
       </tr>
       <tr>
         <td>Author:</td>
-        <td><?php echo $module->getAuthorName(); ?> (<?php echo $module->getAuthorAddress(); ?>)</td>
+        <td><?php echo $tInfo->author_name; ?> (<?php echo $tInfo->author_www; ?>)</td>
       </tr>
       <tr>
         <td>Markup:</td>
-        <td><?php echo $module->getMarkup(); ?></td>
+        <td><?php echo $tInfo->markup; ?></td>
       </tr>
       <tr>
         <td>CSS Based:</td>
-        <td><?php echo ($module->isCSSBased() ? 'Yes' : 'No'); ?></td>
+        <td><?php echo $tInfo->css_based; ?></td>
       </tr>
       <tr>
         <td>Presentation Medium:</td>
-        <td><?php echo $module->getMedium(); ?></td>
+        <td><?php echo $tInfo->medium; ?></td>
       </tr>
     </table>
 

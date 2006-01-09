@@ -14,7 +14,7 @@
     $Qnewproducts = $osC_Database->query('select p.products_id, p.products_image, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword from :table_products p, :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc limit :max_display_new_products');
     $Qnewproducts->bindTable(':table_products', TABLE_PRODUCTS);
     $Qnewproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-    $Qnewproducts->bindInt(':language_id', $_SESSION['languages_id']);
+    $Qnewproducts->bindInt(':language_id', $osC_Language->getID());
     $Qnewproducts->bindInt(':max_display_new_products', MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY);
   } else {
     $Qnewproducts = $osC_Database->query('select distinct p.products_id, p.products_image, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword from :table_products p, :table_products_description pd, :table_products_to_categories p2c, :table_categories c where c.parent_id = :parent_id and c.categories_id = p2c.categories_id and p2c.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc limit :max_display_new_products');
@@ -23,12 +23,12 @@
     $Qnewproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
     $Qnewproducts->bindTable(':table_categories', TABLE_CATEGORIES);
     $Qnewproducts->bindInt(':parent_id', $current_category_id);
-    $Qnewproducts->bindInt(':language_id', $_SESSION['languages_id']);
+    $Qnewproducts->bindInt(':language_id', $osC_Language->getID());
     $Qnewproducts->bindInt(':max_display_new_products', MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY);
   }
 
   if (MODULE_CONTENT_NEW_PRODUCTS_CACHE > 0) {
-    $Qnewproducts->setCache('new_products-' . $_SESSION['language'] . '-' . $current_category_id, MODULE_CONTENT_NEW_PRODUCTS_CACHE);
+    $Qnewproducts->setCache('new_products-' . $osC_Language->getCode() . '-' . $current_category_id, MODULE_CONTENT_NEW_PRODUCTS_CACHE);
   }
 
   $Qnewproducts->execute();

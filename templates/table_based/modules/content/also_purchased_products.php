@@ -12,7 +12,7 @@
 
   if (isset($osC_Product)) {
     $Qorders = $osC_Database->query("select p.products_id, p.products_image, pd.products_keyword from " . TABLE_ORDERS_PRODUCTS . " opa, " . TABLE_ORDERS_PRODUCTS . " opb, " . TABLE_ORDERS . " o, " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where opa.products_id = '" . (int)$osC_Product->getID() . "' and opa.orders_id = opb.orders_id and opb.products_id != '" . (int)$osC_Product->getID() . "' and opb.products_id = p.products_id and opb.orders_id = o.orders_id and p.products_status = '1' and p.products_id = pd.products_id and pd.language_id = :language_id group by p.products_id order by o.date_purchased desc limit " . MODULE_CONTENT_ALSO_PURCHASED_MAX_DISPLAY);
-    $Qorders->bindInt(':language_id', $_SESSION['languages_id']);
+    $Qorders->bindInt(':language_id', $osC_Language->getID());
 
     if (MODULE_CONTENT_ALSO_PURCHASED_PRODUCTS_CACHE > 0) {
       $Qorders->setCache('also_purchased-' . (int)$osC_Product->getID(), MODULE_CONTENT_ALSO_PURCHASED_PRODUCTS_CACHE);

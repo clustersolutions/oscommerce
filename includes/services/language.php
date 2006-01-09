@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:language.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -27,7 +27,7 @@
         $osC_Language->set($_GET['language']);
       }
 
-      require('includes/languages/' . $_SESSION['language'] . '.php');
+      require('includes/languages/' . $osC_Language->getDirectory() . '.php');
 
       header('Content-Type: text/html; charset=' . CHARSET);
 

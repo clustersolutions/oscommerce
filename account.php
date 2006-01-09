@@ -20,7 +20,7 @@
     }
   }
 
-  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_ACCOUNT);
+  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_ACCOUNT);
 
   if ($osC_Services->isStarted('breadcrumb')) {
     $breadcrumb->add(NAVBAR_TITLE_MY_ACCOUNT, tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));

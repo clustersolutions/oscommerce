@@ -14,7 +14,7 @@
 
   $osC_NavigationHistory->removeCurrentPage();
 
-  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_INFO_SHOPPING_CART);
+  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_INFO_SHOPPING_CART);
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html <?php echo HTML_PARAMS; ?>>

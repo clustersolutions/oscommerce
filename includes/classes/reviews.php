@@ -90,19 +90,19 @@
     }
 
     function getTotal($id) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qcheck = $osC_Database->query('select count(*) as total from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1 limit 1');
       $Qcheck->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qcheck->bindInt(':products_id', $id);
-      $Qcheck->bindInt(':languages_id', $_SESSION['languages_id']);
+      $Qcheck->bindInt(':languages_id', $osC_Language->getID());
       $Qcheck->execute();
 
       return $Qcheck->valueInt('total');
     }
 
     function exists($id = null, $groupped = false) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qcheck = $osC_Database->query('select reviews_id from :table_reviews where');
 
@@ -118,7 +118,7 @@
 
       $Qcheck->appendQuery('languages_id = :languages_id and reviews_status = 1 limit 1');
       $Qcheck->bindTable(':table_reviews', TABLE_REVIEWS);
-      $Qcheck->bindInt(':languages_id', $_SESSION['languages_id']);
+      $Qcheck->bindInt(':languages_id', $osC_Language->getID());
       $Qcheck->execute();
 
       if ($Qcheck->numberOfRows() === 1) {
@@ -140,18 +140,18 @@
     }
 
     function &getListing($id = null) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       if (is_numeric($id)) {
         $Qreviews = $osC_Database->query('select reviews_id, reviews_text, reviews_rating, date_added, customers_name from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1 order by reviews_id desc');
         $Qreviews->bindInt(':products_id', $id);
-        $Qreviews->bindInt(':languages_id', $_SESSION['languages_id']);
+        $Qreviews->bindInt(':languages_id', $osC_Language->getID());
       } else {
         $Qreviews = $osC_Database->query('select r.reviews_id, left(r.reviews_text, 100) as reviews_text, r.reviews_rating, r.date_added, r.customers_name, p.products_id, p.products_image, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword from :table_reviews r, :table_products p, :table_products_description pd where r.reviews_status = 1 and r.languages_id = :languages_id and r.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by r.reviews_id desc');
         $Qreviews->bindTable(':table_products', TABLE_PRODUCTS);
         $Qreviews->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-        $Qreviews->bindInt(':languages_id', $_SESSION['languages_id']);
-        $Qreviews->bindInt(':language_id', $_SESSION['languages_id']);
+        $Qreviews->bindInt(':languages_id', $osC_Language->getID());
+        $Qreviews->bindInt(':language_id', $osC_Language->getID());
       }
       $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qreviews->setBatchLimit((isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1), MAX_DISPLAY_NEW_REVIEWS);
@@ -161,19 +161,19 @@
     }
 
     function &getEntry($id) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qreviews = $osC_Database->query('select reviews_id, reviews_text, reviews_rating, date_added, customers_name from :table_reviews where reviews_id = :reviews_id and languages_id = :languages_id and reviews_status = 1');
       $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qreviews->bindInt(':reviews_id', $id);
-      $Qreviews->bindInt(':languages_id', $_SESSION['languages_id']);
+      $Qreviews->bindInt(':languages_id', $osC_Language->getID());
       $Qreviews->execute();
 
       return $Qreviews;
     }
 
     function saveEntry($data) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qreview = $osC_Database->query('insert into :table_reviews (products_id, customers_id, customers_name, reviews_rating, languages_id, reviews_text, reviews_status, date_added) values (:products_id, :customers_id, :customers_name, :reviews_rating, :languages_id, :reviews_text, :reviews_status, now())');
       $Qreview->bindTable(':table_reviews', TABLE_REVIEWS);
@@ -181,7 +181,7 @@
       $Qreview->bindInt(':customers_id', $data['customer_id']);
       $Qreview->bindValue(':customers_name', $data['customer_name']);
       $Qreview->bindValue(':reviews_rating', $data['rating']);
-      $Qreview->bindInt(':languages_id', $_SESSION['languages_id']);
+      $Qreview->bindInt(':languages_id', $osC_Language->getID());
       $Qreview->bindValue(':reviews_text', $data['review']);
       $Qreview->bindInt(':reviews_status', $data['status']);
       $Qreview->execute();

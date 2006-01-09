@@ -40,14 +40,14 @@
 /* Public methods */
 
     function &getListing($limit = null, $page_keyword = 'page') {
-      global $osC_Database, $osC_Customer;
+      global $osC_Database, $osC_Customer, $osC_Language;
 
       $Qorders = $osC_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "ot_total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc');
       $Qorders->bindTable(':table_orders', TABLE_ORDERS);
       $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
       $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qorders->bindInt(':customers_id', $osC_Customer->getID());
-      $Qorders->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qorders->bindInt(':language_id', $osC_Language->getID());
 
       if (is_numeric($limit)) {
         $Qorders->setBatchLimit(isset($_GET[$page_keyword]) && is_numeric($_GET[$page_keyword]) ? $_GET[$page_keyword] : 1, $limit);
@@ -59,7 +59,7 @@
     }
 
     function &getStatusListing($id = null) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       if ( ($id === null) && isset($this) ) {
         $id = $this->_id;
@@ -69,7 +69,7 @@
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qstatus->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
       $Qstatus->bindInt(':orders_id', $id);
-      $Qstatus->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qstatus->bindInt(':language_id', $osC_Language->getID());
 
       return $Qstatus;
     }
@@ -127,7 +127,7 @@
 
 
     function query($order_id) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qorder = $osC_Database->query('select customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, orders_status, last_modified from :table_orders where orders_id = :orders_id');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
@@ -162,7 +162,7 @@
       $Qstatus = $osC_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qstatus->bindInt(':orders_status_id', $Qorder->valueInt('orders_status'));
-      $Qstatus->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qstatus->bindInt(':language_id', $osC_Language->getID());
       $Qstatus->execute();
 
       $this->info = array('currency' => $Qorder->value('currency'),
@@ -257,7 +257,7 @@
     }
 
     function cart() {
-      global $osC_Database, $osC_Customer, $osC_Tax, $osC_Currencies;
+      global $osC_Database, $osC_Customer, $osC_Tax, $osC_Currencies, $osC_Language;
 
       $this->content_type = $_SESSION['cart']->get_content_type();
 
@@ -384,8 +384,8 @@
             $Qattributes->bindInt(':products_id', $products[$i]['id']);
             $Qattributes->bindInt(':options_id', $option);
             $Qattributes->bindInt(':options_values_id', $value);
-            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
-            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
             $Qattributes->execute();
 
             $this->products[$index]['attributes'][$subindex] = array('option' => $Qattributes->value('products_options_name'),

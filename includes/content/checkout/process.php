@@ -53,7 +53,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Currencies, $order, $payment_modules, $shipping_modules, $order_total_modules;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Currencies, $osC_Language, $order, $payment_modules, $shipping_modules, $order_total_modules;
 
 // load selected payment module
       require('includes/classes/payment.php');
@@ -235,8 +235,8 @@
               $Qattributes->bindInt(':products_id', $order->products[$i]['id']);
               $Qattributes->bindInt(':options_id', $order->products[$i]['attributes'][$j]['option_id']);
               $Qattributes->bindInt(':options_values_id', $order->products[$i]['attributes'][$j]['value_id']);
-              $Qattributes->bindInt(':popt_language_id', $_SESSION['languages_id']);
-              $Qattributes->bindInt(':poval_language_id', $_SESSION['languages_id']);
+              $Qattributes->bindInt(':popt_language_id', $osC_Language->getID());
+              $Qattributes->bindInt(':poval_language_id', $osC_Language->getID());
             } else {
               $Qattributes = $osC_Database->query('select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix from :table_products_options popt, :table_products_options_values poval, :table_products_attributes pa where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_id = popt.products_options_id and pa.options_values_id = :options_values_id and pa.options_values_id = poval.products_options_values_id and popt.language_id = :popt_language_id and poval.language_id = :poval_language_id');
               $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
@@ -245,8 +245,8 @@
               $Qattributes->bindInt(':products_id', $order->products[$i]['id']);
               $Qattributes->bindInt(':options_id', $order->products[$i]['attributes'][$j]['option_id']);
               $Qattributes->bindInt(':options_values_id', $order->products[$i]['attributes'][$j]['value_id']);
-              $Qattributes->bindInt(':popt_language_id', $_SESSION['languages_id']);
-              $Qattributes->bindInt(':poval_language_id', $_SESSION['languages_id']);
+              $Qattributes->bindInt(':popt_language_id', $osC_Language->getID());
+              $Qattributes->bindInt(':poval_language_id', $osC_Language->getID());
             }
             $Qattributes->execute();
 

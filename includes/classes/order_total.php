@@ -15,12 +15,14 @@
 
 // class constructor
     function order_total() {
+      global $osC_Language;
+
       if (defined('MODULE_ORDER_TOTAL_INSTALLED') && tep_not_null(MODULE_ORDER_TOTAL_INSTALLED)) {
         $this->modules = explode(';', MODULE_ORDER_TOTAL_INSTALLED);
 
         reset($this->modules);
         while (list(, $value) = each($this->modules)) {
-          include('includes/languages/' . $_SESSION['language'] . '/modules/order_total/' . $value);
+          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/order_total/' . $value);
           include('includes/modules/order_total/' . $value);
 
           $class = substr($value, 0, strrpos($value, '.'));

@@ -18,7 +18,7 @@
   $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
   $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qproducts->bindInt(':products_id', $_GET['pID']);
-  $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
+  $Qproducts->bindInt(':language_id', $osC_Language->getID());
   $Qproducts->execute();
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">

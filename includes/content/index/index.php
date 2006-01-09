@@ -23,14 +23,14 @@
 /* Class constructor */
 
     function osC_Index_Index() {
-      global $osC_Database, $osC_Services, $breadcrumb, $cPath, $cPath_array, $current_category_id, $osC_Category;
+      global $osC_Database, $osC_Services, $osC_Language, $breadcrumb, $cPath, $cPath_array, $current_category_id, $osC_Category;
 
       if (isset($cPath) && (empty($cPath) === false)) {
         if ($osC_Services->isStarted('breadcrumb')) {
           $Qcategories = $osC_Database->query('select categories_id, categories_name from :table_categories_description where categories_id in (:categories_id) and language_id = :language_id');
           $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
           $Qcategories->bindTable(':categories_id', implode(',', $cPath_array));
-          $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
+          $Qcategories->bindInt(':language_id', $osC_Language->getID());
           $Qcategories->execute();
 
           $categories = array();

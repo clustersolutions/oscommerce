@@ -27,7 +27,7 @@
         $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
         $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
         $Qcategories->bindInt(':parent_id', $category_links[$i]);
-        $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
+        $Qcategories->bindInt(':language_id', $osC_Language->getID());
         $Qcategories->execute();
 
         if ($Qcategories->valueInt('total') < 1) {
@@ -37,7 +37,7 @@
           $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
           $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
           $Qcategories->bindInt(':parent_id', $category_links[$i]);
-          $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
+          $Qcategories->bindInt(':language_id', $osC_Language->getID());
           $Qcategories->execute();
           break; // we've found the deepest category the customer is in
         }
@@ -47,7 +47,7 @@
       $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
       $Qcategories->bindInt(':parent_id', $current_category_id);
-      $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qcategories->bindInt(':language_id', $osC_Language->getID());
       $Qcategories->execute();
     }
 

@@ -14,7 +14,7 @@
 
   require('includes/classes/order.php');
 
-  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_CHECKOUT);
+  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_CHECKOUT);
 
   if ($osC_Services->isStarted('breadcrumb')) {
     $breadcrumb->add(NAVBAR_TITLE_CHECKOUT, tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));

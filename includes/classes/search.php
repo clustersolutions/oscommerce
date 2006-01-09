@@ -132,7 +132,7 @@
     }
 
     function &execute() {
-      global $osC_Database, $osC_Customer, $osC_Currencies;
+      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_Language;
 
       $Qlisting = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price');
 
@@ -167,7 +167,7 @@
       $Qlisting->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
 
       $Qlisting->appendQuery('where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id');
-      $Qlisting->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qlisting->bindInt(':language_id', $osC_Language->getID());
 
       if ($this->hasCategory()) {
         if ($this->isRecursive()) {
@@ -185,7 +185,7 @@
           $Qlisting->appendQuery(')');
         } else {
           $Qlisting->appendQuery('and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = :language_id and p2c.categories_id = :categories_id');
-          $Qlisting->bindInt(':language_id', $_SESSION['languages_id']);
+          $Qlisting->bindInt(':language_id', $osC_Language->getID());
           $Qlisting->bindInt(':categories_id', $this->_category);
         }
       }

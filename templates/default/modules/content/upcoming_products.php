@@ -14,7 +14,7 @@
   $Qupcoming->bindRaw(':table_products', TABLE_PRODUCTS);
   $Qupcoming->bindRaw(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qupcoming->bindInt(':products_status', 1);
-  $Qupcoming->bindInt(':language_id', $_SESSION['languages_id']);
+  $Qupcoming->bindInt(':language_id', $osC_Language->getID());
   $Qupcoming->bindRaw(':expected_products_field', EXPECTED_PRODUCTS_FIELD);
   $Qupcoming->bindRaw(':expected_products_sort', EXPECTED_PRODUCTS_SORT);
   $Qupcoming->bindInt(':max_display_upcoming_products', MODULE_CONTENT_UPCOMING_PRODUCTS_MAX_DISPLAY);

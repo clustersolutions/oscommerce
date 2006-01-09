@@ -12,7 +12,7 @@
 
   require('includes/application_top.php');
 
-  require('includes/languages/' . $_SESSION['language'] . '/' . FILENAME_INFO);
+  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_INFO);
 
   if ($osC_Services->isStarted('breadcrumb')) {
     $breadcrumb->add(BREADCRUMB_INFO, tep_href_link(FILENAME_INFO));

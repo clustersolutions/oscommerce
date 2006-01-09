@@ -23,17 +23,17 @@
     }
 
     function initialize() {
-      global $osC_Database, $osC_Services, $osC_Currencies, $osC_Cache;
+      global $osC_Database, $osC_Services, $osC_Currencies, $osC_Cache, $osC_Language;
 
       if ($osC_Services->isStarted('specials')) {
-        if ((BOX_SPECIALS_CACHE > 0) && $osC_Cache->read('box-specials-' . $_SESSION['language'], BOX_SPECIALS_CACHE)) {
+        if ((BOX_SPECIALS_CACHE > 0) && $osC_Cache->read('box-specials-' . $osC_Language->getCode(), BOX_SPECIALS_CACHE)) {
           $data = $osC_Cache->getCache();
         } else {
           $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, p.products_image, pd.products_name, pd.products_keyword, s.specials_new_products_price from :table_products p, :table_products_description pd, :table_specials s where s.status = 1 and s.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by s.specials_date_added desc limit :max_random_select_specials');
           $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
           $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-          $Qspecials->bindInt(':language_id', $_SESSION['languages_id']);
+          $Qspecials->bindInt(':language_id', $osC_Language->getID());
           $Qspecials->bindInt(':max_random_select_specials', BOX_SPECIALS_RANDOM_SELECT);
           $Qspecials->executeRandomMulti();
 

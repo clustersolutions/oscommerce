@@ -24,7 +24,7 @@
 /* Class constructor */
 
     function osC_Checkout_Shipping() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -115,7 +115,7 @@
       if ( ($pass == true) && ( ($order->info['total'] - $order->info['shipping_cost']) >= MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER) ) {
         $free_shipping = true;
 
-        include('includes/languages/' . $_SESSION['language'] . '/modules/order_total/ot_shipping.php');
+        include('includes/languages/' . $osC_Language->getDirectory() . '/modules/order_total/ot_shipping.php');
       }
     } else {
       $free_shipping = false;

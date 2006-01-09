@@ -15,6 +15,8 @@
 
 // class constructor
     function payment($module = '') {
+      global $osC_Language;
+
       if (defined('MODULE_PAYMENT_INSTALLED') && tep_not_null(MODULE_PAYMENT_INSTALLED)) {
         $this->modules = explode(';', MODULE_PAYMENT_INSTALLED);
 
@@ -33,7 +35,7 @@
         }
 
         for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include('includes/languages/' . $_SESSION['language'] . '/modules/payment/' . $include_modules[$i]['file']);
+          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/payment/' . $include_modules[$i]['file']);
           include('includes/modules/payment/' . $include_modules[$i]['file']);
 
           $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];

@@ -5,19 +5,16 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Language {
 
-/* Public variables */
-
-    var $language;
-
 /* Private variables */
-    var $_languages = array();
+    var $_code,
+        $_languages = array();
 
 /* Class constructor */
 
@@ -32,140 +29,123 @@
       while ($Qlanguages->next()) {
         $this->_languages[$Qlanguages->value('code')] = array('id' => $Qlanguages->valueInt('languages_id'),
                                                               'name' => $Qlanguages->value('name'),
-                                                              'code' => $Qlanguages->value('code'),
                                                               'image' => $Qlanguages->value('image'),
                                                               'directory' => $Qlanguages->value('directory'));
       }
 
       $Qlanguages->freeResult();
 
-      if (isset($_SESSION['language'])) {
-        $this->set();
-      } else {
-        $this->setToBrowser();
-      }
+      $this->set();
     }
 
 /* Public methods */
 
-    function set($lang = '') {
-      if (empty($lang) && isset($_SESSION['language'])) {
-        foreach ($this->_languages as $l) {
-          if ($l['directory'] == $_SESSION['language']) {
-            $lang = $l['code'];
-            break;
+    function set($code = '') {
+      $this->_code = $code;
+
+      if (empty($this->_code)) {
+        if (isset($_SESSION['language'])) {
+          $this->_code = $_SESSION['language'];
+        } elseif (isset($_COOKIE['language'])) {
+          $this->_code = $_COOKIE['language'];
+        } else {
+          $this->_code = $this->getBrowserSetting();
+        }
+      }
+
+      if (empty($this->_code) || ($this->exists($this->_code) === false)) {
+        $this->_code = DEFAULT_LANGUAGE;
+      }
+
+      if (!isset($_COOKIE['language']) || (isset($_COOKIE['language']) && ($_COOKIE['language'] != $this->_code))) {
+        tep_setcookie('language', $this->_code, time()+60*60*24*90);
+      }
+
+      if ((isset($_SESSION['language']) === false) || (isset($_SESSION['language']) && ($_SESSION['language'] != $this->_code))) {
+        $_SESSION['language'] = $this->_code;
+      }
+    }
+
+    function getBrowserSetting() {
+      if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        $browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+
+        $languages = array('ar' => 'ar([-_][[:alpha:]]{2})?|arabic',
+                           'bg' => 'bg|bulgarian',
+                           'br' => 'pt[-_]br|brazilian portuguese',
+                           'ca' => 'ca|catalan',
+                           'cs' => 'cs|czech',
+                           'da' => 'da|danish',
+                           'de' => 'de([-_][[:alpha:]]{2})?|german',
+                           'el' => 'el|greek',
+                           'en' => 'en([-_][[:alpha:]]{2})?|english',
+                           'es' => 'es([-_][[:alpha:]]{2})?|spanish',
+                           'et' => 'et|estonian',
+                           'fi' => 'fi|finnish',
+                           'fr' => 'fr([-_][[:alpha:]]{2})?|french',
+                           'gl' => 'gl|galician',
+                           'he' => 'he|hebrew',
+                           'hu' => 'hu|hungarian',
+                           'id' => 'id|indonesian',
+                           'it' => 'it|italian',
+                           'ja' => 'ja|japanese',
+                           'ko' => 'ko|korean',
+                           'ka' => 'ka|georgian',
+                           'lt' => 'lt|lithuanian',
+                           'lv' => 'lv|latvian',
+                           'nl' => 'nl([-_][[:alpha:]]{2})?|dutch',
+                           'no' => 'no|norwegian',
+                           'pl' => 'pl|polish',
+                           'pt' => 'pt([-_][[:alpha:]]{2})?|portuguese',
+                           'ro' => 'ro|romanian',
+                           'ru' => 'ru|russian',
+                           'sk' => 'sk|slovak',
+                           'sr' => 'sr|serbian',
+                           'sv' => 'sv|swedish',
+                           'th' => 'th|thai',
+                           'tr' => 'tr|turkish',
+                           'uk' => 'uk|ukrainian',
+                           'tw' => 'zh[-_]tw|chinese traditional',
+                           'zh' => 'zh|chinese simplified');
+
+        foreach ($browser_languages as $browser_language) {
+          foreach ($languages as $key => $value) {
+            if (eregi('^(' . $value . ')(;q=[0-9]\\.[0-9])?$', $browser_language) && $this->exists($key)) {
+              return $key;
+            }
           }
         }
       }
 
-      if (empty($lang) || ($this->exists($lang) === false)) {
-        $lang = DEFAULT_LANGUAGE;
-      }
-
-      $this->language = $this->get($lang);
-
-      if (!isset($_COOKIE['language']) || (isset($_COOKIE['language']) && ($_COOKIE['language'] != $this->language['code']))) {
-        tep_setcookie('language', $this->language['code'], time()+60*60*24*90);
-      }
-
-      if ((isset($_SESSION['language']) === false) || (isset($_SESSION['language']) && ($_SESSION['language'] != $this->language['directory']))) {
-        $_SESSION['language'] = $this->language['directory'];
-        $_SESSION['languages_id'] = $this->language['id'];
-      }
+      return false;
     }
 
-    function setToBrowser() {
-      if (isset($_COOKIE['language'])) {
-        if ($this->exists($_COOKIE['language'])) {
-          $this->set($_COOKIE['language']);
-
-          return true;
-        }
-      }
-
-      $http_accept_language = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
-
-      $browser_languages = array('ar' => 'ar([-_][[:alpha:]]{2})?|arabic',
-                                 'bg' => 'bg|bulgarian',
-                                 'br' => 'pt[-_]br|brazilian portuguese',
-                                 'ca' => 'ca|catalan',
-                                 'cs' => 'cs|czech',
-                                 'da' => 'da|danish',
-                                 'de' => 'de([-_][[:alpha:]]{2})?|german',
-                                 'el' => 'el|greek',
-                                 'en' => 'en([-_][[:alpha:]]{2})?|english',
-                                 'es' => 'es([-_][[:alpha:]]{2})?|spanish',
-                                 'et' => 'et|estonian',
-                                 'fi' => 'fi|finnish',
-                                 'fr' => 'fr([-_][[:alpha:]]{2})?|french',
-                                 'gl' => 'gl|galician',
-                                 'he' => 'he|hebrew',
-                                 'hu' => 'hu|hungarian',
-                                 'id' => 'id|indonesian',
-                                 'it' => 'it|italian',
-                                 'ja' => 'ja|japanese',
-                                 'ko' => 'ko|korean',
-                                 'ka' => 'ka|georgian',
-                                 'lt' => 'lt|lithuanian',
-                                 'lv' => 'lv|latvian',
-                                 'nl' => 'nl([-_][[:alpha:]]{2})?|dutch',
-                                 'no' => 'no|norwegian',
-                                 'pl' => 'pl|polish',
-                                 'pt' => 'pt([-_][[:alpha:]]{2})?|portuguese',
-                                 'ro' => 'ro|romanian',
-                                 'ru' => 'ru|russian',
-                                 'sk' => 'sk|slovak',
-                                 'sr' => 'sr|serbian',
-                                 'sv' => 'sv|swedish',
-                                 'th' => 'th|thai',
-                                 'tr' => 'tr|turkish',
-                                 'uk' => 'uk|ukrainian',
-                                 'tw' => 'zh[-_]tw|chinese traditional',
-                                 'zh' => 'zh|chinese simplified');
-
-      foreach ($http_accept_language as $browser_language) {
-        foreach ($browser_languages as $key => $value) {
-          if (eregi('^(' . $value . ')(;q=[0-9]\\.[0-9])?$', $browser_language) && $this->exists($key)) {
-            $this->set($key);
-
-            return true;
-          }
-        }
-      }
-
-      $this->set(DEFAULT_LANGUAGE);
-    }
-
-    function get($lang) {
-      return $this->_languages[$lang];
+    function exists($code) {
+      return array_key_exists($code, $this->_languages);
     }
 
     function getAll() {
       return $this->_languages;
     }
 
-    function exists($lang) {
-      return array_key_exists($lang, $this->_languages);
-    }
-
     function getID() {
-      return $this->language['id'];
+      return $this->_languages[$this->_code]['id'];
     }
 
     function getName() {
-      return $this->language['name'];
+      return $this->_languages[$this->_code]['name'];
     }
 
     function getCode() {
-      return $this->language['code'];
+      return $this->_code;
     }
 
     function getImage() {
-      return $this->language['image'];
+      return $this->_languages[$this->_code]['image'];
     }
 
     function getDirectory() {
-      return $this->language['directory'];
+      return $this->_languages[$this->_code]['directory'];
     }
 
     function load($definition = false) {

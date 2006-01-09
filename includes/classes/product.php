@@ -14,7 +14,7 @@
     var $_data = array();
 
     function osC_Product($id) {
-      global $osC_Database, $osC_Services;
+      global $osC_Database, $osC_Services, $osC_Language;
 
       if (!empty($id)) {
         $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_image as image, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where');
@@ -30,7 +30,7 @@
         }
 
         $Qproduct->appendQuery('and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id');
-        $Qproduct->bindInt(':language_id', $_SESSION['languages_id']);
+        $Qproduct->bindInt(':language_id', $osC_Language->getID());
         $Qproduct->execute();
 
         if ($Qproduct->numberOfRows() === 1) {
@@ -56,8 +56,8 @@
             $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
             $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
             $Qattributes->bindInt(':products_id', $this->_data['id']);
-            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
-            $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
             $Qattributes->execute();
 
             while ($Qattributes->next()) {
@@ -74,7 +74,7 @@
             $Qavg = $osC_Database->query('select avg(reviews_rating) as rating from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1');
             $Qavg->bindTable(':table_reviews', TABLE_REVIEWS);
             $Qavg->bindInt(':products_id', $this->_data['id']);
-            $Qavg->bindInt(':languages_id', $_SESSION['languages_id']);
+            $Qavg->bindInt(':languages_id', $osC_Language->getID());
             $Qavg->execute();
 
             $this->_data['reviews_average_rating'] = round($Qavg->value('rating'));
@@ -232,23 +232,23 @@
     }
 
     function incrementCounter() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qupdate = $osC_Database->query('update :table_products_description set products_viewed = products_viewed+1 where products_id = :products_id and language_id = :language_id');
       $Qupdate->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
       $Qupdate->bindInt(':products_id', tep_get_prid($this->_data['id']));
-      $Qupdate->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qupdate->bindInt(':language_id', $osC_Language->getID());
       $Qupdate->execute();
     }
 
     function &getListingNew() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_image, p.products_price, p.products_tax_class_id, p.products_date_added, m.manufacturers_name from :table_products p left join :table_manufacturers m on (p.manufacturers_id = m.manufacturers_id), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc, pd.products_name');
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_PRODUCTS_NEW);
       $Qproducts->execute();
 

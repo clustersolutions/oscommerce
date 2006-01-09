@@ -161,7 +161,7 @@
     }
 
     function process_button() {
-      global $order, $osC_Currencies;
+      global $order, $osC_Currencies, $osC_Language;
 
       switch (MODULE_PAYMENT_IPAYMENT_CURRENCY) {
         case 'Always EUR':
@@ -200,7 +200,7 @@
                                osc_draw_hidden_field('addr_country', $order->billing['country']['iso_code_2']) .
                                osc_draw_hidden_field('addr_telefon', $order->customer['telephone']) .
                                osc_draw_hidden_field('addr_email', $order->customer['email_address']) .
-                               osc_draw_hidden_field('error_lang', ($_SESSION['language'] == 'english') ? 'en' : 'de') .
+                               osc_draw_hidden_field('error_lang', ($osC_Language->getCode() == 'en') ? 'en' : 'de') .
                                osc_draw_hidden_field('silent', '1') .
                                osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code . '&' . $payment_error_return, 'SSL')) .
                                osc_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .

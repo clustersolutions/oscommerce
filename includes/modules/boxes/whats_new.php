@@ -23,15 +23,15 @@
     }
 
     function initialize() {
-      global $osC_Cache, $osC_Database, $osC_Services, $osC_Currencies, $osC_Specials;
+      global $osC_Cache, $osC_Database, $osC_Services, $osC_Currencies, $osC_Specials, $osC_Language;
 
-      if ((BOX_WHATS_NEW_CACHE > 0) && $osC_Cache->read('box-whats_new-' . $_SESSION['language'], BOX_WHATS_NEW_CACHE)) {
+      if ((BOX_WHATS_NEW_CACHE > 0) && $osC_Cache->read('box-whats_new-' . $osC_Language->getCode(), BOX_WHATS_NEW_CACHE)) {
         $data = $osC_Cache->getCache();
       } else {
         $Qnew = $osC_Database->query('select p.products_id, p.products_image, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword from :table_products p, :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc limit :max_random_select_new');
         $Qnew->bindTable(':table_products', TABLE_PRODUCTS);
         $Qnew->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-        $Qnew->bindInt(':language_id', $_SESSION['languages_id']);
+        $Qnew->bindInt(':language_id', $osC_Language->getID());
         $Qnew->bindInt(':max_random_select_new', BOX_WHATS_NEW_RANDOM_SELECT);
         $Qnew->executeRandomMulti();
 

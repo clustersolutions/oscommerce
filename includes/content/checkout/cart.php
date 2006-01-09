@@ -41,7 +41,7 @@
     }
 
     function getAttributes($id) {
-      global $osC_Database, $osC_Session;
+      global $osC_Database, $osC_Session, $osC_Language;
 
       foreach ($_SESSION['cart']->get_products() as $product) {
         if ($product['id'] == $id) {
@@ -56,8 +56,8 @@
               $Qattributes->bindInt(':products_id', $product['id']);
               $Qattributes->bindInt(':options_id', $option);
               $Qattributes->bindInt(':options_values_id', $value);
-              $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
-              $Qattributes->bindInt(':language_id', $_SESSION['languages_id']);
+              $Qattributes->bindInt(':language_id', $osC_Language->getID());
+              $Qattributes->bindInt(':language_id', $osC_Language->getID());
               $Qattributes->execute();
 
               $array[] = array('options_id' => $option,

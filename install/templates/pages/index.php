@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -119,10 +119,10 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="50%" align="center"><a href="install.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/install.gif" border="0" alt="<?php echo $osC_Language->get('image_button_install'); ?>" /></a></td>
+        <td width="50%" align="center"><?php echo '<a href="install.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/install.gif" border="0" alt="' . $osC_Language->get('image_button_install') . '" /></a>'; ?></td>
 
 <!--
-        <td width="50%" align="center"><a href="upgrade.php"><img src="templates/<?php echo $template; ?>/languages/<?php echo $language; ?>/images/upgrade.gif" border="0" alt="<?php echo $osC_Language->get('image_button_upgrade'); ?>" /></a></td>
+        <td width="50%" align="center"><?php echo '<a href="upgrade.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/upgrade.gif" border="0" alt="' . $osC_Language->get('image_button_upgrade') . '" /></a>'; ?></td>
 //-->
 
       </tr>

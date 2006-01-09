@@ -42,13 +42,13 @@
 /* Public methods */
 
     function &getListing() {
-      global $osC_Database, $osC_Session, $osC_Customer;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Language;
 
       $Qproducts = $osC_Database->query('select pd.products_id, pd.products_name from :table_products_description pd, :table_products_notifications pn where pn.customers_id = :customers_id and pn.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
       $Qproducts->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
       $Qproducts->bindInt(':customers_id', $osC_Customer->getID());
-      $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
 
       return $Qproducts;

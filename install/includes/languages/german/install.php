@@ -22,7 +22,7 @@ param_import_database = Import Catalog Database
 param_import_database_description = Import the database structure and configuration parameters. (Required for first time installations)
 
 param_automatic_configuration = Automatic Configuration
-param_automatic_configuration_description = Save configuration patemeters entered during the installation procedure to the server.
+param_automatic_configuration_description = Save configuration parameters entered during the installation procedure to the server.
 
 param_database_server = Database Server
 param_database_server_description = The address of the database server in the form of a hostname or IP address.

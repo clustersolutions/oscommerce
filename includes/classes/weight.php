@@ -22,7 +22,7 @@
     }
 
     function prepareRules() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qrules = $osC_Database->query('select r.weight_class_from_id, r.weight_class_to_id, r.weight_class_rule from :table_weight_class_rules r, :table_weight_class c where c.weight_class_id = r.weight_class_from_id');
       $Qrules->bindRaw(':table_weight_class_rules', TABLE_WEIGHT_CLASS_RULES);
@@ -36,7 +36,7 @@
 
       $Qclasses = $osC_Database->query('select weight_class_id, weight_class_key, weight_class_title from :table_weight_class where language_id = :language_id');
       $Qclasses->bindRaw(':table_weight_class', TABLE_WEIGHT_CLASS);
-      $Qclasses->bindInt(':language_id', $_SESSION['languages_id']);
+      $Qclasses->bindInt(':language_id', $osC_Language->getID());
       $Qclasses->setCache('weight-classes');
       $Qclasses->execute();
 

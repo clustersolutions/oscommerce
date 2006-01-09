@@ -22,7 +22,7 @@
     }
 
     function initialize() {
-      global $osC_Customer, $osC_Database;
+      global $osC_Customer, $osC_Database, $osC_Language;
 
       if ($osC_Customer->isLoggedOn()) {
         $Qorders = $osC_Database->query('select distinct op.products_id from :table_orders o, :table_orders_products op, :table_products p where o.customers_id = :customers_id and o.orders_id = op.orders_id and op.products_id = p.products_id and p.products_status = 1 group by products_id order by o.date_purchased desc limit :limit');
@@ -47,7 +47,7 @@
           $Qproducts = $osC_Database->query('select products_id, products_name, products_keyword from :table_products_description where products_id in (:products_id) and language_id = :language_id order by products_name');
           $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qproducts->bindRaw(':products_id', $product_ids);
-          $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
+          $Qproducts->bindInt(':language_id', $osC_Language->getID());
           $Qproducts->execute();
 
           while ($Qproducts->next()) {

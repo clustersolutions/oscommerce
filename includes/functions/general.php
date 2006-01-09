@@ -58,10 +58,10 @@
 // Return a product's name
 // TABLES: products
   function tep_get_products_name($product_id, $language_id = '') {
-    global $osC_Database;
+    global $osC_Database, $osC_Language;
 
     if (empty($language_id) || !is_numeric($language_id)) {
-      $language_id = $_SESSION['languages_id'];
+      $language_id = $osC_Language->getID();
     }
 
     $Qproduct = $osC_Database->query('select products_name from :table_products_description where products_id = :products_id and language_id = :language_id');
@@ -448,7 +448,7 @@
   }
 
   function tep_get_categories($categories_array = '', $parent_id = '0', $indent = '') {
-    global $osC_Database;
+    global $osC_Database, $osC_Language;
 
     if (!is_array($categories_array)) $categories_array = array();
 
@@ -456,7 +456,7 @@
     $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
     $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
     $Qcategories->bindInt(':parent_id', $parent_id);
-    $Qcategories->bindInt(':language_id', $_SESSION['languages_id']);
+    $Qcategories->bindInt(':language_id', $osC_Language->getID());
     $Qcategories->execute();
 
     while ($Qcategories->next()) {

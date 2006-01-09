@@ -15,6 +15,8 @@
 
 // class constructor
     function shipping($module = '') {
+      global $osC_Language;
+
       if (defined('MODULE_SHIPPING_INSTALLED') && tep_not_null(MODULE_SHIPPING_INSTALLED)) {
         $this->modules = explode(';', MODULE_SHIPPING_INSTALLED);
 
@@ -31,7 +33,7 @@
         }
 
         for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include('includes/languages/' . $_SESSION['language'] . '/modules/shipping/' . $include_modules[$i]['file']);
+          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/shipping/' . $include_modules[$i]['file']);
           include('includes/modules/shipping/' . $include_modules[$i]['file']);
 
           $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];

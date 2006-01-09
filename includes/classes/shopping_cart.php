@@ -388,7 +388,7 @@
     }
 
     function get_products() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       if (!is_array($this->contents)) return false;
 
@@ -399,7 +399,7 @@
         $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
         $Qproducts->bindInt(':products_id', $products_id);
-        $Qproducts->bindInt(':language_id', $_SESSION['languages_id']);
+        $Qproducts->bindInt(':language_id', $osC_Language->getID());
         $Qproducts->execute();
 
         if ($Qproducts->numberOfRows()) {
