@@ -16,17 +16,19 @@
 
     var $_module = 'cart',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_SHOPPING_CART,
+        $_page_title,
         $_page_contents = 'shopping_cart.php',
         $_products_out_of_stock = false;
 
 /* Class constructor */
 
     function osC_Checkout_Cart() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Services, $osC_Language, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('shopping_cart_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_SHOPPING_CART, tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shopping_cart'), tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'update') {

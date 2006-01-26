@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -31,8 +31,8 @@
 
   <tr>
     <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qproducts->value('products_image'), $Qproducts->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>'; ?></td>
-    <td valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->valueInt('products_id')) . '"><b><u>' . $Qproducts->value('products_name') . '</u></b></a><br />' . TEXT_DATE_ADDED . ' ' . tep_date_long($Qproducts->value('products_date_added')) . '<br />' . TEXT_MANUFACTURER . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . TEXT_PRICE . ' ' . $products_price; ?></td>
-    <td align="right" valign="middle" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qproducts->value('products_id')) . '">' . tep_image_button('button_in_cart.gif', IMAGE_BUTTON_IN_CART) . '</a>'; ?></td>
+    <td valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->valueInt('products_id')) . '"><b><u>' . $Qproducts->value('products_name') . '</u></b></a><br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($Qproducts->value('products_date_added')) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . $osC_Language->get('price') . ' ' . $products_price; ?></td>
+    <td align="right" valign="middle" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qproducts->value('products_id')) . '">' . tep_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')) . '</a>'; ?></td>
   </tr>
   <tr>
     <td colspan="3"><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
@@ -44,7 +44,7 @@
 ?>
 
   <tr>
-    <td class="main"><?php echo TEXT_NO_NEW_PRODUCTS; ?></td>
+    <td class="main"><?php echo $osC_Language->get('no_new_products'); ?></td>
   </tr>
   <tr>
     <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
@@ -59,5 +59,5 @@
 <div class="listingPageLinks">
   <span style="float: right;"><?php echo $Qproducts->displayBatchLinksPullDown('page', 'new'); ?></span>
 
-  <?php echo $Qproducts->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?>
+  <?php echo $Qproducts->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
 </div>

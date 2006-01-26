@@ -25,17 +25,17 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo HEADING_PASSWORD_FORGOTTEN; ?>
+    <?php echo $osC_Language->get('password_forgotten_heading'); ?>
   </div>
 
   <div class="content">
-    <p><?php echo TEXT_PASSWORD_FORGOTTEN; ?></p>
+    <p><?php echo $osC_Language->get('password_forgotten'); ?></p>
 
     <table border="0" cellspacing="2" cellpadding="2">
       <tr>
-        <td><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('email_address', '', '', true); ?></td>
       </tr>
     </table>
@@ -43,9 +43,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

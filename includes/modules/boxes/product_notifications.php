@@ -5,13 +5,13 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_product_notifications extends osC_Modules {
-    var $_title = 'Product Notifications',
+    var $_title,
         $_code = 'product_notifications',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
@@ -19,12 +19,14 @@
 
 
     function osC_Boxes_product_notifications() {
-//      $this->_title = BOX_HEADING_NOTIFICATIONS;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_product_notifications_heading');
       $this->_title_link = tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL');
     }
 
     function initialize() {
-      global $osC_Database, $osC_Product, $osC_Customer;
+      global $osC_Database, $osC_Language, $osC_Product, $osC_Customer;
 
       if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
         if ($osC_Customer->isLoggedOn()) {
@@ -43,15 +45,15 @@
             if ($Qcheck->numberOfRows() > 0) {
               $data = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
                       '  <tr>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', IMAGE_BUTTON_REMOVE_NOTIFICATIONS) . '</a></td>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . sprintf(BOX_NOTIFICATIONS_NOTIFY_REMOVE, $osC_Product->getTitle()) .'</a></td>' . "\n" .
+                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle())) . '</a></td>' . "\n" .
+                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()) .'</a></td>' . "\n" .
                       '  </tr>' . "\n" .
                       '</table>' . "\n";
             } else {
               $data = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
                       '  <tr>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications.gif', IMAGE_BUTTON_NOTIFICATIONS) . '</a></td>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . sprintf(BOX_NOTIFICATIONS_NOTIFY, $osC_Product->gettitle()) .'</a></td>' . "\n" .
+                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications.gif', sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle())) . '</a></td>' . "\n" .
+                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()) .'</a></td>' . "\n" .
                       '  </tr>' . "\n" .
                       '</table>' . "\n";
             }

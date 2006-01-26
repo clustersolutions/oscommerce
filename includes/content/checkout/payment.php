@@ -16,13 +16,15 @@
 
     var $_module = 'payment',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_PAYMENT,
+        $_page_title,
         $_page_contents = 'checkout_payment.php';
 
 /* Class constructor */
 
     function osC_Checkout_Payment() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $payment_modules;
+      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $payment_modules;
+
+      $this->_page_title = $osC_Language->get('payment_method_heading');
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -58,12 +60,12 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_PAYMENT, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
 // redirect to the billing address page when no default address exists
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->_page_title = HEADING_TITLE_CHECKOUT_PAYMENT_ADDRESS;
+        $this->_page_title = $osC_Language->get('payment_address_heading');
         $this->_page_contents = 'checkout_payment_address.php';
 
         $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment_address.js');

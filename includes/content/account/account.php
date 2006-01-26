@@ -18,7 +18,13 @@
 
     var $_module = 'account',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_ACCOUNT,
+        $_page_title,
         $_page_contents = 'account.php';
+
+    function osC_Account_Account() {
+      global $osC_Language;
+
+      $this->_page_title = $osC_Language->get('account_heading');
+    }
   }
 ?>

@@ -16,17 +16,19 @@
 
     var $_module = 'new',
         $_group = 'products',
-        $_page_title = HEADING_TITLE_NEW_PRODUCTS,
+        $_page_title,
         $_page_contents = 'new.php',
         $_page_image = 'table_background_products_new.gif';
 
 /* Class constructor */
 
     function osC_Products_New() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Services, $osC_Language, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('new_products_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_NEW_PRODUCTS, tep_href_link(FILENAME_PRODUCTS, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_new_products'), tep_href_link(FILENAME_PRODUCTS, $this->_module));
       }
     }
   }

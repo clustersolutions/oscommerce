@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="iso-8859-15"?>
+<language>
+  <definitions>
+    <definition>
+      <key>payment_authorizenet_title</key>
+      <value><![CDATA[Authorize.net]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_description</key>
+      <value><![CDATA[Credit Card Test Info:<br /><br />CC#: 4111111111111111<br />Expiry: Any]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_credit_card_owner</key>
+      <value><![CDATA[Credit Card Owner:]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_credit_card_type</key>
+      <value><![CDATA[Credit Card Type:]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_credit_card_number</key>
+      <value><![CDATA[Credit Card Number:]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_credit_card_expiry_date</key>
+      <value><![CDATA[Credit Card Expiry Date:]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_js_credit_card_owner</key>
+      <value><![CDATA[* The owner's name of the credit card must be at least %s characters.]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_js_credit_card_number</key>
+      <value><![CDATA[* The credit card number must be at least %s characters.]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_error_message</key>
+      <value><![CDATA[There has been an error processing your credit card: %s]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_declined_message</key>
+      <value><![CDATA[Your credit card was declined: %s]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_error</key>
+      <value><![CDATA[Credit Card Error!]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_account_name</key>
+      <value><![CDATA[Name on Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_account_type</key>
+      <value><![CDATA[Type of Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_account_type_check</key>
+      <value><![CDATA[Checking Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_account_type_savings</key>
+      <value><![CDATA[Savings Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_organization_type</key>
+      <value><![CDATA[Organization Type]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_organization_type_personal</key>
+      <value><![CDATA[Personal Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_organization_type_business</key>
+      <value><![CDATA[Business Account]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_name</key>
+      <value><![CDATA[Bank Name]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_routing_code</key>
+      <value><![CDATA[Bank Routing Code]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_bank_account_number</key>
+      <value><![CDATA[Bank Account Number]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_identification</key>
+      <value><![CDATA[Enter TAX ID or Driver's License]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_identification_tax_id</key>
+      <value><![CDATA[Tax ID]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_identification_drivers_license_number</key>
+      <value><![CDATA[Drivers License Number]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_identification_state_code</key>
+      <value><![CDATA[State (2 Letter Code)]]></value>
+      <group>modules-payment</group>
+    </definition>
+    <definition>
+      <key>payment_authorizenet_identification_date_of_birth</key>
+      <value><![CDATA[Date of Birth (MM/DD/YYYY)]]></value>
+      <group>modules-payment</group>
+    </definition>
+  </definitions>
+</language>

@@ -12,10 +12,10 @@
 
   require('includes/application_top.php');
 
-  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_INFO);
+  $osC_Language->load('info');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add(BREADCRUMB_INFO, tep_href_link(FILENAME_INFO));
+    $breadcrumb->add($osC_Language->get('breadcrumb_information'), tep_href_link(FILENAME_INFO));
   }
 
   $osC_Template = osC_Template::setup('info');

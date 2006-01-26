@@ -39,7 +39,7 @@
     }
 
     function createEntry($data) {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_NavigationHistory;
 
       $osC_Database->startTransaction();
 
@@ -83,16 +83,17 @@
 // build the message content
           if ((ACCOUNT_GENDER > -1) && isset($data['gender'])) {
              if ($data['gender'] == 'm') {
-               $email_text = sprintf(EMAIL_GREET_MR, $osC_Customer->getLastName());
+               $email_text = sprintf($osC_Language->get('email_addressing_gender_male'), $osC_Customer->getLastName()) . "\n\n";
              } else {
-               $email_text = sprintf(EMAIL_GREET_MS, $osC_Customer->getLastName());
+               $email_text = sprintf($osC_Language->get('email_addressing_gender_female'), $osC_Customer->getLastName()) . "\n\n";
              }
           } else {
-            $email_text = sprintf(EMAIL_GREET_NONE, $osC_Customer->getName());
+            $email_text = sprintf($osC_Language->get('email_addressing_gender_unknown'), $osC_Customer->getName()) . "\n\n";
           }
 
-          $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT . EMAIL_WARNING;
-          tep_mail($osC_Customer->getName(), $osC_Customer->getEmailAddress(), EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          $email_text .= sprintf($osC_Language->get('email_create_account_body'), STORE_NAME, STORE_OWNER_EMAIL_ADDRESS);
+
+          tep_mail($osC_Customer->getName(), $osC_Customer->getEmailAddress(), sprintf($osC_Language->get('email_create_account_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
           return true;
         } else {

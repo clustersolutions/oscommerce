@@ -5,20 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_reviews extends osC_Modules {
-    var $_title = 'Reviews',
+    var $_title,
         $_code = 'reviews',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_reviews() {
-//      $this->_title = BOX_HEADING_REVIEWS;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_reviews_heading');
       $this->_title_link = tep_href_link(FILENAME_PRODUCTS, 'reviews');
     }
 
@@ -54,15 +56,15 @@
             $Qtext->bindInt(':languages_id', $osC_Language->getID());
             $Qtext->execute();
 
-            $data = '<div align="center"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreview->valueInt('reviews_id') . '&' . $Qreview->value('products_keyword')) . '">' . tep_image(DIR_WS_IMAGES . $Qreview->value('products_image'), $Qreview->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a></div><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreview->valueInt('reviews_id') . '&' . $Qreview->value('products_keyword')) . '">' . tep_break_string($Qtext->valueProtected('reviews_text'), 15, '-<br />') . ' ..</a><br /><div align="center">' . tep_image(DIR_WS_IMAGES . 'stars_' . $Qreview->valueInt('reviews_rating') . '.gif' , sprintf(BOX_REVIEWS_TEXT_OF_5_STARS, $Qreview->valueInt('reviews_rating'))) . '</div>';
+            $data = '<div align="center"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreview->valueInt('reviews_id') . '&' . $Qreview->value('products_keyword')) . '">' . tep_image(DIR_WS_IMAGES . $Qreview->value('products_image'), $Qreview->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a></div><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreview->valueInt('reviews_id') . '&' . $Qreview->value('products_keyword')) . '">' . tep_break_string($Qtext->valueProtected('reviews_text'), 15, '-<br />') . ' ..</a><br /><div align="center">' . tep_image(DIR_WS_IMAGES . 'stars_' . $Qreview->valueInt('reviews_rating') . '.gif' , sprintf($osC_Language->get('box_reviews_stars_rating'), $Qreview->valueInt('reviews_rating'))) . '</div>';
 
             $Qtext->freeResult();
             $Qreview->freeResult();
           } elseif (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
             $data = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
                     '  <tr>' . "\n" .
-                    '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . tep_image(DIR_WS_IMAGES . 'box_write_review.gif', IMAGE_BUTTON_WRITE_REVIEW) . '</a></td>' . "\n" .
-                    '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . BOX_REVIEWS_WRITE_REVIEW .'</a></td>' . "\n" .
+                    '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . tep_image(DIR_WS_IMAGES . 'box_write_review.gif', $osC_Language->get('button_write_review')) . '</a></td>' . "\n" .
+                    '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . $osC_Language->get('box_reviews_write') .'</a></td>' . "\n" .
                     '  </tr>' . "\n" .
                     '</table>' . "\n";
           }

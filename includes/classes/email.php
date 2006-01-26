@@ -29,6 +29,8 @@
     var $headers;
 
     function email($headers = '') {
+      global $osC_Language;
+
       if ($headers == '') $headers = array();
 
       $this->html_images = array();
@@ -58,8 +60,8 @@
 
       $this->build_params['html_encoding'] = 'quoted-printable';
       $this->build_params['text_encoding'] = '7bit';
-      $this->build_params['html_charset'] = constant('CHARSET');
-      $this->build_params['text_charset'] = constant('CHARSET');
+      $this->build_params['html_charset'] = $osC_Language->getCharacterSet();
+      $this->build_params['text_charset'] = $osC_Language->getCharacterSet();
       $this->build_params['text_wrap'] = 998;
 
 /**

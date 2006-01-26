@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_REVIEWS_TITLE')) {
-    $osC_Language->load('modules/summary/reviews.php');
+    $osC_Language->loadConstants('modules/summary/reviews.php');
   }
 
   class osC_Summary_reviews extends osC_Summary {

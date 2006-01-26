@@ -99,9 +99,11 @@
 
 // class constructor
     function zones() {
+      global $osC_Language;
+
       $this->code = 'zones';
-      $this->title = MODULE_SHIPPING_ZONES_TEXT_TITLE;
-      $this->description = MODULE_SHIPPING_ZONES_TEXT_DESCRIPTION;
+      $this->title = $osC_Language->get('shipping_zones_title');
+      $this->description = $osC_Language->get('shipping_zones_description');
       $this->sort_order = MODULE_SHIPPING_ZONES_SORT_ORDER;
       $this->icon = '';
       $this->tax_class = MODULE_SHIPPING_ZONES_TAX_CLASS;
@@ -113,7 +115,7 @@
 
 // class methods
     function quote($method = '') {
-      global $osC_Tax, $order, $shipping_weight, $shipping_num_boxes, $osC_Weight;
+      global $osC_Language, $osC_Tax, $order, $shipping_weight, $shipping_num_boxes, $osC_Weight;
 
       $dest_country = $order->delivery['country']['iso_code_2'];
       $dest_zone = 0;
@@ -141,21 +143,21 @@
         for ($i=0; $i<$size; $i+=2) {
           if ($shipping_weight <= $zones_table[$i]) {
             $shipping = $zones_table[$i+1];
-            $shipping_method = MODULE_SHIPPING_ZONES_TEXT_WAY . ' ' . $dest_country . ' : ' . $osC_Weight->display($shipping_weight, MODULE_SHIPPING_ZONES_WEIGHT_UNIT);
+            $shipping_method = $osC_Language->get('shipping_zones_method') . ' ' . $dest_country . ' : ' . $osC_Weight->display($shipping_weight, MODULE_SHIPPING_ZONES_WEIGHT_UNIT);
             break;
           }
         }
 
         if ($shipping == -1) {
           $shipping_cost = 0;
-          $shipping_method = MODULE_SHIPPING_ZONES_UNDEFINED_RATE;
+          $shipping_method = $osC_Language->get('shipping_zones_undefined_rate');
         } else {
           $shipping_cost = ($shipping * $shipping_num_boxes) + constant('MODULE_SHIPPING_ZONES_HANDLING_' . $dest_zone);
         }
       }
 
       $this->quotes = array('id' => $this->code,
-                            'module' => MODULE_SHIPPING_ZONES_TEXT_TITLE,
+                            'module' => $this->title,
                             'methods' => array(array('id' => $this->code,
                                                      'title' => $shipping_method,
                                                      'cost' => $shipping_cost)),
@@ -167,7 +169,7 @@
 
       if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->title);
 
-      if ($error == true) $this->quotes['error'] = MODULE_SHIPPING_ZONES_INVALID_ZONE;
+      if ($error == true) $this->quotes['error'] = $osC_Language->get('shipping_zones_invalid_zone');
 
       return $this->quotes;
     }
@@ -181,7 +183,7 @@
     }
 
     function install() {
-      global $osC_Database;
+      global $osC_Database, $osC_Languange;
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Enable Zones Method', 'MODULE_SHIPPING_ZONES_STATUS', 'True', 'Do you want to offer zone rate shipping?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Tax Class', 'MODULE_SHIPPING_ZONES_TAX_CLASS', '0', 'Use the following tax class on the shipping fee.', '6', '0', 'tep_get_tax_class_title', 'tep_cfg_pull_down_tax_classes(', now())");
@@ -199,15 +201,50 @@
         $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Zone " . $i ." Handling Fee', 'MODULE_SHIPPING_ZONES_HANDLING_" . $i."', '0', 'Handling Fee for this shipping zone', '6', '0', now())");
         $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Module weight Unit', 'MODULE_SHIPPING_ZONES_WEIGHT_UNIT', '2', 'What unit of weight does this shipping module use?.', '6', '0', 'tep_get_weight_class_title', 'tep_cfg_pull_down_weight_classes(', now())");
       }
+
+      foreach ($osC_Language->getAll() as $key => $value) {
+        foreach ($osC_Language->extractDefinitions($key . '/modules/shipping/' . $this->code . '.xml') as $def) {
+          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
+          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qcheck->bindValue(':definition_key', $def['key']);
+          $Qcheck->bindValue(':content_group', $def['group']);
+          $Qcheck->bindInt(':languages_id', $value['id']);
+          $Qcheck->execute();
+
+          if ($Qcheck->numberOfRows() === 1) {
+            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
+          } else {
+            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+          }
+          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdef->bindInt(':languages_id', $value['id']);
+          $Qdef->bindValue(':content_group', $def['group']);
+          $Qdef->bindValue(':definition_key', $def['key']);
+          $Qdef->bindValue(':definition_value', $def['value']);
+          $Qdef->execute();
+        }
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function remove() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
       $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
       $Qdel->execute();
+
+      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/shipping/' . $this->code . '.xml') as $def) {
+        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
+        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdel->bindValue(':definition_key', $def['key']);
+        $Qdel->bindValue(':content_group', $def['group']);
+        $Qdel->execute();
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function keys() {

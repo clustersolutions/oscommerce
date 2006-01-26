@@ -4,13 +4,13 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Content_also_purchased_products extends osC_Modules {
-    var $_title = 'Also Purchased Products',
+    var $_title,
         $_code = 'also_purchased_products',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
@@ -19,6 +19,9 @@
 /* Class constructor */
 
     function osC_Content_also_purchased_products() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('customers_also_purchased_title');
     }
 
     function initialize() {

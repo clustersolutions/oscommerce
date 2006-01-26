@@ -5,20 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_manufacturer_info extends osC_Modules {
-    var $_title = 'Manufacturer Info',
+    var $_title,
         $_code = 'manufacturer_info',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_manufacturer_info() {
-//      $this->_title = BOX_HEADING_MANUFACTURER_INFO;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_manufacturer_info_heading');
     }
 
     function initialize() {
@@ -45,13 +47,13 @@
           if (tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
             $data .= '  <tr>' . "\n" .
                      '    <td valign="top" class="infoBoxContents">-&nbsp;</td>' . "\n" .
-                     '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_REDIRECT, 'action=manufacturer&manufacturers_id=' . $Qmanufacturer->valueInt('manufacturers_id')) . '" target="_blank">' . sprintf(BOX_MANUFACTURER_INFO_HOMEPAGE, $Qmanufacturer->value('manufacturers_name')) . '</a></td>' . "\n" .
+                     '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_REDIRECT, 'action=manufacturer&manufacturers_id=' . $Qmanufacturer->valueInt('manufacturers_id')) . '" target="_blank">' . sprintf($osC_Language->get('box_manufacturer_info_website'), $Qmanufacturer->value('manufacturers_name')) . '</a></td>' . "\n" .
                      '  </tr>' . "\n";
           }
 
           $data .= '  <tr>' . "\n" .
                    '    <td valign="top" class="infoBoxContents">-&nbsp;</td>' . "\n" .
-                   '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')) . '">' . BOX_MANUFACTURER_INFO_OTHER_PRODUCTS . '</a></td>' . "\n" .
+                   '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')) . '">' . $osC_Language->get('box_manufacturer_info_products') . '</a></td>' . "\n" .
                    '  </tr>' . "\n" .
                    '</table>' . "\n";
 

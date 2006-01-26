@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,9 +19,9 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span style="float: right;">&nbsp;<br /><?php echo HEADING_ORDER_TOTAL . ' ' . $order->info['total']; ?></span>
+    <span style="float: right;">&nbsp;<br /><?php echo $osC_Language->get('order_total_heading') . ' ' . $order->info['total']; ?></span>
 
-    <?php echo sprintf(HEADING_ORDER_NUMBER, $_GET['orders']) . ' <small>(' . $order->info['orders_status'] . ')</small><br />' . HEADING_ORDER_DATE . ' ' . tep_date_long($order->info['date_purchased']); ?>
+    <?php echo sprintf($osC_Language->get('order_number_heading'), $_GET['orders']) . ' <small>(' . $order->info['orders_status'] . ')</small><br />' . $osC_Language->get('order_date_heading') . ' ' . osC_DateTime::getLong($order->info['date_purchased']); ?>
   </div>
 
   <div class="content">
@@ -32,14 +32,14 @@
 <?php
   if ($order->delivery != false) {
 ?>
-          <p><b><?php echo HEADING_DELIVERY_ADDRESS; ?></b></p>
+          <p><b><?php echo $osC_Language->get('order_delivery_address_title'); ?></b></p>
           <p><?php echo tep_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br />'); ?></p>
 
 <?php
     if (tep_not_null($order->info['shipping_method'])) {
 ?>
 
-          <p><b><?php echo HEADING_SHIPPING_METHOD; ?></b></p>
+          <p><b><?php echo $osC_Language->get('order_shipping_method_title'); ?></b></p>
           <p><?php echo $order->info['shipping_method']; ?></p>
 
 <?php
@@ -47,10 +47,10 @@
   }
 ?>
 
-          <p><b><?php echo HEADING_BILLING_ADDRESS; ?></b></p>
+          <p><b><?php echo $osC_Language->get('order_billing_address_title'); ?></b></p>
           <p><?php echo tep_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></p>
 
-          <p><b><?php echo HEADING_PAYMENT_METHOD; ?></b></p>
+          <p><b><?php echo $osC_Language->get('order_payment_method_title'); ?></b></p>
           <p><?php echo $order->info['payment_method']; ?></p>
         </td>
         <td width="70%" valign="top">
@@ -60,15 +60,15 @@
   if (sizeof($order->info['tax_groups']) > 1) {
 ?>
               <tr>
-                <td colspan="2"><b><?php echo HEADING_PRODUCTS; ?></b></td>
-                <td align="right"><b><?php echo HEADING_TAX; ?></b></td>
-                <td align="right"><b><?php echo HEADING_TOTAL; ?></b></td>
+                <td colspan="2"><b><?php echo $osC_Language->get('order_products_title'); ?></b></td>
+                <td align="right"><b><?php echo $osC_Language->get('order_tax_title'); ?></b></td>
+                <td align="right"><b><?php echo $osC_Language->get('order_total_title'); ?></b></td>
               </tr>
 <?php
   } else {
 ?>
               <tr>
-                <td colspan="3"><b><?php echo HEADING_PRODUCTS; ?></b></td>
+                <td colspan="3"><b><?php echo $osC_Language->get('order_products_title'); ?></b></td>
               </tr>
 <?php
   }
@@ -125,14 +125,14 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo HEADING_ORDER_HISTORY; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('order_history_heading'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
   while ($Qstatus->next()) {
     echo '    <tr>' . "\n" .
-         '      <td valign="top" width="70">' . tep_date_short($Qstatus->value('date_added')) . '</td>' . "\n" .
+         '      <td valign="top" width="70">' . osC_DateTime::getShort($Qstatus->value('date_added')) . '</td>' . "\n" .
          '      <td valign="top" width="70">' . $Qstatus->value('orders_status_name') . '</td>' . "\n" .
          '      <td valign="top">' . (tep_not_null($Qstatus->valueProtected('comments')) ? nl2br($Qstatus->valueProtected('comments')) : '&nbsp;') . '</td>' . "\n" .
          '    </tr>' . "\n";
@@ -152,5 +152,5 @@
 
 
 <div class="submitFormButtons">
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>

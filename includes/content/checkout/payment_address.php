@@ -16,13 +16,15 @@
 
     var $_module = 'payment_address',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_PAYMENT_ADDRESS,
+        $_page_title,
         $_page_contents = 'checkout_payment_address.php';
 
 /* Class constructor */
 
     function osC_Checkout_Payment_address() {
-      global $osC_Session, $osC_Customer, $osC_Services, $osC_NavigationHistory, $breadcrumb;
+      global $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('payment_address_heading');
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -43,8 +45,8 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_PAYMENT, tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_PAYMENT_ADDRESS, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if (($_GET[$this->_module] == 'process')) {
@@ -66,46 +68,46 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Customer, $messageStack;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $messageStack;
 
 // process a new billing address
       if (($osC_Customer->hasDefaultAddress() === false) || (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) ) {
         if (ACCOUNT_GENDER > 0) {
           if (!isset($_POST['gender']) || (($_POST['gender'] != 'm') && ($_POST['gender'] != 'f'))) {
-            $messageStack->add('checkout_address', ENTRY_GENDER_ERROR);
+            $messageStack->add('checkout_address', $osC_Language->get('field_customer_gender_error'));
           }
         }
 
         if (!isset($_POST['firstname']) || (strlen(trim($_POST['firstname'])) < ACCOUNT_FIRST_NAME)) {
-          $messageStack->add('checkout_address', ENTRY_FIRST_NAME_ERROR);
+          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
         }
 
         if (!isset($_POST['lastname']) || (strlen(trim($_POST['lastname'])) < ACCOUNT_LAST_NAME)) {
-          $messageStack->add('checkout_address', ENTRY_LAST_NAME_ERROR);
+          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
         }
 
         if (ACCOUNT_COMPANY > 0) {
           if (!isset($_POST['company']) || (strlen(trim($_POST['company'])) < ACCOUNT_COMPANY)) {
-            $messageStack->add('checkout_address', ENTRY_COMPANY_ERROR);
+            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_company_error'), ACCOUNT_COMPANY));
           }
         }
 
         if (!isset($_POST['street_address']) || (strlen(trim($_POST['street_address'])) < ACCOUNT_STREET_ADDRESS)) {
-          $messageStack->add('checkout_address', ENTRY_STREET_ADDRESS_ERROR);
+          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_street_address_error'), ACCOUNT_STREET_ADDRESS));
         }
 
         if (ACCOUNT_SUBURB > 0) {
           if (!isset($_POST['suburb']) || (strlen(trim($_POST['suburb'])) < ACCOUNT_SUBURB)) {
-            $messageStack->add('checkout_address', ENTRY_SUBURB_ERROR);
+            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_suburb_error'), ACCOUNT_SUBURB));
           }
         }
 
         if (!isset($_POST['postcode']) || (strlen(trim($_POST['postcode'])) < ACCOUNT_POST_CODE)) {
-          $messageStack->add('checkout_address', ENTRY_POST_CODE_ERROR);
+          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
         }
 
         if (!isset($_POST['city']) || (strlen(trim($_POST['city'])) < ACCOUNT_CITY)) {
-          $messageStack->add('checkout_address', ENTRY_CITY_ERROR);
+          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_city_error'), ACCOUNT_CITY));
         }
 
         if (ACCOUNT_STATE > 0) {
@@ -139,31 +141,31 @@
               if ($Qzone->numberOfRows() === 1) {
                 $zone_id = $Qzone->valueInt('zone_id');
               } else {
-                $messageStack->add('checkout_address', ENTRY_STATE_ERROR_SELECT);
+                $messageStack->add('checkout_address', $osC_Language->get('field_customer_state_select_pull_down_error'));
               }
             }
 
             $Qzone->freeResult();
           } else {
             if (strlen(trim($_POST['state'])) < ACCOUNT_STATE) {
-              $messageStack->add('checkout_address', ENTRY_STATE_ERROR);
+              $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_state_error'), ACCOUNT_STATE));
             }
           }
         }
 
         if ( (is_numeric($_POST['country']) === false) || ($_POST['country'] < 1) ) {
-          $messageStack->add('checkout_address', ENTRY_COUNTRY_ERROR);
+          $messageStack->add('checkout_address', $osC_Language->get('field_customer_country_error'));
         }
 
         if (ACCOUNT_TELEPHONE > 0) {
           if (!isset($_POST['telephone']) || (strlen(trim($_POST['telephone'])) < ACCOUNT_TELEPHONE)) {
-            $messageStack->add('checkout_address', ENTRY_TELEPHONE_NUMBER_ERROR);
+            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE));
           }
         }
 
         if (ACCOUNT_FAX > 0) {
           if (!isset($_POST['fax']) || (strlen(trim($_POST['fax'])) < ACCOUNT_FAX)) {
-            $messageStack->add('checkout_address', ENTRY_FAX_NUMBER_ERROR);
+            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_fax_number_error'), ACCOUNT_FAX));
           }
         }
 

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -26,8 +26,8 @@
           <tr>
             <td><br /><table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
-                <td class="tableHeading">&nbsp;<?php echo TABLE_HEADING_UPCOMING_PRODUCTS; ?>&nbsp;</td>
-                <td align="right" class="tableHeading">&nbsp;<?php echo TABLE_HEADING_DATE_EXPECTED; ?>&nbsp;</td>
+                <td class="tableHeading">&nbsp;<?php echo $osC_Language->get('upcoming_products_title'); ?>&nbsp;</td>
+                <td align="right" class="tableHeading">&nbsp;<?php echo $osC_Language->get('upcoming_products_date_expected_title'); ?>&nbsp;</td>
               </tr>
               <tr>
                 <td colspan="2"><?php echo tep_draw_separator(); ?></td>
@@ -43,7 +43,7 @@
       }
 
       echo '                <td class="smallText">&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qupcoming->valueInt('products_id')) . '">' . $Qupcoming->value('products_name') . '</a>&nbsp;</td>' . "\n" .
-           '                <td align="right" class="smallText">&nbsp;' . tep_date_short($Qupcoming->value('date_expected')) . '&nbsp;</td>' . "\n" .
+           '                <td align="right" class="smallText">&nbsp;' . osC_DateTime::getShort($Qupcoming->value('date_expected')) . '&nbsp;</td>' . "\n" .
            '              </tr>' . "\n";
     }
 ?>

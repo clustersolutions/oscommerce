@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,9 +15,11 @@
     var $cc_card_type, $cc_card_number, $cc_expiry_month, $cc_expiry_year;
 
     function authorizenet() {
+      global $osC_Language;
+
       $this->code = 'authorizenet';
-      $this->title = MODULE_PAYMENT_AUTHORIZENET_TEXT_TITLE;
-      $this->description = MODULE_PAYMENT_AUTHORIZENET_TEXT_DESCRIPTION;
+      $this->title = $osC_Language->get('payment_authorizenet_title');
+      $this->description = $osC_Language->get('payment_authorizenet_description');
 
       if (defined('MODULE_PAYMENT_AUTHORIZENET_STATUS')) {
         $this->initialize();
@@ -144,15 +146,17 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function javascript_validation() {
+      global $osC_Language;
+
       $js = '  if (payment_value == "' . $this->code . '") {' . "\n" .
             '    var cc_owner = document.checkout_payment.authorizenet_cc_owner.value;' . "\n" .
             '    var cc_number = document.checkout_payment.authorizenet_cc_number.value;' . "\n" .
             '    if (cc_owner == "" || cc_owner.length < ' . CC_OWNER_MIN_LENGTH . ') {' . "\n" .
-            '      error_message = error_message + "' . MODULE_PAYMENT_AUTHORIZENET_TEXT_JS_CC_OWNER . '";' . "\n" .
+            '      error_message = error_message + "' . sprintf($osC_Language->get('payment_authorizenet_js_credit_card_owner'), CC_OWNER_MIN_LENGTH) . '\n";' . "\n" .
             '      error = 1;' . "\n" .
             '    }' . "\n" .
             '    if (cc_number == "" || cc_number.length < ' . CC_NUMBER_MIN_LENGTH . ') {' . "\n" .
-            '      error_message = error_message + "' . MODULE_PAYMENT_AUTHORIZENET_TEXT_JS_CC_NUMBER . '";' . "\n" .
+            '      error_message = error_message + "' . sprintf($osC_Language->get('payment_authorizenet_js_credit_card_number'), CC_NUMBER_MIN_LENGTH) . '\n";' . "\n" .
             '      error = 1;' . "\n" .
             '    }' . "\n" .
             '  }' . "\n";
@@ -161,7 +165,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function selection() {
-      global $order;
+      global $osC_Language, $order;
 
       if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
         for ($i=1; $i<13; $i++) {
@@ -175,7 +179,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
         $Qcredit_cards = $osC_Database->query('select credit_card_name, credit_card_code from :table_credit_cards where credit_card_status = :credit_card_status');
 
-        $Qcredit_cards->bindRaw(':table_credit_cards', TABLE_CREDIT_CARDS);
+        $Qcredit_cards->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
         $Qcredit_cards->bindInt(':credit_card_status', '1');
         $Qcredit_cards->setCache('credit-cards');
         $Qcredit_cards->execute();
@@ -188,44 +192,44 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
         $selection = array('id' => $this->code,
                            'module' => $this->title,
-                           'fields' => array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_OWNER,
+                           'fields' => array(array('title' => $osC_Language->get('payment_authorizenet_credit_card_owner'),
                                                    'field' => osc_draw_input_field('authorizenet_cc_owner', $order->billing['firstname'] . ' ' . $order->billing['lastname'])),
-                                             array('title' => MODULE_PAYMENT_CC_TEXT_CREDIT_CARD_TYPE,
+                                             array('title' => $osC_Language->get('payment_authorizenet_credit_card_type'),
                                                    'field' => osc_draw_pull_down_menu('authorizenet_cc_type', $credit_cards)),
-                                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_NUMBER,
+                                             array('title' => $osC_Language->get('payment_authorizenet_credit_card_number'),
                                                    'field' => osc_draw_input_field('authorizenet_cc_number')),
-                                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_EXPIRES,
+                                             array('title' => $osC_Language->get('payment_authorizenet_credit_card_expiry_date'),
                                                    'field' => osc_draw_pull_down_menu('authorizenet_cc_expires_month', $expires_month, $today['mon']) . '&nbsp;' . osc_draw_pull_down_menu('authorizenet_cc_expires_year', $expires_year))));
       } else { // eCheck
-        $acct_types = array(array('id' => 'CHECKING', 'text' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_TYPE_CHECK),
-                            array('id' => 'SAVINGS', 'text' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_TYPE_SAVINGS));
+        $acct_types = array(array('id' => 'CHECKING', 'text' => $osC_Language->get('payment_authorizenet_bank_account_type_check')),
+                            array('id' => 'SAVINGS', 'text' => $osC_Language->get('payment_authorizenet_bank_account_type_savings')));
 
-        $fields = array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_NAME,
+        $fields = array(array('title' => $osC_Language->get('payment_authorizenet_bank_account_name'),
                               'field' => osc_draw_input_field('authorizenet_bank_owner', $order->billing['firstname'] . ' ' . $order->billing['lastname'])),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_TYPE,
+                        array('title' => $osC_Language->get('payment_authorizenet_bank_account_type'),
                               'field' => osc_draw_pull_down_menu('authorizenet_bank_acct_type', $acct_types)),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_NAME,
-                              'field' => osc_draw_input_field('authorizenet_bank_name')),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ABA_CODE,
+                        array('title' => $osC_Language->get('payment_authorizenet_bank_name'),
+                              'field' => osc_draw_input_field('payment_authorizenet_bank_name')),
+                        array('title' => $osC_Language->get('authorizenet_bank_routing_code'),
                               'field' => osc_draw_input_field('authorizenet_bank_aba')),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_NUM,
+                        array('title' => $osC_Language->get('authorizenet_bank_account_number'),
                               'field' => osc_draw_input_field('authorizenet_bank_acct')));
 
         if (MODULE_PAYMENT_AUTHORIZENET_WELLSFARGO == 'Yes') { // Add extra fields
-          $org_types = array(array('id' => 'I', 'text' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_ORG_PERSONAL),
-                             array('id' => 'B', 'text' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_ORG_BUSINESS));
+          $org_types = array(array('id' => 'I', 'text' => $osC_Language->get('payment_authorizenet_organization_type_personal')),
+                             array('id' => 'B', 'text' => $osC_Language->get('payment_authorizenet_organization_type_business')));
 
-          $fields_wf = array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_ORG,
+          $fields_wf = array(array('title' => $osC_Language->get('payment_authorizenet_organization_type'),
                                    'field' => osc_draw_pull_down_menu('wellsfargo_org_type', $org_types)),
-                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_INTRO,
+                             array('title' => $osC_Language->get('authorizenet_identification'),
                                    'field' => ''),
-                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_TAXID,
+                             array('title' => $osC_Language->get('authorizenet_identification_tax_id'),
                                    'field' => osc_draw_input_field('wellsfargo_taxid')),
-                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_DLNUM,
+                             array('title' => $osC_Language->get('authorizenet_identification_drivers_license_number'),
                                    'field' => osc_draw_input_field('wellsfargo_dlnum')),
-                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_STATE,
+                             array('title' => $osC_Language->get('authorizenet_identification_state_code'),
                                    'field' => osc_draw_input_field('wellsfargo_state')),
-                             array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_DOB,
+                             array('title' => $osC_Language->get('authorizenet_identification_date_of_birth'),
                                    'field' => osc_draw_input_field('wellsfargo_dob')));
            $fields = array_merge($fields, $fields_wf);
         }
@@ -238,11 +242,11 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
 
     function pre_confirmation_check() {
-      global $messageStack;
+      global $osC_Language, $messageStack;
 
       if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
         if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
-          $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
+          $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
 
           $payment_error_return = 'payment_error=' . $this->code . '&error=' . urlencode($error) . '&authorizenet_cc_owner=' . urlencode($_POST['authorizenet_cc_owner']) . '&authorizenet_cc_expires_month=' . $_POST['authorizenet_cc_expires_month'] . '&authorizenet_cc_expires_year=' . $_POST['authorizenet_cc_expires_year'];
 
@@ -258,36 +262,38 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function confirmation() {
+      global $osC_Language;
+
       if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
         $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
-                              'fields' => array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_OWNER,
+                              'fields' => array(array('title' => $osC_Language->get('payment_authorizenet_credit_card_owner'),
                                                       'field' => $this->cc_card_owner),
-                                                array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_NUMBER,
+                                                array('title' => $osC_Language->get('payment_authorizenet_credit_card_number'),
                                                       'field' => substr($this->cc_card_number, 0, 4) . str_repeat('X', (strlen($this->cc_card_number) - 8)) . substr($this->cc_card_number, -4)),
-                                                array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_CREDIT_CARD_EXPIRES,
+                                                array('title' => $osC_Language->get('payment_authorizenet_credit_card_expiry_date'),
                                                       'field' => strftime('%B, %Y', mktime(0,0,0,$this->cc_expiry_month, 1, '20' . $this->cc_expiry_year)))));
       } else { // eCheck
-        $fields = array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_NAME,
+        $fields = array(array('title' => $osC_Language->get('payment_authorizenet_bank_account_name'),
                               'field' => $_POST['authorizenet_bank_owner']),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_TYPE,
+                        array('title' => $osC_Language->get('payment_authorizenet_bank_account_type'),
                               'field' => $_POST['authorizenet_bank_acct_type']),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_NAME,
+                        array('title' => $osC_Language->get('payment_authorizenet_bank_name'),
                               'field' => $_POST['authorizenet_bank_name']),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ABA_CODE,
+                        array('title' => $osC_Language->get('authorizenet_bank_routing_code'),
                               'field' => $_POST['authorizenet_bank_aba']),
-                        array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_BANK_ACCT_NUM,
+                        array('title' => $osC_Language->get('authorizenet_bank_account_number'),
                               'field' => $_POST['authorizenet_bank_acct']));
 
         if (MODULE_PAYMENT_AUTHORIZENET_WELLSFARGO == 'Yes') { // Add extra fields
           if (tep_not_null($_POST['wellsfargo_taxid'])) {
-            $fields_wf = array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_TAXID,
+            $fields_wf = array(array('title' => $osC_Language->get('authorizenet_identification_tax_id'),
                                      'field' => $_POST['wellsfargo_taxid']));
           } else {
-            $fields_wf = array(array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_DLNUM,
+            $fields_wf = array(array('title' => $osC_Language->get('authorizenet_identification_drivers_license_number'),
                                      'field' => $_POST['wellsfargo_dlnum']),
-                               array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_STATE,
+                               array('title' => $osC_Language->get('authorizenet_identification_state_code'),
                                      'field' => $_POST['wellsfargo_state']),
-                               array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_WF_DOB,
+                               array('title' => $osC_Language->get('authorizenet_identification_date_of_birth'),
                                      'field' => $_POST['wellsfargo_dob']));
           }
           $fields = array_merge($fields, $fields_wf);
@@ -400,6 +406,8 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function before_process() {
+      global $osC_Language;
+
       if (MODULE_PAYMENT_AUTHORIZENET_GATEWAY_METHOD == 'AIM') {
         if (MODULE_PAYMENT_AUTHORIZENET_METHOD == 'Credit Card') {
           $this->cc_card_number = $_POST['authorizenet_cc_number'];
@@ -450,10 +458,10 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
 
       if ($x_response_code == '1') return;
       if ($x_response_code == '2') {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_DECLINED_MESSAGE.$x_response_reason_text), 'SSL', true, false));
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(sprintf($osC_Language->get('payment_authorizenet_declined_message'), $x_response_reason_text)), 'SSL', true, false));
       }
       // Code 3 is an error - but anything else is an error too (IMHO)
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(MODULE_PAYMENT_AUTHORIZENET_TEXT_ERROR_MESSAGE.$x_response_reason_text) . '&error=' . urlencode($x_response_reason_text), 'SSL', true, false));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&error_message=' . urlencode(sprintf($osC_Language->get('payment_authorizenet_error_message'), $x_response_reason_text)) . '&error=' . urlencode($x_response_reason_text), 'SSL', true, false));
     }
 
     function after_process() {
@@ -461,7 +469,9 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function get_error() {
-      $error = array('title' => MODULE_PAYMENT_AUTHORIZENET_TEXT_ERROR,
+      global $osC_Language;
+
+      $error = array('title' => $osC_Language->get('payment_authorizenet_error'),
                      'error' => urldecode($_GET['error']));
 
       return $error;
@@ -476,7 +486,7 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
     }
 
     function install() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Authorize.net Module', 'MODULE_PAYMENT_AUTHORIZENET_STATUS', 'True', 'Do you want to accept Authorize.net payments?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Include file that defines the Login Username', 'MODULE_PAYMENT_AUTHORIZENET_LOGIN_FILE', '" . DIR_FS_CATALOG . "includes/local/auth_login.php', 'The full path to the file that defines the login username used for the Authorize.net service. This should be a secure file. The PHP variable MODULE_PAYMENT_AUTHORIZENET_LOGIN must be defined here.', '6', '0', now())");
@@ -491,15 +501,50 @@ function InsertFP ($loginid, $txnkey, $amount, $sequence, $currency = "") {
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Credit Card Mode', 'MODULE_PAYMENT_AUTHORIZENET_CREDIT_CAPTURE', 'AUTH_CAPTURE', 'Credit Card processing method. Authorize Only or Authorize and Capture (Collect Funds)', '6', '0', 'tep_cfg_select_option(array(\'AUTH_CAPTURE\', \'AUTH_ONLY\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Wells Fargo Secure Source Account?', 'MODULE_PAYMENT_AUTHORIZENET_WELLSFARGO', 'No', 'Set to YES if your account is with Wells Fargo', '6', '0', 'tep_cfg_select_option(array(\'No\', \'Yes\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Path to cURL', 'MODULE_PAYMENT_AUTHORIZENET_CURL', '/usr/local/bin/curl', 'The full path to the cURL program (ask your hosting provider)', '6', '0', now())");
+
+      foreach ($osC_Language->getAll() as $key => $value) {
+        foreach ($osC_Language->extractDefinitions($key . '/modules/payment/' . $this->code . '.xml') as $def) {
+          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
+          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qcheck->bindValue(':definition_key', $def['key']);
+          $Qcheck->bindValue(':content_group', $def['group']);
+          $Qcheck->bindInt(':languages_id', $value['id']);
+          $Qcheck->execute();
+
+          if ($Qcheck->numberOfRows() === 1) {
+            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
+          } else {
+            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+          }
+          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdef->bindInt(':languages_id', $value['id']);
+          $Qdef->bindValue(':content_group', $def['group']);
+          $Qdef->bindValue(':definition_key', $def['key']);
+          $Qdef->bindValue(':definition_value', $def['value']);
+          $Qdef->execute();
+        }
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function remove() {
-      global $osC_Database;
+      global $osC_Database, $osC_Languange;
 
       $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
       $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
       $Qdel->execute();
+
+      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/payment/' . $this->code . '.xml') as $def) {
+        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
+        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdel->bindValue(':definition_key', $def['key']);
+        $Qdel->bindValue(':content_group', $def['group']);
+        $Qdel->execute();
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function keys() {

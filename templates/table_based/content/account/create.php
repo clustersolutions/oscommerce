@@ -19,23 +19,15 @@
   if ($messageStack->size('create') > 0) {
     echo $messageStack->output('create');
   }
-
-  if (empty($_GET['create'])) {
-?>
-
-<p><?php echo sprintf(TEXT_CREATE_ORIGIN_LOGIN, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL')); ?></p>
-
-<?php
-  }
 ?>
 
 <form name="create" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'create=save', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo MY_ACCOUNT_TITLE; ?>
+    <?php echo $osC_Language->get('my_account_title'); ?>
   </div>
 
   <div class="content">
@@ -43,11 +35,11 @@
 
 <?php
   if (ACCOUNT_GENDER > -1) {
-    $gender_array = array(array('id' => 'm', 'text' => MALE),
-                          array('id' => 'f', 'text' => FEMALE));
+    $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
+                          array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
 ?>
       <tr>
-        <td><?php echo ENTRY_GENDER; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_gender'); ?></td>
         <td><?php echo osc_draw_radio_field('gender', $gender_array, '', '', (ACCOUNT_GENDER > 0)); ?></td>
       </tr>
       <tr>
@@ -58,11 +50,11 @@
 ?>
 
       <tr>
-        <td><?php echo ENTRY_FIRST_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_first_name'); ?></td>
         <td><?php echo osc_draw_input_field('firstname', '', '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_LAST_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_last_name'); ?></td>
         <td><?php echo osc_draw_input_field('lastname', '', '', true); ?></td>
       </tr>
 
@@ -73,7 +65,7 @@
        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_DATE_OF_BIRTH; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_date_of_birth'); ?></td>
         <td><?php echo tep_draw_date_pull_down_menu('dob', '', false, true, true, date('Y')-1901, -5) . '&nbsp;<span class="inputRequirement">*</span>'; ?></td>
       </tr>
 <?php
@@ -84,7 +76,7 @@
        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('email_address', '', '', true); ?></td>
       </tr>
 
@@ -92,7 +84,7 @@
   if (ACCOUNT_NEWSLETTER > -1) {
 ?>
       <tr>
-        <td><?php echo ENTRY_NEWSLETTER; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_newsletter'); ?></td>
         <td><?php echo osc_draw_checkbox_field('newsletter', '1'); ?></td>
       </tr>
 <?php
@@ -103,11 +95,11 @@
        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_PASSWORD; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_password'); ?></td>
         <td><?php echo osc_draw_password_field('password', '', '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_PASSWORD_CONFIRMATION; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_password_confirmation'); ?></td>
         <td><?php echo osc_draw_password_field('confirmation', '', '', true); ?></td>
       </tr>
     </table>
@@ -120,13 +112,13 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <?php echo HEADING_PRIVACY_CONDITIONS; ?>
+    <?php echo $osC_Language->get('create_account_terms_heading'); ?>
   </div>
 
   <div class="content">
     <table border="0" cellspacing="2" cellpadding="2">
       <tr>
-        <td class="main"><?php echo TEXT_PRIVACY_CONDITIONS_DESCRIPTION . '<br /><br />' . osc_draw_checkbox_field('privacy_conditions', '1', false, 'id="privacy"') . '<label for="privacy">&nbsp;' . TEXT_PRIVACY_CONDITIONS_CONFIRM . '</label>'; ?></td>
+        <td class="main"><?php echo sprintf($osC_Language->get('create_account_terms_description'), tep_href_link(FILENAME_INFO, 'privacy', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('privacy_conditions', '1', false, 'id="privacy"') . '<label for="privacy">&nbsp;' . $osC_Language->get('create_account_terms_confirm') . '</label>'; ?></td>
       </tr>
     </table>
   </div>
@@ -137,9 +129,9 @@
 ?>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,11 +15,11 @@
 
 // class constructor
     function flat() {
-      global $osC_Database, $order;
+      global $osC_Database, $osC_Language, $order;
 
       $this->code = 'flat';
-      $this->title = MODULE_SHIPPING_FLAT_TEXT_TITLE;
-      $this->description = MODULE_SHIPPING_FLAT_TEXT_DESCRIPTION;
+      $this->title = $osC_Language->get('shipping_flat_title');
+      $this->description = $osC_Language->get('shipping_flat_description');
       $this->sort_order = MODULE_SHIPPING_FLAT_SORT_ORDER;
       $this->icon = '';
       $this->tax_class = MODULE_SHIPPING_FLAT_TAX_CLASS;
@@ -52,12 +52,12 @@
 
 // class methods
     function quote($method = '') {
-      global $osC_Tax, $order;
+      global $osC_Language, $osC_Tax, $order;
 
       $this->quotes = array('id' => $this->code,
-                            'module' => MODULE_SHIPPING_FLAT_TEXT_TITLE,
+                            'module' => $this->title,
                             'methods' => array(array('id' => $this->code,
-                                                     'title' => MODULE_SHIPPING_FLAT_TEXT_WAY,
+                                                     'title' => $osC_Language->get('shipping_flat_method'),
                                                      'cost' => MODULE_SHIPPING_FLAT_COST)),
                             'tax' => 0);
 
@@ -79,22 +79,57 @@
     }
 
     function install() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Flat Shipping', 'MODULE_SHIPPING_FLAT_STATUS', 'True', 'Do you want to offer flat rate shipping?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Shipping Cost', 'MODULE_SHIPPING_FLAT_COST', '5.00', 'The shipping cost for all orders using this shipping method.', '6', '0', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Tax Class', 'MODULE_SHIPPING_FLAT_TAX_CLASS', '0', 'Use the following tax class on the shipping fee.', '6', '0', 'tep_get_tax_class_title', 'tep_cfg_pull_down_tax_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Shipping Zone', 'MODULE_SHIPPING_FLAT_ZONE', '0', 'If a zone is selected, only enable this shipping method for that zone.', '6', '0', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_SHIPPING_FLAT_SORT_ORDER', '0', 'Sort order of display.', '6', '0', now())");
+
+      foreach ($osC_Language->getAll() as $key => $value) {
+        foreach ($osC_Language->extractDefinitions($key . '/modules/shipping/' . $this->code . '.xml') as $def) {
+          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
+          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qcheck->bindValue(':definition_key', $def['key']);
+          $Qcheck->bindValue(':content_group', $def['group']);
+          $Qcheck->bindInt(':languages_id', $value['id']);
+          $Qcheck->execute();
+
+          if ($Qcheck->numberOfRows() === 1) {
+            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
+          } else {
+            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+          }
+          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdef->bindInt(':languages_id', $value['id']);
+          $Qdef->bindValue(':content_group', $def['group']);
+          $Qdef->bindValue(':definition_key', $def['key']);
+          $Qdef->bindValue(':definition_value', $def['value']);
+          $Qdef->execute();
+        }
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function remove() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
       $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
       $Qdel->execute();
+
+      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/shipping/' . $this->code . '.xml') as $def) {
+        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
+        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdel->bindValue(':definition_key', $def['key']);
+        $Qdel->bindValue(':content_group', $def['group']);
+        $Qdel->execute();
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function keys() {

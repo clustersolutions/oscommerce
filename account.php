@@ -20,10 +20,10 @@
     }
   }
 
-  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_ACCOUNT);
+  $osC_Language->load('account');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add(NAVBAR_TITLE_MY_ACCOUNT, tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+    $breadcrumb->add($osC_Language->get('breadcrumb_my_account'), tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
   }
 
   $osC_Template = osC_Template::setup('account');

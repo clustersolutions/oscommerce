@@ -5,15 +5,13 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
   require('../includes/classes/modules.php');
-
-  $selected_box = 'templates';
 
   $set = (isset($_GET['set']) ? $_GET['set'] : '');
 
@@ -34,6 +32,8 @@
       define('TABLE_HEADING_MODULES_TITLE', TABLE_HEADING_MODULES_BOXES);
       break;
   }
+
+  $osC_Language->load('modules-' . $set);
 
   if (!empty($action)) {
     switch ($action) {

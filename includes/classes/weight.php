@@ -50,15 +50,19 @@
     }
 
     function convert($value, $unit_from, $unit_to) {
+      global $osC_Language;
+
       if ($unit_from == $unit_to) {
-        return number_format($value, (int)$this->precision, NUMERIC_DECIMAL_SEPARATOR, NUMERIC_THOUSANDS_SEPARATOR);
+        return number_format($value, (int)$this->precision, $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator());
       } else {
-        return number_format($value * $this->weight_classes[(int)$unit_from][(int)$unit_to], (int)$this->precision, NUMERIC_DECIMAL_SEPARATOR, NUMERIC_THOUSANDS_SEPARATOR);
+        return number_format($value * $this->weight_classes[(int)$unit_from][(int)$unit_to], (int)$this->precision, $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator());
       }
     }
 
     function display($value, $class) {
-      return number_format($value, (int)$this->precision, NUMERIC_DECIMAL_SEPARATOR, NUMERIC_THOUSANDS_SEPARATOR) . $this->weight_classes[$class]['key'];
+      global $osC_Language;
+
+      return number_format($value, (int)$this->precision, $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator()) . $this->weight_classes[$class]['key'];
     }
   }
 ?>

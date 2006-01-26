@@ -18,23 +18,25 @@
 
     var $_module = 'search',
         $_group = 'search',
-        $_page_title = HEADING_TITLE_SEARCH,
+        $_page_title,
         $_page_image = 'table_background_browse.gif',
         $_page_contents = 'search.php';
 
 /* Class constructor */
 
     function osC_Search_Search() {
-      global $osC_Services, $breadcrumb, $osC_Search;
+      global $osC_Services, $osC_Language, $breadcrumb, $osC_Search;
+
+      $this->_page_title = $osC_Language->get('search_heading');
 
       $osC_Search = new osC_Search();
 
       if (isset($_GET['keywords'])) {
-        $this->_page_title = HEADING_TITLE_SEARCH_RESULTS;
+        $this->_page_title = $osC_Language->get('search_results_heading');
         $this->_page_contents = 'results.php';
 
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add(BREADCRUMB_SEARCH_RESULTS, tep_href_link(FILENAME_SEARCH, tep_get_all_get_params()));
+          $breadcrumb->add($osC_Language->get('breadcrumb_search_results'), tep_href_link(FILENAME_SEARCH, tep_get_all_get_params()));
         }
 
         $this->_process();
@@ -46,13 +48,13 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Search, $Qlisting;
+      global $osC_Language, $messageStack, $osC_Search, $Qlisting;
 
       if (isset($_GET['datefrom_days']) && is_numeric($_GET['datefrom_days']) && isset($_GET['datefrom_months']) && is_numeric($_GET['datefrom_months']) && isset($_GET['datefrom_years']) && is_numeric($_GET['datefrom_years'])) {
         if (@checkdate($_GET['datefrom_months'], $_GET['datefrom_days'], $_GET['datefrom_years'])) {
           $osC_Search->setDateFrom(mktime(0, 0, 0, $_GET['datefrom_months'], $_GET['datefrom_days'], $_GET['datefrom_years']));
         } else {
-          $messageStack->add('search', ERROR_INVALID_FROM_DATE);
+          $messageStack->add('search', $osC_Language->get('error_search_invalid_from_date'));
         }
       }
 
@@ -60,13 +62,13 @@
         if (@checkdate($_GET['dateto_months'], $_GET['dateto_days'], $_GET['dateto_years'])) {
           $osC_Search->setDateTo(mktime(0, 0, 0, $_GET['dateto_months'], $_GET['dateto_days'], $_GET['dateto_years']));
         } else {
-          $messageStack->add('search', ERROR_INVALID_TO_DATE);
+          $messageStack->add('search', $osC_Language->get('error_search_invalid_to_date'));
         }
       }
 
       if ($osC_Search->hasDateSet()) {
         if ($osC_Search->getDateFrom() > $osC_Search->getDateTo()) {
-          $messageStack->add('search', ERROR_TO_DATE_LESS_THAN_FROM_DATE);
+          $messageStack->add('search', $osC_Language->get('error_search_to_date_less_than_from_date'));
         }
       }
 
@@ -74,7 +76,7 @@
         if (settype($_GET['pfrom'], 'double')) {
           $osC_Search->setPriceFrom($_GET['pfrom']);
         } else {
-          $messageStack->add('search', ERROR_PRICE_FROM_MUST_BE_NUM);
+          $messageStack->add('search', $osC_Language->get('error_search_price_from_not_numeric'));
         }
       }
 
@@ -82,24 +84,24 @@
         if (settype($_GET['pto'], 'double')) {
           $osC_Search->setPriceTo($_GET['pto']);
         } else {
-          $messageStack->add('search', ERROR_PRICE_TO_MUST_BE_NUM);
+          $messageStack->add('search', $osC_Language->get('error_search_price_to_not_numeric'));
         }
       }
 
       if ($osC_Search->hasPriceSet('from') && $osC_Search->hasPriceSet('to') && ($osC_Search->getPriceFrom() >= $osC_Search->getPriceTo())) {
-        $messageStack->add('search', ERROR_PRICE_TO_LESS_THAN_PRICE_FROM);
+        $messageStack->add('search', $osC_Language->get('error_search_price_to_less_than_price_from'));
       }
 
       if (isset($_GET['keywords']) && is_string($_GET['keywords']) && !empty($_GET['keywords'])) {
         $osC_Search->setKeywords(urldecode($_GET['keywords']));
 
         if ($osC_Search->hasKeywords() === false) {
-          $messageStack->add('search', ERROR_INVALID_KEYWORDS);
+          $messageStack->add('search', $osC_Language->get('error_search_invalid_keywords'));
         }
       }
 
       if (!$osC_Search->hasKeywords() && !$osC_Search->hasPriceSet('from') && !$osC_Search->hasPriceSet('to') && !$osC_Search->hasDateSet('from') && !$osC_Search->hasDateSet('to')) {
-        $messageStack->add('search', ERROR_AT_LEAST_ONE_INPUT);
+        $messageStack->add('search', $osC_Language->get('error_search_at_least_one_input'));
       }
 
       if (isset($_GET['category']) && is_numeric($_GET['category']) && ($_GET['category'] > 0)) {

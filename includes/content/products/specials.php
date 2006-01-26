@@ -16,17 +16,19 @@
 
     var $_module = 'specials',
         $_group = 'products',
-        $_page_title = HEADING_TITLE_SPECIALS,
+        $_page_title,
         $_page_contents = 'specials.php',
         $_page_image = 'table_background_specials.gif';
 
 /* Class constructor */
 
     function osC_Products_Specials() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Services, $osC_Language, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('specials_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_SPECIALS, tep_href_link(FILENAME_PRODUCTS, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_specials'), tep_href_link(FILENAME_PRODUCTS, $this->_module));
       }
     }
   }

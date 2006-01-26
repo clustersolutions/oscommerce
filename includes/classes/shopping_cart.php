@@ -35,12 +35,11 @@
           $Qproduct->execute();
 
           if ($Qproduct->numberOfRows() < 1) {
-            $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, :customers_basket_date_added)');
+            $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, now())');
             $Qnew->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qnew->bindInt(':customers_id', $osC_Customer->getID());
             $Qnew->bindValue(':products_id', $products_id);
             $Qnew->bindInt(':customers_basket_quantity', $qty);
-            $Qnew->bindValue(':customers_basket_date_added', date('Ymd'));
             $Qnew->execute();
 
             if (isset($this->contents[$products_id]['attributes'])) {
@@ -69,13 +68,14 @@
 // reset per-session cart contents, but not the database contents
       $this->reset(false);
 
-      $Qproducts = $osC_Database->query('select products_id, customers_basket_quantity from :table_customers_basket where customers_id = :customers_id');
+      $Qproducts = $osC_Database->query('select products_id, customers_basket_quantity, customers_basket_date_added from :table_customers_basket where customers_id = :customers_id order by customers_basket_date_added desc');
       $Qproducts->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
       $Qproducts->bindInt(':customers_id', $osC_Customer->getID());
       $Qproducts->execute();
 
       while ($Qproducts->next()) {
-        $this->contents[$Qproducts->value('products_id')] = array('qty' => $Qproducts->valueInt('customers_basket_quantity'));
+        $this->contents[$Qproducts->value('products_id')] = array('qty' => $Qproducts->valueInt('customers_basket_quantity'),
+                                                                  'date_added' => $Qproducts->value('customers_basket_date_added'));
 // attributes
         $Qattributes = $osC_Database->query('select products_options_id, products_options_value_id from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
         $Qattributes->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
@@ -135,15 +135,15 @@
           if ($this->in_cart($products_id_string)) {
             $this->update_quantity($products_id_string, $qty, $attributes);
           } else {
-            $this->contents[$products_id_string] = array('qty' => $qty);
+            $this->contents[$products_id_string] = array('qty' => $qty,
+                                                         'date_added' => osC_DateTime::getNow());
 // insert into database
             if ($osC_Customer->isLoggedOn()) {
-              $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, :customers_basket_date_added)');
+              $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, now())');
               $Qnew->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
               $Qnew->bindInt(':customers_id', $osC_Customer->getID());
               $Qnew->bindValue(':products_id', $products_id_string);
               $Qnew->bindInt(':customers_basket_quantity', $qty);
-              $Qnew->bindValue(':customers_basket_date_added', date('Ymd'));
               $Qnew->execute();
             }
 
@@ -426,7 +426,8 @@
                                     'weight' => $Qproducts->value('products_weight'),
                                     'final_price' => ($products_price + $this->attributes_price($products_id)),
                                     'tax_class_id' => $Qproducts->valueInt('products_tax_class_id'),
-                                    'attributes' => (isset($this->contents[$products_id]['attributes']) ? $this->contents[$products_id]['attributes'] : ''));
+                                    'attributes' => (isset($this->contents[$products_id]['attributes']) ? $this->contents[$products_id]['attributes'] : ''),
+                                    'date_added' => $this->contents[$products_id]['date_added']);
         }
       }
 

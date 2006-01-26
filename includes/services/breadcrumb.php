@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id$
+  $Id:breadcrumb.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,13 +18,13 @@
         $preceeds;
 
     function start() {
-      global $breadcrumb, $osC_Database, $cPath, $cPath_array;
+      global $breadcrumb, $osC_Database, $osC_Language, $cPath, $cPath_array;
 
       include('includes/classes/breadcrumb.php');
       $breadcrumb = new breadcrumb;
 
-      $breadcrumb->add(HEADER_TITLE_TOP, HTTP_SERVER);
-      $breadcrumb->add(HEADER_TITLE_CATALOG, tep_href_link(FILENAME_DEFAULT));
+      $breadcrumb->add($osC_Language->get('breadcrumb_top'), HTTP_SERVER);
+      $breadcrumb->add($osC_Language->get('breadcrumb_shop'), tep_href_link(FILENAME_DEFAULT));
 
       return true;
     }

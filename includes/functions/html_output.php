@@ -127,7 +127,7 @@
   function tep_image_submit($image, $alt = '', $parameters = '') {
     global $osC_Language;
 
-    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getDirectory() . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
+    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
 
     if (tep_not_null($alt)) $image_submit .= ' title=" ' . tep_output_string($alt) . ' "';
 
@@ -143,7 +143,7 @@
   function tep_image_button($image, $alt = '', $parameters = '') {
     global $osC_Language;
 
-    return tep_image('includes/languages/' . $osC_Language->getDirectory() . '/images/buttons/' . $image, $alt, '', '', $parameters);
+    return tep_image('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image, $alt, '', '', $parameters);
   }
 
 ////

@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_CUSTOMERS_TITLE')) {
-    $osC_Language->load('modules/summary/customers.php');
+    $osC_Language->loadConstants('modules/summary/customers.php');
   }
 
   class osC_Summary_customers extends osC_Summary {

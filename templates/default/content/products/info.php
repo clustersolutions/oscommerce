@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -21,10 +21,10 @@
 
 <div style="float: right;">
   <script type="text/javascript"><!--
-    document.write('<?php echo '<a href="javascript:popupWindow(\\\'' . tep_href_link(FILENAME_POPUP_IMAGE, 'pID=' . $osC_Product->getID()) , '\\\')">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), addslashes($osC_Product->getTitle()), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>');
+    document.write('<?php echo '<a href="javascript:popupWindow(\\\'' . tep_href_link(FILENAME_POPUP_IMAGE, 'pID=' . $osC_Product->getID()) , '\\\')">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), addslashes($osC_Product->getTitle()), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>');
   //--></script>
   <noscript>
-<?php echo '<a href="' . tep_href_link(DIR_WS_IMAGES . $osC_Product->getImage()) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), $osC_Product->getTitle(), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . TEXT_CLICK_TO_ENLARGE . '</a>'; ?>
+<?php echo '<a href="' . tep_href_link(DIR_WS_IMAGES . $osC_Product->getImage()) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), $osC_Product->getTitle(), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>
   </noscript>
 </div>
 
@@ -42,7 +42,7 @@
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="main" colspan="2"><?php echo TEXT_PRODUCT_OPTIONS; ?></td>
+    <td class="main" colspan="2"><?php echo $osC_Language->get('product_attributes'); ?></td>
   </tr>
 
 <?php
@@ -71,7 +71,7 @@
   if ($osC_Services->isStarted('reviews') && osC_Reviews::exists(tep_get_prid($osC_Product->getID()))) {
 ?>
 
-<p><?php echo TEXT_CURRENT_REVIEWS . ' ' . osC_Reviews::getTotal(tep_get_prid($osC_Product->getID())); ?></p>
+<p><?php echo $osC_Language->get('number_of_product_reviews') . ' ' . osC_Reviews::getTotal(tep_get_prid($osC_Product->getID())); ?></p>
 
 <?php
   }
@@ -79,7 +79,7 @@
   if ($osC_Product->hasURL()) {
 ?>
 
-<p><?php echo sprintf(TEXT_MORE_INFORMATION, tep_href_link(FILENAME_REDIRECT, 'action=url&amp;goto=' . urlencode($osC_Product->getURL()), 'NONSSL', true, false)); ?></p>
+<p><?php echo sprintf($osC_Language->get('go_to_external_products_webpage'), tep_href_link(FILENAME_REDIRECT, 'action=url&amp;goto=' . urlencode($osC_Product->getURL()), 'NONSSL', true, false)); ?></p>
 
 <?php
   }
@@ -87,18 +87,18 @@
   if ($osC_Product->getDateAvailable() > date('Y-m-d H:i:s')) {
 ?>
 
-<p align="center"><?php echo sprintf(TEXT_DATE_AVAILABLE, tep_date_long($osC_Product->getDateAvailable())); ?></p>
+<p align="center"><?php echo sprintf($osC_Language->get('date_availability'), osC_DateTime::getLong($osC_Product->getDateAvailable())); ?></p>
 
 <?php
   }
 ?>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('products_id', tep_get_prid($osC_Product->getID())) . tep_image_submit('button_in_cart.gif', IMAGE_BUTTON_IN_CART); ?></span>
+  <span style="float: right;"><?php echo osc_draw_hidden_field('products_id', tep_get_prid($osC_Product->getID())) . tep_image_submit('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?></span>
 
 <?php
   if ($osC_Services->isStarted('reviews')) {
-    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . tep_get_all_get_params()) . '">' . tep_image_button('button_reviews.gif', IMAGE_BUTTON_REVIEWS) . '</a>';
+    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . tep_get_all_get_params()) . '">' . tep_image_button('button_reviews.gif', $osC_Language->get('button_reviews')) . '</a>';
   }
 ?>
 </div>

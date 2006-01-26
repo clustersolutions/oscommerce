@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,9 +14,11 @@
     var $code, $title, $description, $sort_order, $enabled = false;
 
     function pm2checkout() {
+      global $osC_Language;
+
       $this->code = 'pm2checkout';
-      $this->title = MODULE_PAYMENT_2CHECKOUT_TEXT_TITLE;
-      $this->description = MODULE_PAYMENT_2CHECKOUT_TEXT_DESCRIPTION;
+      $this->title = $osC_Language->get('payment_2checkout_title');
+      $this->description = $osC_Language->get('payment_2checkout_description');
 
       if (defined('MODULE_PAYMENT_2CHECKOUT_STATUS')) {
         $this->initialize();
@@ -67,10 +69,12 @@
     }
 
     function javascript_validation() {
+      global $osC_Language;
+
       $js = '  if (payment_value == "' . $this->code . '") {' . "\n" .
             '    var cc_number = document.checkout_payment.pm_2checkout_cc_number.value;' . "\n" .
             '    if (cc_number == "" || cc_number.length < ' . CC_NUMBER_MIN_LENGTH . ') {' . "\n" .
-            '      error_message = error_message + "' . MODULE_PAYMENT_2CHECKOUT_TEXT_JS_CC_NUMBER . '";' . "\n" .
+            '      error_message = error_message + "' . sprintf($osC_Language->get('payment_2checkout_js_credit_card_number'), CC_NUMBER_MIN_LENGTH) . '\n";' . "\n" .
             '      error = 1;' . "\n" .
             '    }' . "\n" .
             '  }' . "\n";
@@ -79,7 +83,7 @@
     }
 
     function selection() {
-      global $order, $osC_Database;
+      global $osC_Database, $osC_Language, $order;
 
       for ($i=1; $i < 13; $i++) {
         $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B',mktime(0,0,0,$i,1,2000)));
@@ -105,27 +109,27 @@
 
       $selection = array('id' => $this->code,
                          'module' => $this->title,
-                         'fields' => array(array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER_FIRST_NAME,
+                         'fields' => array(array('title' => $osC_Language->get('payment_2checkout_credit_card_owner_first_name'),
                                                  'field' => osc_draw_input_field('pm_2checkout_cc_owner_firstname', $order->billing['firstname'])),
-                                           array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER_LAST_NAME,
+                                           array('title' => $osC_Language->get('payment_2checkout_credit_card_owner_last_name'),
                                                  'field' => osc_draw_input_field('pm_2checkout_cc_owner_lastname', $order->billing['lastname'])),
-                                           array('title' => MODULE_PAYMENT_CC_TEXT_CREDIT_CARD_TYPE,
+                                           array('title' => $osC_Language->get('payment_2checkout_credit_cart_type'),
                                                  'field' => osc_draw_pull_down_menu('pm_2checkout_cc_type', $credit_cards)),
-                                           array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_NUMBER,
+                                           array('title' => $osC_Language->get('payment_2checkout_credit_card_number'),
                                                  'field' => osc_draw_input_field('pm_2checkout_cc_number')),
-                                           array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_EXPIRES,
+                                           array('title' => $osC_Language->get('payment_2checkout_credit_card_expiry_date'),
                                                  'field' => osc_draw_pull_down_menu('pm_2checkout_cc_expires_month', $expires_month) . '&nbsp;' . osc_draw_pull_down_menu('pm_2checkout_cc_expires_year', $expires_year)),
-                                           array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_CHECKNUMBER,
-                                                 'field' => osc_draw_input_field('pm_2checkout_cc_cvv', '', 'size="4" maxlength="4"') . '&nbsp;<small>' . MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_CHECKNUMBER_LOCATION . '</small>')));
+                                           array('title' => $osC_Language->get('payment_2checkout_credit_card_checknumber'),
+                                                 'field' => osc_draw_input_field('pm_2checkout_cc_cvv', '', 'size="4" maxlength="4"') . '&nbsp;<small>' . $osC_Language->get('payment_2checkout_credit_card_checknumber_location') . '</small>')));
 
       return $selection;
     }
 
     function pre_confirmation_check() {
-      global $messageStack;
+      global $osC_Language, $messageStack;
 
       if (!tep_validate_credit_card($_POST['pm_2checkout_cc_number'])) {
-        $messageStack->add_session('checkout_payment', TEXT_CCVAL_ERROR_INVALID_NUMBER, 'error');
+        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
 
         $payment_error_return = 'pm_2checkout_cc_owner_firstname=' . urlencode($_POST['pm_2checkout_cc_owner_firstname']) . '&pm_2checkout_cc_owner_lastname=' . urlencode($_POST['pm_2checkout_cc_owner_lastname']) . '&pm_2checkout_cc_expires_month=' . urlencode($_POST['pm_2checkout_cc_expires_month']) . '&pm_2checkout_cc_expires_year=' . urlencode($_POST['pm_2checkout_cc_expires_year']) . '&pm_2checkout_cc_cvv=' . urlencode($_POST['pm_2checkout_cc_cvv']);
 
@@ -140,16 +144,18 @@
     }
 
     function confirmation() {
+      global $osC_Language;
+
       $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
-                            'fields' => array(array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_OWNER,
+                            'fields' => array(array('title' => $osC_Language->get('payment_2checkout_credit_card_owner'),
                                                     'field' => $_POST['pm_2checkout_cc_owner_firstname'] . ' ' . $_POST['pm_2checkout_cc_owner_lastname']),
-                                              array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_NUMBER,
+                                              array('title' => $osC_Language->get('payment_2checkout_credit_card_number'),
                                                     'field' => substr($this->cc_card_number, 0, 4) . str_repeat('X', (strlen($this->cc_card_number) - 8)) . substr($this->cc_card_number, -4)),
-                                              array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_EXPIRES,
+                                              array('title' => $osC_Language->get('payment_2checkout_credit_card_expiry_date'),
                                                     'field' => strftime('%B, %Y', mktime(0,0,0,$this->cc_expiry_month, 1, '20' . $this->cc_expiry_year)))));
 
       if (tep_not_null($this->cc_checkcode)) {
-        $confirmation['fields'][] = array('title' => MODULE_PAYMENT_2CHECKOUT_TEXT_CREDIT_CARD_CHECKNUMBER,
+        $confirmation['fields'][] = array('title' => $osC_Language->get('payment_2checkout_credit_card_checknumber'),
                                           'field' => $this->cc_checkcode);
       }
 
@@ -189,10 +195,10 @@
     }
 
     function before_process() {
-      global $messageStack;
+      global $osC_Language, $messageStack;
 
       if ($_POST['x_response_code'] != '1') {
-        $messageStack->add_session('checkout_payment', MODULE_PAYMENT_2CHECKOUT_TEXT_ERROR_MESSAGE, 'error');
+        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_2checkout_error_message'), 'error');
 
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
@@ -215,7 +221,7 @@
     }
 
     function install() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable 2CheckOut Module', 'MODULE_PAYMENT_2CHECKOUT_STATUS', 'True', 'Do you want to accept 2CheckOut payments?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Login/Store Number', 'MODULE_PAYMENT_2CHECKOUT_LOGIN', '18157', 'Login/Store Number used for the 2CheckOut service', '6', '0', now())");
@@ -224,15 +230,50 @@
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_2CHECKOUT_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_2CHECKOUT_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '2', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_2CHECKOUT_ORDER_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', '6', '0', 'tep_cfg_pull_down_order_statuses(', 'tep_get_order_status_name', now())");
+
+      foreach ($osC_Language->getAll() as $key => $value) {
+        foreach ($osC_Language->extractDefinitions($key . '/modules/payment/' . $this->code . '.xml') as $def) {
+          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
+          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qcheck->bindValue(':definition_key', $def['key']);
+          $Qcheck->bindValue(':content_group', $def['group']);
+          $Qcheck->bindInt(':languages_id', $value['id']);
+          $Qcheck->execute();
+
+          if ($Qcheck->numberOfRows() === 1) {
+            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
+          } else {
+            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+          }
+          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdef->bindInt(':languages_id', $value['id']);
+          $Qdef->bindValue(':content_group', $def['group']);
+          $Qdef->bindValue(':definition_key', $def['key']);
+          $Qdef->bindValue(':definition_value', $def['value']);
+          $Qdef->execute();
+        }
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function remove() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
       $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
       $Qdel->execute();
+
+      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/payment/' . $this->code . '.xml') as $def) {
+        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
+        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdel->bindValue(':definition_key', $def['key']);
+        $Qdel->bindValue(':content_group', $def['group']);
+        $Qdel->execute();
+      }
+
+      osC_Cache::clear('languages');
     }
 
     function keys() {

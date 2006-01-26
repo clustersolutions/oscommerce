@@ -11,13 +11,12 @@
 */
 
   require('includes/application_top.php');
-
   require('includes/classes/order.php');
 
-  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_CHECKOUT);
+  $osC_Language->load('checkout');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add(NAVBAR_TITLE_CHECKOUT, tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+    $breadcrumb->add($osC_Language->get('breadcrumb_checkout'), tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
   }
 
   $osC_Template = osC_Template::setup('cart');

@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2005 osCommerce
+# Copyright (c) 2006 osCommerce
 #
 # Released under the GNU General Public License
 #
@@ -132,14 +132,8 @@ CREATE TABLE osc_configuration_group (
 
 DROP TABLE IF EXISTS osc_counter;
 CREATE TABLE osc_counter (
-  startdate char(8),
-  counter int(12)
-);
-
-DROP TABLE IF EXISTS osc_counter_history;
-CREATE TABLE osc_counter_history (
-  month char(8),
-  counter int(12)
+  startdate datetime,
+  counter int
 );
 
 DROP TABLE IF EXISTS osc_countries;
@@ -199,9 +193,9 @@ CREATE TABLE osc_customers_basket (
   customers_basket_id int NOT NULL auto_increment,
   customers_id int NOT NULL,
   products_id tinytext NOT NULL,
-  customers_basket_quantity int(2) NOT NULL,
+  customers_basket_quantity int NOT NULL,
   final_price decimal(15,4) NOT NULL,
-  customers_basket_date_added char(8),
+  customers_basket_date_added datetime,
   PRIMARY KEY (customers_basket_id)
 );
 
@@ -230,12 +224,32 @@ DROP TABLE IF EXISTS osc_languages;
 CREATE TABLE osc_languages (
   languages_id int NOT NULL auto_increment,
   name varchar(32)  NOT NULL,
-  code char(2) NOT NULL,
-  image varchar(64),
-  directory varchar(32),
+  code char(5) NOT NULL,
+  locale varchar(255) NOT NULL,
+  charset varchar(32) NOT NULL,
+  date_format_short varchar(32) NOT NULL,
+  date_format_long varchar(32) NOT NULL,
+  time_format varchar(32) NOT NULL,
+  text_direction varchar(12) NOT NULL,
+  image varchar(64) NOT NULL,
+  currencies_id int NOT NULL,
+  numeric_separator_decimal varchar(12) NOT NULL,
+  numeric_separator_thousands varchar(12) NOT NULL,
   sort_order int(3),
-  PRIMARY KEY (languages_id),
-  KEY IDX_LANGUAGES_NAME (name)
+  PRIMARY KEY (languages_id)
+);
+
+DROP TABLE IF EXISTS osc_languages_definitions;
+CREATE TABLE osc_languages_definitions (
+  id int NOT NULL auto_increment,
+  languages_id int NOT NULL,
+  content_group varchar(32) NOT NULL,
+  definition_key varchar(255) NOT NULL,
+  definition_value text NOT NULL,
+  PRIMARY KEY (id),
+  KEY IDX_LANGUAGES_DEFINITIONS_LANGUAGES (languages_id),
+  KEY IDX_LANGUAGES_DEFINITIONS (languages_id, content_group),
+  KEY IDX_LANGUAGES_DEFINITIONS_GROUPS (content_group)
 );
 
 DROP TABLE IF EXISTS osc_manufacturers;
@@ -733,7 +747,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Shipping Zone', 'MODULE_SHIPPING_FLAT_ZONE', '0', 'If a zone is selected, only enable this shipping method for that zone.', '6', '0', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Sort Order', 'MODULE_SHIPPING_FLAT_SORT_ORDER', '0', 'Sort order of display.', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Currency', 'DEFAULT_CURRENCY', 'USD', 'Default Currency', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Language', 'DEFAULT_LANGUAGE', 'en', 'Default Language', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Language', 'DEFAULT_LANGUAGE', 'en_US', 'Default Language', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Order Status For New Orders', 'DEFAULT_ORDERS_STATUS_ID', '1', 'When a new order is created, this order status will be assigned to it.', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Shipping', 'MODULE_ORDER_TOTAL_SHIPPING_STATUS', 'true', 'Do you want to display the order shipping cost?', '6', '1','tep_cfg_select_option(array(\'true\', \'false\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Sort Order', 'MODULE_ORDER_TOTAL_SHIPPING_SORT_ORDER', '2', 'Sort order of display.', '6', '2', now());
@@ -1086,9 +1100,9 @@ INSERT INTO osc_credit_cards VALUES (7,'SWIT','Switch','1','7');
 INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now());
 INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.1036', now());
 
-INSERT INTO osc_languages VALUES (1,'English','en','icon.gif','english',1);
-INSERT INTO osc_languages VALUES (2,'Deutsch','de','icon.gif','german',2);
-INSERT INTO osc_languages VALUES (3,'Español','es','icon.gif','espanol',3);
+INSERT INTO osc_languages VALUES (1,'English','en_US','en_US,en_US.ISO8859-15,english','iso-8859-15','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
+INSERT INTO osc_languages VALUES (2,'Deutsch','de_DE','de_DE,de_DE.ISO8859-15,german','iso-8859-15','%d.%m.%Y','%A, %d. %B %Y','%H:%M:%S','ltr','icon.gif',2,',','.',2);
+INSERT INTO osc_languages VALUES (3,'Español','es_ES','es_ES,es_ES.ISO8859-15,spanish','iso-8859-15','%d/%m/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',2,'.',',',3);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
 INSERT INTO osc_orders_status VALUES ( '1', '2', 'Offen');

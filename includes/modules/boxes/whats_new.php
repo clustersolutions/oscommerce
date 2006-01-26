@@ -5,20 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_whats_new extends osC_Modules {
-    var $_title = 'What\'s New',
+    var $_title,
         $_code = 'whats_new',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_whats_new() {
-//      $this->_title = BOX_HEADING_WHATS_NEW;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_whats_new_heading');
       $this->_title_link = tep_href_link(FILENAME_PRODUCTS, 'new');
     }
 

@@ -16,13 +16,15 @@
 
     var $_module = 'success',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_SUCCESS,
+        $_page_title,
         $_page_contents = 'checkout_success.php';
 
 /* Class constructor */
 
     function osC_Checkout_Success() {
-      global $osC_Services, $osC_Customer, $osC_NavigationHistory, $breadcrumb;
+      global $osC_Services, $osC_Language, $osC_Customer, $osC_NavigationHistory, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('success_heading');
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -31,7 +33,7 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_SUCCESS, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_success'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'update') {

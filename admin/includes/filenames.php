@@ -27,6 +27,7 @@
   define('FILENAME_FILE_MANAGER', 'file_manager.php');
   define('FILENAME_GEO_ZONES', 'geo_zones.php');
   define('FILENAME_LANGUAGES', 'languages.php');
+  define('FILENAME_LANGUAGES_DEFINITIONS', 'languages_definitions.php');
   define('FILENAME_LOGIN', 'login.php');
   define('FILENAME_MANUFACTURERS', 'manufacturers.php');
   define('FILENAME_MODULES', 'modules.php');

@@ -425,12 +425,10 @@
 
     $field .= '>';
 
-    $default_value = $default;
-
     if (isset($_GET[$name])) {
-      $default_value = $_GET[$name];
+      $default = $_GET[$name];
     } elseif (isset($_POST[$name])) {
-      $default_value = $_POST[$name];
+      $default = $_POST[$name];
     }
 
     for ($i=0, $n=sizeof($values); $i<$n; $i++) {
@@ -442,7 +440,7 @@
       }
       $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
 
-      if ($default_value == $values[$i]['id']) {
+      if ( (is_string($default) && ($default == $values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
         $field .= ' selected="selected"';
       }
 

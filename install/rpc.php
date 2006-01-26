@@ -70,6 +70,39 @@
           $osC_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
         }
 
+        if ($osC_Database->isError() === false) {
+          include('../includes/classes/xml.php');
+          include('../admin/includes/classes/directory_listing.php');
+
+          foreach ($osC_Language->extractDefinitions('en_US.xml') as $def) {
+            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+            $Qdef->bindTable(':table_languages_definitions', $db['DB_TABLE_PREFIX'] . 'languages_definitions');
+            $Qdef->bindInt(':languages_id', 1);
+            $Qdef->bindValue(':content_group', $def['group']);
+            $Qdef->bindValue(':definition_key', $def['key']);
+            $Qdef->bindValue(':definition_value', $def['value']);
+            $Qdef->execute();
+          }
+
+          $osC_DirectoryListing = new osC_DirectoryListing('../includes/languages/en_US');
+          $osC_DirectoryListing->setRecursive(true);
+          $osC_DirectoryListing->setIncludeDirectories(false);
+          $osC_DirectoryListing->setAddDirectoryToFilename(true);
+          $osC_DirectoryListing->setCheckExtension('xml');
+
+          foreach ($osC_DirectoryListing->getFiles() as $files) {
+            foreach ($osC_Language->extractDefinitions('en_US/' . $files['name']) as $def) {
+              $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+              $Qdef->bindTable(':table_languages_definitions', $db['DB_TABLE_PREFIX'] . 'languages_definitions');
+              $Qdef->bindInt(':languages_id', 1);
+              $Qdef->bindValue(':content_group', $def['group']);
+              $Qdef->bindValue(':definition_key', $def['key']);
+              $Qdef->bindValue(':definition_value', $def['value']);
+              $Qdef->execute();
+            }
+          }
+        }
+
         if ( ($osC_Database->isError() === false) && ($db['DB_DATABASE_CLASS'] == 'mysql_innodb') ) {
           $Qinno = $osC_Database->query('show variables like "have_innodb"');
           if (($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes')) {

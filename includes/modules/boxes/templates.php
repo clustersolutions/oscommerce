@@ -5,20 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_templates extends osC_Modules {
-    var $_title = 'Templates',
+    var $_title,
         $_code = 'templates',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_templates() {
-//      $this->_title = BOX_HEADING_TEMPLATES;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_templates_heading');
     }
 
     function initialize() {

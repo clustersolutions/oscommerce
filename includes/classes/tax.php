@@ -60,7 +60,7 @@
     }
 
     function getTaxRateDescription($class_id, $country_id, $zone_id) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['description']) == false) {
         $Qtax = $osC_Database->query('select tax_description from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
@@ -81,7 +81,7 @@
 
           $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = substr($tax_description, 0, -3);
         } else {
-          $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = TEXT_UNKNOWN_TAX_RATE;
+          $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = $osC_Language->get('tax_rate_unknown');
         }
       }
 

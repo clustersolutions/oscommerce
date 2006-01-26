@@ -18,55 +18,57 @@
 
     var $_module = 'address_book',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_ADDRESS_BOOK,
+        $_page_title,
         $_page_contents = 'address_book.php';
 
 /* Class constructor */
 
     function osC_Account_Address_book() {
-      global $osC_Services, $breadcrumb, $osC_Customer;
+      global $osC_Language, $osC_Services, $breadcrumb, $osC_Customer;
+
+      $this->_page_title = $osC_Language->get('address_book_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_address_book'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY;
+        $this->_page_title = $osC_Language->get('address_book_add_entry_heading');
         $this->_page_contents = 'address_book_process.php';
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['new'])) {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_ADD_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
+          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_add_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
         }
 
-        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_ADD_ENTRY;
+        $this->_page_title = $osC_Language->get('address_book_add_entry_heading');
         $this->_page_contents = 'address_book_process.php';
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['edit']) && is_numeric($_GET[$this->_module])) {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_EDIT_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
+          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
         }
 
-        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_EDIT_ENTRY;
+        $this->_page_title = $osC_Language->get('address_book_edit_entry_heading');
         $this->_page_contents = 'address_book_process.php';
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['delete']) && is_numeric($_GET[$this->_module])) {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add(NAVBAR_TITLE_ADDRESS_BOOK_DELETE_ENTRY, tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
+          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
         }
 
-        $this->_page_title = HEADING_TITLE_ADDRESS_BOOK_DELETE_ENTRY;
+        $this->_page_title = $osC_Language->get('address_book_delete_entry_heading');
         $this->_page_contents = 'address_book_delete.php';
       }
 
       if (isset($_GET['new']) && ($_GET['new'] == 'save')) {
         if (osC_AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES) {
-          $messageStack->add('address_book', ERROR_ADDRESS_BOOK_FULL);
+          $messageStack->add('address_book', $osC_Language->get('error_address_book_full'));
 
-          $this->_page_title = HEADING_TITLE_ADDRESS_BOOK;
+          $this->_page_title = $osC_Language->get('address_book_heading');
           $this->_page_contents = 'address_book.php';
         } else {
           $this->_process();
@@ -81,7 +83,7 @@
 /* Private methods */
 
     function _process($id = '') {
-      global $messageStack, $osC_Database, $osC_Customer, $entry_state_has_zones;
+      global $messageStack, $osC_Database, $osC_Language, $osC_Customer, $entry_state_has_zones;
 
       $data = array();
 
@@ -89,54 +91,54 @@
         if (isset($_POST['gender']) && (($_POST['gender'] == 'm') || ($_POST['gender'] == 'f'))) {
           $data['gender'] = $_POST['gender'];
         } else {
-          $messageStack->add('address_book', ENTRY_GENDER_ERROR);
+          $messageStack->add('address_book', $osC_Language->get('field_customer_gender_error'));
         }
       }
 
       if (isset($_POST['firstname']) && (strlen(trim($_POST['firstname'])) >= ACCOUNT_FIRST_NAME)) {
         $data['firstname'] = $_POST['firstname'];
       } else {
-        $messageStack->add('address_book', ENTRY_FIRST_NAME_ERROR);
+        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
       }
 
       if (isset($_POST['lastname']) && (strlen(trim($_POST['lastname'])) >= ACCOUNT_LAST_NAME)) {
         $data['lastname'] = $_POST['lastname'];
       } else {
-        $messageStack->add('address_book', ENTRY_LAST_NAME_ERROR);
+        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
       }
 
       if (ACCOUNT_COMPANY >= 0) {
         if (isset($_POST['company']) && (strlen(trim($_POST['company'])) >= ACCOUNT_COMPANY)) {
           $data['company'] = $_POST['company'];
         } else {
-          $messageStack->add('address_book', ENTRY_COMPANY_ERROR);
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_company_error'), ACCOUNT_COMPANY));
         }
       }
 
       if (isset($_POST['street_address']) && (strlen(trim($_POST['street_address'])) >= ACCOUNT_STREET_ADDRESS)) {
         $data['street_address'] = $_POST['street_address'];
       } else {
-        $messageStack->add('address_book', ENTRY_STREET_ADDRESS_ERROR);
+        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_street_address_error'), ACCOUNT_STREET_ADDRESS));
       }
 
       if (ACCOUNT_SUBURB >= 0) {
         if (isset($_POST['suburb']) && (strlen(trim($_POST['suburb'])) >= ACCOUNT_SUBURB)) {
           $data['suburb'] = $_POST['suburb'];
         } else {
-          $messageStack->add('address_book', ENTRY_SUBURB_ERROR);
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_suburb_error'), ACCOUNT_SUBURB));
         }
       }
 
       if (isset($_POST['postcode']) && (strlen(trim($_POST['postcode'])) >= ACCOUNT_POST_CODE)) {
         $data['postcode'] = $_POST['postcode'];
       } else {
-        $messageStack->add('address_book', ENTRY_POST_CODE_ERROR);
+        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
       }
 
       if (isset($_POST['city']) && (strlen(trim($_POST['city'])) >= ACCOUNT_CITY)) {
         $data['city'] = $_POST['city'];
       } else {
-        $messageStack->add('address_book', ENTRY_CITY_ERROR);
+        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_city_error'), ACCOUNT_CITY));
       }
 
       if (ACCOUNT_STATE >= 0) {
@@ -166,35 +168,35 @@
             if ($Qzone->numberOfRows() === 1) {
               $data['zone_id'] = $Qzone->valueInt('zone_id');
             } else {
-              $messageStack->add('address_book', ENTRY_STATE_ERROR_SELECT);
+              $messageStack->add('address_book', $osC_Language->get('field_customer_state_select_pull_down_error'));
             }
           }
         } else {
           if (strlen(trim($_POST['state'])) >= ACCOUNT_STATE) {
             $data['state'] = $_POST['state'];
           } else {
-            $messageStack->add('address_book', ENTRY_STATE_ERROR);
+            $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_state_error'), ACCOUNT_STATE));
           }
         }
       } else {
         if (strlen(trim($_POST['state'])) >= ACCOUNT_STATE) {
           $data['state'] = $_POST['state'];
         } else {
-          $messageStack->add('address_book', ENTRY_STATE_ERROR);
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_state_error'), ACCOUNT_STATE));
         }
       }
 
       if (isset($_POST['country']) && is_numeric($_POST['country']) && ($_POST['country'] >= 1)) {
         $data['country'] = $_POST['country'];
       } else {
-        $messageStack->add('address_book', ENTRY_COUNTRY_ERROR);
+        $messageStack->add('address_book', $osC_Language->get('field_customer_country_error'));
       }
 
       if (ACCOUNT_TELEPHONE >= 0) {
         if (isset($_POST['telephone']) && (strlen(trim($_POST['telephone'])) >= ACCOUNT_TELEPHONE)) {
           $data['telephone'] = $_POST['telephone'];
         } else {
-          $messageStack->add('address_book', ENTRY_TELEPHONE_NUMBER_ERROR);
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE));
         }
       }
 
@@ -202,7 +204,7 @@
         if (isset($_POST['fax']) && (strlen(trim($_POST['fax'])) >= ACCOUNT_FAX)) {
           $data['fax'] = $_POST['fax'];
         } else {
-          $messageStack->add('address_book', ENTRY_FAX_NUMBER_ERROR);
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_fax_number_error'), ACCOUNT_FAX));
         }
       }
 
@@ -212,7 +214,7 @@
 
       if ($messageStack->size('address_book') === 0) {
         if (osC_AddressBook::saveEntry($data, $id)) {
-          $messageStack->add_session('address_book', SUCCESS_ADDRESS_BOOK_ENTRY_UPDATED, 'success');
+          $messageStack->add_session('address_book', $osC_Language->get('success_address_book_entry_updated'), 'success');
         }
 
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
@@ -220,14 +222,14 @@
     }
 
     function _delete($id) {
-      global $messageStack, $osC_Customer;
+      global $messageStack, $osC_Language, $osC_Customer;
 
       if ($id != $osC_Customer->getDefaultAddressID()) {
         if (osC_AddressBook::deleteEntry($id)) {
-          $messageStack->add_session('address_book', SUCCESS_ADDRESS_BOOK_ENTRY_DELETED, 'success');
+          $messageStack->add_session('address_book', $osC_Language->get('success_address_book_entry_deleted'), 'success');
         }
       } else {
-        $messageStack->add_session('address_book', WARNING_PRIMARY_ADDRESS_DELETION, 'warning');
+        $messageStack->add_session('address_book', $osC_Language->get('warning_primary_address_deletion'), 'warning');
       }
 
       tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));

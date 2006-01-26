@@ -5,30 +5,14 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
 
-  $selected_box = 'templates';
-
-  $set = (isset($_GET['set']) ? $_GET['set'] : '');
-
-  switch ($set) {
-    case 'content':
-//      define('HEADING_TITLE', HEADING_TITLE_MODULES_CONTENT);
-//      define('TABLE_HEADING_MODULES_TITLE', TABLE_HEADING_MODULES_CONTENT);
-      break;
-
-    case 'boxes':
-    default:
-      $set = 'boxes';
-//      define('HEADING_TITLE', HEADING_TITLE_MODULES_BOXES);
-//      define('TABLE_HEADING_MODULES_TITLE', TABLE_HEADING_MODULES_BOXES);
-      break;
-  }
+  $set = (isset($_GET['set']) ? $_GET['set'] : 'boxes');
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 

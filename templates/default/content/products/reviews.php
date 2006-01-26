@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,8 +22,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&amp;' . $Qreviews->value('products_keyword')) . '"><u><b>' . $Qreviews->value('products_name') . '</b></u></a> <span class="smallText">' . sprintf(TEXT_REVIEW_BY, $Qreviews->valueProtected('customers_name')) . '</span>'; ?></td>
-    <td class="smallText" align="right"><?php echo sprintf(TEXT_REVIEW_DATE_ADDED, tep_date_long($Qreviews->value('date_added'))); ?></td>
+    <td class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&amp;' . $Qreviews->value('products_keyword')) . '"><u><b>' . $Qreviews->value('products_name') . '</b></u></a> <span class="smallText">' . sprintf($osC_Language->get('reviewed_by'), $Qreviews->valueProtected('customers_name')) . '</span>'; ?></td>
+    <td class="smallText" align="right"><?php echo sprintf($osC_Language->get('review_date_added'), osC_DateTime::getLong($Qreviews->value('date_added'))); ?></td>
   </tr>
 </table>
 
@@ -33,7 +33,7 @@
       <tr>
         <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
         <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" align="center" valign="top" class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&amp;' . $Qreviews->value('products_keyword')) . '">' . tep_image(DIR_WS_IMAGES . $Qreviews->value('products_image'), $Qreviews->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>'; ?></td>
-        <td valign="top" class="main"><?php echo tep_break_string($Qreviews->valueProtected('reviews_text'), 60, '-<br />') . ((strlen($Qreviews->valueProtected('reviews_text')) >= 100) ? '..' : '') . '<br /><br /><i>' . sprintf(TEXT_REVIEW_RATING, tep_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf(TEXT_OF_5_STARS, $Qreviews->valueInt('reviews_rating'))), sprintf(TEXT_OF_5_STARS, $Qreviews->valueInt('reviews_rating'))) . '</i>'; ?></td>
+        <td valign="top" class="main"><?php echo tep_break_string($Qreviews->valueProtected('reviews_text'), 60, '-<br />') . ((strlen($Qreviews->valueProtected('reviews_text')) >= 100) ? '..' : '') . '<br /><br /><i>' . sprintf($osC_Language->get('review_rating'), tep_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))), sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))) . '</i>'; ?></td>
         <td width="10" align="right"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
       </tr>
     </table></td>
@@ -47,5 +47,5 @@
 <div class="listingPageLinks">
   <span style="float: right;"><?php echo $Qreviews->displayBatchLinksPullDown('page', 'reviews'); ?></span>
 
-  <?php echo $Qreviews->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_REVIEWS); ?>
+  <?php echo $Qreviews->displayBatchLinksTotal($osC_Language->get('result_set_number_of_reviews')); ?>
 </div>

@@ -20,5 +20,5 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php echo '<a href="' . tep_href_link(FILENAME_SEARCH) . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_SEARCH) . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>

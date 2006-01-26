@@ -4,13 +4,13 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Content_new_products extends osC_Modules {
-    var $_title = 'New Products',
+    var $_title,
         $_code = 'new_products',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
@@ -19,6 +19,9 @@
 /* Class constructor */
 
     function osC_Content_new_products() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('new_products_title');
     }
 
     function initialize() {

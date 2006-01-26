@@ -32,11 +32,14 @@
 <?php
   $installed_modules = array();
   foreach ($files as $file) {
-    include('../includes/languages/' . $osC_Language->getDirectory() . '/modules/' . $module_type . '/' . $file['name']);
     include('../includes/modules/' . $module_type . '/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
     if (class_exists($class)) {
+//      if (call_user_func(array($class, 'isInstalled'), $class, $module_type) === false) {
+        $osC_Language->injectDefinitions('modules/' . $module_type . '/' . $class . '.xml');
+//      }
+
       $module = new $class;
       if ($module->check() > 0) {
         if (($module->sort_order > 0) && !isset($installed_modules[$module->sort_order])) {

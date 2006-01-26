@@ -126,6 +126,22 @@ function toggleClass(removeClass, addClass, cssClass, tagName) {
   document.getElementById(addClass).className = cssClass;
 }
 
+function selectAllFromPullDownMenu(field) {
+  var field = document.getElementById(field);
+
+  for (i=0; i < field.length; i++) {
+    field.options[i].selected = true;
+  }
+}
+
+function resetPullDownMenuSelection(field) {
+  var field = document.getElementById(field);
+
+  for (i=0; i < field.length; i++) {
+    field.options[i].selected = false;
+  }
+}
+
 /*@cc_on
 @if (@_jscript_version >= 5.5 && @_win32)
 // Correctly handle PNG transparency in Win IE 5.5 or higher.

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id$
+  $Id:debug.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,43 +18,43 @@
         $preceeds;
 
     function start() {
-      global $messageStack;
+      global $messageStack, $osC_Language;
 
       if (SERVICE_DEBUG_SHOW_DEVELOPMENT_WARNING == 'True') {
-        $messageStack->add('debug', 'This is a development version of osCommerce - please use it for testing purposes only! [' . PROJECT_VERSION . ']');
+        $messageStack->add('debug', 'This is a development version of osCommerce (' . PROJECT_VERSION . ') - please use it for testing purposes only! [' . __CLASS__ . ']');
       }
 
       if (SERVICE_DEBUG_CHECK_LOCALE == 'True') {
-        $setlocale = setlocale(LC_TIME, LANGUAGE_LOCALE);
+        $setlocale = osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
 
         if (($setlocale === false) || ($setlocale === null)) {
-          $messageStack->add('debug', 'Error: Locale does not exist: ' . LANGUAGE_LOCALE . ' [' . __CLASS__ . ']', 'error');
+          $messageStack->add('debug', 'Error: Locale does not exist: ' . $osC_Language->getLocale() . ' [' . __CLASS__ . ']', 'error');
         }
       }
 
       if ((SERVICE_DEBUG_CHECK_INSTALLATION_MODULE == 'True') && file_exists(dirname($_SERVER['SCRIPT_FILENAME']) . '/install')) {
-        $messageStack->add('debug', WARNING_INSTALL_DIRECTORY_EXISTS . ' [' . __CLASS__ . ']', 'warning');
+        $messageStack->add('debug', sprintf($osC_Language->get('warning_install_directory_exists'), dirname($_SERVER['SCRIPT_FILENAME']) . '/install') . ' [' . __CLASS__ . ']', 'warning');
       }
 
       if ((SERVICE_DEBUG_CHECK_CONFIGURATION == 'True') && file_exists(dirname($_SERVER['SCRIPT_FILENAME']) . '/includes/configure.php') && is_writeable(dirname($_SERVER['SCRIPT_FILENAME']) . '/includes/configure.php')) {
-        $messageStack->add('debug', WARNING_CONFIG_FILE_WRITEABLE . ' [' . __CLASS__ . ']', 'warning');
+        $messageStack->add('debug', sprintf($osC_Language->get('warning_config_file_writeable'), dirname($_SERVER['SCRIPT_FILENAME']) . '/includes/configure.php') . ' [' . __CLASS__ . ']', 'warning');
       }
 
       if ((SERVICE_DEBUG_CHECK_SESSION_DIRECTORY == 'True') && (STORE_SESSIONS == '')) {
-        if (!is_dir(session_save_path())) {
-          $messageStack->add('debug', WARNING_SESSION_DIRECTORY_NON_EXISTENT . ' [' . __CLASS__ . ']', 'warning');
-        } elseif (!is_writeable(session_save_path())) {
-          $messageStack->add('debug', WARNING_SESSION_DIRECTORY_NOT_WRITEABLE . ' [' . __CLASS__ . ']', 'warning');
+        if (!is_dir($osC_Session->getSavePath())) {
+          $messageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_non_existent'), $osC_Session->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
+        } elseif (!is_writeable($osC_Session->getSavePath())) {
+          $messageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_not_writeable'), $osC_Session->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
         }
       }
 
       if ((SERVICE_DEBUG_CHECK_SESSION_AUTOSTART == 'True') && (bool)ini_get('session.auto_start')) {
-        $messageStack->add('debug', WARNING_SESSION_AUTO_START . ' [' . __CLASS__ . ']', 'warning');
+        $messageStack->add('debug', $osC_Language->get('warning_session_auto_start') . ' [' . __CLASS__ . ']', 'warning');
       }
 
       if ((SERVICE_DEBUG_CHECK_DOWNLOAD_DIRECTORY == 'True') && (DOWNLOAD_ENABLED == 'true')) {
         if (!is_dir(DIR_FS_DOWNLOAD)) {
-          $messageStack->add('debug', WARNING_DOWNLOAD_DIRECTORY_NON_EXISTENT . ' [' . __CLASS__ . ']', 'warning');
+          $messageStack->add('debug', sprintf($osC_Language->get('warning_download_directory_non_existent'), DIR_FS_DOWNLOAD) . ' [' . __CLASS__ . ']', 'warning');
         }
       }
 

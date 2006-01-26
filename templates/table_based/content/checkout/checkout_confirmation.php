@@ -24,14 +24,14 @@
 <?php
   if ($_SESSION['sendto'] != false) {
 ?>
-          <p><?php echo '<b>' . HEADING_DELIVERY_ADDRESS . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_delivery_address_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
           <p><?php echo tep_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br />'); ?></p>
 
 <?php
     if (tep_not_null($order->info['shipping_method'])) {
 ?>
 
-          <p><?php echo '<b>' . HEADING_SHIPPING_METHOD . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_shipping_method_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
           <p><?php echo $order->info['shipping_method']; ?></p>
 
 <?php
@@ -39,10 +39,10 @@
   }
 ?>
 
-          <p><?php echo '<b>' . HEADING_BILLING_ADDRESS . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_billing_address_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
           <p><?php echo tep_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></p>
 
-          <p><?php echo '<b>' . HEADING_PAYMENT_METHOD . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_payment_method_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
           <p><?php echo $order->info['payment_method']; ?></p>
         </td>
         <td width="70%" valign="top">
@@ -52,15 +52,15 @@
   if (sizeof($order->info['tax_groups']) > 1) {
 ?>
               <tr>
-                <td colspan="2"><?php echo '<b>' . HEADING_PRODUCTS . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></td>
-                <td align="right"><b><?php echo HEADING_TAX; ?></b></td>
-                <td align="right"><b><?php echo HEADING_TOTAL; ?></b></td>
+                <td colspan="2"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></td>
+                <td align="right"><b><?php echo $osC_Language->get('order_tax_title'); ?></b></td>
+                <td align="right"><b><?php echo $osC_Language->get('order_total_title'); ?></b></td>
               </tr>
 <?php
   } else {
 ?>
               <tr>
-                <td colspan="3"><?php echo '<b>' . HEADING_PRODUCTS . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?></td>
+                <td colspan="3"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></td>
               </tr>
 <?php
   }
@@ -119,7 +119,7 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <?php echo HEADING_PAYMENT_INFORMATION; ?>
+    <?php echo $osC_Language->get('order_payment_information_title'); ?>
   </div>
 
   <div class="content">
@@ -152,7 +152,7 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <?php echo '<b>' . HEADING_ORDER_COMMENTS . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">(' . TEXT_EDIT . ')</span></a>'; ?>
+    <?php echo '<b>' . $osC_Language->get('order_comments_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?>
   </div>
 
   <div class="content">
@@ -179,7 +179,7 @@
     echo $payment_modules->process_button();
   }
 
-  echo tep_image_submit('button_confirm_order.gif', IMAGE_BUTTON_CONFIRM_ORDER) . '</form>';
+  echo tep_image_submit('button_confirm_order.gif', $osC_Language->get('button_confirm_order')) . '</form>';
 ?>
 
 </div>

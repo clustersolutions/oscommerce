@@ -23,25 +23,25 @@
 
   <div style="float: right; width: 50%;">
     <ul>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_ACCOUNT . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . $osC_Language->get('sitemap_account') . '</a>'; ?></li>
         <ul>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_ACCOUNT_EDIT . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_ADDRESS_BOOK . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_ACCOUNT_HISTORY . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_ACCOUNT_NOTIFICATIONS . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . $osC_Language->get('sitemap_account_edit') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . $osC_Language->get('sitemap_address_book') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . $osC_Language->get('sitemap_account_history') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . $osC_Language->get('sitemap_account_notifications') . '</a>'; ?></li>
         </ul>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_SHOPPING_CART . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . TEXT_INFO_SITEMAP_PAGE_CHECKOUT_SHIPPING . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_SEARCH) . '">' . TEXT_INFO_SITEMAP_PAGE_ADVANCED_SEARCH . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'new') . '">' . TEXT_INFO_SITEMAP_PAGE_PRODUCTS_NEW . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'specials') . '">' . TEXT_INFO_SITEMAP_PAGE_SPECIALS . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews') . '">' . TEXT_INFO_SITEMAP_PAGE_REVIEWS . '</a>'; ?></li>
-      <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . BOX_HEADING_INFORMATION . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . $osC_Language->get('sitemap_shopping_cart') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . $osC_Language->get('sitemap_checkout_shipping') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_SEARCH) . '">' . $osC_Language->get('sitemap_advanced_search') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'new') . '">' . $osC_Language->get('sitemap_products_new') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'specials') . '">' . $osC_Language->get('sitemap_specials') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews') . '">' . $osC_Language->get('sitemap_reviews') . '</a>'; ?></li>
+      <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . $osC_Language->get('box_information_heading') . '</a>'; ?></li>
         <ul>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'shipping') . '">' . BOX_INFORMATION_SHIPPING . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'privacy') . '">' . BOX_INFORMATION_PRIVACY . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'conditions') . '">' . BOX_INFORMATION_CONDITIONS . '</a>'; ?></li>
-          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'contact') . '">' . BOX_INFORMATION_CONTACT . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'shipping') . '">' . $osC_Language->get('box_information_shipping') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'privacy') . '">' . $osC_Language->get('box_information_privacy') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'conditions') . '">' . $osC_Language->get('box_information_conditions') . '</a>'; ?></li>
+          <li><?php echo '<a href="' . tep_href_link(FILENAME_INFO, 'contact') . '">' . $osC_Language->get('box_information_contact') . '</a>'; ?></li>
         </ul>
     </ul>
   </div>

@@ -31,6 +31,7 @@
   define('TABLE_CUSTOMERS_INFO', DB_TABLE_PREFIX . 'customers_info');
   define('TABLE_GEO_ZONES', DB_TABLE_PREFIX . 'geo_zones');
   define('TABLE_LANGUAGES', DB_TABLE_PREFIX . 'languages');
+  define('TABLE_LANGUAGES_DEFINITIONS', DB_TABLE_PREFIX . 'languages_definitions');
   define('TABLE_MANUFACTURERS', DB_TABLE_PREFIX . 'manufacturers');
   define('TABLE_MANUFACTURERS_INFO', DB_TABLE_PREFIX . 'manufacturers_info');
   define('TABLE_NEWSLETTERS', DB_TABLE_PREFIX . 'newsletters');

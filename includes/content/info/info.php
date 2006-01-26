@@ -16,7 +16,13 @@
 
     var $_module = 'info',
         $_group = 'info',
-        $_page_title = HEADING_INFO,
+        $_page_title,
         $_page_contents = 'info.php';
+
+    function osC_Info_Info() {
+      global $osC_Language;
+
+      $this->_page_title = $osC_Language->get('info_heading');
+    }
   }
 ?>

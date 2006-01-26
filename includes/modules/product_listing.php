@@ -32,7 +32,7 @@
 ?>
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?></td>
     <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
   </tr>
 </table>
@@ -52,38 +52,38 @@
 
       switch ($column_list[$col]) {
         case 'PRODUCT_LIST_MODEL':
-          $lc_text = TABLE_HEADING_MODEL;
+          $lc_text = $osC_Language->get('listing_model_heading');
           $lc_key = 'model';
           break;
         case 'PRODUCT_LIST_NAME':
-          $lc_text = TABLE_HEADING_PRODUCTS;
+          $lc_text = $osC_Language->get('listing_products_heading');
           $lc_key = 'name';
           break;
         case 'PRODUCT_LIST_MANUFACTURER':
-          $lc_text = TABLE_HEADING_MANUFACTURER;
+          $lc_text = $osC_Language->get('listing_manufacturer_heading');
           $lc_key = 'manufacturer';
           break;
         case 'PRODUCT_LIST_PRICE':
-          $lc_text = TABLE_HEADING_PRICE;
+          $lc_text = $osC_Language->get('listing_price_heading');
           $lc_key = 'price';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_QUANTITY':
-          $lc_text = TABLE_HEADING_QUANTITY;
+          $lc_text = $osC_Language->get('listing_quantity_heading');
           $lc_key = 'quantity';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_WEIGHT':
-          $lc_text = TABLE_HEADING_WEIGHT;
+          $lc_text = $osC_Language->get('listing_weight_heading');
           $lc_key = 'weight';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_IMAGE':
-          $lc_text = TABLE_HEADING_IMAGE;
+          $lc_text = $osC_Language->get('listing_image_heading');
           $lc_align = 'center';
           break;
         case 'PRODUCT_LIST_BUY_NOW':
-          $lc_text = TABLE_HEADING_BUY_NOW;
+          $lc_text = $osC_Language->get('listing_buy_now_heading');
           $lc_align = 'center';
           break;
       }
@@ -152,7 +152,7 @@
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', IMAGE_BUTTON_BUY_NOW) . '</a>&nbsp;';
+            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now')) . '</a>&nbsp;';
             break;
         }
 
@@ -167,7 +167,7 @@
 ?>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><?php echo TEXT_NO_PRODUCTS; ?></td>
+      <td><?php echo $osC_Language->get('no_products_in_category'); ?></td>
     </tr>
   </table>
 <?php
@@ -179,7 +179,7 @@
 ?>
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?></td>
+    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?></td>
     <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
   </tr>
 </table>

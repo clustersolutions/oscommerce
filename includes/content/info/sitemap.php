@@ -16,16 +16,18 @@
 
     var $_module = 'sitemap',
         $_group = 'info',
-        $_page_title = HEADING_INFO_SITEMAP,
+        $_page_title,
         $_page_contents = 'info_sitemap.php';
 
 /* Class constructor */
 
     function osC_Info_Sitemap() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Services, $osC_Language, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('info_sitemap_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(BREADCRUMB_INFO_SITEMAP, tep_href_link(FILENAME_INFO, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_sitemap'), tep_href_link(FILENAME_INFO, $this->_module));
       }
     }
   }

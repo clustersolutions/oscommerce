@@ -16,16 +16,18 @@
 
     var $_module = 'notifications',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_NOTIFICATIONS,
+        $_page_title,
         $_page_contents = 'account_notifications.php';
 
 /* Class constructor */
 
     function osC_Account_Notifications() {
-      global $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qglobal;
+      global $osC_Language, $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qglobal;
+
+      $this->_page_title = $osC_Language->get('notifications_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_NOTIFICATIONS, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_notifications'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!
@@ -68,7 +70,7 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Customer, $Qglobal;
+      global $messageStack, $osC_Database, $osC_Language, $osC_Customer, $Qglobal;
 
       $updated = false;
 
@@ -137,7 +139,7 @@
       }
 
       if ($updated === true) {
-        $messageStack->add_session('account', SUCCESS_NOTIFICATIONS_UPDATED, 'success');
+        $messageStack->add_session('account', $osC_Language->get('success_notifications_updated'), 'success');
       }
 
       tep_redirect(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));

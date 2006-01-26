@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_ORDERS_TITLE')) {
-    $osC_Language->load('modules/summary/orders.php');
+    $osC_Language->loadConstants('modules/summary/orders.php');
   }
 
   class osC_Summary_orders extends osC_Summary {

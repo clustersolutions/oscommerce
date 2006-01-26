@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -34,8 +34,9 @@
           }
         }
 
+        $osC_Language->load('modules-payment');
+
         for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/payment/' . $include_modules[$i]['file']);
           include('includes/modules/payment/' . $include_modules[$i]['file']);
 
           $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];
@@ -74,12 +75,14 @@
     }
 
     function javascript_validation() {
+      global $osC_Language;
+
       $js = '';
       if (is_array($this->modules)) {
         $js = '<script type="text/javascript"><!-- ' . "\n" .
               'function check_form() {' . "\n" .
               '  var error = 0;' . "\n" .
-              '  var error_message = "' . JS_ERROR . '";' . "\n" .
+              '  var error_message = "' . $osC_Language->get('js_error') . '";' . "\n" .
               '  var payment_value = null;' . "\n" .
               '  if (document.checkout_payment.payment.length) {' . "\n" .
               '    for (var i=0; i<document.checkout_payment.payment.length; i++) {' . "\n" .
@@ -102,7 +105,7 @@
         }
 
         $js .= "\n" . '  if (payment_value == null) {' . "\n" .
-               '    error_message = error_message + "' . JS_ERROR_NO_PAYMENT_MODULE_SELECTED . '";' . "\n" .
+               '    error_message = error_message + "' . $osC_Language->get('js_no_payment_module_selected') . '\n";' . "\n" .
                '    error = 1;' . "\n" .
                '  }' . "\n\n" .
                '  if (error == 1) {' . "\n" .

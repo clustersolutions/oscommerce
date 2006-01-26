@@ -5,31 +5,33 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_manufacturers extends osC_Modules {
-    var $_title = 'Manufacturers',
+    var $_title,
         $_code = 'manufacturers',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_manufacturers() {
-//      $this->_title = BOX_HEADING_MANUFACTURERS;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_manufacturers_heading');
     }
 
     function initialize() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qmanufacturers = $osC_Database->query('select manufacturers_id as id, manufacturers_name as text from :table_manufacturers order by manufacturers_name');
       $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qmanufacturers->setCache('manufacturers');
       $Qmanufacturers->execute();
 
-      $manufacturers_array = array(array('id' => '', 'text' => PULL_DOWN_DEFAULT));
+      $manufacturers_array = array(array('id' => '', 'text' => $osC_Language->get('pull_down_default')));
 
       while ($Qmanufacturers->next()) {
         $manufacturers_array[] = $Qmanufacturers->toArray();

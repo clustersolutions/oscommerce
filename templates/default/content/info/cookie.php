@@ -17,15 +17,15 @@
 
 <table border="0" width="40%" cellspacing="0" cellpadding="0" align="right">
   <tr>
-    <td><?php new infoBoxHeading(array(array('text' => BOX_INFO_COOKIE_USAGE_HEADING))); ?></td>
+    <td><?php new infoBoxHeading(array(array('text' => $osC_Language->get('cookie_usage_box_heading')))); ?></td>
   </tr>
   <tr>
-    <td><?php new infoBox(array(array('text' => BOX_INFO_COOKIE_USAGE_CONTENT))); ?></td>
+    <td><?php new infoBox(array(array('text' => $osC_Language->get('cookie_usage_box_contents')))); ?></td>
   </tr>
 </table>
 
-<p><?php echo TEXT_INFO_COOKIE_USAGE; ?></p>
+<p><?php echo $osC_Language->get('cookie_usage'); ?></p>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
 </div>

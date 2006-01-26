@@ -5,25 +5,27 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_shopping_cart extends osC_Modules {
-    var $_title = 'Shopping Cart',
+    var $_title,
         $_code = 'shopping_cart',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_shopping_cart() {
-//      $this->_title = BOX_HEADING_SHOPPING_CART;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_shopping_cart_heading');
       $this->_title_link = tep_href_link(FILENAME_CHECKOUT, '', 'SSL');
     }
 
     function initialize() {
-      global $osC_Currencies;
+      global $osC_Language, $osC_Currencies;
 
       if ($_SESSION['cart']->count_contents() > 0) {
         $data = '<table border="0" width="100%" cellspacing="0" cellpadding="0">' . "\n";
@@ -68,7 +70,7 @@
         $data .= '</table>' . "\n" .
                  '<p style="text-align: right">Subtotal: ' . $osC_Currencies->format($_SESSION['cart']->show_total()) . '</p>' . "\n";
       } else {
-        $data = BOX_SHOPPING_CART_EMPTY;
+        $data = $osC_Language->get('box_shopping_cart_empty');
       }
 
       $this->_content = $data;

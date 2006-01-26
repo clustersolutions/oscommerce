@@ -14,11 +14,11 @@
     if (osC_AddressBook::checkEntry($_GET['address_book'])) {
       $Qentry = osC_AddressBook::getEntry($_GET['address_book']);
     } else {
-      $messageStack->add('address_book', ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY, 'error');
+      $messageStack->add('address_book', $osC_Language->get('error_address_book_entry_non_existing'), 'error');
     }
   } else {
     if (osC_AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES) {
-      $messageStack->add('address_book', ERROR_ADDRESS_BOOK_FULL);
+      $messageStack->add('address_book', $osC_Language->get('error_address_book_full'));
     }
   }
 ?>
@@ -39,9 +39,9 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo NEW_ADDRESS_TITLE; ?>
+    <?php echo $osC_Language->get('address_book_new_address_title'); ?>
   </div>
 
   <div class="content">
@@ -54,7 +54,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
 <?php
     if ($osC_NavigationHistory->hasSnapshot()) {
@@ -65,7 +65,7 @@
       $back_link = tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL');
     }
 
-    echo '<a href="' . $back_link . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>';
+    echo '<a href="' . $back_link . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>';
 ?>
 
 </div>
@@ -77,7 +77,7 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 <?php

@@ -48,5 +48,5 @@
 <div class="listingPageLinks">
   <span style="float: right;"><?php echo $Qspecials->displayBatchLinksPullDown(); ?></span>
 
-  <?php echo $Qspecials->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_SPECIALS); ?>
+  <?php echo $Qspecials->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
 </div>

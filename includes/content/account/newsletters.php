@@ -16,16 +16,18 @@
 
     var $_module = 'newsletters',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_NEWSLETTERS,
+        $_page_title ,
         $_page_contents = 'account_newsletters.php';
 
 /* Class constructor */
 
     function osC_Account_Newsletters() {
-      global $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qnewsletter;
+      global $osC_Language, $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qnewsletter;
+
+      $this->_page_title = $osC_Language->get('newsletters_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_NEWSLETTERS, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_newsletters'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!
@@ -42,7 +44,7 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Customer, $Qnewsletter;
+      global $messageStack, $osC_Database, $osC_Language, $osC_Customer, $Qnewsletter;
 
       if (isset($_POST['newsletter_general']) && is_numeric($_POST['newsletter_general'])) {
         $newsletter_general = $_POST['newsletter_general'];
@@ -60,7 +62,7 @@
         $Qupdate->execute();
 
         if ($Qupdate->affectedRows() === 1) {
-          $messageStack->add_session('account', SUCCESS_NEWSLETTER_UPDATED, 'success');
+          $messageStack->add_session('account', $osC_Language->get('success_newsletter_updated'), 'success');
         }
       }
 

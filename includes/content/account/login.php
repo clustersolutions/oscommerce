@@ -18,21 +18,23 @@
 
     var $_module = 'login',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_LOGIN,
+        $_page_title,
         $_page_contents = 'login.php';
 
 /* Class constructor */
 
     function osC_Account_Login() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $breadcrumb;
 
 // redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled (or the session has not started)
       if (osc_empty(session_id())) {
         tep_redirect(tep_href_link(FILENAME_INFO, 'cookie', 'AUTO'));
       }
 
+      $this->_page_title = $osC_Language->get('sign_in_heading');
+
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_LOGIN, tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_sign_in'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {
@@ -43,7 +45,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $messageStack, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Session, $osC_Language, $messageStack, $osC_Customer, $osC_NavigationHistory;
 
       if (osC_Account::checkEntry($_POST['email_address'])) {
         if (osC_Account::checkPassword($_POST['password'], $_POST['email_address'])) {
@@ -68,10 +70,10 @@
             tep_redirect(tep_href_link(FILENAME_DEFAULT, '', 'AUTO'));
           }
         } else {
-          $messageStack->add('login', TEXT_LOGIN_ERROR);
+          $messageStack->add('login', $osC_Language->get('error_login_no_match'));
         }
       } else {
-        $messageStack->add('login', TEXT_LOGIN_ERROR);
+        $messageStack->add('login', $osC_Language->get('error_login_no_match'));
       }
     }
   }

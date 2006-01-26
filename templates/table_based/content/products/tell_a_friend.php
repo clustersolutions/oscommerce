@@ -25,19 +25,19 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo FORM_TITLE_CUSTOMER_DETAILS; ?>
+    <?php echo $osC_Language->get('customer_details_title'); ?>
   </div>
 
   <div class="content">
     <table border="0" cellspacing="2" cellpadding="2">
       <tr>
-        <td><?php echo FORM_FIELD_CUSTOMER_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_tell_a_friend_customer_name'); ?></td>
         <td><?php echo osc_draw_input_field('from_name', ($osC_Customer->isLoggedOn() ? $osC_Customer->getName() : ''), '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo FORM_FIELD_CUSTOMER_EMAIL; ?></td>
+        <td><?php echo $osC_Language->get('field_tell_a_friend_customer_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('from_email_address', ($osC_Customer->isLoggedOn() ? $osC_Customer->getEmailAddress() : ''), '', true); ?></td>
       </tr>
     </table>
@@ -45,16 +45,16 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo FORM_TITLE_FRIEND_DETAILS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('friend_details_title'); ?></div>
 
   <div class="content">
     <table border="0" cellspacing="2" cellpadding="2">
       <tr>
-        <td><?php echo FORM_FIELD_FRIEND_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_tell_a_friend_friends_name'); ?></td>
         <td><?php echo osc_draw_input_field('to_name', '', '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo FORM_FIELD_FRIEND_EMAIL; ?></td>
+        <td><?php echo $osC_Language->get('field_tell_a_friend_friends_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('to_email_address', '', '', true); ?></td>
       </tr>
     </table>
@@ -62,7 +62,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo FORM_TITLE_FRIEND_MESSAGE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('tell_a_friend_message'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="2" cellpadding="2">
@@ -75,9 +75,9 @@
 
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()) . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()) . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

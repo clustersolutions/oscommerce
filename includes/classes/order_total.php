@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -20,9 +20,10 @@
       if (defined('MODULE_ORDER_TOTAL_INSTALLED') && tep_not_null(MODULE_ORDER_TOTAL_INSTALLED)) {
         $this->modules = explode(';', MODULE_ORDER_TOTAL_INSTALLED);
 
+        $osC_Language->load('modules-order_total');
+
         reset($this->modules);
         while (list(, $value) = each($this->modules)) {
-          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/order_total/' . $value);
           include('includes/modules/order_total/' . $value);
 
           $class = substr($value, 0, strrpos($value, '.'));

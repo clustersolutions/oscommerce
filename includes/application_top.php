@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -91,6 +91,10 @@
 
   require('includes/classes/category.php');
   require('includes/classes/product.php');
+
+  require('includes/classes/datetime.php');
+
+  require('includes/classes/xml.php');
 
 // include and start the services
   require('includes/classes/services.php');

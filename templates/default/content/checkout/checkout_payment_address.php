@@ -31,13 +31,13 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_PAYMENT_ADDRESS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('billing_address_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td valign="top"><?php echo TEXT_SELECTED_PAYMENT_DESTINATION; ?></td>
-        <td valign="top" align="center"><?php echo '<b>' . TITLE_PAYMENT_ADDRESS . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo $osC_Language->get('selected_billing_destination'); ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('current_billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
         <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $_SESSION['billto'], true, ' ', '<br />'); ?></td>
       </tr>
     </table>
@@ -51,14 +51,14 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_ADDRESS_BOOK_ENTRIES; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('address_book_entries_title'); ?></div>
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_PLEASE_SELECT . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
     </div>
 
-    <p style="margin-top: 0px;"><?php echo TEXT_SELECT_OTHER_PAYMENT_DESTINATION; ?></p>
+    <p style="margin-top: 0px;"><?php echo $osC_Language->get('select_another_billing_destination'); ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
@@ -115,10 +115,10 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_NEW_PAYMENT_ADDRESS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('new_billing_address_title'); ?></div>
 
   <div class="content">
-    <?php echo TEXT_CREATE_NEW_PAYMENT_ADDRESS; ?>
+    <?php echo $osC_Language->get('new_billing_address'); ?>
 
     <div style="margin: 10px 30px 10px 30px;">
       <?php require('includes/modules/checkout_new_address.php'); ?>
@@ -133,10 +133,10 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?>
+      <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
     </div>
 
-    <?php echo '<b>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</b><br />' . TEXT_CONTINUE_CHECKOUT_PROCEDURE_TO_PAYMENT; ?>
+    <?php echo '<b>' . $osC_Language->get('continue_checkout_procedure_title') . '</b><br />' . $osC_Language->get('continue_checkout_procedure_to_payment'); ?>
   </div>
 </div>
 

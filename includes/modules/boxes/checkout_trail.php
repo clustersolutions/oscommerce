@@ -5,42 +5,44 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_checkout_trail extends osC_Modules {
-    var $_title = 'Ordering Steps',
+    var $_title,
         $_code = 'checkout_trail',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_checkout_trail() {
-//      $this->_title = BOX_HEADING_CHECKOUT_TRAIL;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_ordering_steps_heading');
     }
 
     function initialize() {
-      global $osC_Template;
+      global $osC_Language, $osC_Template;
 
       $steps = array();
 
       if ($_SESSION['cart']->get_content_type() != 'virtual') {
-        $steps[] = array('title' => CHECKOUT_BAR_DELIVERY,
+        $steps[] = array('title' => $osC_Language->get('box_ordering_steps_delivery'),
                           'code' => 'shipping',
                           'active' => (($osC_Template->getModule() == 'shipping') || ($osC_Template->getModule() == 'shipping_address') ? true : false));
       }
 
-      $steps[] = array('title' => CHECKOUT_BAR_PAYMENT,
+      $steps[] = array('title' => $osC_Language->get('box_ordering_steps_payment'),
                         'code' => 'payment',
                         'active' => (($osC_Template->getModule() == 'payment') || ($osC_Template->getModule() == 'payment_address') ? true : false));
 
-      $steps[] = array('title' => CHECKOUT_BAR_CONFIRMATION,
+      $steps[] = array('title' => $osC_Language->get('box_ordering_steps_confirmation'),
                         'code' => 'confirmation',
                         'active' => ($osC_Template->getModule() == 'confirmation' ? true : false));
 
-      $steps[] = array('title' => CHECKOUT_BAR_FINISHED,
+      $steps[] = array('title' => $osC_Language->get('box_ordering_steps_complete'),
                         'active' => ($osC_Template->getModule() == 'success' ? true : false));
 
 

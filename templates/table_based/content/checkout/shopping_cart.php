@@ -22,7 +22,7 @@
 <form name="shopping_cart" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo HEADING_TITLE_CHECKOUT_SHOPPING_CART; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('shopping_cart_heading'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -32,7 +32,7 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'action=cartRemove&amp;products_id=' . $products['id'], 'SSL') . '">' . tep_image_button('small_delete.gif', SMALL_IMAGE_BUTTON_DELETE) . '</a>'; ?></td>
+        <td valign="top" width="60"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'action=cartRemove&amp;products_id=' . $products['id'], 'SSL') . '">' . tep_image_button('small_delete.gif', $osC_Language->get('button_delete')) . '</a>'; ?></td>
         <td valign="top">
 
 <?php
@@ -65,14 +65,14 @@
     </table>
   </div>
 
-  <p style="text-align: right; padding-right: 7px;"><b><?php echo SUB_TITLE_SUB_TOTAL; ?> <?php echo $osC_Currencies->format($_SESSION['cart']->show_total()); ?></b></p>
+  <p style="text-align: right; padding-right: 7px;"><b><?php echo $osC_Language->get('subtotal_title'); ?> <?php echo $osC_Currencies->format($_SESSION['cart']->show_total()); ?></b></p>
 
 <?php
     if ( (STOCK_CHECK == 'true') && ($osC_Template->hasProductsOutOfStock() === true) ) {
       if (STOCK_ALLOW_CHECKOUT == 'true') {
-        echo '<p class="stockWarning" align="center">' . OUT_OF_STOCK_CAN_CHECKOUT . '</p>';
+        echo '<p class="stockWarning" align="center">' . sprintf($osC_Language->get('products_out_of_stock_checkout_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
       } else {
-        echo '<p class="stockWarning" align="center">' . OUT_OF_STOCK_CANT_CHECKOUT . '</p>';
+        echo '<p class="stockWarning" align="center">' . sprintf($osC_Language->get('products_out_of_stock_checkout_not_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
       }
     }
 ?>
@@ -80,9 +80,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image_button('button_checkout.gif', IMAGE_BUTTON_CHECKOUT) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image_button('button_checkout.gif', $osC_Language->get('button_checkout')) . '</a>'; ?></span>
 
-  <?php echo tep_image_submit('button_update_cart.gif', IMAGE_BUTTON_UPDATE_CART); ?>
+  <?php echo tep_image_submit('button_update_cart.gif', $osC_Language->get('button_update_cart')); ?>
 </div>
 
 </form>
@@ -93,12 +93,12 @@
 
 <div class="moduleBox">
   <div class="content">
-    <?php echo TEXT_CART_EMPTY; ?>
+    <?php echo $osC_Language->get('shopping_cart_empty'); ?>
   </div>
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
 </div>
 
 <?php

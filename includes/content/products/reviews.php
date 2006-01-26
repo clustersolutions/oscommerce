@@ -16,21 +16,23 @@
 
     var $_module = 'reviews',
         $_group = 'products',
-        $_page_title = HEADING_TITLE_REVIEWS,
+        $_page_title,
         $_page_contents = 'reviews.php',
         $_page_image = 'table_background_reviews_new.gif';
 
 /* Class constructor */
 
     function osC_Products_Reviews() {
-      global $osC_Services, $breadcrumb, $osC_Product, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Services, $osC_Language, $breadcrumb, $osC_Product, $osC_Customer, $osC_NavigationHistory;
 
       if ($osC_Services->isStarted('reviews') === false) {
         tep_redirect(tep_href_link(FILENAME_DEFAULT));
       }
 
+      $this->_page_title = $osC_Language->get('reviews_heading');
+
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_REVIEWS, tep_href_link(FILENAME_PRODUCTS, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_reviews'), tep_href_link(FILENAME_PRODUCTS, $this->_module));
       }
 
       if (is_numeric($_GET[$this->_module])) {
@@ -75,7 +77,7 @@
 
               if ($osC_Services->isStarted('breadcrumb')) {
                 $breadcrumb->add($osC_Product->getTitle(), tep_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
-                $breadcrumb->add(NAVBAR_TITLE_REVIEWS_NEW, tep_href_link(FILENAME_PRODUCTS, $this->_module . '=new&' . $osC_Product->getKeyword()));
+                $breadcrumb->add($osC_Language->get('breadcrumb_reviews_new'), tep_href_link(FILENAME_PRODUCTS, $this->_module . '=new&' . $osC_Product->getKeyword()));
               }
 
               if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
@@ -103,7 +105,7 @@
 /* Private methods */
 
     function _process($id) {
-      global $messageStack, $osC_Customer;
+      global $osC_Language, $messageStack, $osC_Customer;
 
       $data = array('products_id' => $id);
 
@@ -116,13 +118,13 @@
       }
 
       if (strlen(trim($_POST['review'])) < REVIEW_TEXT_MIN_LENGTH) {
-        $messageStack->add('reviews', JS_REVIEW_TEXT);
+        $messageStack->add('reviews', sprintf($osC_Language->get('js_review_text'), REVIEW_TEXT_MIN_LENGTH));
       } else {
         $data['review'] = $_POST['review'];
       }
 
       if (($_POST['rating'] < 1) || ($_POST['rating'] > 5)) {
-        $messageStack->add('reviews', JS_REVIEW_RATING);
+        $messageStack->add('reviews', $osC_Language->get('js_review_rating'));
       } else {
         $data['rating'] = $_POST['rating'];
       }
@@ -131,11 +133,11 @@
         if ($osC_Reviews->is_moderated === true) {
           $data['status'] = '0';
 
-          $messageStack->add_session('reviews', SUCCESS_REVIEW_NEW_MODERATION, 'success');
+          $messageStack->add_session('reviews', $osC_Language->get('success_review_moderation'), 'success');
         } else {
           $data['status'] = '1';
 
-          $messageStack->add_session('reviews', SUCCESS_REVIEW_NEW, 'success');
+          $messageStack->add_session('reviews', $osC_Language->get('success_review_new'), 'success');
         }
 
         osC_Reviews::saveEntry($data);

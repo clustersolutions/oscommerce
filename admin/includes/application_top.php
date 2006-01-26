@@ -86,6 +86,8 @@
     }
   }
 
+  require('../includes/classes/xml.php');
+
 // set the language
   require('includes/classes/language.php');
   $osC_Language = new osC_Language_Admin();
@@ -94,12 +96,12 @@
     $osC_Language->set($_GET['language']);
   }
 
-  $osC_Language->load();
+  $osC_Language->loadConstants();
 
   header('Content-Type: text/html; charset=' . CHARSET);
   setlocale(LC_TIME, LANGUAGE_LOCALE);
 
-  $osC_Language->load(basename($_SERVER['SCRIPT_FILENAME']));
+  $osC_Language->loadConstants(basename($_SERVER['SCRIPT_FILENAME']));
 
 // define our localization functions
   require('includes/functions/localization.php');

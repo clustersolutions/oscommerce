@@ -14,7 +14,8 @@
 
 /* Private variables */
     var $_code,
-        $_languages = array();
+        $_languages = array(),
+        $_definitions = array();
 
 /* Class constructor */
 
@@ -29,8 +30,16 @@
       while ($Qlanguages->next()) {
         $this->_languages[$Qlanguages->value('code')] = array('id' => $Qlanguages->valueInt('languages_id'),
                                                               'name' => $Qlanguages->value('name'),
+                                                              'locale' => $Qlanguages->value('locale'),
+                                                              'charset' => $Qlanguages->value('charset'),
+                                                              'date_format_short' => $Qlanguages->value('date_format_short'),
+                                                              'date_format_long' => $Qlanguages->value('date_format_long'),
+                                                              'time_format' => $Qlanguages->value('time_format'),
+                                                              'text_direction' => $Qlanguages->value('text_direction'),
                                                               'image' => $Qlanguages->value('image'),
-                                                              'directory' => $Qlanguages->value('directory'));
+                                                              'currencies_id' => $Qlanguages->valueInt('currencies_id'),
+                                                              'numeric_separator_decimal' => $Qlanguages->value('numeric_separator_decimal'),
+                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'));
       }
 
       $Qlanguages->freeResult();
@@ -39,6 +48,31 @@
     }
 
 /* Public methods */
+
+    function load($key) {
+      global $osC_Database;
+
+      $Qdef = $osC_Database->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group');
+      $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+      $Qdef->bindInt(':languages_id', $this->getID());
+      $Qdef->bindValue(':content_group', $key);
+      $Qdef->setCache('languages-' . $this->_code . '-' . $key);
+      $Qdef->execute();
+
+      while ($Qdef->next()) {
+        $this->_definitions[$Qdef->value('definition_key')] = $Qdef->value('definition_value');
+      }
+
+      $Qdef->freeResult();
+    }
+
+    function get($key) {
+      if (isset($this->_definitions[$key])) {
+        return $this->_definitions[$key];
+      }
+
+      return $key;
+    }
 
     function set($code = '') {
       $this->_code = $code;
@@ -128,6 +162,22 @@
       return $this->_languages;
     }
 
+    function getData($key, $language = '') {
+      if (empty($language)) {
+        $language = $this->_code;
+      }
+
+      return $this->_languages[$language][$key];
+    }
+
+    function getCodeFromID($id) {
+      foreach ($this->_languages as $code => $lang) {
+        if ($lang['id'] == $id) {
+          return $code;
+        }
+      }
+    }
+
     function getID() {
       return $this->_languages[$this->_code]['id'];
     }
@@ -140,20 +190,44 @@
       return $this->_code;
     }
 
+    function getLocale() {
+      return $this->_languages[$this->_code]['locale'];
+    }
+
+    function getCharacterSet() {
+      return $this->_languages[$this->_code]['charset'];
+    }
+
+    function getDateFormatShort() {
+      return $this->_languages[$this->_code]['date_format_short'];
+    }
+
+    function getDateFormatLong() {
+      return $this->_languages[$this->_code]['date_format_long'];
+    }
+
+    function getTimeFormat() {
+      return $this->_languages[$this->_code]['time_format'];
+    }
+
+    function getTextDirection() {
+      return $this->_languages[$this->_code]['text_direction'];
+    }
+
     function getImage() {
       return $this->_languages[$this->_code]['image'];
     }
 
-    function getDirectory() {
-      return $this->_languages[$this->_code]['directory'];
+    function getCurrencyID() {
+      return $this->_languages[$this->_code]['currencies_id'];
     }
 
-    function load($definition = false) {
-      if (is_string($definition)) {
-        include('includes/languages/' . $this->getDirectory() . '/' . $definition);
-      } else {
-        include('includes/languages/' . $this->getDirectory() . '.php');
-      }
+    function getNumericDecimalSeparator() {
+      return $this->_languages[$this->_code]['numeric_separator_decimal'];
+    }
+
+    function getNumericThousandsSeparator() {
+      return $this->_languages[$this->_code]['numeric_separator_thousands'];
     }
   }
 ?>

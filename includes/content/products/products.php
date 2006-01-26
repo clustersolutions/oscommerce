@@ -23,7 +23,7 @@
 /* Class constructor */
 
     function osC_Products_Products() {
-      global $osC_Database, $osC_Services, $breadcrumb, $osC_Product;
+      global $osC_Database, $osC_Services, $osC_Language, $breadcrumb, $osC_Product;
 
       if (empty($_GET) === false) {
         $id = false;
@@ -54,11 +54,11 @@
 
           $this->_page_title = $osC_Product->getTitle();
         } else {
-          $this->_page_title = HEADING_TITLE_PRODUCT_NOT_FOUND;
+          $this->_page_title = $osC_Language->get('product_not_found_heading');
           $this->_page_contents = 'info_not_found.php';
         }
       } else {
-        $this->_page_title = HEADING_TITLE_PRODUCT_NOT_FOUND;
+        $this->_page_title = $osC_Language->get('product_not_found_heading');
         $this->_page_contents = 'info_not_found.php';
       }
     }

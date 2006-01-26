@@ -23,10 +23,10 @@
   if (isset($_GET['contact']) && ($_GET['contact'] == 'success')) {
 ?>
 
-<p><?php echo TEXT_INFO_CONTACT_TEXT_SUCCESS; ?></p>
+<p><?php echo $osC_Language->get('contact_email_sent_successfully'); ?></p>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
 </div>
 
 <?php
@@ -34,7 +34,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TITLE_CONTACT_INFORMATION; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('contact_title'); ?></div>
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
@@ -42,10 +42,10 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_STORE_ADDRESS . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('contact_store_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
     </div>
 
-    <p style="margin-top: 0px;"><?php echo TEXT_INFO_CONTACT; ?></p>
+    <p style="margin-top: 0px;"><?php echo $osC_Language->get('contact'); ?></p>
 
     <p><?php echo nl2br(STORE_OWNER_EMAIL_ADDRESS); ?></p>
   </div>
@@ -57,19 +57,19 @@
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><?php echo TEXT_INFO_CONTACT_ENTRY_NAME; ?></td>
+        <td><?php echo $osC_Language->get('contact_name_title'); ?></td>
       </tr>
       <tr>
         <td><?php echo osc_draw_input_field('name'); ?></td>
       </tr>
       <tr>
-        <td><?php echo TEXT_INFO_CONTACT_ENTRY_EMAIL; ?></td>
+        <td><?php echo $osC_Language->get('contact_email_address_title'); ?></td>
       </tr>
       <tr>
         <td><?php echo osc_draw_input_field('email'); ?></td>
       </tr>
       <tr>
-        <td><?php echo TEXT_INFO_CONTACT_ENTRY_ENQUIRY; ?></td>
+        <td><?php echo $osC_Language->get('contact_enquiry_title'); ?></td>
       </tr>
       <tr>
         <td><?php echo osc_draw_textarea_field('enquiry', '', 50, 15); ?></td>
@@ -79,7 +79,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 </div>
 
 </form>

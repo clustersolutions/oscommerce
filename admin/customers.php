@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,8 +13,6 @@
   require('includes/application_top.php');
 
   require('external/adodb/adodb-time.inc.php');
-
-  $selected_box = 'customers';
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 

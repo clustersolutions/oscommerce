@@ -15,7 +15,7 @@
   }
 
   if (!defined('MODULE_SUMMARY_PRODUCTS_TITLE')) {
-    $osC_Language->load('modules/summary/products.php');
+    $osC_Language->loadConstants('modules/summary/products.php');
   }
 
   class osC_Summary_products extends osC_Summary {

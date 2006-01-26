@@ -37,7 +37,7 @@
 ?>
 <!-- new_products //-->
 <div class="boxNew">
-  <div class="boxTitle"><?php echo sprintf(TABLE_HEADING_NEW_PRODUCTS, strftime('%B')); ?></div>
+  <div class="boxTitle"><?php echo $osC_Language->get('new_products_title'); ?></div>
 
   <div class="boxContents">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">

@@ -25,7 +25,7 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <?php echo TEXT_NEW_REVIEW; ?>
+    <?php echo $osC_Language->get('new_review_title'); ?>
   </div>
 
   <div class="content">
@@ -36,7 +36,7 @@
 ?>
 
       <tr>
-        <td><?php echo TEXT_REVIEW_FROM; ?></td>
+        <td><?php echo $osC_Language->get('field_review_from'); ?></td>
         <td><?php echo tep_output_string_protected($osC_Customer->getName()); ?></td>
       </tr>
 
@@ -49,7 +49,7 @@
         <td><?php echo osc_draw_input_field('customer_name'); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('customer_email_address'); ?></td>
       </tr>
 
@@ -64,16 +64,16 @@
         <td><?php echo osc_draw_textarea_field('review', '', 60, 15); ?></td>
       </tr>
       <tr>
-        <td><?php echo TEXT_REVIEW_SET_RATING . ' ' . TEXT_REVIEW_BAD . ' ' . osc_draw_radio_field('rating', array('1', '2', '3', '4', '5')) . ' ' . TEXT_REVIEW_GOOD; ?></td>
+        <td><?php echo $osC_Language->get('field_review_rating') . ' ' . $osC_Language->get('review_lowest_rating_title') . ' ' . osc_draw_radio_field('rating', array('1', '2', '3', '4', '5')) . ' ' . $osC_Language->get('review_highest_rating_title'); ?></td>
       </tr>
     </table>
   </div>
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . $osC_Product->getID()) . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . $osC_Product->getID()) . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

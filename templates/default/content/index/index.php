@@ -15,6 +15,12 @@
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<p><?php echo tep_customer_greeting(); ?></p>
+<?php
+  if ($osC_Customer->isLoggedOn()) {
+    echo '<p>' . sprintf($osC_Language->get('greeting_customer'), tep_output_string_protected($osC_Customer->getFirstName()), tep_href_link(FILENAME_PRODUCTS, 'new')) . '</p>';
+  } else {
+    echo '<p>' . sprintf($osC_Language->get('greeting_guest'), tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), tep_href_link(FILENAME_PRODUCTS, 'new')) . '</p>';
+  }
+?>
 
-<p><?php echo TEXT_INDEX; ?></p>
+<p><?php echo $osC_Language->get('index_text'); ?></p>

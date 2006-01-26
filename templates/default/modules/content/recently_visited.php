@@ -3,7 +3,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,7 @@
 ?>
 
         <td valign="top">
-          <div class="tableHeading"><b>Recent Products</b></div>
+          <div class="tableHeading"><?php echo $osC_Language->get('recently_visited_title'); ?></div>
 
           <table border="0" width="100%" cellspacing="0" cellpadding="2">
 

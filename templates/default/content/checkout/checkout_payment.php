@@ -28,10 +28,10 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_CONDITIONS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('order_conditions_title'); ?></div>
 
   <div class="content">
-    <?php echo TEXT_CONDITIONS_DESCRIPTION . '<br /><br />' . osc_draw_checkbox_field('conditions', '1', false, 'id="conditions"') . '<label for="conditions">&nbsp;' . TEXT_CONDITIONS_CONFIRM . '</label>'; ?>
+    <?php echo sprintf($osC_Language->get('order_conditions_description'), tep_href_link(FILENAME_INFO, 'conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', '1', false, 'id="conditions"') . '<label for="conditions">&nbsp;' . $osC_Language->get('order_conditions_acknowledge') . '</label>'; ?>
   </div>
 </div>
 
@@ -40,13 +40,13 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_BILLING_ADDRESS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('billing_address_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td valign="top"><?php echo TEXT_SELECTED_BILLING_DESTINATION; ?><br /><br /><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', IMAGE_BUTTON_CHANGE_ADDRESS) . '</a>'; ?></td>
-        <td valign="top" align="center"><?php echo '<b>' . TITLE_BILLING_ADDRESS . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo $osC_Language->get('choose_billing_destination'); ?><br /><br /><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address')) . '</a>'; ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
         <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $_SESSION['billto'], true, ' ', '<br />'); ?></td>
       </tr>
     </table>
@@ -54,7 +54,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_PAYMENT_METHOD; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('payment_method_title'); ?></div>
 
   <div class="content">
 
@@ -65,16 +65,16 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . TITLE_PLEASE_SELECT . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
     </div>
 
-    <p style="margin-top: 0px;"><?php echo TEXT_SELECT_PAYMENT_METHOD; ?></p>
+    <p style="margin-top: 0px;"><?php echo $osC_Language->get('choose_payment_method'); ?></p>
 
 <?php
   } else {
 ?>
 
-    <p style="margin-top: 0px;"><?php echo TEXT_ENTER_PAYMENT_INFORMATION; ?></p>
+    <p style="margin-top: 0px;"><?php echo $osC_Language->get('only_one_payment_method_available'); ?></p>
 
 <?php
   }
@@ -147,7 +147,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo TABLE_HEADING_COMMENTS; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('add_comment_to_order_title'); ?></div>
 
   <div class="content">
     <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : '')); ?>
@@ -157,10 +157,10 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?>
+      <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
     </div>
 
-    <?php echo '<b>' . TITLE_CONTINUE_CHECKOUT_PROCEDURE . '</b><br />' . TEXT_CONTINUE_CHECKOUT_PROCEDURE_TO_CONFIRMATION; ?>
+    <?php echo '<b>' . $osC_Language->get('continue_checkout_procedure_title') . '</b><br />' . $osC_Language->get('continue_checkout_procedure_to_confirmation'); ?>
   </div>
 </div>
 

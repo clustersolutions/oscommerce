@@ -25,26 +25,26 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo MY_PASSWORD_TITLE; ?>
+    <?php echo $osC_Language->get('my_password_title'); ?>
   </div>
 
   <div class="content">
     <table border="0" cellspacing="2" cellpadding="2">
       <tr>
-        <td><?php echo ENTRY_PASSWORD_CURRENT; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_password_current'); ?></td>
         <td><?php echo osc_draw_password_field('password_current', '', true); ?></td>
       </tr>
       <tr>
         <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_PASSWORD_NEW; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_password_new'); ?></td>
         <td><?php echo osc_draw_password_field('password_new', '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_PASSWORD_CONFIRMATION; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_password_confirmation'); ?></td>
         <td><?php echo osc_draw_password_field('password_confirmation', '', true); ?></td>
       </tr>
     </table>
@@ -52,9 +52,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

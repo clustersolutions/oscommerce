@@ -16,16 +16,18 @@
 
     var $_module = 'conditions',
         $_group = 'info',
-        $_page_title = HEADING_INFO_CONDITIONS,
+        $_page_title,
         $_page_contents = 'info_conditions.php';
 
 /* Class constructor */
 
     function osC_Info_Conditions() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Services, $osC_Language, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('info_conditions_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(BREADCRUMB_INFO_CONDITIONS, tep_href_link(FILENAME_INFO, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_conditions'), tep_href_link(FILENAME_INFO, $this->_module));
       }
     }
   }

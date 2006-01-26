@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -37,6 +37,10 @@
     $class = 'osC_' . ucfirst($set) . '_' . $code;
 
    if (class_exists($class)) {
+      if (call_user_func(array($class, 'isInstalled'), $code, $set) === false) {
+        $osC_Language->injectDefinitions('modules/' . $set . '/' . $code . '.xml');
+      }
+
       $module = new $class();
 
       if (!isset($mInfo) && (!isset($_GET[$set]) || (isset($_GET[$set]) && ($_GET[$set] == $code)))) {

@@ -5,35 +5,10 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
-
-// look in your $PATH_LOCALE/locale directory for available locales
-// or execute 'locale -a' on the server.
-// Examples:
-// on Linux try 'de_DE'
-// on FreeBSD try 'de_DE.ISO_8859-1'
-// on Windows try 'de' or 'German'
-define('LANGUAGE_LOCALE', 'de_DE');
-
-define('DATE_FORMAT_SHORT', '%d.%m.%Y');  // this is used for strftime()
-define('DATE_FORMAT_LONG', '%A, %d. %B %Y'); // this is used for strftime()
-define('DATE_FORMAT', 'd.m.Y');  // this is used for strftime()
-define('DATE_TIME_FORMAT', DATE_FORMAT_SHORT . ' %H:%M:%S');
-
-// if USE_DEFAULT_LANGUAGE_CURRENCY is true, use the following currency, instead of the applications default currency (used when changing language)
-define('LANGUAGE_CURRENCY', 'EUR');
-
-define('NUMERIC_DECIMAL_SEPARATOR', ',');
-define('NUMERIC_THOUSANDS_SEPARATOR', '.');
-
-// Global entries for the <html> tag
-define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="de" lang="de"');
-
-// charset for web pages and emails
-define('CHARSET', 'iso-8859-1');
 
 // page title
 define('TITLE', 'osCommerce');

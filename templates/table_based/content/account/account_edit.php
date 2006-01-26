@@ -27,9 +27,9 @@
 
 <div class="moduleBox">
   <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo FORM_REQUIRED_INFORMATION; ?></span>
+    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
 
-    <?php echo MY_ACCOUNT_TITLE; ?>
+    <?php echo $osC_Language->get('my_account_title'); ?>
   </div>
 
   <div class="content">
@@ -37,11 +37,11 @@
 
 <?php
   if (ACCOUNT_GENDER > -1) {
-    $gender_array = array(array('id' => 'm', 'text' => MALE),
-                          array('id' => 'f', 'text' => FEMALE));
+    $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
+                          array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
 ?>
       <tr>
-        <td><?php echo ENTRY_GENDER; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_gender'); ?></td>
         <td><?php echo osc_draw_radio_field('gender', $gender_array, $Qaccount->value('customers_gender'), '', (ACCOUNT_GENDER > 0)); ?></td>
       </tr>
       <tr>
@@ -52,11 +52,11 @@
 ?>
 
       <tr>
-        <td><?php echo ENTRY_FIRST_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_first_name'); ?></td>
         <td><?php echo osc_draw_input_field('firstname', $Qaccount->value('customers_firstname'), '', true); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_LAST_NAME; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_last_name'); ?></td>
         <td><?php echo osc_draw_input_field('lastname', $Qaccount->value('customers_lastname'), '', true); ?></td>
       </tr>
 
@@ -67,7 +67,7 @@
        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_DATE_OF_BIRTH; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_date_of_birth'); ?></td>
         <td><?php echo tep_draw_date_pull_down_menu('dob', $Qaccount->value('customers_dob'), false, true, true, date('Y')-1901, -5) . '&nbsp;<span class="inputRequirement">*</span>'; ?></td>
       </tr>
 <?php
@@ -78,7 +78,7 @@
        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
         <td><?php echo osc_draw_input_field('email_address', $Qaccount->value('customers_email_address'), '', true); ?></td>
       </tr>
     </table>
@@ -86,9 +86,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

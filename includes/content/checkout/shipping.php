@@ -18,13 +18,15 @@
 
     var $_module = 'shipping',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_SHIPPING,
+        $_page_title,
         $_page_contents = 'checkout_shipping.php';
 
 /* Class constructor */
 
     function osC_Checkout_Shipping() {
       global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
+
+      $this->_page_title = $osC_Language->get('shipping_method_heading');
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -37,11 +39,11 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_SHIPPING, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
-        $this->_page_title = HEADING_TITLE_CHECKOUT_SHIPPING_ADDRESS;
+        $this->_page_title = $osC_Language->get('shipping_address_heading');
         $this->_page_contents = 'checkout_shipping_address.php';
 
         $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping_address.js');

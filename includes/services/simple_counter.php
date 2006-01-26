@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id$
+  $Id:simple_counter.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -21,7 +21,7 @@
       global $osC_Database, $messageStack;
 
       $Qcounter = $osC_Database->query('select startdate, counter from :table_counter');
-      $Qcounter->bindRaw(':table_counter', TABLE_COUNTER);
+      $Qcounter->bindTable(':table_counter', TABLE_COUNTER);
       $Qcounter->execute();
 
       if ($Qcounter->numberOfRows()) {
@@ -29,16 +29,16 @@
         $counter_now = $Qcounter->valueInt('counter') + 1;
 
         $Qcounterupdate = $osC_Database->query('update :table_counter set counter = counter+1');
-        $Qcounterupdate->bindRaw(':table_counter', TABLE_COUNTER);
+        $Qcounterupdate->bindTable(':table_counter', TABLE_COUNTER);
         $Qcounterupdate->execute();
 
         $Qcounterupdate->freeResult();
       } else {
-        $counter_startdate = date('Ymd');
+        $counter_startdate = osC_DateTime::getNow();
         $counter_now = 1;
 
         $Qcounterupdate = $osC_Database->query('insert into :table_counter (startdate, counter) values (:start_date, 1)');
-        $Qcounterupdate->bindRaw(':table_counter', TABLE_COUNTER);
+        $Qcounterupdate->bindTable(':table_counter', TABLE_COUNTER);
         $Qcounterupdate->bindValue(':start_date', $counter_startdate);
         $Qcounterupdate->execute();
 
@@ -46,10 +46,6 @@
       }
 
       $Qcounter->freeResult();
-
-      $counter_startdate_formatted = strftime(DATE_FORMAT_LONG, mktime(0, 0, 0, substr($counter_startdate, 4, 2), substr($counter_startdate, -2), substr($counter_startdate, 0, 4)));
-
-      $messageStack->add('counter', number_format($counter_now) . ' ' . FOOTER_TEXT_REQUESTS_SINCE . ' ' . $counter_startdate_formatted);
 
       return true;
     }

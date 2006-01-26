@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -38,7 +38,7 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
       <tr>
-        <td class="main"><b><?php echo HEADING_DOWNLOAD; ?></b></td>
+        <td class="main"><b><?php echo $osC_Language->get('download_heading'); ?></b></td>
       </tr>
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
@@ -69,8 +69,8 @@
 ?>
 <!-- right box -->
 <?php
-      echo '            <td class="main">' . TABLE_HEADING_DOWNLOAD_DATE . tep_date_long($download_expiry) . '</td>' . "\n" .
-           '            <td class="main" align="right">' . $Qdownloads->valueInt('download_count') . TABLE_HEADING_DOWNLOAD_COUNT . '</td>' . "\n" .
+      echo '            <td class="main">' . sprintf($osC_Language->get('download_link_expires'), osC_DateTime::getLong($download_expiry)) . '</td>' . "\n" .
+           '            <td class="main" align="right">' . sprintf($osC_Language->get('download_counter_remaining'), $Qdownloads->valueInt('download_count')) . '</td>' . "\n" .
            '          </tr>' . "\n";
     }
 ?>
@@ -84,7 +84,7 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
       </tr>
       <tr>
-        <td class="smalltext" colspan="4"><p><?php printf(FOOTER_DOWNLOAD, '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . HEADER_TITLE_MY_ACCOUNT . '</a>'); ?></p></td>
+        <td class="smalltext" colspan="4"><p><?php sprintf($osC_Language->get('download_footer'), '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . $osC_Language->get('my_account') . '</a>'); ?></p></td>
       </tr>
 <?php
     }

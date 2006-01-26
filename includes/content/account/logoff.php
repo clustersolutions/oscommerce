@@ -16,16 +16,18 @@
 
     var $_module = 'logoff',
         $_group = 'account',
-        $_page_title = HEADING_TITLE_LOGOFF,
+        $_page_title,
         $_page_contents = 'logoff.php';
 
 /* Class constructor */
 
     function osC_Account_Logoff() {
-      global $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $breadcrumb;
+
+      $this->_page_title = $osC_Language->get('sign_out_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_LOGOFF);
+        $breadcrumb->add($osC_Language->get('breadcrumb_sign_out'));
       }
 
       $this->_process();

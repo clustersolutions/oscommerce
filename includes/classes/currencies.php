@@ -5,35 +5,39 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Currencies {
-    var $currencies;
+    var $currencies = array();
 
 // class constructor
     function osC_Currencies() {
       global $osC_Database;
 
-      $this->currencies = array();
-
-      $Qcurrencies = $osC_Database->query('select code, title, symbol_left, symbol_right, decimal_places, value from :table_currencies');
-      $Qcurrencies->bindRaw(':table_currencies', TABLE_CURRENCIES);
+      $Qcurrencies = $osC_Database->query('select * from :table_currencies');
+      $Qcurrencies->bindTable(':table_currencies', TABLE_CURRENCIES);
+      $Qcurrencies->setCache('currencies');
       $Qcurrencies->execute();
 
       while ($Qcurrencies->next()) {
-        $this->currencies[$Qcurrencies->value('code')] = array('title' => $Qcurrencies->value('title'),
+        $this->currencies[$Qcurrencies->value('code')] = array('id' => $Qcurrencies->valueInt('currencies_id'),
+                                                               'title' => $Qcurrencies->value('title'),
                                                                'symbol_left' => $Qcurrencies->value('symbol_left'),
                                                                'symbol_right' => $Qcurrencies->value('symbol_right'),
                                                                'decimal_places' => $Qcurrencies->valueInt('decimal_places'),
                                                                'value' => $Qcurrencies->valueDecimal('value'));
       }
+
+      $Qcurrencies->freeResult();
     }
 
 // class methods
     function format($number, $currency_code = '', $currency_value = '') {
+      global $osC_Language;
+
       if (empty($currency_code) || ($this->exists($currency_code) == false)) {
         $currency_code = (isset($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY);
       }
@@ -42,7 +46,7 @@
         $currency_value = $this->currencies[$currency_code]['value'];
       }
 
-      return $this->currencies[$currency_code]['symbol_left'] . number_format(tep_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], NUMERIC_DECIMAL_SEPARATOR, NUMERIC_THOUSANDS_SEPARATOR) . $this->currencies[$currency_code]['symbol_right'];
+      return $this->currencies[$currency_code]['symbol_left'] . number_format(tep_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
     }
 
     function displayPrice($price, $tax_class_id, $quantity = 1) {
@@ -79,6 +83,26 @@
       }
 
       return false;
+    }
+
+    function getCode($id = '') {
+      if (is_numeric($id)) {
+        foreach ($this->currencies as $key => $value) {
+          if ($value['id'] == $id) {
+            return $key;
+          }
+        }
+      } else {
+        return $_SESSION['currency'];
+      }
+    }
+
+    function getID($code = '') {
+      if (empty($code)) {
+        $code = $_SESSION['currency'];
+      }
+
+      return $this->currencies[$code]['id'];
     }
   }
 ?>

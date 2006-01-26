@@ -5,14 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
-
-  $selected_box = 'localization';
 
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();

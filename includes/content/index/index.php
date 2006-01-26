@@ -16,7 +16,7 @@
 
     var $_module = 'index',
         $_group = 'index',
-        $_page_title = HEADING_TITLE_INDEX,
+        $_page_title,
         $_page_contents = 'index.php',
         $_page_image = 'table_background_list.gif';
 
@@ -24,6 +24,8 @@
 
     function osC_Index_Index() {
       global $osC_Database, $osC_Services, $osC_Language, $breadcrumb, $cPath, $cPath_array, $current_category_id, $osC_Category;
+
+      $this->_page_title = sprintf($osC_Language->get('index_heading'), STORE_NAME);
 
       if (isset($cPath) && (empty($cPath) === false)) {
         if ($osC_Services->isStarted('breadcrumb')) {

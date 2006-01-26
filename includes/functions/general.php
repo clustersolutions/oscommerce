@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -507,42 +507,6 @@
     }
   }
 
-// Output a raw date string in the selected locale date format
-// $raw_date needs to be in this format: YYYY-MM-DD HH:MM:SS
-  function tep_date_long($raw_date) {
-    if ( ($raw_date == '0000-00-00 00:00:00') || ($raw_date == '') ) return false;
-
-    $year = (int)substr($raw_date, 0, 4);
-    $month = (int)substr($raw_date, 5, 2);
-    $day = (int)substr($raw_date, 8, 2);
-    $hour = (int)substr($raw_date, 11, 2);
-    $minute = (int)substr($raw_date, 14, 2);
-    $second = (int)substr($raw_date, 17, 2);
-
-    return strftime(DATE_FORMAT_LONG, mktime($hour,$minute,$second,$month,$day,$year));
-  }
-
-////
-// Output a raw date string in the selected locale date format
-// $raw_date needs to be in this format: YYYY-MM-DD HH:MM:SS
-// NOTE: Includes a workaround for dates before 01/01/1970 that fail on windows servers
-  function tep_date_short($raw_date) {
-    if ( ($raw_date == '0000-00-00 00:00:00') || empty($raw_date) ) return false;
-
-    $year = substr($raw_date, 0, 4);
-    $month = (int)substr($raw_date, 5, 2);
-    $day = (int)substr($raw_date, 8, 2);
-    $hour = (int)substr($raw_date, 11, 2);
-    $minute = (int)substr($raw_date, 14, 2);
-    $second = (int)substr($raw_date, 17, 2);
-
-    if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
-      return date(DATE_FORMAT, mktime($hour, $minute, $second, $month, $day, $year));
-    } else {
-      return ereg_replace('2037' . '$', $year, date(DATE_FORMAT, mktime($hour, $minute, $second, $month, $day, 2037)));
-    }
-  }
-
 ////
 // Parse search string into indivual objects
   function tep_parse_search_string($search_str = '', &$objects) {
@@ -814,6 +778,8 @@
 ////
 // Return table heading with sorting capabilities
   function tep_create_sort_heading($key, $heading) {
+    global $osC_Language;
+
     $current = false;
     $direction = false;
 
@@ -831,7 +797,7 @@
       }
     }
 
-    $sort_heading = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'sort')) . '&amp;sort=' . $key . ($direction == '+' ? '|d' : '')) . '" title="' . tep_output_string(TEXT_SORT_PRODUCTS . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? TEXT_ASCENDINGLY : TEXT_DESCENDINGLY) . TEXT_BY . $heading) . '" class="productListing-heading">' . $heading . (($key == $current) ? $direction : '') . '</a>';
+    $sort_heading = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'sort')) . '&amp;sort=' . $key . ($direction == '+' ? '|d' : '')) . '" title="' . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? sprintf($osC_Language->get('listing_sort_ascendingly'), $heading) : sprintf($osC_Language->get('listing_sort_descendingly'), $heading)) . '" class="productListing-heading">' . $heading . (($key == $current) ? $direction : '') . '</a>';
 
     return $sort_heading;
   }
@@ -956,20 +922,6 @@
     } else {
       return false;
     }
-  }
-
-////
-// Return a customer greeting
-  function tep_customer_greeting() {
-    global $osC_Customer;
-
-    if ($osC_Customer->isLoggedOn()) {
-      $greeting_string = sprintf(TEXT_GREETING_PERSONAL, tep_output_string_protected($osC_Customer->getFirstName()), tep_href_link(FILENAME_PRODUCTS, 'new'));
-    } else {
-      $greeting_string = sprintf(TEXT_GREETING_GUEST, tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), tep_href_link(FILENAME_ACCOUNT, 'create', 'SSL'));
-    }
-
-    return $greeting_string;
   }
 
 ////
@@ -1441,7 +1393,9 @@
 ////
 // Creates a pull-down list of countries
   function tep_get_country_list($name, $selected = '', $parameters = '', $required = false) {
-    $countries_array = array(array('id' => '', 'text' => PULL_DOWN_DEFAULT));
+    global $osC_Language;
+
+    $countries_array = array(array('id' => '', 'text' => $osC_Language->get('pull_down_default')));
     $countries = tep_get_countries();
 
     for ($i=0, $n=sizeof($countries); $i<$n; $i++) {
@@ -1449,5 +1403,45 @@
     }
 
     return osc_draw_pull_down_menu($name, $countries_array, $selected, $parameters, $required);
+  }
+
+  function osc_setlocale($category, $locale) {
+    if (PHP_VERSION < 4.1) {
+      if (is_array($locale)) {
+        foreach ($locale as $l) {
+          if (($result = setlocale($category, $l)) !== false) {
+            return $result;
+          }
+        }
+
+        return false;
+      } else {
+        return setlocale($category, $locale);
+      }
+    } else {
+      return setlocale($category, $locale);
+    }
+  }
+
+  function osc_object2array_recursive($object) {
+    $array = array();
+       
+    if (is_array($object)) {
+      foreach ($object as $key => $value) {
+        $array[$key] = osc_object2array_recursive($value);
+      }
+    } else {
+      $var = get_object_vars($object);
+           
+      if ($var) {
+        foreach($var as $key => $value) {
+          $array[$key] = ($key && !$value) ? (string)$value : osc_object2array_recursive($value);
+        }
+      } else {
+        return $object;
+      }
+    }
+
+    return $array;
   }
 ?>

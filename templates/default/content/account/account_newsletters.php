@@ -18,26 +18,26 @@
 <form name="account_newsletter" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'newsletters=save', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo MY_NEWSLETTERS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_subscriptions_heading'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="checkBox('newsletter_general');">
         <td width="30"><?php echo osc_draw_checkbox_field('newsletter_general', '1', $Qnewsletter->value('customers_newsletter'), 'onclick="checkBox(\'newsletter_general\')"'); ?></td>
-        <td><b><?php echo MY_NEWSLETTERS_GENERAL_NEWSLETTER; ?></b></td>
+        <td><b><?php echo $osC_Language->get('newsletter_general'); ?></b></td>
       </tr>
       <tr>
         <td width="30">&nbsp;</td>
-        <td><?php echo MY_NEWSLETTERS_GENERAL_NEWSLETTER_DESCRIPTION; ?></td>
+        <td><?php echo $osC_Language->get('newsletter_general_description'); ?></td>
       </tr>
     </table>
   </div>
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

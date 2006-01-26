@@ -16,13 +16,17 @@
 
     var $_module = 'confirmation',
         $_group = 'checkout',
-        $_page_title = HEADING_TITLE_CHECKOUT_CONFIRMATION,
+        $_page_title,
         $_page_contents = 'checkout_confirmation.php';
 
 /* Class constructor */
 
     function osC_Checkout_Confirmation() {
-      global $osC_Session, $osC_Services, $osC_Customer, $messageStack, $osC_NavigationHistory, $breadcrumb, $order, $payment_modules, $shipping_modules, $order_total_modules, $any_out_of_stock;
+      global $osC_Session, $osC_Services, $osC_Language, $osC_Customer, $messageStack, $osC_NavigationHistory, $breadcrumb, $order, $payment_modules, $shipping_modules, $order_total_modules, $any_out_of_stock;
+
+      $this->_page_title = $osC_Language->get('confirmation_heading');
+
+      $osC_Language->load('order');
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -47,7 +51,7 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add(NAVBAR_TITLE_CHECKOUT_CONFIRMATION, tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if (isset($_POST['payment_mod_sel'])) {
@@ -63,7 +67,7 @@
 
       if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true') {
         if (!isset($_POST['conditions']) || ($_POST['conditions'] != '1')) {
-          $messageStack->add_session('checkout_payment', ERROR_CONDITIONS_NOT_ACCEPTED, 'error');
+          $messageStack->add_session('checkout_payment', $osC_Language->get('error_conditions_not_accepted'), 'error');
         }
       }
 
@@ -76,7 +80,7 @@
       $payment_modules->update_status();
 
       if ( (is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !isset($GLOBALS[$payment])) || (isset($GLOBALS[$payment]) && is_object($GLOBALS[$payment]) && ($GLOBALS[$payment]->enabled == false)) ) {
-        $messageStack->add_session('checkout_payment', ERROR_NO_PAYMENT_MODULE_SELECTED, 'error');
+        $messageStack->add_session('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
       }
 
       if ($messageStack->size('checkout_payment') > 0) {

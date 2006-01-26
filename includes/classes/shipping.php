@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,8 +32,9 @@
           }
         }
 
+        $osC_Language->load('modules-shipping');
+
         for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include('includes/languages/' . $osC_Language->getDirectory() . '/modules/shipping/' . $include_modules[$i]['file']);
           include('includes/modules/shipping/' . $include_modules[$i]['file']);
 
           $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];

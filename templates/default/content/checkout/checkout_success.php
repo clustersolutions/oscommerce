@@ -42,12 +42,12 @@
   <div style="float: left;"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $osC_Template->getPageTitle()); ?></div>
 
   <div style="padding-top: 30px;">
-    <p><?php echo TEXT_SUCCESS; ?></p>
+    <p><?php echo $osC_Language->get('order_processed_successfully'); ?></p>
 
     <p>
 <?php
   if ($global['global_product_notifications'] != '1') {
-    echo TEXT_NOTIFY_PRODUCTS . '<br /><p class="productsNotifications">';
+    echo $osC_Language->get('add_selection_to_product_notifications') . '<br /><p class="productsNotifications">';
 
     $products_displayed = array();
     for ($i=0, $n=sizeof($products_array); $i<$n; $i++) {
@@ -59,17 +59,17 @@
 
     echo '</p>';
   } else {
-    echo TEXT_SEE_ORDERS . '<br /><br />' . TEXT_CONTACT_STORE_OWNER;
+    echo sprintf($osC_Language->get('view_order_history'), tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL')) . '<br /><br />' . sprintf($osC_Language->get('contact_store_owner'), tep_href_link(FILENAME_INFO, 'contact'));
   }
 ?>
     </p>
 
-    <h2 style="text-align: center;"><?php echo TEXT_THANKS_FOR_SHOPPING; ?></h2>
+    <h2 style="text-align: center;"><?php echo $osC_Language->get('thanks_for_shopping_with_us'); ?></h2>
   </div>
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?>
+  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">

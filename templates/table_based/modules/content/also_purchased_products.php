@@ -26,7 +26,7 @@
 ?>
 <!-- also_purchased_products //-->
 <div class="boxNew">
-  <div class="boxTitle"><?php echo TEXT_ALSO_PURCHASED_PRODUCTS; ?></div>
+  <div class="boxTitle"><?php echo $osC_Language->get('customers_also_purchased_title'); ?></div>
 
   <div class="boxContents">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">

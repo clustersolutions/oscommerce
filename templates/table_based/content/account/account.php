@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,7 +22,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo MY_ACCOUNT_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('my_account_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -30,9 +30,9 @@
         <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_personal.gif'); ?></td>
         <td>
           <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . MY_ACCOUNT_INFORMATION . '</a>'; ?></li>
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . MY_ACCOUNT_ADDRESS_BOOK . '</a>'; ?></li>
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'password', 'SSL') . '">' . MY_ACCOUNT_PASSWORD . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'edit', 'SSL') . '">' . $osC_Language->get('my_account_information') . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . $osC_Language->get('my_account_address_book') . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'password', 'SSL') . '">' . $osC_Language->get('my_account_password') . '</a>'; ?></li>
           </ul>
         </td>
       </tr>
@@ -41,7 +41,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo MY_ORDERS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('my_orders_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -49,7 +49,7 @@
         <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_orders.gif'); ?></td>
         <td>
           <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . MY_ORDERS_VIEW . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL') . '">' . $osC_Language->get('my_orders_view') . '</a>'; ?></li>
           </ul>
 
 <?php
@@ -74,11 +74,11 @@
             <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
               <td width="50" align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image('templates/' . $osC_Template->getCode() . '/images/icons/16x16/package.png') . '</a>'; ?></td>
               <td><?php echo '#' . $Qorders->valueInt('orders_id'); ?></td>
-              <td><?php echo tep_date_short($Qorders->value('date_purchased')); ?></td>
+              <td><?php echo osC_DateTime::getShort($Qorders->value('date_purchased')); ?></td>
               <td><?php echo $order_name . ', ' . $order_country; ?></td>
               <td><?php echo $Qorders->value('orders_status_name'); ?></td>
               <td align="right"><?php echo $Qorders->value('order_total'); ?></td>
-              <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image_button('small_view.gif', SMALL_IMAGE_BUTTON_VIEW) . '</a>'; ?></td>
+              <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qorders->valueInt('orders_id'), 'SSL') . '">' . tep_image_button('small_view.gif', $osC_Language->get('button_view')) . '</a>'; ?></td>
             </tr>
 
 <?php
@@ -98,7 +98,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo MY_EMAIL_NOTIFICATIONS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('my_notifications_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -106,8 +106,8 @@
         <td width="80" valign="top"><?php echo tep_image(DIR_WS_IMAGES . 'account_notifications.gif'); ?></td>
         <td>
           <ul style="list-style-image: url(<?php echo tep_href_link(DIR_WS_IMAGES . 'arrow_green.gif', '', 'SSL'); ?>);">
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_NEWSLETTERS . '</a>'; ?></li>
-            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL') . '">' . MY_EMAIL_NOTIFICATIONS_PRODUCTS . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'newsletters', 'SSL') . '">' . $osC_Language->get('my_notifications_newsletters') . '</a>'; ?></li>
+            <li><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL') . '">' . $osC_Language->get('my_notifications_products') . '</a>'; ?></li>
           </ul>
         </td>
       </tr>

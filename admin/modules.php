@@ -5,14 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
-
-  $selected_box = 'modules';
 
   $set = (isset($_GET['set']) ? $_GET['set'] : '');
 
@@ -40,6 +38,8 @@
         break;
     }
   }
+
+  $osC_Language->load('modules-' . $module_type);
 
   if (!empty($action)) {
     switch ($action) {
@@ -76,7 +76,7 @@
       case 'install':
       case 'remove':
         if (file_exists('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension)) {
-          include('../includes/languages/' . $osC_Language->getDirectory() . '/modules/' . $module_type . '/' . $_GET['module'] . $file_extension);
+          $osC_Language->injectDefinitions('modules/' . $module_type . '/' .$_GET['module'] . '.xml');
           include('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension);
           $module = new $_GET['module'];
           if ($action == 'install') {

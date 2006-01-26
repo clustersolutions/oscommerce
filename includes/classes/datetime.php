@@ -5,71 +5,55 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_DateTime {
-    var $date = '',
-        $month = '',
-        $year = '',
-        $hour = '',
-        $minute = '',
-        $second = '',
-        $long_date_format = '',
-        $short_date_format = '',
-        $long_date = '',
-        $short_date = '';
+    function getNow() {
+      return date('Y-m-d H:i:s');      
+    }
 
-    function osC_DateTime($raw_date = '', $long_date_format = '', $short_date_format = '') {
-      if (tep_not_null($long_date_format)) {
-        $this->long_date_format = $long_date_format;
-      } else {
-        $this->long_date_format = DATE_FORMAT_LONG;
+    function getShort($date = '') {
+      global $osC_Language;
+
+      if (empty($date)) {
+        $date = osC_DateTime::getNow();
       }
 
-      if (tep_not_null($short_date_format)) {
-        $this->short_date_format = $short_date_format;
-      } else {
-        $this->short_date_format = DATE_FORMAT;
-      }
+      $year = substr($date, 0, 4);
+      $month = (int)substr($date, 5, 2);
+      $day = (int)substr($date, 8, 2);
+      $hour = (int)substr($date, 11, 2);
+      $minute = (int)substr($date, 14, 2);
+      $second = (int)substr($date, 17, 2);
 
-      if (tep_not_null($raw_date)) {
-        $this->format($raw_date);
+      if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
+        return strftime($osC_Language->getDateFormatShort(), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        $this->setCurrentDate();
+        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatShort(), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 
-    function setCurrentDate() {
-      $this->date = date('d');
-      $this->month = date('m');
-      $this->year = date('Y');
+    function getLong($date = '') {
+      global $osC_Language;
 
-      $this->hour = date('H');
-      $this->minute = date('i');
-      $this->second = date('s');
-    }
-
-    function format($raw_date) {
-      if (empty($raw_date) || ($raw_date == '0000-00-00 00:00:00')) {
-        return false;
+      if (empty($date)) {
+        $date = osC_DateTime::getNow();
       }
 
-      $this->year = (int)substr($raw_date, 0, 4);
-      $this->month = (int)substr($raw_date, 5, 2);
-      $this->day = (int)substr($raw_date, 8, 2);
-      $this->hour = (int)substr($raw_date, 11, 2);
-      $this->minute = (int)substr($raw_date, 14, 2);
-      $this->second = (int)substr($raw_date, 17, 2);
+      $year = substr($date, 0, 4);
+      $month = (int)substr($date, 5, 2);
+      $day = (int)substr($date, 8, 2);
+      $hour = (int)substr($date, 11, 2);
+      $minute = (int)substr($date, 14, 2);
+      $second = (int)substr($date, 17, 2);
 
-      $this->long_date = strftime($this->long_date_format, mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year));
-
-      if (@date('Y', mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year)) == $this->year) {
-        $this->short_date = date($this->short_date_format, mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year));
+      if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
+        return strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        $this->short_date = ereg_replace('2037$', $this->year, date($this->short_date_format, mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, 2037)));
+        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 

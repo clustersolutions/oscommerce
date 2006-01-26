@@ -5,20 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   class osC_Boxes_best_sellers extends osC_Modules {
-    var $_title = 'Best Sellers',
+    var $_title,
         $_code = 'best_sellers',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
     function osC_Boxes_best_sellers() {
-//      $this->_title = BOX_HEADING_BESTSELLERS;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('box_best_sellers_heading');
     }
 
     function initialize() {

@@ -18,25 +18,25 @@
 <form name="account_notifications" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'notifications=save', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo MY_NOTIFICATIONS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications'); ?></div>
 
   <div class="content">
-    <?php echo MY_NOTIFICATIONS_DESCRIPTION; ?>
+    <?php echo $osC_Language->get('newsletter_product_notifications_description'); ?>
   </div>
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo GLOBAL_NOTIFICATIONS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications_global'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="checkBox('product_global');">
         <td width="30"><?php echo osc_draw_checkbox_field('product_global', '1', $Qglobal->value('global_product_notifications'), 'onclick="checkBox(\'product_global\');"'); ?></td>
-        <td><b><?php echo GLOBAL_NOTIFICATIONS_TITLE; ?></b></td>
+        <td><b><?php echo $osC_Language->get('newsletter_product_notifications_global'); ?></b></td>
       </tr>
       <tr>
         <td width="30">&nbsp;</td>
-        <td><?php echo GLOBAL_NOTIFICATIONS_DESCRIPTION; ?></td>
+        <td><?php echo $osC_Language->get('newsletter_product_notifications_global_description'); ?></td>
       </tr>
     </table>
   </div>
@@ -47,7 +47,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo NOTIFICATIONS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications_products'); ?></div>
 
   <div class="content">
 
@@ -57,7 +57,7 @@
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="main" colspan="2"><?php echo NOTIFICATIONS_DESCRIPTION; ?></td>
+        <td class="main" colspan="2"><?php echo $osC_Language->get('newsletter_product_notifications_products_description'); ?></td>
       </tr>
 
 <?php
@@ -82,7 +82,7 @@
 
 <?php
     } else {
-      echo NOTIFICATIONS_NON_EXISTING;
+      echo $osC_Language->get('newsletter_product_notifications_products_none');
     }
 ?>
 
@@ -94,9 +94,9 @@
 ?>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', IMAGE_BUTTON_CONTINUE); ?></span>
+  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>
 
 </form>

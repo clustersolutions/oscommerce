@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 
@@ -21,13 +21,13 @@
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
-<html <?php echo HTML_PARAMS; ?>>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $osC_Language->getTextDirection(); ?>" xml:lang="<?php echo $osC_Language->getCode(); ?>" lang="<?php echo $osC_Language->getCode(); ?>">
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
 
-<title><?php echo TITLE . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
+<title><?php echo STORE_NAME . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
 <base href="<?php echo tep_href_link('', '', 'AUTO', false); ?>" />
 
@@ -142,9 +142,9 @@
     <div id="headerIcons">
 
 <?php
-  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', HEADER_TITLE_MY_ACCOUNT) . '</a>&nbsp;&nbsp;
-        <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', HEADER_TITLE_CART_CONTENTS) . '</a>&nbsp;&nbsp;
-        <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', HEADER_TITLE_CHECKOUT) . '</a>';
+  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account')) . '</a>&nbsp;&nbsp;
+        <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents')) . '</a>&nbsp;&nbsp;
+        <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout')) . '</a>';
 ?>
 
     </div>
@@ -163,10 +163,10 @@
 
 <?php
   if ($osC_Customer->isLoggedOn()) {
-    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL') . '" class="headerNavigation">' . HEADER_TITLE_LOGOFF . '</a> &nbsp;|&nbsp; ';
+    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('sign_out') . '</a> &nbsp;|&nbsp; ';
   }
 
-  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '" class="headerNavigation">' . HEADER_TITLE_MY_ACCOUNT . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '" class="headerNavigation">' . HEADER_TITLE_CART_CONTENTS . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '" class="headerNavigation">' . HEADER_TITLE_CHECKOUT . '</a>';
+  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('my_account') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('cart_contents') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('checkout') . '</a>';
 ?>
 
       </div>
@@ -176,12 +176,10 @@
 
 <div id="pageFooter">
   <div id="footerBar">
-    <div style="float: left;"><?php echo strftime(DATE_FORMAT_LONG); ?></div>
-
-    <div style="text-align: right;"><?php if ($messageStack->size('counter')) echo $messageStack->outputPlain('counter'); ?></div>
+    <div><?php echo osC_DateTime::getLong(); ?></div>
   </div>
 
-  <?php echo '<p align="center">' . FOOTER_TEXT_BODY . '</p>'; ?>
+  <?php echo '<p align="center">' . sprintf($osC_Language->get('footer'), date('Y'), tep_href_link(FILENAME_DEFAULT), STORE_NAME) . '</p>'; ?>
 </div>
 
 <?php

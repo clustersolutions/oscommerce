@@ -12,7 +12,7 @@
 
   require('includes/application_top.php');
 
-  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_PRODUCTS);
+  $osC_Language->load('products');
 
   $osC_Template = osC_Template::setup('products');
 

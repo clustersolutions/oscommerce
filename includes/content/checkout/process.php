@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -285,37 +285,37 @@
 
 // lets start with the email confirmation
       $email_order = STORE_NAME . "\n" .
-                     EMAIL_SEPARATOR . "\n" .
-                     EMAIL_TEXT_ORDER_NUMBER . ' ' . $insert_id . "\n" .
-                     EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $insert_id, 'SSL', false) . "\n" .
-                     EMAIL_TEXT_DATE_ORDERED . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n";
+                     $osC_Language->get('email_order_separator') . "\n" .
+                     sprintf($osC_Language->get('email_order_order_number'), $insert_id) . "\n" .
+                     sprintf($osC_Language->get('email_order_invoice_url'), tep_href_link(FILENAME_ACCOUNT, 'orders=' . $insert_id, 'SSL', false)) . "\n" .
+                     sprintf($osC_Language->get('email_order_date_ordered'), osC_DateTime::getLong()) . "\n\n";
       if ($order->info['comments']) {
         $email_order .= tep_output_string_protected($order->info['comments']) . "\n\n";
       }
-      $email_order .= EMAIL_TEXT_PRODUCTS . "\n" .
-                      EMAIL_SEPARATOR . "\n" .
+      $email_order .= $osC_Language->get('email_order_products') . "\n" .
+                      $osC_Language->get('email_order_separator') . "\n" .
                       $products_ordered .
-                      EMAIL_SEPARATOR . "\n";
+                      $osC_Language->get('email_order_separator') . "\n";
 
       for ($i=0, $n=sizeof($order_totals); $i<$n; $i++) {
         $email_order .= strip_tags($order_totals[$i]['title']) . ' ' . strip_tags($order_totals[$i]['text']) . "\n";
       }
 
       if ($order->content_type != 'virtual') {
-        $email_order .= "\n" . EMAIL_TEXT_DELIVERY_ADDRESS . "\n" .
-                        EMAIL_SEPARATOR . "\n" .
+        $email_order .= "\n" . $osC_Language->get('email_order_delivery_address') . "\n" .
+                        $osC_Language->get('email_order_separator') . "\n" .
                         tep_address_label($osC_Customer->getID(), $_SESSION['sendto'], 0, '', "\n") . "\n";
       }
 
-      $email_order .= "\n" . EMAIL_TEXT_BILLING_ADDRESS . "\n" .
-                      EMAIL_SEPARATOR . "\n" .
+      $email_order .= "\n" . $osC_Language->get('email_order_billing_address') . "\n" .
+                      $osC_Language->get('email_order_separator') . "\n" .
                       tep_address_label($osC_Customer->getID(), $_SESSION['billto'], 0, '', "\n") . "\n\n";
 
       $payment =& $_SESSION['payment'];
 
       if (is_object($$payment)) {
-        $email_order .= EMAIL_TEXT_PAYMENT_METHOD . "\n" .
-                        EMAIL_SEPARATOR . "\n";
+        $email_order .= $osC_Language->get('email_order_payment_method') . "\n" .
+                        $osC_Language->get('email_order_separator') . "\n";
         $payment_class = $$payment;
         $email_order .= $payment_class->title . "\n\n";
         if (isset($payment_class->email_footer)) {
@@ -323,11 +323,11 @@
         }
       }
 
-      tep_mail($order->customer['firstname'] . ' ' . $order->customer['lastname'], $order->customer['email_address'], EMAIL_TEXT_SUBJECT, $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+      tep_mail($order->customer['firstname'] . ' ' . $order->customer['lastname'], $order->customer['email_address'], $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
 // send emails to other people
       if (SEND_EXTRA_ORDER_EMAILS_TO != '') {
-        tep_mail('', SEND_EXTRA_ORDER_EMAILS_TO, EMAIL_TEXT_SUBJECT, $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        tep_mail('', SEND_EXTRA_ORDER_EMAILS_TO, $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
       }
 
 // load the after_process function from the payment modules

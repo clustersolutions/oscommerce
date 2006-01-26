@@ -10,21 +10,19 @@
   Released under the GNU General Public License
 */
 
-  require('../includes/classes/language.php');
+  require('../admin/includes/classes/language.php');
 
-  class osC_LanguageInstall extends osC_Language {
+  class osC_LanguageInstall extends osC_Language_Admin {
 
 /* Private variables */
-    var $_code,
-        $_languages = array('en' => array('directory' => 'english'), 'es' => array('directory' => 'espanol'), 'de' => array('directory' => 'german')),
-        $_values = array();
+    var $_languages = array('en_US' => array('directory' => 'english'), 'es_ES' => array('directory' => 'espanol'), 'de_DE' => array('directory' => 'german'));
 
 /* Class constructor */
 
     function osC_LanguageInstall() {
       $this->set();
 
-      $this->_values = $this->_parseIniFile();
+      $this->_definitions = $this->_parseIniFile();
 
       $this->load(basename($_SERVER['PHP_SELF']));
     }
@@ -32,11 +30,11 @@
 /* Public methods */
 
     function load($filename) {
-      $this->_values = array_merge($this->_values, $this->_parseIniFile($filename));
+      $this->_definitions = array_merge($this->_definitions, $this->_parseIniFile($filename));
     }
 
-    function get($key) {
-      return $this->_values[$key];
+    function getDirectory() {
+      return $this->_languages[$this->_code]['directory'];
     }
 
 /* Private methods */

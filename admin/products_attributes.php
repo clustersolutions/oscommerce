@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,8 +36,6 @@
         break;
 */
   require('includes/application_top.php');
-
-  $selected_box = 'catalog';
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 

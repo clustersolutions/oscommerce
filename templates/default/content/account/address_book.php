@@ -22,13 +22,13 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo PRIMARY_ADDRESS_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('primary_address_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td valign="top"><?php echo PRIMARY_ADDRESS_DESCRIPTION; ?></td>
-        <td valign="top" align="center"><?php echo '<b>' . PRIMARY_ADDRESS_TITLE . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
+        <td valign="top"><?php echo $osC_Language->get('primary_address_description'); ?></td>
+        <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('primary_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
         <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $osC_Customer->getDefaultAddressID(), true, ' ', '<br />'); ?></td>
       </tr>
     </table>
@@ -36,7 +36,7 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo ADDRESS_BOOK_TITLE; ?></div>
+  <div class="outsideHeading"><?php echo $osC_Language->get('address_book_title'); ?></div>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -54,12 +54,12 @@
 
 <?php
     if ($Qaddresses->valueInt('address_book_id') == $osC_Customer->getDefaultAddressID()) {
-      echo '&nbsp;<small><i>' . PRIMARY_ADDRESS . '</i></small>';
+      echo '&nbsp;<small><i>' . $osC_Language->get('primary_address_marker') . '</i></small>';
     }
 ?>
 
         </td>
-        <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&edit', 'SSL') . '">' . tep_image_button('small_edit.gif', SMALL_IMAGE_BUTTON_EDIT) . '</a>&nbsp;<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&delete', 'SSL') . '">' . tep_image_button('small_delete.gif', SMALL_IMAGE_BUTTON_DELETE) . '</a>'; ?></td>
+        <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&edit', 'SSL') . '">' . tep_image_button('small_edit.gif', $osC_Language->get('button_edit')) . '</a>&nbsp;<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&delete', 'SSL') . '">' . tep_image_button('small_delete.gif', $osC_Language->get('button_delete')) . '</a>'; ?></td>
       </tr>
       <tr>
         <td colspan="2" style="padding: 0px 0px 10px 10px;"><?php echo tep_address_format($format_id, $Qaddresses->toArray(), true, ' ', '<br />'); ?></td>
@@ -77,12 +77,12 @@
   <span style="float: right;">
 <?php
   if ($Qaddresses->numberOfRows() < MAX_ADDRESS_BOOK_ENTRIES) {
-    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book&new', 'SSL') . '">' . tep_image_button('button_add_address.gif', IMAGE_BUTTON_ADD_ADDRESS) . '</a>';
+    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book&new', 'SSL') . '">' . tep_image_button('button_add_address.gif', $osC_Language->get('button_add_address')) . '</a>';
   } else {
-    echo sprintf(TEXT_MAXIMUM_ENTRIES, MAX_ADDRESS_BOOK_ENTRIES);
+    echo sprintf($osC_Language->get('address_book_maximum_entries'), MAX_ADDRESS_BOOK_ENTRIES);
   }
 ?>
   </span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BUTTON_BACK) . '</a>'; ?>
+  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
 </div>

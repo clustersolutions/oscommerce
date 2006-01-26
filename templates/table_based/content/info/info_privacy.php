@@ -15,8 +15,8 @@
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<p><?php echo TEXT_INFO_PRIVACY; ?></p>
+<p><?php echo $osC_Language->get('privacy'); ?></p>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', IMAGE_BUTTON_CONTINUE) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
 </div>

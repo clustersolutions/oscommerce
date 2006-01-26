@@ -28,13 +28,13 @@
     $Qfilterlist->execute();
 
     if ($Qfilterlist->numberOfRows() > 1) {
-      echo '<p>' . tep_draw_form('filter', FILENAME_DEFAULT, 'get') . TEXT_SHOW . '&nbsp;';
+      echo '<p>' . tep_draw_form('filter', FILENAME_DEFAULT, 'get') . $osC_Language->get('filter_show') . '&nbsp;';
       if (isset($_GET['manufacturers']) && tep_not_null($_GET['manufacturers'])) {
         echo osc_draw_hidden_field('manufacturers', $_GET['manufacturers']);
-        $options = array(array('id' => '', 'text' => TEXT_ALL_CATEGORIES));
+        $options = array(array('id' => '', 'text' => $osC_Language->get('filter_all_categories')));
       } else {
         echo osc_draw_hidden_field('cPath', $cPath);
-        $options = array(array('id' => '', 'text' => TEXT_ALL_MANUFACTURERS));
+        $options = array(array('id' => '', 'text' => $osC_Language->get('filter_all_manufacturers')));
       }
       echo osc_draw_hidden_field('sort', $_GET['sort']);
 
