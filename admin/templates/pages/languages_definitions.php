@@ -89,7 +89,7 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_VALUE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('value', '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('value', '', '60', '4', 'soft', 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_GROUP . '</b>'; ?></td>
