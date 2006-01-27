@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,6 @@
   define('FILENAME_CURRENCIES', 'currencies.php');
   define('FILENAME_CUSTOMERS', 'customers.php');
   define('FILENAME_DEFAULT', 'index.php');
-  define('FILENAME_DEFINE_LANGUAGE', 'define_language.php');
   define('FILENAME_FILE_MANAGER', 'file_manager.php');
   define('FILENAME_GEO_ZONES', 'geo_zones.php');
   define('FILENAME_LANGUAGES', 'languages.php');

@@ -112,7 +112,6 @@ define('BOX_HEADING_TOOLS', 'Tools');
 define('BOX_TOOLS_BACKUP', 'Database Backup');
 define('BOX_TOOLS_BANNER_MANAGER', 'Banner Manager');
 define('BOX_TOOLS_CACHE', 'Cache Control');
-define('BOX_TOOLS_DEFINE_LANGUAGE', 'Define Languages');
 define('BOX_TOOLS_FILE_MANAGER', 'File Manager');
 define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Newsletter Manager');
 define('BOX_TOOLS_SERVER_INFO', 'Server Info');

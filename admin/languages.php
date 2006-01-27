@@ -37,24 +37,26 @@
           $Qlanguage->bindInt(':languages_id', $_GET['lID']);
           $Qlanguage->execute();
 
-          $export_array['language']['data'] = array('title-CDATA' => $Qlanguage->value('name'),
-                                                    'code-CDATA' => $Qlanguage->value('code'),
-                                                    'locale-CDATA' => $Qlanguage->value('locale'),
-                                                    'character_set-CDATA' => $Qlanguage->value('charset'),
-                                                    'text_direction-CDATA' => $Qlanguage->value('text_direction'),
-                                                    'date_format_short-CDATA' => $Qlanguage->value('date_format_short'),
-                                                    'date_format_long-CDATA' => $Qlanguage->value('date_format_long'),
-                                                    'time_format-CDATA' => $Qlanguage->value('time_format'),
-                                                    'default_currency-CDATA' => $osC_Currencies->getCode($Qlanguage->valueInt('currencies_id')),
-                                                    'numerical_decimal_separator-CDATA' => $Qlanguage->value('numeric_separator_decimal'),
-                                                    'numerical_thousands_separator-CDATA' => $Qlanguage->value('numeric_separator_thousands'));
+          if ($_POST['include_data'] == 'on') {
+            $export_array['language']['data'] = array('title-CDATA' => $Qlanguage->value('name'),
+                                                      'code-CDATA' => $Qlanguage->value('code'),
+                                                      'locale-CDATA' => $Qlanguage->value('locale'),
+                                                      'character_set-CDATA' => $Qlanguage->value('charset'),
+                                                      'text_direction-CDATA' => $Qlanguage->value('text_direction'),
+                                                      'date_format_short-CDATA' => $Qlanguage->value('date_format_short'),
+                                                      'date_format_long-CDATA' => $Qlanguage->value('date_format_long'),
+                                                      'time_format-CDATA' => $Qlanguage->value('time_format'),
+                                                      'default_currency-CDATA' => $osC_Currencies->getCode($Qlanguage->valueInt('currencies_id')),
+                                                      'numerical_decimal_separator-CDATA' => $Qlanguage->value('numeric_separator_decimal'),
+                                                      'numerical_thousands_separator-CDATA' => $Qlanguage->value('numeric_separator_thousands'));
+          }
 
           $Qdefs = $osC_Database->query('select content_group, definition_key, definition_value from :table_languages_definitions where languages_id = :languages_id and content_group in (:content_group) order by content_group, definition_key');
           $Qdefs->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
           $Qdefs->bindInt(':languages_id', $_GET['lID']);
           $Qdefs->bindRaw(':content_group', '"' . implode('", "', $_POST['groups']) . '"');
           $Qdefs->execute();
-          
+
           while ($Qdefs->next()) {
             $export_array['language']['definitions']['definition'][] = array('key' => $Qdefs->value('definition_key'),
                                                                              'value-CDATA' => $Qdefs->value('definition_value'),

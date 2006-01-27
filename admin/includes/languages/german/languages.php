@@ -41,6 +41,7 @@ define('TEXT_INFO_HEADING_IMPORT_LANGUAGE', 'Sprache Importieren');
 
 define('TEXT_INFO_SELECT_LANGUAGE', 'Select Language:');
 define('TEXT_INFO_SELECT_IMPORT_TYPE', 'Type of Import:');
+define('TEXT_INFO_EXPORT_WITH_DATA', 'Export with language data');
 
 define('TEXT_INFO_DELETE_PROHIBITED', 'Warnung: Die Standardsprache darf nicht gel&ouml;scht werden. Bitte definieren Sie eine neue Standardsprache und wiederholen Sie den Vorgang.');
 ?>

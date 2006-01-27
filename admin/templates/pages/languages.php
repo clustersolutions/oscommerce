@@ -247,6 +247,8 @@
 ?>
     <p>(<a href="javascript:selectAllFromPullDownMenu('exportGroups');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('exportGroups');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="exportGroups" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
+    <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => TEXT_INFO_EXPORT_WITH_DATA)), true); ?></p>
+
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_EXPORT . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="resetPullDownMenuSelection(\'exportGroups\'); toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
 
     </form>
