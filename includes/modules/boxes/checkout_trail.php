@@ -18,7 +18,7 @@
         $_group = 'boxes';
 
     function osC_Boxes_checkout_trail() {
-      global $osC_Language;
+      global $osC_Language, $osC_ShoppingCart;
 
       $this->_title = $osC_Language->get('box_ordering_steps_heading');
     }
@@ -28,7 +28,7 @@
 
       $steps = array();
 
-      if ($_SESSION['cart']->get_content_type() != 'virtual') {
+      if ($osC_ShoppingCart->getContentType() != 'virtual') {
         $steps[] = array('title' => $osC_Language->get('box_ordering_steps_delivery'),
                           'code' => 'shipping',
                           'active' => (($osC_Template->getModule() == 'shipping') || ($osC_Template->getModule() == 'shipping_address') ? true : false));

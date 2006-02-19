@@ -47,16 +47,11 @@
 
 <?php
     foreach ($osC_Product->getAttributes() as $options => $values) {
-      if (isset($_SESSION['cart']->contents[$osC_Product->getID()]['attributes'][$options])) {
-        $selected_attribute = $_SESSION['cart']->contents[$osC_Product->getID()]['attributes'][$options];
-      } else {
-        $selected_attribute = false;
-      }
 ?>
 
   <tr>
     <td class="main"><?php echo $values['options_name'] . ':'; ?></td>
-    <td class="main"><?php echo osc_draw_pull_down_menu('id[' . $options . ']', $values['data'], $selected_attribute); ?></td>
+    <td class="main"><?php echo osc_draw_pull_down_menu('id[' . $options . ']', $values['data']); ?></td>
   </tr>
 
 <?php

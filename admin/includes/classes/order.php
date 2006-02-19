@@ -334,7 +334,7 @@
       return $number_of_items;
     }
 
-    function getTotal($id = 'ot_total') {
+    function getTotal($id = 'total') {
       if (!isset($this->_totals)) {
         $this->_getTotals();
       }

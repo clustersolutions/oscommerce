@@ -35,44 +35,42 @@
     include('../includes/modules/' . $module_type . '/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
-    if (class_exists($class)) {
-//      if (call_user_func(array($class, 'isInstalled'), $class, $module_type) === false) {
-        $osC_Language->injectDefinitions('modules/' . $module_type . '/' . $class . '.xml');
-//      }
 
-      $module = new $class;
+    if (class_exists($module_class . $class)) {
+      $osC_Language->injectDefinitions('modules/' . $module_type . '/' . $class . '.xml');
+
+      $module = $module_class . $class;
+      $module = new $module();
+
       if ($module->check() > 0) {
-        if (($module->sort_order > 0) && !isset($installed_modules[$module->sort_order])) {
-          $installed_modules[$module->sort_order] = $file['name'];
+        if ( ($module->getSortOrder() > 0) && !isset($installed_modules[$module->getSortOrder()])) {
+          $installed_modules[$module->getSortOrder()] = $file['name'];
         } else {
           $installed_modules[] = $file['name'];
         }
       }
 
       if (!isset($mInfo) && (!isset($_GET['module']) || (isset($_GET['module']) && ($_GET['module'] == $class)))) {
-        $module_info = array('code' => $module->code,
-                             'title' => $module->title,
-                             'description' => $module->description,
+        $module_info = array('code' => $module->getCode(),
+                             'title' => $module->getTitle(),
+                             'description' => $module->getDescription(),
                              'installed' => ($module->check() ? true : false),
-                             'status' => $module->enabled);
+                             'status' => $module->getStatus());
 
-        $module_keys = $module->keys();
+        $module_keys = $module->getKeys();
 
-        $keys_extra = array();
         foreach ($module_keys as $key) {
           $Qkeys = $osC_Database->query('select configuration_title, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_key = :configuration_key');
           $Qkeys->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qkeys->bindValue(':configuration_key', $key);
           $Qkeys->execute();
 
-          $keys_extra[$key]['title'] = $Qkeys->value('configuration_title');
-          $keys_extra[$key]['value'] = $Qkeys->value('configuration_value');
-          $keys_extra[$key]['description'] = $Qkeys->value('configuration_description');
-          $keys_extra[$key]['use_function'] = $Qkeys->value('use_function');
-          $keys_extra[$key]['set_function'] = $Qkeys->value('set_function');
+          $module_info['keys'][$key] = array('title' => $Qkeys->value('configuration_title'),
+                                             'value' => $Qkeys->value('configuration_value'),
+                                             'description' => $Qkeys->value('configuration_description'),
+                                             'use_function' => $Qkeys->value('use_function'),
+                                             'set_function' => $Qkeys->value('set_function'));
         }
-
-        $module_info['keys'] = $keys_extra;
 
         $mInfo = new objectInfo($module_info);
       }
@@ -83,9 +81,9 @@
         echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class) . '\';">' . "\n";
       }
 ?>
-        <td><?php echo $module->title; ?></td>
-        <td><?php if (isset($module->sort_order) && is_numeric($module->sort_order)) echo $module->sort_order; ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($module->check() > 0) ? ($module->enabled ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
+        <td><?php echo $module->getTitle(); ?></td>
+        <td><?php echo $module->getSortOrder(); ?></td>
+        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($module->check() > 0) ? ($module->getStatus() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
         <td align="right">
 <?php
     if (isset($mInfo) && ($class == $mInfo->code)) {
@@ -97,7 +95,7 @@
              tep_image('images/pixel_trans.gif', '', '16', '16');
       }
     } else {
-      if (($module->check() > 0) && $module->enabled === true) {
+      if ($module->check() > 0) {
         echo '<a href="' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;' .
              '<a href="' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
       } else {
@@ -109,19 +107,6 @@
         </td>
       </tr>
 <?php
-    }
-  }
-
-  ksort($installed_modules);
-  if (constant($module_key) != implode(';', $installed_modules)) {
-    $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
-    $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-    $Qupdate->bindValue(':configuration_value', implode(';', $installed_modules));
-    $Qupdate->bindValue(':configuration_key', $module_key);
-    $Qupdate->execute();
-
-    if ($Qupdate->affectedRows()) {
-      osC_Cache::clear('configuration');
     }
   }
 ?>

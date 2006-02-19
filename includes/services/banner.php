@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:banner.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -15,7 +15,7 @@
         $description = 'Banner management features for the catalog.',
         $uninstallable = true,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Banner;

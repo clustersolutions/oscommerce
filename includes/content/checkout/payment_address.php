@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,9 +22,7 @@
 /* Class constructor */
 
     function osC_Checkout_Payment_address() {
-      global $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb;
-
-      $this->_page_title = $osC_Language->get('payment_address_heading');
+      global $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -32,16 +30,18 @@
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
-      if ($_SESSION['cart']->count_contents() < 1) {
+      if ($osC_ShoppingCart->hasContents() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
+
+      $this->_page_title = $osC_Language->get('payment_address_heading');
 
       $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment_address.js');
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
 // if no billing destination address was selected, use their own address as default
-      if (isset($_SESSION['billto']) == false) {
-        $_SESSION['billto'] = $osC_Customer->getDefaultAddressID();
+      if ($osC_ShoppingCart->hasBillingAddress() === false) {
+        $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
@@ -49,7 +49,7 @@
         $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
-      if (($_GET[$this->_module] == 'process')) {
+      if ($_GET[$this->_module] == 'process') {
         $this->_process();
       }
     }
@@ -68,7 +68,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $messageStack;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack;
 
 // process a new billing address
       if (($osC_Customer->hasDefaultAddress() === false) || (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) ) {
@@ -203,8 +203,8 @@
               $osC_Customer->setDefaultAddressID($address_book_id);
             }
 
-            $_SESSION['billto'] = $address_book_id;
-            unset($_SESSION['payment']);
+            $osC_ShoppingCart->setBillingAddress($address_book_id);
+            $osC_ShoppingCart->resetBillingMethod();
 
             tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
           } else {
@@ -214,34 +214,35 @@
 // process the selected billing destination
       } elseif (isset($_POST['address'])) {
         $reset_payment = false;
-        if (isset($_SESSION['billto'])) {
-          if ($_SESSION['billto'] != $_POST['address']) {
-            if (isset($_SESSION['payment'])) {
+
+        if ($osC_ShoppingCart->hasBillingAddress()) {
+          if ($osC_ShoppingCart->getBillingAddress('id') != $_POST['address']) {
+            if ($osC_ShoppingCart->hasBillingMethod()) {
               $reset_payment = true;
             }
           }
         }
 
-        $_SESSION['billto'] = $_POST['address'];
+        $osC_ShoppingCart->setBillingAddress($_POST['address']);
 
-        $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
+        $Qcheck = $osC_Database->query('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id limit 1');
         $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+        $Qcheck->bindInt(':address_book_id', $osC_ShoppingCart->getBillingAddress('id'));
         $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->bindInt(':address_book_id', $_SESSION['billto']);
         $Qcheck->execute();
 
-        if ($Qcheck->valueInt('total') == 1) {
-          if ($reset_payment == true) {
-            unset($_SESSION['payment']);
+        if ($Qcheck->numberOfRows() === 1) {
+          if ($reset_payment === true) {
+            $osC_ShoppingCart->resetBillingMethod();
           }
 
           tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
         } else {
-          unset($_SESSION['billto']);
+          $osC_ShoppingCart->resetBillingAddress();
         }
 // no addresses to select from - customer decided to keep the current assigned address
       } else {
-        $_SESSION['billto'] = $osC_Customer->getDefaultAddressID();
+        $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
 
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }

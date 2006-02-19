@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,9 +22,7 @@
 /* Class constructor */
 
     function osC_Checkout_Payment() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $payment_modules;
-
-      $this->_page_title = $osC_Language->get('payment_method_heading');
+      global $osC_Database, $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $osC_Payment;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -32,32 +30,26 @@
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
-      if ($_SESSION['cart']->count_contents() < 1) {
+      if ($osC_ShoppingCart->hasContents() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
-      if (isset($_SESSION['shipping']) == false) {
+      if ($osC_ShoppingCart->hasShippingMethod() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
-      }
-
-// avoid hack attempts during the checkout procedure by checking the internal cartID
-      if (isset($_SESSION['cart']->cartID) && isset($_SESSION['cartID'])) {
-        if ($_SESSION['cart']->cartID != $_SESSION['cartID']) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
-        }
       }
 
 // Stock Check
       if ( (STOCK_CHECK == 'true') && (STOCK_ALLOW_CHECKOUT != 'true') ) {
-        $products = $_SESSION['cart']->get_products();
-        for ($i=0, $n=sizeof($products); $i<$n; $i++) {
-          if (tep_check_stock($products[$i]['id'], $products[$i]['quantity'])) {
+        foreach ($osC_ShoppingCart->getProducts() as $products) {
+          if ($osC_ShoppingCart->isInStock($products['id']) === false) {
             tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'SSL'));
             break;
           }
         }
       }
+
+      $this->_page_title = $osC_Language->get('payment_method_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
@@ -72,37 +64,29 @@
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } else {
         $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment.js');
-      }
 
 // if no billing destination address was selected, use the customers own address as default
-      if (isset($_SESSION['billto']) == false) {
-        $_SESSION['billto'] = $osC_Customer->getDefaultAddressID();
-      } else {
+        if ($osC_ShoppingCart->hasBillingAddress() == false) {
+          $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
+        } else {
 // verify the selected billing address
-        $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
-        $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->bindInt(':address_book_id', $_SESSION['billto']);
-        $Qcheck->execute();
+          $Qcheck = $osC_Database->query('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id limit 1');
+          $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+          $Qcheck->bindInt(':address_book_id', $osC_ShoppingCart->getBillingAddress('id'));
+          $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
+          $Qcheck->execute();
 
-        if ($Qcheck->valueInt('total') != 1) {
-          $_SESSION['billto'] = $osC_Customer->getDefaultAddressID();
-
-          unset($_SESSION['payment']);
+          if ($Qcheck->numberOfRows() !== 1) {
+            $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
+            $osC_ShoppingCart->resetBillingMethod();
+          }
         }
-      }
-
-      $order = new order;
-
-      $total_weight = $_SESSION['cart']->show_weight();
-      $total_count = $_SESSION['cart']->count_contents();
 
 // load all enabled payment modules
-      require('includes/classes/payment.php');
-      $payment_modules = new payment;
+        include('includes/classes/payment.php');
+        $osC_Payment = new osC_Payment();
 
-      if ($this->_page_contents == 'checkout_payment.php') {
-        $this->addJavascriptBlock($payment_modules->javascript_validation());
+        $this->addJavascriptBlock($osC_Payment->javascript_validation());
       }
 
       if (isset($_GET['payment_error']) && is_object(${$_GET['payment_error']}) && ($error = ${$_GET['payment_error']}->get_error())) {

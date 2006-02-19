@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:whos_online.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -15,7 +15,7 @@
         $description = 'See who is currently online.',
         $uninstallable = true,
         $depends = 'session',
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Customer, $osC_Database;

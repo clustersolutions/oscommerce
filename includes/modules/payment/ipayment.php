@@ -10,15 +10,21 @@
   Released under the GNU General Public License
 */
 
-  class ipayment {
-    var $code, $title, $description, $sort_order, $enabled = false;
+  class osC_Payment_ipayment extends osC_Payment {
+    var $_title,
+        $_code = 'ipayment',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
+        $_status = false,
+        $_sort_order;
 
-    function ipayment() {
+    function osC_Payment_ipayment() {
       global $osC_Language;
 
-      $this->code = 'ipayment';
-      $this->title = $osC_Language->get('payment_ipayment_title');
-      $this->description = $osC_Language->get('payment_ipayment_description');
+      $this->_title = $osC_Language->get('payment_ipayment_title');
+      $this->_description = $osC_Language->get('payment_ipayment_description');
+      $this->_status = (defined('MODULE_PAYMENT_IPAYMENT_STATUS') && (MODULE_PAYMENT_IPAYMENT_STATUS == 'True') ? true : false);
+      $this->_sort_order = (defined('MODULE_PAYMENT_IPAYMENT_SORT_ORDER') ? MODULE_PAYMENT_IPAYMENT_SORT_ORDER : null);
 
       if (defined('MODULE_PAYMENT_IPAYMENT_STATUS')) {
         $this->initialize();
@@ -27,9 +33,6 @@
 
     function initialize() {
       global $order;
-
-      $this->sort_order = MODULE_PAYMENT_IPAYMENT_SORT_ORDER;
-      $this->enabled = ((MODULE_PAYMENT_IPAYMENT_STATUS == 'True') ? true : false);
 
       if ((int)MODULE_PAYMENT_IPAYMENT_ORDER_STATUS_ID > 0) {
         $this->order_status = MODULE_PAYMENT_IPAYMENT_ORDER_STATUS_ID;
@@ -43,7 +46,7 @@
     function update_status() {
       global $osC_Database, $order;
 
-      if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_IPAYMENT_ZONE > 0) ) {
+      if ( ($this->_status === true) && ((int)MODULE_PAYMENT_IPAYMENT_ZONE > 0) ) {
         $check_flag = false;
 
         $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
@@ -63,7 +66,7 @@
         }
 
         if ($check_flag == false) {
-          $this->enabled = false;
+          $this->_status = false;
         }
       }
     }
@@ -71,7 +74,7 @@
     function javascript_validation() {
       global $osC_Language;
 
-      $js = '  if (payment_value == "' . $this->code . '") {' . "\n" .
+      $js = '  if (payment_value == "' . $this->_code . '") {' . "\n" .
             '    var cc_owner = document.checkout_payment.ipayment_cc_owner.value;' . "\n" .
             '    var cc_number = document.checkout_payment.ipayment_cc_number.value;' . "\n" .
             '    if (cc_owner == "" || cc_owner.length < ' . CC_OWNER_MIN_LENGTH . ') {' . "\n" .
@@ -112,8 +115,8 @@
 
       $Qcredit_cards->freeResult();
 
-      $selection = array('id' => $this->code,
-                         'module' => $this->title,
+      $selection = array('id' => $this->_code,
+                         'module' => $this->_title,
                          'fields' => array(array('title' => $osC_Language->get('payment_ipayment_credit_card_owner'),
                                                  'field' => osc_draw_input_field('ipayment_cc_owner', $order->billing['firstname'] . ' ' . $order->billing['lastname'])),
                                            array('title' => $osC_Language->get('payment_ipayment_credit_card_type'),
@@ -150,7 +153,7 @@
     function confirmation() {
       global $osC_Language;
 
-      $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
+      $confirmation = array('title' => $this->_title . ': ' . $this->cc_card_type,
                             'fields' => array(array('title' => $osC_Language->get('payment_ipayment_credit_card_owner'),
                                                     'field' => $this->cc_card_owner),
                                               array('title' => $osC_Language->get('payment_ipayment_credit_card_number'),
@@ -208,7 +211,7 @@
                                osc_draw_hidden_field('addr_email', $order->customer['email_address']) .
                                osc_draw_hidden_field('error_lang', ($osC_Language->getCode() == 'en') ? 'en' : 'de') .
                                osc_draw_hidden_field('silent', '1') .
-                               osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code . '&' . $payment_error_return, 'SSL')) .
+                               osc_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->_code . '&' . $payment_error_return, 'SSL')) .
                                osc_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
                                osc_draw_hidden_field('cc_number', $this->cc_card_number) .
                                osc_draw_hidden_field('cc_expdate_month', $this->cc_expiry_month) .
@@ -252,7 +255,9 @@
     }
 
     function install() {
-      global $osC_Database, $osC_Language;
+      global $osC_Database;
+
+      parent::install();
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable iPayment Module', 'MODULE_PAYMENT_IPAYMENT_STATUS', 'True', 'Do you want to accept iPayment payments?', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Account Number', 'MODULE_PAYMENT_IPAYMENT_ID', '99999', 'The account number used for the iPayment service', '6', '2', now())");
@@ -263,54 +268,22 @@
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_IPAYMENT_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '7', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_IPAYMENT_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '8', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_IPAYMENT_ORDER_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', '6', '9', 'tep_cfg_pull_down_order_statuses(', 'tep_get_order_status_name', now())");
-
-      foreach ($osC_Language->getAll() as $key => $value) {
-        foreach ($osC_Language->extractDefinitions($key . '/modules/payment/' . $this->code . '.xml') as $def) {
-          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
-          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qcheck->bindValue(':definition_key', $def['key']);
-          $Qcheck->bindValue(':content_group', $def['group']);
-          $Qcheck->bindInt(':languages_id', $value['id']);
-          $Qcheck->execute();
-
-          if ($Qcheck->numberOfRows() === 1) {
-            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
-          } else {
-            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-          }
-          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qdef->bindInt(':languages_id', $value['id']);
-          $Qdef->bindValue(':content_group', $def['group']);
-          $Qdef->bindValue(':definition_key', $def['key']);
-          $Qdef->bindValue(':definition_value', $def['value']);
-          $Qdef->execute();
-        }
-      }
-
-      osC_Cache::clear('languages');
     }
 
-    function remove() {
-      global $osC_Database, $osC_Language;
-
-      $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
-      $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
-      $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
-      $Qdel->execute();
-
-      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/payment/' . $this->code . '.xml') as $def) {
-        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
-        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-        $Qdel->bindValue(':definition_key', $def['key']);
-        $Qdel->bindValue(':content_group', $def['group']);
-        $Qdel->execute();
+    function getKeys() {
+      if (!isset($this->_keys)) {
+        $this->_keys = array('MODULE_PAYMENT_IPAYMENT_STATUS',
+                             'MODULE_PAYMENT_IPAYMENT_ID',
+                             'MODULE_PAYMENT_IPAYMENT_USER_ID',
+                             'MODULE_PAYMENT_IPAYMENT_PASSWORD',
+                             'MODULE_PAYMENT_IPAYMENT_SECURITY_KEY',
+                             'MODULE_PAYMENT_IPAYMENT_CURRENCY',
+                             'MODULE_PAYMENT_IPAYMENT_ZONE',
+                             'MODULE_PAYMENT_IPAYMENT_ORDER_STATUS_ID',
+                             'MODULE_PAYMENT_IPAYMENT_SORT_ORDER');
       }
 
-      osC_Cache::clear('languages');
-    }
-
-    function keys() {
-      return array('MODULE_PAYMENT_IPAYMENT_STATUS', 'MODULE_PAYMENT_IPAYMENT_ID', 'MODULE_PAYMENT_IPAYMENT_USER_ID', 'MODULE_PAYMENT_IPAYMENT_PASSWORD', 'MODULE_PAYMENT_IPAYMENT_SECURITY_KEY', 'MODULE_PAYMENT_IPAYMENT_CURRENCY', 'MODULE_PAYMENT_IPAYMENT_ZONE', 'MODULE_PAYMENT_IPAYMENT_ORDER_STATUS_ID', 'MODULE_PAYMENT_IPAYMENT_SORT_ORDER');
+      return $this->_keys;
     }
   }
 ?>

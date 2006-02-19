@@ -15,7 +15,7 @@
         $description = 'Parses the category path.',
         $uninstallable = false,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
       global $cPath, $cPath_array, $current_category_id, $osC_CategoryTree;

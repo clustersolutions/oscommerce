@@ -15,7 +15,7 @@
         $description = 'Set the default or selected currency.',
         $uninstallable = false,
         $depends = 'language',
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Language, $osC_Currencies;

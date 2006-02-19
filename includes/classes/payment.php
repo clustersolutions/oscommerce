@@ -10,52 +10,72 @@
   Released under the GNU General Public License
 */
 
-  class payment {
-    var $modules, $selected_module;
+  class osC_Payment {
+    var $selected_module;
+
+    var $_modules = array(),
+        $_group = 'payment';
 
 // class constructor
-    function payment($module = '') {
-      global $osC_Language;
+    function osC_Payment($module = '') {
+      global $osC_Database, $osC_Language;
 
-      if (defined('MODULE_PAYMENT_INSTALLED') && tep_not_null(MODULE_PAYMENT_INSTALLED)) {
-        $this->modules = explode(';', MODULE_PAYMENT_INSTALLED);
+      $Qmodules = $osC_Database->query('select code from :table_templates_boxes where modules_group = "payment"');
+      $Qmodules->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qmodules->setCache('modules-payment');
+      $Qmodules->execute();
 
-        $include_modules = array();
+      while ($Qmodules->next()) {
+        $this->_modules[] = $Qmodules->value('code');
+      }
 
-        if ( (tep_not_null($module)) && (in_array($module . '.' . substr($_SERVER['PHP_SELF'], (strrpos($_SERVER['PHP_SELF'], '.')+1)), $this->modules)) ) {
-          $this->selected_module = $module;
+      $Qmodules->freeResult();
 
-          $include_modules[] = array('class' => $module, 'file' => $module . '.php');
-        } else {
-          reset($this->modules);
-          while (list(, $value) = each($this->modules)) {
-            $class = substr($value, 0, strrpos($value, '.'));
-            $include_modules[] = array('class' => $class, 'file' => $value);
-          }
+      if (empty($this->_modules) === false) {
+        if ((empty($module) === false) && in_array($module, $this->_modules)) {
+          $this->_modules = array($module);
+          $this->selected_module = 'osC_Payment_' . $module;
         }
 
         $osC_Language->load('modules-payment');
 
-        for ($i=0, $n=sizeof($include_modules); $i<$n; $i++) {
-          include('includes/modules/payment/' . $include_modules[$i]['file']);
+        foreach ($this->_modules as $modules) {
+          include('includes/modules/payment/' . $modules . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
 
-          $GLOBALS[$include_modules[$i]['class']] = new $include_modules[$i]['class'];
+          $module_class = 'osC_Payment_' . $modules;
+
+          $GLOBALS[$module_class] = new $module_class();
         }
 
-// if there is only one payment method, select it as default because in
-// checkout_confirmation.php the $payment variable is being assigned the
-// $_POST['payment_mod_sel'] value which will be empty (no radio button selection possible)
-        if ( (tep_count_payment_modules() == 1) && (!isset($GLOBALS[$_SESSION['payment']]) || (isset($GLOBALS[$_SESSION['payment']]) && !is_object($GLOBALS[$_SESSION['payment']]))) ) {
-          $_SESSION['payment'] = $include_modules[0]['class'];
-        }
+        usort($this->_modules, array('osC_Payment', '_usortModules'));
 
-        if ( (tep_not_null($module)) && (in_array($module, $this->modules)) && (isset($GLOBALS[$module]->form_action_url)) ) {
-          $this->form_action_url = $GLOBALS[$module]->form_action_url;
+        if ( (tep_not_null($module)) && (in_array($module, $this->_modules)) && (isset($GLOBALS['osC_Payment_' . $module]->form_action_url)) ) {
+          $this->form_action_url = $GLOBALS['osC_Payment_' . $module]->form_action_url;
         }
       }
     }
 
 // class methods
+    function getCode() {
+      return $this->_code;
+    }
+
+    function getTitle() {
+      return $this->_title;
+    }
+
+    function getDescription() {
+      return $this->_description;
+    }
+
+    function getStatus() {
+      return $this->_status;
+    }
+
+    function getSortOrder() {
+      return $this->_sort_order;
+    }
+
 /* The following method is needed in the checkout_confirmation.php page
    due to a chicken and egg problem with the payment class and order class.
    The payment modules needs the order destination data for the dynamic status
@@ -65,7 +85,7 @@
    section. This should be looked into again post 2.2.
 */
     function update_status() {
-      if (is_array($this->modules)) {
+      if (is_array($this->_modules)) {
         if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module])) {
           if (method_exists($GLOBALS[$this->selected_module], 'update_status')) {
             $GLOBALS[$this->selected_module]->update_status();
@@ -78,7 +98,7 @@
       global $osC_Language;
 
       $js = '';
-      if (is_array($this->modules)) {
+      if (is_array($this->_modules)) {
         $js = '<script type="text/javascript"><!-- ' . "\n" .
               'function check_form() {' . "\n" .
               '  var error = 0;' . "\n" .
@@ -96,11 +116,9 @@
               '    payment_value = document.checkout_payment.payment.value;' . "\n" .
               '  }' . "\n\n";
 
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
-          $class = substr($value, 0, strrpos($value, '.'));
-          if ($GLOBALS[$class]->enabled) {
-            $js .= $GLOBALS[$class]->javascript_validation();
+        foreach ($this->_modules as $module) {
+          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+            $js .= $GLOBALS['osC_Payment_' . $module]->javascript_validation();
           }
         }
 
@@ -124,14 +142,10 @@
     function selection() {
       $selection_array = array();
 
-      if (is_array($this->modules)) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
-          $class = substr($value, 0, strrpos($value, '.'));
-          if ($GLOBALS[$class]->enabled) {
-            $selection = $GLOBALS[$class]->selection();
-            if (is_array($selection)) $selection_array[] = $selection;
-          }
+      foreach ($this->_modules as $module) {
+        if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+          $selection = $GLOBALS['osC_Payment_' . $module]->selection();
+          if (is_array($selection)) $selection_array[] = $selection;
         }
       }
 
@@ -139,51 +153,187 @@
     }
 
     function pre_confirmation_check() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           $GLOBALS[$this->selected_module]->pre_confirmation_check();
         }
       }
     }
 
     function confirmation() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           return $GLOBALS[$this->selected_module]->confirmation();
         }
       }
     }
 
     function process_button() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           return $GLOBALS[$this->selected_module]->process_button();
         }
       }
     }
 
     function before_process() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           return $GLOBALS[$this->selected_module]->before_process();
         }
       }
     }
 
     function after_process() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           return $GLOBALS[$this->selected_module]->after_process();
         }
       }
     }
 
     function get_error() {
-      if (is_array($this->modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->enabled) ) {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
           return $GLOBALS[$this->selected_module]->get_error();
         }
       }
+    }
+
+    function hasActionURL() {
+      if (is_array($this->_modules)) {
+        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+          if (isset($GLOBALS[$this->selected_module]->form_action_url) && (empty($GLOBALS[$this->selected_module]->form_action_url) === false)) {
+            return true;
+          }
+        }
+      }
+
+      return false;
+    }
+
+    function getActionURL() {
+      return $GLOBALS[$this->selected_module]->form_action_url;
+    }
+
+    function hasActive() {
+      static $has_active;
+
+      if (isset($has_active) === false) {
+        $has_active = false;
+
+        foreach ($this->_modules as $module) {
+          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+            $has_active = true;
+            break;
+          }
+        }
+      }
+
+      return $has_active;
+    }
+
+    function numberOfActive() {
+      static $active;
+
+      if (isset($active) === false) {
+        $active = 0;
+
+        foreach ($this->_modules as $module) {
+          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+            $active++;
+          }
+        }
+      }
+
+      return $active;
+    }
+
+    function hasKeys() {
+      static $has_keys;
+
+      if (isset($has_keys) === false) {
+        $has_keys = (sizeof($this->getKeys()) > 0) ? true : false;
+      }
+
+      return $has_keys;
+    }
+
+    function install() {
+      global $osC_Database, $osC_Language;
+
+      $Qinstall = $osC_Database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
+      $Qinstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qinstall->bindValue(':title', $this->_title);
+      $Qinstall->bindValue(':code', $this->_code);
+      $Qinstall->bindValue(':author_name', $this->_author_name);
+      $Qinstall->bindValue(':author_www', $this->_author_www);
+      $Qinstall->bindValue(':modules_group', $this->_group);
+      $Qinstall->execute();
+
+      foreach ($osC_Language->getAll() as $key => $value) {
+        if (file_exists(dirname(__FILE__) . '/../languages/' . $key . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
+          foreach ($osC_Language->extractDefinitions($key . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def) {
+            $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
+            $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+            $Qcheck->bindValue(':definition_key', $def['key']);
+            $Qcheck->bindValue(':content_group', $def['group']);
+            $Qcheck->bindInt(':languages_id', $value['id']);
+            $Qcheck->execute();
+
+            if ($Qcheck->numberOfRows() === 1) {
+              $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
+            } else {
+              $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+            }
+            $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+            $Qdef->bindInt(':languages_id', $value['id']);
+            $Qdef->bindValue(':content_group', $def['group']);
+            $Qdef->bindValue(':definition_key', $def['key']);
+            $Qdef->bindValue(':definition_value', $def['value']);
+            $Qdef->execute();
+          }
+        }
+      }
+
+      osC_Cache::clear('languages');
+    }
+
+    function remove() {
+      global $osC_Database, $osC_Language;
+
+      $Qdel = $osC_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
+      $Qdel->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qdel->bindValue(':code', $this->_code);
+      $Qdel->bindValue(':modules_group', $this->_group);
+      $Qdel->execute();
+
+      if ($this->hasKeys()) {
+        $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
+        $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
+        $Qdel->bindRaw(':configuration_key', implode('", "', $this->getKeys()));
+        $Qdel->execute();
+      }
+
+      if (file_exists(dirname(__FILE__) . '/../languages/' . $osC_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
+        foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def) {
+          $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
+          $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdel->bindValue(':definition_key', $def['key']);
+          $Qdel->bindValue(':content_group', $def['group']);
+          $Qdel->execute();
+        }
+
+        osC_Cache::clear('languages');
+      }
+    }
+
+    function _usortModules($a, $b) {
+      if ($GLOBALS['osC_Payment_' . $a]->getSortOrder() == $GLOBALS['osC_Payment_' . $b]->getSortOrder()) {
+        return strnatcasecmp($GLOBALS['osC_Payment_' . $a]->getTitle(), $GLOBALS['osC_Payment_' . $a]->getTitle());
+      }
+
+      return ($GLOBALS['osC_Payment_' . $a]->getSortOrder() < $GLOBALS['osC_Payment_' . $b]->getSortOrder()) ? -1 : 1;
     }
   }
 ?>

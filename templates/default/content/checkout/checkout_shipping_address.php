@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -38,7 +38,7 @@
       <tr>
         <td valign="top"><?php echo $osC_Language->get('selected_shipping_destination'); ?></td>
         <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('current_shipping_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
-        <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $_SESSION['sendto'], true, ' ', '<br />'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getShippingAddress('id'), true, ' ', '<br />'); ?></td>
       </tr>
     </table>
   </div>
@@ -73,7 +73,7 @@
         <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-       if ($Qaddresses->valueInt('address_book_id') == $_SESSION['sendto']) {
+       if ($Qaddresses->valueInt('address_book_id') == $osC_ShoppingCart->getShippingAddress('id')) {
           echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
         } else {
           echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
@@ -81,7 +81,7 @@
 ?>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
             <td class="main" colspan="2"><b><?php echo $Qaddresses->valueProtected('firstname') . ' ' . $Qaddresses->valueProtected('lastname'); ?></b></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('address', $Qaddresses->valueInt('address_book_id'), $_SESSION['sendto']); ?></td>
+            <td class="main" align="right"><?php echo osc_draw_radio_field('address', $Qaddresses->valueInt('address_book_id'), $osC_ShoppingCart->getShippingAddress('id')); ?></td>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
           <tr>

@@ -42,7 +42,7 @@
     function &getListing($limit = null, $page_keyword = 'page') {
       global $osC_Database, $osC_Customer, $osC_Language;
 
-      $Qorders = $osC_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "ot_total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc');
+      $Qorders = $osC_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc');
       $Qorders->bindTable(':table_orders', TABLE_ORDERS);
       $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
       $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
@@ -146,7 +146,7 @@
         $this->totals[] = array('title' => $Qtotals->value('title'),
                                 'text' => $Qtotals->value('text'));
 
-        if ($Qtotals->value('class') == 'ot_shipping') {
+        if ($Qtotals->value('class') == 'shipping') {
           $shipping_method_string = strip_tags($Qtotals->value('title'));
 
           if (substr($shipping_method_string, -1) == ':') {
@@ -154,7 +154,7 @@
           }
         }
 
-        if ($Qtotals->value('class') == 'ot_total') {
+        if ($Qtotals->value('class') == 'total') {
           $order_total_string = strip_tags($Qtotals->value('text'));
         }
       }
@@ -257,9 +257,9 @@
     }
 
     function cart() {
-      global $osC_Database, $osC_Customer, $osC_Tax, $osC_Currencies, $osC_Language;
+      global $osC_Database, $osC_ShoppingCart, $osC_Customer, $osC_Tax, $osC_Currencies, $osC_Language;
 
-      $this->content_type = $_SESSION['cart']->get_content_type();
+      $this->content_type = $osC_ShoppingCart->getContentType();
 
       $shipping =& $_SESSION['shipping'];
       $payment =& $_SESSION['payment'];
@@ -360,7 +360,7 @@
                              'format_id' => $Qbilling->valueInt('address_format_id'));
 
       $index = 0;
-      $products = $_SESSION['cart']->get_products();
+      $products = $osC_ShoppingCart->getProducts();
       for ($i=0, $n=sizeof($products); $i<$n; $i++) {
         $this->products[$index] = array('qty' => $products[$i]['quantity'],
                                         'name' => $products[$i]['name'],
@@ -369,7 +369,7 @@
                                         'tax_description' => $osC_Tax->getTaxRateDescription($products[$i]['tax_class_id'], $Qtax->valueInt('entry_country_id'), $Qtax->valueInt('entry_zone_id')),
                                         'tax_class_id' => $products[$i]['tax_class_id'],
                                         'price' => $products[$i]['price'],
-                                        'final_price' => $products[$i]['price'] + $_SESSION['cart']->attributes_price($products[$i]['id']),
+                                        'final_price' => $products[$i]['price'] + $osC_ShoppingCart->getProductAttributesPriceTotal($products[$i]['id']),
                                         'weight' => $products[$i]['weight'],
                                         'id' => $products[$i]['id']);
 
@@ -383,7 +383,7 @@
             $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
             $Qattributes->bindInt(':products_id', $products[$i]['id']);
             $Qattributes->bindInt(':options_id', $option);
-            $Qattributes->bindInt(':options_values_id', $value);
+            $Qattributes->bindInt(':options_values_id', $value['value_id']);
             $Qattributes->bindInt(':language_id', $osC_Language->getID());
             $Qattributes->bindInt(':language_id', $osC_Language->getID());
             $Qattributes->execute();
@@ -391,7 +391,7 @@
             $this->products[$index]['attributes'][$subindex] = array('option' => $Qattributes->value('products_options_name'),
                                                                      'value' => $Qattributes->value('products_options_values_name'),
                                                                      'option_id' => $option,
-                                                                     'value_id' => $value,
+                                                                     'value_id' => $value['value_id'],
                                                                      'prefix' => $Qattributes->value('price_prefix'),
                                                                      'price' => $Qattributes->value('options_values_price'));
 

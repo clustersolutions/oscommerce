@@ -15,7 +15,7 @@
         $description = 'Display collected debug information.',
         $uninstallable = true,
         $depends = 'language',
-        $preceeds;
+        $precedes;
 
     function start() {
       global $messageStack, $osC_Language;

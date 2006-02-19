@@ -58,7 +58,7 @@
       $this->_resultset = $osC_Database->query('select o.orders_id, o.customers_name, ot.value from :table_orders o, :table_orders_total ot where o.orders_id = ot.orders_id and ot.class = :class order by value desc');
       $this->_resultset->bindTable(':table_orders', TABLE_ORDERS);
       $this->_resultset->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
-      $this->_resultset->bindValue(':class', 'ot_total');
+      $this->_resultset->bindValue(':class', 'total');
       $this->_resultset->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
       $this->_resultset->execute();
 

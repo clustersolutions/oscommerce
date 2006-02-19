@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -20,16 +20,11 @@
 
 // class methods
     function getTaxRate($class_id, $country_id = -1, $zone_id = -1) {
-      global $osC_Database, $osC_Customer;
+      global $osC_Database, $osC_ShoppingCart;
 
       if ( ($country_id == -1) && ($zone_id == -1) ) {
-        if ($osC_Customer->isLoggedOn()) {
-          $country_id = $osC_Customer->getCountryID();
-          $zone_id = $osC_Customer->getZoneID();
-        } else {
-          $country_id = STORE_COUNTRY;
-          $zone_id = STORE_ZONE;
-        }
+        $country_id = $osC_ShoppingCart->getTaxingAddress('country_id');
+        $zone_id = $osC_ShoppingCart->getTaxingAddress('zone_id');
       }
 
       if (isset($this->tax_rates[$class_id][$country_id][$zone_id]['rate']) == false) {

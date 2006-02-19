@@ -14,7 +14,7 @@
         $description = 'Enable Recently visited module.',
         $uninstallable = true,
         $depends = array('session', 'category_path'),
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Services, $osC_RecentlyVisited;

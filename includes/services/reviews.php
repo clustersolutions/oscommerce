@@ -15,7 +15,7 @@
         $description = 'Enable Product Reviews.',
         $uninstallable = true,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
     	global $osC_Reviews;

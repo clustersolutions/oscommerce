@@ -15,7 +15,7 @@
         $description = 'Enable Product Specials.',
         $uninstallable = true,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Specials;

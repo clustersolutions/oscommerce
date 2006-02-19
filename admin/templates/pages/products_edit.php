@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -81,7 +81,6 @@
   }
 ?>
 
-<script type="text/javascript" src="external/FCKeditor/2.0b1/fckeditor.js"></script>
 <style type="text/css">@import url('external/jscalendar/calendar-win2k-1.css');</style>
 <script type="text/javascript" src="external/jscalendar/calendar.js"></script>
 <script type="text/javascript" src="external/jscalendar/lang/calendar-en.js"></script>
@@ -122,26 +121,26 @@
     }
   }
 
-  function updateGross() {
+  function updateGross(field) {
     var taxRate = getTaxRate();
-    var grossValue = document.forms["new_product"].products_price.value;
+    var grossValue = document.getElementById(field).value;
 
     if (taxRate > 0) {
       grossValue = grossValue * ((taxRate / 100) + 1);
     }
 
-    document.forms["new_product"].products_price_gross.value = doRound(grossValue, 4);
+    document.getElementById(field + "_gross").value = doRound(grossValue, 4);
   }
 
-  function updateNet() {
+  function updateNet(field) {
     var taxRate = getTaxRate();
-    var netValue = document.forms["new_product"].products_price_gross.value;
+    var netValue = document.getElementById(field + "_gross").value;
 
     if (taxRate > 0) {
       netValue = netValue / ((taxRate / 100) + 1);
     }
 
-    document.forms["new_product"].products_price.value = doRound(netValue, 4);
+    document.getElementById(field).value = doRound(netValue, 4);
   }
 
   var counter = 0;
@@ -293,13 +292,6 @@
             <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : '')); ?></td>
           </tr>
         </table>
-
-        <script type="text/javascript"><!--
-          var fckpd_<?php echo $l['code']; ?> = new FCKeditor('fckpd_<?php echo $l['code']; ?>');
-          fckpd_<?php echo $l['code']; ?>.BasePath = "<?php echo DIR_WS_CATALOG . 'admin/external/FCKeditor/2.0b1/'; ?>";
-          fckpd_<?php echo $l['code']; ?>.Height = "400";
-          fckpd_<?php echo $l['code']; ?>.ReplaceTextarea();
-        //--></script>
       </div>
 
 <?php
@@ -325,20 +317,20 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_TAX_CLASS; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($pInfo) ? $pInfo->products_tax_class_id : ''), 'onchange="updateGross()"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($pInfo) ? $pInfo->products_tax_class_id : ''), 'onchange="updateGross(\'products_price\');"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_NET; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($pInfo) ? $pInfo->products_price : ''), 'onKeyUp="updateGross()"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($pInfo) ? $pInfo->products_price : ''), 'id="products_price" onkeyup="updateGross(\'products_price\')"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_GROSS; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($pInfo) ? $pInfo->products_price : ''), 'OnKeyUp="updateNet()"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($pInfo) ? $pInfo->products_price : ''), 'id="products_price_gross" onkeyup="updateNet(\'products_price\')"'); ?></td>
               </tr>
             </table>
 
             <script type="text/javascript"><!--
-              updateGross();
+              updateGross('products_price');
             //--></script>
           </fieldset>
         </td>

@@ -15,7 +15,7 @@
         $description = 'Count the number of page requests made.',
         $uninstallable = true,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Database, $messageStack;

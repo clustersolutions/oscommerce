@@ -25,14 +25,14 @@
     }
 
     function initialize() {
-      global $osC_Language, $osC_Currencies;
+      global $osC_Language, $osC_ShoppingCart, $osC_Currencies;
 
-      if ($_SESSION['cart']->count_contents() > 0) {
+      if ($osC_ShoppingCart->hasContents()) {
         $data = '<table border="0" width="100%" cellspacing="0" cellpadding="0">' . "\n";
 
-        $products = $_SESSION['cart']->get_products();
+        $products = $osC_ShoppingCart->getProducts();
 
-        foreach ($_SESSION['cart']->get_products() as $products) {
+        foreach ($osC_ShoppingCart->getProducts() as $products) {
           $data .= '  <tr>' . "\n" .
                    '    <td align="right" valign="top">';
 
@@ -68,7 +68,7 @@
         }
 
         $data .= '</table>' . "\n" .
-                 '<p style="text-align: right">Subtotal: ' . $osC_Currencies->format($_SESSION['cart']->show_total()) . '</p>' . "\n";
+                 '<p style="text-align: right">Subtotal: ' . $osC_Currencies->format($osC_ShoppingCart->getSubTotal()) . '</p>' . "\n";
       } else {
         $data = $osC_Language->get('box_shopping_cart_empty');
       }

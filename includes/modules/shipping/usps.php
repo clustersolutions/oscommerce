@@ -5,47 +5,59 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-  class usps {
-    var $code, $title, $description, $icon, $enabled, $countries;
+  class osC_Shipping_usps extends osC_Shipping {
+    var $icon, $countries;
+
+    var $_title,
+        $_code = 'usps',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
+        $_status = false,
+        $_sort_order;
 
 // class constructor
-    function usps() {
-      global $osC_Database, $osC_Language, $order;
+    function osC_Shipping_usps() {
+      global $osC_Language;
 
-      $this->code = 'usps';
-      $this->title = $osC_Language->get('shipping_usps_title');
-      $this->description = $osC_Language->get('shipping_usps_description');
-      $this->sort_order = MODULE_SHIPPING_USPS_SORT_ORDER;
       $this->icon = DIR_WS_IMAGES . 'icons/shipping_usps.gif';
-      $this->tax_class = MODULE_SHIPPING_USPS_TAX_CLASS;
-      $this->enabled = ((MODULE_SHIPPING_USPS_STATUS == 'True') ? true : false);
 
-      if ( ($this->enabled == true) && ((int)MODULE_SHIPPING_USPS_ZONE > 0) ) {
+      $this->_title = $osC_Language->get('shipping_usps_title');
+      $this->_description = $osC_Language->get('shipping_usps_description');
+      $this->_status = (defined('MODULE_SHIPPING_USPS_STATUS') && (MODULE_SHIPPING_USPS_STATUS == 'True') ? true : false);
+      $this->_sort_order = (defined('MODULE_SHIPPING_USPS_SORT_ORDER') ? MODULE_SHIPPING_USPS_SORT_ORDER : null);
+    }
+
+    function initialize() {
+      global $osC_Database, $osC_ShoppingCart;
+
+      $this->tax_class = MODULE_SHIPPING_USPS_TAX_CLASS;
+
+      if ( ($this->_status === true) && ((int)MODULE_SHIPPING_USPS_ZONE > 0) ) {
         $check_flag = false;
 
         $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
         $Qcheck->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
         $Qcheck->bindInt(':geo_zone_id', MODULE_SHIPPING_USPS_ZONE);
-        $Qcheck->bindInt(':zone_country_id', $order->delivery['country']['id']);
+        $Qcheck->bindInt(':zone_country_id', $osC_ShoppingCart->getShippingAddress('country_id'));
         $Qcheck->execute();
 
         while ($Qcheck->next()) {
           if ($Qcheck->valueInt('zone_id') < 1) {
             $check_flag = true;
             break;
-          } elseif ($Qcheck->valueInt('zone_id') == $order->delivery['zone_id']) {
+          } elseif ($Qcheck->valueInt('zone_id') == $osC_ShoppingCart->getShippingAddress('zone_id')) {
             $check_flag = true;
             break;
           }
         }
 
         if ($check_flag == false) {
-          $this->enabled = false;
+          $this->_status = false;
         }
       }
 
@@ -69,19 +81,15 @@
     }
 
 // class methods
-    function quote($method = '') {
-      global $osC_Language, $osC_Tax, $order, $shipping_weight, $shipping_num_boxes;
-
-      if ( tep_not_null($method) && (isset($this->types[$method]) || in_array($method, $this->intl_types)) ) {
-        $this->_setService($method);
-      }
+    function quote() {
+      global $osC_Language, $osC_ShoppingCart;
 
       $this->_setMachinable('False');
       $this->_setContainer('None');
       $this->_setSize('REGULAR');
 
 // usps doesnt accept zero weight
-      $shipping_weight = ($shipping_weight < 0.1 ? 0.1 : $shipping_weight);
+      $shipping_weight = ($osC_ShoppingCart->getShippingBoxesWeight() < 0.1 ? 0.1 : $osC_ShoppingCart->getShippingBoxesWeight());
       $shipping_pounds = floor ($shipping_weight);
       $shipping_ounces = round(16 * ($shipping_weight - floor($shipping_weight)));
       $this->_setWeight($shipping_pounds, $shipping_ounces);
@@ -90,12 +98,12 @@
 
       if (is_array($uspsQuote)) {
         if (isset($uspsQuote['error'])) {
-          $this->quotes = array('module' => $this->title,
+          $this->quotes = array('module' => $this->_title,
                                 'error' => $uspsQuote['error']);
         } else {
-          $this->quotes = array('id' => $this->code,
-                                'module' => $this->title . ' (' . $shipping_num_boxes . ' x ' . $shipping_weight . 'lbs)',
-                                'tax' => 0);
+          $this->quotes = array('id' => $this->_code,
+                                'module' => $this->_title . ' (' . $osC_ShoppingCart->numberOfShippingBoxes() . ' x ' . $shipping_weight . 'lbs)',
+                                'tax_class_id' => $this->tax_class);
 
           $methods = array();
           $size = sizeof($uspsQuote);
@@ -104,21 +112,17 @@
 
             $methods[] = array('id' => $type,
                                'title' => ((isset($this->types[$type])) ? $this->types[$type] : $type),
-                               'cost' => ($cost + MODULE_SHIPPING_USPS_HANDLING) * $shipping_num_boxes);
+                               'cost' => ($cost + MODULE_SHIPPING_USPS_HANDLING) * $osC_ShoppingCart->numberOfShippingBoxes());
           }
 
           $this->quotes['methods'] = $methods;
-
-          if ($this->tax_class > 0) {
-            $this->quotes['tax'] = $osC_Tax->getTaxRate($this->tax_class, $order->delivery['country']['id'], $order->delivery['zone_id']);
-          }
         }
       } else {
-        $this->quotes = array('module' => $this->title,
+        $this->quotes = array('module' => $this->_title,
                               'error' => $osC_Language->get('shipping_usps_error'));
       }
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->title);
+      if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->_title);
 
       return $this->quotes;
     }
@@ -132,7 +136,9 @@
     }
 
     function install() {
-      global $osC_Database, $osC_Languange;
+      global $osC_Database;
+
+      parent::install();
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable USPS Shipping', 'MODULE_SHIPPING_USPS_STATUS', 'True', 'Do you want to offer USPS shipping?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Enter the USPS User ID', 'MODULE_SHIPPING_USPS_USERID', 'NONE', 'Enter the USPS USERID assigned to you.', '6', '0', now())");
@@ -142,54 +148,21 @@
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Tax Class', 'MODULE_SHIPPING_USPS_TAX_CLASS', '0', 'Use the following tax class on the shipping fee.', '6', '0', 'tep_get_tax_class_title', 'tep_cfg_pull_down_tax_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Shipping Zone', 'MODULE_SHIPPING_USPS_ZONE', '0', 'If a zone is selected, only enable this shipping method for that zone.', '6', '0', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_SHIPPING_USPS_SORT_ORDER', '0', 'Sort order of display.', '6', '0', now())");
-
-      foreach ($osC_Language->getAll() as $key => $value) {
-        foreach ($osC_Language->extractDefinitions($key . '/modules/shipping/' . $this->code . '.xml') as $def) {
-          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
-          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qcheck->bindValue(':definition_key', $def['key']);
-          $Qcheck->bindValue(':content_group', $def['group']);
-          $Qcheck->bindInt(':languages_id', $value['id']);
-          $Qcheck->execute();
-
-          if ($Qcheck->numberOfRows() === 1) {
-            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
-          } else {
-            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-          }
-          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qdef->bindInt(':languages_id', $value['id']);
-          $Qdef->bindValue(':content_group', $def['group']);
-          $Qdef->bindValue(':definition_key', $def['key']);
-          $Qdef->bindValue(':definition_value', $def['value']);
-          $Qdef->execute();
-        }
-      }
-
-      osC_Cache::clear('languages');
     }
 
-    function remove() {
-      global $osC_Database, $osC_Language;
-
-      $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
-      $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
-      $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
-      $Qdel->execute();
-
-      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/shipping/' . $this->code . '.xml') as $def) {
-        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
-        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-        $Qdel->bindValue(':definition_key', $def['key']);
-        $Qdel->bindValue(':content_group', $def['group']);
-        $Qdel->execute();
+    function getKeys() {
+      if (!isset($this->_keys)) {
+        $this->_keys = array('MODULE_SHIPPING_USPS_STATUS',
+                             'MODULE_SHIPPING_USPS_USERID',
+                             'MODULE_SHIPPING_USPS_PASSWORD',
+                             'MODULE_SHIPPING_USPS_SERVER',
+                             'MODULE_SHIPPING_USPS_HANDLING',
+                             'MODULE_SHIPPING_USPS_TAX_CLASS',
+                             'MODULE_SHIPPING_USPS_ZONE',
+                             'MODULE_SHIPPING_USPS_SORT_ORDER');
       }
 
-      osC_Cache::clear('languages');
-    }
-
-    function keys() {
-      return array('MODULE_SHIPPING_USPS_STATUS', 'MODULE_SHIPPING_USPS_USERID', 'MODULE_SHIPPING_USPS_PASSWORD', 'MODULE_SHIPPING_USPS_SERVER', 'MODULE_SHIPPING_USPS_HANDLING', 'MODULE_SHIPPING_USPS_TAX_CLASS', 'MODULE_SHIPPING_USPS_ZONE', 'MODULE_SHIPPING_USPS_SORT_ORDER');
+      return $this->_keys;
     }
 
     function _setService($service) {
@@ -214,9 +187,9 @@
     }
 
     function _getQuote() {
-      global $order;
+      global $osC_ShoppingCart;
 
-      if ($order->delivery['country']['id'] == SHIPPING_ORIGIN_COUNTRY) {
+      if ($osC_ShoppingCart->getShippingAddress('country_id') == SHIPPING_ORIGIN_COUNTRY) {
         $request  = '<RateRequest USERID="' . MODULE_SHIPPING_USPS_USERID . '" PASSWORD="' . MODULE_SHIPPING_USPS_PASSWORD . '">';
         $services_count = 0;
 
@@ -224,8 +197,8 @@
           $this->types = array($this->service => $this->types[$this->service]);
         }
 
-        $dest_zip = str_replace(' ', '', $order->delivery['postcode']);
-        if ($order->delivery['country']['iso_code_2'] == 'US') $dest_zip = substr($dest_zip, 0, 5);
+        $dest_zip = str_replace(' ', '', $osC_ShoppingCart->getShippingAddress('postcode'));
+        if ($osC_ShoppingCart->getShippingAddress('country_iso_code_2') == 'US') $dest_zip = substr($dest_zip, 0, 5);
 
         reset($this->types);
         while (list($key, $value) = each($this->types)) {
@@ -250,7 +223,7 @@
                     '<Pounds>' . $this->pounds . '</Pounds>' .
                     '<Ounces>' . $this->ounces . '</Ounces>' .
                     '<MailType>Package</MailType>' .
-                    '<Country>' . $this->countries[$order->delivery['country']['iso_code_2']] . '</Country>' .
+                    '<Country>' . $this->countries[$osC_ShoppingCart->getShippingAddress('country_iso_code_2')] . '</Country>' .
                     '</Package>' .
                     '</IntlRateRequest>';
 
@@ -295,7 +268,7 @@
       }
 
       $rates = array();
-      if ($order->delivery['country']['id'] == SHIPPING_ORIGIN_COUNTRY) {
+      if ($osC_ShoppingCart->getShippingAddress('country_id') == SHIPPING_ORIGIN_COUNTRY) {
         if (sizeof($response) == '1') {
           if (ereg('<Error>', $response[0])) {
             $number = ereg('<Number>(.*)</Number>', $response[0], $regs);

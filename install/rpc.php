@@ -103,6 +103,42 @@
           }
         }
 
+        if ($osC_Database->isError() === false) {
+          define('DB_TABLE_PREFIX', $db['DB_TABLE_PREFIX']);
+          include('../includes/database_tables.php');
+          include('includes/classes/payment.php');
+          include('includes/classes/shipping.php');
+          include('includes/classes/order_total.php');
+
+          include('../includes/modules/payment/cod.php');
+          $module = new osC_Payment_cod();
+          $module->install();
+
+          include('../includes/modules/payment/cc.php');
+          $module = new osC_Payment_cc();
+          $module->install();
+
+          include('../includes/modules/shipping/flat.php');
+          $module = new osC_Shipping_flat();
+          $module->install();
+
+          include('../includes/modules/order_total/sub_total.php');
+          $module = new osC_OrderTotal_sub_total();
+          $module->install();
+
+          include('../includes/modules/order_total/shipping.php');
+          $module = new osC_OrderTotal_shipping();
+          $module->install();
+
+          include('../includes/modules/order_total/tax.php');
+          $module = new osC_OrderTotal_tax();
+          $module->install();
+
+          include('../includes/modules/order_total/total.php');
+          $module = new osC_OrderTotal_total();
+          $module->install();
+        }
+
         if ( ($osC_Database->isError() === false) && ($db['DB_DATABASE_CLASS'] == 'mysql_innodb') ) {
           $Qinno = $osC_Database->query('show variables like "have_innodb"');
           if (($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes')) {

@@ -11,37 +11,40 @@
 */
 
   if (in_array('database', $_POST['install'])) {
+    define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
+    include('../includes/database_tables.php');
+
     $osC_Database = osC_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE_CLASS']);
     $osC_Database->selectDatabase($_POST['DB_DATABASE']);
 
     $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-    $Qupdate->bindTable(':table_configuration', $_POST['DB_TABLE_PREFIX'] . 'configuration');
+    $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
     $Qupdate->bindValue(':configuration_value', $_POST['CFG_STORE_NAME']);
     $Qupdate->bindValue(':configuration_key', 'STORE_NAME');
     $Qupdate->execute();
 
     $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-    $Qupdate->bindTable(':table_configuration', $_POST['DB_TABLE_PREFIX'] . 'configuration');
+    $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
     $Qupdate->bindValue(':configuration_value', $_POST['CFG_STORE_OWNER_NAME']);
     $Qupdate->bindValue(':configuration_key', 'STORE_OWNER');
     $Qupdate->execute();
 
     $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-    $Qupdate->bindTable(':table_configuration', $_POST['DB_TABLE_PREFIX'] . 'configuration');
+    $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
     $Qupdate->bindValue(':configuration_value', $_POST['CFG_STORE_OWNER_EMAIL_ADDRESS']);
     $Qupdate->bindValue(':configuration_key', 'STORE_OWNER_EMAIL_ADDRESS');
     $Qupdate->execute();
 
     if (!empty($_POST['CFG_STORE_OWNER_NAME']) && !empty($_POST['CFG_STORE_OWNER_EMAIL_ADDRESS'])) {
       $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-      $Qupdate->bindTable(':table_configuration', $_POST['DB_TABLE_PREFIX'] . 'configuration');
+      $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qupdate->bindValue(':configuration_value', '"' . $_POST['CFG_STORE_OWNER_NAME'] . '" <' . $_POST['CFG_STORE_OWNER_EMAIL_ADDRESS'] . '>');
       $Qupdate->bindValue(':configuration_key', 'EMAIL_FROM');
       $Qupdate->execute();
     }
 
     $Qcheck = $osC_Database->query('select user_name from :table_administrators where user_name = :user_name');
-    $Qcheck->bindTable(':table_administrators', $_POST['DB_TABLE_PREFIX'] . 'administrators');
+    $Qcheck->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
     $Qcheck->bindValue(':user_name', $_POST['CFG_ADMINISTRATOR_USERNAME']);
     $Qcheck->execute();
 
@@ -50,7 +53,7 @@
     } else {
       $Qadmin = $osC_Database->query('insert into :table_administrators (user_name, user_password) values (:user_name, :user_password)');
     }
-    $Qadmin->bindTable(':table_administrators', $_POST['DB_TABLE_PREFIX'] . 'administrators');
+    $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
     $Qadmin->bindValue(':user_password', tep_encrypt_password(trim($_POST['CFG_ADMINISTRATOR_PASSWORD'])));
     $Qadmin->bindValue(':user_name', $_POST['CFG_ADMINISTRATOR_USERNAME']);
     $Qadmin->execute();
@@ -110,6 +113,15 @@
     $http_work_directory = $_POST['HTTP_WORK_DIRECTORY'];
     if (substr($http_work_directory, -1) != '/') {
       $http_work_directory .= '/';
+    }
+
+    include('../admin/includes/classes/directory_listing.php');
+    $osC_DirectoryListing = new osC_DirectoryListing($http_work_directory);
+    $osC_DirectoryListing->setIncludeDirectories(false);
+    $osC_DirectoryListing->setCheckExtension('cache');
+
+    foreach ($osC_DirectoryListing->getFiles() as $files) {
+      @unlink($osC_DirectoryListing->getDirectory() . '/' . $files['name']);
     }
 
     $file_contents = '<?php' . "\n" .

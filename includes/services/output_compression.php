@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:output_compression.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -15,7 +15,7 @@
         $description = 'Compress the content with GZIP.',
         $uninstallable = true,
         $depends,
-        $preceeds = 'session';
+        $precedes = 'session';
 
     function start() {
       if (extension_loaded('zlib')) {

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,17 +22,17 @@
         <td width="30%" valign="top">
 
 <?php
-  if ($_SESSION['sendto'] != false) {
+  if ($osC_ShoppingCart->hasShippingAddress()) {
 ?>
           <p><?php echo '<b>' . $osC_Language->get('order_delivery_address_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
-          <p><?php echo tep_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br />'); ?></p>
+          <p><?php echo tep_address_format($osC_ShoppingCart->getShippingAddress('format_id'), $osC_ShoppingCart->getShippingAddress(), 1, ' ', '<br />'); ?></p>
 
 <?php
-    if (tep_not_null($order->info['shipping_method'])) {
+    if ($osC_ShoppingCart->hasShippingMethod()) {
 ?>
 
           <p><?php echo '<b>' . $osC_Language->get('order_shipping_method_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
-          <p><?php echo $order->info['shipping_method']; ?></p>
+          <p><?php echo $osC_ShoppingCart->getShippingMethod('title'); ?></p>
 
 <?php
     }
@@ -40,10 +40,10 @@
 ?>
 
           <p><?php echo '<b>' . $osC_Language->get('order_billing_address_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
-          <p><?php echo tep_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></p>
+          <p><?php echo tep_address_format($osC_ShoppingCart->getBillingAddress('format_id'), $osC_ShoppingCart->getBillingAddress(), 1, ' ', '<br />'); ?></p>
 
           <p><?php echo '<b>' . $osC_Language->get('order_payment_method_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></p>
-          <p><?php echo $order->info['payment_method']; ?></p>
+          <p><?php echo $osC_ShoppingCart->getBillingMethod('title'); ?></p>
         </td>
         <td width="70%" valign="top">
           <div style="border: 1px; border-style: solid; border-color: #CCCCCC; background-color: #FBFBFB; padding: 5px;">
@@ -65,28 +65,28 @@
 <?php
   }
 
-  for ($i=0, $n=sizeof($order->products); $i<$n; $i++) {
+  foreach ($osC_ShoppingCart->getProducts() as $products) {
     echo '              <tr>' . "\n" .
-         '                <td align="right" valign="top" width="30">' . $order->products[$i]['qty'] . '&nbsp;x</td>' . "\n" .
-         '                <td valign="top">' . $order->products[$i]['name'];
+         '                <td align="right" valign="top" width="30">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' . "\n" .
+         '                <td valign="top">' . $products['name'];
 
     if (STOCK_CHECK == 'true') {
-      echo tep_check_stock($order->products[$i]['id'], $order->products[$i]['qty']);
+      echo tep_check_stock($products['id'], $products['quantity']);
     }
 
-    if ( (isset($order->products[$i]['attributes'])) && (sizeof($order->products[$i]['attributes']) > 0) ) {
-      for ($j=0, $n2=sizeof($order->products[$i]['attributes']); $j<$n2; $j++) {
-        echo '<br /><nobr><small>&nbsp;<i> - ' . $order->products[$i]['attributes'][$j]['option'] . ': ' . $order->products[$i]['attributes'][$j]['value'] . '</i></small></nobr>';
+    if ( (isset($products['attributes'])) && (sizeof($products['attributes']) > 0) ) {
+      foreach ($products['attributes'] as $attributes) {
+        echo '<br /><nobr><small>&nbsp;<i> - ' . $attributes['products_options_name'] . ': ' . $attributes['products_options_values_name'] . '</i></small></nobr>';
       }
     }
 
     echo '</td>' . "\n";
 
-    if (sizeof($order->info['tax_groups']) > 1) {
-      echo '                <td valign="top" align="right">' . tep_display_tax_value($order->products[$i]['tax']) . '%</td>' . "\n";
+    if (sizeof($osC_ShoppingCart->_tax_groups) > 1) {
+      echo '                <td valign="top" align="right">' . tep_display_tax_value($products['tax']) . '%</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->format(tep_add_tax($order->products[$i]['final_price'], $order->products[$i]['tax']) * $order->products[$i]['qty'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->format(tep_add_tax($products['final_price'], $products['tax_class_id']) * $products['quantity'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>
@@ -98,10 +98,15 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-  if (MODULE_ORDER_TOTAL_INSTALLED) {
-    $order_total_modules->process();
-    echo $order_total_modules->output();
-  }
+//  if ($osC_OrderTotal->hasActive()) {
+//    foreach ($osC_OrderTotal->getResult() as $module) {
+    foreach ($osC_ShoppingCart->getOrderTotals() as $module) {
+      echo '              <tr>' . "\n" .
+           '                <td align="right" class="main">' . $module['title'] . '</td>' . "\n" .
+           '                <td align="right" class="main">' . $module['text'] . '</td>' . "\n" .
+           '              </tr>';
+    }
+//  }
 ?>
 
             </table>
@@ -113,8 +118,8 @@
 </div>
 
 <?php
-  if (is_array($payment_modules->modules)) {
-    if ($confirmation = $payment_modules->confirmation()) {
+  if ($osC_Payment->hasActive()) {
+    if ($confirmation = $osC_Payment->confirmation()) {
 ?>
 
 <div class="moduleBox">
@@ -167,16 +172,16 @@
 <div class="submitFormButtons" style="text-align: right;">
 
 <?php
-  if (isset($$payment->form_action_url)) {
-    $form_action_url = $$payment->form_action_url;
+  if ($osC_Payment->hasActionURL()) {
+    $form_action_url = $osC_Payment->getActionURL();
   } else {
     $form_action_url = tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL');
   }
 
   echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
 
-  if (is_array($payment_modules->modules)) {
-    echo $payment_modules->process_button();
+  if ($osC_Payment->hasActive()) {
+    echo $osC_Payment->process_button();
   }
 
   echo tep_image_submit('button_confirm_order.gif', $osC_Language->get('button_confirm_order')) . '</form>';

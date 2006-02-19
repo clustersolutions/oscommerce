@@ -237,7 +237,7 @@
       $Qmodule->execute();
 
       $Qdel = $osC_Database->query('delete from :table_templates_boxes_to_pages where templates_boxes_id = :templates_boxes_id');
-      $Qdel->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qdel->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
       $Qdel->bindValue(':templates_boxes_id', $Qmodule->valueInt('id'));
       $Qdel->execute();
 

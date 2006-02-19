@@ -114,16 +114,16 @@
                 $installed[] = $_GET['service'];
               }
             }
-          } elseif (isset($module->preceeds)) {
-            if (is_string($module->preceeds)) {
-              if ((($key = array_search($module->preceeds, $installed)) !== false)) {
+          } elseif (isset($module->precedes)) {
+            if (is_string($module->precedes)) {
+              if ((($key = array_search($module->precedes, $installed)) !== false)) {
                 array_splice($installed, $key, 0, $_GET['service']);
               } else {
                 $installed[] = $_GET['service'];
               }
-            } elseif (is_array($module->preceeds)) {
-              foreach ($module->preceeds as $preceeds_module) {
-                if (($key = array_search($preceeds_module, $installed)) !== false) {
+            } elseif (is_array($module->precedes)) {
+              foreach ($module->precedes as $precedes_module) {
+                if (($key = array_search($precedes_module, $installed)) !== false) {
                   if (!isset($array_position) || ($key < $array_position)) {
                     $array_position = $key;
                   }

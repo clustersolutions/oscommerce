@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,11 +22,7 @@
 /* Class constructor */
 
     function osC_Checkout_Confirmation() {
-      global $osC_Session, $osC_Services, $osC_Language, $osC_Customer, $messageStack, $osC_NavigationHistory, $breadcrumb, $order, $payment_modules, $shipping_modules, $order_total_modules, $any_out_of_stock;
-
-      $this->_page_title = $osC_Language->get('confirmation_heading');
-
-      $osC_Language->load('order');
+      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack, $osC_NavigationHistory, $breadcrumb, $osC_Payment;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -34,30 +30,22 @@
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
-      if ($_SESSION['cart']->count_contents() < 1) {
+      if ($osC_ShoppingCart->hasContents() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
 
-// avoid hack attempts during the checkout procedure by checking the internal cartID
-      if (isset($_SESSION['cart']->cartID) && isset($_SESSION['cartID'])) {
-        if ($_SESSION['cart']->cartID != $_SESSION['cartID']) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
-        }
-      }
-
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
-      if (isset($_SESSION['shipping']) == false) {
+      if ($osC_ShoppingCart->hasShippingAddress() == false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
+
+      $this->_page_title = $osC_Language->get('confirmation_heading');
+
+      $osC_Language->load('order');
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
-
-      if (isset($_POST['payment_mod_sel'])) {
-        $_SESSION['payment'] = $_POST['payment_mod_sel'];
-      }
-      $payment =& $_SESSION['payment'];
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {
         unset($_SESSION['comments']);
@@ -72,14 +60,15 @@
       }
 
 // load the selected payment module
-      require('includes/classes/payment.php');
-      $payment_modules = new payment($_SESSION['payment']);
+      include('includes/classes/payment.php');
+      $osC_Payment = new osC_Payment($_POST['payment_mod_sel']);
+      $osC_Payment->update_status();
 
-      $order = new order;
+      if (isset($_POST['payment_mod_sel'])) {
+        $osC_ShoppingCart->setBillingMethod(array('id' => $_POST['payment_mod_sel'], 'title' => $GLOBALS['osC_Payment_' . $_POST['payment_mod_sel']]->getTitle()));
+      }
 
-      $payment_modules->update_status();
-
-      if ( (is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !isset($GLOBALS[$payment])) || (isset($GLOBALS[$payment]) && is_object($GLOBALS[$payment]) && ($GLOBALS[$payment]->enabled == false)) ) {
+      if ( $osC_Payment->hasActive() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->getStatus() === false))) ) {
         $messageStack->add_session('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
       }
 
@@ -87,16 +76,9 @@
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
-      if (is_array($payment_modules->modules)) {
-        $payment_modules->pre_confirmation_check();
+      if ($osC_Payment->hasActive()) {
+        $osC_Payment->pre_confirmation_check();
       }
-
-// load the selected shipping module
-      require('includes/classes/shipping.php');
-      $shipping_modules = new shipping($_SESSION['shipping']);
-
-      require('includes/classes/order_total.php');
-      $order_total_modules = new order_total;
 
 // Stock Check
       $any_out_of_stock = false;

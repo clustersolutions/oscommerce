@@ -5,12 +5,10 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
-
-  require('includes/classes/http_client.php');
 
   class osC_Checkout_Shipping extends osC_Template {
 
@@ -24,9 +22,7 @@
 /* Class constructor */
 
     function osC_Checkout_Shipping() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order, $total_weight, $total_count, $shipping_modules, $pass, $free_shipping, $quotes;
-
-      $this->_page_title = $osC_Language->get('shipping_method_heading');
+      global $osC_Database, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $osC_Shipping;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -34,9 +30,17 @@
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
-      if ($_SESSION['cart']->count_contents() < 1) {
+      if ($osC_ShoppingCart->hasContents() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
+
+// if the order contains only virtual products, forward the customer to the billing page as
+// a shipping address is not needed
+      if ($osC_ShoppingCart->getContentType() == 'virtual') {
+        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+      }
+
+      $this->_page_title = $osC_Language->get('shipping_method_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
         $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
@@ -50,136 +54,71 @@
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } else {
         $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping.js');
-      }
 
 // if no shipping destination address was selected, use the customers own address as default
-      if (isset($_SESSION['sendto']) == false) {
-        $_SESSION['sendto'] = $osC_Customer->getDefaultAddressID();
-      } else {
+        if ($osC_ShoppingCart->hasShippingAddress() === false) {
+          $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
+        } else {
 // verify the selected shipping address
-        $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
-        $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->bindInt(':address_book_id', $_SESSION['sendto']);
-        $Qcheck->execute();
+          $Qcheck = $osC_Database->query('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id limit 1');
+          $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+          $Qcheck->bindInt(':address_book_id', $osC_ShoppingCart->getShippingAddress('id'));
+          $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
+          $Qcheck->execute();
 
-        if ($Qcheck->valueInt('total') != 1) {
-          $_SESSION['sendto'] = $osC_Customer->getDefaultAddressID();
+          if ($Qcheck->numberOfRows() !== 1) {
+            $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
+          }
+        }
 
-          unset($_SESSION['shipping']);
+// load all enabled shipping modules
+        if (class_exists('osC_Shipping') === false) {
+          include('includes/classes/shipping.php');
+        }
+
+        $osC_Shipping = new osC_Shipping();
+
+// if no shipping method has been selected, automatically select the cheapest method.
+        if ($osC_ShoppingCart->hasShippingMethod() === false) {
+          $osC_ShoppingCart->setShippingMethod($osC_Shipping->getCheapestQuote());
         }
       }
 
-      $order = new order;
-
-// register a random ID in the session to check throughout the checkout procedure
-// against alterations in the shopping cart contents
-      $_SESSION['cartID'] = $_SESSION['cart']->cartID;
-
-// if the order contains only virtual products, forward the customer to the billing page as
-// a shipping address is not needed
-    if ($order->content_type == 'virtual') {
-      $false = false;
-
-      $_SESSION['shipping'] = $false;
-      $_SESSION['sendto'] = $false;
-
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
-    }
-
-    $total_weight = $_SESSION['cart']->show_weight();
-    $total_count = $_SESSION['cart']->count_contents();
-
-// load all enabled shipping modules
-    require('includes/classes/shipping.php');
-    $shipping_modules = new shipping;
-
-    if (defined('MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING') && (MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING == 'true')) {
-      $pass = false;
-
-      switch (MODULE_ORDER_TOTAL_SHIPPING_DESTINATION) {
-        case 'national':
-          if ($order->delivery['country_id'] == STORE_COUNTRY) {
-            $pass = true;
-          }
-          break;
-        case 'international':
-          if ($order->delivery['country_id'] != STORE_COUNTRY) {
-            $pass = true;
-          }
-          break;
-        case 'both':
-          $pass = true;
-          break;
+      if ($_GET[$this->_module] == 'process') {
+        $this->_process();
       }
-
-      $free_shipping = false;
-      if ( ($pass == true) && ( ($order->info['total'] - $order->info['shipping_cost']) >= MODULE_ORDER_TOTAL_SHIPPING_FREE_SHIPPING_OVER) ) {
-        $free_shipping = true;
-
-        include('includes/languages/' . $osC_Language->getDirectory() . '/modules/order_total/ot_shipping.php');
-      }
-    } else {
-      $free_shipping = false;
     }
-
-// get all available shipping quotes
-    $quotes = $shipping_modules->quote();
-
-// if no shipping method has been selected, automatically select the cheapest method.
-// if the modules status was changed when none were available, to save on implementing
-// a javascript force-selection method, also automatically select the cheapest shipping
-// method if more than one module is now enabled
-    if ( (isset($_SESSION['shipping']) == false) || (isset($_SESSION['shipping']) && ($_SESSION['shipping'] == false) && (tep_count_shipping_modules() > 1)) ) {
-      $_SESSION['shipping'] = $shipping_modules->cheapest();
-    }
-
-    if ($_GET[$this->_module] == 'process') {
-      $this->_process();
-    }
-  }
 
 /* Private methods */
 
     function _process() {
-      global $osC_Session, $free_shipping, $shipping_modules;
+      global $osC_ShoppingCart, $osC_Shipping;
 
       if (tep_not_null($_POST['comments'])) {
         $_SESSION['comments'] = tep_sanitize_string($_POST['comments']);
       }
 
-      if ( (tep_count_shipping_modules() > 0) || ($free_shipping == true) ) {
+      if ($osC_Shipping->hasQuotes()) {
         if (isset($_POST['shipping_mod_sel']) && strpos($_POST['shipping_mod_sel'], '_')) {
-          $_SESSION['shipping'] = $_POST['shipping_mod_sel'];
+          list($module, $method) = explode('_', $_POST['shipping_mod_sel']);
+          $module = 'osC_Shipping_' . $module;
 
-          list($module, $method) = explode('_', $_SESSION['shipping']);
-          if (is_object($GLOBALS[$module]) || ($_SESSION['shipping'] == 'free_free')) {
-            if ($_SESSION['shipping'] == 'free_free') {
-              $quote[0]['methods'][0]['title'] = FREE_SHIPPING_TITLE;
-              $quote[0]['methods'][0]['cost'] = '0';
-            } else {
-              $quote = $shipping_modules->quote($method, $module);
-            }
+          if (is_object($GLOBALS[$module]) && $GLOBALS[$module]->getStatus() === true) {
+            $quote = $osC_Shipping->getQuote($_POST['shipping_mod_sel']);
 
             if (isset($quote['error'])) {
-              unset($_SESSION['shipping']);
+              $osC_ShoppingCart->resetShippingMethod();
             } else {
-              if (isset($quote[0]['methods'][0]['title']) && isset($quote[0]['methods'][0]['cost'])) {
-                $shipping = array('id' => $_SESSION['shipping'],
-                                  'title' => (($free_shipping == true) ?  $quote[0]['methods'][0]['title'] : $quote[0]['module'] . ' (' . $quote[0]['methods'][0]['title'] . ')'),
-                                  'cost' => $quote[0]['methods'][0]['cost']);
+              $osC_ShoppingCart->setShippingMethod($quote);
 
-                $_SESSION['shipping'] = $shipping;
-
-                tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
-              }
+              tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
             }
           } else {
-            unset($_SESSION['shipping']);
+            $osC_ShoppingCart->resetShippingMethod();
           }
         }
       } else {
-        $_SESSION['shipping'] = false;
+        $osC_ShoppingCart->resetShippingMethod();
 
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }

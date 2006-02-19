@@ -50,7 +50,7 @@
                            'description' => $module->description,
                            'status' => in_array($class_code, $installed),
                            'uninstallable' => $module->uninstallable,
-                           'preceeds' => $module->preceeds,
+                           'precedes' => $module->precedes,
                            'keys' => array());
 
       if (is_array($module_keys) && (sizeof($module_keys) > 0)) {

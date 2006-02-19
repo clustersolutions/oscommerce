@@ -15,7 +15,7 @@
         $description = 'Include the default or selected language files.',
         $uninstallable = false,
         $depends = 'session',
-        $preceeds;
+        $precedes;
 
     function start() {
       global $osC_Language, $osC_Session;

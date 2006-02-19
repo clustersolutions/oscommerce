@@ -45,7 +45,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $messageStack, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $messageStack, $osC_Customer, $osC_NavigationHistory;
 
       if (osC_Account::checkEntry($_POST['email_address'])) {
         if (osC_Account::checkPassword($_POST['password'], $_POST['email_address'])) {
@@ -60,7 +60,7 @@
           $Qupdate->bindInt(':customers_info_id', $osC_Customer->getID());
           $Qupdate->execute();
 
-          $_SESSION['cart']->restore_contents();
+          $osC_ShoppingCart->synchronizeWithDatabase();
 
           $osC_NavigationHistory->removeCurrentPage();
 

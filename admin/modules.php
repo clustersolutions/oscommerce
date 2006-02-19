@@ -22,19 +22,22 @@
     switch ($set) {
       case 'shipping':
         $module_type = 'shipping';
-        $module_key = 'MODULE_SHIPPING_INSTALLED';
+        $module_class = 'osC_Shipping_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_SHIPPING);
+        include('../includes/classes/shipping.php');
         break;
       case 'ordertotal':
         $module_type = 'order_total';
-        $module_key = 'MODULE_ORDER_TOTAL_INSTALLED';
+        $module_class = 'osC_OrderTotal_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_ORDER_TOTAL);
+        include('../includes/classes/order_total.php');
         break;
       case 'payment':
       default:
         $module_type = 'payment';
-        $module_key = 'MODULE_PAYMENT_INSTALLED';
+        $module_class = 'osC_Payment_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_PAYMENT);
+        include('../includes/classes/payment.php');
         break;
     }
   }
@@ -78,7 +81,8 @@
         if (file_exists('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension)) {
           $osC_Language->injectDefinitions('modules/' . $module_type . '/' .$_GET['module'] . '.xml');
           include('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension);
-          $module = new $_GET['module'];
+          $module = $module_class . $_GET['module'];
+          $module = new $module();
           if ($action == 'install') {
             $module->install();
           } elseif ($action == 'remove') {
@@ -86,6 +90,7 @@
           }
         }
 
+        osC_Cache::clear('modules-' , $module_type);
         osC_Cache::clear('configuration');
 
         tep_redirect(tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $_GET['module']));

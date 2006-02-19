@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:session.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -15,10 +15,10 @@
         $description = 'The session manager for guests, customers, and spider robots.',
         $uninstallable = false,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
-      global $request_type, $osC_Session, $osC_Customer, $osC_NavigationHistory, $messageStack;
+      global $request_type, $osC_Session, $messageStack;
 
       include('includes/classes/session.php');
       $osC_Session = new osC_Session();
@@ -95,19 +95,6 @@
           tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
-
-// create an instance of the shopping cart
-      if (isset($_SESSION['cart']) === false) {
-        $_SESSION['cart'] = new shoppingCart();
-      }
-
-// create an instance of the customer class
-      include('includes/classes/customer.php');
-      $osC_Customer = new osC_Customer();
-
-// navigation history
-      include('includes/classes/navigation_history.php');
-      $osC_NavigationHistory = new osC_NavigationHistory(true);
 
 // add messages in the session to the message stack
       $messageStack->loadFromSession();

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,7 +16,7 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($_SESSION['cart']->count_contents() > 0) {
+  if ($osC_ShoppingCart->hasContents()) {
 ?>
 
 <form name="shopping_cart" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
@@ -28,7 +28,18 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-    foreach ($osC_Template->getListing() as $products) {
+    $_cart_date_added = null;
+    foreach ($osC_ShoppingCart->getProducts() as $products) {
+      if ($products['date_added'] != $_cart_date_added) {
+        $_cart_date_added = $products['date_added'];
+?>
+
+      <tr>
+        <td colspan="4"><?php echo sprintf($osC_Language->get('date_added_to_shopping_cart'), $products['date_added']); ?></td>
+      </tr>
+
+<?php
+      }
 ?>
 
       <tr>
@@ -36,16 +47,16 @@
         <td valign="top">
 
 <?php
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $products['id']) . '"><b>' . $products['name'] . '</b></a>';
+      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $products['keyword']) . '"><b>' . $products['name'] . '</b></a>';
 
-      if ( (STOCK_CHECK == 'true') && ($osC_Template->hasStock($products['id'], $products['quantity']) === false) ) {
+      if ( (STOCK_CHECK == 'true') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
       }
 
       echo '&nbsp;(Top Category)';
 
-      if ($osC_Template->hasAttributes($products['id'])) {
-        foreach ($osC_Template->getAttributes($products['id']) as $attributes) {
+      if ($osC_ShoppingCart->hasAttributes($products['id'])) {
+        foreach ($osC_ShoppingCart->getAttributes($products['id']) as $attributes) {
           echo osc_draw_hidden_field('id[' . $products['id'] . '][' . $attributes['options_id'] . ']', $attributes['options_values_id']);
 
           echo '<br />- ' . $attributes['products_options_name'] . ': ' . $attributes['products_options_values_name'];
@@ -65,10 +76,10 @@
     </table>
   </div>
 
-  <p style="text-align: right; padding-right: 7px;"><b><?php echo $osC_Language->get('subtotal_title'); ?> <?php echo $osC_Currencies->format($_SESSION['cart']->show_total()); ?></b></p>
+  <p style="text-align: right; padding-right: 7px;"><b><?php echo $osC_Language->get('subtotal_title'); ?> <?php echo $osC_Currencies->format($osC_ShoppingCart->getTotal()); ?></b></p>
 
 <?php
-    if ( (STOCK_CHECK == 'true') && ($osC_Template->hasProductsOutOfStock() === true) ) {
+    if ( (STOCK_CHECK == 'true') && ($osC_ShoppingCart->hasStock() === false) ) {
       if (STOCK_ALLOW_CHECKOUT == 'true') {
         echo '<p class="stockWarning" align="center">' . sprintf($osC_Language->get('products_out_of_stock_checkout_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
       } else {

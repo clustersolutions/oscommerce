@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,9 +22,7 @@
 /* Class constructor */
 
     function osC_Checkout_Shipping_address() {
-      global $osC_Session, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $order;
-
-      $this->_page_title = $osC_Language->get('shipping_address_heading');
+      global $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -32,27 +30,27 @@
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
-      if ($_SESSION['cart']->count_contents() < 1) {
+      if ($osC_ShoppingCart->hasContents() === false) {
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
       }
+
+      $this->_page_title = $osC_Language->get('shipping_address_heading');
 
       $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping_address.js');
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
-      $order = new order();
-
 // if the order contains only virtual products, forward the customer to the billing page as
 // a shipping address is not needed
-      if ($order->content_type == 'virtual') {
-        $_SESSION['shipping'] = false;
-        $_SESSION['sendto'] = false;
+      if ($osC_ShoppingCart->getContentType() == 'virtual') {
+        $osC_ShoppingCart->resetShippingAddress();
+        $osC_ShoppingCart->resetShippingMethod();
 
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
 // if no shipping destination address was selected, use their own address as default
-      if (isset($_SESSION['sendto']) == false) {
-        $_SESSION['sendto'] = $osC_Customer->getDefaultAddressID();
+      if ($osC_ShoppingCart->hasShippingAddress() === false) {
+        $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
@@ -79,7 +77,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $messageStack;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_ShoppingCart, $messageStack;
 
 // process a new shipping address
       if (($osC_Customer->hasDefaultAddress() === false) || (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) ) {
@@ -214,8 +212,7 @@
               $osC_Customer->setDefaultAddressID($address_book_id);
             }
 
-            $_SESSION['sendto'] = $address_book_id;
-            unset($_SESSION['shipping']);
+            $osC_ShoppingCart->setShippingAddress($address_book_id);
 
             tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
           } else {
@@ -224,35 +221,21 @@
         }
 // process the selected shipping destination
       } elseif (isset($_POST['address'])) {
-        $reset_shipping = false;
+        $osC_ShoppingCart->setShippingAddress($_POST['address']);
 
-        if (isset($_SESSION['sendto'])) {
-          if ($_SESSION['sendto'] != $_POST['address']) {
-            if (isset($_SESSION['shipping'])) {
-              $reset_shipping = true;
-            }
-          }
-        }
-
-        $_SESSION['sendto'] = $_POST['address'];
-
-        $Qcheck = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id and address_book_id = :address_book_id');
+        $Qcheck = $osC_Database->query('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id limit 1');
         $Qcheck->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+        $Qcheck->bindInt(':address_book_id', $osC_ShoppingCart->getShippingAddress('id'));
         $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->bindInt(':address_book_id', $_SESSION['sendto']);
         $Qcheck->execute();
 
-        if ($Qcheck->valueInt('total') == 1) {
-          if ($reset_shipping == true) {
-            unset($_SESSION['shipping']);
-          }
-
+        if ($Qcheck->numberOfRows() === 1) {
           tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
         } else {
-          unset($_SESSION['sendto']);
+          $osC_ShoppingCart->resetShippingAddress();
         }
       } else {
-        $_SESSION['sendto'] = $osC_Customer->getDefaultAddressID();
+        $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
 
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }

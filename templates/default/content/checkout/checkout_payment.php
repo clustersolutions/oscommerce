@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -47,7 +47,7 @@
       <tr>
         <td valign="top"><?php echo $osC_Language->get('choose_billing_destination'); ?><br /><br /><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address')) . '</a>'; ?></td>
         <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
-        <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $_SESSION['billto'], true, ' ', '<br />'); ?></td>
+        <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), true, ' ', '<br />'); ?></td>
       </tr>
     </table>
   </div>
@@ -59,7 +59,7 @@
   <div class="content">
 
 <?php
-  $selection = $payment_modules->selection();
+  $selection = $osC_Payment->selection();
 
   if (sizeof($selection) > 1) {
 ?>
@@ -87,18 +87,33 @@
   for ($i=0, $n=sizeof($selection); $i<$n; $i++) {
 ?>
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-    if ( ($n == 1) || ($selection[$i]['id'] == $_SESSION['payment']) ) {
+    if ( ($n == 1) || ($selection[$i]['id'] == $osC_ShoppingCart->getBillingMethod('id')) ) {
       echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
     } else {
       echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
     }
 ?>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-            <td class="main" colspan="3"><b><?php echo $selection[$i]['module']; ?></b></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_mod_sel', $selection[$i]['id'], $_SESSION['payment']); ?></td>
+
+<?php
+    if ($n > 1) {
+?>
+
+            <td class="main" colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
+            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_mod_sel', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
+
+<?php
+    } else {
+?>
+
+            <td class="main" colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_mod_sel', $selection[$i]['id']); ?></td>
+
+<?php
+  }
+?>
+
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
 <?php
@@ -135,7 +150,6 @@
     }
 ?>
         </table></td>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
       </tr>
 <?php
     $radio_buttons++;

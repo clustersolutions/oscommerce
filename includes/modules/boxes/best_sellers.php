@@ -87,7 +87,9 @@
 
     function getKeys() {
       if (!isset($this->_keys)) {
-        $this->_keys = array('BOX_BEST_SELLERS_MIN_LIST', 'BOX_BEST_SELLERS_MAX_LIST', 'BOX_BEST_SELLERS_CACHE');
+        $this->_keys = array('BOX_BEST_SELLERS_MIN_LIST',
+                             'BOX_BEST_SELLERS_MAX_LIST',
+                             'BOX_BEST_SELLERS_CACHE');
       }
 
       return $this->_keys;

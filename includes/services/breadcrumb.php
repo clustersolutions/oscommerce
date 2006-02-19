@@ -15,7 +15,7 @@
         $description = 'Breadcrumb builder for easy navigation.',
         $uninstallable = true,
         $depends,
-        $preceeds;
+        $precedes;
 
     function start() {
       global $breadcrumb, $osC_Database, $osC_Language, $cPath, $cPath_array;

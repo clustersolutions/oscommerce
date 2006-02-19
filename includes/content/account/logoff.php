@@ -36,9 +36,9 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Customer;
+      global $osC_ShoppingCart, $osC_Customer;
 
-      $_SESSION['cart']->reset();
+      $osC_ShoppingCart->reset();
 
       $osC_Customer->reset();
     }

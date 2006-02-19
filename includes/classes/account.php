@@ -39,7 +39,7 @@
     }
 
     function createEntry($data) {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_NavigationHistory;
 
       $osC_Database->startTransaction();
 
@@ -76,7 +76,7 @@
           $osC_Customer->setCustomerData($customer_id);
 
 // restore cart contents
-          $_SESSION['cart']->restore_contents();
+          $osC_ShoppingCart->synchronizeWithDatabase();
 
           $osC_NavigationHistory->removeCurrentPage();
 

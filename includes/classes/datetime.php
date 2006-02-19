@@ -57,6 +57,23 @@
       }
     }
 
+    function getTimestamp($date = '') {
+      global $osC_Language;
+
+      if (empty($date)) {
+        $date = osC_DateTime::getNow();
+      }
+
+      $year = substr($date, 0, 4);
+      $month = (int)substr($date, 5, 2);
+      $day = (int)substr($date, 8, 2);
+      $hour = (int)substr($date, 11, 2);
+      $minute = (int)substr($date, 14, 2);
+      $second = (int)substr($date, 17, 2);
+
+      return mktime($hour, $minute, $second, $month, $day, $year);
+    }
+
     function isLeapYear($year = '') {
       if (empty($year)) {
         $year = $this->year;

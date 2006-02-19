@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id:sefu.php 293 2005-11-29 17:34:26Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -15,7 +15,7 @@
         $description = 'Search engine friendly urls.',
         $uninstallable = true,
         $depends,
-        $preceeds = 'session';
+        $precedes = 'session';
 
     function start() {
       if (isset($_SERVER['PATH_INFO']) && (strlen($_SERVER['PATH_INFO']) > 1)) {

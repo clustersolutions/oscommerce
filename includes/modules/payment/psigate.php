@@ -10,15 +10,21 @@
   Released under the GNU General Public License
 */
 
-  class psigate {
-    var $code, $title, $description, $sort_order, $enabled = false;
+  class osC_Payment_psigate extends osC_Payment {
+    var $_title,
+        $_code = 'psigate',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
+        $_status = false,
+        $_sort_order;
 
-    function psigate() {
+    function osC_Payment_psigate() {
       global $osC_Language;
 
-      $this->code = 'psigate';
-      $this->title = $osC_Language->get('payment_psigate_title');
-      $this->description = $osC_Language->get('payment_psigate_description');
+      $this->_title = $osC_Language->get('payment_psigate_title');
+      $this->_description = $osC_Language->get('payment_psigate_description');
+      $this->_status = (defined('MODULE_PAYMENT_PSIGATE_STATUS') && (MODULE_PAYMENT_PSIGATE_STATUS == 'True') ? true : false);
+      $this->_sort_order = (defined('MODULE_PAYMENT_PSIGATE_SORT_ORDER') ? MODULE_PAYMENT_PSIGATE_SORT_ORDER : null);
 
       if (defined('MODULE_PAYMENT_PSIGATE_STATUS')) {
         $this->initialize();
@@ -27,9 +33,6 @@
 
     function initialize() {
       global $order;
-
-      $this->sort_order = MODULE_PAYMENT_PSIGATE_SORT_ORDER;
-      $this->enabled = ((MODULE_PAYMENT_PSIGATE_STATUS == 'True') ? true : false);
 
       if ((int)MODULE_PAYMENT_PSIGATE_ORDER_STATUS_ID > 0) {
         $this->order_status = MODULE_PAYMENT_PSIGATE_ORDER_STATUS_ID;
@@ -43,7 +46,7 @@
     function update_status() {
       global $osC_Database, $order;
 
-      if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_PSIGATE_ZONE > 0) ) {
+      if ( ($this->_status === true) && ((int)MODULE_PAYMENT_PSIGATE_ZONE > 0) ) {
         $check_flag = false;
 
         $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
@@ -63,7 +66,7 @@
         }
 
         if ($check_flag == false) {
-          $this->enabled = false;
+          $this->_status = false;
         }
       }
     }
@@ -72,7 +75,7 @@
       global $osC_Language;
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
-        $js = 'if (payment_value == "' . $this->code . '") {' . "\n" .
+        $js = 'if (payment_value == "' . $this->_code . '") {' . "\n" .
               '  var psigate_cc_number = document.checkout_payment.psigate_cc_number.value;' . "\n" .
               '  if (psigate_cc_number == "" || psigate_cc_number.length < ' . CC_NUMBER_MIN_LENGTH . ') {' . "\n" .
               '    error_message = error_message + "' . $osC_Language->get('payment_psigate_js_credit_card_number') . '\n";' . "\n" .
@@ -112,8 +115,8 @@
 
         $Qcredit_cards->freeResult();
 
-        $selection = array('id' => $this->code,
-                           'module' => $this->title,
+        $selection = array('id' => $this->_code,
+                           'module' => $this->_title,
                            'fields' => array(array('title' => $osC_Language->get('payment_psigate_credit_card_owner'),
                                                    'field' => osc_draw_input_field('psigate_cc_owner', $order->billing['firstname'] . ' ' . $order->billing['lastname'])),
                                              array('title' => $osC_Language->get('payment_psigate_credit_card_type'),
@@ -123,8 +126,8 @@
                                              array('title' => $osC_Language->get('payment_psigate_credit_card_expiry_date'),
                                                    'field' => osc_draw_pull_down_menu('psigate_cc_expires_month', $expires_month) . '&nbsp;' . osc_draw_pull_down_menu('psigate_cc_expires_year', $expires_year))));
       } else {
-        $selection = array('id' => $this->code,
-                           'module' => $this->title);
+        $selection = array('id' => $this->_code,
+                           'module' => $this->_title);
       }
 
       return $selection;
@@ -156,7 +159,7 @@
       global $osC_Language, $order;
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
-        $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
+        $confirmation = array('title' => $this->_title . ': ' . $this->cc_card_type,
                               'fields' => array(array('title' => $osC_Language->get('payment_psigate_credit_card_owner'),
                                                       'field' => $this->cc_card_owner),
                                                 array('title' => $osC_Language->get('payment_psigate_credit_card_number'),
@@ -211,7 +214,7 @@
       $process_button_string = osc_draw_hidden_field('MerchantID', MODULE_PAYMENT_PSIGATE_MERCHANT_ID) .
                                osc_draw_hidden_field('FullTotal', number_format($order->info['total'] * $osC_Currencies->value(MODULE_PAYMENT_PSIGATE_CURRENCY), $osC_Currencies->currencies[MODULE_PAYMENT_PSIGATE_CURRENCY]['decimal_places'])) .
                                osc_draw_hidden_field('ThanksURL', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true)) .
-                               osc_draw_hidden_field('NoThanksURL', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->code . $payment_error_return, 'SSL')) .
+                               osc_draw_hidden_field('NoThanksURL', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->_code . $payment_error_return, 'SSL')) .
                                osc_draw_hidden_field('Bname', ((MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') ? $_POST['psigate_cc_owner'] : $order->billing['firstname'] . ' ' . $order->billing['lastname'])) .
                                osc_draw_hidden_field('Baddr1', $order->billing['street_address']) .
                                osc_draw_hidden_field('Bcity', $order->billing['city']);
@@ -284,7 +287,9 @@
     }
 
     function install() {
-      global $osC_Database, $osC_Language;
+      global $osC_Database;
+
+      parent::install();
 
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable PSiGate Module', 'MODULE_PAYMENT_PSIGATE_STATUS', 'True', 'Do you want to accept PSiGate payments?', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Merchant ID', 'MODULE_PAYMENT_PSIGATE_MERCHANT_ID', 'teststorewithcard', 'Merchant ID used for the PSiGate service', '6', '2', now())");
@@ -295,54 +300,22 @@
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_PSIGATE_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_PSIGATE_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '2', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_PSIGATE_ORDER_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', '6', '0', 'tep_cfg_pull_down_order_statuses(', 'tep_get_order_status_name', now())");
-
-      foreach ($osC_Language->getAll() as $key => $value) {
-        foreach ($osC_Language->extractDefinitions($key . '/modules/payment/' . $this->code . '.xml') as $def) {
-          $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
-          $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qcheck->bindValue(':definition_key', $def['key']);
-          $Qcheck->bindValue(':content_group', $def['group']);
-          $Qcheck->bindInt(':languages_id', $value['id']);
-          $Qcheck->execute();
-
-          if ($Qcheck->numberOfRows() === 1) {
-            $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
-          } else {
-            $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-          }
-          $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qdef->bindInt(':languages_id', $value['id']);
-          $Qdef->bindValue(':content_group', $def['group']);
-          $Qdef->bindValue(':definition_key', $def['key']);
-          $Qdef->bindValue(':definition_value', $def['value']);
-          $Qdef->execute();
-        }
-      }
-
-      osC_Cache::clear('languages');
     }
 
-    function remove() {
-      global $osC_Database, $osC_Language;
-
-      $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
-      $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
-      $Qdel->bindRaw(':configuration_key', implode('", "', $this->keys()));
-      $Qdel->execute();
-
-      foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/payment/' . $this->code . '.xml') as $def) {
-        $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
-        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-        $Qdel->bindValue(':definition_key', $def['key']);
-        $Qdel->bindValue(':content_group', $def['group']);
-        $Qdel->execute();
+    function getKeys() {
+      if (!isset($this->_keys)) {
+        $this->_keys = array('MODULE_PAYMENT_PSIGATE_STATUS',
+                             'MODULE_PAYMENT_PSIGATE_MERCHANT_ID',
+                             'MODULE_PAYMENT_PSIGATE_TRANSACTION_MODE',
+                             'MODULE_PAYMENT_PSIGATE_TRANSACTION_TYPE',
+                             'MODULE_PAYMENT_PSIGATE_INPUT_MODE',
+                             'MODULE_PAYMENT_PSIGATE_CURRENCY',
+                             'MODULE_PAYMENT_PSIGATE_ZONE',
+                             'MODULE_PAYMENT_PSIGATE_ORDER_STATUS_ID',
+                             'MODULE_PAYMENT_PSIGATE_SORT_ORDER');
       }
 
-      osC_Cache::clear('languages');
-    }
-
-    function keys() {
-      return array('MODULE_PAYMENT_PSIGATE_STATUS', 'MODULE_PAYMENT_PSIGATE_MERCHANT_ID', 'MODULE_PAYMENT_PSIGATE_TRANSACTION_MODE', 'MODULE_PAYMENT_PSIGATE_TRANSACTION_TYPE', 'MODULE_PAYMENT_PSIGATE_INPUT_MODE', 'MODULE_PAYMENT_PSIGATE_CURRENCY', 'MODULE_PAYMENT_PSIGATE_ZONE', 'MODULE_PAYMENT_PSIGATE_ORDER_STATUS_ID', 'MODULE_PAYMENT_PSIGATE_SORT_ORDER');
+      return $this->_keys;
     }
   }
 ?>
