@@ -128,7 +128,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
+    echo tep_image('../includes/languages/' . $l['code'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -168,7 +168,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : '')) . '<br />';
+      echo tep_image('../includes/languages/' . $l['code'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : '')) . '<br />';
     }
 ?>
         </td>

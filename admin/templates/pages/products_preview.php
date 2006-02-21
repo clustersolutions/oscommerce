@@ -57,7 +57,7 @@
     <td>
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo '<span id="lang_' . $l['code'] . '"' . (($l['directory'] == $osC_Language->getDirectory()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
+    echo '<span id="lang_' . $l['code'] . '"' . (($l['code'] == $osC_Language->getCode()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
   }
 ?>
     </td>
@@ -68,7 +68,7 @@
   foreach ($osC_Language->getAll() as $l) {
 ?>
 
-<div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['directory'] != $osC_Language->getDirectory()) ? ' style="display: none;"' : ''); ?>>
+<div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['code'] != $osC_Language->getCode()) ? ' style="display: none;"' : ''); ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td><h1><?php echo $pInfo->products_name[$l['id']] . (!empty($pInfo->products_model[$l['id']]) ? '<br /><span class="smallText">' . $pInfo->products_model[$l['id']] . '</span>': ''); ?></h1></td>

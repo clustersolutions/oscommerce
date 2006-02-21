@@ -124,7 +124,7 @@
   echo TEXT_CATEGORIES_NAME;
 
   foreach ($osC_Language->getAll() as $l) {
-    echo '<br />' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']');
+    echo '<br />' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']');
   }
 ?>
     </p>
@@ -193,7 +193,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo '<br />' . tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']', (isset($categories_name[$l['id']]) ? $categories_name[$l['id']] : ''));
+      echo '<br />' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']', (isset($categories_name[$l['id']]) ? $categories_name[$l['id']] : ''));
     }
 ?>
     </p>

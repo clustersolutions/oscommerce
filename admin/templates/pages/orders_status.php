@@ -87,7 +87,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br />';
+    echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -131,7 +131,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
+      echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
     }
 ?>
         </td>

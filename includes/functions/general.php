@@ -13,7 +13,11 @@
 ////
 // Redirect to another page or site
   function tep_redirect($url) {
-    global $osC_Services, $request_type;
+    global $osC_Services;
+
+    if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
+      $url = tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false);
+    }
 
     if (strpos($url, '&amp;') !== false) {
       $url = str_replace('&amp;', '&', $url);

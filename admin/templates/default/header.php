@@ -111,7 +111,7 @@
        '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/locale.png', '', '16', '16') . '\', \'' . addslashes(HEADER_TITLE_LANGUAGES) . '\', null, null, null,' . "\n";
 
   foreach ($osC_Language->getAll() as $l) {
-    echo '            [\'' . tep_image('../includes/languages/' . $l['directory'] . '/images/icon.gif') . '\', \'' . addslashes($l['name']) . '\', \'' . tep_href_link(FILENAME_DEFAULT, 'language=' . $l['code']) . '\', null, null],' . "\n";
+    echo '            [\'' . tep_image('../includes/languages/' . $l['code'] . '/images/icon.gif') . '\', \'' . addslashes($l['name']) . '\', \'' . tep_href_link(FILENAME_DEFAULT, 'language=' . $l['code']) . '\', null, null],' . "\n";
   }
 
   echo '        ],' . "\n" .

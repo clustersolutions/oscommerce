@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,14 @@
 
     case 'url':
       if (isset($_GET['goto']) && tep_not_null($_GET['goto'])) {
-        tep_redirect('http://' . $_GET['goto']);
+        $Qcheck = $osC_Database->query('select products_url from :table_products_description where products_url = :products_url limit 1');
+        $Qcheck->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+        $Qcheck->bindValue(':products_url', $_GET['goto']);
+        $Qcheck->execute();
+
+        if ($Qcheck->numberOfRows() === 1) {
+          tep_redirect('http://' . $HTTP_GET_VARS['goto']);
+        }
       }
       break;
 

@@ -260,7 +260,7 @@
 ?>
 
       <div class="tab-page" id="tabDescriptionLanguages_<?php echo $l['code']; ?>">
-        <h2 class="tab"><?php echo tep_image('../includes/languages/' . $l['directory'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . $l['name']; ?></h2>
+        <h2 class="tab"><?php echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . $l['name']; ?></h2>
 
         <script type="text/javascript"><!--
           descriptionTabPane.addTabPage( document.getElementById( "tabDescriptionLanguages_<?php echo $l['code']; ?>" ) );

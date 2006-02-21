@@ -473,6 +473,26 @@
  */
 
     function send($to_name, $to_addr, $from_name, $from_addr, $subject = '', $headers = '') {
+      if ((strpos($to_name, "\n") !== false) || (sstrpos($to_name, "\r") !== false)) {
+        return false;
+      }
+
+      if ((strpos($to_addr, "\n") !== false) || (strpos($to_addr, "\r") !== false)) {
+        return false;
+      }
+
+      if ((strpos($subject, "\n") !== false) || (strpos($subject, "\r") !== false)) {
+        return false;
+      }
+
+      if ((strpos($from_name, "\n") !== false) || (strpos($from_name, "\r") !== false)) {
+        return false;
+      }
+
+      if ((strpos($from_addr, "\n") !== false) || (strpos($from_addr, "\r") !== false)) {
+        return false;
+      }
+
       $to = (($to_name != '') ? '"' . $to_name . '" <' . $to_addr . '>' : $to_addr);
       $from = (($from_name != '') ? '"' . $from_name . '" <' . $from_addr . '>' : $from_addr);
 

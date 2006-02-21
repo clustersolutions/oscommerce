@@ -14,7 +14,7 @@
 
   $osC_NavigationHistory->removeCurrentPage();
 
-  require('includes/languages/' . $osC_Language->getDirectory() . '/' . FILENAME_SEARCH);
+  require('includes/languages/' . $osC_Language->getCode() . '/' . FILENAME_SEARCH);
 ?>
 <!doctype html public "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $osC_Language->getTextDirection(); ?>" xml:lang="<?php echo $osC_Language->getCode(); ?>" lang="<?php echo $osC_Language->getCode(); ?>">

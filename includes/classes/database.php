@@ -578,7 +578,7 @@
       $this->batch_rows = $maximum_rows;
       $this->batch_select_field = (empty($select_field) ? '*' : $select_field);
 
-      $from = ($this->batch_number * $maximum_rows) - $maximum_rows;
+      $from = max(($this->batch_number * $maximum_rows) - $maximum_rows, 0);
 
       $this->sql_query = $this->db_class->setBatchLimit($this->sql_query, $from, $maximum_rows);
 

@@ -29,6 +29,7 @@
 
       while ($Qlanguages->next()) {
         $this->_languages[$Qlanguages->value('code')] = array('id' => $Qlanguages->valueInt('languages_id'),
+                                                              'code' => $Qlanguages->value('code'),
                                                               'name' => $Qlanguages->value('name'),
                                                               'locale' => $Qlanguages->value('locale'),
                                                               'charset' => $Qlanguages->value('charset'),

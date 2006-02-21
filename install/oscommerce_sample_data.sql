@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2004 osCommerce
+# Copyright (c) 2006 osCommerce
 #
 # Released under the GNU General Public License
 #
@@ -18,8 +18,6 @@
 #         directory of the 'catalog' module.
 #       * Comments should be like these, full line comments.
 #         (don't use inline comments)
-
-INSERT INTO osc_address_book VALUES ( '1', '1', 'm', 'ACME Inc.', 'John', 'Doe', '1 Way Street', '', '12345', 'NeverNever', '', '223', '12', '12345', '');
 
 INSERT INTO osc_banners VALUES (1, 'osCommerce', '', '', '468x60', '<script language=\'JavaScript\' type=\'text/javascript\' src=\'http://adserver.oscommerce.com/adx.js\'></script>
 <script language=\'JavaScript\' type=\'text/javascript\'>
@@ -118,10 +116,6 @@ INSERT INTO osc_categories_description VALUES ( '17', '3', 'Unidades CDROM');
 INSERT INTO osc_categories_description VALUES ( '18', '3', 'Simulacion');
 INSERT INTO osc_categories_description VALUES ( '19', '3', 'Accion');
 INSERT INTO osc_categories_description VALUES ( '20', '3', 'Estrategia');
-
-INSERT INTO osc_customers VALUES ( '1', 'm', 'John', 'doe', '2001-01-01 00:00:00', 'root@localhost', '1', '12345', '', 'd95e8fa7f20a009372eb3477473fcd34:1c', '0', '1', '127.0.0.1');
-
-INSERT INTO osc_customers_info VALUES('1', null, '0', now(), null, '0');
 
 INSERT INTO osc_manufacturers VALUES (1,'Matrox','manufacturer_matrox.gif', now(), null);
 INSERT INTO osc_manufacturers VALUES (2,'Microsoft','manufacturer_microsoft.gif', now(), null);
@@ -377,7 +371,7 @@ INSERT INTO osc_products_to_categories VALUES (25,8);
 INSERT INTO osc_products_to_categories VALUES (26,9);
 INSERT INTO osc_products_to_categories VALUES (27,5);
 
-INSERT INTO osc_reviews VALUES (1,19,1,'John doe',5,1, 'this has to be one of the funniest movies released for 1999!', now(),null,0, 1);
+INSERT INTO osc_reviews VALUES (1,19,0,'John doe',5,1, 'this has to be one of the funniest movies released for 1999!', now(),null,0, 1);
 
 INSERT INTO osc_specials VALUES (1,3, 39.99, now(), null, null, null, null, '1');
 INSERT INTO osc_specials VALUES (2,5, 30.00, now(), null, null, null, null, '1');

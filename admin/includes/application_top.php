@@ -118,8 +118,8 @@
   require('includes/classes/object_info.php');
 
 // email classes
-  require('includes/classes/mime.php');
-  require('includes/classes/email.php');
+  require('../includes/classes/mime.php');
+  require('../includes/classes/email.php');
 
 // file uploading class
   require('includes/classes/upload.php');

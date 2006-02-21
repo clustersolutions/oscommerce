@@ -18,7 +18,8 @@ define('TABLE_HEADING_STATUS', 'Status');
 define('TABLE_HEADING_ACTION', 'Action');
 
 define('TEXT_SPECIALS_PRODUCT', 'Product:');
-define('TEXT_SPECIALS_SPECIAL_PRICE', 'Special Price:');
+define('TEXT_SPECIALS_SPECIAL_PRICE_NET', 'Special Price (Net):');
+define('TEXT_SPECIALS_SPECIAL_PRICE_GROSS', 'Special Price (Gross):');
 define('TEXT_SPECIALS_STATUS', 'Status:');
 define('TEXT_SPECIALS_START_DATE', 'Start Date:');
 define('TEXT_SPECIALS_EXPIRES_DATE', 'Expiry Date:');
