@@ -14,6 +14,10 @@
   error_reporting(E_ALL); // & ~E_NOTICE);
 
   define('DEFAULT_LANGUAGE', 'en_US');
+  define('HTTP_COOKIE_PATH', '');
+  define('HTTPS_COOKIE_PATH', '');
+  define('HTTP_COOKIE_DOMAIN', '');
+  define('HTTPS_COOKIE_DOMAIN', '');
 
   require('../includes/functions/compatibility.php');
 
