@@ -132,8 +132,6 @@
       }
     }
   }
-
-  echo osc_draw_hidden_field('install[]', 'configure');
 ?>
 
     </form>

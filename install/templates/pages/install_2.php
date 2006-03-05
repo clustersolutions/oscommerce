@@ -23,7 +23,7 @@
   var dbPassword;
   var dbName;
   var dbClass;
-  var dbImport = "<?php echo ((in_array('database', $_POST['install'])) ? '1' : '0'); ?>";
+  var dbImport = "1";
   var dbImportSample = "0";
   var dbPrefix;
 
@@ -160,20 +160,6 @@
         <td class="inputField"><?php echo $osC_Language->get('param_database_prefix') . '<br />' . osc_draw_input_field('DB_TABLE_PREFIX', 'osc_', 'id="cfg_dbprefix" class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_database_prefix_description'); ?></td>
       </tr>
-
-<?php
-  if (!in_array('configure', $_POST['install'])) {
-?>
-
-      <tr>
-        <td class="inputField"><?php echo osc_draw_checkbox_field('DB_INSERT_SAMPLE_DATA', 'true', true, 'id="cfg_dbimport"') . '&nbsp;' . $osC_Language->get('param_database_import_sample_data'); ?></td>
-        <td class="inputDescription"><?php echo $osC_Language->get('param_database_import_sample_data_description'); ?></td>
-      </tr>
-
-<?php
-  }
-?>
-
     </table>
 
     <p align="right"><?php echo '<input type="image" src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/buttons/continue.gif" border="0" alt="' . $osC_Language->get('image_button_continue') . '" id="inputButton" />'; ?>&nbsp;&nbsp;<?php echo '<a href="index.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/buttons/cancel.gif" border="0" alt="' . $osC_Language->get('image_button_cancel') . '" /></a>'; ?></p>
