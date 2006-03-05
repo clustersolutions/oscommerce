@@ -23,8 +23,6 @@
   var dbPassword;
   var dbName;
   var dbClass;
-  var dbImport = "1";
-  var dbImportSample = "0";
   var dbPrefix;
 
   var formSubmited = false;
@@ -53,17 +51,9 @@
         var result = http.responseText.split(':osCRPC:', 2);
 
         if (result[0] == '1') {
-          if (dbImport == '1') {
-            document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_importing'); ?></p>';
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_importing'); ?></p>';
 
-            loadXMLDoc("rpc.php?action=dbImport&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass) + "&import=" + urlEncode(dbImportSample) + "&prefix=" + urlEncode(dbPrefix), handleHttpResponse_DoImport);
-          } else {
-            document.getElementById('mBoxContents').innerHTML = '<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_connected'); ?></p>';
-
-            setTimeout("document.getElementById('installForm').submit();", 2000);
-
-            formSubmited = false
-          }
+          loadXMLDoc("rpc.php?action=dbImport&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass) + "&import=0&prefix=" + urlEncode(dbPrefix), handleHttpResponse_DoImport);
         } else {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_connection_error'); ?></p>'.replace('%s', result[1]);
           formSubmited = false;
@@ -90,9 +80,6 @@
     dbPassword = document.getElementById("cfg_dbpassword").value;
     dbName = document.getElementById("cfg_dbname").value;
     dbClass = document.getElementById("cfg_dbclass").value;
-    if (document.getElementById("cfg_dbimport") && document.getElementById("cfg_dbimport").checked) {
-      dbImportSample = "1";
-    }
     dbPrefix = document.getElementById("cfg_dbprefix").value;
 
     loadXMLDoc("rpc.php?action=dbCheck&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass), handleHttpResponse);
@@ -133,7 +120,7 @@
   <div class="contentPane">
     <h2><?php echo $osC_Language->get('page_heading_step_2'); ?></h2>
 
-    <form name="install" id="installForm" action="install.php?step=3" method="post" onsubmit="prepareDB(); return false;">
+    <form name="install" id="installForm" action="install.php?step=2" method="post" onsubmit="prepareDB(); return false;">
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>
@@ -163,20 +150,6 @@
     </table>
 
     <p align="right"><?php echo '<input type="image" src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/buttons/continue.gif" border="0" alt="' . $osC_Language->get('image_button_continue') . '" id="inputButton" />'; ?>&nbsp;&nbsp;<?php echo '<a href="index.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/buttons/cancel.gif" border="0" alt="' . $osC_Language->get('image_button_cancel') . '" /></a>'; ?></p>
-
-<?php
-  foreach ($_POST as $key => $value) {
-    if (($key != 'x') && ($key != 'y') && ($key != 'DB_SERVER') && ($key != 'DB_SERVER_USERNAME') && ($key != 'DB_SERVER_PASSWORD') && ($key != 'DB_DATABASE') && ($key != 'DB_DATABASE_CLASS') && ($key != 'DB_TABLE_PREFIX') && ($key != 'DB_INSERT_SAMPLE_DATA')) {
-      if (is_array($value)) {
-        for ($i=0, $n=sizeof($value); $i<$n; $i++) {
-          echo osc_draw_hidden_field($key . '[]', $value[$i]);
-        }
-      } else {
-        echo osc_draw_hidden_field($key, $value);
-      }
-    }
-  }
-?>
 
     </form>
   </div>

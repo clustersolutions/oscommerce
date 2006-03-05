@@ -101,7 +101,7 @@
   <div class="contentPane">
     <h2><?php echo $osC_Language->get('page_heading_step_3'); ?></h2>
 
-    <form name="install" id="installForm" action="install.php?step=4" method="post" onsubmit="prepareWork(); return false;">
+    <form name="install" id="installForm" action="install.php?step=3" method="post" onsubmit="prepareWork(); return false;">
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>

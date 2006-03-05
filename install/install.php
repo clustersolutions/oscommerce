@@ -12,20 +12,20 @@
 
   require('includes/application.php');
 
-  $page_contents = 'install_2.php';
+  $page_contents = 'install.php';
 
   if (isset($_GET['step']) && is_numeric($_GET['step'])) {
     switch ($_GET['step']) {
+      case '2':
+        $page_contents = 'install_2.php';
+        break;
+
       case '3':
         $page_contents = 'install_3.php';
         break;
 
       case '4':
         $page_contents = 'install_4.php';
-        break;
-
-      case '5':
-        $page_contents = 'install_5.php';
         break;
     }
   }
