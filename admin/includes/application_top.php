@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,7 @@
   error_reporting(E_ALL & ~E_NOTICE);
 
 // Define the project version
-  define('PROJECT_VERSION', 'osCommerce 3.0a1');
+  define('PROJECT_VERSION', 'osCommerce 3.0a2');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';

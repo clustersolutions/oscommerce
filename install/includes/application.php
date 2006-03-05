@@ -11,7 +11,7 @@
 */
 
 // Set the level of error reporting
-  error_reporting(E_ALL); // & ~E_NOTICE);
+  error_reporting(E_ALL & ~E_NOTICE);
 
   define('DEFAULT_LANGUAGE', 'en_US');
   define('HTTP_COOKIE_PATH', '');

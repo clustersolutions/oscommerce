@@ -1075,18 +1075,10 @@ INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now(
 INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.1036', now());
 
 INSERT INTO osc_languages VALUES (1,'English','en_US','en_US,en_US.ISO8859-15,english','iso-8859-15','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
-INSERT INTO osc_languages VALUES (2,'Deutsch','de_DE','de_DE,de_DE.ISO8859-15,german','iso-8859-15','%d.%m.%Y','%A, %d. %B %Y','%H:%M:%S','ltr','icon.gif',2,',','.',2);
-INSERT INTO osc_languages VALUES (3,'Español','es_ES','es_ES,es_ES.ISO8859-15,spanish','iso-8859-15','%d/%m/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',2,'.',',',3);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
-INSERT INTO osc_orders_status VALUES ( '1', '2', 'Offen');
-INSERT INTO osc_orders_status VALUES ( '1', '3', 'Pendiente');
 INSERT INTO osc_orders_status VALUES ( '2', '1', 'Processing');
-INSERT INTO osc_orders_status VALUES ( '2', '2', 'In Bearbeitung');
-INSERT INTO osc_orders_status VALUES ( '2', '3', 'Proceso');
 INSERT INTO osc_orders_status VALUES ( '3', '1', 'Delivered');
-INSERT INTO osc_orders_status VALUES ( '3', '2', 'Versendet');
-INSERT INTO osc_orders_status VALUES ( '3', '3', 'Entregado');
 
 INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
 
@@ -1161,17 +1153,9 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 
 # Weight Classes
 INSERT INTO osc_weight_classes VALUES (1, 'g', 1, 'Gram(s)');
-INSERT INTO osc_weight_classes VALUES (1, 'g', 2, 'Gram(s)');
-INSERT INTO osc_weight_classes VALUES (1, 'g', 3, 'Gram(s)');
 INSERT INTO osc_weight_classes VALUES (2, 'kg', 1, 'Kilogram(s)');
-INSERT INTO osc_weight_classes VALUES (2, 'kg', 2, 'Kilogram(s)');
-INSERT INTO osc_weight_classes VALUES (2, 'kg', 3, 'Kilogram(s)');
 INSERT INTO osc_weight_classes VALUES (3, 'oz', 1, 'Ounce(s)');
-INSERT INTO osc_weight_classes VALUES (3, 'oz', 2, 'Ounce(s)');
-INSERT INTO osc_weight_classes VALUES (3, 'oz', 3, 'Ounce(s)');
 INSERT INTO osc_weight_classes VALUES (4, 'lb', 1, 'Pound(s)');
-INSERT INTO osc_weight_classes VALUES (4, 'lb', 2, 'Pound(s)');
-INSERT INTO osc_weight_classes VALUES (4, 'lb', 3, 'Pound(s)');
 
 INSERT INTO osc_weight_classes_rules VALUES (1, 2, '0.0010');
 INSERT INTO osc_weight_classes_rules VALUES (1, 3, '0.0352');
@@ -1185,6 +1169,7 @@ INSERT INTO osc_weight_classes_rules VALUES (3, 4, '0.0625');
 INSERT INTO osc_weight_classes_rules VALUES (4, 1, '453.5923');
 INSERT INTO osc_weight_classes_rules VALUES (4, 2, '0.4535');
 INSERT INTO osc_weight_classes_rules VALUES (4, 3, '16.0000');
+
 # USA
 INSERT INTO osc_zones VALUES (1,223,'AL','Alabama');
 INSERT INTO osc_zones VALUES (2,223,'AK','Alaska');
