@@ -68,9 +68,8 @@
     <ol>
       <li><?php echo $osC_Language->get('box_steps_step_1'); ?></li>
       <li><?php echo $osC_Language->get('box_steps_step_2'); ?></li>
-      <li><?php echo $osC_Language->get('box_steps_step_3'); ?></li>
-      <li style="font-weight: bold;"><?php echo $osC_Language->get('box_steps_step_4'); ?></li>
-      <li><?php echo $osC_Language->get('box_steps_step_5'); ?></li>
+      <li style="font-weight: bold;"><?php echo $osC_Language->get('box_steps_step_3'); ?></li>
+      <li><?php echo $osC_Language->get('box_steps_step_4'); ?></li>
     </ol>
   </div>
 
@@ -81,10 +80,10 @@
 
 <div class="contentBlock">
   <div class="infoPane">
-    <h3><?php echo $osC_Language->get('box_info_step_4_title'); ?></h3>
+    <h3><?php echo $osC_Language->get('box_info_step_3_title'); ?></h3>
 
     <div class="infoPaneContents">
-      <?php echo $osC_Language->get('box_info_step_4_text'); ?>
+      <?php echo $osC_Language->get('box_info_step_3_text'); ?>
     </div>
   </div>
 
@@ -93,7 +92,7 @@
   </div>
 
   <div class="contentPane">
-    <h2><?php echo $osC_Language->get('page_heading_step_4'); ?></h2>
+    <h2><?php echo $osC_Language->get('page_heading_step_3'); ?></h2>
 
     <form name="install" id="installForm" action="install.php?step=4" method="post" onsubmit="prepareDB(); return false;">
 

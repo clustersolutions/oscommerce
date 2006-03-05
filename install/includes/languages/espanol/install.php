@@ -3,26 +3,19 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2005 osCommerce
+# Copyright (c) 2006 osCommerce
 #
 # Released under the GNU General Public License
 
 page_title_installation = New Installation
 
-page_heading_step_1 = Installation Options
-page_heading_step_2 = Database Server
-page_heading_step_3 = Web Server
-page_heading_step_4 = Online Store Settings
-page_heading_step_5 = Finished!
+page_heading_step_1 = Database Server
+page_heading_step_2 = Web Server
+page_heading_step_3 = Online Store Settings
+page_heading_step_4 = Finished!
 
 text_installation = <p>This web-based installation routine will correctly setup and configure osCommerce to run on this server.</p><p>Please following the on-screen instructions that will take you through the database server, web server, and store configuration options. If help is needed at any stage, please consult the documentation or seek help at the community support forums.</p>
 text_successful_installation = The installation and configuration was successful!
-
-param_import_database = Import Catalog Database
-param_import_database_description = Import the database structure and configuration parameters. (Required for first time installations)
-
-param_automatic_configuration = Automatic Configuration
-param_automatic_configuration_description = Save configuration parameters entered during the installation procedure to the server.
 
 param_database_server = Database Server
 param_database_server_description = The address of the database server in the form of a hostname or IP address.
@@ -58,26 +51,22 @@ param_administrator_username_description = The administrator username to use for
 param_administrator_password = Administrator Password
 param_administrator_password_description = The password to use for the administrator account.
 
-box_steps_step_1 = Installation Options
-box_steps_step_2 = Database Server
-box_steps_step_3 = Web Server
-box_steps_step_4 = Online Store Settings
-box_steps_step_5 = Finished!
+box_steps_step_1 = Database Server
+box_steps_step_2 = Web Server
+box_steps_step_3 = Online Store Settings
+box_steps_step_4 = Finished!
 
-box_info_step_1_title = Step 1: Installation Options
-box_info_step_1_text = <p>Here you can choose to import the database structure only, to automatically configure an existing installation, or to do both for new installations.</p><p>For new installations it is required to perform both in order to install the software correctly.</p>
+box_info_step_1_title = Step 1: Database Server
+box_info_step_1_text = <p>The database server stores the content of the online store such as product information, customer information, and the orders that have been made.</p><p>Please consult your server administrator if your database server parameters are not yet known.</p>
 
-box_info_step_2_title = Step 2: Database Server
-box_info_step_2_text = <p>The database server stores the content of the online store such as product information, customer information, and the orders that have been made.</p><p>Please consult your server administrator if your database server parameters are not yet known.</p>
+box_info_step_2_title = Step 2: Web Server
+box_info_step_2_text = <p>The web server takes care of serving the pages of the online store to the visitors and customers. The web server parameters make sure the links to the pages point to the correct location.</p><p>Temporary files such as session data and cache files are stored in the work directory. It is important that this directory is located outside the web server root directory and is protected from public access.</p>
 
-box_info_step_3_title = Step 3: Web Server
-box_info_step_3_text = <p>The web server takes care of serving the pages of the online store to the visitors and customers. The web server parameters make sure the links to the pages point to the correct location.</p><p>Temporary files such as session data and cache files are stored in the work directory. It is important that this directory is located outside the web server root directory and is protected from public access.</p>
+box_info_step_3_title = Step 3: Online Store Settings
+box_info_step_3_text = <p>Here you can define the name of your online store, and the contact information for the store owner.</p><p>The administrator username and password are used to log into the protected administration tool section.</p>
 
-box_info_step_4_title = Step 4: Online Store Settings
-box_info_step_4_text = <p>Here you can define the name of your online store, and the contact information for the store owner.</p><p>The administrator username and password are used to log into the protected administration tool section.</p>
-
-box_info_step_5_title = Step 5: Finished!
-box_info_step_5_text = <p>Congratulations on installing and configuring osCommerce as your online store solution!</p><p>We hope you all the best with your online store and welcome you to join and participate in our community.</p><p align="right">- The osCommerce Team</p>
+box_info_step_4_title = Step 4: Finished!
+box_info_step_4_text = <p>Congratulations on installing and configuring osCommerce as your online store solution!</p><p>We hope you all the best with your online store and welcome you to join and participate in our community.</p><p align="right">- The osCommerce Team</p>
 
 error_configuration_file_not_writeable = <p>The webserver was not able to write the online store parameters to its configuration file due to file permission problems.</p><p>Please verify the permissions of the configuration file to allow the webserver to write to it, and try again by clicking on the Retry button below.</p><p>The configuration file is located at:</p><p>%s</p>
 error_configuration_file_alternate_method = <p>Alternatively you can copy and save the contents of the textbox below to the configuration file by hand.</p>
