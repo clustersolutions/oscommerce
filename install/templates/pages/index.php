@@ -12,6 +12,10 @@
 ?>
 
 <div class="mainBlock">
+  <div style="float: right;">
+    <?php echo $osC_Language->get('title_language'); ?> <a href="index.php?language=en_US">English</a> | <a href="index.php?language=de_DE">Deutsch</a> | <a href="index.php?language=es_ES">Espa&ntilde;ol</a>
+  </div>
+
   <h1><?php echo $osC_Language->get('page_title_welcome'); ?></h1>
 
   <p><?php echo $osC_Language->get('text_welcome'); ?></p>

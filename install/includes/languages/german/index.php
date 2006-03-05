@@ -3,13 +3,15 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2005 osCommerce
+# Copyright (c) 2006 osCommerce
 #
 # Released under the GNU General Public License
 
-page_title_welcome = Willkommen bei osCommerce 3.0a1!
+page_title_welcome = Willkommen bei osCommerce 3.0a2!
 
 page_heading_installation_type = Installation Type
+
+title_language = Sprache:
 
 text_welcome = <p style="background-color: #ff6633; padding: 5px; border: 1px #000 solid;">Please be aware that this is an internal alpha non-supported release and is not to be used for production use.</p><p>osCommerce ist eine Open Source E-Commerce L&ouml;sung unter st&auml;ndiger Weiterentwicklung durch die Open Source Gemeinde. Durch seine Eigenschaft, dass es out-of-the-box installiert werden kann, sind Shopbetreiber in der Lage, mit minimalen Aufwand und ohne weitere Kosten, ihren Online-Shop selbst aufzusetzen und zu verwalten.</p><p>osCommerce kombiniert weitverbreitete Open Source L&ouml;sungen um eine freie und offene Entwicklungsplattform zur Verf&uuml;gung zu stellen, welches PHP, eine spezielle Skriptsprache f&uuml;r dynamische Webseiten, Apache, den extrem stabilen Webserver, und MySQL, die sehr schnelle Datenbankserver, umfasst.</p><p>Ohne Einschr&auml;nkungen oder spezielle Anforderungen l&auml;uft osCommerce auf jedem Webserver der PHP und MySQL unterst&uuml;tzt. Daher kann osCommerce auf Webservern mit Betriebssystemen wie Linux, Solaris, BSD, Microsoft Windows, und Mac OS X gleichermassen eingesetzt werden.</p>
 text_installation_type = Bitte w&auml;hlen Sie ihre Installationsart aus.

@@ -20,7 +20,9 @@
 /* Class constructor */
 
     function osC_LanguageInstall() {
-      $this->set();
+      $language = (isset($_GET['language']) && !empty($_GET['language']) ? $_GET['language'] : '');
+
+      $this->set($language);
 
       $this->_definitions = $this->_parseIniFile();
 
