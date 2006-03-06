@@ -1072,7 +1072,8 @@ INSERT INTO osc_credit_cards VALUES (6,'SOLO','Solo','1','6');
 INSERT INTO osc_credit_cards VALUES (7,'SWIT','Switch','1','7');
 
 INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now());
-INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.1036', now());
+INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.2076', now());
+INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','£','','2','1.7587', now());
 
 INSERT INTO osc_languages VALUES (1,'English','en_US','en_US,en_US.ISO8859-15,english','iso-8859-15','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
 

@@ -21,7 +21,7 @@
     function osC_Statistics_Orders() {
       global $osC_Language, $osC_Currencies;
 
-      $osC_Language->load('modules/statistics/orders.php');
+      $osC_Language->loadConstants('modules/statistics/orders.php');
 
       if (!isset($osC_Currencies)) {
         if (!class_exists('osC_Currencies')) {

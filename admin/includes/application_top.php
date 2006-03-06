@@ -103,6 +103,10 @@
 
   $osC_Language->loadConstants(basename($_SERVER['SCRIPT_FILENAME']));
 
+// load general definitions due to the split page results language definitions the database class uses
+// (quick fix; will be properly fixed in a later alpha release)
+  $osC_Language->load('general');
+
 // define our localization functions
   require('includes/functions/localization.php');
 

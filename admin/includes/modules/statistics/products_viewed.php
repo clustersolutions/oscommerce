@@ -21,7 +21,7 @@
     function osC_Statistics_Products_Viewed() {
       global $osC_Language;
 
-      $osC_Language->load('modules/statistics/products_viewed.php');
+      $osC_Language->loadConstants('modules/statistics/products_viewed.php');
 
       $this->_setIcon();
       $this->_setTitle();
@@ -56,7 +56,7 @@
       $this->_resultset->execute();
 
       while ($this->_resultset->next()) {
-        $this->_data[] = array('<a href="' . tep_href_link(FILENAME_CATEGORIES, 'action=new_product_preview&read=only&pID=' . $this->_resultset->valueInt('products_id')) . '">' . $this->_icon . '&nbsp;' . $this->_resultset->value('products_name') . '</a>',
+        $this->_data[] = array('<a href="' . tep_href_link(FILENAME_PRODUCTS, 'pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only') . '">' . $this->_icon . '&nbsp;' . $this->_resultset->value('products_name') . '</a>',
                                tep_image('../includes/languages/' . $this->_resultset->value('directory') . '/images/' . $this->_resultset->value('image'), $this->_resultset->value('name')),
                                $this->_resultset->valueInt('products_viewed'));
       }

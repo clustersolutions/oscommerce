@@ -50,6 +50,8 @@
   define('TEXT_PRODUCTS_DESCRIPTION', 'Descripci&oacute;n del producto:');
   define('TEXT_PRODUCTS_QUANTITY', 'Cantidad:');
   define('TEXT_PRODUCTS_MODEL', 'M&oacute;delo:');
+  define('TEXT_PRODUCTS_KEYWORD', 'Products Keyword:');
+  define('TEXT_PRODUCTS_TAGS', 'Products Tags:');
   define('TEXT_PRODUCTS_IMAGE', 'Imagen:');
   define('TEXT_PRODUCTS_URL', 'URL del Producto:');
   define('TEXT_PRODUCTS_URL_WITHOUT_HTTP', '<small>(sin http://)</small>');
