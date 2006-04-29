@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  include(dirname(__FILE__) . '/credit_card.php');
+
   class osC_Payment {
     var $selected_module;
 
@@ -56,6 +58,100 @@
     }
 
 // class methods
+    function sendTransactionToGateway($url, $parameters, $header = '', $method = 'post', $certificate = '') {
+      if (empty($header) || (is_array($header) === false)) {
+        $header = array();
+      }
+
+      $result = '';
+
+      $server = parse_url($url);
+
+      if (isset($server['port']) === false) {
+        $server['port'] = ($server['scheme'] == 'https') ? 443 : 80;
+      }
+
+      if (isset($server['path']) === false) {
+        $server['path'] = '/';
+      }
+
+      if (isset($server['user']) && isset($server['pass'])) {
+        $header[] = 'Authorization: Basic ' . base64_encode($server['user'] . ':' . $server['pass']);
+      }
+
+
+      $curl = curl_init($server['scheme'] . '://' . $server['host'] . $server['path'] . (isset($server['query']) ? '?' . $server['query'] : ''));
+      curl_setopt($curl, CURLOPT_PORT, $server['port']);
+
+      if (empty($header) === false) {
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+      }
+
+      if (empty($certificate) === false) {
+        curl_setopt($curl, CURLOPT_SSLCERT, $certificate);
+      }
+
+      curl_setopt($curl, CURLOPT_HEADER, 0);
+      curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
+      curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
+      curl_setopt($curl, CURLOPT_POST, 1);
+      curl_setopt($curl, CURLOPT_POSTFIELDS, $parameters);
+      $result = curl_exec($curl);
+      curl_close($curl);
+
+
+/*
+      exec('/usr/bin/curl -d ' . escapeshellarg($parameters) . ' "' . $server['scheme'] . '://' . $server['host'] . $server['path'] . (isset($server['query']) ? '?' . $server['query'] : '') . '" -P ' . $server['port'] . ' -k' . (empty($header) === false ? ' -H ' . escapeshellarg(implode("\r\n", $header)) : '') . (empty($certificate) === false ? ' -E ' . escapeshellarg($certificate) : ''), $result);
+      $result = implode("\n", $result);
+*/
+/*
+      if ($fp = @fsockopen(($server['scheme'] == 'https' ? 'ssl' : $server['scheme']) . '://' . $server['host'], $server['port'])) {
+        @fputs($fp, 'POST ' . $server['path'] . (isset($server['query']) ? '?' . $server['query'] : '') . ' HTTP/1.1' . "\r\n" .
+                    'Host: ' . $server['host'] . "\r\n" .
+                    'Content-type: application/x-www-form-urlencoded' . "\r\n" .
+                    'Content-length: ' . strlen($parameters) . "\r\n" .
+                    (empty($header) === false ? implode("\r\n", $header) . "\r\n" : '') .
+                    'Connection: close' . "\r\n\r\n" .
+                    $parameters . "\r\n\r\n");
+
+        $result = @stream_get_contents($fp);
+
+        @fclose($fp);
+
+        $result = trim(substr($result, strpos($result, "\r\n\r\n", strpos(strtolower($result), 'content-length:'))));
+      }
+*/
+/*
+      $options = array('http' => array('method' => 'POST',
+                                       'header' => 'Host: ' . $server['host'] . "\r\n" .
+                                                   'Content-type: application/x-www-form-urlencoded' . "\r\n" .
+                                                   'Content-length: ' . strlen($parameters) . "\r\n" .
+                                                   (empty($header) === false ? implode("\r\n", $header) . "\r\n" : '') .
+                                                   'Connection: close',
+                                       'content' => $parameters));
+
+      if (empty($certificate) === false) {
+        $options['ssl'] = array('local_cert' => $certificate);
+      }
+
+      $context = stream_context_create($options);
+
+      if ($fp = fopen($url, 'r', false, $context)) {
+        $result = '';
+
+        while (!feof($fp)) {
+          $result .= fgets($fp, 4096);
+        }
+
+        fclose($fp);
+      }
+*/
+
+      return $result;
+    }
+
     function getCode() {
       return $this->_code;
     }
@@ -68,7 +164,11 @@
       return $this->_description;
     }
 
-    function getStatus() {
+    function getMethodTitle() {
+      return $this->_method_title;
+    }
+
+    function isEnabled() {
       return $this->_status;
     }
 
@@ -76,25 +176,10 @@
       return $this->_sort_order;
     }
 
-/* The following method is needed in the checkout_confirmation.php page
-   due to a chicken and egg problem with the payment class and order class.
-   The payment modules needs the order destination data for the dynamic status
-   feature, and the order class needs the payment module title.
-   The following method is a work-around to implementing the method in all
-   payment modules available which would break the modules in the contributions
-   section. This should be looked into again post 2.2.
-*/
-    function update_status() {
-      if (is_array($this->_modules)) {
-        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module])) {
-          if (method_exists($GLOBALS[$this->selected_module], 'update_status')) {
-            $GLOBALS[$this->selected_module]->update_status();
-          }
-        }
-      }
+    function getJavascriptBlock() {
     }
 
-    function javascript_validation() {
+    function getJavascriptBlocks() {
       global $osC_Language;
 
       $js = '';
@@ -104,21 +189,21 @@
               '  var error = 0;' . "\n" .
               '  var error_message = "' . $osC_Language->get('js_error') . '";' . "\n" .
               '  var payment_value = null;' . "\n" .
-              '  if (document.checkout_payment.payment.length) {' . "\n" .
-              '    for (var i=0; i<document.checkout_payment.payment.length; i++) {' . "\n" .
-              '      if (document.checkout_payment.payment[i].checked) {' . "\n" .
-              '        payment_value = document.checkout_payment.payment[i].value;' . "\n" .
+              '  if (document.checkout_payment.payment_method.length) {' . "\n" .
+              '    for (var i=0; i<document.checkout_payment.payment_method.length; i++) {' . "\n" .
+              '      if (document.checkout_payment.payment_method[i].checked) {' . "\n" .
+              '        payment_value = document.checkout_payment.payment_method[i].value;' . "\n" .
               '      }' . "\n" .
               '    }' . "\n" .
-              '  } else if (document.checkout_payment.payment.checked) {' . "\n" .
-              '    payment_value = document.checkout_payment.payment.value;' . "\n" .
-              '  } else if (document.checkout_payment.payment.value) {' . "\n" .
-              '    payment_value = document.checkout_payment.payment.value;' . "\n" .
+              '  } else if (document.checkout_payment.payment_method.checked) {' . "\n" .
+              '    payment_value = document.checkout_payment.payment_method.value;' . "\n" .
+              '  } else if (document.checkout_payment.payment_method.value) {' . "\n" .
+              '    payment_value = document.checkout_payment.payment_method.value;' . "\n" .
               '  }' . "\n\n";
 
         foreach ($this->_modules as $module) {
-          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
-            $js .= $GLOBALS['osC_Payment_' . $module]->javascript_validation();
+          if ($GLOBALS['osC_Payment_' . $module]->isEnabled()) {
+            $js .= $GLOBALS['osC_Payment_' . $module]->getJavascriptBlock();
           }
         }
 
@@ -143,7 +228,7 @@
       $selection_array = array();
 
       foreach ($this->_modules as $module) {
-        if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+        if ($GLOBALS['osC_Payment_' . $module]->isEnabled()) {
           $selection = $GLOBALS['osC_Payment_' . $module]->selection();
           if (is_array($selection)) $selection_array[] = $selection;
         }
@@ -154,7 +239,7 @@
 
     function pre_confirmation_check() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           $GLOBALS[$this->selected_module]->pre_confirmation_check();
         }
       }
@@ -162,7 +247,7 @@
 
     function confirmation() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->confirmation();
         }
       }
@@ -170,31 +255,23 @@
 
     function process_button() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->process_button();
         }
       }
     }
 
-    function before_process() {
+    function process() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
-          return $GLOBALS[$this->selected_module]->before_process();
-        }
-      }
-    }
-
-    function after_process() {
-      if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
-          return $GLOBALS[$this->selected_module]->after_process();
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+          return $GLOBALS[$this->selected_module]->process();
         }
       }
     }
 
     function get_error() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->get_error();
         }
       }
@@ -202,7 +279,7 @@
 
     function hasActionURL() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && ($GLOBALS[$this->selected_module]->getStatus() === true) ) {
+        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           if (isset($GLOBALS[$this->selected_module]->form_action_url) && (empty($GLOBALS[$this->selected_module]->form_action_url) === false)) {
             return true;
           }
@@ -223,7 +300,7 @@
         $has_active = false;
 
         foreach ($this->_modules as $module) {
-          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+          if ($GLOBALS['osC_Payment_' . $module]->isEnabled()) {
             $has_active = true;
             break;
           }
@@ -240,92 +317,13 @@
         $active = 0;
 
         foreach ($this->_modules as $module) {
-          if ($GLOBALS['osC_Payment_' . $module]->getStatus() === true) {
+          if ($GLOBALS['osC_Payment_' . $module]->isEnabled()) {
             $active++;
           }
         }
       }
 
       return $active;
-    }
-
-    function hasKeys() {
-      static $has_keys;
-
-      if (isset($has_keys) === false) {
-        $has_keys = (sizeof($this->getKeys()) > 0) ? true : false;
-      }
-
-      return $has_keys;
-    }
-
-    function install() {
-      global $osC_Database, $osC_Language;
-
-      $Qinstall = $osC_Database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
-      $Qinstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-      $Qinstall->bindValue(':title', $this->_title);
-      $Qinstall->bindValue(':code', $this->_code);
-      $Qinstall->bindValue(':author_name', $this->_author_name);
-      $Qinstall->bindValue(':author_www', $this->_author_www);
-      $Qinstall->bindValue(':modules_group', $this->_group);
-      $Qinstall->execute();
-
-      foreach ($osC_Language->getAll() as $key => $value) {
-        if (file_exists(dirname(__FILE__) . '/../languages/' . $key . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
-          foreach ($osC_Language->extractDefinitions($key . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def) {
-            $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
-            $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-            $Qcheck->bindValue(':definition_key', $def['key']);
-            $Qcheck->bindValue(':content_group', $def['group']);
-            $Qcheck->bindInt(':languages_id', $value['id']);
-            $Qcheck->execute();
-
-            if ($Qcheck->numberOfRows() === 1) {
-              $Qdef = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
-            } else {
-              $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-            }
-            $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-            $Qdef->bindInt(':languages_id', $value['id']);
-            $Qdef->bindValue(':content_group', $def['group']);
-            $Qdef->bindValue(':definition_key', $def['key']);
-            $Qdef->bindValue(':definition_value', $def['value']);
-            $Qdef->execute();
-          }
-        }
-      }
-
-      osC_Cache::clear('languages');
-    }
-
-    function remove() {
-      global $osC_Database, $osC_Language;
-
-      $Qdel = $osC_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
-      $Qdel->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-      $Qdel->bindValue(':code', $this->_code);
-      $Qdel->bindValue(':modules_group', $this->_group);
-      $Qdel->execute();
-
-      if ($this->hasKeys()) {
-        $Qdel = $osC_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
-        $Qdel->bindTable(':table_configuration', TABLE_CONFIGURATION);
-        $Qdel->bindRaw(':configuration_key', implode('", "', $this->getKeys()));
-        $Qdel->execute();
-      }
-
-      if (file_exists(dirname(__FILE__) . '/../languages/' . $osC_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
-        foreach ($osC_Language->extractDefinitions($osC_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def) {
-          $Qdel = $osC_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
-          $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qdel->bindValue(':definition_key', $def['key']);
-          $Qdel->bindValue(':content_group', $def['group']);
-          $Qdel->execute();
-        }
-
-        osC_Cache::clear('languages');
-      }
     }
 
     function _usortModules($a, $b) {

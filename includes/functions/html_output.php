@@ -5,14 +5,14 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
 ////
 // The HTML href link wrapper function
-  function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
+  function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_full_address = false) {
     global $request_type, $osC_Session, $osC_Services;
 
     if ($connection == 'AUTO') {
@@ -23,13 +23,13 @@
       }
     } elseif ( ($connection == 'SSL') && (ENABLE_SSL === true) ) {
       if ($request_type == 'SSL') {
-        $link = '';
+        $link = ($use_full_address === false) ? '' : HTTPS_SERVER . DIR_WS_HTTPS_CATALOG;
       } else {
         $link = HTTPS_SERVER . DIR_WS_HTTPS_CATALOG;
       }
     } else {
       if ($request_type == 'NONSSL') {
-        $link = '';
+        $link = ($use_full_address === false) ? '' : HTTP_SERVER . DIR_WS_HTTP_CATALOG;
       } else {
         $link = HTTP_SERVER . DIR_WS_HTTP_CATALOG;
       }
@@ -53,7 +53,7 @@
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
-    if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == 'False') ) {
+    if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
       if (osc_empty(SID) === false) {
         $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
@@ -81,7 +81,7 @@
 ////
 // The HTML image wrapper function
   function tep_image($src, $alt = '', $width = '', $height = '', $parameters = '') {
-    if ( (empty($src) || ($src == DIR_WS_IMAGES)) && (IMAGE_REQUIRED == 'false') ) {
+    if ( (empty($src) || ($src == DIR_WS_IMAGES)) && (IMAGE_REQUIRED == '-1') ) {
       return false;
     }
 
@@ -93,7 +93,7 @@
       $image .= ' title=" ' . tep_output_string($alt) . ' "';
     }
 
-    if ( (CONFIG_CALCULATE_IMAGE_SIZE == 'true') && (empty($width) || empty($height)) ) {
+    if ( (CONFIG_CALCULATE_IMAGE_SIZE == '1') && (empty($width) || empty($height)) ) {
       if ($image_size = @getimagesize($src)) {
         if (empty($width) && tep_not_null($height)) {
           $ratio = $height / $image_size[1];
@@ -105,7 +105,7 @@
           $width = (int)$image_size[0];
           $height = (int)$image_size[1];
         }
-      } elseif (IMAGE_REQUIRED == 'false') {
+      } elseif (IMAGE_REQUIRED == '-1') {
         return false;
       }
     }
@@ -226,7 +226,7 @@
         $field .= ' value="' . tep_output_string($selection_value) . '"';
       }
 
-      if ((is_bool($default) && $default === true) || (!empty($default) && ($default == $selection_value))) {
+      if ((is_bool($default) && $default === true) || (!empty($default) && ((is_string($default) && ($default == $selection_value)) || (is_array($default) && in_array($selection_value, $default))))) {
         $field .= '  checked="checked"';
       }
 

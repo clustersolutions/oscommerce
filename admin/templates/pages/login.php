@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,3 +36,11 @@
     </form>
   </div>
 </div>
+
+<script language="javascript" type="text/javascript">
+<!--
+
+document.login.user_name.focus();
+
+//-->
+</script>

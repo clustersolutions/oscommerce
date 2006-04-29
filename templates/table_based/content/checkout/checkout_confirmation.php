@@ -70,7 +70,7 @@
          '                <td align="right" valign="top" width="30">' . $order->products[$i]['qty'] . '&nbsp;x</td>' . "\n" .
          '                <td valign="top">' . $order->products[$i]['name'];
 
-    if (STOCK_CHECK == 'true') {
+    if (STOCK_CHECK == '1') {
       echo tep_check_stock($order->products[$i]['id'], $order->products[$i]['qty']);
     }
 

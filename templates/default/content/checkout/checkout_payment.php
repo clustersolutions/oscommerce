@@ -24,7 +24,7 @@
 <form name="checkout_payment" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'); ?>" method="post" onsubmit="return check_form();">
 
 <?php
-  if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true') {
+  if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
 ?>
 
 <div class="moduleBox">
@@ -102,13 +102,13 @@
 ?>
 
             <td class="main" colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_mod_sel', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
+            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
 
 <?php
     } else {
 ?>
 
-            <td class="main" colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_mod_sel', $selection[$i]['id']); ?></td>
+            <td class="main" colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
 
 <?php
   }

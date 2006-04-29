@@ -1,3 +1,5 @@
+/* tep_cfg_display_boolean */
+
 # $Id$
 #
 # osCommerce, Open Source E-Commerce Solutions
@@ -151,12 +153,12 @@ CREATE TABLE osc_countries (
 
 DROP TABLE IF EXISTS osc_credit_cards;
 CREATE TABLE osc_credit_cards (
-  credit_card_id int(11) NOT NULL auto_increment,
-  credit_card_code varchar(4) NOT NULL default '',
-  credit_card_name varchar(32) NOT NULL default '',
-  credit_card_status char(1) NOT NULL default '',
-  sort_order int(1) NOT NULL default '0',
-  PRIMARY KEY  (credit_card_id)
+  id int NOT NULL auto_increment,
+  credit_card_name varchar(32) NOT NULL,
+  pattern varchar(64) NOT NULL,
+  credit_card_status char(1) NOT NULL,
+  sort_order int default '0',
+  PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS osc_currencies;
@@ -331,7 +333,8 @@ CREATE TABLE osc_orders (
   billing_state varchar(32),
   billing_country varchar(32) NOT NULL,
   billing_address_format_id int(5) NOT NULL,
-  payment_method varchar(32) NOT NULL,
+  payment_method varchar(255) NOT NULL,
+  payment_module varchar(255) NOT NULL,
   cc_type varchar(20),
   cc_owner varchar(64),
   cc_number varchar(32),
@@ -413,6 +416,27 @@ CREATE TABLE osc_orders_total (
   sort_order int NOT NULL,
   PRIMARY KEY (orders_total_id),
   KEY idx_orders_total_orders_id (orders_id)
+);
+
+DROP TABLE IF EXISTS osc_orders_transactions_history;
+CREATE TABLE osc_orders_transactions_history (
+  id int unsigned not null auto_increment,
+  orders_id int unsigned not null,
+  transaction_code int not null,
+  transaction_return_value text not null,
+  transaction_return_status int not null,
+  date_added datetime,
+  PRIMARY KEY (id),
+  KEY idx_orders_transactions_history_orders_id (orders_id)
+);
+
+DROP TABLE IF EXISTS osc_orders_transactions_status;
+CREATE TABLE osc_orders_transactions_status (
+   id int unsigned NOT NULL,
+   language_id int unsigned NOT NULL,
+   status_name varchar(32) NOT NULL,
+   PRIMARY KEY (id, language_id),
+   KEY idx_orders_transactions_status_name (status_name)
 );
 
 DROP TABLE IF EXISTS osc_products;
@@ -686,12 +710,12 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Expected Sort Order', 'EXPECTED_PRODUCTS_SORT', 'desc', 'This is the sort order used in the expected products box.', '1', '8', 'tep_cfg_select_option(array(\'asc\', \'desc\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Expected Sort Field', 'EXPECTED_PRODUCTS_FIELD', 'date_expected', 'The column to sort by in the expected products box.', '1', '9', 'tep_cfg_select_option(array(\'products_name\', \'date_expected\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Send Extra Order Emails To', 'SEND_EXTRA_ORDER_EMAILS_TO', '', 'Send extra order emails to the following email addresses, in this format: Name 1 &lt;email@address1&gt;, Name 2 &lt;email@address2&gt;', '1', '11', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Cart After Adding Product', 'DISPLAY_CART', 'true', 'Display the shopping cart after adding a product (or return back to their origin)', '1', '14', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Allow Guest To Tell A Friend', 'ALLOW_GUEST_TO_TELL_A_FRIEND', 'false', 'Allow guests to tell a friend about a product', '1', '15', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display Cart After Adding Product', 'DISPLAY_CART', '1', 'Display the shopping cart after adding a product (or return back to their origin)', '1', '14', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Allow Guest To Tell A Friend', 'ALLOW_GUEST_TO_TELL_A_FRIEND', '-1', 'Allow guests to tell a friend about a product', '1', '15', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Default Search Operator', 'ADVANCED_SEARCH_DEFAULT_OPERATOR', 'and', 'Default search operators', '1', '17', 'tep_cfg_select_option(array(\'and\', \'or\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Store Address and Phone', 'STORE_NAME_ADDRESS', 'Store Name\nAddress\nCountry\nPhone', 'This is the Store Name, Address and Phone used on printable documents and displayed online', '1', '18', 'tep_cfg_textarea(', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Tax Decimal Places', 'TAX_DECIMAL_PLACES', '0', 'Pad the tax value this amount of decimal places', '1', '20', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Prices with Tax', 'DISPLAY_PRICE_WITH_TAX', 'false', 'Display prices with tax included (true) or add the tax at the end (false)', '1', '21', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display Prices with Tax', 'DISPLAY_PRICE_WITH_TAX', '-1', 'Display prices with tax included (true) or add the tax at the end (false)', '1', '21', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Credit Card Owner Name', 'CC_OWNER_MIN_LENGTH', '3', 'Minimum length of credit card owner name', '2', '12', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Credit Card Number', 'CC_NUMBER_MIN_LENGTH', '10', 'Minimum length of credit card number', '2', '13', now());
@@ -711,25 +735,25 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Heading Image Height', 'HEADING_IMAGE_HEIGHT', '40', 'The pixel height of heading images', '4', '4', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Subcategory Image Width', 'SUBCATEGORY_IMAGE_WIDTH', '100', 'The pixel width of subcategory images', '4', '5', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Subcategory Image Height', 'SUBCATEGORY_IMAGE_HEIGHT', '57', 'The pixel height of subcategory images', '4', '6', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Calculate Image Size', 'CONFIG_CALCULATE_IMAGE_SIZE', 'true', 'Calculate the size of images?', '4', '7', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Image Required', 'IMAGE_REQUIRED', 'true', 'Enable to display broken images. Good for development.', '4', '8', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Calculate Image Size', 'CONFIG_CALCULATE_IMAGE_SIZE', '1', 'Calculate the size of images?', '4', '7', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Image Required', 'IMAGE_REQUIRED', '1', 'Enable to display broken images. Good for development.', '4', '8', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Gender', 'ACCOUNT_GENDER', '1', 'Ask for or require the customers gender.', '5', '10', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Gender', 'ACCOUNT_GENDER', '1', 'Ask for or require the customers gender.', '5', '10', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, 0, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('First Name', 'ACCOUNT_FIRST_NAME', '2', 'Minimum requirement for the customers first name.', '5', '11', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Last Name', 'ACCOUNT_LAST_NAME', '2', 'Minimum requirement for the customers last name.', '5', '12', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Date Of Birth', 'ACCOUNT_DATE_OF_BIRTH', '0', 'Ask for the customers date of birth.', '5', '13', 'tep_cfg_display_boolean', 'tep_cfg_select_option(array(\'-1\', \'0\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Date Of Birth', 'ACCOUNT_DATE_OF_BIRTH', '1', 'Ask for the customers date of birth.', '5', '13', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('E-Mail Address', 'ACCOUNT_EMAIL_ADDRESS', '6', 'Minimum requirement for the customers e-mail address.', '5', '14', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Password', 'ACCOUNT_PASSWORD', '5', 'Minimum requirement for the customers password.', '5', '15', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Newsletter', 'ACCOUNT_NEWSLETTER', '0', 'Ask for a newsletter subscription.', '5', '16', 'tep_cfg_display_boolean', 'tep_cfg_select_option(array(\'-1\', \'0\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Company Name', 'ACCOUNT_COMPANY', '0', 'Ask for or require the customers company name.', '5', '17', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Newsletter', 'ACCOUNT_NEWSLETTER', '1', 'Ask for a newsletter subscription.', '5', '16', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Company Name', 'ACCOUNT_COMPANY', '0', 'Ask for or require the customers company name.', '5', '17', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(\'10\', \'9\', \'8\', \'7\', \'6\', \'5\', \'4\', \'3\', \'2\', \'1\', 0, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Street Address', 'ACCOUNT_STREET_ADDRESS', '5', 'Minimum requirement for the customers street address.', '5', '18', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Suburb', 'ACCOUNT_SUBURB', '0', 'Ask for or require the customers suburb.', '5', '19', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Suburb', 'ACCOUNT_SUBURB', '0', 'Ask for or require the customers suburb.', '5', '19', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(\'10\', \'9\', \'8\', \'7\', \'6\', \'5\', \'4\', \'3\', \'2\', \'1\', 0, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Post Code', 'ACCOUNT_POST_CODE', '4', 'Minimum requirement for the customers post code.', '5', '20', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('City', 'ACCOUNT_CITY', '4', 'Minimum requirement for the customers city.', '5', '21', 'tep_cfg_select_option(array(\'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('State', 'ACCOUNT_STATE', '2', 'Ask for or require the customers state.', '5', '22', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country', 'ACCOUNT_COUNTRY', '0', 'Ask for the customers country.', '5', '23', 'tep_cfg_display_boolean', 'tep_cfg_select_option(array(\'0\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Telephone Number', 'ACCOUNT_TELEPHONE', '3', 'Ask for or require the customers telephone number.', '5', '24', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Fax Number', 'ACCOUNT_FAX', '0', 'Ask for or require the customers fax number.', '5', '25', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\', \'10\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('State', 'ACCOUNT_STATE', '2', 'Ask for or require the customers state.', '5', '22', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(\'10\', \'9\', \'8\', \'7\', \'6\', \'5\', \'4\', \'3\', \'2\', \'1\', 0, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country', 'ACCOUNT_COUNTRY', '1', 'Ask for the customers country.', '5', '23', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Telephone Number', 'ACCOUNT_TELEPHONE', '3', 'Ask for or require the customers telephone number.', '5', '24', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(\'10\', \'9\', \'8\', \'7\', \'6\', \'5\', \'4\', \'3\', \'2\', \'1\', 0, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Fax Number', 'ACCOUNT_FAX', '0', 'Ask for or require the customers fax number.', '5', '25', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(\'10\', \'9\', \'8\', \'7\', \'6\', \'5\', \'4\', \'3\', \'2\', \'1\', 0, -1), ', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Currency', 'DEFAULT_CURRENCY', 'USD', 'Default Currency', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Language', 'DEFAULT_LANGUAGE', 'en_US', 'Default Language', '6', '0', now());
@@ -754,61 +778,28 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Display Category/Manufacturer Filter (0=disable; 1=enable)', 'PRODUCT_LIST_FILTER', '1', 'Do you want to display the Category/Manufacturer Filter?', '8', '9', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Location of Prev/Next Navigation Bar (1-top, 2-bottom, 3-both)', 'PREV_NEXT_BAR_LOCATION', '2', 'Sets the location of the Prev/Next Navigation Bar (1-top, 2-bottom, 3-both)', '8', '10', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check stock level', 'STOCK_CHECK', 'true', 'Check to see if sufficent stock is available', '9', '1', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Subtract stock', 'STOCK_LIMITED', 'true', 'Subtract product in stock by product orders', '9', '2', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Allow Checkout', 'STOCK_ALLOW_CHECKOUT', 'true', 'Allow customer to checkout even if there is insufficient stock', '9', '3', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check stock level', 'STOCK_CHECK', '1', 'Check to see if sufficent stock is available', '9', '1', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Subtract stock', 'STOCK_LIMITED', '1', 'Subtract product in stock by product orders', '9', '2', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Allow Checkout', 'STOCK_ALLOW_CHECKOUT', '1', 'Allow customer to checkout even if there is insufficient stock', '9', '3', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Mark product out of stock', 'STOCK_MARK_PRODUCT_OUT_OF_STOCK', '***', 'Display something on screen so customer can see which product has insufficient stock', '9', '4', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Stock Re-order level', 'STOCK_REORDER_LEVEL', '5', 'Define when stock needs to be re-ordered', '9', '5', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('E-Mail Transport Method', 'EMAIL_TRANSPORT', 'sendmail', 'Defines if this server uses a local connection to sendmail or uses an SMTP connection via TCP/IP. Servers running on Windows and MacOS should change this setting to SMTP.', '12', '1', 'tep_cfg_select_option(array(\'sendmail\', \'smtp\'),', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('E-Mail Linefeeds', 'EMAIL_LINEFEED', 'LF', 'Defines the character sequence used to separate mail headers.', '12', '2', 'tep_cfg_select_option(array(\'LF\', \'CRLF\'),', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Use MIME HTML When Sending Emails', 'EMAIL_USE_HTML', 'false', 'Send e-mails in HTML format', '12', '3', 'tep_cfg_select_option(array(\'true\', \'false\'),', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Verify E-Mail Addresses Through DNS', 'ENTRY_EMAIL_ADDRESS_CHECK', 'false', 'Verify e-mail address through a DNS server', '12', '4', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Send E-Mails', 'SEND_EMAILS', 'true', 'Send out e-mails', '12', '5', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Use MIME HTML When Sending Emails', 'EMAIL_USE_HTML', '-1', 'Send e-mails in HTML format', '12', '3', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1),', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Verify E-Mail Addresses Through DNS', 'ENTRY_EMAIL_ADDRESS_CHECK', '-1', 'Verify e-mail address through a DNS server', '12', '4', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Send E-Mails', 'SEND_EMAILS', '1', 'Send out e-mails', '12', '5', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Enable download', 'DOWNLOAD_ENABLED', 'false', 'Enable the products download functions.', '13', '1', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Download by redirect', 'DOWNLOAD_BY_REDIRECT', 'false', 'Use browser redirection for download. Disable on non-Unix systems.', '13', '2', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Enable download', 'DOWNLOAD_ENABLED', '-1', 'Enable the products download functions.', '13', '1', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Download by redirect', 'DOWNLOAD_BY_REDIRECT', '-1', 'Use browser redirection for download. Disable on non-Unix systems.', '13', '2', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Expiry delay (days)' ,'DOWNLOAD_MAX_DAYS', '7', 'Set number of days before the download link expires. 0 means no limit.', '13', '3', '', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Maximum number of downloads' ,'DOWNLOAD_MAX_COUNT', '5', 'Set the maximum number of downloads. 0 means no download authorized.', '13', '4', '', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Confirm Terms and Conditions During Checkout Procedure', 'DISPLAY_CONDITIONS_ON_CHECKOUT', 'false', 'Show the Terms and Conditions during the checkout procedure which the customer must agree to.', '16', '1', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Confirm Privacy Notice During Account Creation Procedure', 'DISPLAY_PRIVACY_CONDITIONS', 'false', 'Show the Privacy Notice during the account creation procedure which the customer must agree to.', '16', '2', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Confirm Terms and Conditions During Checkout Procedure', 'DISPLAY_CONDITIONS_ON_CHECKOUT', '-1', 'Show the Terms and Conditions during the checkout procedure which the customer must agree to.', '16', '1', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Confirm Privacy Notice During Account Creation Procedure', 'DISPLAY_PRIVACY_CONDITIONS', '-1', 'Show the Privacy Notice during the account creation procedure which the customer must agree to.', '16', '2', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Service Modules', 'MODULE_SERVICES_INSTALLED',  'output_compression;session;language;currencies;core;simple_counter;category_path;breadcrumb;whos_online;banner;specials;debug;reviews;recently_visited', 'Installed services modules', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Calculate Number Of Products In Each Category', 'SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT', '1', 'Recursively calculate how many products are in each category.', '6', '0', 'tep_cfg_select_option(array(\'1\', \'0\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Use Default Language Currency', 'USE_DEFAULT_LANGUAGE_CURRENCY', 'false', 'Automatically use the currency set with the language (eg, German->Euro).', '6', '0', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Page Execution Time Log File', 'SERVICE_DEBUG_EXECUTION_TIME_LOG', '', 'Location of the page execution time log file (eg, /www/log/page_parse.log).', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Show The Page Execution Time', 'SERVICE_DEBUG_EXECUTION_DISPLAY', 'True', 'Show the page execution time.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Log Database Queries', 'SERVICE_DEBUG_LOG_DB_QUERIES', 'False', 'Log all database queries in the page execution time log file.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Show Development Version Warning', 'SERVICE_DEBUG_SHOW_DEVELOPMENT_WARNING', 'True', 'Show an osCommerce development version warning message.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Check Language Locale', 'SERVICE_DEBUG_CHECK_LOCALE', 'True', 'Show a warning message if the set language locale does not exist on the server.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check Installation Module', 'SERVICE_DEBUG_CHECK_INSTALLATION_MODULE', 'True', 'Show a warning message if the installation module exists.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check Configuration File', 'SERVICE_DEBUG_CHECK_CONFIGURATION', 'True', 'Show a warning if the configuration file is writeable.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check Sessions Directory', 'SERVICE_DEBUG_CHECK_SESSION_DIRECTORY', 'True', 'Show a warning if the file-based session directory does not exist.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check Sessions Auto Start', 'SERVICE_DEBUG_CHECK_SESSION_AUTOSTART', 'True', 'Show a warning if PHP is configured to automatically start sessions.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check Download Directory', 'SERVICE_DEBUG_CHECK_DOWNLOAD_DIRECTORY', 'True', 'Show a warning if the digital product download directory does not exist.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('GZIP Compression Level', 'SERVICE_OUTPUT_COMPRESSION_GZIP_LEVEL', '5', 'Set the GZIP compression level to this value (0=min, 9=max).', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\', \'7\', \'8\', \'9\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Force Cookie Usage', 'SERVICE_SESSION_FORCE_COOKIE_USAGE', 'False', 'Only start a session when cookies are enabled.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Block Search Engine Spiders', 'SERVICE_SESSION_BLOCK_SPIDERS', 'False', 'Block search engine spider robots from starting a session.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check SSL Session ID', 'SERVICE_SESSION_CHECK_SSL_SESSION_ID', 'False', 'Check the SSL_SESSION_ID on every secure HTTPS page request.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check User Agent', 'SERVICE_SESSION_CHECK_USER_AGENT', 'False', 'Check the browser user agent on every page request.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Check IP Address', 'SERVICE_SESSION_CHECK_IP_ADDRESS', 'False', 'Check the IP address on every page request.', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Regenerate Session ID', 'SERVICE_SESSION_REGENERATE_ID', 'False', 'Regenerate the session ID when a customer logs on or creates an account (requires PHP >= 4.1).', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Detect Search Engine Spider Robots', 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION', 'True', 'Detect search engine spider robots (GoogleBot, Yahoo, etc).', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('New Reviews', 'MAX_DISPLAY_NEW_REVIEWS', '6', 'Maximum number of new reviews to display', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Review Level', 'SERVICE_REVIEW_ENABLE_REVIEWS', '1', 'Customer level required to write a review.', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\', \'2\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Moderate Reviews', 'SERVICE_REVIEW_ENABLE_MODERATION', '-1', 'Should reviews be approved by store admin.', '6', '0', 'tep_cfg_select_option(array(\'-1\', \'0\', \'1\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Special Products', 'MAX_DISPLAY_SPECIAL_PRODUCTS', '9', 'Maximum number of products on special to display', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display Duplicate Banners', 'SERVICE_BANNER_SHOW_DUPLICATE', 'False', 'Show duplicate banners in the same banner group on the same page?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest products', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS', 'True', 'Display recently visited products.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display product images', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES', 'True', 'Display the product image.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display product prices', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES', 'True', 'Display the products price.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum products to show', 'SERVICE_RECENTLY_VISITED_MAX_PRODUCTS', '5', 'Maximum number of recently visited products to show', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest categories', 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES', 'True', 'Display recently visited categories.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display category images', 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORY_IMAGES', 'True', 'Display the category image.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum categories to show', 'SERVICE_RECENTLY_VISITED_MAX_CATEGORIES', '3', 'Mazimum number of recently visited categories to show', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Display latest searches', 'SERVICE_RECENTLY_VISITED_SHOW_SEARCHES', 'True', 'Show recent searches.', '6', '0', 'tep_cfg_select_option(array(\'False\', \'True\'), ', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Maximum searches to show', 'SERVICE_RECENTLY_VISITED_MAX_SEARCHES', '3', 'Mazimum number of recent searches to display', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Verify With Regular Expressions', 'CFG_CREDIT_CARDS_VERIFY_WITH_REGEXP', '1', 'Verify credit card numbers with server-side regular expression patterns.', '17', '0', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Verify With Javascript', 'CFG_CREDIT_CARDS_VERIFY_WITH_JS', '1', 'Verify credit card numbers with javascript based regular expression patterns.', '17', '1', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
 INSERT INTO osc_configuration_group VALUES ('1', 'My Store', 'General information about my store', '1', '1');
 INSERT INTO osc_configuration_group VALUES ('2', 'Minimum Values', 'The minimum values for functions / data', '2', '1');
@@ -822,6 +813,7 @@ INSERT INTO osc_configuration_group VALUES ('9', 'Stock', 'Stock configuration o
 INSERT INTO osc_configuration_group VALUES ('12', 'E-Mail Options', 'General setting for E-Mail transport and HTML E-Mails', '12', '1');
 INSERT INTO osc_configuration_group VALUES ('13', 'Download', 'Downloadable products options', '13', '1');
 INSERT INTO osc_configuration_group VALUES ('16', 'Regulations', 'Regulation options', '16', '1');
+INSERT INTO osc_configuration_group VALUES ('17', 'Credit Cards', 'Credit card options', '17', '1');
 
 INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG','1');
 INSERT INTO osc_countries VALUES (2,'Albania','AL','ALB','1');
@@ -1063,23 +1055,36 @@ INSERT INTO osc_countries VALUES (237,'Zaire','ZR','ZAR','1');
 INSERT INTO osc_countries VALUES (238,'Zambia','ZM','ZMB','1');
 INSERT INTO osc_countries VALUES (239,'Zimbabwe','ZW','ZWE','1');
 
-INSERT INTO osc_credit_cards VALUES (1,'AMEX','American Express','1','1');
-INSERT INTO osc_credit_cards VALUES (2,'DINR','Diners Club','1','2');
-INSERT INTO osc_credit_cards VALUES (3,'JCB','JCB','1','3');
-INSERT INTO osc_credit_cards VALUES (4,'MC','Mastercard','1','4');
-INSERT INTO osc_credit_cards VALUES (5,'VISA','Visa','1','5');
-INSERT INTO osc_credit_cards VALUES (6,'SOLO','Solo','1','6');
-INSERT INTO osc_credit_cards VALUES (7,'SWIT','Switch','1','7');
+# Regular expression patterns from http://www.creditcardcode.net
+INSERT INTO osc_credit_cards VALUES (1,'American Express','/^(34|37)\\d{13}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (2,'Diners Club','/^(30|36|38)\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (3,'JCB','/^((2131|1800)\\d{11}|3[0135]\\d{14})$/','0','0');
+INSERT INTO osc_credit_cards VALUES (4,'MasterCard','/^5[1-5]\\d{14}$/','1','0');
+INSERT INTO osc_credit_cards VALUES (5,'Visa','/^4\\d{12}(\\d{3})?$/','1','0');
+INSERT INTO osc_credit_cards VALUES (6,'Discover Card','/^6011\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (7,'Solo','/^(63|67)\\d{14}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (8,'Switch','/^(49|56|63|67)\\d{14}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (9,'Australian Bankcard','/^5610\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (10,'enRoute','/^(2014|2149)\\d{11}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (11,'Laser','/^6304\\d{12}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (12,'Maestro','/^(50|56|57|58|6)/','0','0');
+INSERT INTO osc_credit_cards VALUES (13,'Saferpay Test Card','/^9451123100000004$/','0','0');
 
 INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now());
 INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.2076', now());
-INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','£','','2','1.7587', now());
+INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','Â£','','2','1.7587', now());
 
 INSERT INTO osc_languages VALUES (1,'English','en_US','en_US,en_US.ISO8859-15,english','iso-8859-15','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
 INSERT INTO osc_orders_status VALUES ( '2', '1', 'Processing');
 INSERT INTO osc_orders_status VALUES ( '3', '1', 'Delivered');
+INSERT INTO osc_orders_status VALUES ( '4', '1', 'Preparing');
+
+INSERT INTO osc_orders_transactions_status VALUES ( '1', '1', 'Authorize');
+INSERT INTO osc_orders_transactions_status VALUES ( '2', '1', 'Cancel');
+INSERT INTO osc_orders_transactions_status VALUES ( '3', '1', 'Approve');
+INSERT INTO osc_orders_transactions_status VALUES ( '4', '1', 'Inquiry');
 
 INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
 
@@ -1136,7 +1141,7 @@ INSERT INTO osc_templates_boxes_to_pages VALUES (20,19,1,'products/info','after'
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Minimum List Size', 'BOX_BEST_SELLERS_MIN_LIST', '3', 'Minimum amount of products that must be shown in the listing', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_BEST_SELLERS_MAX_LIST', '10', 'Maximum amount of products to show in the listing', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Cache Contents', 'BOX_BEST_SELLERS_CACHE', '60', 'Number of minutes to keep the contents cached (0 = no cache)', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Show Product Count', 'BOX_CATEGORIES_SHOW_PRODUCT_COUNT', '1', 'Show the amount of products each category has', '6', '0', 'tep_cfg_select_option(array(\'0\', \'1\'), ', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Show Product Count', 'BOX_CATEGORIES_SHOW_PRODUCT_COUNT', '1', 'Show the amount of products each category has', '6', '0', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Manufacturers List Size', 'BOX_MANUFACTURERS_LIST_SIZE', '1', 'The size of the manufacturers pull down menu listing.', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_ORDER_HISTORY_MAX_LIST', '5', 'Maximum amount of products to show in the listing', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Random Review Selection', 'BOX_REVIEWS_RANDOM_SELECT', '10', 'Select a random review from this amount of the newest reviews available', '6', '0', now());
@@ -1255,7 +1260,7 @@ INSERT INTO osc_zones VALUES (78,38,'YT','Yukon Territory');
 
 # Germany
 INSERT INTO osc_zones VALUES (79,81,'NDS','Niedersachsen');
-INSERT INTO osc_zones VALUES (80,81,'BAW','Baden-Württemberg');
+INSERT INTO osc_zones VALUES (80,81,'BAW','Baden-WÃ¼rttemberg');
 INSERT INTO osc_zones VALUES (81,81,'BAY','Bayern');
 INSERT INTO osc_zones VALUES (82,81,'BER','Berlin');
 INSERT INTO osc_zones VALUES (83,81,'BRG','Brandenburg');
@@ -1269,14 +1274,14 @@ INSERT INTO osc_zones VALUES (90,81,'SAR','Saarland');
 INSERT INTO osc_zones VALUES (91,81,'SAS','Sachsen');
 INSERT INTO osc_zones VALUES (92,81,'SAC','Sachsen-Anhalt');
 INSERT INTO osc_zones VALUES (93,81,'SCN','Schleswig-Holstein');
-INSERT INTO osc_zones VALUES (94,81,'THE','Thüringen');
+INSERT INTO osc_zones VALUES (94,81,'THE','ThÃ¼ringen');
 
 # Austria
 INSERT INTO osc_zones VALUES (95,14,'WI','Wien');
-INSERT INTO osc_zones VALUES (96,14,'NO','Niederösterreich');
-INSERT INTO osc_zones VALUES (97,14,'OO','Oberösterreich');
+INSERT INTO osc_zones VALUES (96,14,'NO','NiederÃ¶sterreich');
+INSERT INTO osc_zones VALUES (97,14,'OO','OberÃ¶sterreich');
 INSERT INTO osc_zones VALUES (98,14,'SB','Salzburg');
-INSERT INTO osc_zones VALUES (99,14,'KN','Kärnten');
+INSERT INTO osc_zones VALUES (99,14,'KN','KÃ¤rnten');
 INSERT INTO osc_zones VALUES (100,14,'ST','Steiermark');
 INSERT INTO osc_zones VALUES (101,14,'TI','Tirol');
 INSERT INTO osc_zones VALUES (102,14,'BL','Burgenland');
@@ -1292,7 +1297,7 @@ INSERT INTO osc_zones VALUES (109,204,'BS','Basel-Stadt');
 INSERT INTO osc_zones VALUES (110,204,'FR','Freiburg');
 INSERT INTO osc_zones VALUES (111,204,'GE','Genf');
 INSERT INTO osc_zones VALUES (112,204,'GL','Glarus');
-INSERT INTO osc_zones VALUES (113,204,'JU','Graubünden');
+INSERT INTO osc_zones VALUES (113,204,'JU','GraubÃ¼nden');
 INSERT INTO osc_zones VALUES (114,204,'JU','Jura');
 INSERT INTO osc_zones VALUES (115,204,'LU','Luzern');
 INSERT INTO osc_zones VALUES (116,204,'NE','Neuenburg');
@@ -1308,10 +1313,10 @@ INSERT INTO osc_zones VALUES (125,204,'UR','Uri');
 INSERT INTO osc_zones VALUES (126,204,'VD','Waadt');
 INSERT INTO osc_zones VALUES (127,204,'VS','Wallis');
 INSERT INTO osc_zones VALUES (128,204,'ZG','Zug');
-INSERT INTO osc_zones VALUES (129,204,'ZH','Zürich');
+INSERT INTO osc_zones VALUES (129,204,'ZH','ZÃ¼rich');
 
 # Spain
-INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (195,'A Coruña','A Coruña');
+INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (195,'A CoruÃ±a','A CoruÃ±a');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (195,'Alava','Alava');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (195,'Albacete','Albacete');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (195,'Alicante','Alicante');

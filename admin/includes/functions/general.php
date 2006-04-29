@@ -555,12 +555,21 @@
 
     for ($i=0, $n=sizeof($select_array); $i<$n; $i++) {
       $name = ((tep_not_null($key)) ? 'configuration[' . $key . ']' : 'configuration_value');
+      $value = $select_array[$i];
+
+      if ($value === -1) {
+        $value = TEXT_FALSE;
+      } elseif ($value === 0) {
+        $value = TEXT_OPTIONAL;
+      } elseif ($value === 1) {
+        $value = TEXT_TRUE;
+      }
 
       $string .= '<br /><input type="radio" name="' . $name . '" value="' . $select_array[$i] . '"';
 
       if ($key_value == $select_array[$i]) $string .= ' checked="checked"';
 
-      $string .= '> ' . $select_array[$i];
+      $string .= '> ' . $value;
     }
 
     return $string;
@@ -1088,14 +1097,14 @@
   }
 
   function tep_mail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
-    if (SEND_EMAILS != 'true') return false;
+    if (SEND_EMAILS == '-1') return false;
 
     // Instantiate a new mail object
     $message = new email(array('X-Mailer: osCommerce'));
 
     // Build the text version
     $text = strip_tags($email_text);
-    if (EMAIL_USE_HTML == 'true') {
+    if (EMAIL_USE_HTML == '1') {
       $message->add_html($email_text, $text);
     } else {
       $message->add_text($text);
@@ -1156,7 +1165,7 @@
   function tep_add_tax($price, $tax) {
     global $osC_Currencies;
 
-    if (DISPLAY_PRICE_WITH_TAX == 'true') {
+    if (DISPLAY_PRICE_WITH_TAX == '1') {
       return tep_round($price, $osC_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']) + tep_calculate_tax($price, $tax);
     } else {
       return tep_round($price, $osC_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -1284,6 +1293,23 @@
     }
 
     return tep_draw_pull_down_menu($name, $statuses_array, $order_status_id);
+  }
+
+  function tep_cfg_checkboxes_credit_cards($selected, $key) {
+    global $osC_Database;
+
+    $cc_array = array();
+
+    $Qcc = $osC_Database->query('select id, credit_card_name from :table_credit_cards where credit_card_status = "1" order by sort_order, credit_card_name');
+    $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+    $Qcc->execute();
+
+    while ($Qcc->next()) {
+      $cc_array[] = array('id' => $Qcc->valueInt('id'),
+                          'text' => $Qcc->value('credit_card_name'));
+    }
+
+    return osc_draw_checkbox_field('configuration[' . $key . '][]', $cc_array, explode(',', $selected), '', false, '<br />');
   }
 
   function tep_get_order_status_name($order_status_id, $language_id = '') {
@@ -1487,5 +1513,44 @@
     }
 
     return $array;
+  }
+
+  function osc_empty($value) {
+    if (is_array($value)) {
+      if (sizeof($value) > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if ((strtolower($value) != 'null') && (strlen(trim($value)) > 0)) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  }
+
+  function osc_cfg_get_boolean_value($string) {
+    switch ($string) {
+      case -1:
+      case '-1':
+        return TEXT_FALSE;
+        break;
+
+      case 0:
+      case '0':
+        return TEXT_OPTIONAL;
+        break;
+
+      case 1:
+      case '1':
+        return TEXT_TRUE;
+        break;
+
+      default:
+        return $string;
+        break;
+    }
   }
 ?>

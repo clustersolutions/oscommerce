@@ -52,6 +52,7 @@ define('ENTRY_SHIPPING', 'Shipping:');
 define('ENTRY_TOTAL', 'Total:');
 define('ENTRY_DATE_PURCHASED', 'Date Purchased:');
 define('ENTRY_STATUS', 'Status:');
+define('ENTRY_POST_TRANSACTION_ACTIONS', 'Post Transaction Actions:');
 define('ENTRY_DATE_LAST_UPDATED', 'Date Last Updated:');
 define('ENTRY_NOTIFY_CUSTOMER', 'Notify Customer:');
 define('ENTRY_NOTIFY_COMMENTS', 'Append Comments:');

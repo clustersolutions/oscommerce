@@ -71,7 +71,7 @@
       }
     }
 
-    function javascript_validation() {
+    function getJavascriptBlock() {
       global $osC_Language;
 
       $js = '  if (payment_value == "' . $this->_code . '") {' . "\n" .

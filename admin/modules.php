@@ -37,7 +37,7 @@
         $module_type = 'payment';
         $module_class = 'osC_Payment_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_PAYMENT);
-        include('../includes/classes/payment.php');
+        include('includes/classes/payment.php');
         break;
     }
   }
@@ -55,7 +55,7 @@
           foreach ($_POST['configuration'] as $key => $value) {
             $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
             $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-            $Qupdate->bindValue(':configuration_value', $value);
+            $Qupdate->bindValue(':configuration_value', is_array($_POST['configuration'][$key]) ? implode(',', $_POST['configuration'][$key]) : $value);
             $Qupdate->bindValue(':configuration_key', $key);
             $Qupdate->execute();
 
@@ -78,9 +78,9 @@
         break;
       case 'install':
       case 'remove':
-        if (file_exists('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension)) {
+        if (file_exists('includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension)) {
           $osC_Language->injectDefinitions('modules/' . $module_type . '/' .$_GET['module'] . '.xml');
-          include('../includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension);
+          include('includes/modules/' . $module_type . '/' . $_GET['module'] . $file_extension);
           $module = $module_class . $_GET['module'];
           $module = new $module();
           if ($action == 'install') {

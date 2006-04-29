@@ -42,7 +42,7 @@
           $error = true;
         }
 
-        if (ACCOUNT_DATE_OF_BIRTH > -1) {
+        if (ACCOUNT_DATE_OF_BIRTH == '1') {
           if (isset($_POST['dob_days']) && isset($_POST['dob_months']) && isset($_POST['dob_years']) && checkdate($_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years'])) {
             $dob = adodb_mktime(0, 0, 0, $_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years']);
           } else {
@@ -214,7 +214,7 @@
           $Qcustomer->bindValue(':customers_firstname', $_POST['firstname']);
           $Qcustomer->bindValue(':customers_lastname', $_POST['lastname']);
           $Qcustomer->bindValue(':customers_email_address', $_POST['email_address']);
-          $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH > -1) ? adodb_date('Ymd', $dob) : ''));
+          $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH == '1') ? adodb_date('Ymd', $dob) : ''));
           $Qcustomer->bindInt(':customers_newsletter', (isset($_POST['newsletter']) && ($_POST['newsletter'] == 'on') ? '1' : '0'));
           $Qcustomer->bindInt(':customers_status', (isset($_POST['status']) && ($_POST['status'] == 'on') ? '1' : '0'));
           $Qcustomer->execute();

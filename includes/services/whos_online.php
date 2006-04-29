@@ -14,7 +14,7 @@
     var $title = 'Who\'s Online',
         $description = 'See who is currently online.',
         $uninstallable = true,
-        $depends = 'session',
+        $depends = array('session', 'core'),
         $precedes;
 
     function start() {
@@ -27,7 +27,7 @@
         $wo_customer_id = '';
         $wo_full_name = 'Guest';
 
-        if (SERVICE_WHOS_ONLINE_SPIDER_DETECTION == 'True') {
+        if (SERVICE_WHOS_ONLINE_SPIDER_DETECTION == '1') {
           $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 
           if (tep_not_null($user_agent)) {
@@ -98,7 +98,7 @@
     function install() {
       global $osC_Database;
 
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Detect Search Engine Spider Robots', 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION', 'True', 'Detect search engine spider robots (GoogleBot, Yahoo, etc).', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
+      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Detect Search Engine Spider Robots', 'SERVICE_WHOS_ONLINE_SPIDER_DETECTION', '1', 'Detect search engine spider robots (GoogleBot, Yahoo, etc).', '6', '0', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now())");
     }
 
     function remove() {

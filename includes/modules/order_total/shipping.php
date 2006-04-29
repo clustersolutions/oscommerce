@@ -44,7 +44,7 @@
           $osC_ShoppingCart->addTaxAmount(tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
           $osC_ShoppingCart->addTaxGroup($tax_description, tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
 
-          if (DISPLAY_PRICE_WITH_TAX == 'true') {
+          if (DISPLAY_PRICE_WITH_TAX == '1') {
             $osC_ShoppingCart->addToTotal(tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
             $osC_ShoppingCart->_shipping_method['cost'] += tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax);
           }

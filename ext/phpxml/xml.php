@@ -35,7 +35,7 @@ function & XML_serialize(&$data, $encoding, $level = 0, $prior_key = NULL){
 	  }
 	  echo '?>',"\n";
 	}
-	while(list($key, $value) = each($data)) {
+	foreach ($data as $key => $value) {
     $is_cdata = false;
 		if(!strpos($key, ' attr')) #if it's not an attribute
 			#we don't treat attributes by themselves, so for an empty element
@@ -99,9 +99,10 @@ class XML{
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
-		xml_parse(&$this->parser, &$data, true);
-		$this->document = array_shift($this->document);
-		return $this->document;
+//		xml_parse(&$this->parser, &$data, true);
+//		$this->document = array_shift($this->document);
+//		return $this->document;
+		return xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
 	}
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata

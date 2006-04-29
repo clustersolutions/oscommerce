@@ -11,5 +11,10 @@
       <value><![CDATA[Cash on Delivery]]></value>
       <group>modules-payment</group>
     </definition>
+    <definition>
+      <key>payment_cod_method_title</key>
+      <value><![CDATA[Cash on Delivery]]></value>
+      <group>modules-payment</group>
+    </definition>
   </definitions>
 </language>

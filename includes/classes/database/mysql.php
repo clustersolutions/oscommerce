@@ -95,11 +95,11 @@
         }
 
         if (isset($osC_Services) && $osC_Services->isStarted('debug')) {
-          if ( ($debug === false) && (SERVICE_DEBUG_OUTPUT_DB_QUERIES == 'True') ) {
+          if ( ($debug === false) && (SERVICE_DEBUG_OUTPUT_DB_QUERIES == '1') ) {
             $debug = true;
           }
 
-          if (tep_not_null(SERVICE_DEBUG_EXECUTION_TIME_LOG) && (SERVICE_DEBUG_LOG_DB_QUERIES == 'True')) {
+          if (tep_not_null(SERVICE_DEBUG_EXECUTION_TIME_LOG) && (SERVICE_DEBUG_LOG_DB_QUERIES == '1')) {
             @error_log('QUERY ' . $query . "\n", 3, SERVICE_DEBUG_EXECUTION_TIME_LOG);
           }
         } elseif ($debug === true) {

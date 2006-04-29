@@ -49,16 +49,40 @@
       return $this->currencies[$currency_code]['symbol_left'] . number_format(tep_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
     }
 
+    function formatRaw($number, $currency_code = '', $currency_value = '') {
+      if (empty($currency_code) || ($this->exists($currency_code) == false)) {
+        $currency_code = (isset($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY);
+      }
+
+      if (empty($currency_value) || (is_numeric($currency_value) == false)) {
+        $currency_value = $this->currencies[$currency_code]['value'];
+      }
+
+      return number_format(tep_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
+    }
+
     function displayPrice($price, $tax_class_id, $quantity = 1) {
       global $osC_Tax;
 
       $price = tep_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
-      if ( (DISPLAY_PRICE_WITH_TAX == 'true') && ($tax_class_id > 0) ) {
+      if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
         $price += tep_round($price * ($osC_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->format($price * $quantity);
+    }
+
+    function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $currency_code = '', $currency_value = '') {
+      global $osC_Tax;
+
+      $price = tep_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+
+      if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_rate > 0) ) {
+        $price += tep_round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      }
+
+      return $this->format($price * $quantity, $currency_code, $currency_value);
     }
 
     function exists($code) {

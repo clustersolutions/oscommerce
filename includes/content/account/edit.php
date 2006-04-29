@@ -66,7 +66,7 @@
         $messageStack->add('account_edit', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
       }
 
-      if (ACCOUNT_DATE_OF_BIRTH > -1) {
+      if (ACCOUNT_DATE_OF_BIRTH == '1') {
         if (isset($_POST['dob_days']) && isset($_POST['dob_months']) && isset($_POST['dob_years']) && checkdate($_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years'])) {
           $data['dob'] = mktime(0, 0, 0, $_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years']);
         } else {

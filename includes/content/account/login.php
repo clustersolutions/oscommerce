@@ -49,7 +49,7 @@
 
       if (osC_Account::checkEntry($_POST['email_address'])) {
         if (osC_Account::checkPassword($_POST['password'], $_POST['email_address'])) {
-          if (SERVICE_SESSION_REGENERATE_ID == 'True') {
+          if (SERVICE_SESSION_REGENERATE_ID == '1') {
             $osC_Session->recreate();
           }
 

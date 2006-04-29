@@ -96,7 +96,7 @@ function tep_unlink_temp_dir($dir) {
   header("Content-Type: Application/octet-stream");
   header("Content-disposition: attachment; filename=" . $Qdownloads->value('orders_products_filename'));
 
-  if (DOWNLOAD_BY_REDIRECT == 'true') {
+  if (DOWNLOAD_BY_REDIRECT == '1') {
 // This will work only on Unix/Linux hosts
     tep_unlink_temp_dir(DIR_FS_DOWNLOAD_PUBLIC);
     $tempdir = tep_random_name();

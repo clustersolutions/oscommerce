@@ -25,7 +25,7 @@
     function osC_Products_Tell_a_friend() {
       global $osC_Services, $osC_Language, $breadcrumb, $osC_Customer, $osC_NavigationHistory, $osC_Product;
 
-      if ((ALLOW_GUEST_TO_TELL_A_FRIEND == 'false') && ($osC_Customer->isLoggedOn() === false)) {
+      if ((ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($osC_Customer->isLoggedOn() === false)) {
         $osC_NavigationHistory->setSnapshot();
 
         tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));

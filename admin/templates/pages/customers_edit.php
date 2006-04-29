@@ -58,7 +58,7 @@
       <td class="main" width="70%"><?php echo osc_draw_input_field('lastname', (isset($Qaccount) ? $Qaccount->value('customers_lastname') : ''), '', true); ?></td>
     </tr>
 <?php
-  if (ACCOUNT_DATE_OF_BIRTH > -1) {
+  if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_DATE_OF_BIRTH; ?></td>
@@ -75,7 +75,7 @@
       <td class="main" width="70%"><?php echo osc_draw_input_field('email_address', (isset($Qaccount) ? $Qaccount->value('customers_email_address') : ''), '', true); ?></td>
     </tr>
 <?php
-  if (ACCOUNT_NEWSLETTER > -1) {
+  if (ACCOUNT_NEWSLETTER == '1') {
 ?>
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_NEWSLETTER; ?></td>

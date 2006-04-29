@@ -28,7 +28,7 @@
 ?>
 
 <p>
-  <input type="button" value="Summary" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionSummary');"> <input type="button" value="Products" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionProducts');"> <input type="button" value="Status History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionStatusHistory');">
+  <input type="button" value="Summary" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionSummary');"> <input type="button" value="Products" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionProducts');"> <input type="button" value="Transaction History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionTransactionHistory');"> <input type="button" value="Status History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionStatusHistory');">
   <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
 </p>
 
@@ -166,6 +166,50 @@
     }
 ?>
   </table>
+</div>
+
+<div id="sectionTransactionHistory" <?php if ($section != 'transactionHistory') { echo 'style="display: none;"'; } ?>>
+  <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr class="dataTableHeadingRow">
+      <td class="dataTableHeadingContent" width="130"><?php echo TABLE_HEADING_DATE_ADDED; ?></td>
+      <td class="dataTableHeadingContent" width="50"><?php echo TABLE_HEADING_STATUS; ?></td>
+      <td class="dataTableHeadingContent" width="20">&nbsp;</td>
+      <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_COMMENTS; ?></td>
+    </tr>
+
+<?php
+    foreach ($osC_Order->getTransactionHistory() as $history) {
+?>
+
+    <tr class="dataTableRow">
+      <td class="dataTableContent" valign="top"><?php echo tep_datetime_short($history['date_added']); ?></td>
+      <td class="dataTableContent" valign="top"><?php echo (empty($history['status']) === false) ? $history['status'] : $history['status_id']; ?></td>
+      <td class="dataTableContent" valign="top" align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($history['return_status'] === 1 ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+      <td class="dataTableContent" valign="top"><?php echo nl2br($history['return_value']); ?></td>
+    </tr>
+
+<?php
+    }
+?>
+
+  </table>
+
+<?php
+    if ($osC_Order->hasPostTransactionActions()) {
+?>
+
+  <br />
+
+  <?php echo tep_draw_form('transaction', FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_transaction'); ?>
+
+  <p><?php echo ENTRY_POST_TRANSACTION_ACTIONS . ' '. osc_draw_pull_down_menu('transaction', $osC_Order->getPostTransactionActions()) . ' <input type="submit" value="' . IMAGE_EXECUTE . '" class="operationButton">'; ?></p>
+
+  </form>
+
+<?php
+    }
+?>
+
 </div>
 
 <div id="sectionStatusHistory" <?php if ($section != 'statusHistory') { echo 'style="display: none;"'; } ?>>

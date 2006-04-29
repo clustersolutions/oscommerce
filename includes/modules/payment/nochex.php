@@ -71,10 +71,6 @@
       }
     }
 
-    function javascript_validation() {
-      return false;
-    }
-
     function selection() {
       return array('id' => $this->_code,
                    'module' => $this->_title);

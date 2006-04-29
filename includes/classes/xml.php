@@ -22,8 +22,8 @@
       }
     }
 
-    function toArray() {
-      if (function_exists('simplexml_load_string')) {
+    function toArray($fallback = false) {
+      if (($fallback === false) && function_exists('simplexml_load_string')) {
         return osc_object2array_recursive(simplexml_load_string($this->_xml));
       } else {
         if (function_exists('XML_unserialize') === false) {

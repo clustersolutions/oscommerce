@@ -61,7 +61,7 @@
       </tr>
 
 <?php
-  if (ACCOUNT_DATE_OF_BIRTH > -1) {
+  if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
       <tr>
        <td colspan="2">&nbsp;</td>

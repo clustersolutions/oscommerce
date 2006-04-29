@@ -11,7 +11,7 @@
 */
 
   require('includes/classes/directory_listing.php');
-  $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/' . $module_type);
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/' . $module_type);
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();
 ?>
@@ -32,7 +32,7 @@
 <?php
   $installed_modules = array();
   foreach ($files as $file) {
-    include('../includes/modules/' . $module_type . '/' . $file['name']);
+    include('includes/modules/' . $module_type . '/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
 
@@ -42,7 +42,7 @@
       $module = $module_class . $class;
       $module = new $module();
 
-      if ($module->check() > 0) {
+      if ($module->isInstalled()) {
         if ( ($module->getSortOrder() > 0) && !isset($installed_modules[$module->getSortOrder()])) {
           $installed_modules[$module->getSortOrder()] = $file['name'];
         } else {
@@ -54,8 +54,8 @@
         $module_info = array('code' => $module->getCode(),
                              'title' => $module->getTitle(),
                              'description' => $module->getDescription(),
-                             'installed' => ($module->check() ? true : false),
-                             'status' => $module->getStatus());
+                             'installed' => $module->isInstalled(),
+                             'status' => $module->isEnabled());
 
         $module_keys = $module->getKeys();
 
@@ -83,7 +83,7 @@
 ?>
         <td><?php echo $module->getTitle(); ?></td>
         <td><?php echo $module->getSortOrder(); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($module->check() > 0) ? ($module->getStatus() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
+        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($module->isInstalled() ? ($module->isEnabled() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
         <td align="right">
 <?php
     if (isset($mInfo) && ($class == $mInfo->code)) {
@@ -95,7 +95,7 @@
              tep_image('images/pixel_trans.gif', '', '16', '16');
       }
     } else {
-      if ($module->check() > 0) {
+      if ($module->isInstalled()) {
         echo '<a href="' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;' .
              '<a href="' . tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
       } else {

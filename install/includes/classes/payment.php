@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  class osC_Payment {
+  class osC_Payment_Admin {
     var $_group = 'payment';
 
     function install() {

@@ -73,7 +73,7 @@
 </div>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <?php if (DOWNLOAD_ENABLED == 'true') include('includes/modules/downloads.php'); ?>
+  <?php if (DOWNLOAD_ENABLED == '1') include('includes/modules/downloads.php'); ?>
 </table>
 
 </form>

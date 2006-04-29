@@ -136,7 +136,7 @@
 
       $Qlisting = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price');
 
-      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == 'true')) {
+      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == '1')) {
         $Qlisting->appendQuery(', sum(tr.tax_rate) as tax_rate');
       }
 
@@ -145,7 +145,7 @@
       $Qlisting->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qlisting->bindTable(':table_specials', TABLE_SPECIALS);
 
-      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == 'true')) {
+      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == '1')) {
         if ($osC_Customer->isLoggedOn()) {
           $customer_country_id = $osC_Customer->getCountryID();
           $customer_zone_id = $osC_Customer->getZoneID();
@@ -221,7 +221,7 @@
         }
       }
 
-      if (DISPLAY_PRICE_WITH_TAX == 'true') {
+      if (DISPLAY_PRICE_WITH_TAX == '1') {
         if ($this->_price_from > 0) {
           $Qlisting->appendQuery('and (if(s.status, s.specials_new_products_price, p.products_price) * if(gz.geo_zone_id is null, 1, 1 + (tr.tax_rate / 100) ) >= :price_from)');
           $Qlisting->bindFloat(':price_from', $this->_price_from);
@@ -243,7 +243,7 @@
         }
       }
 
-      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == 'true')) {
+      if (($this->hasPriceSet('from') || $this->hasPriceSet('to')) && (DISPLAY_PRICE_WITH_TAX == '1')) {
         $Qlisting->appendQuery('group by p.products_id, tr.tax_priority');
       }
 

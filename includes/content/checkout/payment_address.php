@@ -36,7 +36,7 @@
 
       $this->_page_title = $osC_Language->get('payment_address_heading');
 
-      $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment_address.js');
+      $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_payment_address.js');
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
 // if no billing destination address was selected, use their own address as default

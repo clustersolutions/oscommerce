@@ -112,7 +112,7 @@
     else {
       $valid_address = false;
     }
-    if ($valid_address && ENTRY_EMAIL_ADDRESS_CHECK == 'true') {
+    if ($valid_address && ENTRY_EMAIL_ADDRESS_CHECK == '1') {
       if (!checkdnsrr($domain, "MX") && !checkdnsrr($domain, "A")) {
         $valid_address = false;
       }

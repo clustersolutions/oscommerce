@@ -73,7 +73,7 @@ define('BOX_CONFIGURATION_MYSTORE', 'My Store');
 define('BOX_CONFIGURATION_LOGGING', 'Logging');
 define('BOX_CONFIGURATION_CACHE', 'Cache');
 define('BOX_CONFIGURATION_SERVICES', 'Services');
-define('BOX_CONFIGURATION_CREDIT_CARDS', 'Credit Cards');
+define('BOX_CONFIGURATION_CREDIT_CARD_TYPES', 'Credit Card Types');
 
 // modules box text in includes/boxes/modules.php
 define('BOX_HEADING_MODULES', 'Modules');
@@ -201,6 +201,7 @@ define('IMAGE_DELETE', 'Delete');
 define('IMAGE_EDIT', 'Edit');
 define('IMAGE_EDIT_DEFINITIONS', 'Edit Definitions');
 define('IMAGE_EMAIL', 'Email');
+define('IMAGE_EXECUTE', 'Execute');
 define('IMAGE_EXPORT', 'Export');
 define('IMAGE_FILE_MANAGER', 'File Manager');
 define('IMAGE_ICON_STATUS_GREEN', 'Active');
@@ -315,6 +316,9 @@ define('TEXT_CACHE_ALSO_PURCHASED', 'Also Purchased Module');
 
 define('TEXT_NONE', '--none--');
 define('TEXT_TOP', 'Top');
+define('TEXT_TRUE', 'True');
+define('TEXT_FALSE', 'False');
+define('TEXT_OPTIONAL', 'Voluntary');
 
 define('ERROR_DESTINATION_DOES_NOT_EXIST', 'Error: Destination does not exist.');
 define('ERROR_DESTINATION_NOT_WRITEABLE', 'Error: Destination not writeable.');

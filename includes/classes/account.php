@@ -53,7 +53,7 @@
       $Qcustomer->bindValue(':customers_ip_address', tep_get_ip_address());
       $Qcustomer->bindValue(':customers_password', tep_encrypt_password($data['password']));
       $Qcustomer->bindValue(':customers_gender', (((ACCOUNT_GENDER > -1) && isset($data['gender']) && (($data['gender'] == 'm') || ($data['gender'] == 'f'))) ? $data['gender'] : ''));
-      $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH > -1) ? date('Ymd', $data['dob']) : ''));
+      $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH == '1') ? date('Ymd', $data['dob']) : ''));
       $Qcustomer->execute();
 
       if ($Qcustomer->affectedRows() === 1) {
@@ -69,7 +69,7 @@
         if ($Qci->affectedRows() === 1) {
           $osC_Database->commitTransaction();
 
-          if (SERVICE_SESSION_REGENERATE_ID == 'True') {
+          if (SERVICE_SESSION_REGENERATE_ID == '1') {
             $osC_Session->recreate();
           }
 
@@ -115,7 +115,7 @@
       $Qcustomer->bindValue(':customers_firstname', $data['firstname']);
       $Qcustomer->bindValue(':customers_lastname', $data['lastname']);
       $Qcustomer->bindValue(':customers_email_address', $data['email_address']);
-      $Qcustomer->bindValue(':customers_dob', (ACCOUNT_DATE_OF_BIRTH > -1) ? date('Ymd', $data['dob']) : '');
+      $Qcustomer->bindValue(':customers_dob', (ACCOUNT_DATE_OF_BIRTH == '1') ? date('Ymd', $data['dob']) : '');
       $Qcustomer->bindInt(':customers_id', $osC_Customer->getID());
       $Qcustomer->execute();
 

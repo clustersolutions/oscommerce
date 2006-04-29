@@ -70,7 +70,7 @@
          '                <td align="right" valign="top" width="30">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' . "\n" .
          '                <td valign="top">' . $products['name'];
 
-    if (STOCK_CHECK == 'true') {
+    if (STOCK_CHECK == '1') {
       echo tep_check_stock($products['id'], $products['quantity']);
     }
 
@@ -128,12 +128,15 @@
   </div>
 
   <div class="content">
-    <table border="0" cellspacing="0" cellpadding="2">
-      <tr>
-        <td class="main" colspan="4"><?php echo $confirmation['title']; ?></td>
-      </tr>
+    <p><?php echo $confirmation['title']; ?></p>
+
 <?php
-      for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
+      if (isset($confirmation['fields'])) {
+?>
+
+    <table border="0" cellspacing="0" cellpadding="2">
+<?php
+        for ($i=0, $n=sizeof($confirmation['fields']); $i<$n; $i++) {
 ?>
       <tr>
         <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
@@ -142,9 +145,19 @@
         <td class="main"><?php echo $confirmation['fields'][$i]['field']; ?></td>
       </tr>
 <?php
-      }
+        }
 ?>
     </table>
+
+<?php
+      }
+
+      if (isset($confirmation['text'])) {
+?>
+    <p><?php echo $confirmation['text']; ?></p>
+<?php
+      }
+?>
   </div>
 </div>
 

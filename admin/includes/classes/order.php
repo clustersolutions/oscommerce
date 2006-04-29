@@ -27,7 +27,7 @@
     function _getSummary($order_id) {
       global $osC_Database;
 
-      $Qorder = $osC_Database->query('select orders_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_address_format_id, customers_telephone, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, last_modified, orders_status from :table_orders where orders_id = :orders_id');
+      $Qorder = $osC_Database->query('select orders_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_address_format_id, customers_telephone, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, payment_module, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, last_modified, orders_status from :table_orders where orders_id = :orders_id');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
       $Qorder->bindInt(':orders_id', $order_id);
       $Qorder->execute();
@@ -70,6 +70,7 @@
                                 'format_id' => $Qorder->valueInt('billing_address_format_id'));
 
         $this->_payment_method = $Qorder->value('payment_method');
+        $this->_payment_module = $Qorder->value('payment_module');
         $this->_credit_card = array('type' => $Qorder->value('cc_type'),
                                     'owner' => $Qorder->valueProtected('cc_owner'),
                                     'number' => $Qorder->valueProtected('cc_number'),
@@ -129,6 +130,65 @@
       }
 
       $this->_status_history = $history_array;
+    }
+
+    function _getTransactionHistory() {
+      global $osC_Database, $osC_Language;
+
+      $this->_transaction_history = array();
+
+      $Qhistory = $osC_Database->query('select oth.transaction_code, oth.transaction_return_value, oth.transaction_return_status, oth.date_added, ots.status_name from :table_orders_transactions_history oth left join :table_orders_transactions_status ots on (oth.transaction_code = ots.id and ots.language_id = :language_id) where oth.orders_id = :orders_id order by oth.date_added');
+      $Qhistory->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
+      $Qhistory->bindTable(':table_orders_transactions_status', TABLE_ORDERS_TRANSACTIONS_STATUS);
+      $Qhistory->bindInt(':language_id', $osC_Language->getID());
+      $Qhistory->bindInt(':orders_id', $this->_order_id);
+      $Qhistory->execute();
+
+      while ($Qhistory->next()) {
+        $this->_transaction_history[] = array('status_id' => $Qhistory->valueInt('transaction_code'),
+                                              'status' => $Qhistory->value('status_name'),
+                                              'return_value' => $Qhistory->valueProtected('transaction_return_value'),
+                                              'return_status' => $Qhistory->valueInt('transaction_return_status'),
+                                              'date_added' => $Qhistory->value('date_added'));
+      }
+    }
+
+    function _getPostTransactionActions() {
+      global $osC_Database, $osC_Language;
+
+      $this->_post_transaction_actions = array();
+
+      if (file_exists('includes/modules/payment/' . $this->_payment_module . '.php')) {
+        include('includes/classes/payment.php');
+        include('includes/modules/payment/' . $this->_payment_module . '.php');
+
+        if (call_user_func(array('osC_Payment_' . $this->_payment_module, 'isInstalled')) === true) {
+          $trans_array = array();
+
+          foreach ($this->getTransactionHistory() as $history) {
+            if ($history['return_status'] === 1) {
+              $trans_array[] = $history['status_id'];
+            }
+          }
+
+          $transactions = call_user_func(array('osC_Payment_' . $this->_payment_module, 'getPostTransactionActions'), $trans_array);
+
+          if (is_array($transactions) && (empty($transactions) === false)) {
+            $Qactions = $osC_Database->query('select id, status_name from :table_orders_transactions_status where language_id = :language_id and id in :id order by status_name');
+            $Qactions->bindTable(':table_orders_transactions_status', TABLE_ORDERS_TRANSACTIONS_STATUS);
+            $Qactions->bindInt(':language_id', $osC_Language->getID());
+            $Qactions->bindRaw(':id', '(' . implode(', ', array_keys($transactions)) . ')');
+            $Qactions->execute();
+
+            $trans_code_array = array();
+
+            while ($Qactions->next()) {
+              $this->_post_transaction_actions[] = array('id' => $transactions[$Qactions->valueInt('id')],
+                                                         'text' => $Qactions->value('status_name'));
+            }
+          }
+        }
+      }
     }
 
     function _getProducts() {
@@ -236,6 +296,10 @@
 
     function getPaymentMethod() {
       return $this->_payment_method;
+    }
+
+    function getPaymentModule() {
+      return $this->_payment_module;
     }
 
     function getCreditCardDetails($id = '') {
@@ -362,6 +426,30 @@
       }
 
       return $this->_status_history;
+    }
+
+    function getTransactionHistory() {
+      if (!isset($this->_transaction_history)) {
+        $this->_getTransactionHistory();
+      }
+
+      return $this->_transaction_history;
+    }
+
+    function getPostTransactionActions() {
+      if (!isset($this->_post_transaction_actions)) {
+        $this->_getPostTransactionActions();
+      }
+
+      return $this->_post_transaction_actions;
+    }
+
+    function hasPostTransactionActions() {
+      if (!isset($this->_post_transaction_actions)) {
+        $this->_getPostTransactionActions();
+      }
+
+      return !empty($this->_post_transaction_actions);
     }
   }
 ?>

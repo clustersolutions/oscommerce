@@ -53,13 +53,13 @@
           </ul>
 
 <?php
-  if (order::numberOfEntries() > 0) {
+  if (osC_Order::numberOfEntries() > 0) {
 ?>
 
           <table border="0" width="100%" cellspacing="0" cellpadding="5">
 
 <?php
-    $Qorders = order::getListing(3);
+    $Qorders = osC_Order::getListing(3);
 
     while ($Qorders->next()) {
       if (tep_not_null($Qorders->valueProtected('delivery_name'))) {

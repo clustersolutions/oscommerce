@@ -28,21 +28,16 @@
           $error = true;
         }
 
-        if (empty($_POST['credit_card_code'])) {
-          $osC_MessageStack->add('header', ERROR_CREDIT_CARD_CODE, 'error');
-          $error = true;
-        }
-
         if ($error === false) {
           if (isset($_GET['ccID']) && is_numeric($_GET['ccID'])) {
-            $Qcc = $osC_Database->query('update :table_credit_cards set credit_card_name = :credit_card_name, credit_card_code = :credit_card_code, credit_card_status = :credit_card_status, sort_order = :sort_order where credit_card_id = :credit_card_id');
-            $Qcc->bindInt(':credit_card_id', $_GET['ccID']);
+            $Qcc = $osC_Database->query('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
+            $Qcc->bindInt(':id', $_GET['ccID']);
           } else {
-            $Qcc = $osC_Database->query('insert into :table_credit_cards (credit_card_name, credit_card_code, credit_card_status, sort_order) values (:credit_card_name, :credit_card_code, :credit_card_status, :sort_order)');
+            $Qcc = $osC_Database->query('insert into :table_credit_cards (credit_card_name, pattern, credit_card_status, sort_order) values (:credit_card_name, :pattern, :credit_card_status, :sort_order)');
           }
           $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
           $Qcc->bindValue(':credit_card_name', $_POST['credit_card_name']);
-          $Qcc->bindValue(':credit_card_code', $_POST['credit_card_code']);
+          $Qcc->bindValue(':pattern', $_POST['pattern']);
           $Qcc->bindInt(':credit_card_status', (isset($_POST['credit_card_status']) && ($_POST['credit_card_status'] == '1') ? '1' : '0'));
           $Qcc->bindInt(':sort_order', $_POST['sort_order']);
           $Qcc->execute();
@@ -67,9 +62,9 @@
         break;
       case 'deleteconfirm':
         if (isset($_GET['ccID']) && is_numeric($_GET['ccID'])) {
-          $Qdel = $osC_Database->query('delete from :table_credit_cards where credit_card_id = :credit_card_id');
+          $Qdel = $osC_Database->query('delete from :table_credit_cards where id = :id');
           $Qdel->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
-          $Qdel->bindInt(':credit_card_id', $_GET['ccID']);
+          $Qdel->bindInt(':id', $_GET['ccID']);
           $Qdel->execute();
 
           if ($Qdel->affectedRows()) {

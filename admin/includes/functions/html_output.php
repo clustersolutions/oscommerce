@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -354,7 +354,7 @@
         $field .= ' value="' . tep_output_string($selection_value) . '"';
       }
 
-      if ((is_bool($default) && $default === true) || (!empty($default) && ($default == $selection_value))) {
+      if ((is_bool($default) && $default === true) || (!empty($default) && ((is_string($default) && ($default == $selection_value)) || (is_array($default) && in_array($selection_value, $default))))) {
         $field .= ' checked="checked"';
       }
 

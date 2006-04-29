@@ -1219,6 +1219,11 @@ Note: If you did not request this action via our password forgotten page, please
       <group>checkout</group>
     </definition>
     <definition>
+      <key>email_order_status</key>
+      <value><![CDATA[Order Status: %s]]></value>
+      <group>checkout</group>
+    </definition>
+    <definition>
       <key>email_order_products</key>
       <value><![CDATA[Products]]></value>
       <group>checkout</group>

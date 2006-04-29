@@ -320,7 +320,7 @@
   function tep_add_tax($price, $tax) {
     global $osC_Currencies;
 
-    if ( (DISPLAY_PRICE_WITH_TAX == 'true') && ($tax > 0) ) {
+    if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax > 0) ) {
       return tep_round($price, $osC_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']) + tep_calculate_tax($price, $tax);
     } else {
       return tep_round($price, $osC_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -943,14 +943,14 @@
 //                    e.g. info@mytepshop.com
 
   function tep_mail($to_name, $to_email_address, $email_subject, $email_text, $from_email_name, $from_email_address) {
-    if (SEND_EMAILS != 'true') return false;
+    if (SEND_EMAILS == '-1') return false;
 
     // Instantiate a new mail object
     $message = new email(array('X-Mailer: osCommerce Mailer'));
 
     // Build the text version
     $text = strip_tags($email_text);
-    if (EMAIL_USE_HTML == 'true') {
+    if (EMAIL_USE_HTML == '1') {
       $message->add_html($email_text, $text);
     } else {
       $message->add_text($text);
@@ -1332,7 +1332,7 @@
     else {
       $valid_address = false;
     }
-    if ($valid_address && ENTRY_EMAIL_ADDRESS_CHECK == 'true') {
+    if ($valid_address && ENTRY_EMAIL_ADDRESS_CHECK == '1') {
       if (!checkdnsrr($domain, "MX") && !checkdnsrr($domain, "A")) {
         $valid_address = false;
       }

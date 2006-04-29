@@ -71,7 +71,7 @@
       }
     }
 
-    function javascript_validation() {
+    function getJavascriptBlock() {
       global $osC_Language;
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {

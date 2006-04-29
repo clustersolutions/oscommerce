@@ -93,7 +93,7 @@
       tep_redirect(tep_href_link(FILENAME_INFO, 'cookie'));
     }
 
-    if (DISPLAY_CART == 'true') {
+    if (DISPLAY_CART == '1') {
       $goto =  FILENAME_CHECKOUT;
       $parameters = array('action', 'cPath', 'products_id', 'pid');
     } else {

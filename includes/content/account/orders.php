@@ -39,7 +39,7 @@
       }
 
       if (is_numeric($_GET[$this->_module])) {
-        if (order::getCustomerID($_GET[$this->_module]) !== $osC_Customer->getID()) {
+        if (osC_Order::getCustomerID($_GET[$this->_module]) !== $osC_Customer->getID()) {
           tep_redirect(tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
         }
 

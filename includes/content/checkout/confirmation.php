@@ -39,6 +39,8 @@
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
+      include('includes/classes/order.php');
+
       $this->_page_title = $osC_Language->get('confirmation_heading');
 
       $osC_Language->load('order');
@@ -53,7 +55,7 @@
         $_SESSION['comments'] = tep_sanitize_string($_POST['comments']);
       }
 
-      if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true') {
+      if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
         if (!isset($_POST['conditions']) || ($_POST['conditions'] != '1')) {
           $messageStack->add_session('checkout_payment', $osC_Language->get('error_conditions_not_accepted'), 'error');
         }
@@ -61,14 +63,13 @@
 
 // load the selected payment module
       include('includes/classes/payment.php');
-      $osC_Payment = new osC_Payment($_POST['payment_mod_sel']);
-      $osC_Payment->update_status();
+      $osC_Payment = new osC_Payment($_POST['payment_method']);
 
-      if (isset($_POST['payment_mod_sel'])) {
-        $osC_ShoppingCart->setBillingMethod(array('id' => $_POST['payment_mod_sel'], 'title' => $GLOBALS['osC_Payment_' . $_POST['payment_mod_sel']]->getTitle()));
+      if (isset($_POST['payment_method'])) {
+        $osC_ShoppingCart->setBillingMethod(array('id' => $_POST['payment_method'], 'title' => $GLOBALS['osC_Payment_' . $_POST['payment_method']]->getMethodTitle()));
       }
 
-      if ( $osC_Payment->hasActive() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->getStatus() === false))) ) {
+      if ( $osC_Payment->hasActive() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->isEnabled() === false))) ) {
         $messageStack->add_session('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
       }
 
@@ -82,14 +83,14 @@
 
 // Stock Check
       $any_out_of_stock = false;
-      if (STOCK_CHECK == 'true') {
+      if (STOCK_CHECK == '1') {
         for ($i=0, $n=sizeof($order->products); $i<$n; $i++) {
           if (tep_check_stock($order->products[$i]['id'], $order->products[$i]['qty'])) {
             $any_out_of_stock = true;
           }
         }
 // Out of Stock
-        if ( (STOCK_ALLOW_CHECKOUT != 'true') && ($any_out_of_stock == true) ) {
+        if ( (STOCK_ALLOW_CHECKOUT == '-1') && ($any_out_of_stock == true) ) {
           tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'AUTO'));
         }
       }

@@ -34,6 +34,34 @@
 
   if (!empty($action)) {
     switch ($action) {
+      case 'update_transaction':
+        if (isset($_GET['oID']) && is_numeric($_GET['oID'])) {
+          if (isset($_POST['transaction'])) {
+            $Qorder = $osC_Database->query('select payment_module from :table_orders where orders_id = :orders_id limit 1');
+            $Qorder->bindTable(':table_orders', TABLE_ORDERS);
+            $Qorder->bindInt(':orders_id', $_GET['oID']);
+            $Qorder->execute();
+
+            if ( ($Qorder->numberOfRows() === 1) && tep_not_null($Qorder->value('payment_module'))) {
+              if (file_exists('includes/modules/payment/' . $Qorder->value('payment_module') . '.php')) {
+                include('includes/classes/payment.php');
+                include('includes/modules/payment/' . $Qorder->value('payment_module') . '.php');
+
+                if (is_callable(array('osC_Payment_' . $Qorder->value('payment_module'), $_POST['transaction']))) {
+                  $payment_module = 'osC_Payment_' . $Qorder->value('payment_module');
+                  $payment_module = new $payment_module();
+                  $payment_module->$_POST['transaction']($_GET['oID']);
+// HPDL - the following static call won't work due to using $this->_gateway_url in the class method
+//                  call_user_func(array('osC_Payment_' . $Qorder->value('payment_module'), $_POST['transaction']), $_GET['oID']);
+                }
+              }
+            }
+          }
+        }
+
+        tep_redirect(tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=transactionHistory'));
+
+        break;
       case 'update_order':
         if (isset($_GET['oID']) && is_numeric($_GET['oID'])) {
           $Qorder = $osC_Database->query('select customers_name, customers_email_address, orders_status, date_purchased from :table_orders where orders_id = :orders_id');

@@ -20,7 +20,7 @@
 
         tep_db_query("insert into " . TABLE_PRODUCTS_ATTRIBUTES . " values ('', '" . (int)$products_id . "', '" . (int)$options_id . "', '" . (int)$values_id . "', '" . tep_db_input($value_price) . "', '" . tep_db_input($price_prefix) . "')");
 
-        if (DOWNLOAD_ENABLED == 'true') {
+        if (DOWNLOAD_ENABLED == '1') {
           $products_attributes_id = tep_db_insert_id();
 
           $products_attributes_filename = tep_db_prepare_input($HTTP_POST_VARS['products_attributes_filename']);

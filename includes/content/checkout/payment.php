@@ -40,7 +40,7 @@
       }
 
 // Stock Check
-      if ( (STOCK_CHECK == 'true') && (STOCK_ALLOW_CHECKOUT != 'true') ) {
+      if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
         foreach ($osC_ShoppingCart->getProducts() as $products) {
           if ($osC_ShoppingCart->isInStock($products['id']) === false) {
             tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'SSL'));
@@ -60,10 +60,10 @@
         $this->_page_title = $osC_Language->get('payment_address_heading');
         $this->_page_contents = 'checkout_payment_address.php';
 
-        $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment_address.js');
+        $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_payment_address.js');
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } else {
-        $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_payment.js');
+        $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_payment.js');
 
 // if no billing destination address was selected, use the customers own address as default
         if ($osC_ShoppingCart->hasBillingAddress() == false) {
@@ -86,7 +86,7 @@
         include('includes/classes/payment.php');
         $osC_Payment = new osC_Payment();
 
-        $this->addJavascriptBlock($osC_Payment->javascript_validation());
+        $this->addJavascriptBlock($osC_Payment->getJavascriptBlocks());
       }
 
       if (isset($_GET['payment_error']) && is_object(${$_GET['payment_error']}) && ($error = ${$_GET['payment_error']}->get_error())) {

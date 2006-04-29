@@ -43,6 +43,8 @@
   define('TABLE_ORDERS_STATUS', DB_TABLE_PREFIX . 'orders_status');
   define('TABLE_ORDERS_STATUS_HISTORY', DB_TABLE_PREFIX . 'orders_status_history');
   define('TABLE_ORDERS_TOTAL', DB_TABLE_PREFIX . 'orders_total');
+  define('TABLE_ORDERS_TRANSACTIONS_HISTORY', DB_TABLE_PREFIX . 'orders_transactions_history');
+  define('TABLE_ORDERS_TRANSACTIONS_STATUS', DB_TABLE_PREFIX . 'orders_transactions_status');
   define('TABLE_PRODUCTS', DB_TABLE_PREFIX . 'products');
   define('TABLE_PRODUCTS_ATTRIBUTES', DB_TABLE_PREFIX . 'products_attributes');
   define('TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD', DB_TABLE_PREFIX . 'products_attributes_download');

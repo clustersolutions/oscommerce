@@ -49,7 +49,7 @@
 <?php
       echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $products['keyword']) . '"><b>' . $products['name'] . '</b></a>';
 
-      if ( (STOCK_CHECK == 'true') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
+      if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
       }
 
@@ -93,8 +93,8 @@
   </table>
 
 <?php
-    if ( (STOCK_CHECK == 'true') && ($osC_ShoppingCart->hasStock() === false) ) {
-      if (STOCK_ALLOW_CHECKOUT == 'true') {
+    if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->hasStock() === false) ) {
+      if (STOCK_ALLOW_CHECKOUT == '1') {
         echo '<p class="stockWarning" align="center">' . sprintf($osC_Language->get('products_out_of_stock_checkout_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';
       } else {
         echo '<p class="stockWarning" align="center">' . sprintf($osC_Language->get('products_out_of_stock_checkout_not_possible'), STOCK_MARK_PRODUCT_OUT_OF_STOCK) . '</p>';

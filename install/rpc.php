@@ -106,17 +106,114 @@
         if ($osC_Database->isError() === false) {
           define('DB_TABLE_PREFIX', $db['DB_TABLE_PREFIX']);
           include('../includes/database_tables.php');
+
+/* HPDL
+          $services = array('banner',
+                            'breadcrumb',
+                            'category_path',
+                            'core',
+                            'currencies',
+                            'debug',
+                            'language',
+                            'output_compression',
+                            'recently_visited',
+                            'reviews',
+                            'session',
+                            'simple_counter',
+                            'specials',
+                            'whos_online');
+*/
+          $services = array('output_compression',
+                            'session',
+                            'language',
+                            'debug',
+                            'currencies',
+                            'core',
+                            'simple_counter',
+                            'category_path',
+                            'breadcrumb',
+                            'whos_online',
+                            'banner',
+                            'specials',
+                            'reviews',
+                            'recently_visited');
+
+          $installed = array();
+
+          foreach ($services as $service) {
+            include('../includes/services/' . $service . '.php');
+            $class = 'osC_Services_' . $service;
+            $module = new $class();
+            $module->install();
+
+            if (isset($module->depends)) {
+              if (is_string($module->depends) && (($key = array_search($module->depends, $installed)) !== false)) {
+                if (isset($installed[$key+1])) {
+                  array_splice($installed, $key+1, 0, $service);
+                } else {
+                  $installed[] = $service;
+                }
+              } elseif (is_array($module->depends)) {
+                foreach ($module->depends as $depends_module) {
+                  if (($key = array_search($depends_module, $installed)) !== false) {
+                    if (!isset($array_position) || ($key > $array_position)) {
+                      $array_position = $key;
+                    }
+                  }
+                }
+
+                if (isset($array_position)) {
+                  array_splice($installed, $array_position+1, 0, $service);
+                } else {
+                  $installed[] = $service;
+                }
+              }
+            } elseif (isset($module->precedes)) {
+              if (is_string($module->precedes)) {
+                if ((($key = array_search($module->precedes, $installed)) !== false)) {
+                  array_splice($installed, $key, 0, $service);
+                } else {
+                  $installed[] = $service;
+                }
+              } elseif (is_array($module->precedes)) {
+                foreach ($module->precedes as $precedes_module) {
+                  if (($key = array_search($precedes_module, $installed)) !== false) {
+                    if (!isset($array_position) || ($key < $array_position)) {
+                      $array_position = $key;
+                    }
+                  }
+                }
+
+                if (isset($array_position)) {
+                  array_splice($installed, $array_position, 0, $service);
+                } else {
+                  $installed[] = $service;
+                }
+              }
+            } else {
+              $installed[] = $service;
+            }
+
+            unset($array_position);
+          }
+
+          $Qs = $osC_Database->query('insert into :table_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ("Service Modules", "MODULE_SERVICES_INSTALLED",  :configuration_value, "Installed services modules", "6", "0", now())');
+          $Qs->bindTable(':table_configuration', TABLE_CONFIGURATION);
+          $Qs->bindValue(':configuration_value', implode(';', $installed));
+          $Qs->execute();
+
           include('includes/classes/payment.php');
           include('includes/classes/shipping.php');
           include('includes/classes/order_total.php');
 
-          include('../includes/modules/payment/cod.php');
+          include('../admin/includes/modules/payment/cod.php');
           $module = new osC_Payment_cod();
           $module->install();
 
-          include('../includes/modules/payment/cc.php');
-          $module = new osC_Payment_cc();
-          $module->install();
+          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = 1 where configuration_key = :configuration_key');
+          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
+          $Qupdate->bindValue(':configuration_key', 'MODULE_PAYMENT_COD_STATUS');
+          $Qupdate->execute();
 
           include('../includes/modules/shipping/flat.php');
           $module = new osC_Shipping_flat();

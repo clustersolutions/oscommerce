@@ -31,13 +31,13 @@
       foreach ($osC_RecentlyVisited->getProducts() as $product) {
         echo '            <tr>' . "\n";
 
-        if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES == 'True') {
+        if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES == '1') {
           echo '              <td width="' . ((SMALL_IMAGE_WIDTH * 0.5) + 5) . '"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . tep_image(DIR_WS_IMAGES . $product['image'], $product['name'], SMALL_IMAGE_WIDTH*0.5, SMALL_IMAGE_HEIGHT*0.5) . '</a></td>' . "\n";
         }
 
         echo '              <td class="main"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . $product['name'] . '</a><br />';
 
-        if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == 'True') {
+        if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == '1') {
           echo $product['price'] . '&nbsp;';
         }
 
@@ -64,7 +64,7 @@
       foreach ($osC_RecentlyVisited->getCategories() as $category) {
         echo '          <tr>' . "\n";
 
-        if (SERVICE_RECENTLY_VISITED_SHOW_CATEGORY_IMAGES == 'True') {
+        if (SERVICE_RECENTLY_VISITED_SHOW_CATEGORY_IMAGES == '1') {
           echo '              <td width="' . ((SMALL_IMAGE_WIDTH * 0.5) + 5) . '"><a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['path']) . '">' . tep_image(DIR_WS_IMAGES . $category['image'], $category['name'], SMALL_IMAGE_WIDTH*0.5, SMALL_IMAGE_HEIGHT*0.5) . '</a></td>' . "\n";
         }
 

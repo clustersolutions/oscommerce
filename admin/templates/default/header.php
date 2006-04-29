@@ -39,7 +39,7 @@
     }
 
     echo '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/services.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_SERVICES) . '\', \'' . tep_href_link(FILENAME_SERVICES) . '\', null, null],' . "\n" .
-         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/wallet.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_CREDIT_CARDS) . '\', \'' . tep_href_link(FILENAME_CREDIT_CARDS) . '\', null, null]' . "\n" .
+         '        [\'' . tep_image('templates/' . $template . '/images/icons/16x16/wallet.png', '', '16', '16') . '\', \'' . addslashes(BOX_CONFIGURATION_CREDIT_CARD_TYPES) . '\', \'' . tep_href_link(FILENAME_CREDIT_CARDS) . '\', null, null]' . "\n" .
          '    ],' . "\n" .
          '    _cmSplit,' . "\n" .
          '    [null, \'' . addslashes(BOX_HEADING_CATALOG) . '\', null, null, null,' . "\n" .

@@ -24,7 +24,7 @@
 <form name="checkout_payment" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'); ?>" method="post" onsubmit="return check_form();">
 
 <?php
-  if (DISPLAY_CONDITIONS_ON_CHECKOUT == 'true') {
+  if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
 ?>
 
 <div class="moduleBox">

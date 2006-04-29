@@ -44,13 +44,24 @@
         tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
-      $this->_process();
+      include('includes/classes/order.php');
+
+      $osC_Payment->process();
+
+      $osC_ShoppingCart->reset(true);
+
+// unregister session variables used during checkout
+      unset($_SESSION['comments']);
+
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
     }
 
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Currencies, $osC_Language, $osC_Payment;
+      global $osC_Database, $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Currencies, $osC_Language, $osC_Payment, $insert_id;
+
+      $payment = 'osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id');
 
 // load the before_process function from the payment modules
       $osC_Payment->before_process();
@@ -60,7 +71,7 @@
         $order_status_id = $GLOBALS[$osC_ShoppingCart->getBillingMethod('id')]->order_status;
       }
 
-      $Qorder = $osC_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner, cc_number, cc_expires, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :cc_type, :cc_owner, :cc_number, :cc_expires, now(), :orders_status, :currency, :currency_value)');
+      $Qorder = $osC_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, payment_module, cc_type, cc_owner, cc_number, cc_expires, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :payment_module, :cc_type, :cc_owner, :cc_number, :cc_expires, now(), :orders_status, :currency, :currency_value)');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
       $Qorder->bindInt(':customers_id', $osC_Customer->getID());
       $Qorder->bindValue(':customers_name', $osC_Customer->getName());
@@ -94,6 +105,7 @@
       $Qorder->bindValue(':billing_country', $osC_ShoppingCart->getBillingAddress('country_id'));
       $Qorder->bindInt(':billing_address_format_id', $osC_ShoppingCart->getBillingAddress('format_id'));
       $Qorder->bindValue(':payment_method', $osC_ShoppingCart->getBillingMethod('title'));
+      $Qorder->bindValue(':payment_module', $GLOBALS[$payment]->getCode());
       $Qorder->bindValue(':cc_type', '' /*$order->info['cc_type']*/);
       $Qorder->bindValue(':cc_owner', '' /*$order->info['cc_owner']*/);
       $Qorder->bindValue(':cc_number', '' /*$order->info['cc_number']*/);
@@ -124,7 +136,7 @@
       $Qstatus->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
       $Qstatus->bindInt(':orders_id', $insert_id);
       $Qstatus->bindInt(':orders_status_id', $order_status_id);
-      $Qstatus->bindInt(':customer_notified', (SEND_EMAILS == 'true') ? '1' : '0');
+      $Qstatus->bindInt(':customer_notified', (SEND_EMAILS == '1') ? '1' : '0');
       $Qstatus->bindValue(':comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''));
       $Qstatus->execute();
 
@@ -136,8 +148,8 @@
       $total_cost = 0;
 
       foreach ($osC_ShoppingCart->getProducts() as $products) {
-        if (STOCK_LIMITED == 'true') {
-          if (DOWNLOAD_ENABLED == 'true') {
+        if (STOCK_LIMITED == '1') {
+          if (DOWNLOAD_ENABLED == '1') {
             $Qstock = $osC_Database->query('select products_quantity, pad.products_attributes_filename from :table_products p left join :table_products_attributes pa on (p.products_id = pa.products_id) left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where p.products_id = :products_id');
             $Qstock->bindTable(':table_products', TABLE_PRODUCTS);
             $Qstock->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
@@ -165,7 +177,7 @@
             $stock_left = $Qstock->valueInt('products_quantity');
 
 // do not decrement quantities if products_attributes_filename exists
-            if ((DOWNLOAD_ENABLED != 'true') || ((DOWNLOAD_ENABLED == 'true') && (strlen($Qstock->value('products_attributes_filename')) < 1))) {
+            if ((DOWNLOAD_ENABLED == '-1') || ((DOWNLOAD_ENABLED == '1') && (strlen($Qstock->value('products_attributes_filename')) < 1))) {
               $stock_left = $stock_left - $products['quantity'];
 
               $Qupdate = $osC_Database->query('update :table_products set products_quantity = :products_quantity where products_id = :products_id');
@@ -175,7 +187,7 @@
               $Qupdate->execute();
             }
 
-            if ((STOCK_ALLOW_CHECKOUT == 'false') && ($stock_left < 1)) {
+            if ((STOCK_ALLOW_CHECKOUT == '-1') && ($stock_left < 1)) {
               $Qupdate = $osC_Database->query('update :table_products set products_status = :products_status where products_id = :products_id');
               $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
               $Qupdate->bindInt(':products_status', 0);
@@ -213,7 +225,7 @@
           $attributes_exist = '1';
 
           foreach ($osC_ShoppingCart->getAttributes($products['id']) as $atttributes) {
-            if (DOWNLOAD_ENABLED == 'true') {
+            if (DOWNLOAD_ENABLED == '1') {
               $Qattributes = $osC_Database->query('select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount, pad.products_attributes_filename from :table_products_options popt, :table_products_options_values poval, :table_products_attributes pa left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_id = popt.products_options_id and pa.options_values_id = :options_values_id and pa.options_values_id = poval.products_options_values_id and popt.language_id = :popt_language_id and poval.language_id = :poval_language_id');
               $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
               $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
@@ -247,7 +259,7 @@
             $Qopa->bindValue(':price_prefix', $Qattributes->value('price_prefix'));
             $Qopa->execute();
 
-            if ((DOWNLOAD_ENABLED == 'true') && (strlen($Qattributes->value('products_attributes_filename')) > 0)) {
+            if ((DOWNLOAD_ENABLED == '1') && (strlen($Qattributes->value('products_attributes_filename')) > 0)) {
               $Qopd = $osC_Database->query('insert into :table_orders_products_download (orders_id, orders_products_id, orders_products_filename, download_maxdays, download_count) values (:orders_id, :orders_products_id, :orders_products_filename, :download_maxdays, :download_count)');
               $Qopd->bindTable(':table_orders_products_download', TABLE_ORDERS_PRODUCTS_DOWNLOAD);
               $Qopd->bindInt(':orders_id', $insert_id);
@@ -300,13 +312,11 @@
                       $osC_Language->get('email_order_separator') . "\n" .
                       tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), 0, '', "\n") . "\n\n";
 
-      $payment = 'osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id');
-
       if (is_object($GLOBALS[$payment])) {
         $email_order .= $osC_Language->get('email_order_payment_method') . "\n" .
                         $osC_Language->get('email_order_separator') . "\n";
 
-        $email_order .= $GLOBALS[$payment]->getTitle() . "\n\n";
+        $email_order .= $osC_ShoppingCart->getBillingMethod('title') . "\n\n";
         if (isset($GLOBALS[$payment]->email_footer)) {
           $email_order .= $GLOBALS[$payment]->email_footer . "\n\n";
         }

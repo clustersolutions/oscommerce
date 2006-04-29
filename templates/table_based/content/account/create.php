@@ -59,7 +59,7 @@
       </tr>
 
 <?php
-  if (ACCOUNT_DATE_OF_BIRTH > -1) {
+  if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
       <tr>
        <td colspan="2">&nbsp;</td>
@@ -81,7 +81,7 @@
       </tr>
 
 <?php
-  if (ACCOUNT_NEWSLETTER > -1) {
+  if (ACCOUNT_NEWSLETTER == '1') {
 ?>
       <tr>
         <td><?php echo $osC_Language->get('field_customer_newsletter'); ?></td>
@@ -107,7 +107,7 @@
 </div>
 
 <?php
-  if (DISPLAY_PRIVACY_CONDITIONS == 'true') {
+  if (DISPLAY_PRIVACY_CONDITIONS == '1') {
 ?>
 
 <div class="moduleBox">

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,7 +24,7 @@
   <div style="float: left;"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $osC_Template->getPageTitle()); ?></div>
 
   <div style="padding-top: 30px;">
-    <p><?php echo sprintf($osC_Language->get('email_password_reminder_body'), tep_href_link(FILENAME_INFO, 'contact')); ?></p>
+    <p><?php echo sprintf($osC_Language->get('success_account_created'), tep_href_link(FILENAME_INFO, 'contact')); ?></p>
   </div>
 </div>
 

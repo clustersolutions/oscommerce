@@ -50,10 +50,10 @@
         $this->_page_title = $osC_Language->get('shipping_address_heading');
         $this->_page_contents = 'checkout_shipping_address.php';
 
-        $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping_address.js');
+        $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_shipping_address.js');
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } else {
-        $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping.js');
+        $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_shipping.js');
 
 // if no shipping destination address was selected, use the customers own address as default
         if ($osC_ShoppingCart->hasShippingAddress() === false) {

@@ -473,7 +473,7 @@
  */
 
     function send($to_name, $to_addr, $from_name, $from_addr, $subject = '', $headers = '') {
-      if ((strpos($to_name, "\n") !== false) || (sstrpos($to_name, "\r") !== false)) {
+      if ((strpos($to_name, "\n") !== false) || (strpos($to_name, "\r") !== false)) {
         return false;
       }
 

@@ -4,7 +4,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -30,4 +30,24 @@ function selectRowEffect(object, buttonSelect) {
   } else {
     document.checkout_payment.payment.checked=true;
   }
+}
+
+function mod10(number) {
+  var nCheck = 0;
+  var nDigit = 0;
+  var bEven = false;
+
+  for (n = number.length - 1; n >= 0; n--) {
+    var cDigit = number.charAt(n);
+    var nDigit = parseInt(cDigit, 10);
+    if (bEven) {
+      if ((nDigit *= 2) > 9) {
+        nDigit -= 9;
+      }
+    }
+    nCheck += nDigit;
+    bEven = !bEven;
+  }
+
+  return (nCheck % 10) == 0;
 }

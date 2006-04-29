@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -99,6 +99,36 @@
   if (!function_exists('floatval')) {
     function floatval($float) {
       return doubleval($float);
+    }
+  }
+
+  if (!function_exists('stream_get_contents')) {
+    function stream_get_contents($resource) {
+      $result = '';
+
+      if (is_resource($resource)) {
+        while (!feof($resource)) {
+          $result .= @fread($resource, 2048);
+        }
+      }
+
+      return $result;
+    }
+  }
+
+  if (!function_exists('sha1')) {
+    function sha1($source) {
+      if (function_exists('mhash')) {
+        if (($hash = @mhash(MHASH_SHA1, $source)) !== false) {
+          return bin2hex($hash);
+        }
+      }
+
+      if (!function_exists('calc_sha1')) {
+        include('ext/sha1/sha1.php');
+      }
+
+      return calc_sha1($source);
     }
   }
 ?>

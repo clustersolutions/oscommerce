@@ -36,7 +36,7 @@
 
       foreach ($osC_ShoppingCart->_tax_groups as $key => $value) {
         if ($value > 0) {
-          if (DISPLAY_PRICE_WITH_TAX == 'false') {
+          if (DISPLAY_PRICE_WITH_TAX == '1') {
             $osC_ShoppingCart->addToTotal($value);
           }
 

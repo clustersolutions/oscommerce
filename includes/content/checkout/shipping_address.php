@@ -36,7 +36,7 @@
 
       $this->_page_title = $osC_Language->get('shipping_address_heading');
 
-      $this->addJavascriptFilename('templates/' . $this->_template . '/javascript/checkout_shipping_address.js');
+      $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/checkout_shipping_address.js');
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
 // if the order contains only virtual products, forward the customer to the billing page as

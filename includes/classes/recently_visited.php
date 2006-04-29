@@ -25,19 +25,19 @@
     function initialize() {
       global $osC_Product, $osC_Category, $osC_Search;
 
-      if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == 'True') {
+      if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1') {
         if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
           $this->setProduct($osC_Product->getID());
         }
       }
 
-      if (SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES == 'True') {
+      if (SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES == '1') {
         if (isset($osC_Category) && is_a($osC_Category, 'osC_Category')) {
           $this->setCategory($osC_Category->getID());
         }
       }
 
-      if (SERVICE_RECENTLY_VISITED_SHOW_SEARCHES == 'True') {
+      if (SERVICE_RECENTLY_VISITED_SHOW_SEARCHES == '1') {
         if (isset($osC_Search) && is_a($osC_Search, 'osC_Search')) {
           if ($osC_Search->hasKeywords()) {
             $this->setSearchQuery($osC_Search->getKeywords());
@@ -138,7 +138,7 @@
           $history[] = array('name' => $osC_Product->getTitle(),
                              'id' => $osC_Product->getID(),
                              'keyword' => $osC_Product->getKeyword(),
-                             'price' => (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == 'True') ? $osC_Product->getPriceFormated(true) : '',
+                             'price' => (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == '1') ? $osC_Product->getPriceFormated(true) : '',
                              'image' => $osC_Product->getImage(),
                              'category_name' =>  $osC_Category->getTitle(),
                              'category_path' => $osC_Category->getPath()

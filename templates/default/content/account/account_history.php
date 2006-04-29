@@ -16,8 +16,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if (order::numberOfEntries() > 0) {
-    $Qhistory = order::getListing(MAX_DISPLAY_ORDER_HISTORY);
+  if (osC_Order::numberOfEntries() > 0) {
+    $Qhistory = osC_Order::getListing(MAX_DISPLAY_ORDER_HISTORY);
 
     while ($Qhistory->next()) {
       if (tep_not_null($Qhistory->value('delivery_name'))) {
@@ -40,7 +40,7 @@
     <table border="0" width="100%" cellspacing="2" cellpadding="4">
       <tr>
         <td width="50%" valign="top"><?php echo '<b>' . $osC_Language->get('order_date') . '</b> ' . osC_DateTime::getLong($Qhistory->value('date_purchased')) . '<br /><b>' . $order_type . '</b> ' . tep_output_string_protected($order_name); ?></td>
-        <td width="30%" valign="top"><?php echo '<b>' . $osC_Language->get('order_products') . '</b> ' . order::numberOfProducts($Qhistory->valueInt('orders_id')) . '<br /><b>' . $osC_Language->get('order_cost') . '</b> ' . strip_tags($Qhistory->value('order_total')); ?></td>
+        <td width="30%" valign="top"><?php echo '<b>' . $osC_Language->get('order_products') . '</b> ' . osC_Order::numberOfProducts($Qhistory->valueInt('orders_id')) . '<br /><b>' . $osC_Language->get('order_cost') . '</b> ' . strip_tags($Qhistory->value('order_total')); ?></td>
         <td width="20%"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qhistory->valueInt('orders_id') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL') . '">' . tep_image_button('small_view.gif', $osC_Language->get('button_view')) . '</a>'; ?></td>
       </tr>
     </table>

@@ -11,7 +11,7 @@
 */
 
 /*
-      if (DOWNLOAD_ENABLED == 'true') {
+      if (DOWNLOAD_ENABLED == '1') {
         $download_query_raw ="select products_attributes_filename, products_attributes_maxdays, products_attributes_maxcount
                               from " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . "
                               where products_attributes_id='" . $attributes_values['products_attributes_id'] . "'";

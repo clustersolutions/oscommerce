@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  $order = new order($_GET['orders']);
+  $order = new osC_Order($_GET['orders']);
 ?>
 
 <?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
@@ -145,7 +145,7 @@
 <?php
   }
 
-  if (DOWNLOAD_ENABLED == 'true') {
+  if (DOWNLOAD_ENABLED == '1') {
     include('includes/modules/downloads.php');
   }
 ?>
