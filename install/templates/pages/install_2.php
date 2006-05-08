@@ -10,7 +10,14 @@
   Released under the GNU General Public License
 */
 
-  $www_location = 'http://' . getenv('HTTP_HOST') . getenv('SCRIPT_NAME');
+  $www_location = 'http://' . $_SERVER['HTTP_HOST'];
+
+  if (isset($_SERVER['REQUEST_URI']) && (empty($_SERVER['REQUEST_URI']) === false)) {
+    $www_location .= $_SERVER['REQUEST_URI'];
+  } else {
+    $www_location .= $_SERVER['PHP_SELF'];
+  }
+
   $www_location = substr($www_location, 0, strpos($www_location, 'install'));
 
   $dir_fs_www_root = tep_realpath(dirname(__FILE__) . '/../../../') . '/';

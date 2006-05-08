@@ -56,6 +56,10 @@
     unset($val);
   }
 
+  if (strpos(php_sapi_name(), 'cgi') !== false) {
+    $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
+  }
+
   if (!function_exists('checkdnsrr')) {
     function checkdnsrr($host, $type) {
       if(tep_not_null($host) && tep_not_null($type)) {
