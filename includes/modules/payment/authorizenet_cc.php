@@ -263,8 +263,8 @@
 
       if (empty($this->_transaction_response) === false) {
         $regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $this->_transaction_response);
-        foreach ($regs as &$value) {
-          $value = substr($value, 1, -1); // remove double quotes
+        foreach ($regs as $key => $value) {
+          $regs[$key] = substr($value, 1, -1); // remove double quotes
         }
       } else {
         $regs = array('-1', '-1', '-1');

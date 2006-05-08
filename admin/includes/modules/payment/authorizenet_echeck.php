@@ -101,8 +101,8 @@
 
       if ($Qorder->numberOfRows() === 1) {
         $inquiry_regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $Qorder->value('transaction_return_value'));
-        foreach ($inquiry_regs as $value) {
-          $value = substr($value, 1, -1); // remove double quotes
+        foreach ($inquiry_regs as $key => $value) {
+          $inquiry_regs[$key] = substr($value, 1, -1); // remove double quotes
         }
 
         $params = array('x_version' => '3.1',
@@ -127,8 +127,8 @@
 
         if (empty($result) === false) {
           $regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $result);
-          foreach ($regs as $value) {
-            $value = substr($value, 1, -1); // remove double quotes
+          foreach ($regs as $key => $value) {
+            $regs[$key] = substr($value, 1, -1); // remove double quotes
           }
 
           $transaction_return_status = $regs[0];
@@ -164,8 +164,8 @@
 
       if ($Qorder->numberOfRows() === 1) {
         $inquiry_regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $Qorder->value('transaction_return_value'));
-        foreach ($inquiry_regs as $value) {
-          $value = substr($value, 1, -1); // remove double quotes
+        foreach ($inquiry_regs as $key => $value) {
+          $inquiry_regs[$key] = substr($value, 1, -1); // remove double quotes
         }
 
         $params = array('x_version' => '3.1',
@@ -190,8 +190,8 @@
 
         if (empty($result) === false) {
           $regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $result);
-          foreach ($regs as $value) {
-            $value = substr($value, 1, -1); // remove double quotes
+          foreach ($regs as $key => $value) {
+            $regs[$key] = substr($value, 1, -1); // remove double quotes
           }
 
           $transaction_return_status = $regs[0];
