@@ -103,7 +103,7 @@
 
       if ($Qorder->numberOfRows() === 1) {
         $inquiry_regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $Qorder->value('transaction_return_value'));
-        foreach ($inquiry_regs as &$value) {
+        foreach ($inquiry_regs as $value) {
           $value = substr($value, 1, -1); // remove double quotes
         }
 
@@ -129,7 +129,7 @@
 
         if (empty($result) === false) {
           $regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $result);
-          foreach ($regs as &$value) {
+          foreach ($regs as $value) {
             $value = substr($value, 1, -1); // remove double quotes
           }
 
@@ -166,7 +166,7 @@
 
       if ($Qorder->numberOfRows() === 1) {
         $inquiry_regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $Qorder->value('transaction_return_value'));
-        foreach ($inquiry_regs as &$value) {
+        foreach ($inquiry_regs as $value) {
           $value = substr($value, 1, -1); // remove double quotes
         }
 
@@ -192,7 +192,7 @@
 
         if (empty($result) === false) {
           $regs = preg_split("/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/", $result);
-          foreach ($regs as &$value) {
+          foreach ($regs as $value) {
             $value = substr($value, 1, -1); // remove double quotes
           }
 
