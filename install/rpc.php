@@ -133,7 +133,7 @@
                             'category_path',
                             'breadcrumb',
                             'whos_online',
-                            'banner',
+//                            'banner',
                             'specials',
                             'reviews',
                             'recently_visited');

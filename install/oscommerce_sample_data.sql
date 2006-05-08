@@ -19,22 +19,6 @@
 #       * Comments should be like these, full line comments.
 #         (don't use inline comments)
 
-INSERT INTO osc_banners VALUES (1, 'osCommerce', '', '', '468x60', '<script language=\'JavaScript\' type=\'text/javascript\' src=\'http://adserver.oscommerce.com/adx.js\'></script>
-<script language=\'JavaScript\' type=\'text/javascript\'>
-<!--
-   if (!document.phpAds_used) document.phpAds_used = \',\';
-   phpAds_random = new String (Math.random()); phpAds_random = phpAds_random.substring(2,11);
-
-   document.write ("<" + "script language=\'JavaScript\' type=\'text/javascript\' src=\'");
-   document.write ("http://adserver.oscommerce.com/adjs.php?n=" + phpAds_random);
-   document.write ("&amp;what=zone:1");
-   document.write ("&amp;exclude=" + document.phpAds_used);
-   if (document.referrer)
-      document.write ("&amp;referer=" + escape(document.referrer));
-   document.write ("\'><" + "/script>");
-//-->
-</script><noscript><a href=\'http://adserver.oscommerce.com/adclick.php?n=ac215cea\' target=\'_blank\'><img src=\'http://adserver.oscommerce.com/adview.php?what=zone:1&amp;n=ac215cea\' border=\'0\' alt=\'\' /></a></noscript>', 0, date_add(now(), interval 7 day), null, now(), null, 1);
-
 INSERT INTO osc_categories VALUES ('1', 'category_hardware.gif', '0', '1', now(), null);
 INSERT INTO osc_categories VALUES ('2', 'category_software.gif', '0', '2', now(), null);
 INSERT INTO osc_categories VALUES ('3', 'category_dvd_movies.gif', '0', '3', now(), null);
