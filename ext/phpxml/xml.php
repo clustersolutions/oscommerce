@@ -99,10 +99,10 @@ class XML{
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
-//		xml_parse($this->parser, $data, true);
+		xml_parse($this->parser, $data, true);
 //		$this->document = array_shift($this->document);
-//		return $this->document;
-		return xml_parse($this->parser, $data, true) ? array_shift($this->document) : NULL;
+		return $this->document;
+//		return xml_parse($this->parser, $data, true) ? array_shift($this->document) : NULL;
 	}
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata

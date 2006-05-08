@@ -222,16 +222,15 @@
 
         $osC_XML = new osC_XML($this->_transaction_response);
         $result = $osC_XML->toArray();
-        $result = @array_shift($result);
 
-        switch ($result['RESULT']) {
+        switch ($result['IDP attr']['RESULT']) {
           case '0': //success
             break;
 
           case '62':
           case '63':
           case '64':
-            $error = $osC_Language->get('payment_saferpay_cc_error_' . (int)$result['RESULT']);
+            $error = $osC_Language->get('payment_saferpay_cc_error_' . (int)$result['IDP attr']['RESULT']);
             break;
 
           default:

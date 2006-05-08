@@ -82,12 +82,11 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_VT_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_VT_ACCOUNT_ID,
-                          'ID' => $result['ID']);
+                          'ID' => $result['IDP attr']['ID']);
 
           $post_string = '';
 
@@ -121,12 +120,11 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_VT_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_VT_ACCOUNT_ID,
-                          'ID' => $result['ID'],
+                          'ID' => $result['IDP attr']['ID'],
                           'ACTION' => 'Cancel');
 
           $post_string = '';
@@ -161,12 +159,11 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_VT_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_VT_ACCOUNT_ID,
-                          'ID' => $result['ID'],
+                          'ID' => $result['IDP attr']['ID'],
                           'ORDERID' => $id);
 
           $post_string = '';
@@ -179,30 +176,20 @@
 
           $this->_transaction_response = $result_string = $this->sendTransactionToGateway('https://support.saferpay.de/scripts/Inquiry.asp', $post_string);
 
+          $pass = false;
+
           if (substr($this->_transaction_response, 0, 3) == 'OK:') {
             $pass = true;
 
-            $result_string = substr($this->_transaction_response, 3);
-
-            $osC_XML = new osC_XML($result_string);
-            $result = $osC_XML->toArray();
-            $result = array_shift($result);
-
-            $result_string = '<IDP ';
-
-            foreach ($result as $key => $value) {
-              $result_string .= $key . '="' . $value . '" ';
-            }
-
-            $result_string = substr($result_string, 0, -1) . '/>';
+            $this->_transaction_response = substr($this->_transaction_response, 3);
           }
 
           $Qtransaction = $osC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
           $Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
           $Qtransaction->bindInt(':orders_id', $id);
           $Qtransaction->bindInt(':transaction_code', 4);
-          $Qtransaction->bindValue(':transaction_return_value', $result_string);
-          $Qtransaction->bindInt(':transaction_return_status', (substr($this->_transaction_response, 0, 3) == 'OK:') ? 1 : 0);
+          $Qtransaction->bindValue(':transaction_return_value', $this->_transaction_response);
+          $Qtransaction->bindInt(':transaction_return_status', ($pass === true) ? 1 : 0);
           $Qtransaction->execute();
         }
       }

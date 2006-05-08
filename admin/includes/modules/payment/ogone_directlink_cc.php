@@ -101,11 +101,10 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $params = array('PSPID' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_MERCHANT_ID,
                         'PSWD' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_PASSWORD,
-                        'PAYID' => $result_array['PAYID'],
+                        'PAYID' => $result_array['ncresponse attr']['PAYID'],
                         'OPERATION' => 'SAS');
 
         if (osc_empty(MODULE_PAYMENT_OGONE_DIRECTLINK_CC_USER_ID) === false) {
@@ -125,9 +124,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
-          switch ($result_array['STATUS']) {
+          switch ($result_array['ncresponse attr']['STATUS']) {
             case '':
             case '0':
               $transaction_return_status = '0';
@@ -160,11 +158,10 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $params = array('PSPID' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_MERCHANT_ID,
                         'PSWD' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_PASSWORD,
-                        'PAYID' => $result_array['PAYID'],
+                        'PAYID' => $result_array['ncresponse attr']['PAYID'],
                         'OPERATION' => 'DES');
 
         if (osc_empty(MODULE_PAYMENT_OGONE_DIRECTLINK_CC_USER_ID) === false) {
@@ -184,9 +181,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
-          switch ($result_array['STATUS']) {
+          switch ($result_array['ncresponse attr']['STATUS']) {
             case '':
             case '0':
               $transaction_return_status = '0';
@@ -219,11 +215,10 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $params = array('PSPID' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_MERCHANT_ID,
                         'PSWD' => MODULE_PAYMENT_OGONE_DIRECTLINK_CC_PASSWORD,
-                        'PAYID' => $result_array['PAYID']);
+                        'PAYID' => $result_array['ncresponse attr']['PAYID']);
 
         if (osc_empty(MODULE_PAYMENT_OGONE_DIRECTLINK_CC_USER_ID) === false) {
           $params['USERID'] = MODULE_PAYMENT_OGONE_DIRECTLINK_CC_USER_ID;
@@ -242,9 +237,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
-          switch ($result_array['STATUS']) {
+          switch ($result_array['ncresponse attr']['STATUS']) {
             case '':
             case '0':
               $transaction_return_status = '0';

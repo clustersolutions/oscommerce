@@ -264,16 +264,15 @@
       if (empty($this->_transaction_response) === false) {
         $osC_XML = new osC_XML($this->_transaction_response);
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
       } else {
         $result = array();
       }
 
       $error = false;
 
-      if (isset($result['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-        if ($result['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] != 'ACK') {
-          $errno = $result['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['ERROR']['Number'];
+      if (isset($result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+        if ($result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] != 'ACK') {
+          $errno = $result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['ERROR']['Number'];
 
           switch ($errno) {
             case '14':

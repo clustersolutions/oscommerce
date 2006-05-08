@@ -133,8 +133,8 @@
                        <DoCaptureReq xmlns="urn:ebay:api:PayPalAPI">
                          <DoCaptureRequest xmlns="urn:ebay:api:PayPalAPI">
                            <Version xmlns="urn:ebay:apis:eBLBaseComponents" xsi:type="xsd:string">1.0</Version>
-                           <AuthorizationID>' . $result['auth_id'] . '</AuthorizationID>
-                           <Amount currencyID="' . $result['mc_currency'] . '" xsi:type="cc:BasicAmountType">' . $result['mc_gross'] . '</Amount>
+                           <AuthorizationID>' . $result['root']['auth_id'] . '</AuthorizationID>
+                           <Amount currencyID="' . $result['root']['mc_currency'] . '" xsi:type="cc:BasicAmountType">' . $result['root']['mc_gross'] . '</Amount>
                            <CompleteType>Complete</CompleteType>
                          </DoCaptureRequest>
                        </DoCaptureReq>
@@ -146,8 +146,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
 
-// fallback due to a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
-          $result = $osC_XML->toArray(true);
+// there is a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
+          $result = $osC_XML->toArray();
 
           if (isset($result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['DoCaptureResponse'])) {
             $info = $result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['DoCaptureResponse'];
@@ -219,7 +219,7 @@
                        <DoVoidReq xmlns="urn:ebay:api:PayPalAPI">
                          <DoVoidRequest xmlns="urn:ebay:api:PayPalAPI">
                            <Version xmlns="urn:ebay:apis:eBLBaseComponents" xsi:type="xsd:string">1.0</Version>
-                           <AuthorizationID>' . $result['auth_id'] . '</AuthorizationID>
+                           <AuthorizationID>' . $result['root']['auth_id'] . '</AuthorizationID>
                          </DoVoidRequest>
                        </DoVoidReq>
                      </SOAP-ENV:Body>
@@ -230,8 +230,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
 
-// fallback due to a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
-          $result = $osC_XML->toArray(true);
+// there is a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
+          $result = $osC_XML->toArray();
 
           if (isset($result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['DoVoidResponse'])) {
             $result = $result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['DoVoidResponse'];
@@ -285,7 +285,7 @@
                       <GetTransactionDetailsReq xmlns="urn:ebay:api:PayPalAPI">
                         <GetTransactionDetailsRequest xsi:type="ns:GetTransactionDetailsRequestType">
                           <Version xmlns="urn:ebay:apis:eBLBaseComponents" xsi:type="xsd:string">1.0</Version>
-                          <TransactionID xsi:type="ebl:TransactionId">' . $result['txn_id'] . '</TransactionID>
+                          <TransactionID xsi:type="ebl:TransactionId">' . $result['root']['txn_id'] . '</TransactionID>
                         </GetTransactionDetailsRequest>
                       </GetTransactionDetailsReq>
                     </SOAP-ENV:Body>
@@ -296,8 +296,8 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
 
-// fallback due to a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
-          $result = $osC_XML->toArray(true);
+// there is a PHP 5.1.2 XML root namespace bug; http://bugs.php.net/bug.php?id=37035
+          $result = $osC_XML->toArray();
 
           if (isset($result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['GetTransactionDetailsResponse'])) {
             $info = $result['SOAP-ENV:Envelope']['SOAP-ENV:Body']['GetTransactionDetailsResponse'];

@@ -149,9 +149,8 @@
 
         $osC_XML = new osC_XML($this->_transaction_response);
         $result = $osC_XML->toArray();
-        $result = @array_shift($result);
 
-        switch ($result_array['RESULT']) {
+        switch ($result_array['IDP attr']['RESULT']) {
           case '0': //success
             break;
 

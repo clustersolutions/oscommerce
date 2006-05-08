@@ -221,16 +221,15 @@
       if (empty($this->_transaction_response) === false) {
         $osC_XML = new osC_XML($this->_transaction_response);
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
       } else {
         $result = array();
       }
 
       $error = false;
 
-      if (isset($result['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-        if ($result['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] != 'ACK') {
-//          $errno = $result['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['DETAIL']['ReturnCode'];
+      if (isset($result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+        if ($result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] != 'ACK') {
+//          $errno = $result['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['DETAIL']['ReturnCode'];
 
 //          switch ($errno) {
 //            default:

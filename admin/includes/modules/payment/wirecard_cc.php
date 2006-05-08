@@ -102,7 +102,6 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $post_string = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
                        '<WIRECARD_BXML xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:noNamespaceSchemaLocation="wirecard.xsd">' . "\n" .
@@ -113,8 +112,8 @@
                        '      <FNC_CC_CAPTURE_PREAUTHORIZATION>' . "\n" .
                        '        <FunctionID>Capturing 1</FunctionID>' . "\n" .
                        '        <CC_TRANSACTION mode="' . MODULE_PAYMENT_WIRECARD_CC_TRANSACTION_MODE . '">' . "\n" .
-                       '          <TransactionID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
-                       '          <GuWID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n" .
+                       '          <TransactionID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
+                       '          <GuWID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n" .
                        '        </CC_TRANSACTION>' . "\n" .
                        '      </FNC_CC_CAPTURE_PREAUTHORIZATION>' . "\n" .
                        '    </W_JOB>' . "\n" .
@@ -126,12 +125,11 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
           $transaction_return_status = '0';
 
-          if (isset($result_array['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-            if ($result_array['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
+          if (isset($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+            if ($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
               $transaction_return_status = '1';
             }
           }
@@ -158,7 +156,6 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $post_string = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
                        '<WIRECARD_BXML xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:noNamespaceSchemaLocation="wirecard.xsd">' . "\n" .
@@ -171,11 +168,11 @@
                        '        <CC_TRANSACTION mode="' . MODULE_PAYMENT_WIRECARD_CC_TRANSACTION_MODE . '">' . "\n";
 
         if ($Qorder->valueInt('transaction_code') === 1) {
-          $post_string .= '          <TransactionID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
-                          '          <GuWID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n";
+          $post_string .= '          <TransactionID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
+                          '          <GuWID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n";
         } else {
-          $post_string .= '          <TransactionID>' . $result_array['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
-                          '          <GuWID>' . $result_array['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n";
+          $post_string .= '          <TransactionID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
+                          '          <GuWID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_CAPTURE_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n";
         }
 
         $post_string .= '        </CC_TRANSACTION>' . "\n" .
@@ -189,12 +186,11 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
           $transaction_return_status = '0';
 
-          if (isset($result_array['W_JOB']['FNC_CC_REVERSAL']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-            if ($result_array['W_JOB']['FNC_CC_REVERSAL']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
+          if (isset($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_REVERSAL']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+            if ($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_REVERSAL']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
               $transaction_return_status = '1';
             }
           }
@@ -221,7 +217,6 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $post_string = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
                        '<WIRECARD_BXML xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:noNamespaceSchemaLocation="wirecard.xsd">' . "\n" .
@@ -232,8 +227,8 @@
                        '      <FNC_CC_QUERY>' . "\n" .
                        '        <FunctionID>Query 1</FunctionID>' . "\n" .
                        '        <CC_TRANSACTION mode="' . MODULE_PAYMENT_WIRECARD_CC_TRANSACTION_MODE . '">' . "\n" .
-                       '          <TransactionID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
-                       '          <GuWID>' . $result_array['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n" .
+                       '          <TransactionID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
+                       '          <GuWID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_PREAUTHORIZATION']['CC_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</GuWID>' . "\n" .
                        '        </CC_TRANSACTION>' . "\n" .
                        '      </FNC_CC_QUERY>' . "\n" .
                        '    </W_JOB>' . "\n" .
@@ -245,12 +240,11 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
           $transaction_return_status = '0';
 
-          if (isset($result_array['W_JOB']['FNC_CC_QUERY']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-            if ($result_array['W_JOB']['FNC_CC_QUERY']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
+          if (isset($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_QUERY']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+            if ($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_CC_QUERY']['CC_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
               $transaction_return_status = '1';
             }
           }

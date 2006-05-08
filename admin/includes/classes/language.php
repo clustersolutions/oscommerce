@@ -34,11 +34,11 @@
 
       $definitions = $osC_XML->toArray();
 
-      if (isset($definitions['definitions']['definition'][0]) === false) {
-        $definitions['definitions']['definition'] = array($definitions['definitions']['definition']);
+      if (isset($definitions['language']['definitions']['definition'][0]) === false) {
+        $definitions['language']['definitions']['definition'] = array($definitions['language']['definitions']['definition']);
       }
 
-      return $definitions['definitions']['definition'];
+      return $definitions['language']['definitions']['definition'];
     }
 
     function import($file, $type) {
@@ -63,7 +63,7 @@
                           'numeric_separator_thousands' => $source['data']['numerical_thousands_separator']
                          );
 
-        $definitions = $source['definitions']['definition'];
+        $definitions = $source['language']['definitions']['definition'];
 
         unset($source);
 

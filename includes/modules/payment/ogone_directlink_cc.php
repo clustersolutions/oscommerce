@@ -239,12 +239,11 @@
       if (empty($this->_transaction_response) === false) {
         $osC_XML = new osC_XML($this->_transaction_response);
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
       } else {
-        $result = array('STATUS' => '');
+        $result = array('ncresponse attr' => array('STATUS' => ''));
       }
 
-      switch ($result['STATUS']) {
+      switch ($result['ncresponse attr']['STATUS']) {
         case '':
         case '0':
         case '2';

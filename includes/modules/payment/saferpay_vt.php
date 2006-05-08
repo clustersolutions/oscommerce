@@ -145,9 +145,8 @@
       if ($error === false) {
         $osC_XML = new osC_XML($_GET['DATA']);
         $result = $osC_XML->toArray();
-        $result = @array_shift($result);
 
-        $this->_order_id = $result['ORDERID'];
+        $this->_order_id = $result['IDP attr']['ORDERID'];
 
         osC_Order::process($this->_order_id, $this->order_status);
 

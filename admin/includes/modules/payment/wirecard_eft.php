@@ -94,7 +94,6 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result_array = $osC_XML->toArray();
-        $result_array = array_shift($result_array);
 
         $post_string = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
                        '<WIRECARD_BXML xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:noNamespaceSchemaLocation="wirecard.xsd">' . "\n" .
@@ -105,8 +104,8 @@
                        '      <FNC_FT_CANCEL>' . "\n" .
                        '        <FunctionID>Reversal 1</FunctionID>' . "\n" .
                        '        <FT_TRANSACTION mode="' . MODULE_PAYMENT_WIRECARD_EFT_TRANSACTION_MODE . '">' . "\n" .
-                       '          <TransactionID>' . $result_array['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
-                       '          <ReferenceGuWID>' . $result_array['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</ReferenceGuWID>' . "\n" .
+                       '          <TransactionID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['TransactionID'] . '</TransactionID>' . "\n" .
+                       '          <ReferenceGuWID>' . $result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_DEBIT']['FT_TRANSACTION']['PROCESSING_STATUS']['GuWID'] . '</ReferenceGuWID>' . "\n" .
                        '        </FT_TRANSACTION>' . "\n" .
                        '      </FNC_FT_CANCEL>' . "\n" .
                        '    </W_JOB>' . "\n" .
@@ -118,12 +117,11 @@
         if (empty($result) === false) {
           $osC_XML = new osC_XML($result);
           $result_array = $osC_XML->toArray();
-          $result_array = array_shift($result_array);
 
           $transaction_return_status = '0';
 
-          if (isset($result_array['W_JOB']['FNC_FT_CANCEL']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
-            if ($result_array['W_JOB']['FNC_FT_CANCEL']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
+          if (isset($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_CANCEL']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'])) {
+            if ($result_array['WIRECARD_BXML']['W_RESPONSE']['W_JOB']['FNC_FT_CANCEL']['FT_TRANSACTION']['PROCESSING_STATUS']['FunctionResult'] == 'ACK') {
               $transaction_return_status = '1';
             }
           }

@@ -86,12 +86,11 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_CC_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_CC_ACCOUNT_ID,
-                          'ID' => $result['ID']);
+                          'ID' => $result['IDP attr']['ID']);
 
           $post_string = '';
 
@@ -125,12 +124,11 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_CC_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_CC_ACCOUNT_ID,
-                          'ID' => $result['ID'],
+                          'ID' => $result['IDP attr']['ID'],
                           'ACTION' => 'Cancel');
 
           $post_string = '';
@@ -165,13 +163,12 @@
       if ($Qorder->numberOfRows() === 1) {
         $osC_XML = new osC_XML($Qorder->value('transaction_return_value'));
         $result = $osC_XML->toArray();
-        $result = array_shift($result);
 
-        if (isset($result['ID'])) {
+        if (isset($result['IDP attr']['ID'])) {
           $params = array('spPassword' => MODULE_PAYMENT_SAFERPAY_CC_PASSWORD,
                           'ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_CC_ACCOUNT_ID,
-                          'ID' => $result['ID'],
-                          'ORDERID' => $result['ORDERID']);
+                          'ID' => $result['IDP attr']['ID'],
+                          'ORDERID' => $result['IDP attr']['ORDERID']);
 
           $post_string = '';
 
@@ -190,14 +187,13 @@
 
             $osC_XML = new osC_XML($result_string);
             $result = $osC_XML->toArray();
-            $result = array_shift($result);
 
-            $result['TRACK2'] = str_replace($result['PAN'], str_repeat('X', strlen($result['PAN'])-4) . substr($result['PAN'], -4), $result['TRACK2']);
-            $result['PAN'] = str_repeat('X', strlen($result['PAN'])-4) . substr($result['PAN'], -4);
+            $result['IDP attr']['TRACK2'] = str_replace($result['IDP attr']['PAN'], str_repeat('X', strlen($result['IDP attr']['PAN'])-4) . substr($result['IDP attr']['PAN'], -4), $result['IDP attr']['TRACK2']);
+            $result['IDP attr']['PAN'] = str_repeat('X', strlen($result['IDP attr']['PAN'])-4) . substr($result['IDP attr']['PAN'], -4);
 
             $result_string = '<IDP ';
 
-            foreach ($result as $key => $value) {
+            foreach ($result['IDP attr'] as $key => $value) {
               $result_string .= $key . '="' . $value . '" ';
             }
 
