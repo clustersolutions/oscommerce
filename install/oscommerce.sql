@@ -443,7 +443,6 @@ DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
   products_id int NOT NULL auto_increment,
   products_quantity int(4) NOT NULL,
-  products_image varchar(64),
   products_price decimal(15,4) NOT NULL,
   products_date_added datetime NOT NULL,
   products_last_modified datetime,
@@ -492,6 +491,30 @@ CREATE TABLE osc_products_description (
   PRIMARY KEY  (products_id,language_id),
   KEY products_name (products_name),
   KEY products_description_keyword (products_keyword)
+);
+
+DROP TABLE IF EXISTS osc_products_images;
+CREATE TABLE osc_products_images (
+  id int NOT NULL auto_increment,
+  products_id int NOT NULL,
+  image varchar(255) NOT NULL,
+  default_flag tinyint(1) NOT NULL,
+  sort_order int NOT NULL,
+  date_added datetime NOT NULL,
+  PRIMARY KEY (id),
+  KEY products_images_products_id (products_id)
+);
+
+DROP TABLE IF EXISTS osc_products_images_groups;
+CREATE TABLE osc_products_images_groups (
+  id int NOT NULL auto_increment,
+  language_id int NOT NULL,
+  title varchar(255) not null,
+  code varchar(32) not null,
+  size_width int,
+  size_height int,
+  force_size tinyint(1) default 0,
+  PRIMARY KEY (id, language_id)
 );
 
 DROP TABLE IF EXISTS osc_products_notifications;
@@ -758,6 +781,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Currency', 'DEFAULT_CURRENCY', 'USD', 'Default Currency', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Language', 'DEFAULT_LANGUAGE', 'en_US', 'Default Language', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Order Status For New Orders', 'DEFAULT_ORDERS_STATUS_ID', '1', 'When a new order is created, this order status will be assigned to it.', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Image Group', 'DEFAULT_IMAGE_GROUP_ID', '2', 'Default image group.', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Template', 'DEFAULT_TEMPLATE', 'default', 'Default Template', '6', '0', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country of Origin', 'SHIPPING_ORIGIN_COUNTRY', '223', 'Select the country of origin to be used in shipping quotes.', '7', '1', 'tep_get_country_name', 'tep_cfg_pull_down_country_list(', now());
@@ -801,6 +825,8 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Verify With Regular Expressions', 'CFG_CREDIT_CARDS_VERIFY_WITH_REGEXP', '1', 'Verify credit card numbers with server-side regular expression patterns.', '17', '0', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Verify With Javascript', 'CFG_CREDIT_CARDS_VERIFY_WITH_JS', '1', 'Verify credit card numbers with javascript based regular expression patterns.', '17', '1', 'osc_cfg_get_boolean_value', 'tep_cfg_select_option(array(1, -1), ', now());
 
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('ImageMagick "convert"', 'CFG_APP_IMAGEMAGICK_CONVERT', '/usr/bin/convert', 'The program location to ImageMagicks "convert" to use when manipulating images.', '18', '1', now());
+
 INSERT INTO osc_configuration_group VALUES ('1', 'My Store', 'General information about my store', '1', '1');
 INSERT INTO osc_configuration_group VALUES ('2', 'Minimum Values', 'The minimum values for functions / data', '2', '1');
 INSERT INTO osc_configuration_group VALUES ('3', 'Maximum Values', 'The maximum values for functions / data', '3', '1');
@@ -814,6 +840,7 @@ INSERT INTO osc_configuration_group VALUES ('12', 'E-Mail Options', 'General set
 INSERT INTO osc_configuration_group VALUES ('13', 'Download', 'Downloadable products options', '13', '1');
 INSERT INTO osc_configuration_group VALUES ('16', 'Regulations', 'Regulation options', '16', '1');
 INSERT INTO osc_configuration_group VALUES ('17', 'Credit Cards', 'Credit card options', '17', '1');
+INSERT INTO osc_configuration_group VALUES ('18', 'Program Locations', 'Locations to certain programs on the server.', '18', '1');
 
 INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG','1');
 INSERT INTO osc_countries VALUES (2,'Albania','AL','ALB','1');
@@ -1085,6 +1112,12 @@ INSERT INTO osc_orders_transactions_status VALUES ( '1', '1', 'Authorize');
 INSERT INTO osc_orders_transactions_status VALUES ( '2', '1', 'Cancel');
 INSERT INTO osc_orders_transactions_status VALUES ( '3', '1', 'Approve');
 INSERT INTO osc_orders_transactions_status VALUES ( '4', '1', 'Inquiry');
+
+INSERT INTO osc_products_images_groups values (1, 1, 'Originals', 'originals', 0, 0, 0);
+INSERT INTO osc_products_images_groups values (2, 1, 'Thumbnails', 'thumbnails', 100, 80, 0);
+INSERT INTO osc_products_images_groups values (3, 1, 'Product Information Page', 'product_info', 188, 150, 0);
+INSERT INTO osc_products_images_groups values (4, 1, 'Large', 'large', 375, 300, 0);
+INSERT INTO osc_products_images_groups values (5, 1, 'Mini', 'mini', 50, 40, 0);
 
 INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
 

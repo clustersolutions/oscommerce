@@ -112,6 +112,7 @@ define('BOX_HEADING_TOOLS', 'Tools');
 define('BOX_TOOLS_BACKUP', 'Database Backup');
 define('BOX_TOOLS_BANNER_MANAGER', 'Banner Manager');
 define('BOX_TOOLS_CACHE', 'Cache Control');
+define('BOX_TOOLS_IMAGES', 'Images');
 define('BOX_TOOLS_FILE_MANAGER', 'File Manager');
 define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Newsletter Manager');
 define('BOX_TOOLS_SERVER_INFO', 'Server Info');
@@ -123,6 +124,7 @@ define('BOX_LOCALIZATION_CURRENCIES', 'Currencies');
 define('BOX_LOCALIZATION_LANGUAGES', 'Languages');
 define('BOX_LOCALIZATION_ORDERS_STATUS', 'Orders Status');
 define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
+define('BOX_LOCALIZATION_IMAGE_GROUPS', 'Image Groups');
 
 define('BOX_HEADING_LOGOFF', 'Logoff');
 

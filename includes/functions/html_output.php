@@ -89,10 +89,11 @@
 // the image filename as default
     $image = '<img src="' . tep_output_string($src) . '" border="0" alt="' . tep_output_string($alt) . '"';
 
-    if (tep_not_null($alt)) {
+    if (empty($alt) === false) {
       $image .= ' title=" ' . tep_output_string($alt) . ' "';
     }
 
+/*
     if ( (CONFIG_CALCULATE_IMAGE_SIZE == '1') && (empty($width) || empty($height)) ) {
       if ($image_size = @getimagesize($src)) {
         if (empty($width) && tep_not_null($height)) {
@@ -109,12 +110,19 @@
         return false;
       }
     }
+*/
 
-    if (tep_not_null($width) && tep_not_null($height)) {
-      $image .= ' width="' . tep_output_string($width) . '" height="' . tep_output_string($height) . '"';
+    if ($width > 0) {
+      $image .= ' width="' . tep_output_string($width) . '"';
     }
 
-    if (tep_not_null($parameters)) $image .= ' ' . $parameters;
+    if ($height > 0) {
+      $image .= ' height="' . tep_output_string($height) . '"';
+    }
+
+    if (empty($parameters) === false) {
+      $image .= ' ' . $parameters;
+    }
 
     $image .= ' />';
 

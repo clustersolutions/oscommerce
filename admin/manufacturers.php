@@ -91,6 +91,8 @@
         break;
       case 'deleteconfirm':
         if (isset($_GET['mID']) && is_numeric($_GET['mID'])) {
+          include('includes/classes/product.php');
+
           if (isset($_POST['delete_image']) && ($_POST['delete_image'] == 'on')) {
             $Qimage = $osC_Database->query('select manufacturers_image from :table_manufacturers where manufacturers_id = :manufacturers_id');
             $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
@@ -121,7 +123,7 @@
             $Qproducts->execute();
 
             while ($Qproducts->next()) {
-              tep_remove_product($Qproducts->valueInt('products_id'));
+              osC_Product_Admin::remove($Qproducts->valueInt('products_id'));
             }
           } else {
             $Qupdate = $osC_Database->query('update :table_products set manufacturers_id = "" where manufacturers_id = :manufacturers_id');

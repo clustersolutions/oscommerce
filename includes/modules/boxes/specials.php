@@ -25,15 +25,17 @@
     }
 
     function initialize() {
-      global $osC_Database, $osC_Services, $osC_Currencies, $osC_Cache, $osC_Language;
+      global $osC_Database, $osC_Services, $osC_Currencies, $osC_Cache, $osC_Language, $osC_Image;
 
       if ($osC_Services->isStarted('specials')) {
-        if ((BOX_SPECIALS_CACHE > 0) && $osC_Cache->read('box-specials-' . $osC_Language->getCode(), BOX_SPECIALS_CACHE)) {
+        if ((BOX_SPECIALS_CACHE > 0) && $osC_Cache->read('box-specials-' . $osC_Language->getCode() . '-' . $osC_Currencies->getCode(), BOX_SPECIALS_CACHE)) {
           $data = $osC_Cache->getCache();
         } else {
-          $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, p.products_image, pd.products_name, pd.products_keyword, s.specials_new_products_price from :table_products p, :table_products_description pd, :table_specials s where s.status = 1 and s.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by s.specials_date_added desc limit :max_random_select_specials');
+          $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword, s.specials_new_products_price, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd, :table_specials s where s.status = 1 and s.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by s.specials_date_added desc limit :max_random_select_specials');
           $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
+          $Qspecials->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
           $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+          $Qspecials->bindInt(':default_flag', 1);
           $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
           $Qspecials->bindInt(':language_id', $osC_Language->getID());
           $Qspecials->bindInt(':max_random_select_specials', BOX_SPECIALS_RANDOM_SELECT);
@@ -51,7 +53,13 @@
         }
 
         if (empty($data) === false) {
-          $this->_content = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . tep_image(DIR_WS_IMAGES . $data['products_image'], $data['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br /><a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
+          $this->_content = '';
+
+          if (empty($data['image']) === false) {
+            $this->_content = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $osC_Image->show($data['image'], $data['products_name']) . '</a><br />';
+          }
+
+          $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
         }
       }
     }

@@ -115,6 +115,8 @@
         break;
       case 'delete_category_confirm':
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
+          include('includes/classes/product.php');
+
           $osC_CategoryTree->setBreadcrumbUsage(false);
 
           $categories = array_merge(array(array('id' => $_GET['cID'], 'text' => '')), $osC_CategoryTree->getTree($_GET['cID']));
@@ -150,8 +152,8 @@
             tep_remove_category($c_entry['id']);
           }
 
-          foreach ($products_delete as $key => $value) {
-            tep_remove_product($key);
+          foreach ($products_delete as $id) {
+            osC_Product_Admin::remove($id);
           }
 
           osC_Cache::clear('categories');

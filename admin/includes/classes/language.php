@@ -18,7 +18,7 @@
     function loadConstants($definition = false) {
       if (is_string($definition) && file_exists('includes/languages/' . $this->getCode() . '/' . $definition)) {
         include('includes/languages/' . $this->getCode() . '/' . $definition);
-      } else {
+      } elseif ($definition === false) {
         include('includes/languages/' . $this->getCode() . '.php');
       }
     }

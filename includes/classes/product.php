@@ -14,11 +14,12 @@
     var $_data = array();
 
     function osC_Product($id) {
-      global $osC_Database, $osC_Services, $osC_Language;
+      global $osC_Database, $osC_Services, $osC_Language, $osC_Image;
 
       if (!empty($id)) {
-        $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_image as image, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where');
+        $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where');
         $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qproduct->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
         $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
 
         if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
@@ -30,6 +31,7 @@
         }
 
         $Qproduct->appendQuery('and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id');
+        $Qproduct->bindInt(':default_flag', 1);
         $Qproduct->bindInt(':language_id', $osC_Language->getID());
         $Qproduct->execute();
 
@@ -242,12 +244,14 @@
     }
 
     function &getListingNew() {
-      global $osC_Database, $osC_Language;
+      global $osC_Database, $osC_Language, $osC_Image;
 
-      $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_image, p.products_price, p.products_tax_class_id, p.products_date_added, m.manufacturers_name from :table_products p left join :table_manufacturers m on (p.manufacturers_id = m.manufacturers_id), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc, pd.products_name');
+      $Qproducts = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, p.products_date_added, pd.products_name, pd.products_keyword, m.manufacturers_name, i.image from :table_products p left join :table_manufacturers m on (p.manufacturers_id = m.manufacturers_id) left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc, pd.products_name');
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+      $Qproducts->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+      $Qproducts->bindInt(':default_flag', 1);
       $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_PRODUCTS_NEW);
       $Qproducts->execute();

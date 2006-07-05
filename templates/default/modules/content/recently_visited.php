@@ -32,7 +32,7 @@
         echo '            <tr>' . "\n";
 
         if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES == '1') {
-          echo '              <td width="' . ((SMALL_IMAGE_WIDTH * 0.5) + 5) . '"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . tep_image(DIR_WS_IMAGES . $product['image'], $product['name'], SMALL_IMAGE_WIDTH*0.5, SMALL_IMAGE_HEIGHT*0.5) . '</a></td>' . "\n";
+          echo '              <td width="' . ($osC_Image->getWidth('mini') + 10) . '" align="center"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . $osC_Image->show($product['image'], $product['name'], '', 'mini') . '</a></td>' . "\n";
         }
 
         echo '              <td class="main"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . $product['name'] . '</a><br />';

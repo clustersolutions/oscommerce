@@ -62,7 +62,7 @@
     }
 
     function stop() {
-      global $messageStack;
+      global $messageStack, $osC_Template;
 
       $time_start = explode(' ', PAGE_PARSE_START_TIME);
       $time_end = explode(' ', microtime());
@@ -80,7 +80,7 @@
         $messageStack->add('debug', 'Execution Time: ' . $parse_time . 's [' . __CLASS__ . ']', 'warning');
       }
 
-      if ($messageStack->size('debug') > 0) {
+      if ( $osC_Template->showDebugMessages() && ($messageStack->size('debug') > 0) ) {
         echo $messageStack->output('debug');
       }
 

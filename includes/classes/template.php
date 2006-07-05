@@ -122,6 +122,51 @@
     var $_javascript_blocks = array();
 
 /**
+ * Defines if the requested page has a header
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_has_header = true;
+
+/**
+ * Defines if the requested page has a footer
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_has_footer = true;
+
+/**
+ * Defines if the requested page has box modules
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_has_box_modules = true;
+
+/**
+ * Defines if the requested page has content modules
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_has_content_modules = true;
+
+/**
+ * Defines if the requested page should display any debug messages
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_show_debug_messages = true;
+
+/**
  * Setup the template class with the requested page module
  *
  * @param string $module The default page module to setup
@@ -362,6 +407,61 @@
 
     function hasJavascript() {
       return (!empty($this->_javascript_filenames) || !empty($this->_javascript_php_filenames) || !empty($this->_javascript_blocks));
+    }
+
+/**
+ * Checks to see if the page has a footer defined
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function hasPageFooter() {
+      return $this->_has_footer;
+    }
+
+/**
+ * Checks to see if the page has a header defined
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function hasPageHeader() {
+      return $this->_has_header;
+    }
+
+/**
+ * Checks to see if the page has content modules defined
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function hasPageContentModules() {
+      return $this->_has_content_modules;
+    }
+
+/**
+ * Checks to see if the page has box modules defined
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function hasPageBoxModules() {
+      return $this->_has_box_modules;
+    }
+
+/**
+ * Checks to see if the page show display debug messages
+ *
+ * @access public
+ * @return boolean
+ */
+
+    function showDebugMessages() {
+      return $this->_show_debug_messages;
     }
 
 /**

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -10,12 +10,60 @@
   Released under the GNU General Public License
 */
 
+/**
+ * The administration side of the Wire Card EFT payment module
+ */
+
   class osC_Payment_wirecard_eft extends osC_Payment_Admin {
-    var $_title,
-        $_code = 'wirecard_eft',
-        $_author_name = 'osCommerce',
-        $_author_www = 'http://www.oscommerce.com',
-        $_status = false;
+
+/**
+ * The administrative title of the payment module
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_title;
+
+/**
+ * The code of the payment module
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_code = 'wirecard_eft';
+
+/**
+ * The developers name
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_author_name = 'osCommerce';
+
+/**
+ * The developers address
+ *
+ * @var string
+ * @access private
+ */
+
+    var $_author_www = 'http://www.oscommerce.com';
+
+/**
+ * The status of the module
+ *
+ * @var boolean
+ * @access private
+ */
+
+    var $_status = false;
+
+/**
+ * Constructor
+ */
 
     function osC_Payment_wirecard_eft() {
       global $osC_Language;
@@ -37,9 +85,23 @@
       }
     }
 
+/**
+ * Checks to see if the module has been installed
+ *
+ * @access public
+ * @return boolean
+ */
+
     function isInstalled() {
-      return defined('MODULE_PAYMENT_WIRECARD_EFT_STATUS');
+      return (bool)defined('MODULE_PAYMENT_WIRECARD_EFT_STATUS');
     }
+
+/**
+ * Installs the module
+ *
+ * @access public
+ * @see osC_Payment_Admin::install()
+ */
 
     function install() {
       global $osC_Database;
@@ -57,6 +119,13 @@
       $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_WIRECARD_EFT_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0' , now())");
     }
 
+/**
+ * Return the configuration parameter keys in an array
+ *
+ * @access public
+ * @return array
+ */
+
     function getKeys() {
       if (!isset($this->_keys)) {
         $this->_keys = array('MODULE_PAYMENT_WIRECARD_EFT_STATUS',
@@ -73,6 +142,14 @@
       return $this->_keys;
     }
 
+/**
+ * Returns the available post transaction actions in an array
+ *
+ * @access public
+ * @param $history An array of transaction actions already processed
+ * @return array
+ */
+
     function getPostTransactionActions($history) {
       $actions = array();
 
@@ -82,6 +159,13 @@
 
       return $actions;
     }
+
+/**
+ * Cancels the transaction at the gateway server
+ *
+ * @access public
+ * @param $id The ID of the order
+ */
 
     function cancelTransaction($id) {
       global $osC_Database;

@@ -25,6 +25,8 @@
   define('FILENAME_DEFAULT', 'index.php');
   define('FILENAME_FILE_MANAGER', 'file_manager.php');
   define('FILENAME_GEO_ZONES', 'geo_zones.php');
+  define('FILENAME_IMAGE_GROUPS', 'image_groups.php');
+  define('FILENAME_IMAGES', 'images.php');
   define('FILENAME_LANGUAGES', 'languages.php');
   define('FILENAME_LANGUAGES_DEFINITIONS', 'languages_definitions.php');
   define('FILENAME_LOGIN', 'login.php');

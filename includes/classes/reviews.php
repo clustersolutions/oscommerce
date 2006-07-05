@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -140,16 +140,18 @@
     }
 
     function &getListing($id = null) {
-      global $osC_Database, $osC_Language;
+      global $osC_Database, $osC_Language, $osC_Image;
 
       if (is_numeric($id)) {
         $Qreviews = $osC_Database->query('select reviews_id, reviews_text, reviews_rating, date_added, customers_name from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1 order by reviews_id desc');
         $Qreviews->bindInt(':products_id', $id);
         $Qreviews->bindInt(':languages_id', $osC_Language->getID());
       } else {
-        $Qreviews = $osC_Database->query('select r.reviews_id, left(r.reviews_text, 100) as reviews_text, r.reviews_rating, r.date_added, r.customers_name, p.products_id, p.products_image, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword from :table_reviews r, :table_products p, :table_products_description pd where r.reviews_status = 1 and r.languages_id = :languages_id and r.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by r.reviews_id desc');
+        $Qreviews = $osC_Database->query('select r.reviews_id, left(r.reviews_text, 100) as reviews_text, r.reviews_rating, r.date_added, r.customers_name, p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword, i.image from :table_reviews r, :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where r.reviews_status = 1 and r.languages_id = :languages_id and r.products_id = p.products_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by r.reviews_id desc');
         $Qreviews->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qreviews->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
         $Qreviews->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+        $Qreviews->bindInt(':default_flag', 1);
         $Qreviews->bindInt(':languages_id', $osC_Language->getID());
         $Qreviews->bindInt(':language_id', $osC_Language->getID());
       }

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: index.php 199 2005-09-22 17:56:13 +0200 (Do, 22 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -26,7 +26,13 @@
   while ($Qspecials->next()) {
     $row++;
 
-    echo '    <td align="center" width="33%" class="smallText"><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qspecials->value('products_image'), $Qspecials->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br /><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->valueInt('products_id')) . '">' . $Qspecials->value('products_name') . '</a><br /><s>' . $osC_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s><br /><span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span></td>' . "\n";
+    echo '    <td align="center" width="33%" class="smallText">';
+
+    if (osc_empty($Qspecials->value('image')) === false) {
+      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')) . '">' . $osC_Image->show($Qspecials->value('image'), $Qspecials->value('products_name')) . '</a><br />';
+    }
+
+    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')) . '">' . $Qspecials->value('products_name') . '</a><br /><s>' . $osC_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span></td>' . "\n";
 
     if ((($row / 3) == floor($row / 3))) {
 ?>

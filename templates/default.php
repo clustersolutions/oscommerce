@@ -55,86 +55,109 @@
     echo $messageStack->output('header');
   }
 
-  foreach ($osC_Services->getCallBeforePageContent() as $service) {
-    $$service[0]->$service[1]();
-  }
-
-  foreach ($osC_Template->getContentModules('before') as $box) {
-    $osC_Box = new $box();
-    $osC_Box->initialize();
-
-    if ($osC_Box->hasContent()) {
-      include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+  if ($osC_Template->hasPageContentModules()) {
+    foreach ($osC_Services->getCallBeforePageContent() as $service) {
+      $$service[0]->$service[1]();
     }
 
-    unset($osC_Box);
+    foreach ($osC_Template->getContentModules('before') as $box) {
+      $osC_Box = new $box();
+      $osC_Box->initialize();
+
+      if ($osC_Box->hasContent()) {
+        include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+      }
+
+      unset($osC_Box);
+    }
   }
 
   include('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
 
-  foreach ($osC_Services->getCallAfterPageContent() as $service) {
-    $$service[0]->$service[1]();
-  }
-
-  foreach ($osC_Template->getContentModules('after') as $box) {
-    $osC_Box = new $box();
-    $osC_Box->initialize();
-
-    if ($osC_Box->hasContent()) {
-      include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+  if ($osC_Template->hasPageContentModules()) {
+    foreach ($osC_Services->getCallAfterPageContent() as $service) {
+      $$service[0]->$service[1]();
     }
 
-    unset($osC_Box);
+    foreach ($osC_Template->getContentModules('after') as $box) {
+      $osC_Box = new $box();
+      $osC_Box->initialize();
+
+      if ($osC_Box->hasContent()) {
+        include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+      }
+
+      unset($osC_Box);
+    }
   }
 ?>
 
   </div>
+
+<?php
+  if ($osC_Template->hasPageBoxModules()) {
+?>
 
   <div id="pageColumnLeft">
     <div class="boxGroup">
 
 <?php
-  foreach ($osC_Template->getBoxModules('left') as $box) {
-    $osC_Box = new $box();
-    $osC_Box->initialize();
+    foreach ($osC_Template->getBoxModules('left') as $box) {
+      $osC_Box = new $box();
+      $osC_Box->initialize();
 
-    if ($osC_Box->hasContent()) {
-      include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+      if ($osC_Box->hasContent()) {
+        include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+      }
+
+      unset($osC_Box);
     }
-
-    unset($osC_Box);
-  }
 ?>
 
     </div>
   </div>
+
+<?php
+  }
+?>
+
 </div>
+
+<?php
+  if ($osC_Template->hasPageBoxModules()) {
+?>
 
 <div id="pageColumnRight">
   <div class="boxGroup">
 
 <?php
-  foreach ($osC_Template->getBoxModules('right') as $box) {
-    $osC_Box = new $box();
-    $osC_Box->initialize();
+    foreach ($osC_Template->getBoxModules('right') as $box) {
+      $osC_Box = new $box();
+      $osC_Box->initialize();
 
-    if ($osC_Box->hasContent()) {
-      include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+      if ($osC_Box->hasContent()) {
+        include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+      }
+
+      unset($osC_Box);
     }
-
-    unset($osC_Box);
-  }
 ?>
 
   </div>
 </div>
+
+<?php
+  }
+
+  if ($osC_Template->hasPageHeader()) {
+?>
 
 <div id="pageHeader">
   <div id="header-content">
     <div id="headerLogo">
 
 <?php
-  echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce') . '</a>';
+    echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce') . '</a>';
 ?>
 
     </div>
@@ -142,9 +165,9 @@
     <div id="headerIcons">
 
 <?php
-  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account')) . '</a>&nbsp;&nbsp;
-        <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents')) . '</a>&nbsp;&nbsp;
-        <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout')) . '</a>';
+    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account')) . '</a>&nbsp;&nbsp;
+          <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents')) . '</a>&nbsp;&nbsp;
+          <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout')) . '</a>';
 ?>
 
     </div>
@@ -153,26 +176,32 @@
       <div id="breadcrumb" style="float: left;">
 
 <?php
-  if ($osC_Services->isStarted('breadcrumb')) {
-    echo $breadcrumb->trail(' &raquo; ');
-  }
+    if ($osC_Services->isStarted('breadcrumb')) {
+      echo $breadcrumb->trail(' &raquo; ');
+    }
 ?>
 
       </div>
       <div style="text-align: right;">
 
 <?php
-  if ($osC_Customer->isLoggedOn()) {
-    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('sign_out') . '</a> &nbsp;|&nbsp; ';
-  }
+    if ($osC_Customer->isLoggedOn()) {
+      echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('sign_out') . '</a> &nbsp;|&nbsp; ';
+    }
 
-  echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('my_account') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('cart_contents') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('checkout') . '</a>';
+    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('my_account') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('cart_contents') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('checkout') . '</a>';
 ?>
 
       </div>
     </div>
   </div>
 </div>
+
+<?php
+  } // if ($osC_Template->hasPageHeader())
+
+  if ($osC_Template->hasPageFooter()) {
+?>
 
 <div id="pageFooter">
   <div id="footerBar">
@@ -183,8 +212,9 @@
 </div>
 
 <?php
-  if ($osC_Services->isStarted('banner') && $osC_Banner->exists('468x60')) {
-    echo '<p align="center">' . $osC_Banner->display() . '</p>';
+    if ($osC_Services->isStarted('banner') && $osC_Banner->exists('468x60')) {
+      echo '<p align="center">' . $osC_Banner->display() . '</p>';
+    }
   }
 ?>
 

@@ -79,7 +79,7 @@
       echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\';">' . "\n";
     }
 ?>
-        <td><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product_preview&read=only') . '">' . tep_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name') . '</a>'; ?></td>
+        <td><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=preview') . '">' . tep_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name') . '</a>'; ?></td>
         <td align="right"><?php echo $osC_Currencies->format($Qproducts->value('products_price')); ?></td>
         <td align="right"><?php echo $Qproducts->valueInt('products_quantity'); ?></td>
         <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>

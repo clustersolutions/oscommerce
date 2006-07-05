@@ -96,12 +96,14 @@
     }
 
     function &getListing() {
-      global $osC_Database, $osC_Language;
+      global $osC_Database, $osC_Language, $osC_Image;
 
-      $Qspecials = $osC_Database->query('select p.products_id, pd.products_name, p.products_price, p.products_tax_class_id, p.products_image, s.specials_new_products_price from :table_products p, :table_products_description pd, :table_specials s where p.products_status = 1 and s.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id and s.status = 1 order by s.specials_date_added desc');
+      $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, pd.products_keyword, s.specials_new_products_price, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd, :table_specials s where p.products_status = 1 and s.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id and s.status = 1 order by s.specials_date_added desc');
       $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qspecials->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
       $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
       $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
+      $Qspecials->bindInt(':default_flag', 1);
       $Qspecials->bindInt(':language_id', $osC_Language->getID());
       $Qspecials->setBatchLimit($_GET['page'], MAX_DISPLAY_SPECIAL_PRODUCTS);
       $Qspecials->execute();

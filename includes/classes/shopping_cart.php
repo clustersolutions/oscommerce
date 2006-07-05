@@ -63,7 +63,7 @@
     }
 
     function synchronizeWithDatabase() {
-      global $osC_Database, $osC_Language, $osC_Customer;
+      global $osC_Database, $osC_Language, $osC_Customer, $osC_Image;
 
       if ($osC_Customer->isLoggedOn() === false) {
         return false;
@@ -111,10 +111,12 @@
 // reset per-session cart contents, but not the database contents
       $this->reset();
 
-      $Qproducts = $osC_Database->query('select cb.products_id, cb.customers_basket_quantity, cb.customers_basket_date_added, p.products_image, p.products_price, p.products_tax_class_id, p.products_weight, p.products_weight_class, pd.products_name, pd.products_keyword from :table_customers_basket cb, :table_products p, :table_products_description pd where cb.customers_id = :customers_id and cb.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id order by cb.customers_basket_date_added desc');
+      $Qproducts = $osC_Database->query('select cb.products_id, cb.customers_basket_quantity, cb.customers_basket_date_added, p.products_price, p.products_tax_class_id, p.products_weight, p.products_weight_class, pd.products_name, pd.products_keyword, i.image from :table_customers_basket cb, :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where cb.customers_id = :customers_id and cb.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id order by cb.customers_basket_date_added desc');
       $Qproducts->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qproducts->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+      $Qproducts->bindInt(':default_flag', 1);
       $Qproducts->bindInt(':customers_id', $osC_Customer->getID());
       $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
@@ -134,7 +136,7 @@
         $this->_contents[$Qproducts->value('products_id')] = array('id' => $Qproducts->value('products_id'),
                                                                    'name' => $Qproducts->value('products_name'),
                                                                    'keyword' => $Qproducts->value('products_keyword'),
-                                                                   'image' => $Qproducts->value('products_image'),
+                                                                   'image' => $Qproducts->value('image'),
                                                                    'price' => $price,
                                                                    'final_price' => $price,
                                                                    'quantity' => $Qproducts->valueInt('customers_basket_quantity'),
@@ -217,14 +219,16 @@
     }
 
     function add($products_id, $attributes = '', $quantity = '') {
-      global $osC_Database, $osC_Language, $osC_Customer;
+      global $osC_Database, $osC_Language, $osC_Customer, $osC_Image;
 
       $products_id_string = tep_get_uprid($products_id, $attributes);
       $products_id = tep_get_prid($products_id_string);
 
       if (is_numeric($products_id)) {
-        $Qcheck = $osC_Database->query('select products_image, products_price, products_tax_class_id, products_weight, products_weight_class, products_status from :table_products where products_id = :products_id');
+        $Qcheck = $osC_Database->query('select p.products_price, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag) where p.products_id = :products_id');
         $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+        $Qcheck->bindInt(':default_flag', 1);
         $Qcheck->bindInt(':products_id', $products_id);
         $Qcheck->execute();
 
@@ -272,7 +276,7 @@
             $this->_contents[$products_id_string] = array('id' => $products_id_string,
                                                           'name' => $Qproduct->value('products_name'),
                                                           'keyword' => $Qproduct->value('products_keyword'),
-                                                          'image' => $Qcheck->value('products_image'),
+                                                          'image' => $Qcheck->value('image'),
                                                           'price' => $price,
                                                           'final_price' => $price,
                                                           'quantity' => $quantity,

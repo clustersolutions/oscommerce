@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -49,6 +49,8 @@
   define('TABLE_PRODUCTS_ATTRIBUTES', DB_TABLE_PREFIX . 'products_attributes');
   define('TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD', DB_TABLE_PREFIX . 'products_attributes_download');
   define('TABLE_PRODUCTS_DESCRIPTION', DB_TABLE_PREFIX . 'products_description');
+  define('TABLE_PRODUCTS_IMAGES', DB_TABLE_PREFIX . 'products_images');
+  define('TABLE_PRODUCTS_IMAGES_GROUPS', DB_TABLE_PREFIX . 'products_images_groups');
   define('TABLE_PRODUCTS_NOTIFICATIONS', DB_TABLE_PREFIX . 'products_notifications');
   define('TABLE_PRODUCTS_OPTIONS', DB_TABLE_PREFIX . 'products_options');
   define('TABLE_PRODUCTS_OPTIONS_VALUES', DB_TABLE_PREFIX . 'products_options_values');

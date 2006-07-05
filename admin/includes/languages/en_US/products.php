@@ -28,7 +28,7 @@
   define('TABLE_HEADING_STATUS', 'Status');
   define('TABLE_HEADING_ACTION', 'Action');
 
-  define('TEXT_NEW_PRODUCT', 'New Product in &quot;%s&quot;');
+  define('TEXT_NEW_PRODUCT', 'New Product');
   define('TEXT_CATEGORIES', 'Categories:');
 
   define('TEXT_EDIT_INTRO', 'Please make any necessary changes');

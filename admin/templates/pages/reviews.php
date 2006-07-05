@@ -47,17 +47,12 @@
       $Qtext->bindInt(':reviews_id', $Qreviews->valueInt('reviews_id'));
       $Qtext->execute();
 
-      $Qimage = $osC_Database->query('select products_image from :table_products where products_id = :products_id');
-      $Qimage->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qimage->bindInt(':products_id', $Qreviews->valueInt('products_id'));
-      $Qimage->execute();
-
       $Qaverage = $osC_Database->query('select (avg(reviews_rating) / 5 * 100) as average_rating from :table_reviews where products_id = :products_id');
       $Qaverage->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qaverage->bindInt(':products_id', $Qreviews->valueInt('products_id'));
       $Qaverage->execute();
 
-      $rInfo = new objectInfo(array_merge($Qreviews->toArray(), $Qtext->toArray(), $Qimage->toArray(), $Qaverage->toArray()));
+      $rInfo = new objectInfo(array_merge($Qreviews->toArray(), $Qtext->toArray(), $Qaverage->toArray()));
     }
 
     if (isset($rInfo) && ($Qreviews->valueInt('reviews_id') == $rInfo->reviews_id) ) {

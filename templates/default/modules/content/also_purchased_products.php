@@ -11,8 +11,18 @@
 */
 
   if (isset($osC_Product)) {
-    $Qorders = $osC_Database->query("select p.products_id, p.products_image, pd.products_keyword from " . TABLE_ORDERS_PRODUCTS . " opa, " . TABLE_ORDERS_PRODUCTS . " opb, " . TABLE_ORDERS . " o, " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where opa.products_id = '" . (int)$osC_Product->getID() . "' and opa.orders_id = opb.orders_id and opb.products_id != '" . (int)$osC_Product->getID() . "' and opb.products_id = p.products_id and opb.orders_id = o.orders_id and p.products_status = '1' and p.products_id = pd.products_id and pd.language_id = :language_id group by p.products_id order by o.date_purchased desc limit " . MODULE_CONTENT_ALSO_PURCHASED_MAX_DISPLAY);
+    $Qorders = $osC_Database->query('select p.products_id, pd.products_keyword, i.image from :table_orders_products opa, :table_orders_products opb, :table_orders o, :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where opa.products_id = :products_id and opa.orders_id = opb.orders_id and opb.products_id != :products_id and opb.products_id = p.products_id and opb.orders_id = o.orders_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id group by p.products_id order by o.date_purchased desc limit :limit');
+    $Qorders->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+    $Qorders->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
+    $Qorders->bindTable(':table_orders', TABLE_ORDERS);
+    $Qorders->bindTable(':table_products', TABLE_PRODUCTS);
+    $Qorders->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+    $Qorders->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+    $Qorders->bindInt(':default_flag', 1);
+    $Qorders->bindInt(':products_id', $osC_Product->getID());
+    $Qorders->bindInt(':products_id', $osC_Product->getID());
     $Qorders->bindInt(':language_id', $osC_Language->getID());
+    $Qorders->bindInt(':limit', MODULE_CONTENT_ALSO_PURCHASED_MAX_DISPLAY);
 
     if (MODULE_CONTENT_ALSO_PURCHASED_PRODUCTS_CACHE > 0) {
       $Qorders->setCache('also_purchased-' . (int)$osC_Product->getID(), MODULE_CONTENT_ALSO_PURCHASED_PRODUCTS_CACHE);
@@ -40,7 +50,13 @@
 
         $products_name = tep_get_products_name($Qorders->valueInt('products_id'));
 
-        echo '      <td align="center" class="smallText" width="33%" valign="top"><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . tep_image(DIR_WS_IMAGES . $Qorders->value('products_image'), $Qorders->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br /><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . $products_name . '</a></td>' . "\n";
+        echo '      <td align="center" class="smallText" width="33%" valign="top">';
+
+        if (osc_empty($Qorders->value('image')) === false) {
+          echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . $osC_Image->show($Qorders->value('image'), $products_name) . '</a><br />';
+        }
+
+        echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . $products_name . '</a></td>' . "\n";
 
         $col++;
 

@@ -25,19 +25,21 @@
     }
 
     function initialize() {
-      global $osC_Cache, $osC_Database, $osC_Services, $osC_Currencies, $osC_Specials, $osC_Language;
+      global $osC_Cache, $osC_Database, $osC_Services, $osC_Currencies, $osC_Specials, $osC_Language, $osC_Image;
 
-      if ((BOX_WHATS_NEW_CACHE > 0) && $osC_Cache->read('box-whats_new-' . $osC_Language->getCode(), BOX_WHATS_NEW_CACHE)) {
+      if ((BOX_WHATS_NEW_CACHE > 0) && $osC_Cache->read('box-whats_new-' . $osC_Language->getCode() . '-' . $osC_Currencies->getCode(), BOX_WHATS_NEW_CACHE)) {
         $data = $osC_Cache->getCache();
       } else {
-        $Qnew = $osC_Database->query('select p.products_id, p.products_image, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword from :table_products p, :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc limit :max_random_select_new');
+        $data = array();
+
+        $Qnew = $osC_Database->query('select p.products_id, p.products_tax_class_id, p.products_price, pd.products_name, pd.products_keyword, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc limit :max_random_select_new');
         $Qnew->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qnew->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
         $Qnew->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+        $Qnew->bindInt(':default_flag', 1);
         $Qnew->bindInt(':language_id', $osC_Language->getID());
         $Qnew->bindInt(':max_random_select_new', BOX_WHATS_NEW_RANDOM_SELECT);
         $Qnew->executeRandomMulti();
-
-        $data = array();
 
         if ($Qnew->numberOfRows()) {
           $data = $Qnew->toArray();
@@ -55,7 +57,13 @@
       }
 
       if (empty($data) === false) {
-        $this->_content = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . tep_image(DIR_WS_IMAGES . $data['products_image'], $data['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a><br /><a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
+        $this->_content = '';
+
+        if (empty($data['image']) === false) {
+          $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $osC_Image->show($data['image'], $data['products_name']) . '</a><br />';
+        }
+
+        $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
       }
     }
 

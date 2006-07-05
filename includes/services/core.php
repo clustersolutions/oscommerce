@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:breadcrumb.php 293 2005-11-29 17:34:26Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -18,7 +18,7 @@
         $precedes;
 
     function start() {
-      global $osC_Customer, $osC_Tax, $osC_Weight, $osC_ShoppingCart, $osC_NavigationHistory;
+      global $osC_Customer, $osC_Tax, $osC_Weight, $osC_ShoppingCart, $osC_NavigationHistory, $osC_Image;
 
       include('includes/classes/template.php');
       include('includes/classes/modules.php');
@@ -43,6 +43,9 @@
 
       include('includes/classes/navigation_history.php');
       $osC_NavigationHistory = new osC_NavigationHistory(true);
+
+      include('includes/classes/image.php');
+      $osC_Image = new osC_Image();
 
       return true;
     }

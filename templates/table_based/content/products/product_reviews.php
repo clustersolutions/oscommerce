@@ -23,13 +23,8 @@
   if ($osC_Product->hasImage()) {
 ?>
 
-<div style="float: right; padding-left: 30px;">
-  <script type="text/javascript"><!--
-    document.write('<?php echo '<a href="javascript:popupWindow(\\\'' . tep_href_link(FILENAME_POPUP_IMAGE, 'pID=' . $osC_Product->getID()) , '\\\')">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), addslashes($osC_Product->getTitle()), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>');
-  //--></script>
-  <noscript>
-<?php echo '<a href="' . tep_href_link(DIR_WS_IMAGES . $osC_Product->getImage()) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), $osC_Product->getTitle(), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, 'hspace="5" vspace="5"') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>
-  </noscript>
+<div style="float: right; text-align: center; padding-left: 30px;">
+<?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '" target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=600,height=' . ($osC_Image->getHeight('large') + $osC_Image->getHeight('thumbnails') + 100) . '\'); return false;">' . $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"') . '</a>'; ?>
 <?php echo '<p><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now') . '">' . tep_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')) . '</a></p>'; ?>
 </div>
 

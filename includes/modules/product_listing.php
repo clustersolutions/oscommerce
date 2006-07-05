@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -145,9 +145,9 @@
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>';
+              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')) . '</a>';
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . tep_image(DIR_WS_IMAGES . $Qlisting->value('products_image'), $Qlisting->value('products_name'), SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT) . '</a>&nbsp;';
+              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')) . '</a>&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':

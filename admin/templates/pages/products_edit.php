@@ -10,8 +10,8 @@
   Released under the GNU General Public License
 */
 
-  if (isset($_GET['pID']) && empty($_POST)) {
-    $Qp = $osC_Database->query('select products_id, products_quantity, products_image, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+  if (isset($_GET['pID'])) {
+    $Qp = $osC_Database->query('select products_id, products_quantity, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
     $Qp->bindTable(':table_products', TABLE_PRODUCTS);
     $Qp->bindInt(':products_id', $_GET['pID']);
     $Qp->execute();
@@ -32,8 +32,6 @@
     }
 
     $pInfo = new objectInfo(array_merge($Qp->toArray(), $pd_extra));
-  } elseif (!empty($_POST)) {
-    $pInfo = new objectInfo($_POST);
   }
 
   $Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
@@ -66,20 +64,10 @@
     $weight_class_array[] = array('id' => $Qwc->valueInt('weight_class_id'),
                                   'text' => $Qwc->value('weight_class_title'));
   }
-
-  require('includes/classes/directory_listing.php');
-  $osC_Dir_Images = new osC_DirectoryListing('../images');
-  $osC_Dir_Images->setExcludeEntries('CVS');
-  $osC_Dir_Images->setIncludeFiles(false);
-  $osC_Dir_Images->setRecursive(true);
-  $osC_Dir_Images->setAddDirectoryToFilename(true);
-  $files = $osC_Dir_Images->getFiles();
-
-  $image_directories = array(array('id' => '', 'text' => 'images/'));
-  foreach ($files as $file) {
-    $image_directories[] = array('id' => $file['name'], 'text' => 'images/' . $file['name']);
-  }
 ?>
+
+<script language="javascript" type="text/javascript" src="../ext/prototype/prototype.js"></script>
+<script language="javascript" type="text/javascript" src="../ext/scriptaculous/scriptaculous.js"></script>
 
 <style type="text/css">@import url('external/jscalendar/calendar-win2k-1.css');</style>
 <script type="text/javascript" src="external/jscalendar/calendar.js"></script>
@@ -221,18 +209,195 @@
     }
   }
 
-  function reloadImage() {
-    var image = document.new_product.products_image.value;
-    var preview = document.getElementById('previewImage');
+  function handleHttpResponseRemoveImage(http) {
+    var result = http.responseText.split(':osCRPC:', 2);
 
-    preview.src = '../images/' + image;
+    if (result[0] == '1') {
+      document.getElementById('image_' + result[1]).style.display = 'none';
+
+      if (document.getElementById('image_' + result[1]).parentNode.id == 'imagesOriginal') {
+        getImagesOthers();
+      }
+    }
+  }
+
+  function removeImage(id) {
+    var objOverlay = document.getElementById('overlay');
+    var objActionLayer = document.getElementById('actionLayer');
+
+    var arrayPageSize = getPageSize();
+    var arrayPageScroll = getPageScroll();
+
+    objOverlay.style.height = (arrayPageSize[1] + 'px');
+    objOverlay.style.display = 'block';
+
+    objActionLayer.style.top = (arrayPageScroll[1] + ((arrayPageSize[3] - 35 - parseInt(objActionLayer.style.height)) / 2) + 'px');
+    objActionLayer.style.left = (((arrayPageSize[0] - 20 - parseInt(objActionLayer.style.width)) / 2) + 'px');
+
+    var s = new String(objActionLayer.innerHTML);
+    s = s.replace(/removeImageConfirmation\(\'[a-zA-Z0-9_]*\'\)/, 'removeImageConfirmation(\'' + id + '\')');
+    s = s.replace(/cancelRemoveImage\(\'[a-zA-Z0-9_]*\'\)/, 'cancelRemoveImage(\'' + id + '\')');
+
+    objActionLayer.innerHTML = s;
+
+    objActionLayer.style.display = 'block';
+  }
+
+  function removeImageConfirmation(id) {
+    var image = id.split('_');
+
+    document.getElementById('actionLayer').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+
+    new Ajax.Request("rpc.php?action=deleteProductImage&image=" + image[1], {onSuccess: handleHttpResponseRemoveImage});
+  }
+
+  function cancelRemoveImage(id) {
+    document.getElementById('actionLayer').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById(id).style.backgroundColor = '#ffffff';
+  }
+
+  function handleHttpResponseSetDefaultImage(http) {
+    var result = http.responseText.split(':osCRPC:', 2);
+
+    if (result[0] == '1') {
+      getImagesOriginals();
+    }
+  }
+
+  function setDefaultImage(id) {
+    var image = id.split('_');
+
+    new Ajax.Request("rpc.php?action=setDefaultImage&image=" + image[1], {onSuccess: handleHttpResponseSetDefaultImage});
+  }
+
+  function handleHttpResponseReorderImages(http) {
+    var result = http.responseText.split(':osCRPC:', 2);
+
+    if (result[0] == '1') {
+      getImagesOthers();
+    }
+  }
+
+  function handleHttpResponseGetImages(http) {
+    var result = http.responseText.split(':osCRPC:', 2);
+
+    if (result[0] == '1') {
+      var str_array = result[1].split('[x]');
+
+      for (i = 0; i < str_array.length; ++i) {
+        var str_ele = str_array[i].split('[-]');
+
+        var style = 'width: <?php echo $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) + 20; ?>px; padding: 10px; float: left; text-align: center;';
+
+        if (str_ele[1] == '1') { // original (products_images_groups_id)
+          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo tep_href_link('templates/' . $template . '/images/icons/16x16/drag.png', '', 'SSL'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
+
+          if (str_ele[6] == '1') { // default_flag
+            style += ' background-color: #E5EFE5;';
+
+            var onmouseout = 'this.style.backgroundColor=\'#E5EFE5\'; this.style.backgroundImage=\'none\';';
+          } else {
+            var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\'; this.style.backgroundImage=\'none\';';
+          }
+        } else {
+          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\';';
+          var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\';';
+        }
+
+        var newdiv = '<span id="image_' + str_ele[0] + '" style="' + style + '" onmouseover="' + onmouseover + '" onmouseout="' + onmouseout + '">';
+        newdiv += '<a href="' + str_ele[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/' . $osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID) . '/'; ?>' + str_ele[2] + '" border="0" height="<?php echo $osC_Image->getHeight($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)); ?>" alt="' + str_ele[2] + '" title="' + str_ele[2] + '" style="max-width: <?php echo $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) + 20; ?>px;" /></a><br />' + str_ele[3] + '<br />' + str_ele[5] + ' bytes<br />';
+
+        if (str_ele[1] == '1') {
+          if (str_ele[6] == '1') {
+            newdiv += '<?php echo tep_image('templates/' . $template . '/images/icons/16x16/default.png', IMAGE_DEFAULT, '16', '16'); ?>&nbsp;';
+          } else {
+            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/default_grey.png', IMAGE_DEFAULT, '16', '16'); ?></a>&nbsp;';
+          }
+
+          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16'); ?></a>';
+        }
+
+        newdiv += '</span>';
+
+        if (str_ele[1] == '1') {
+          document.getElementById('imagesOriginal').innerHTML += newdiv;
+        } else {
+          document.getElementById('imagesOther').innerHTML += newdiv;
+        }
+      }
+
+      Sortable.create('imagesOriginal', {tag: 'span', overlap: 'horizontal', constraint: false, onUpdate: function() {
+        new Ajax.Request("rpc.php?action=reorderImages&pID=<?php echo urlencode($_GET['pID']); ?>&" + Sortable.serialize('imagesOriginal'), {onSuccess: handleHttpResponseReorderImages});
+      }});
+    }
+
+    if (document.getElementById('showProgressOriginal').style.display != 'none') {
+      document.getElementById('showProgressOriginal').style.display = 'none';
+    }
+
+    if (document.getElementById('showProgressOther').style.display != 'none') {
+      document.getElementById('showProgressOther').style.display = 'none';
+    }
+  }
+
+  function getImages() {
+    getImagesOriginals(false);
+    getImagesOthers(false);
+
+    new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>", {onSuccess: handleHttpResponseGetImages});
+  }
+
+  function getImagesOriginals(makeCall) {
+    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Loading images from server...'; ?></div>';
+
+    if (makeCall != false) {
+      new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=originals", {onSuccess: handleHttpResponseGetImages});
+    }
+  }
+
+  function getImagesOthers(makeCall) {
+    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Loading images from server...'; ?></div>';
+
+    if (makeCall != false) {
+      new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others", {onSuccess: handleHttpResponseGetImages});
+    }
   }
 //--></script>
+
+<style type="text/css"><!--
+#overlay img {
+  border: none;
+}
+
+#overlay {
+  background-image: url(<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>);
+}
+
+* html #overlay {
+  background-color: #000;
+  back\ground-color: transparent;
+  background-image: url(<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>);
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>", sizingMethod="scale");
+  }
+//--></style>
 
 <link type="text/css" rel="stylesheet" href="external/tabpane/css/luna/tab.css" />
 <script type="text/javascript" src="external/tabpane/js/tabpane.js"></script>
 
-<h1><?php echo sprintf(TEXT_NEW_PRODUCT, tep_output_generated_category_path($current_category_id)); ?></h1>
+<div id="overlay" style="display: none; position: absolute; top: 0; left: 0; z-index: 90; width: 100%;"></div>
+
+<div id="actionLayer" style="display: none; position: absolute; z-index: 100; width: 400px; height: 200px;">
+  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' Delete Image'; ?></div>
+  <div class="infoBoxContent">
+    <p>Are you sure you want to delete this product image?</p>
+
+    <p align="center"><?php echo '<button onclick="removeImageConfirmation(\'\')" class="operationButton">' . IMAGE_DELETE . '</button> <button onclick="cancelRemoveImage(\'\')" class="operationButton">' . IMAGE_CANCEL . '</button>'; ?></p>
+  </div>
+</div>
+
+<h1><?php echo (isset($pInfo->products_name[$osC_Language->getID()])) ? $pInfo->products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
 
 <div class="tab-pane" id="mainTabPane">
   <script type="text/javascript"><!--
@@ -240,7 +405,7 @@
   //--></script>
 
 <?php
-  echo tep_draw_form('new_product', FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=new_product_preview', 'post', 'enctype="multipart/form-data"');
+  echo tep_draw_form('product', FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save_product', 'post', 'enctype="multipart/form-data"');
 ?>
 
   <div class="tab-page" id="tabDescription">
@@ -386,52 +551,64 @@
       mainTabPane.addTabPage( document.getElementById( "tabImages" ) );
     //--></script>
 
+<?php
+  if (isset($pInfo)) {
+?>
+
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="smallText" width="50%" height="100%" valign="top">
-          <table border="0" width="100%" cellspacing="0" cellpadding="2">
-            <tr>
-              <td class="smallText" width="50%" height="100%" valign="top">
-                <fieldset style="height: 100%;">
-                  <legend>Image Location</legend>
-
-                  <p><?php echo DIR_WS_CATALOG . 'images/' . osc_draw_input_field('products_image', (isset($pInfo) ? $pInfo->products_image : '')) . '&nbsp;<input type="button" value="Preview" onclick="reloadImage();" class="infoBoxButton">'; ?></p>
-                </fieldset>
-              </td>
-            </tr>
-            <tr>
-              <td class="smallText" width="50%" height="100%" valign="top">
-                <fieldset style="height: 100%;">
-                  <legend>Upload New Image</legend>
-
-                  <table border="0" width="100%" cellspacing="0" cellpadding="2">
-                    <tr>
-                      <td class="smallText"><?php echo TEXT_PRODUCTS_IMAGE; ?></td>
-                      <td class="smallText"><?php echo osc_draw_file_field('products_image_new'); ?></td>
-                    </tr>
-                    <tr>
-                      <td class="smallText"><?php echo 'Destination'; ?></td>
-                      <td class="smallText"><?php echo osc_draw_pull_down_menu('products_image_location', $image_directories, dirname($pInfo->products_image)); ?></td>
-                    </tr>
-                  </table>
-                </fieldset>
-              </td>
-            </tr>
-          </table>
-        </td>
-        <td class="smallText" width="50%" height="100%" valign="top">
+        <td class="smallText" width="100%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>Preview</legend>
+            <legend>Upload New Image</legend>
+
+            <iframe id="fileUpload" src="<?php echo tep_href_link(FILENAME_PRODUCTS, 'action=fileUploadForm' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')); ?>" frameborder="0" scrolling="0" style="width: 100%; height: 50px;"></iframe>
+          </fieldset>
+
+          <fieldset style="height: 100%;">
+            <legend>Original Images</legend>
+
+            <div id="imagesOriginal" style="overflow: auto;"></div>
+          </fieldset>
+
+          <fieldset style="height: 100%;">
+            <legend>Images</legend>
+
+            <div id="imagesOther" style="overflow: auto;"></div>
+          </fieldset>
+
+<script type="text/javascript"><!--
+  getImages();
+//--></script>
+
+        </td>
+      </tr>
+    </table>
+
+<?php
+  } else {
+?>
+
+    <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td class="smallText" height="100%" valign="top">
+          <fieldset style="height: 100%;">
+            <legend>Upload New Original Image</legend>
 
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
-                <td align="center"><?php echo tep_image('../images/' . $pInfo->products_image, '', '', '', 'id="previewImage"'); ?></td>
+                <td class="smallText"><?php echo TEXT_PRODUCTS_IMAGE; ?></td>
+                <td class="smallText"><?php echo osc_draw_file_field('products_image'); ?></td>
               </tr>
             </table>
           </fieldset>
         </td>
       </tr>
     </table>
+
+<?php
+  }
+?>
+
   </div>
 
   <div class="tab-page" id="tabAttributes">
@@ -567,7 +744,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo osc_draw_hidden_field('products_date_added', (isset($pInfo) && isset($pInfo->products_date_added) ? $pInfo->products_date_added : date('Y-m-d'))) . '<input type="submit" value="' . IMAGE_PREVIEW . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
+  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
 
   </form>
 </div>
