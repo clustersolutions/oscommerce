@@ -17,9 +17,8 @@
       global $osC_Database, $osC_Services, $osC_Language, $osC_Image;
 
       if (!empty($id)) {
-        $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where');
+        $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where');
         $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qproduct->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
         $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
 
         if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
@@ -31,12 +30,22 @@
         }
 
         $Qproduct->appendQuery('and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id');
-        $Qproduct->bindInt(':default_flag', 1);
         $Qproduct->bindInt(':language_id', $osC_Language->getID());
         $Qproduct->execute();
 
         if ($Qproduct->numberOfRows() === 1) {
           $this->_data = $Qproduct->toArray();
+
+          $this->_data['images'] = array();
+
+          $Qimages = $osC_Database->query('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
+          $Qimages->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+          $Qimages->bindInt(':products_id', $this->_data['id']);
+          $Qimages->execute();
+
+          while ($Qimages->next()) {
+            $this->_data['images'][] = $Qimages->toArray();
+          }
 
           $Qcategory = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id limit 1');
           $Qcategory->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
@@ -156,12 +165,24 @@
       return $this->_data['category_id'];
     }
 
+    function getImages() {
+      return $this->_data['images'];
+    }
+
     function hasImage() {
-      return (isset($this->_data['image']) && !empty($this->_data['image']));
+      foreach ($this->_data['images'] as $image) {
+        if ($image['default_flag'] == '1') {
+          return true;
+        }
+      }
     }
 
     function getImage() {
-      return $this->_data['image'];
+      foreach ($this->_data['images'] as $image) {
+        if ($image['default_flag'] == '1') {
+          return $image['image'];
+        }
+      }
     }
 
     function hasURL() {
@@ -241,6 +262,10 @@
       $Qupdate->bindInt(':products_id', tep_get_prid($this->_data['id']));
       $Qupdate->bindInt(':language_id', $osC_Language->getID());
       $Qupdate->execute();
+    }
+
+    function numberOfImages() {
+      return sizeof($this->_data['images']);
     }
 
     function &getListingNew() {

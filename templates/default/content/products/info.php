@@ -20,7 +20,7 @@
 ?>
 
 <div style="float: right; text-align: center;">
-<?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '" target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . ($osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;">' . $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'product_info') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>
+<?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '" target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;">' . $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'product_info') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>
 </div>
 
 <?php

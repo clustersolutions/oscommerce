@@ -57,7 +57,7 @@
       return isset($this->_groups[$this->getID($code)]);
     }
 
-    function show(&$image, &$title, $parameters = '', $group = '') {
+    function show($image, $title, $parameters = '', $group = '') {
       if (empty($group) || !$this->exists($group)) {
         $group = $this->getCode(DEFAULT_IMAGE_GROUP_ID);
       }

@@ -99,8 +99,8 @@
   }
 
   function getTaxRate() {
-    var selected_value = document.forms["new_product"].products_tax_class_id.selectedIndex;
-    var parameterVal = document.forms["new_product"].products_tax_class_id[selected_value].value;
+    var selected_value = document.forms["product"].products_tax_class_id.selectedIndex;
+    var parameterVal = document.forms["product"].products_tax_class_id[selected_value].value;
 
     if ( (parameterVal > 0) && (tax_rates[parameterVal] > 0) ) {
       return tax_rates[parameterVal];
@@ -134,11 +134,11 @@
   var counter = 0;
 
   function moreFields() {
-    var existingFields = document.new_product.getElementsByTagName('input');
+    var existingFields = document.product.getElementsByTagName('input');
     var attributeExists = false;
 
     for (i=0; i<existingFields.length; i++) {
-      if (existingFields[i].name == 'attribute_price[' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].parentNode.id + '][' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].value + ']') {
+      if (existingFields[i].name == 'attribute_price[' + document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id + '][' + document.product.attributes.options[document.product.attributes.options.selectedIndex].value + ']') {
         attributeExists = true;
         break;
       }
@@ -154,18 +154,18 @@
       var inputFields = newFields.getElementsByTagName('input');
       var selectFields = newFields.getElementsByTagName('select');
 
-      spanFields[0].innerHTML = document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].parentNode.label;
-      spanFields[1].innerHTML = document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].text;
+      spanFields[0].innerHTML = document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.label;
+      spanFields[1].innerHTML = document.product.attributes.options[document.product.attributes.options.selectedIndex].text;
 
       for (y=0; y<inputFields.length; y++) {
         if (inputFields[y].type != 'button') {
-          inputFields[y].name = inputFields[y].name.substr(4) + '[' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].parentNode.id + '][' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].value + ']';
+          inputFields[y].name = inputFields[y].name.substr(4) + '[' + document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id + '][' + document.product.attributes.options[document.product.attributes.options.selectedIndex].value + ']';
           inputFields[y].disabled = false;
         }
       }
 
       for (y=0; y<selectFields.length; y++) {
-        selectFields[y].name = selectFields[y].name.substr(4) + '[' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].parentNode.id + '][' + document.new_product.attributes.options[document.new_product.attributes.options.selectedIndex].value + ']';
+        selectFields[y].name = selectFields[y].name.substr(4) + '[' + document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id + '][' + document.product.attributes.options[document.product.attributes.options.selectedIndex].value + ']';
         selectFields[y].disabled = false;
       }
 
@@ -734,7 +734,7 @@
 
   foreach ($assignedCategoryTree->getTree() as $value) {
     echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
-         '            <td class="smallText"><a href="#" onclick="document.new_product.categories_' . $value['id'] . '.checked=!document.new_product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
+         '            <td class="smallText"><a href="#" onclick="document.product.categories_' . $value['id'] . '.checked=!document.product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
          '            <td class="smallText" align="right">' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" .
          '          </tr>' . "\n";
   }
