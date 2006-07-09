@@ -81,7 +81,7 @@
   $osC_Session->start();
 
   if (isset($_SESSION['admin']) === false) {
-    if (basename($_SERVER['SCRIPT_FILENAME']) != 'login.php') {
+    if (basename($_SERVER['SCRIPT_FILENAME']) != FILENAME_LOGIN) {
       tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
     }
   }

@@ -56,7 +56,7 @@
     unset($val);
   }
 
-  if (strpos(php_sapi_name(), 'cgi') !== false) {
+  if ( (strpos(php_sapi_name(), 'cgi') !== false) && !empty($_SERVER['PATH_TRANSLATED']) ) {
     $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
   }
 
