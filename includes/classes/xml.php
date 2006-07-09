@@ -16,10 +16,10 @@
     var $_xml,
         $_encoding;
 
-    function osC_XML(&$xml, $encoding = '') {
-      $this->_xml =& $xml;
+    function osC_XML($xml, $encoding = '') {
+      $this->_xml = $xml;
 
-      if (empty($encoding) === false) {
+      if (!empty($encoding)) {
         $this->_encoding = $encoding;
       }
     }
