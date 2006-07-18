@@ -219,12 +219,20 @@
  * @return string
  */
 
-    function getCode() {
+    function getCode($id = null) {
       if (isset($this->_template) === false) {
         $this->set();
       }
 
-      return $this->_template;
+      if (is_numeric($id)) {
+        foreach ($this->getTemplates() as $template) {
+          if ($template['id'] == $id) {
+            return $template['code'];
+          }
+        }
+      } else {
+        return $this->_template;
+      }
     }
 
 /**
@@ -368,7 +376,7 @@
       $Qtemplates->execute();
 
       while ($Qtemplates->next()) {
-        $templates [] = $Qtemplates->toArray();
+        $templates[] = $Qtemplates->toArray();
       }
 
       $Qtemplates->freeResult();

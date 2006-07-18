@@ -64,10 +64,10 @@
         break;
       case 'install':
       case 'remove':
-        if (file_exists('../includes/templates/' . $_GET['template'] . $file_extension)) {
-          include('../includes/templates/' . $_GET['template'] . $file_extension);
+        if (file_exists('includes/templates/' . $_GET['template'] . $file_extension)) {
+          include('includes/templates/' . $_GET['template'] . $file_extension);
           $class = 'osC_Template_' . $_GET['template'];
-          $module = new $class;
+          $module = new $class();
           if ($action == 'install') {
             $module->install();
           } elseif ($action == 'remove') {

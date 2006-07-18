@@ -5,19 +5,19 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-  class osC_Template_table_based {
+  class osC_Template_default {
     var $_id,
-        $_title = 'osCommerce Table Based Template',
-        $_code = 'table_based',
+        $_title = 'osCommerce Default Template',
+        $_code = 'default',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
         $_markup_version = 'XHTML 1.0 Transitional',
-        $_css_based = '0', /* 0=No; 1=Yes */
+        $_css_based = '1', /* 0=No; 1=Yes */
         $_medium = 'Screen',
         $_groups = array('boxes' => array('left', 'right'),
                          'content' => array('before', 'after')),
@@ -83,6 +83,47 @@
       $Qinstall->bindValue(':css_based', $this->_css_based);
       $Qinstall->bindValue(':medium', $this->_medium);
       $Qinstall->execute();
+
+      $id = $osC_Database->nextID();
+
+      $data = array('categories' => array('*', 'left', '100'),
+                    'manufacturers' => array('*', 'left', '200'),
+                    'whats_new' => array('*', 'left', '300'),
+                    'search' => array('*', 'left', '400'),
+                    'information' => array('*', 'left', '500'),
+                    'shopping_cart' => array('*', 'right', '100'),
+                    'manufacturer_info' => array('products/info', 'right', '200'),
+                    'order_history' => array('*', 'right', '300'),
+                    'best_sellers' => array('*', 'right', '400'),
+                    'product_notifications' => array('products/info', 'right', '500'),
+                    'tell_a_friend' => array('products/info', 'right', '600'),
+                    'specials' => array('*', 'right', '700'),
+                    'reviews' => array('*', 'right', '800'),
+                    'languages' => array('*', 'right', '900'),
+                    'currencies' => array('*', 'right', '1000'),
+                    'new_products' => array('index/category_listing', 'after', 400),
+                    'new_products' => array('index/index', 'after', 400),
+                    'upcoming_products' => array('index/index', 'after', 450),
+                    'recently_visited' => array('*', 'after', 500),
+                    'also_purchased_products' => array('products/info', 'after', 100));
+
+      $Qboxes = $osC_Database->query('select id, code from :table_templates_boxes');
+      $Qboxes->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qboxes->execute();
+
+      while ($Qboxes->next()) {
+        if (isset($data[$Qboxes->value('code')])) {
+          $Qrelation = $osC_Database->query('insert into :table_templates_boxes_to_pages (templates_boxes_id, templates_id, content_page, boxes_group, sort_order, page_specific) values (:templates_boxes_id, :templates_id, :content_page, :boxes_group, :sort_order, :page_specific)');
+          $Qrelation->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
+          $Qrelation->bindInt(':templates_boxes_id', $Qboxes->valueInt('id'));
+          $Qrelation->bindInt(':templates_id', $id);
+          $Qrelation->bindValue(':content_page', $data[$Qboxes->value('code')][0]);
+          $Qrelation->bindValue(':boxes_group', $data[$Qboxes->value('code')][1]);
+          $Qrelation->bindInt(':sort_order', $data[$Qboxes->value('code')][2]);
+          $Qrelation->bindInt(':page_specific', 0);
+          $Qrelation->execute();
+        }
+      }
     }
 
     function remove() {

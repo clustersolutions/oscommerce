@@ -65,14 +65,30 @@
       $osC_Box->initialize();
 
       if ($osC_Box->hasContent()) {
-        include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+        if ($osC_Template->getCode() == DEFAULT_TEMPLATE) {
+          include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
+        } else {
+          if (file_exists('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php')) {
+            include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
+          } else {
+            include('templates/' . DEFAULT_TEMPLATE . '/modules/content/' . $osC_Box->getCode() . '.php');
+          }
+        }
       }
 
       unset($osC_Box);
     }
   }
 
-  include('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
+  if ($osC_Template->getCode() == DEFAULT_TEMPLATE) {
+    include('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
+  } else {
+    if (file_exists('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename())) {
+      include('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
+    } else {
+      include('templates/' . DEFAULT_TEMPLATE . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
+    }
+  }
 
   if ($osC_Template->hasPageContentModules()) {
     foreach ($osC_Services->getCallAfterPageContent() as $service) {
@@ -84,7 +100,15 @@
       $osC_Box->initialize();
 
       if ($osC_Box->hasContent()) {
-        include('templates/default/modules/content/' . $osC_Box->getCode() . '.php');
+        if ($osC_Template->getCode() == DEFAULT_TEMPLATE) {
+          include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
+        } else {
+          if (file_exists('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php')) {
+            include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
+          } else {
+            include('templates/' . DEFAULT_TEMPLATE . '/modules/content/' . $osC_Box->getCode() . '.php');
+          }
+        }
       }
 
       unset($osC_Box);
@@ -107,7 +131,15 @@
       $osC_Box->initialize();
 
       if ($osC_Box->hasContent()) {
-        include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+        if ($osC_Template->getCode() == DEFAULT_TEMPLATE) {
+          include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+        } else {
+          if (file_exists('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php')) {
+            include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+          } else {
+            include('templates/' . DEFAULT_TEMPLATE . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+          }
+        }
       }
 
       unset($osC_Box);
@@ -136,7 +168,15 @@
       $osC_Box->initialize();
 
       if ($osC_Box->hasContent()) {
-        include('templates/default/modules/boxes/' . $osC_Box->getCode() . '.php');
+        if ($osC_Template->getCode() == DEFAULT_TEMPLATE) {
+          include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+        } else {
+          if (file_exists('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php')) {
+            include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+          } else {
+            include('templates/' . DEFAULT_TEMPLATE . '/modules/boxes/' . $osC_Box->getCode() . '.php');
+          }
+        }
       }
 
       unset($osC_Box);

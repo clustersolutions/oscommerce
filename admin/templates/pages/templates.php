@@ -11,7 +11,7 @@
 */
 
   require('includes/classes/directory_listing.php');
-  $osC_DirectoryListing = new osC_DirectoryListing('../includes/templates');
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/templates');
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();
 ?>
@@ -31,7 +31,7 @@
 
 <?php
   foreach ($files as $file) {
-    include('../includes/templates/' . $file['name']);
+    include('includes/templates/' . $file['name']);
 
     $code = substr($file['name'], 0, strrpos($file['name'], '.'));
     $class = 'osC_Template_' . $code;
@@ -74,7 +74,18 @@
         echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code) . '\';">' . "\n";
       }
 ?>
-        <td><?php echo $module->getTitle() . ($module->getCode() == DEFAULT_TEMPLATE ? ' <i>(' . TEXT_DEFAULT . ')</i>' : ''); ?></td>
+
+        <td>
+
+<?php
+      if ($module->getCode() == DEFAULT_TEMPLATE) {
+        echo '<b>' . $module->getTitle() . ' <i>(' . TEXT_DEFAULT . ')</i></b>';
+      } else {
+        echo $module->getTitle();
+      }
+?>
+
+        </td>
         <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
         <td align="right">
 <?php
@@ -119,8 +130,6 @@
 
     </tbody>
   </table>
-
-  <p><?php echo TEXT_TEMPLATE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/templates'); ?></p>
 </div>
 
 <?php
