@@ -38,7 +38,7 @@
 <div class="submitFormButtons">
   <span style="float: right;"><?php echo tep_hide_session_id() . tep_image_submit('button_search.gif', $osC_Language->get('button_search')); ?></span>
 
-  <?php echo '<a href="javascript:popupWindow(\'' . tep_href_link(FILENAME_POPUP_SEARCH_HELP) . '\')">' . $osC_Language->get('search_help_tips') . '</a>'; ?>
+  <?php echo '<a href="javascript:popupWindow(\'' . tep_href_link(FILENAME_SEARCH, 'help') . '\')">' . $osC_Language->get('search_help_tips') . '</a>'; ?>
 </div>
 
 <div class="moduleBox">

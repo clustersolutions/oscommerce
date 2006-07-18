@@ -16,7 +16,6 @@
   define('FILENAME_DEFAULT', 'index.php');
   define('FILENAME_DOWNLOAD', 'download.php');
   define('FILENAME_INFO', 'info.php');
-  define('FILENAME_POPUP_SEARCH_HELP', 'popup_search_help.php');
   define('FILENAME_PRODUCTS', 'products.php');
   define('FILENAME_REDIRECT', 'redirect.php');
   define('FILENAME_SEARCH', 'search.php');
