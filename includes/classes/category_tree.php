@@ -257,41 +257,45 @@
     }
 
     function calculateCategoryProductCount() {
+      global $osC_Database;
+
+      $totals = array();
+
+      $Qtotals = $osC_Database->query('select p2c.categories_id, count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.products_id = p.products_id and p.products_status = :products_status group by p2c.categories_id');
+      $Qtotals->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qtotals->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+      $Qtotals->bindInt(':products_status', 1);
+      $Qtotals->execute();
+
+      while ($Qtotals->next()) {
+        $totals[$Qtotals->valueInt('categories_id')] = $Qtotals->valueInt('total');
+      }
+
+      $Qtotals->freeResult();
+
       foreach ($this->data as $parent => $categories) {
         foreach ($categories as $id => $info) {
-          $this->data[$parent][$id]['count'] = $this->countCategoryProducts($id);
+          if ($totals[$id] > 0) {
+            $this->data[$parent][$id]['count'] = $totals[$id];
 
-          $parent_category = $parent;
-          while ($parent_category != $this->root_category_id) {
-            foreach ($this->data as $parent_parent => $parent_categories) {
-              foreach ($parent_categories as $parent_category_id => $parent_category_info) {
-                if ($parent_category_id == $parent_category) {
-                  $this->data[$parent_parent][$parent_category_id]['count'] += $this->data[$parent][$id]['count'];
+            $parent_category = $parent;
+            while ($parent_category != $this->root_category_id) {
+              foreach ($this->data as $parent_parent => $parent_categories) {
+                foreach ($parent_categories as $parent_category_id => $parent_category_info) {
+                  if ($parent_category_id == $parent_category) {
+                    $this->data[$parent_parent][$parent_category_id]['count'] += $this->data[$parent][$id]['count'];
 
-                  $parent_category = $parent_parent;
-                  break 2;
+                    $parent_category = $parent_parent;
+                    break 2;
+                  }
                 }
               }
             }
           }
         }
       }
-    }
 
-    function countCategoryProducts($category_id) {
-      global $osC_Database;
-
-      $Qcategories = $osC_Database->query('select count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.categories_id = :categories_id and p2c.products_id = p.products_id and p.products_status = 1');
-      $Qcategories->bindRaw(':table_products', TABLE_PRODUCTS);
-      $Qcategories->bindRaw(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-      $Qcategories->bindInt(':categories_id', $category_id);
-      $Qcategories->execute();
-
-      $count = $Qcategories->valueInt('total');
-
-      $Qcategories->freeResult();
-
-      return $count;
+      unset($totals);
     }
 
     function setRootCategoryID($root_category_id) {
