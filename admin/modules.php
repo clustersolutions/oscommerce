@@ -24,13 +24,13 @@
         $module_type = 'shipping';
         $module_class = 'osC_Shipping_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_SHIPPING);
-        include('../includes/classes/shipping.php');
+        include('includes/classes/shipping.php');
         break;
       case 'ordertotal':
         $module_type = 'order_total';
         $module_class = 'osC_OrderTotal_';
         define('HEADING_TITLE', HEADING_TITLE_MODULES_ORDER_TOTAL);
-        include('../includes/classes/order_total.php');
+        include('includes/classes/order_total.php');
         break;
       case 'payment':
       default:

@@ -112,8 +112,6 @@
 ?>
     </tbody>
   </table>
-
-  <p><?php echo TEXT_MODULE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/modules/' . $module_type); ?></p>
 </div>
 
 <?php

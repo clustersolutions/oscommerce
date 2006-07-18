@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -10,18 +10,16 @@
   Released under the GNU General Public License
 */
 
-  class osC_OrderTotal_tax extends osC_OrderTotal {
-    var $output;
-
+  class osC_OrderTotal_tax extends osC_OrderTotal_Admin {
     var $_title,
         $_code = 'tax',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
         $_status = false,
         $_sort_order;
 
     function osC_OrderTotal_tax() {
       global $osC_Language;
-
-      $this->output = array();
 
       $this->_title = $osC_Language->get('order_total_tax_title');
       $this->_description = $osC_Language->get('order_total_tax_description');
@@ -29,28 +27,8 @@
       $this->_sort_order = (defined('MODULE_ORDER_TOTAL_TAX_SORT_ORDER') ? MODULE_ORDER_TOTAL_TAX_SORT_ORDER : null);
     }
 
-    function process() {
-      global $osC_ShoppingCart, $osC_Currencies;
-
-      foreach ($osC_ShoppingCart->_tax_groups as $key => $value) {
-        if ($value > 0) {
-          if (DISPLAY_PRICE_WITH_TAX == '1') {
-            $osC_ShoppingCart->addToTotal($value);
-          }
-
-          $this->output[] = array('title' => $key . ':',
-                                  'text' => $osC_Currencies->format($value),
-                                  'value' => $value);
-        }
-      }
-    }
-
-    function check() {
-      if (!isset($this->_check)) {
-        $this->_check = defined('MODULE_ORDER_TOTAL_TAX_STATUS');
-      }
-
-      return $this->_check;
+    function isInstalled() {
+      return (bool)defined('MODULE_ORDER_TOTAL_TAX_STATUS');
     }
 
     function install() {

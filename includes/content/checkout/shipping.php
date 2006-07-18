@@ -103,7 +103,7 @@
           list($module, $method) = explode('_', $_POST['shipping_mod_sel']);
           $module = 'osC_Shipping_' . $module;
 
-          if (is_object($GLOBALS[$module]) && $GLOBALS[$module]->getStatus() === true) {
+          if (is_object($GLOBALS[$module]) && $GLOBALS[$module]->isEnabled()) {
             $quote = $osC_Shipping->getQuote($_POST['shipping_mod_sel']);
 
             if (isset($quote['error'])) {

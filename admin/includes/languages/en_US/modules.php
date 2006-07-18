@@ -19,7 +19,5 @@ define('TABLE_HEADING_SORT_ORDER', 'Sort Order');
 define('TABLE_HEADING_STATUS', 'Status');
 define('TABLE_HEADING_ACTION', 'Action');
 
-define('TEXT_MODULE_DIRECTORY', 'Module Directory:');
-
 define('INFO_MODULE_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br /><br />(All module parameters would then be removed)');
 ?>

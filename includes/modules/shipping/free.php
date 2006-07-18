@@ -15,8 +15,6 @@
 
     var $_title,
         $_code = 'free',
-        $_author_name = 'osCommerce',
-        $_author_www = 'http://www.oscommerce.com',
         $_status = false;
 
 // class constructor
@@ -30,6 +28,7 @@
       $this->_status = (defined('MODULE_SHIPPING_FREE_STATUS') && (MODULE_SHIPPING_FREE_STATUS == 'True') ? true : false);
     }
 
+// class methods
     function initialize() {
       global $osC_Database, $osC_ShoppingCart;
 
@@ -62,7 +61,6 @@
       }
     }
 
-// class methods
     function quote() {
       global $osC_Language, $osC_Currencies;
 
@@ -76,34 +74,6 @@
       if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->_title);
 
       return $this->quotes;
-    }
-
-    function check() {
-      if (!isset($this->_check)) {
-        $this->_check = defined('MODULE_SHIPPING_FREE_STATUS');
-      }
-
-      return $this->_check;
-    }
-
-    function install() {
-      global $osC_Database;
-
-      parent::install();
-
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Free Shipping', 'MODULE_SHIPPING_FREE_STATUS', 'True', 'Do you want to offer flat rate shipping?', '6', '0', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Shipping Cost', 'MODULE_SHIPPING_FREE_MINIMUM_ORDER', '20', 'The minimum order amount to apply free shipping to.', '6', '0', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Shipping Zone', 'MODULE_SHIPPING_FREE_ZONE', '0', 'If a zone is selected, only enable this shipping method for that zone.', '6', '0', 'tep_get_zone_class_title', 'tep_cfg_pull_down_zone_classes(', now())");
-    }
-
-    function getKeys() {
-      if (!isset($this->_keys)) {
-        $this->_keys = array('MODULE_SHIPPING_FREE_STATUS',
-                             'MODULE_SHIPPING_FREE_MINIMUM_ORDER',
-                             'MODULE_SHIPPING_FREE_ZONE');
-      }
-
-      return $this->_keys;
     }
   }
 ?>

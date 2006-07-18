@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -10,18 +10,16 @@
   Released under the GNU General Public License
 */
 
-  class osC_OrderTotal_sub_total extends osC_OrderTotal {
-    var $output;
-
+  class osC_OrderTotal_sub_total extends osC_OrderTotal_Admin {
     var $_title,
         $_code = 'sub_total',
+        $_author_name = 'osCommerce',
+        $_author_www = 'http://www.oscommerce.com',
         $_status = false,
         $_sort_order;
 
     function osC_OrderTotal_sub_total() {
       global $osC_Language;
-
-      $this->output = array();
 
       $this->_title = $osC_Language->get('order_total_subtotal_title');
       $this->_description = $osC_Language->get('order_total_subtotal_description');
@@ -29,20 +27,8 @@
       $this->_sort_order = (defined('MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER') ? MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER : null);
     }
 
-    function process() {
-      global $osC_ShoppingCart, $osC_Currencies;
-
-      $this->output[] = array('title' => $this->_title . ':',
-                              'text' => $osC_Currencies->format($osC_ShoppingCart->getSubTotal()),
-                              'value' => $osC_ShoppingCart->getSubTotal());
-    }
-
-    function check() {
-      if (!isset($this->_check)) {
-        $this->_check = defined('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS');
-      }
-
-      return $this->_check;
+    function isInstalled() {
+      return (bool)defined('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS');
     }
 
     function install() {
