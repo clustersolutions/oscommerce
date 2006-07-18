@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:install_5.php 261 2005-11-17 12:52:42Z hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -160,7 +160,7 @@
   } else {
 ?>
 
-    <form name="install" action="install.php?step=5" method="post">
+    <form name="install" action="install.php?step=4" method="post">
 
     <div class="noticeBox">
       <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), $dir_fs_document_root . 'includes/configure.php'); ?>
