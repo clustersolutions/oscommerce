@@ -1099,10 +1099,10 @@ INSERT INTO osc_credit_cards VALUES (12,'Maestro','/^(50|56|57|58|6)/','0','0');
 INSERT INTO osc_credit_cards VALUES (13,'Saferpay Test Card','/^9451123100000004$/','0','0');
 
 INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now());
-INSERT INTO osc_currencies VALUES (2,'Euro','EUR','','EUR','2','1.2076', now());
+INSERT INTO osc_currencies VALUES (2,'Euro','EUR','€','','2','1.2076', now());
 INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','£','','2','1.7587', now());
 
-INSERT INTO osc_languages VALUES (1,'English','en_US','en_US,en_US.ISO8859-15,english','iso-8859-15','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
+INSERT INTO osc_languages VALUES (1,'English','en_US','en_US.UTF-8,en_US,english','utf-8','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr','icon.gif',1,'.',',',1);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
 INSERT INTO osc_orders_status VALUES ( '2', '1', 'Processing');
