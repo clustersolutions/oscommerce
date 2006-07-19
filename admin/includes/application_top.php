@@ -98,8 +98,9 @@
 
   $osC_Language->loadConstants();
 
-  header('Content-Type: text/html; charset=' . CHARSET);
-  setlocale(LC_TIME, LANGUAGE_LOCALE);
+  header('Content-Type: text/html; charset=' . $osC_Language->getCharacterSet());
+
+  osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
 
   $osC_Language->loadConstants(basename($_SERVER['SCRIPT_FILENAME']));
 

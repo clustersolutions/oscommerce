@@ -1431,4 +1431,22 @@
         break;
     }
   }
+
+  function osc_setlocale($category, $locale) {
+    if (PHP_VERSION < 4.1) {
+      if (is_array($locale)) {
+        foreach ($locale as $l) {
+          if (($result = setlocale($category, $l)) !== false) {
+            return $result;
+          }
+        }
+
+        return false;
+      } else {
+        return setlocale($category, $locale);
+      }
+    } else {
+      return setlocale($category, $locale);
+    }
+  }
 ?>

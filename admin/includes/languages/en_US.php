@@ -5,18 +5,10 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
-
-// look in your $PATH_LOCALE/locale directory for available locales
-// or execute 'locale -a' on the server.
-// Examples:
-// on Linux try 'en_US'
-// on FreeBSD try 'en_US.ISO_8859-1'
-// on Windows try 'en', or 'English'
-define('LANGUAGE_LOCALE', 'en_US');
 
 define('DATE_FORMAT_SHORT', '%m/%d/%Y');  // this is used for strftime()
 define('DATE_FORMAT_LONG', '%A %d %B, %Y'); // this is used for strftime()
@@ -38,12 +30,6 @@ function tep_date_raw($date, $reverse = false) {
 
 define('NUMERIC_DECIMAL_SEPARATOR', '.');
 define('NUMERIC_THOUSANDS_SEPARATOR', ',');
-
-// Global entries for the <html> tag
-define('HTML_PARAMS','xmlns="http://www.w3.org/1999/xhtml" dir="ltr" xml:lang="en" lang="en"');
-
-// charset for web pages and emails
-define('CHARSET', 'iso-8859-1');
 
 // page title
 define('TITLE', 'osCommerce');
