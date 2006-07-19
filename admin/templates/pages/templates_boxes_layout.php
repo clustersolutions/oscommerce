@@ -5,12 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-  require('../includes/templates/' . $filter_template . '.php');
+  require('includes/templates/' . $filter_template . '.php');
   require('includes/classes/directory_listing.php');
 
   $boxes_array = array();
