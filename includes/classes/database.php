@@ -623,7 +623,7 @@
           }
         }
 
-        $display_links = tep_draw_form($batch_keyword, basename($_SERVER['PHP_SELF']), 'get');
+        $display_links = '<form action="' . tep_href_link(basename($_SERVER['PHP_SELF'])) . '" action="get">';
 
         if ($this->batch_number > 1) {
           $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)) . '" class="splitPageLink">' . $osC_Language->get('result_set_previous_page') . '</a>';

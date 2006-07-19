@@ -160,18 +160,6 @@
     return tep_image(DIR_WS_IMAGES . $image, '', $width, $height);
   }
 
-////
-// Output a form
-  function tep_draw_form($name, $action, $method = 'post', $parameters = '') {
-    $form = '<form name="' . tep_output_string($name) . '" action="' . tep_output_string($action) . '" method="' . tep_output_string($method) . '"';
-
-    if (tep_not_null($parameters)) $form .= ' ' . $parameters;
-
-    $form .= '>';
-
-    return $form;
-  }
-
   function osc_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
     $field_value = $value;
 

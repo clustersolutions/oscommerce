@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: index.php 199 2005-09-22 17:56:13 +0200 (Do, 22 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -27,7 +27,7 @@
   }
 ?>
 
-<?php echo tep_draw_form('cart_quantity', tep_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=add_product')); ?>
+<form name="cart_quantity" action="<?php echo tep_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=add_product'); ?>" method="post">
 
 <p><?php echo $osC_Product->getDescription(); ?></p>
 

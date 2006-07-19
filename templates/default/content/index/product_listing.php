@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: index.php 199 2005-09-22 17:56:13 +0200 (Do, 22 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -28,7 +28,7 @@
     $Qfilterlist->execute();
 
     if ($Qfilterlist->numberOfRows() > 1) {
-      echo '<p>' . tep_draw_form('filter', FILENAME_DEFAULT, 'get') . $osC_Language->get('filter_show') . '&nbsp;';
+      echo '<p><form name="filter" action="' . tep_href_link(FILENAME_DEFAULT) . '" method="get">' . $osC_Language->get('filter_show') . '&nbsp;';
       if (isset($_GET['manufacturers']) && tep_not_null($_GET['manufacturers'])) {
         echo osc_draw_hidden_field('manufacturers', $_GET['manufacturers']);
         $options = array(array('id' => '', 'text' => $osC_Language->get('filter_all_categories')));
