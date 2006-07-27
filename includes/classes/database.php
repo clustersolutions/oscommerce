@@ -148,6 +148,8 @@
           }
 
           if ($import_queries[($i+1)] == "\n") {
+            $next = '';
+
             for ($j=($i+2); $j<$sql_length; $j++) {
               if (!empty($import_queries[$j])) {
                 $next = substr($import_queries, $j, 6);
