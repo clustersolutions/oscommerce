@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: search.php 333 2005-12-07 03:15:13Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -18,13 +18,13 @@
         $_group = 'boxes';
 
     function osC_Boxes_checkout_trail() {
-      global $osC_Language, $osC_ShoppingCart;
+      global $osC_Language;
 
       $this->_title = $osC_Language->get('box_ordering_steps_heading');
     }
 
     function initialize() {
-      global $osC_Language, $osC_Template;
+      global $osC_Language, $osC_Template, $osC_ShoppingCart;
 
       $steps = array();
 

@@ -416,7 +416,7 @@
     return osc_draw_input_field($name, $value, $parameters, $required, 'password', false);
   }
 
-  function osc_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
+  function osc_draw_pull_down_menu($name, $values, $default = null, $parameters = '', $required = false) {
     $group = false;
 
     $field = '<select name="' . tep_output_string($name) . '"';

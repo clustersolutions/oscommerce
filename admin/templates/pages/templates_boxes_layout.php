@@ -47,14 +47,44 @@
   $d_boxes->setCheckExtension('php');
   $d_boxes->setExcludeEntries('.svn');
 
-  $current_directory = false;
   foreach ($d_boxes->getFiles(false) as $box) {
     if ($box['is_directory'] === true) {
-      $pages_array[] = array('id' => $filter_template_id . '/' . $box['name'] . '/*', 'text' => $box['name'] . '/*');
+      $entry = array('id' => $filter_template_id . '/' . $box['name'] . '/*', 'text' => $box['name'] . '/*');
     } else {
       $page_filename = substr($box['name'], 0, strrpos($box['name'], '.'));
+      $entry = array('id' => $filter_template_id . '/' . $page_filename, 'text' => $page_filename);
+    }
 
-      $pages_array[] = array('id' => $filter_template_id . '/' . $page_filename, 'text' => $page_filename);
+    if ( ($filter_template != DEFAULT_TEMPLATE) && ($d_boxes->getSize() > 0) ) {
+      $entry['group'] = '-- ' . $filter_template . ' --';
+    }
+
+    $pages_array[] = $entry;
+  }
+
+  if ($filter_template != DEFAULT_TEMPLATE) {
+    $d_boxes = new osC_DirectoryListing('../templates/' . DEFAULT_TEMPLATE . '/content');
+    $d_boxes->setRecursive(true);
+    $d_boxes->setAddDirectoryToFilename(true);
+    $d_boxes->setCheckExtension('php');
+    $d_boxes->setExcludeEntries('.svn');
+
+    foreach ($d_boxes->getFiles(false) as $box) {
+      if ($box['is_directory'] === true) {
+        $entry = array('id' => $filter_template_id . '/' . $box['name'] . '/*', 'text' => $box['name'] . '/*');
+      } else {
+        $page_filename = substr($box['name'], 0, strrpos($box['name'], '.'));
+        $entry = array('id' => $filter_template_id . '/' . $page_filename, 'text' => $page_filename);
+      }
+
+      $check_entry = $entry;
+      $check_entry['group'] = '-- ' . $filter_template . ' --';
+
+      if (!in_array($check_entry, $pages_array)) {
+        $entry['group'] = '-- ' . DEFAULT_TEMPLATE . ' --';
+
+        $pages_array[] = $entry;
+      }
     }
   }
 
@@ -80,7 +110,7 @@
   }
 
   if (empty($groups_array) === false) {
-    array_unshift($groups_array, array('id' => '', 'text' => TEXT_PLEASE_SELECT));
+    array_unshift($groups_array, array('id' => null, 'text' => TEXT_PLEASE_SELECT));
   }
 ?>
 
@@ -162,11 +192,11 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_BOXES . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('box', $boxes_array, '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('box', $boxes_array, null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_PAGES . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('content_page', $pages_array, '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('content_page', $pages_array, null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%">&nbsp;</td>
@@ -177,7 +207,7 @@
         <td class="smallText" width="60%">
 <?php
   if (empty($groups_array) === false) {
-    echo osc_draw_pull_down_menu('group', $groups_array, '', 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_GROUP_NEW . '</b>&nbsp;';
+    echo osc_draw_pull_down_menu('group', $groups_array, null, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_GROUP_NEW . '</b>&nbsp;';
   }
 
   echo osc_draw_input_field('group_new', '', 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');

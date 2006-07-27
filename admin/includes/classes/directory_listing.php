@@ -56,12 +56,12 @@
     function setExcludeEntries($entries) {
       if (is_array($entries)) {
         foreach ($entries as $value) {
-          if (in_array($value, $this->_exclude_entries) === false) {
+          if (!in_array($value, $this->_exclude_entries)) {
             $this->_exclude_entries[] = $value;
           }
         }
       } elseif (is_string($entries)) {
-        if (in_array($entries, $this->_exclude_entries) === false) {
+        if (!in_array($entries, $this->_exclude_entries)) {
           $this->_exclude_entries[] = $entries;
         }
       }
@@ -100,13 +100,13 @@
         $directory = $this->_directory;
       }
 
-      if (is_array($this->_listing) === false) {
+      if (!is_array($this->_listing)) {
         $this->_listing = array();
       }
 
       if ($dir = @dir($directory)) {
         while (($entry = $dir->read()) !== false) {
-          if (in_array($entry, $this->_exclude_entries) === false) {
+          if (!in_array($entry, $this->_exclude_entries)) {
             if (($this->_include_files === true) && is_file($dir->path . '/' . $entry)) {
               if (($this->_check_extension === false) || (substr($entry, strrpos($entry, '.')+1) == $this->_check_extension)) {
                 if ($this->_add_directory_to_filename === true) {
@@ -161,7 +161,7 @@
     }
 
     function getFiles($sort_by_directories = true) {
-      if (is_array($this->_listing) === false) {
+      if (!is_array($this->_listing)) {
         $this->read();
       }
 
@@ -174,6 +174,14 @@
       }
 
       return array();
+    }
+
+    function getSize() {
+      if (!is_array($this->_listing)) {
+        $this->read();
+      }
+
+      return sizeof($this->_listing);
     }
 
     function getDirectory() {

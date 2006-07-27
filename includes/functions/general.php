@@ -1382,7 +1382,7 @@
   }
 
   function osc_setlocale($category, $locale) {
-    if (PHP_VERSION < 4.1) {
+    if (version_compare(PHP_VERSION, '4.3', '<')) {
       if (is_array($locale)) {
         foreach ($locale as $l) {
           if (($result = setlocale($category, $l)) !== false) {
