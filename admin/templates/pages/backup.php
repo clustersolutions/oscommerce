@@ -65,10 +65,10 @@
         <td align="right">
 <?php
       if (isset($buInfo) && ($entry == $buInfo->file)) {
-        echo '<a href="#" onclick="toggleInfoBox(\'bRestore\');">' . osc_icon('tape.png', IMAGE_EDIT) . '</a>&nbsp;' .
+        echo '<a href="#" onclick="toggleInfoBox(\'bRestore\');">' . osc_icon('tape.png', IMAGE_RESTORE) . '</a>&nbsp;' .
              '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bRestore'), osc_icon('tape.png', IMAGE_EDIT)) . '&nbsp;' .
+        echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bRestore'), osc_icon('tape.png', IMAGE_RESTORE)) . '&nbsp;' .
              osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bDelete'), osc_icon('trash.png', IMAGE_DELETE));
       }
 ?>
