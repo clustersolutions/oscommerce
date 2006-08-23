@@ -74,7 +74,7 @@
 <?php
   }
 
-  if ($osC_Product->getDateAvailable() > date('Y-m-d H:i:s')) {
+  if ($osC_Product->getDateAvailable() > osC_DateTime::getNow()) {
 ?>
 
 <p align="center"><?php echo sprintf($osC_Language->get('date_availability'), osC_DateTime::getLong($osC_Product->getDateAvailable())); ?></p>

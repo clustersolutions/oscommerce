@@ -42,7 +42,7 @@
 
       if ($Qbanner->numberOfRows() > 0) {
         while ($Qbanner->next()) {
-          if (date('Y-m-d H:i:s') >= $Qbanner->value('date_scheduled')) {
+          if (osC_DateTime::getNow() >= $Qbanner->value('date_scheduled')) {
             $this->activate($Qbanner->valueInt('banners_id'));
           }
         }
@@ -66,7 +66,7 @@
       if ($Qbanner->numberOfRows() > 0) {
         while ($Qbanner->next()) {
           if (!osc_empty($Qbanner->value('expires_date'))) {
-            if (date('Y-m-d H:i:s') >= $Qbanner->value('expires_date')) {
+            if (osC_DateTime::getNow() >= $Qbanner->value('expires_date')) {
               $this->expire($Qbanner->valueInt('banners_id'));
             }
           } elseif (!osc_empty($Qbanner->valueInt('expires_impressions'))) {

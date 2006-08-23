@@ -60,7 +60,7 @@
       }
 ?>
         <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'action=download&file=' . $entry), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $entry); ?></td>
-        <td><?php echo osC_DateTime::getShort(date('Y-m-d H:i:s', filemtime(DIR_FS_BACKUP . $entry)), true); ?></td>
+        <td><?php echo osC_DateTime::getShort(osC_DateTime::fromUnixTimestamp(filemtime(DIR_FS_BACKUP . $entry)), true); ?></td>
         <td><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
         <td align="right">
 <?php

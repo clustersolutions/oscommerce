@@ -74,6 +74,10 @@
       return mktime($hour, $minute, $second, $month, $day, $year);
     }
 
+    function fromUnixTimestamp($timestamp) {
+      return date('Y-m-d H:i:s', $timestamp);
+    }
+
     function isLeapYear($year = '') {
       if (empty($year)) {
         $year = $this->year;
