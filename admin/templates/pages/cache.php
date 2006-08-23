@@ -58,7 +58,7 @@
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo $cache; ?></td>
       <td align="center"><?php echo $stats['total']; ?></td>
-      <td align="right"><?php echo osC_DateTime::getShort($stats['last_modified'], true)); ?></td>
+      <td align="right"><?php echo osC_DateTime::getShort($stats['last_modified'], true); ?></td>
       <td align="right"><?php echo osc_link_object(osc_href_link_admin(FILENAME_CACHE, 'cache=' . $cache . '&action=reset'), osc_icon('delete.png', IMAGE_DELETE)); ?></td>
     </tr>
 <?php
