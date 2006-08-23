@@ -71,7 +71,7 @@
       if (isset($tInfo) && ($code == $tInfo->code) ) {
         echo '      <tr class="selected">' . "\n";
       } else {
-        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code) . '\';">' . "\n";
+        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code) . '\';">' . "\n";
       }
 ?>
 
@@ -86,38 +86,38 @@
 ?>
 
         </td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif'), null, null); ?></td>
         <td align="right">
 <?php
       if (isset($tInfo) && ($code == $tInfo->code)) {
         if ($tInfo->installed === true) {
-          echo '<a href="#" onclick="toggleInfoBox(\'tInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-               '<a href="#" onclick="toggleInfoBox(\'tUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+          echo '<a href="#" onclick="toggleInfoBox(\'tInfo\');">' . osc_icon('info.png', IMAGE_INFO) . '</a>&nbsp;' .
+               '<a href="#" onclick="toggleInfoBox(\'tUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;';
 
           if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-            echo '<a href="#" onclick="toggleInfoBox(\'tEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+            echo '<a href="#" onclick="toggleInfoBox(\'tEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
           } else {
-            echo tep_image('images/pixel_trans.gif', '', '16', '16');
+            echo osc_image('images/pixel_trans.gif', '', '16', '16');
           }
         } else {
-          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-               tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+               osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
         if ($module->isInstalled() && $module->isActive()) {
-          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
 
           if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-            echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+            echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tEdit'), osc_icon('configure.png', IMAGE_EDIT));
           } else {
-            echo tep_image('images/pixel_trans.gif', '', '16', '16');
+            echo osc_image('images/pixel_trans.gif', '', '16', '16');
           }
         } else {
-          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;' .
-               '<a href="' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-               tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+               osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       }
 ?>
@@ -137,7 +137,7 @@
 ?>
 
 <div id="infoBox_tInfo" <?php if ($action != 'tInfo') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . ' ' . $tInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -167,7 +167,7 @@
 </div>
 
 <div id="infoBox_tUninstall" <?php if ($action != 'tUninstall') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . ' ' . $tInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
 <?php
     if ($tInfo->code == DEFAULT_TEMPLATE) {
@@ -178,7 +178,7 @@
     } else {
 ?>
     <p><?php echo INFO_TEMPLATE_UNINSTALL_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'tDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'tDefault\');">'; ?></p>
 <?php
     }
 ?>
@@ -186,9 +186,9 @@
 </div>
 
 <div id="infoBox_tEdit" <?php if ($action != 'tEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $tInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('tEdit', FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=save'); ?>
+    <form name="tEdit" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=save'); ?>" method="post">
 
 <?php
     $keys = '';

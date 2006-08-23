@@ -49,7 +49,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zone_id));
+        tep_redirect(osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zone_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['zID']) && is_numeric($_GET['zID'])) {
@@ -68,7 +68,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(tep_href_link(FILENAME_ZONES, 'page=' . $_GET['page']));
+          tep_redirect(osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page']));
         }
         break;
     }

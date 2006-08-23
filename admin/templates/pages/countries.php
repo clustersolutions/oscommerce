@@ -43,7 +43,7 @@
     if (isset($cInfo) && ($Qcountries->valueInt('countries_id') == $cInfo->countries_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qcountries->value('countries_name'); ?></td>
@@ -52,11 +52,11 @@
         <td align="right">
 <?php
     if (isset($cInfo) && ($Qcountries->valueInt('countries_id') == $cInfo->countries_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id') . '&action=cDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $Qcountries->valueInt('countries_id') . '&action=cDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -78,24 +78,24 @@
 </div>
 
 <div id="infoBox_cNew" <?php if ($action != 'cNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_COUNTRY; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_COUNTRY; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cNew', FILENAME_COUNTRIES, 'action=save'); ?>
+    <form name="cNew" action="<?php echo osc_href_link_admin(FILENAME_COUNTRIES, 'action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_name', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_name', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_CODE_2 . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_iso_code_2', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_iso_code_2', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_CODE_3 . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_iso_code_3', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('countries_iso_code_3', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ADDRESS_FORMAT . '</b>'; ?></td>
@@ -114,9 +114,9 @@
 ?>
 
 <div id="infoBox_cEdit" <?php if ($action != 'cEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $cInfo->countries_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $cInfo->countries_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cEdit', FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->countries_id . '&action=save'); ?>
+    <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->countries_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -146,7 +146,7 @@
 </div>
 
 <div id="infoBox_cDelete" <?php if ($action != 'cDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $cInfo->countries_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $cInfo->countries_name; ?></div>
   <div class="infoBoxContent">
 <?php
     $can_be_deleted = true;
@@ -181,7 +181,7 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_COUNTRIES_WARNING, $cInfo->total_zones) . '</b></p>' . "\n";
       }
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->countries_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->countries_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton"></p>' . "\n";
     } else {
       echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton"></p>' . "\n";
     }

@@ -59,7 +59,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=transactionHistory'));
+        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=transactionHistory'));
 
         break;
       case 'update_order':
@@ -79,7 +79,7 @@
 
               if ($Qupdate->affectedRows()) {
                 if (isset($_POST['notify_customer']) && ($_POST['notify_customer'] == 'on')) {
-                  $email_body = STORE_NAME . "\n" . EMAIL_SEPARATOR . "\n" . EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID . "\n" . EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false) . "\n" . EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($Qorder->value('date_purchased')) . "\n\n";
+                  $email_body = STORE_NAME . "\n" . EMAIL_SEPARATOR . "\n" . EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID . "\n" . EMAIL_TEXT_INVOICE_URL . ' ' . osc_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false, false, true) . "\n" . EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($Qorder->value('date_purchased')) . "\n\n";
 
                   if (isset($_POST['append_comment']) && ($_POST['append_comment'] == 'on')) {
                     $email_body .= sprintf(EMAIL_TEXT_COMMENTS_UPDATE, $_POST['comment']) . "\n\n";
@@ -108,12 +108,12 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=statusHistory'));
+        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=statusHistory'));
         break;
       case 'deleteconfirm':
         tep_remove_order($_GET['oID'], (isset($_POST['restock']) && ($_POST['restock'] == 'on') ? true : false));
 
-        tep_redirect(tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
         break;
     }
   }

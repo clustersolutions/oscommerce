@@ -40,14 +40,14 @@
     <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
         <td class="pageHeading"><?php echo nl2br(STORE_NAME_ADDRESS); ?></td>
-        <td class="pageHeading" align="right"><?php echo tep_image('images/oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
+        <td class="pageHeading" align="right"><?php echo osc_image('images/oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
       </tr>
     </table></td>
   </tr>
   <tr>
     <td><table width="100%" border="0" cellspacing="0" cellpadding="2">
       <tr>
-        <td colspan="2"><?php echo tep_draw_separator(); ?></td>
+        <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
         <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">
@@ -58,7 +58,7 @@
             <td class="main"><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></td>
           </tr>
           <tr>
-            <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '5'); ?></td>
+            <td>&nbsp;</td>
           </tr>
           <tr>
             <td class="main"><?php echo $osC_Order->getCustomer('telephone'); ?></td>
@@ -79,7 +79,7 @@
     </table></td>
   </tr>
   <tr>
-    <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+    <td>&nbsp;</td>
   </tr>
   <tr>
     <td><table border="0" cellspacing="0" cellpadding="2">
@@ -90,7 +90,7 @@
     </table></td>
   </tr>
   <tr>
-    <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
+    <td>&nbsp;</td>
   </tr>
   <tr>
     <td><table border="0" width="100%" cellspacing="0" cellpadding="2">

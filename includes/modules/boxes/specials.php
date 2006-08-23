@@ -21,11 +21,12 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_specials_heading');
-      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'specials');
     }
 
     function initialize() {
       global $osC_Database, $osC_Services, $osC_Currencies, $osC_Cache, $osC_Language, $osC_Image;
+
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'specials');
 
       if ($osC_Services->isStarted('specials')) {
         if ((BOX_SPECIALS_CACHE > 0) && $osC_Cache->read('box-specials-' . $osC_Language->getCode() . '-' . $osC_Currencies->getCode(), BOX_SPECIALS_CACHE)) {

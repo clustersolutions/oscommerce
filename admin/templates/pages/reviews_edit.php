@@ -38,14 +38,14 @@
 
 <h1><?php echo HEADING_TITLE; ?></h1>
 
-<?php echo tep_draw_form('review', FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rPreview'); ?>
+<form name="review" action="<?php echo osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rPreview'); ?>" method="post">
 
 <p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . tep_date_short($rInfo->date_added); ?></p>
 
-<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . tep_draw_textarea_field('reviews_text', 'soft', '60', '15', $rInfo->reviews_text, 'style="width: 100%;"') . '<br /><span class="smallText">' . ENTRY_REVIEW_TEXT . '</span>'; ?></p>
+<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . osc_draw_textarea_field('reviews_text', $rInfo->reviews_text, null, null, 'style="width: 100%;"') . '<br /><span class="smallText">' . ENTRY_REVIEW_TEXT . '</span>'; ?></p>
 
 <p class="main"><?php echo '<b>' . ENTRY_RATING . '</b>&nbsp;' . TEXT_BAD . '&nbsp;' . osc_draw_radio_field('reviews_rating', $rating_array, $rInfo->reviews_rating) . '&nbsp;' . TEXT_GOOD; ?></p>
 
-<p class="main" align="right"><?php echo '<input type="submit" value="' . IMAGE_PREVIEW . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';" class="operationButton">'; ?></p>
+<p class="main" align="right"><?php echo '<input type="submit" value="' . IMAGE_PREVIEW . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';" class="operationButton">'; ?></p>
 
 </form>

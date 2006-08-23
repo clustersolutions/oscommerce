@@ -89,7 +89,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $banners_id));
+          tep_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $banners_id));
         }
         break;
       case 'deleteconfirm':
@@ -143,7 +143,7 @@
 
           $osC_MessageStack->add_session('header', SUCCESS_BANNER_REMOVED, 'success');
 
-          tep_redirect(tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page']));
+          tep_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page']));
         }
         break;
     }

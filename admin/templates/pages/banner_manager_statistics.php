@@ -49,7 +49,7 @@
     <td><h1><?php echo HEADING_TITLE . ': ' . $Qbanner->value('banners_title'); ?></h1></td>
     <td class="smallText" align="right">
 <?php
-  echo tep_draw_form('type', FILENAME_BANNER_MANAGER, '', 'get') . osc_draw_hidden_field('page', $_GET['page']) . osc_draw_hidden_field('bID', $_GET['bID']) . osc_draw_hidden_field('action', 'statistics') .
+  echo '<form name="type" action="' . osc_href_link_admin(FILENAME_BANNER_MANAGER) . ' method="get">' . osc_draw_hidden_field('page', $_GET['page']) . osc_draw_hidden_field('bID', $_GET['bID']) . osc_draw_hidden_field('action', 'statistics') .
        TITLE_TYPE . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onchange="this.form.submit();"');
 
   switch ($type) {
@@ -74,16 +74,16 @@
     switch ($type) {
       case 'yearly':
         include('includes/graphs/banner_yearly.php');
-        echo '<p align="center">' . tep_image('images/graphs/banner_yearly-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
+        echo '<p align="center">' . osc_image('images/graphs/banner_yearly-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
         break;
       case 'monthly':
         include('includes/graphs/banner_monthly.php');
-        echo '<p align="center">' . tep_image('images/graphs/banner_monthly-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
+        echo '<p align="center">' . osc_image('images/graphs/banner_monthly-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
         break;
       default:
       case 'daily':
         include('includes/graphs/banner_daily.php');
-        echo '<p align="center">' . tep_image('images/graphs/banner_daily-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
+        echo '<p align="center">' . osc_image('images/graphs/banner_daily-' . $_GET['bID'] . '.' . $image_extension) . '</p>';
         break;
     }
   }
@@ -110,4 +110,4 @@
   </tbody>
 </table>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>

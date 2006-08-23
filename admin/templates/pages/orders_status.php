@@ -37,7 +37,7 @@
     if (isset($osInfo) && ($Qstatuses->valueInt('orders_status_id') == $osInfo->orders_status_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id')) . '\';">' . "\n";
     }
 
     if (DEFAULT_ORDERS_STATUS_ID == $Qstatuses->valueInt('orders_status_id')) {
@@ -49,11 +49,11 @@
         <td align="right">
 <?php
     if (isset($osInfo) && ($Qstatuses->valueInt('orders_status_id') == $osInfo->orders_status_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'osEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'osDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'osEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'osDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $Qstatuses->valueInt('orders_status_id') . '&action=osDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -75,9 +75,9 @@
 </div>
 
 <div id="infoBox_osNew" <?php if ($action != 'osNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_ORDERS_STATUS; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_ORDERS_STATUS; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('osNew', FILENAME_ORDERS_STATUS, 'action=save'); ?>
+    <form name="osNew" action="<?php echo osc_href_link_admin(FILENAME_ORDERS_STATUS, 'action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -87,7 +87,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br />';
+    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -109,9 +109,9 @@
 ?>
 
 <div id="infoBox_osEdit" <?php if ($action != 'osEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $osInfo->orders_status_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osInfo->orders_status_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('osEdit', FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=save'); ?>
+    <form name="osEdit" action="<?php echo osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -131,7 +131,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
+      echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('orders_status_name[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : null)) . '<br />';
     }
 ?>
         </td>
@@ -155,7 +155,7 @@
 </div>
 
 <div id="infoBox_osDelete" <?php if ($action != 'osDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $osInfo->orders_status_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osInfo->orders_status_name; ?></div>
   <div class="infoBoxContent">
 <?php
     $Qorders = $osC_Database->query('select count(*) as total from :table_orders where orders_status = :orders_status');
@@ -186,7 +186,7 @@
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $osInfo->orders_status_name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $osInfo->orders_status_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'osDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

@@ -74,7 +74,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $_GET['module']));
+        tep_redirect(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $_GET['module']));
         break;
       case 'install':
       case 'remove':
@@ -93,7 +93,7 @@
         osC_Cache::clear('modules-' , $module_type);
         osC_Cache::clear('configuration');
 
-        tep_redirect(tep_href_link(FILENAME_MODULES, 'set=' . $set . '&module=' . $_GET['module']));
+        tep_redirect(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $_GET['module']));
         break;
     }
   }

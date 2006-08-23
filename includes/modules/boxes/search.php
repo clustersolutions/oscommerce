@@ -21,11 +21,12 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_search_heading');
-      $this->_title_link = osc_href_link(FILENAME_SEARCH);
     }
 
     function initialize() {
       global $osC_Language;
+
+      $this->_title_link = osc_href_link(FILENAME_SEARCH);
 
       $this->_content = '<form name="search" action="' . osc_href_link(FILENAME_SEARCH, null, 'NONSSL', false) . '" method="get">' .
                         osc_draw_input_field('keywords', null, 'style="width: 80%;" maxlength="30"') . '&nbsp;' . osc_draw_hidden_session_id_field() . osc_draw_image_submit_button('button_quick_find.gif', $osC_Language->get('box_search_heading')) . '<br />' . sprintf($osC_Language->get('box_search_text'), osc_href_link(FILENAME_SEARCH)) .

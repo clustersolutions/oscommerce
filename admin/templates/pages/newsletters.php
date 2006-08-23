@@ -48,27 +48,27 @@
     if (isset($nmInfo) && ($Qnewsletters->valueInt('newsletters_id') == $nmInfo->newsletters_id) ) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id')) . '\';">' . "\n";
     }
 ?>
-        <td><?php echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmPreview') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/file.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qnewsletters->value('title') . '</a>'; ?></td>
+        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmPreview'), osc_icon('file.png', ICON_PREVIEW) . '&nbsp;' . $Qnewsletters->value('title')); ?></td>
         <td align="right"><?php echo number_format($Qnewsletters->valueInt('content_length')); ?></td>
         <td align="right"><?php echo $$newsletter_module_class->getTitle(); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qnewsletters->valueInt('status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($Qnewsletters->valueInt('status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php
     if ($Qnewsletters->valueInt('status') === 1) {
-      echo tep_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmLog') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/log.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
+      echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmLog'), osc_icon('log.png', IMAGE_DELETE)) . '&nbsp;';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmSend') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/email_send.png', IMAGE_SEND, '16', '16') . '</a>&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmEdit'), osc_icon('edit.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmSend'), osc_icon('email_send.png', IMAGE_SEND)) . '&nbsp;';
     }
 
     if (isset($nmInfo) && ($Qnewsletters->valueInt('newsletters_id') == $nmInfo->newsletters_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'nmDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'nmDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $Qnewsletters->valueInt('newsletters_id') . '&action=nmDelete') , osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -86,7 +86,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . BUTTON_INSERT . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'action=nmEdit') . '\';" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . BUTTON_INSERT . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'action=nmEdit') . '\';" class="infoBoxButton">'; ?></p>
 </div>
 
 <?php
@@ -94,12 +94,12 @@
 ?>
 
 <div id="infoBox_nmDelete" <?php if ($action != 'nmDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $nmInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $nmInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $nmInfo->title . '</b>'; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . BUTTON_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmInfo->newsletters_id . '&action=deleteconfirm') . '\';" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="toggleInfoBox(\'nmDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . BUTTON_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmInfo->newsletters_id . '&action=deleteconfirm') . '\';" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="toggleInfoBox(\'nmDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

@@ -66,7 +66,7 @@
             }
           }          	
         }
-        tep_redirect(tep_href_link(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')));
+        tep_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')));
         break;
       case 'deleteconfirm':
         if (isset($_GET['sID']) && is_numeric($_GET['sID'])) {
@@ -82,7 +82,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_SPECIALS, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page']));
         break;
     }
   }

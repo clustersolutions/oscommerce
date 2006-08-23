@@ -41,11 +41,11 @@
     if (isset($nmlInfo) && ($Qlog->value('email_address') == $nmlInfo->email_address) ) {
       echo '    <tr class="selected">' . "\n";
     } else {
-      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmLog&lpage=' . $_GET['lpage'] . '&nmlAddress=' . $Qlog->value('email_address')) . '\';">' . "\n";
+      echo '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmLog&lpage=' . $_GET['lpage'] . '&nmlAddress=' . $Qlog->value('email_address')) . '\';">' . "\n";
     }
 ?>
       <td><?php echo $Qlog->value('email_address'); ?></td>
-      <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (tep_not_null($Qlog->value('date_sent')) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+      <td align="center"><?php echo osc_icon(tep_not_null($Qlog->value('date_sent') ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
       <td align="right"><?php echo $Qlog->value('date_sent'); ?></td>
     </tr>
 <?php
@@ -61,4 +61,4 @@
   </tr>
 </table>
 
-<p align="right"><?php echo '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="infoBoxButton">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="infoBoxButton">'; ?></p>

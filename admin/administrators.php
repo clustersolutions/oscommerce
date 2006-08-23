@@ -50,7 +50,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $id));
+        tep_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['aID']) && is_numeric($_GET['aID'])) {
@@ -62,7 +62,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page']));
         break;
     }
   }

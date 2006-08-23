@@ -41,6 +41,7 @@
   define('LOCAL_EXE_UNZIP', '/usr/local/bin/unzip');
 
 // compatibility work-around logic for PHP4
+  require('../includes/functions/compatibility.php');
   require('includes/functions/compatibility.php');
 
 // include the list of project filenames
@@ -73,6 +74,7 @@
 
 // define our general functions used application-wide
   require('includes/functions/general.php');
+  require('../includes/functions/html_output.php');
   require('includes/functions/html_output.php');
 
 // include session class
@@ -82,7 +84,7 @@
 
   if (isset($_SESSION['admin']) === false) {
     if (basename($_SERVER['SCRIPT_FILENAME']) != FILENAME_LOGIN) {
-      tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+      tep_redirect(osc_href_link_admin(FILENAME_LOGIN));
     }
   }
 

@@ -19,7 +19,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><h1><?php echo HEADING_TITLE . ': ' . $osC_Images->getTitle(); ?></h1></td>
-    <td align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_IMAGES) . '\';" class="operationButton">'; ?></td>
+    <td align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_IMAGES) . '\';" class="operationButton">'; ?></td>
   </tr>
 </table>
 

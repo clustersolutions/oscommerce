@@ -44,7 +44,7 @@
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
       echo '          <tr class="selected">' . "\n";
     } else {
-      echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\'">' . "\n";
+      echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\'">' . "\n";
     }
 ?>
         <td><?php echo $Qproducts->value('products_name'); ?></td>
@@ -52,9 +52,9 @@
         <td align="right">
 <?php
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'pEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'pEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pEdit'), osc_icon('configure.png', IMAGE_EDIT));
     }
 ?>
         </td>
@@ -78,12 +78,12 @@
 ?>
 
 <div id="infoBox_pEdit" <?php if ($action != 'pEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $pInfo->products_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $pInfo->products_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('pEdit', FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $pInfo->products_id . '&action=save'); ?>
+    <form name="pEdit" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page'] . '&pID=' . $pInfo->products_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_EDIT_INTRO; ?></p>
-    <p><?php echo TEXT_INFO_DATE_EXPECTED . '<br />' . osc_draw_input_field('products_date_available', $pInfo->products_date_available, 'id="calendarValue"'); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValue", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script></p>
+    <p><?php echo TEXT_INFO_DATE_EXPECTED . '<br />' . osc_draw_input_field('products_date_available', $pInfo->products_date_available); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'pDefault\');" class="operationButton">'; ?></p>
 

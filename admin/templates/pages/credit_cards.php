@@ -37,20 +37,20 @@
     if (isset($ccInfo) && ($Qcc->valueInt('id') == $ccInfo->id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qcc->valueProtected('credit_card_name'); ?></td>
         <td><?php echo $Qcc->valueInt('sort_order'); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qcc->valueInt('credit_card_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($Qcc->valueInt('credit_card_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php
     if (isset($ccInfo) && ($Qcc->valueInt('id') == $ccInfo->id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'ccEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'ccDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'ccEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'ccDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id') . '&action=ccEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id') . '&action=ccDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id') . '&action=ccEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $Qcc->valueInt('id') . '&action=ccDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -65,22 +65,22 @@
 </div>
 
 <div id="infoBox_ccNew" <?php if ($action != 'ccNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_HEADING_NEW_CREDIT_CARD; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_HEADING_NEW_CREDIT_CARD; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('ccNew', FILENAME_CREDIT_CARDS, 'action=save'); ?>
+    <form name="ccNew" action="<?php echo osc_href_link_admin(FILENAME_CREDIT_CARDS, 'action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_CREDIT_CARD_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('credit_card_name', '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('credit_card_name', null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_CREDIT_CARD_PATTERN . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('pattern', '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('pattern', null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_SORT_ORDER . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('sort_order', '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('sort_order', null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_STATUS . '</b>'; ?></td>
@@ -99,9 +99,9 @@
 ?>
 
 <div id="infoBox_ccEdit" <?php if ($action != 'ccEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $ccInfo->credit_card_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $ccInfo->credit_card_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('ccEdit', FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->id . '&action=save'); ?>
+    <form name="ccEdit" action="<?php echo osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->id . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -129,11 +129,11 @@
 </div>
 
 <div id="infoBox_ccDelete" <?php if ($action != 'ccDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $ccInfo->credit_card_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $ccInfo->credit_card_name; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $ccInfo->credit_card_name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . $ccInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'ccDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

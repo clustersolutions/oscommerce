@@ -36,18 +36,18 @@
     if (isset($aInfo) && ($Qadmin->valueInt('id') == $aInfo->id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qadmin->value('user_name'); ?></td>
         <td align="right">
 <?php
     if (isset($aInfo) && ($Qadmin->valueInt('id') == $aInfo->id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'aEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'aDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'aEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'aDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id') . '&action=aEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id') . '&action=aDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id') . '&action=aEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $Qadmin->valueInt('id') . '&action=aDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -69,9 +69,9 @@
 </div>
 
 <div id="infoBox_aNew" <?php if ($action != 'aNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_HEADING_NEW_ADMINISTRATOR; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_HEADING_NEW_ADMINISTRATOR; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('mNew', FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&action=save', 'post'); ?>
+    <form name="mNew" action="<?php echo osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_NEW_INTRO; ?></p>
     <p><?php echo TEXT_ADMINISTRATOR_USERNAME . '<br />' . osc_draw_input_field('user_name'); ?></p>
@@ -88,9 +88,9 @@
 ?>
 
 <div id="infoBox_aEdit" <?php if ($action != 'aEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $aInfo->user_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $aInfo->user_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('aEdit', FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $aInfo->id . '&action=save', 'post'); ?>
+    <form name="aEdit" action="<?php echo osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $aInfo->id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_EDIT_INTRO; ?></p>
     <p><?php echo TEXT_ADMINISTRATOR_USERNAME . '<br />' . osc_draw_input_field('user_name', $aInfo->user_name); ?></p>
@@ -103,9 +103,9 @@
 </div>
 
 <div id="infoBox_aDelete" <?php if ($action != 'aDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $aInfo->user_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $aInfo->user_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('aDelete', FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $aInfo->id . '&action=deleteconfirm'); ?>
+    <form name="aDelete" action="<?php echo osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $aInfo->id . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $aInfo->user_name . '</b>'; ?></p>

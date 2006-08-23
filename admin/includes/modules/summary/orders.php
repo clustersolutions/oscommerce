@@ -24,7 +24,7 @@
 
     function osC_Summary_orders() {
       $this->_title = MODULE_SUMMARY_ORDERS_TITLE;
-      $this->_title_link = tep_href_link(FILENAME_ORDERS);
+      $this->_title_link = osc_href_link_admin(FILENAME_ORDERS);
 
       $this->_setData();
     }
@@ -32,7 +32,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database, $osC_Language, $template;
+      global $osC_Database, $osC_Language;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
@@ -54,7 +54,7 @@
 
       while ($Qorders->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td><a href="' . tep_href_link(FILENAME_ORDERS, 'oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qorders->valueProtected('customers_name') . '</a></td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_ORDERS, 'oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .
                         '      <td>' . $Qorders->value('orders_status_name') . '</td>' .

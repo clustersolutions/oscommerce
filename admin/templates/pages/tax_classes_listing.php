@@ -45,7 +45,7 @@
     if (isset($trInfo) && ($Qrates->valueInt('tax_rates_id') == $trInfo->tax_rates_id)) {
       echo '      <tr class="selected" title="' . $Qrates->valueProtected('tax_description') . '">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id')) . '\';" title="' . $Qrates->valueProtected('tax_description') . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id')) . '\';" title="' . $Qrates->valueProtected('tax_description') . '">' . "\n";
     }
 ?>
         <td><?php echo $Qrates->valueInt('tax_priority'); ?></td>
@@ -54,11 +54,11 @@
         <td align="right">
 <?php
     if (isset($trInfo) && ($Qrates->valueInt('tax_rates_id') == $trInfo->tax_rates_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'trEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'trDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'trEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'trDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -76,13 +76,13 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID']) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'trNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID']) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'trNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_trNew" <?php if ($entriesAction != 'trNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_TAX_RATE; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_TAX_RATE; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('trNew', FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&entriesAction=save'); ?>
+    <form name="trNew" action="<?php echo osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&entriesAction=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -93,15 +93,15 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_rate', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_rate', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_DESCRIPTION . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_description', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_description', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_PRIORITY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_priority', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('tax_priority', null, 'style="width: 100%;"'); ?></td>
       </tr>
     </table>
 
@@ -116,9 +116,9 @@
 ?>
 
 <div id="infoBox_trEdit" <?php if ($entriesAction != 'trEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('trEdit', FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=save'); ?>
+    <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -150,11 +150,11 @@
 </div>
 
 <div id="infoBox_trDelete" <?php if ($entriesAction != 'trDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'trDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'trDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

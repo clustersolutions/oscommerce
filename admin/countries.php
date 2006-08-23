@@ -45,9 +45,9 @@
         }
 
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-          tep_redirect(tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $_GET['cID']));
+          tep_redirect(osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page'] . '&cID=' . $_GET['cID']));
         } else {
-          tep_redirect(tep_href_link(FILENAME_COUNTRIES));
+          tep_redirect(osc_href_link_admin(FILENAME_COUNTRIES));
         }
 
         break;
@@ -86,7 +86,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_COUNTRIES, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_COUNTRIES, 'page=' . $_GET['page']));
         break;
     }
   }

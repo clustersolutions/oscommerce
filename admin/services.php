@@ -57,7 +57,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_SERVICES, 'service=' . $_GET['service']));
+        tep_redirect(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $_GET['service']));
         break;
       case 'remove':
         if (($key = array_search($_GET['service'], $installed)) !== false) {
@@ -83,7 +83,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_SERVICES, 'service=' . $_GET['service']));
+        tep_redirect(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $_GET['service']));
         break;
       case 'install':
         if (array_search($_GET['service'], $installed) === false) {
@@ -155,7 +155,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_SERVICES, 'service=' . $_GET['service']));
+        tep_redirect(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $_GET['service']));
         break;
     }
   }

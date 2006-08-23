@@ -52,9 +52,9 @@
         <td align="right">
 <?php
       if ($module->hasParameters()) {
-        echo '<a href="#" onclick="toggleInfoBox(\'iEdit_' . $module->getModuleCode() . '\');">' . tep_image('templates/' . $template . '/images/icons/16x16/run.png', IMAGE_EXECUTE, '16', '16') . '</a>';
+        echo '<a href="#" onclick="toggleInfoBox(\'iEdit_' . $module->getModuleCode() . '\');">' . osc_icon('run.png', IMAGE_EXECUTE) . '</a>';
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_IMAGES, 'module=' . substr($file['name'], 0, strrpos($file['name'], '.'))) . '">' . tep_image('templates/' . $template . '/images/icons/16x16/run.png', IMAGE_EXECUTE, '16', '16') . '</a>';
+        echo osc_link_object(osc_href_link_admin(FILENAME_IMAGES, 'module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png', IMAGE_EXECUTE));
       }
 ?>
         </td>
@@ -74,9 +74,9 @@
 ?>
 
 <div id="<?php echo 'infoBox_iEdit_' . $module['code']; ?>" <?php if ($action != 'iEdit_' . $module['code']) { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $module['title']; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $module['title']; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('iEdit', FILENAME_IMAGES, 'module=' . $module['code']); ?>
+    <form name="iEdit" action="<?php echo osc_href_link_admin(FILENAME_IMAGES, 'module=' . $module['code']); ?>" method="post">
 
     <p><?php echo $module['title']; ?></p>
 

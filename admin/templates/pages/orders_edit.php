@@ -16,7 +16,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><h1><?php echo HEADING_TITLE; ?></h1></td>
-    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
+    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
   </tr>
 </table>
 
@@ -29,27 +29,27 @@
 
 <p>
   <input type="button" value="Summary" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionSummary');"> <input type="button" value="Products" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionProducts');"> <input type="button" value="Transaction History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionTransactionHistory');"> <input type="button" value="Status History" class="sectionButton" onclick="toggleDivBlocks('section', 'sectionStatusHistory');">
-  <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onclick="window.open('<?php echo tep_href_link(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
+  <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onclick="window.open('<?php echo osc_href_link_admin(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onclick="window.open('<?php echo osc_href_link_admin(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
 </p>
 
 <div id="sectionSummary" <?php if (!empty($section)) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="infoBoxContent">
     <tr>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/personal.png', ENTRY_CUSTOMER, '16', '16') . ' ' . ENTRY_CUSTOMER; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('personal.png', ENTRY_CUSTOMER) . ' ' . ENTRY_CUSTOMER; ?></div>
         <div class="infoBoxContent">
           <p><?php echo tep_address_format($osC_Order->getCustomer('format_id'), $osC_Order->getCustomer(), 1, '', '<br />'); ?></p>
-          <p><?php echo tep_image('templates/' . $template . '/images/icons/16x16/telephone.png', ENTRY_TELEPHONE_NUMBER, '16', '16') . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', ENTRY_EMAIL_ADDRESS, '16', '16') . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
+          <p><?php echo osc_icon('telephone.png', ENTRY_TELEPHONE_NUMBER) . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . osc_icon('write.png', ENTRY_EMAIL_ADDRESS) . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/home.png', ENTRY_SHIPPING_ADDRESS, '16', '16') . ' ' . ENTRY_SHIPPING_ADDRESS; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('home.png', ENTRY_SHIPPING_ADDRESS) . ' ' . ENTRY_SHIPPING_ADDRESS; ?></div>
         <div class="infoBoxContent">
           <p><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br />'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/bill.png', ENTRY_BILLING_ADDRESS, '16', '16') . ' ' . ENTRY_BILLING_ADDRESS; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('bill.png', ENTRY_BILLING_ADDRESS) . ' ' . ENTRY_BILLING_ADDRESS; ?></div>
         <div class="infoBoxContent">
           <p><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></p>
         </div>
@@ -62,7 +62,7 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="infoBoxContent">
     <tr>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/payment.png', ENTRY_PAYMENT_METHOD, '16', '16') . ' ' . ENTRY_PAYMENT_METHOD; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('payment.png', ENTRY_PAYMENT_METHOD) . ' ' . ENTRY_PAYMENT_METHOD; ?></div>
         <div class="infoBoxContent">
           <p><?php echo $osC_Order->getPaymentMethod(); ?></p>
 <?php
@@ -92,14 +92,14 @@
         </div>
       </td>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/history.png', ENTRY_STATUS, '16', '16') . ' ' . ENTRY_STATUS; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('history.png', ENTRY_STATUS) . ' ' . ENTRY_STATUS; ?></div>
         <div class="infoBoxContent">
           <p><?php echo $osC_Order->getStatus() . '<br />' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? tep_datetime_short($osC_Order->getDateLastModified()) : tep_datetime_short($osC_Order->getDateCreated())); ?></p>
           <p><?php echo 'Comments: ' . $osC_Order->getNumberOfComments(); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
-        <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/calculator.png', ENTRY_TOTAL, '16', '16') . ' ' . ENTRY_TOTAL; ?></div>
+        <div class="infoBoxHeading"><?php echo osc_icon('calculator.png', ENTRY_TOTAL) . ' ' . ENTRY_TOTAL; ?></div>
         <div class="infoBoxContent">
           <p><?php echo $osC_Order->getTotal(); ?></p>
           <p><?php echo 'Products: ' . $osC_Order->getNumberOfProducts() . '<br />Items: ' . $osC_Order->getNumberOfItems(); ?></p>
@@ -184,7 +184,7 @@
     <tr class="dataTableRow">
       <td class="dataTableContent" valign="top"><?php echo tep_datetime_short($history['date_added']); ?></td>
       <td class="dataTableContent" valign="top"><?php echo (empty($history['status']) === false) ? $history['status'] : $history['status_id']; ?></td>
-      <td class="dataTableContent" valign="top" align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($history['return_status'] === 1 ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+      <td class="dataTableContent" valign="top" align="center"><?php echo osc_icon(($history['return_status'] === 1 ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
       <td class="dataTableContent" valign="top"><?php echo nl2br($history['return_value']); ?></td>
     </tr>
 
@@ -200,7 +200,7 @@
 
   <br />
 
-  <?php echo tep_draw_form('transaction', FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_transaction'); ?>
+  <form name="transaction" action="<?php echo osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_transaction'); ?>" method="post">
 
   <p><?php echo ENTRY_POST_TRANSACTION_ACTIONS . ' '. osc_draw_pull_down_menu('transaction', $osC_Order->getPostTransactionActions()) . ' <input type="submit" value="' . IMAGE_EXECUTE . '" class="operationButton">'; ?></p>
 
@@ -227,7 +227,7 @@
       <td class="dataTableContent" valign="top"><?php echo tep_datetime_short($status_history['date_added']); ?></td>
       <td class="dataTableContent" valign="top"><?php echo $status_history['status']; ?></td>
       <td class="dataTableContent" valign="top"><?php echo nl2br($status_history['comment']); ?></td>
-      <td class="dataTableContent" align="right" valign="top"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($status_history['customer_notified'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+      <td class="dataTableContent" align="right" valign="top"><?php echo osc_icon((($status_history['customer_notified'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
     </tr>
 <?php
     }
@@ -236,7 +236,7 @@
 
   <br />
 
-  <?php echo tep_draw_form('status', FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_order'); ?>
+  <form name="status" action="<?php echo osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_order'); ?>" method="post">
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
@@ -245,14 +245,14 @@
     </tr>
     <tr>
       <td class="main" valign="top"><?php echo ENTRY_NEW_COMMENT; ?></td>
-      <td class="main"><?php echo tep_draw_textarea_field('comment', 'soft', '60', '5', '', 'style="width: 100%"'); ?></td>
+      <td class="main"><?php echo osc_draw_textarea_field('comment', null, null, null, 'style="width: 100%"'); ?></td>
     </tr>
     <tr>
       <td class="main"><?php echo ENTRY_NOTIFY_CUSTOMER; ?></td>
-      <td class="main"><?php echo osc_draw_checkbox_field('notify_customer', '', true); ?></td>
+      <td class="main"><?php echo osc_draw_checkbox_field('notify_customer', null, true); ?></td>
     </tr>
       <td class="main"><?php echo ENTRY_NOTIFY_COMMENTS; ?></td>
-      <td class="main"><?php echo osc_draw_checkbox_field('append_comment', '', true); ?></td>
+      <td class="main"><?php echo osc_draw_checkbox_field('append_comment', null, true); ?></td>
     </tr>
     <tr>
       <td colspan="2" class="main" align="right"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton">'; ?></td>

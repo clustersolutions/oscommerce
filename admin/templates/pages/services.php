@@ -74,32 +74,32 @@
     if (isset($sInfo) && ($class_code == $sInfo->code) ) {
       echo '      <tr class="selected" title="' . $module->description . '">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code) . '\';" title="' . $module->description . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code) . '\';" title="' . $module->description . '">' . "\n";
     }
 ?>
         <td><?php echo (isset($module->title) ? $module->title : $class_code); ?></td>
         <td align="right">
 <?php
     if (in_array($class_code, $installed) === false) {
-      echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;';
     } elseif ($module->uninstallable) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onclick="toggleInfoBox(\'sUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        echo '<a href="#" onclick="toggleInfoBox(\'sUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;';
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=sDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=sDelete'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
       }
     } else {
-      echo tep_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
+      echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
     }
 
     if (is_array($module_keys) && (sizeof($module_keys) > 0)) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onclick="toggleInfoBox(\'sEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+        echo '<a href="#" onclick="toggleInfoBox(\'sEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_SERVICES, 'service=' . $class_code . '&action=sEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+        echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=sEdit'), osc_icon('configure.png', IMAGE_EDIT));
       }
     } else {
-      echo tep_image('images/pixel_trans.gif', '', '16', '16');
+      echo osc_image('images/pixel_trans.gif', '', '16', '16');
     }
 ?>
         </td>
@@ -118,18 +118,18 @@
 ?>
 
 <div id="infoBox_sUninstall" <?php if ($action != 'sDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . ' ' . $sInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $sInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_UNINSTALL_INTRO; ?></p>
     <p><?php echo '<b>' . $sInfo->title . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 
 <div id="infoBox_sEdit" <?php if ($action != 'sEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $sInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $sInfo->title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('sEdit', FILENAME_SERVICES, 'service=' . $_GET['service'] . '&action=save'); ?>
+    <form name="sEdit" action="<?php echo osc_href_link_admin(FILENAME_SERVICES, 'service=' . $_GET['service'] . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php

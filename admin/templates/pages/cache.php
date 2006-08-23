@@ -59,7 +59,7 @@
       <td><?php echo $cache; ?></td>
       <td align="center"><?php echo $stats['total']; ?></td>
       <td align="right"><?php echo strftime(DATE_TIME_FORMAT, $stats['last_modified']); ?></td>
-      <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_CACHE, 'cache=' . $cache . '&action=reset') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/delete.png', IMAGE_DELETE, '16', '16') . '</a>'; ?></td>
+      <td align="right"><?php echo osc_link_object(osc_href_link_admin(FILENAME_CACHE, 'cache=' . $cache . '&action=reset'), osc_icon('delete.png', IMAGE_DELETE)); ?></td>
     </tr>
 <?php
   }

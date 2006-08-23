@@ -167,7 +167,7 @@
 
 <h1><?php echo HEADING_TITLE; ?></p>
 
-<?php echo tep_draw_form('special', FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '') . '&action=save'); ?>
+<form name="special" action="<?php echo osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '') . '&action=save'); ?>" method="post">
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
@@ -176,31 +176,31 @@
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_SPECIALS_SPECIAL_PRICE_NET; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('specials_price', (isset($sInfo) ? $sInfo->specials_new_products_price : ''), 'id="products_price" onkeyup="updateGross(\'products_price\', event)"'); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('specials_price', (isset($sInfo) ? $sInfo->specials_new_products_price : null), 'onkeyup="updateGross(\'specials_price\', event)"'); ?></td>
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_SPECIALS_SPECIAL_PRICE_GROSS; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('specials_price_gross', (isset($sInfo) ? $sInfo->specials_new_products_price : ''), 'id="products_price_gross" onkeyup="updateNet(\'products_price\', event)"'); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('specials_price_gross', (isset($sInfo) ? $sInfo->specials_new_products_price : null), 'onkeyup="updateNet(\'specials_price\', event)"'); ?></td>
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_SPECIALS_STATUS; ?></td>
-    <td class="main"><?php echo osc_draw_checkbox_field('specials_status', '1', (isset($sInfo) ? $sInfo->status : '')); ?></td>
+    <td class="main"><?php echo osc_draw_checkbox_field('specials_status', '1', (isset($sInfo) ? $sInfo->status : null)); ?></td>
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_SPECIALS_START_DATE; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('specials_start_date', (isset($sInfo) ? $sInfo->start_date : ''), 'id="calendarValueStartDate"'); ?><input type="button" value="..." id="calendarTriggerStartDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueStartDate", ifFormat: "%Y-%m-%d", button: "calendarTriggerStartDate" } );</script></td>
+    <td class="main"><?php echo osc_draw_input_field('specials_start_date', (isset($sInfo) ? $sInfo->start_date : null)); ?><input type="button" value="..." id="calendarTriggerStartDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_start_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerStartDate" } );</script></td>
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_SPECIALS_EXPIRES_DATE; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('specials_expires_date', (isset($sInfo) ? $sInfo->expires_date : ''), 'id="calendarValueEndDate"'); ?><input type="button" value="..." id="calendarTriggerEndDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueEndDate", ifFormat: "%Y-%m-%d", button: "calendarTriggerEndDate" } );</script></td>
+    <td class="main"><?php echo osc_draw_input_field('specials_expires_date', (isset($sInfo) ? $sInfo->expires_date : null)); ?><input type="button" value="..." id="calendarTriggerEndDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_expires_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerEndDate" } );</script></td>
   </tr>
 </table>
 
 <script type="text/javascript"><!--
-  updateGross('products_price', false);
+  updateGross('specials_price', false);
 //--></script>
 
-<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')) . '\';">'; ?></p>
 
 <p class="main"><?php echo TEXT_SPECIALS_PRICE_TIP; ?></p>
 

@@ -11,7 +11,7 @@
 */
 
 /**
- * Generate an internal URL address
+ * Generate an internal URL address for the catalog side
  *
  * @param string $page The page to link to
  * @param string $parameters The parameters to pass to the page (in the GET scope)
@@ -213,7 +213,7 @@
  * @param string $value The default value for the input field
  * @param string $parameters Additional parameters for the input field
  * @param boolean $override Override the default value with the value found in the GET or POST scope
- * @param string $type The type of input field to use (text/password)
+ * @param string $type The type of input field to use (text/password/file)
  * @access public
  */
 
@@ -230,11 +230,15 @@
       }
     }
 
-    if (!in_array($type, array('text', 'password'))) {
+    if (!in_array($type, array('text', 'password', 'file'))) {
       $type = 'text';
     }
 
-    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
+    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+
+    if (strpos($parameters, 'id=') === false) {
+      $field .= ' id="' . tep_output_string($name) . '"';
+    }
 
     if (!empty($value)) {
       $field .= ' value="' . tep_output_string($value) . '"';
@@ -259,6 +263,38 @@
 
   function osc_draw_password_field($name, $parameters = null) {
     return osc_draw_input_field($name, null, $parameters, false, 'password');
+  }
+
+/**
+ * Outputs a form file upload field
+ *
+ * @param string $name The name and ID of the file upload field
+ * @param boolean $show_max_size Show the maximum file upload size beside the field
+ * @access public
+ */
+
+  function osc_draw_file_field($name, $show_max_size = false) {
+    global $osC_Language;
+
+    static $upload_max_filesize;
+
+    if (!is_bool($show_max_size)) {
+      $show_max_size = false;
+    }
+
+    $field = osc_draw_input_field($name, null, null, false, 'file');
+
+    if ($show_max_size === true) {
+      if (!isset($upload_max_filesize)) {
+        $upload_max_filesize = @ini_get('upload_max_filesize');
+      }
+
+      if (!empty($upload_max_filesize)) {
+        $field .= '&nbsp;' . sprintf($osC_Language->get('maximum_file_upload_size'), tep_output_string($upload_max_filesize));
+      }
+    }
+
+    return $field;
   }
 
 /**
@@ -299,7 +335,11 @@
         $selection_text = '';
       }
 
-      $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
+      $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+
+      if (strpos($parameters, 'id=') === false) {
+        $field .= ' id="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
+      }
 
       if (!empty($selection_value)) {
         $field .= ' value="' . tep_output_string($selection_value) . '"';
@@ -340,7 +380,7 @@
  * @access public
  */
 
-  function osc_draw_checkbox_field($name, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
+  function osc_draw_checkbox_field($name, $values = null, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
     return osc_draw_selection_field($name, 'checkbox', $values, $default, $parameters, $separator);
   }
 
@@ -392,7 +432,11 @@
       $width = 5;
     }
 
-    $field = '<textarea name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
+    $field = '<textarea name="' . tep_output_string($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
+
+    if (strpos($parameters, 'id=') === false) {
+      $field .= ' id="' . tep_output_string($name) . '"';
+    }
 
     if (!empty($parameters)) {
       $field .= ' ' . $parameters;
@@ -453,13 +497,19 @@
  */
 
   function osc_draw_pull_down_menu($name, $values, $default = null, $parameters = null) {
+    $group = false;
+
     if (isset($_GET[$name])) {
       $default = $_GET[$name];
     } elseif (isset($_POST[$name])) {
       $default = $_POST[$name];
     }
 
-    $field = '<select name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
+    $field = '<select name="' . tep_output_string($name) . '"';
+
+    if (strpos($parameters, 'id=') === false) {
+      $field .= ' id="' . tep_output_string($name) . '"';
+    }
 
     if (!empty($parameters)) {
       $field .= ' ' . $parameters;
@@ -467,14 +517,28 @@
 
     $field .= '>';
 
-    foreach ($values as $value) {
-      $field .= '<option value="' . tep_output_string($value['id']) . '"';
+    for ($i=0, $n=sizeof($values); $i<$n; $i++) {
+      if (isset($values[$i]['group'])) {
+        if ($group != $values[$i]['group']) {
+          $group = $values[$i]['group'];
 
-      if ($default == $value['id']) {
+          $field .= '<optgroup label="' . tep_output_string($values[$i]['group']) . '">';
+        }
+      }
+
+      $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
+
+      if ( (is_string($default) && ($default == $values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
         $field .= ' selected="selected"';
       }
 
-      $field .= '>' . tep_output_string($value['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+      $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+
+      if ( ($group !== false) && (($group != $values[$i]['group']) || !isset($values[$i+1])) ) {
+        $group = false;
+
+        $field .= '</optgroup>';
+      }
     }
 
     $field .= '</select>';
@@ -504,7 +568,7 @@
  * Outputs a form pull down menu for a date selection
  *
  * @param string $name The base name of the date pull down menu fields
- * @param array $value An array containing the year, month, and date values for the default date
+ * @param array $value An array containing the year, month, and date values for the default date (year, month, date)
  * @param boolean $default_today Default to todays date if no default value is used
  * @param boolean $show_days Show the days in a pull down menu
  * @param boolean $use_month_names Show the month names in the month pull down menu

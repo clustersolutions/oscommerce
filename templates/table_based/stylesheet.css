@@ -363,12 +363,6 @@ TD.tableHeading {
   font-weight: bold;
 }
 
-SPAN.newItemInCart {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
-  color: #ff0000;
-}
-
 CHECKBOX, INPUT, RADIO, SELECT {
   font-family: Verdana, Arial, sans-serif;
   font-size: 11px;

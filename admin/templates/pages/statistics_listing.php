@@ -43,7 +43,7 @@
       $module = new $class;
 ?>
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo '<a href="' . tep_href_link(FILENAME_STATISTICS, 'module=' . substr($file, 0, strrpos($file, '.'))) . '">' . $module->getIcon() . '&nbsp;' . $module->getTitle() . '</a>'; ?></td>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_STATISTICS, 'module=' . substr($file, 0, strrpos($file, '.'))), $module->getIcon() . '&nbsp;' . $module->getTitle()); ?></td>
     </tr>
 <?php
     }

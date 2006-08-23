@@ -111,7 +111,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&cID=' . $category_id));
+        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&cID=' . $category_id));
         break;
       case 'delete_category_confirm':
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
@@ -163,7 +163,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
+        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
         break;
       case 'move_category_confirm':
         if (isset($_GET['cID']) && ($_GET['cID'] != end(explode('_', $_POST['move_to_category_id'])))) {
@@ -185,12 +185,12 @@
 
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
 
-              tep_redirect(tep_href_link(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
+              tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
             }
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&cID=' . $_GET['cID']));
+        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&cID=' . $_GET['cID']));
         break;
     }
   }

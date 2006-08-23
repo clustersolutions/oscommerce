@@ -24,7 +24,7 @@
 
     function osC_Summary_customers() {
       $this->_title = MODULE_SUMMARY_CUSTOMERS_TITLE;
-      $this->_title_link = tep_href_link(FILENAME_CUSTOMERS);
+      $this->_title_link = osc_href_link_admin(FILENAME_CUSTOMERS);
 
       $this->_setData();
     }
@@ -32,7 +32,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database, $template;
+      global $osC_Database;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
@@ -51,9 +51,9 @@
 
       while ($Qcustomers->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td><a href="' . tep_href_link(FILENAME_CUSTOMERS, 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/personal.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname') . '</a></td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_CUSTOMERS, 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
                         '      <td>' . $Qcustomers->value('customers_info_date_account_created') . '</td>' .
-                        '      <td align="center">' . tep_image('templates/' . $template . '/images/icons/' . (($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')) . '</td>' .
+                        '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';
       }
 

@@ -39,7 +39,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_EXPECTED, 'page=' . $_GET['page']));
         break;
     }
   }

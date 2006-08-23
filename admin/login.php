@@ -28,7 +28,7 @@
             if (tep_validate_password($_POST['user_password'], $Qadmin->value('user_password'))) {
               $_SESSION['admin'] = $Qadmin->value('user_name');
 
-              tep_redirect(tep_href_link(FILENAME_DEFAULT, '', 'SSL'));
+              tep_redirect(osc_href_link_admin(FILENAME_DEFAULT));
             }
           }
         }
@@ -40,7 +40,7 @@
       case 'logoff':
         unset($_SESSION['admin']);
 
-        tep_redirect(tep_href_link(FILENAME_DEFAULT));
+        tep_redirect(osc_href_link_admin(FILENAME_DEFAULT));
 
         break;
     }

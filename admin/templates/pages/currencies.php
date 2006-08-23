@@ -39,7 +39,7 @@
     if (isset($cInfo) && ($Qcurrencies->valueInt('currencies_id') == $cInfo->currencies_id) ) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id')) . '\';">' . "\n";
     }
 ?>
         <td>
@@ -57,11 +57,11 @@
         <td align="right">
 <?php
     if (isset($cInfo) && ($Qcurrencies->valueInt('currencies_id') == $cInfo->currencies_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $Qcurrencies->valueInt('currencies_id') . '&action=cDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -91,40 +91,40 @@
 </div>
 
 <div id="infoBox_cNew" <?php if ($action != 'cNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_CURRENCY; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_CURRENCY; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cNew', FILENAME_CURRENCIES, 'action=save'); ?>
+    <form name="cNew" action="<?php echo osc_href_link_admin(FILENAME_CURRENCIES, 'action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_TITLE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('title', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('title', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_CODE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('code', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('code', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_SYMBOL_LEFT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('symbol_left', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('symbol_left', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_SYMBOL_RIGHT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('symbol_right', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('symbol_right', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_DECIMAL_PLACES . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('decimal_places', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('decimal_places', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_CURRENCY_VALUE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('value', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('value', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SET_AS_DEFAULT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('default', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('default'); ?></td>
       </tr>
     </table>
 
@@ -139,9 +139,9 @@
 ?>
 
 <div id="infoBox_cUpdate" <?php if ($action != 'cUpdate') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/reload.png', IMAGE_UPDATE, '16', '16') . ' ' . IMAGE_UPDATE_CURRENCIES; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('reload.png', IMAGE_UPDATE) . ' ' . IMAGE_UPDATE_CURRENCIES; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cUpdate', FILENAME_CURRENCIES, 'action=update_currencies'); ?>
+    <form name="cUpdate" action="<?php echo osc_href_link_admin(FILENAME_CURRENCIES, 'action=update_currencies'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_UPDATE_SERVICE_INTRO; ?></p>
 
@@ -150,7 +150,7 @@
     $services = array(array('id' => 'oanda', 'text' => 'Oanda (http://www.oanda.com)'),
                       array('id' => 'xe', 'text' => 'XE (http://www.xe.com)'));
 
-    echo osc_draw_radio_field('service', $services, '', '', false, '<br />');
+    echo osc_draw_radio_field('service', $services, null, null, '<br />');
 ?>
     </p>
 
@@ -163,9 +163,9 @@
 </div>
 
 <div id="infoBox_cEdit" <?php if ($action != 'cEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $cInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $cInfo->title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cEdit', FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=save'); ?>
+    <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -199,7 +199,7 @@
 ?>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SET_AS_DEFAULT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('default', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('default'); ?></td>
       </tr>
 <?php
     }
@@ -213,7 +213,7 @@
 </div>
 
 <div id="infoBox_cDelete" <?php if ($action != 'cDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $cInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $cInfo->title; ?></div>
   <div class="infoBoxContent">
 <?php
     if (DEFAULT_CURRENCY == $cInfo->code) {
@@ -225,7 +225,7 @@
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $cInfo->title . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $cInfo->currencies_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>

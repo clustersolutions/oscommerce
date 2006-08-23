@@ -45,7 +45,7 @@
                                $group['id'],
                                $Qimages->value('image'),
                                $group['code'],
-                               tep_href_link($osC_Image->getAddress($Qimages->value('image'), $group['code']), '', 'NONSSL', false),
+                               osc_href_link($osC_Image->getAddress($Qimages->value('image'), $group['code']), null, 'NONSSL', false, false, true),
                                number_format(@filesize(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $group['code'] . '/' . $Qimages->value('image'))),
                                $Qimages->valueInt('default_flag'));
 

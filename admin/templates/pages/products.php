@@ -16,11 +16,11 @@
     <td><h1><?php echo HEADING_TITLE; ?></h1></td>
     <td class="smallText" align="right">
 <?php
-  echo tep_draw_form('search', FILENAME_PRODUCTS, '', 'get') .
+  echo '<form name="search" action="' . osc_href_link_admin(FILENAME_PRODUCTS) . '" method="get">' .
        HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') .
        osc_draw_pull_down_menu('cPath', array_merge(array(array('id' => '', 'text' => '-- ' . TEXT_TOP . ' --')), $categories_array)) .
        '<input type="submit" value="GO" class="operationButton">' .
-       '<input type="button" value="RESET" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS) . '\';" class="sectionButton"' . ((!empty($_GET['search']) || ($current_category_id > 0)) ? '' : ' disabled') . '>' .
+       '<input type="button" value="RESET" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS) . '\';" class="sectionButton"' . ((!empty($_GET['search']) || ($current_category_id > 0)) ? '' : ' disabled') . '>' .
        '</form>';
 ?>
     </td>
@@ -76,31 +76,31 @@
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id')) . '\';">' . "\n";
     }
 ?>
-        <td><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=preview') . '">' . tep_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name') . '</a>'; ?></td>
+        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=preview'), osc_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')); ?></td>
         <td align="right"><?php echo $osC_Currencies->format($Qproducts->value('products_price')); ?></td>
         <td align="right"><?php echo $Qproducts->valueInt('products_quantity'); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+        <td align="center"><?php echo osc_icon((($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
         <td align="right">
 <?php
-    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
+    echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product'), osc_icon('edit.png', IMAGE_EDIT)) . '&nbsp;';
 
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
       if ($current_category_id > 0) {
-        echo '<a href="#" onclick="toggleInfoBox(\'pMove\');">' . tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . '</a>&nbsp;';
+        echo '<a href="#" onclick="toggleInfoBox(\'pMove\');">' . osc_icon('move.png', IMAGE_MOVE) . '</a>&nbsp;';
       }
 
-      echo '<a href="#" onclick="toggleInfoBox(\'pCopyTo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/copy.png', IMAGE_COPY_TO, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'pDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'pCopyTo\');">' . osc_icon('copy.png', IMAGE_COPY_TO) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'pDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
       if ($current_category_id > 0) {
-        echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pMove') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . '</a>&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pMove'), osc_icon('move.png', IMAGE_MOVE)) . '&nbsp;';
       }
 
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pCopyTo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/copy.png', IMAGE_COPY_TO, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pCopyTo'), osc_icon('copy.png', IMAGE_COPY_TO)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -118,7 +118,7 @@
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_NEW_PRODUCT . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&action=new_product') . '\';" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_NEW_PRODUCT . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&action=new_product') . '\';" class="infoBoxButton">'; ?></p>
 </div>
 
 <?php
@@ -127,9 +127,9 @@
 ?>
 
 <div id="infoBox_pMove" <?php if ($action != 'pMove') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/move.png', IMAGE_MOVE, '16', '16') . ' ' . $pInfo->products_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('move.png', IMAGE_MOVE) . ' ' . $pInfo->products_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('pMove', FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=move_product_confirm'); ?>
+    <form name="pMove" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=move_product_confirm'); ?>" method="post">
 
     <p><?php echo sprintf(TEXT_MOVE_PRODUCTS_INTRO, $pInfo->products_name); ?></p>
     <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
@@ -146,14 +146,14 @@
 ?>
 
 <div id="infoBox_pCopyTo" <?php if ($action != 'pCopyTo') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/copy.png', IMAGE_COPY_TO, '16', '16') . ' ' . $pInfo->products_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('copy.png', IMAGE_COPY_TO) . ' ' . $pInfo->products_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('pCopyTo', FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=copy_to_confirm'); ?>
+    <form name="pCopyTo" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=copy_to_confirm'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_COPY_TO_INTRO; ?></p>
     <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
     <p><?php echo TEXT_CATEGORIES . '<br />' . osc_draw_pull_down_menu('categories_id', $categories_array, $cPath); ?></p>
-    <p><?php echo TEXT_HOW_TO_COPY . '<br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', '', false, '<br />'); ?></p>
+    <p><?php echo TEXT_HOW_TO_COPY . '<br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', null, '<br />'); ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_COPY . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 
@@ -162,9 +162,9 @@
 </div>
 
 <div id="infoBox_pDelete" <?php if ($action != 'pDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $pInfo->products_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $pInfo->products_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('pDelete', FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=delete_product_confirm'); ?>
+    <form name="pDelete" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=delete_product_confirm'); ?>" method="post">
 
     <p><?php echo TEXT_DELETE_PRODUCT_INTRO; ?></p>
     <p><?php echo $pInfo->products_name; ?></p>
@@ -182,7 +182,7 @@
       $product_categories_array[] = array('id' => $product_categories[$i][sizeof($product_categories[$i])-1]['id'], 'text' => $category_path);
     }
 
-    echo osc_draw_checkbox_field('product_categories[]', $product_categories_array, true, '', false, '<br />');
+    echo osc_draw_checkbox_field('product_categories[]', $product_categories_array, true, null, '<br />');
 ?>
     </p>
 

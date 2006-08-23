@@ -14,9 +14,9 @@
 <h1><?php echo HEADING_TITLE; ?></h1>
 
 <div id="infoBox_lDefine">
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT, '16', '16') . ' ' . $_GET['group']; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('edit.png', IMAGE_EDIT) . ' ' . $_GET['group']; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lDefine', FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group'] . '&action=save'); ?>
+    <form name="lDefine" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group'] . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -34,7 +34,7 @@
 
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . $Qdefs->value('definition_key') . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('def[' . $Qdefs->value('definition_key') . ']', $Qdefs->value('definition_value'), '60', '4', 'soft', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('def[' . $Qdefs->value('definition_key') . ']', $Qdefs->value('definition_value'), 60, 4, 'style="width: 100%"'); ?></td>
       </tr>
 
 <?php
@@ -43,7 +43,7 @@
 
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group']) . '\';" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group']) . '\';" class="operationButton">'; ?></p>
 
     </form>
   </div>

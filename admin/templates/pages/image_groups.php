@@ -36,7 +36,7 @@
     if (isset($gInfo) && ($Qgroups->valueInt('id') == $gInfo->id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_IMAGE_GROUPS, '&gID=' . $Qgroups->valueInt('id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_IMAGE_GROUPS, '&gID=' . $Qgroups->valueInt('id')) . '\';">' . "\n";
     }
 
     if (DEFAULT_IMAGE_GROUP_ID == $Qgroups->valueInt('id')) {
@@ -48,11 +48,11 @@
         <td align="right">
 <?php
     if (isset($gInfo) && ($Qgroups->valueInt('id') == $gInfo->id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'gEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'gDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'gEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'gDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -67,9 +67,9 @@
 </div>
 
 <div id="infoBox_gNew" <?php if ($action != 'gNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_IMAGE_GROUP; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_IMAGE_GROUP; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('gNew', FILENAME_IMAGE_GROUPS, 'action=save'); ?>
+    <form name="gNew" action="<?php echo osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -79,7 +79,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']') . '<br />';
+    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -117,9 +117,9 @@
 ?>
 
 <div id="infoBox_gEdit" <?php if ($action != 'gEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $gInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $gInfo->title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('gEdit', FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=save'); ?>
+    <form name="gEdit" action="<?php echo osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -141,7 +141,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
+      echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']', (isset($status_name[$l['id']]) ? $status_name[$l['id']] : '')) . '<br />';
     }
 ?>
 
@@ -186,7 +186,7 @@
 </div>
 
 <div id="infoBox_gDelete" <?php if ($action != 'gDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $gInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $gInfo->title; ?></div>
   <div class="infoBoxContent">
 
 <?php
@@ -205,7 +205,7 @@
 
     <p><?php echo '<b>' . $gInfo->title . '</b>'; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'gDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'gDefault\');" class="operationButton">'; ?></p>
 
 <?php
     }

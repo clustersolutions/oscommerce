@@ -85,7 +85,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $orders_status_id));
+        tep_redirect(osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $orders_status_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['osID']) && is_numeric($_GET['osID'])) {
@@ -112,7 +112,7 @@
               $osC_MessageStack->add_session('header', sprintf(TEXT_INFO_DELETE_PROHIBITED_HISTORY, $Qhistory->valueInt('total')), 'warning');
             }
 
-            tep_redirect(tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $_GET['osID']));
+            tep_redirect(osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&osID=' . $_GET['osID']));
           } else {
             $Qstatus = $osC_Database->query('delete from :table_orders_status where orders_status_id = :orders_status_id');
             $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
@@ -128,7 +128,7 @@
               $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
             }
 
-            tep_redirect(tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page']));
+            tep_redirect(osc_href_link_admin(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page']));
           }
         }
         break;

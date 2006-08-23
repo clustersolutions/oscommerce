@@ -17,16 +17,16 @@
         $_author_www = 'http://www.oscommerce.com',
         $_group = 'boxes';
 
-
     function osC_Boxes_product_notifications() {
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_product_notifications_heading');
-      $this->_title_link = osc_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL');
     }
 
     function initialize() {
       global $osC_Database, $osC_Language, $osC_Product, $osC_Customer;
+
+      $this->_title_link = osc_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL');
 
       if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
         if ($osC_Customer->isLoggedOn()) {

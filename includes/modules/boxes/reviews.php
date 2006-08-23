@@ -21,11 +21,12 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_reviews_heading');
-      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'reviews');
     }
 
     function initialize() {
       global $osC_Database, $osC_Services, $osC_Cache, $osC_Language, $osC_Product, $osC_Image;
+
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'reviews');
 
       if ($osC_Services->isStarted('reviews')) {
         if ((BOX_REVIEWS_CACHE > 0) && $osC_Cache->read('box-reviews' . (isset($osC_Product) && is_a($osC_Product, 'osC_Product') && $osC_Product->isValid() ? '-' . $osC_Product->getID() : '') . '-' . $osC_Language->getCode(), BOX_REVIEWS_CACHE)) {

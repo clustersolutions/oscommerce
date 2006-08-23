@@ -41,29 +41,29 @@
 
 <h1><?php echo HEADING_TITLE; ?></h1>
 
-<?php echo tep_draw_form('newsletter', FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] . '&' : '') . 'action=save'); ?>
+<form name="newsletter" action="<?php echo osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] . '&' : '') . 'action=save'); ?>" method="post">
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
     <td class="main"><?php echo TEXT_NEWSLETTER_MODULE; ?></td>
-    <td class="main"><?php echo osc_draw_pull_down_menu('module', $modules_array, (isset($nmInfo) ? $nmInfo->module : '')); ?></td>
+    <td class="main"><?php echo osc_draw_pull_down_menu('module', $modules_array, (isset($nmInfo) ? $nmInfo->module : null)); ?></td>
   </tr>
   <tr>
     <td class="main" colspan="2">&nbsp;</td>
   </tr>
   <tr>
     <td class="main"><?php echo TEXT_NEWSLETTER_TITLE; ?></td>
-    <td class="main"><?php echo osc_draw_input_field('title', (isset($nmInfo) ? $nmInfo->title : ''), '', true); ?></td>
+    <td class="main"><?php echo osc_draw_input_field('title', (isset($nmInfo) ? $nmInfo->title : null)); ?></td>
   </tr>
   <tr>
     <td class="main" colspan="2">&nbsp;</td>
   </tr>
   <tr>
     <td class="main" valign="top"><?php echo TEXT_NEWSLETTER_CONTENT; ?></td>
-    <td class="main"><?php echo osc_draw_textarea_field('content', (isset($nmInfo) ? $nmInfo->content : ''), '100%', '20'); ?></td>
+    <td class="main"><?php echo osc_draw_textarea_field('content', (isset($nmInfo) ? $nmInfo->content : null), 60, 20, 'style="width: 100%;"'); ?></td>
   </tr>
 </table>
 
-<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
 
 </form>

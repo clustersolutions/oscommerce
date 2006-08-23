@@ -39,7 +39,7 @@
           $osC_Database->rollbackTransaction();
         }
 
-        tep_redirect(tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_POST['content']));
+        tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_POST['content']));
         break;
       case 'save':
         $error = false;
@@ -73,7 +73,7 @@
           $osC_Database->rollbackTransaction();
         }
 
-        tep_redirect(tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_GET['content']));
+        tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_GET['content']));
         break;
       case 'deleteconfirm':
         $error = false;
@@ -104,7 +104,7 @@
           $osC_Database->rollbackTransaction();
         }
 
-        tep_redirect(tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID']));
+        tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID']));
         break;
     }
   }

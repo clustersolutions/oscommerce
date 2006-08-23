@@ -116,7 +116,7 @@
 
 <div>
   <div style="float: right;">
-    <form name="template" action="<?php echo tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT); ?>" method="get">
+    <form name="template" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT); ?>" method="get">
       <?php echo osc_draw_pull_down_menu('filter', $templates_array, $filter_template_id) . osc_draw_hidden_field('set', $set); ?><input type="submit" value="GO">
     </form>
   </div>
@@ -153,22 +153,22 @@
     if (isset($lInfo) && ($Qlayout->valueInt('id') == $lInfo->id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qlayout->value('box_title'); ?></td>
         <td><?php echo $Qlayout->value('content_page'); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($Qlayout->valueInt('page_specific') === 1 ? 'checkbox_ticked.gif' : 'checkbox.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($Qlayout->valueInt('page_specific') === 1 ? 'checkbox_ticked.gif' : 'checkbox.gif'), null, null); ?></td>
         <td align="right"><?php echo $Qlayout->value('boxes_group'); ?></td>
         <td align="right"><?php echo $Qlayout->valueInt('sort_order'); ?></td>
         <td align="right">
 <?php
     if (isset($lInfo) && ($Qlayout->valueInt('id') == $lInfo->id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'lEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'lEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id') . '&action=lEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id') . '&action=lDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id') . '&action=lEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $Qlayout->valueInt('id') . '&action=lDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -183,9 +183,9 @@
 </div>
 
 <div id="infoBox_lNew" <?php if ($action != 'lNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_BOX_LAYOUT; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_BOX_LAYOUT; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lNew', FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&action=save'); ?>
+    <form name="lNew" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -210,13 +210,13 @@
     echo osc_draw_pull_down_menu('group', $groups_array, null, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_GROUP_NEW . '</b>&nbsp;';
   }
 
-  echo osc_draw_input_field('group_new', '', 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
+  echo osc_draw_input_field('group_new', null, 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
 ?>
         </td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SORT_ORDER . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('sort_order', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('sort_order', null, 'style="width: 100%;"'); ?></td>
       </tr>
     </table>
 
@@ -231,9 +231,9 @@
 ?>
 
 <div id="infoBox_lEdit" <?php if ($action != 'lEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $lInfo->box_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $lInfo->box_title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lEdit', FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=save'); ?>
+    <form name="lEdit" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -254,7 +254,7 @@
     echo osc_draw_pull_down_menu('group', $groups_array, $lInfo->boxes_group, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_GROUP_NEW . '</b>&nbsp;';
   }
 
-  echo osc_draw_input_field('group_new', '', 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
+  echo osc_draw_input_field('group_new', null, 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
 ?>
         </td>
       </tr>
@@ -271,10 +271,10 @@
 </div>
 
 <div id="infoBox_lDelete" <?php if ($action != 'lDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $lInfo->box_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $lInfo->box_title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BOX_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'lDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_BOX_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'lDefault\');">'; ?></p>
   </div>
 </div>
 

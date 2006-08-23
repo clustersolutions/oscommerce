@@ -22,7 +22,7 @@
 ?>
 
 <div>
-  <div style="float: right; margin-top: 10px;"><?php echo '<a href="' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $_GET['lID']) . '">' . tep_image('templates/' . $template . '/images/icons/16x16/back.png', IMAGE_BACK, '16', '16') . ' ' . TEXT_BACK_TO_LANGUAGES . '</a>'; ?></div>
+  <div style="float: right; margin-top: 10px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $_GET['lID']), osc_icon('back.png', IMAGE_BACK) . ' ' . TEXT_BACK_TO_LANGUAGES); ?></div>
 
   <h1><?php echo HEADING_TITLE; ?></h1>
 </div>
@@ -51,17 +51,17 @@
     if (isset($dInfo) && ($Qgroups->value('content_group') == $dInfo->content_group)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group')) . '\';">' . "\n";
     }
 ?>
-        <td><?php echo '<a href="' . tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group') . '&action=lDefine') . '">' . tep_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('content_group') . '</a>'; ?></td>
+        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group') . '&action=lDefine'), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('content_group')); ?></td>
         <td align="right"><?php echo $Qgroups->value('total_entries'); ?></td>
         <td align="right">
 <?php
     if (isset($dInfo) && ($Qgroups->value('content_group') == $dInfo->content_group)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group') . '&action=lDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $Qgroups->value('content_group') . '&action=lDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -76,30 +76,30 @@
 </div>
 
 <div id="infoBox_lNew" <?php if ($action != 'lNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_LANGUAGE_DEFINITION; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_LANGUAGE_DEFINITION; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lNew', FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&action=insert'); ?>
+    <form name="lNew" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&action=insert'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_KEY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('key', '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('key', null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_VALUE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('value', '', '60', '4', 'soft', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('value', null, 60, 4, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_GROUP . '</b>'; ?></td>
         <td class="smallText" width="60%">
 <?php
   if (empty($groups_array) === false) {
-    echo osc_draw_pull_down_menu('group', $groups_array, '', 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_LANGUAGE_DEFINITION_GROUP_NEW . '</b>&nbsp;';
+    echo osc_draw_pull_down_menu('group', $groups_array, null, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_LANGUAGE_DEFINITION_GROUP_NEW . '</b>&nbsp;';
   }
 
-  echo osc_draw_input_field('group_new', '', 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
+  echo osc_draw_input_field('group_new', null, 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
 ?>
         </td>
       </tr>
@@ -116,9 +116,9 @@
 ?>
 
 <div id="infoBox_lDelete" <?php if ($action != 'lDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $dInfo->content_group; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $dInfo->content_group; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lDelete', FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $dInfo->content_group . '&action=deleteconfirm'); ?>
+    <form name="lDelete" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $dInfo->content_group . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $dInfo->content_group . '</b>'; ?></p>
@@ -135,9 +135,9 @@
       $defs_array[] = array('id' => $Qdefs->valueInt('id'), 'text' => $Qdefs->value('definition_key'));
     }
 ?>
-    <p>(<a href="javascript:selectAllFromPullDownMenu('delDefs');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('delDefs');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('defs[]', $defs_array, '', 'id="delDefs" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
+    <p>(<a href="javascript:selectAllFromPullDownMenu('defs');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('defs');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('defs[]', $defs_array, null, 'id="defs" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="resetPullDownMenuSelection(\'delDefs\'); toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="resetPullDownMenuSelection(\'defs\'); toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

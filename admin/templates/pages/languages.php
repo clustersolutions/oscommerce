@@ -65,7 +65,7 @@
     if (isset($lInfo) && ($Qlanguages->valueInt('languages_id') == $lInfo->languages_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id')) . '\';">' . "\n";
     }
 
     if ($Qlanguages->value('code') == DEFAULT_LANGUAGE) {
@@ -78,16 +78,16 @@
         <td><?php echo $Qlanguages->value('code'); ?></td>
         <td align="right">
 <?php
-    echo '<a href="' . tep_href_link(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $Qlanguages->valueInt('languages_id')) . '">' . tep_image('templates/' . $template . '/images/icons/16x16/edit.png', IMAGE_EDIT_DEFINITIONS, '16', '16') . '</a>&nbsp;';
+    echo osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $Qlanguages->valueInt('languages_id')), osc_icon('edit.png', IMAGE_EDIT_DEFINITIONS)) . '&nbsp;';
 
     if (isset($lInfo) && ($Qlanguages->valueInt('languages_id') == $lInfo->languages_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'lEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_CONFIGURE, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'lExport\');">' . tep_image('templates/' . $template . '/images/icons/16x16/export.png', IMAGE_EXPORT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'lEdit\');">' . osc_icon('configure.png', IMAGE_CONFIGURE) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'lExport\');">' . osc_icon('export.png', IMAGE_EXPORT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'lDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lExport') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/export.png', IMAGE_EXPORT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lExport'), osc_icon('export.png', IMAGE_EXPORT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $Qlanguages->valueInt('languages_id') . '&action=lDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -102,20 +102,20 @@
 </div>
 
 <div id="infoBox_lImport" <?php if ($action != 'lImport') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_IMPORT_LANGUAGE; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_IMPORT_LANGUAGE; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lImport', FILENAME_LANGUAGES, 'action=import'); ?>
+    <form name="lImport" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES, 'action=import'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_IMPORT_INTRO; ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SELECT_LANGUAGE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('language_import', $import_languages_array, '', 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('language_import', $import_languages_array, null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SELECT_IMPORT_TYPE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_radio_field('import_type', array(array('id' => 'add', 'text' => 'Only Add New Records'), array('id' => 'update', 'text' => 'Only Update Existing Records'), array('id' => 'replace', 'text' => 'Replace Completely')), '', '', false, '<br />'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_radio_field('import_type', array(array('id' => 'add', 'text' => 'Only Add New Records'), array('id' => 'update', 'text' => 'Only Update Existing Records'), array('id' => 'replace', 'text' => 'Replace Completely')), null, null, '<br />'); ?></td>
       </tr>
     </table>
 
@@ -130,9 +130,9 @@
 ?>
 
 <div id="infoBox_lEdit" <?php if ($action != 'lEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $lInfo->name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $lInfo->name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lEdit', FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=save'); ?>
+    <form name="lEdit" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -208,7 +208,7 @@
 </div>
 
 <div id="infoBox_lDelete" <?php if ($action != 'lDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $lInfo->name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $lInfo->name; ?></div>
   <div class="infoBoxContent">
 <?php
     if (DEFAULT_LANGUAGE == $lInfo->code) {
@@ -220,7 +220,7 @@
 ?>
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $lInfo->name . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
 <?php
     }
 ?>
@@ -228,9 +228,9 @@
 </div>
 
 <div id="infoBox_lExport" <?php if ($action != 'lExport') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/export.png', IMAGE_EXPORT, '16', '16') . ' ' . $lInfo->name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('export.png', IMAGE_EXPORT) . ' ' . $lInfo->name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lExport', FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=export'); ?>
+    <form name="lExport" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $lInfo->languages_id . '&action=export'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EXPORT_INTRO; ?></p>
 <?php
@@ -245,11 +245,11 @@
       $groups_array[] = array('id' => $Qgroups->value('content_group'), 'text' => $Qgroups->value('content_group'));
     }
 ?>
-    <p>(<a href="javascript:selectAllFromPullDownMenu('exportGroups');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('exportGroups');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="exportGroups" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
+    <p>(<a href="javascript:selectAllFromPullDownMenu('groups');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('groups');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="groups" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
     <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => TEXT_INFO_EXPORT_WITH_DATA)), true); ?></p>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_EXPORT . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="resetPullDownMenuSelection(\'exportGroups\'); toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_EXPORT . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="resetPullDownMenuSelection(\'groups\'); toggleInfoBox(\'lDefault\');" class="operationButton">'; ?></p>
 
     </form>
   </div>

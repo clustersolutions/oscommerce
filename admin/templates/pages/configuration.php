@@ -63,7 +63,7 @@
     if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
       echo '      <tr class="selected" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id')) . '\';" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id')) . '\';" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
     }
 ?>
         <td><?php echo $Qcfg->value('configuration_title'); ?></td>
@@ -71,9 +71,9 @@
         <td align="right">
 <?php
     if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=cEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT));
     }
 ?>
         </td>
@@ -95,9 +95,9 @@
 ?>
 
 <div id="infoBox_cEdit" <?php if ($action != 'cEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $cInfo->configuration_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $cInfo->configuration_title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cEdit', FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'); ?>
+    <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'); ?>" method="post">
 
     <p><?php echo $cInfo->configuration_description; ?></p>
 

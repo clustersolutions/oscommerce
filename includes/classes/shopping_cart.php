@@ -212,10 +212,6 @@
       $this->resetShippingMethod();
       $this->resetBillingAddress();
       $this->resetBillingMethod();
-
-      if (isset($_SESSION['new_products_id_in_cart'])) {
-        unset($_SESSION['new_products_id_in_cart']);
-      }
     }
 
     function add($products_id, $attributes = '', $quantity = '') {
@@ -233,8 +229,6 @@
         $Qcheck->execute();
 
         if ($Qcheck->valueInt('products_status') === 1) {
-          $_SESSION['new_products_id_in_cart'] = $products_id_string;
-
           if ($this->exists($products_id_string)) {
             if (is_numeric($quantity) === false) {
               $quantity = $this->getQuantity($products_id_string) + 1;

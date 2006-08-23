@@ -63,7 +63,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $currency_id));
+        tep_redirect(osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page'] . '&cID=' . $currency_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
@@ -86,7 +86,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_CURRENCIES, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_CURRENCIES, 'page=' . $_GET['page']));
         break;
       case 'update_currencies':
         if (isset($_POST['service']) && (($_POST['service'] == 'oanda') || ($_POST['service'] == 'xe'))) {
@@ -112,7 +112,7 @@
             }
           }
 
-          tep_redirect(tep_href_link(FILENAME_CURRENCIES));
+          tep_redirect(osc_href_link_admin(FILENAME_CURRENCIES));
         }
         break;
     }

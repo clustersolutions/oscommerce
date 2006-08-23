@@ -21,11 +21,12 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_whats_new_heading');
-      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'new');
     }
 
     function initialize() {
       global $osC_Cache, $osC_Database, $osC_Services, $osC_Currencies, $osC_Specials, $osC_Language, $osC_Image;
+
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'new');
 
       if ((BOX_WHATS_NEW_CACHE > 0) && $osC_Cache->read('box-whats_new-' . $osC_Language->getCode() . '-' . $osC_Currencies->getCode(), BOX_WHATS_NEW_CACHE)) {
         $data = $osC_Cache->getCache();

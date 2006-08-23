@@ -21,7 +21,7 @@
           osC_Cache::clear($_GET['cache']);
         }
 
-        tep_redirect(tep_href_link(FILENAME_CACHE));
+        tep_redirect(osc_href_link_admin(FILENAME_CACHE));
         break;
     }
   }

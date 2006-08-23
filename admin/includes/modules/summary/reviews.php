@@ -24,7 +24,7 @@
 
     function osC_Summary_reviews() {
       $this->_title = MODULE_SUMMARY_REVIEWS_TITLE;
-      $this->_title_link = tep_href_link(FILENAME_REVIEWS);
+      $this->_title_link = osc_href_link_admin(FILENAME_REVIEWS);
 
       $this->_setData();
     }
@@ -32,7 +32,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database, $template;
+      global $osC_Database;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
@@ -53,9 +53,9 @@
 
       while ($Qreviews->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td><a href="' . tep_href_link(FILENAME_REVIEWS, 'rID=' . $Qreviews->valueInt('reviews_id') . '&action=rEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/write.png', ICON_PREVIEW, '16', '16') . '&nbsp;' . $Qreviews->value('products_name') . '</a></td>' .
-                        '      <td align="center">' . tep_image('../includes/languages/' . $Qreviews->value('languages_directory') . '/images/' . $Qreviews->value('languages_image'), $Qreviews->value('languages_name')) . '</td>' .
-                        '      <td align="center">' . tep_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_REVIEWS, 'rID=' . $Qreviews->valueInt('reviews_id') . '&action=rEdit'), osc_icon('write.png', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
+                        '      <td align="center">' . osc_image('../includes/languages/' . $Qreviews->value('languages_directory') . '/images/' . $Qreviews->value('languages_image'), $Qreviews->value('languages_name')) . '</td>' .
+                        '      <td align="center">' . osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .
                         '      <td>' . $Qreviews->value('date_last_modified') . '</td>' .
                         '    </tr>';
       }

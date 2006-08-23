@@ -47,7 +47,7 @@
     if (isset($mInfo) && ($Qmanufacturers->valueInt('manufacturers_id') == $mInfo->manufacturers_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qmanufacturers->value('manufacturers_name'); ?></td>
@@ -55,11 +55,11 @@
         <td align="right">
 <?php
     if (isset($mInfo) && ($Qmanufacturers->valueInt('manufacturers_id') == $mInfo->manufacturers_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'mDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'mDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $Qmanufacturers->valueInt('manufacturers_id') . '&action=mDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -81,19 +81,19 @@
 </div>
 
 <div id="infoBox_mNew" <?php if ($action != 'mNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_HEADING_NEW_MANUFACTURER; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_HEADING_NEW_MANUFACTURER; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('mNew', FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&action=save', 'post', 'enctype="multipart/form-data"'); ?>
+    <form name="mNew" action="<?php echo osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
     <p><?php echo TEXT_NEW_INTRO; ?></p>
     <p><?php echo TEXT_MANUFACTURERS_NAME . '<br />' . osc_draw_input_field('manufacturers_name'); ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image'); ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image', true); ?></p>
     <p>
 <?php
   echo TEXT_MANUFACTURERS_URL;
 
   foreach ($osC_Language->getAll() as $l) {
-    echo '<br />' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
+    echo '<br />' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']');
   }
 ?>
     </p>
@@ -109,20 +109,20 @@
 ?>
 
 <div id="infoBox_mEdit" <?php if ($action != 'mEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $mInfo->manufacturers_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $mInfo->manufacturers_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('mEdit', FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $mInfo->manufacturers_id . '&action=save', 'post', 'enctype="multipart/form-data"'); ?>
+    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $mInfo->manufacturers_id . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
     <p><?php echo TEXT_EDIT_INTRO; ?></p>
     <p><?php echo TEXT_MANUFACTURERS_NAME . '<br />' . osc_draw_input_field('manufacturers_name', $mInfo->manufacturers_name); ?></p>
-    <p><?php echo tep_image('../images/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br />' . DIR_WS_CATALOG . 'images/<br /><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
-    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image'); ?></p>
+    <p><?php echo osc_image('../images/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br />' . DIR_WS_CATALOG . 'images/<br /><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
+    <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image', true); ?></p>
     <p>
 <?php
     echo TEXT_MANUFACTURERS_URL;
 
     foreach ($osC_Language->getAll() as $l) {
-      echo '<br />' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
+      echo '<br />' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
     }
 ?>
     </p>
@@ -134,16 +134,16 @@
 </div>
 
 <div id="infoBox_mDelete" <?php if ($action != 'mDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $mInfo->manufacturers_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $mInfo->manufacturers_name; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('mDelete', FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $mInfo->manufacturers_id . '&action=deleteconfirm'); ?>
+    <form name="mDelete" action="<?php echo osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $mInfo->manufacturers_id . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $mInfo->manufacturers_name . '</b>'; ?></p>
 
 <?php
     if (!empty($mInfo->manufacturers_image)) {
-      echo '    <p>' . osc_draw_checkbox_field('delete_image', '', true) . ' ' . TEXT_DELETE_IMAGE . '</p>';
+      echo '    <p>' . osc_draw_checkbox_field('delete_image', null, true) . ' ' . TEXT_DELETE_IMAGE . '</p>';
     }
 
     if ($mInfo->products_count > 0) {

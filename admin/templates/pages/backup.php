@@ -56,20 +56,20 @@
       if (isset($buInfo) && ($entry == $buInfo->file)) {
         echo '      <tr class="selected">' . "\n";
       } else {
-        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_BACKUP, 'file=' . $entry) . '\';">' . "\n";
+        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry) . '\';">' . "\n";
       }
 ?>
-        <td><?php echo '<a href="' . tep_href_link(FILENAME_BACKUP, 'action=download&file=' . $entry) . '">' . tep_image('templates/' . $template . '/images/icons/16x16/save.png', ICON_FILE_DOWNLOAD, '16', '16') . '&nbsp;' . $entry . '</a>'; ?></td>
+        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'action=download&file=' . $entry), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $entry); ?></td>
         <td><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
         <td><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
         <td align="right">
 <?php
       if (isset($buInfo) && ($entry == $buInfo->file)) {
-        echo '<a href="#" onclick="toggleInfoBox(\'bRestore\');">' . tep_image('templates/' . $template . '/images/icons/16x16/tape.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-             '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+        echo '<a href="#" onclick="toggleInfoBox(\'bRestore\');">' . osc_icon('tape.png', IMAGE_EDIT) . '</a>&nbsp;' .
+             '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_BACKUP, 'file=' . $entry . '&action=bRestore') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/tape.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-             '<a href="' . tep_href_link(FILENAME_BACKUP, 'file=' . $entry . '&action=bDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+        echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bRestore'), osc_icon('tape.png', IMAGE_EDIT)) . '&nbsp;' .
+             osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bDelete') . '">' . osc_icon('trash.png', IMAGE_DELETE));
       }
 ?>
         </td>
@@ -92,7 +92,7 @@
   if (defined('DB_LAST_RESTORE')) {
 ?>
 
-  <p><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' <a href="' . tep_href_link(FILENAME_BACKUP, 'action=forget') . '">' . TEXT_FORGET . '</a>'; ?></p>
+  <p><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'action=forget'), TEXT_FORGET); ?></p>
 
 <?php
   }
@@ -100,9 +100,9 @@
 </div>
 
 <div id="infoBox_bBackup" <?php if ($action != 'bBackup') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_BACKUP; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_BACKUP; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('bBackup', FILENAME_BACKUP, 'action=backupnow'); ?>
+    <form name="bBackup" action="<?php echo osc_href_link_admin(FILENAME_BACKUP, 'action=backupnow'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_NEW_BACKUP; ?></p>
 
@@ -118,7 +118,7 @@
     $compress_array[] = array('id' => 'zip', 'text' => TEXT_INFO_USE_ZIP);
   }
 
-  echo osc_draw_radio_field('compress', $compress_array, 'no', '', false, '<br />');
+  echo osc_draw_radio_field('compress', $compress_array, 'no', null, '<br />');
 ?>
     </p>
 
@@ -139,13 +139,13 @@
 </div>
 
 <div id="infoBox_bRestoreLocal" <?php if ($action != 'bRestoreLocal') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_RESTORE_LOCAL; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_RESTORE_LOCAL; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('bRestoreLocal', FILENAME_BACKUP, 'action=restorelocalnow', 'post', 'enctype="multipart/form-data"'); ?>
+    <form name="bRestoreLocal" action="<?php echo osc_href_link_admin(FILENAME_BACKUP, 'action=restorelocalnow'); ?>" method="post" enctype="multipart/form-data">
 
     <p><?php echo TEXT_INFO_RESTORE_LOCAL; ?></p>
 
-    <p><?php echo osc_draw_file_field('sql_file'); ?></p>
+    <p><?php echo osc_draw_file_field('sql_file', true); ?></p>
 
     <p><?php echo TEXT_INFO_RESTORE_LOCAL_RAW_FILE; ?></p>
 
@@ -160,21 +160,21 @@
 ?>
 
 <div id="infoBox_bRestore" <?php if ($action != 'bRestore') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . $buInfo->file; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $buInfo->file; ?></div>
   <div class="infoBoxContent">
     <p><?php echo sprintf(TEXT_INFO_RESTORE, DIR_FS_BACKUP . (($buInfo->compression != TEXT_NO_EXTENSION) ? substr($buInfo->file, 0, strrpos($buInfo->file, '.')) : $buInfo->file), ($buInfo->compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''); ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_RESTORE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=restorenow') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'bDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_RESTORE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=restorenow') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'bDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 
 <div id="infoBox_bDelete" <?php if ($action != 'bDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $buInfo->file; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $buInfo->file; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $buInfo->file . '</b>'; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'bDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BACKUP, 'file=' . $buInfo->file . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'bDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

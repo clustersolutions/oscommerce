@@ -30,7 +30,7 @@
 // Private methods
 
     function _setIcon() {
-      $this->_icon = tep_icon('products.png', ICON_PRODUCTS, '16', '16');
+      $this->_icon = osc_icon('products.png', ICON_PRODUCTS);
     }
 
     function _setTitle() {
@@ -56,8 +56,8 @@
       $this->_resultset->execute();
 
       while ($this->_resultset->next()) {
-        $this->_data[] = array('<a href="' . tep_href_link(FILENAME_PRODUCTS, 'pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only') . '">' . $this->_icon . '&nbsp;' . $this->_resultset->value('products_name') . '</a>',
-                               tep_image('../includes/languages/' . $this->_resultset->value('directory') . '/images/' . $this->_resultset->value('image'), $this->_resultset->value('name')),
+        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
+                               osc_image('../includes/languages/' . $this->_resultset->value('directory') . '/images/' . $this->_resultset->value('image'), $this->_resultset->value('name')),
                                $this->_resultset->valueInt('products_viewed'));
       }
     }

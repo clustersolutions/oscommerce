@@ -2109,5 +2109,10 @@ Your friend, %s, thought that you would be interested in %s from %s.]]></value>
       <value><![CDATA[The credit card number entered is invalid.<br />Please check the number and try again.]]></value>
       <group>general</group>
     </definition>
+    <definition>
+      <key>maximum_file_upload_size</key>
+      <value><![CDATA[(Max: %s)]]></value>
+      <group>general</group>
+    </definition>
   </definitions>
 </language>

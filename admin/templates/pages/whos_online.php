@@ -86,7 +86,7 @@
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo gmdate('H:i:s', time() - $Qwho->value('time_entry')); ?></td>
@@ -99,9 +99,9 @@
         <td align="right">
 <?php
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . osc_icon('info.png', IMAGE_ICON_INFO) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo'), osc_icon('info.png', IMAGE_ICON_INFO));
     }
 ?>
         </td>
@@ -131,7 +131,7 @@
 ?>
 
 <div id="infoBox_wInfo" <?php if ($action != 'wInfo') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_ICON_INFO, '16', '16') . ' ' . $wInfo->full_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_ICON_INFO) . ' ' . $wInfo->full_name; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>

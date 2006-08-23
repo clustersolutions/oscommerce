@@ -28,7 +28,7 @@
 
         $osC_MessageStack->add_session('header', SUCCESS_LAST_RESTORE_CLEARED, 'success');
 
-        tep_redirect(tep_href_link(FILENAME_BACKUP));
+        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'backupnow':
         tep_set_time_limit(0);
@@ -175,7 +175,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DATABASE_SAVED, 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_BACKUP));
+        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'restorenow':
       case 'restorelocalnow':
@@ -335,7 +335,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DATABASE_RESTORED, 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_BACKUP));
+        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'download':
         if (isset($_GET['file'])) {
@@ -366,7 +366,7 @@
             if (!$tep_remove_error) {
               $osC_MessageStack->add_session('header', SUCCESS_BACKUP_DELETED, 'success');
 
-              tep_redirect(tep_href_link(FILENAME_BACKUP));
+              tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
             }
           }
         }

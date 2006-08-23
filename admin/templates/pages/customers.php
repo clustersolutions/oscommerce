@@ -16,7 +16,7 @@
     <td><h1><?php echo HEADING_TITLE; ?></h1></td>
     <td class="smallText" align="right">
 <?php
-  echo tep_draw_form('search', FILENAME_CUSTOMERS, '', 'get') .
+  echo '<form name="search" action="' . osc_href_link_admin(FILENAME_CUSTOMERS) . '" method="get">' .
        HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') .
        '<input type="submit" value="GO" class="operationButton"></form>';
 ?>
@@ -79,24 +79,24 @@
     if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
         <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
         <td><?php echo tep_date_short($Qinfo->value('date_account_created')); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php
-    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;';
+    echo '<a href="#" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '\';">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;';
 
     if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
+      echo '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>&nbsp;';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cDelete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
     }
 
-    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_ORDERS, 'cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/orders.png', IMAGE_ORDERS, '16', '16') . '</a>';
+    echo '<a href="#" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS, 'cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . osc_icon('orders.png', IMAGE_ORDERS) . '</a>';
 ?>
         </td>
       </tr>
@@ -116,10 +116,10 @@
   <p align="right">
 <?php
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS) . '\';"> ';
+      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS) . '\';"> ';
     }
 
-    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_CUSTOMERS, 'page=' . $_GET['page'] . '&action=cNew') . '\';">';
+    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, 'page=' . $_GET['page'] . '&action=cNew') . '\';">';
 ?>
   </p>
 </div>
@@ -129,16 +129,16 @@
 ?>
 
 <div id="infoBox_cDelete" <?php if ($action != 'cDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('cDelete', FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $cInfo->customers_id . '&action=deleteconfirm'); ?>
+    <form name="cDelete" action="<?php echo osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $cInfo->customers_id . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname . '</b>'; ?></p>
 
 <?php
     if ($cInfo->number_of_reviews > 0) {
-      echo '    <p>' . osc_draw_checkbox_field('delete_reviews', '', true) . ' ' . sprintf(TEXT_DELETE_REVIEWS, $cInfo->number_of_reviews) . '</p>';
+      echo '    <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . sprintf(TEXT_DELETE_REVIEWS, $cInfo->number_of_reviews) . '</p>';
     }
 ?>
 

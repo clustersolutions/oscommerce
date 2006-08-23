@@ -16,7 +16,7 @@
     <td><h1><?php echo HEADING_TITLE; ?></h1></td>
     <td class="smallText" align="right">
 <?php
-  echo tep_draw_form('file_manager', FILENAME_FILE_MANAGER, '', 'get') .
+  echo '<form name="file_manager" action="' . osc_href_link_admin(FILENAME_FILE_MANAGER) . '" method="get">' .
        osc_draw_pull_down_menu('goto', $goto_array, substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1), 'onchange="this.form.submit();"') .
        '</form>';
 ?>
@@ -51,7 +51,7 @@
   }
 ?>
 
-<?php echo tep_draw_form('file_manager_edit', FILENAME_FILE_MANAGER, (isset($_GET['entry']) && !empty($_GET['entry']) ? 'entry=' . basename($_GET['entry']) . '&' : '') . 'action=save'); ?>
+<form name="file_manager_edit" action="<?php echo osc_href_link_admin(FILENAME_FILE_MANAGER, (isset($_GET['entry']) && !empty($_GET['entry']) ? 'entry=' . basename($_GET['entry']) . '&' : '') . 'action=save'); ?>" method="post">
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
@@ -60,7 +60,7 @@
   </tr>
   <tr>
     <td class="main" valign="top"><?php echo TEXT_FILE_CONTENTS; ?></td>
-    <td class="main"><?php echo osc_draw_textarea_field('contents', $contents, '80', '20', 'off', 'style="width: 100%;"' . (($writeable) ? '' : ' readonly')); ?></td>
+    <td class="main"><?php echo osc_draw_textarea_field('contents', $contents, 80, 20, 'style="width: 100%;"' . (($writeable) ? '' : ' readonly="readonly"')); ?></td>
   </tr>
 </table>
 
@@ -70,7 +70,7 @@
     echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton">&nbsp;';
   }
 
-  echo '<input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_FILE_MANAGER, (isset($_GET['entry']) ? 'entry=' . $_GET['entry'] : '')) . '\';">';
+  echo '<input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_FILE_MANAGER, (isset($_GET['entry']) ? 'entry=' . $_GET['entry'] : '')) . '\';">';
 ?>
 </p>
 

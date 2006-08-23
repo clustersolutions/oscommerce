@@ -75,42 +75,42 @@
       if (isset($mInfo) && ($code == $mInfo->code) ) {
         echo '      <tr class="selected">' . "\n";
       } else {
-        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code) . '\';">' . "\n";
+        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code) . '\';">' . "\n";
       }
 ?>
         <td><?php echo $module->getTitle(); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . ($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif'), null, null); ?></td>
         <td align="right">
 <?php
     if (isset($mInfo) && ($code == $mInfo->code)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'mInfo\');">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;';
+      echo '<a href="#" onclick="toggleInfoBox(\'mInfo\');">' . osc_icon('info.png', IMAGE_INFO) . '</a>&nbsp;';
 
       if ($mInfo->installed === true) {
-        echo '<a href="#" onclick="toggleInfoBox(\'mUninstall\');">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        echo '<a href="#" onclick="toggleInfoBox(\'mUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;';
 
         if ($module->hasKeys()) {
-          echo '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          echo '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
         } else {
-          echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-             tep_image('images/pixel_trans.gif', '', '16', '16');
+        echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+             osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mInfo') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . '</a>&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;';
 
       if ($module->isInstalled() && $module->isActive()) {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mUninstall') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . '</a>&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
 
         if ($module->hasKeys()) {
-          echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>';
+          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT));
         } else {
-          echo tep_image('images/pixel_trans.gif', '', '16', '16');
+          echo osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=install') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/play.png', IMAGE_MODULE_INSTALL, '16', '16') . '</a>&nbsp;' .
-             tep_image('images/pixel_trans.gif', '', '16', '16');
+        echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+             osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     }
 ?>
@@ -131,7 +131,7 @@
 ?>
 
 <div id="infoBox_mInfo" <?php if ($action != 'mInfo') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/info.png', IMAGE_INFO, '16', '16') . ' ' . $mInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -149,17 +149,17 @@
 </div>
 
 <div id="infoBox_mUninstall" <?php if ($action != 'mUninstall') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/stop.png', IMAGE_MODULE_REMOVE, '16', '16') . ' ' . $mInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo INFO_UNINSTALL_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . tep_href_link(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
   </div>
 </div>
 
 <div id="infoBox_mEdit" <?php if ($action != 'mEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $mInfo->title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('mEdit', FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $mInfo->code . '&action=save'); ?>
+    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $mInfo->code . '&action=save'); ?>" method="post">
 
 <?php
     $keys = '';

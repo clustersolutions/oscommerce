@@ -32,7 +32,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, $page_info));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, $page_info));
         break;
 */
   require('includes/application_top.php');
@@ -94,7 +94,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $group_id));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $group_id));
         break;
       case 'deleteConfirm':
         if (isset($_GET['paID']) && is_numeric($_GET['paID'])) {
@@ -154,7 +154,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page']));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page']));
         break;
     }
   }
@@ -218,7 +218,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&paeID=' . $entry_id));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&paeID=' . $entry_id));
         break;
       case 'deleteConfirm':
         if (isset($_GET['paeID']) && is_numeric($_GET['paeID'])) {
@@ -258,7 +258,7 @@
           }
         }
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
+        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
         break;
     }
   }

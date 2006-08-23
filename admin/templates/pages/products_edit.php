@@ -292,7 +292,7 @@
         var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
 
         if (str_ele[1] == '1') { // original (products_images_groups_id)
-          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo tep_href_link('templates/' . $template . '/images/icons/16x16/drag.png', '', 'SSL'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
+          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $template . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
 
           if (str_ele[6] == '1') { // default_flag
             style += ' background-color: #E5EFE5;';
@@ -311,12 +311,12 @@
 
         if (str_ele[1] == '1') {
           if (str_ele[6] == '1') {
-            newdiv += '<?php echo tep_image('templates/' . $template . '/images/icons/16x16/default.png', IMAGE_DEFAULT, '16', '16'); ?>&nbsp;';
+            newdiv += '<?php echo osc_icon('default.png', IMAGE_DEFAULT); ?>&nbsp;';
           } else {
-            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/default_grey.png', IMAGE_DEFAULT, '16', '16'); ?></a>&nbsp;';
+            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('default_grey.png', IMAGE_DEFAULT); ?></a>&nbsp;';
           }
 
-          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16'); ?></a>';
+          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('trash.png', IMAGE_DELETE); ?></a>';
         }
 
         newdiv += '</span>';
@@ -350,7 +350,7 @@
   }
 
   function getImagesOriginals(makeCall) {
-    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Loading images from server...'; ?></div>';
+    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Loading images from server...'; ?></div>';
 
     if (makeCall != false) {
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=originals", {onSuccess: handleHttpResponseGetImages});
@@ -358,7 +358,7 @@
   }
 
   function getImagesOthers(makeCall) {
-    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Loading images from server...'; ?></div>';
+    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Loading images from server...'; ?></div>';
 
     if (makeCall != false) {
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others", {onSuccess: handleHttpResponseGetImages});
@@ -397,7 +397,7 @@
   }
 
   function setFileUploadField() {
-    document.getElementById('fileUploadField').innerHTML = '<?php echo osc_draw_file_field('products_image'); ?>';
+    document.getElementById('fileUploadField').innerHTML = '<?php echo osc_draw_file_field('products_image', true); ?>';
   }
 
   function switchImageFilesView(layer) {
@@ -430,14 +430,14 @@
 }
 
 #overlay {
-  background-image: url(<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>);
+  background-image: url(<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>);
 }
 
 * html #overlay {
   background-color: #000;
   back\ground-color: transparent;
-  background-image: url(<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>);
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo tep_href_link('templates/' . $template . '/images/overlay.png', '', 'SSL'); ?>", sizingMethod="scale");
+  background-image: url(<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>);
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>", sizingMethod="scale");
   }
 //--></style>
 
@@ -447,7 +447,7 @@
 <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; z-index: 90; width: 100%;"></div>
 
 <div id="actionLayer" style="display: none; position: absolute; z-index: 100; width: 400px; height: 200px;">
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' Delete Image'; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Delete Image'; ?></div>
   <div class="infoBoxContent">
     <p>Are you sure you want to delete this product image?</p>
 
@@ -481,7 +481,7 @@
 ?>
 
       <div class="tab-page" id="tabDescriptionLanguages_<?php echo $l['code']; ?>">
-        <h2 class="tab"><?php echo tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . $l['name']; ?></h2>
+        <h2 class="tab"><?php echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . $l['name']; ?></h2>
 
         <script type="text/javascript"><!--
           descriptionTabPane.addTabPage( document.getElementById( "tabDescriptionLanguages_<?php echo $l['code']; ?>" ) );
@@ -490,27 +490,27 @@
         <table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_NAME; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_name) && isset($pInfo->products_name[$l['id']]) ? $pInfo->products_name[$l['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_name) && isset($pInfo->products_name[$l['id']]) ? $pInfo->products_name[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText" valign="top"><?php echo TEXT_PRODUCTS_DESCRIPTION; ?></td>
-            <td class="smallText"><?php echo tep_draw_textarea_field('products_description[' . $l['id'] . ']', 'soft', '70', '15', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$l['id']]) ? $pInfo->products_description[$l['id']] : ''), 'id="fckpd_' . $l['code'] . '" style="width: 100%;"'); ?></td>
+            <td class="smallText"><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$l['id']]) ? $pInfo->products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_MODEL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_model) && isset($pInfo->products_model[$l['id']]) ? $pInfo->products_model[$l['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_model) && isset($pInfo->products_model[$l['id']]) ? $pInfo->products_model[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_KEYWORD; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_keyword) && isset($pInfo->products_keyword[$l['id']]) ? $pInfo->products_keyword[$l['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_keyword) && isset($pInfo->products_keyword[$l['id']]) ? $pInfo->products_keyword[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_TAGS; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_tags) && isset($pInfo->products_tags[$l['id']]) ? $pInfo->products_tags[$l['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_tags) && isset($pInfo->products_tags[$l['id']]) ? $pInfo->products_tags[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_URL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : '')); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : null)); ?></td>
           </tr>
         </table>
       </div>
@@ -538,15 +538,15 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_TAX_CLASS; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($pInfo) ? $pInfo->products_tax_class_id : ''), 'onchange="updateGross(\'products_price\');"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($pInfo) ? $pInfo->products_tax_class_id : null), 'onchange="updateGross(\'products_price\');"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_NET; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($pInfo) ? $pInfo->products_price : ''), 'id="products_price" onkeyup="updateGross(\'products_price\')"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($pInfo) ? $pInfo->products_price : null), 'onkeyup="updateGross(\'products_price\')"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_GROSS; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($pInfo) ? $pInfo->products_price : ''), 'id="products_price_gross" onkeyup="updateNet(\'products_price\')"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($pInfo) ? $pInfo->products_price : null), 'onkeyup="updateNet(\'products_price\')"'); ?></td>
               </tr>
             </table>
 
@@ -562,15 +562,15 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_MANUFACTURER; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($pInfo) ? $pInfo->manufacturers_id : '')); ?></td>
+                <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($pInfo) ? $pInfo->manufacturers_id : null)); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_QUANTITY; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_quantity', (isset($pInfo) ? $pInfo->products_quantity : '')); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_quantity', (isset($pInfo) ? $pInfo->products_quantity : null)); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_WEIGHT; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_weight', (isset($pInfo) ? $pInfo->products_weight : '')). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($pInfo) ? $pInfo->products_weight_class : SHIPPING_WEIGHT_UNIT)); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_weight', (isset($pInfo) ? $pInfo->products_weight : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($pInfo) ? $pInfo->products_weight_class : SHIPPING_WEIGHT_UNIT)); ?></td>
               </tr>
             </table>
           </fieldset>
@@ -581,7 +581,7 @@
           <fieldset style="height: 100%;">
             <legend><?php echo TEXT_PRODUCTS_STATUS; ?></legend>
 
-            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($pInfo) ? $pInfo->products_status : '0'), '', false, '<br />'); ?>
+            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($pInfo) ? $pInfo->products_status : '0'), null, '<br />'); ?>
           </fieldset>
         </td>
         <td class="smallText" width="50%" height="100%" valign="top">
@@ -591,7 +591,7 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_DATE_AVAILABLE; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_date_available', (isset($pInfo) ? $pInfo->products_date_available : ''), 'id="calendarValue"'); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValue", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_date_available', (isset($pInfo) ? $pInfo->products_date_available : null)); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
               </tr>
             </table>
           </fieldset>
@@ -622,7 +622,7 @@
 
 <?php
     if (isset($pInfo)) {
-      echo '<input type="submit" value="Send To Server" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Uploading image to server...</div>';
+      echo '<input type="submit" value="Send To Server" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image to server...</div>';
     }
 ?>
             </div>
@@ -636,11 +636,11 @@
 
               <select id="localImagesSelection" name="localimages[]" size="5" multiple="multiple" style="width: 100%;"></select>
 
-              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Retrieving local images..'; ?></div>
+              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Retrieving local images..'; ?></div>
 
 <?php
     if (isset($pInfo)) {
-      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Uploading image(s) to server...</div>';
+      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image(s) to server...</div>';
     }
 ?>
 
@@ -761,7 +761,7 @@
                 </tr>
                 <tr class="attributeAdd">
                   <td class="smallText" width="50%"><span id="attributeKey">&nbsp;</span></td>
-                  <td class="smallText"><?php echo osc_draw_pull_down_menu('new_attribute_prefix', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), '+', 'disabled') . '&nbsp;' . osc_draw_input_field('new_attribute_price', '', 'disabled'); ?></td>
+                  <td class="smallText"><?php echo osc_draw_pull_down_menu('new_attribute_prefix', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), '+', 'disabled="disabled"') . '&nbsp;' . osc_draw_input_field('new_attribute_price', null, 'disabled="disabled"'); ?></td>
                   <td class="smallText" align="right"><input type="button" value="-" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);" class="infoBoxButton"></td>
                 </tr>
               </table>
@@ -815,7 +815,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($pInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save_product') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
+  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($pInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save_product') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
 
   </form>
 </div>

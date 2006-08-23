@@ -63,29 +63,29 @@
     if (isset($bInfo) && ($Qbanners->valueInt('banners_id') == $bInfo->banners_id)) {
       echo '      <tr class="selected">' . "\n";
     } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id')) . '\';">' . "\n";
+      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id')) . '\';">' . "\n";
     }
 ?>
         <td><?php echo $Qbanners->valueProtected('banners_title'); ?></td>
         <td><?php echo $Qbanners->valueProtected('banners_group'); ?></td>
         <td><?php echo $Qstats->valueInt('banners_shown') . ' / ' . $Qstats->valueInt('banners_clicked'); ?></td>
-        <td align="center"><?php echo tep_image('templates/' . $template . '/images/icons/' . (($Qbanners->valueInt('status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif')); ?></td>
+        <td align="center"><?php echo osc_icon(($Qbanners->valueInt('status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php
     if (isset($bInfo) && ($Qbanners->valueInt('banners_id') == $bInfo->banners_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'bPreview\');">' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', IMAGE_PREVIEW, '16', '16') . '</a>&nbsp;';
+      echo '<a href="#" onclick="toggleInfoBox(\'bPreview\');">' . osc_icon('windows.png', IMAGE_PREVIEW) . '</a>&nbsp;';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bPreview') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/windows.png', IMAGE_PREVIEW, '16', '16') . '</a>&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bPreview'), osc_icon('windows.png', IMAGE_PREVIEW)) . '&nbsp;';
     }
 
-    echo '<a href="#" onclick="document.location.href=\'' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=statistics') . '\';">' . tep_image('templates/' . $template . '/images/icons/16x16/graph.png', ICON_STATISTICS, '16', '16') . '</a>&nbsp;';
+    echo '<a href="#" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=statistics') . '\';">' . osc_icon('graph.png', ICON_STATISTICS) . '</a>&nbsp;';
 
     if (isset($bInfo) && ($Qbanners->valueInt('banners_id') == $bInfo->banners_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'bEdit\');">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'bEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      echo '<a href="' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bEdit') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . '</a>&nbsp;' .
-           '<a href="' . tep_href_link(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bDelete') . '">' . tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . '</a>';
+      echo osc_link_object(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $Qbanners->valueInt('banners_id') . '&action=bDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
         </td>
@@ -107,28 +107,28 @@
 </div>
 
 <div id="infoBox_bNew" <?php if ($action != 'bNew') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/new.png', IMAGE_INSERT, '16', '16') . ' ' . TEXT_INFO_HEADING_NEW_BANNER; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_BANNER; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('bNew', FILENAME_BANNER_MANAGER, 'action=save', 'post', 'enctype="multipart/form-data"'); ?>
+    <form name="bNew" action="<?php echo osc_href_link_admin(FILENAME_BANNER_MANAGER, 'action=save'); ?>" method="post" enctype="multipart/form-data">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_TITLE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('banners_title', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('banners_title', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_URL . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('banners_url', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('banners_url', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_GROUP . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('banners_group', $groups_array) . TEXT_BANNERS_NEW_GROUP . '<br />' . osc_draw_input_field('new_banners_group', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('banners_group', $groups_array) . TEXT_BANNERS_NEW_GROUP . '<br />' . osc_draw_input_field('new_banners_group', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_file_field('banners_image') . ' ' . TEXT_BANNERS_IMAGE_LOCAL . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('banners_image_local'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_file_field('banners_image', true) . ' ' . TEXT_BANNERS_IMAGE_LOCAL . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('banners_image_local'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE_TARGET . '</b>'; ?></td>
@@ -136,15 +136,15 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_HTML_TEXT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo tep_draw_textarea_field('banners_html_text', 'soft', '60', '5'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('banners_html_text'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_SCHEDULED_AT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_scheduled', '', 'id="calendarValueDS"'); ?><input type="button" value="..." id="calendarTriggerDS" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueDS", ifFormat: "%Y-%m-%d", button: "calendarTriggerDS" } );</script></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_scheduled'); ?><input type="button" value="..." id="calendarTriggerDS" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_scheduled", ifFormat: "%Y-%m-%d", button: "calendarTriggerDS" } );</script></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_EXPIRES_ON . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_expires', '', 'id="calendarValueDE"'); ?><input type="button" value="..." id="calendarTriggerDE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueDE", ifFormat: "%Y-%m-%d", button: "calendarTriggerDE" } );</script><?php echo TEXT_BANNERS_OR_AT . '<br />' . osc_draw_input_field('expires_impressions', '', 'maxlength="7" size="7"') . ' ' . TEXT_BANNERS_IMPRESSIONS; ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_expires'); ?><input type="button" value="..." id="calendarTriggerDE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_expires", ifFormat: "%Y-%m-%d", button: "calendarTriggerDE" } );</script><?php echo TEXT_BANNERS_OR_AT . '<br />' . osc_draw_input_field('expires_impressions', null, 'maxlength="7" size="7"') . ' ' . TEXT_BANNERS_IMPRESSIONS; ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_STATUS . '</b>'; ?></td>
@@ -165,14 +165,14 @@
 ?>
 
 <div id="infoBox_bPreview" <?php if ($action != 'bPreview') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $bInfo->banners_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $bInfo->banners_title; ?></div>
   <div class="infoBoxContent">
 
 <?php
     if (!empty($bInfo->banners_html_text)) {
       echo $bInfo->banners_html_text;
     } else {
-      echo tep_image('../images/' . $bInfo->banners_image, $bInfo->banners_title);
+      echo osc_image('../images/' . $bInfo->banners_image, $bInfo->banners_title);
     }
 ?>
 
@@ -181,9 +181,9 @@
 </div>
 
 <div id="infoBox_bDelete" <?php if ($action != 'bDelete') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/trash.png', IMAGE_DELETE, '16', '16') . ' ' . $bInfo->banners_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $bInfo->banners_title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('bDelete', FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $bInfo->banners_id . '&action=deleteconfirm'); ?>
+    <form name="bDelete" action="<?php echo osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $bInfo->banners_id . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $bInfo->banners_title . '</b>'; ?></p>
@@ -202,9 +202,9 @@
 
 
 <div id="infoBox_bEdit" <?php if ($action != 'bEdit') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $bInfo->banners_title; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $bInfo->banners_title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('bEdit', FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $bInfo->banners_id . '&action=save', 'post', 'enctype="multipart/form-data"'); ?>
+    <form name="bEdit" action="<?php echo osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $bInfo->banners_id . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -219,11 +219,11 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_GROUP . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('banners_group', $groups_array, $bInfo->banners_group) . TEXT_BANNERS_NEW_GROUP . '<br />' . osc_draw_input_field('new_banners_group', '', 'style="width: 100%;"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('banners_group', $groups_array, $bInfo->banners_group) . TEXT_BANNERS_NEW_GROUP . '<br />' . osc_draw_input_field('new_banners_group', null, 'style="width: 100%;"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_file_field('banners_image') . ' ' . TEXT_BANNERS_IMAGE_LOCAL . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('banners_image_local', $bInfo->banners_image); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_file_field('banners_image', true) . ' ' . TEXT_BANNERS_IMAGE_LOCAL . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('banners_image_local', $bInfo->banners_image); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE_TARGET . '</b>'; ?></td>
@@ -231,19 +231,19 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_HTML_TEXT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo tep_draw_textarea_field('banners_html_text', 'soft', '60', '5', $bInfo->banners_html_text); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('banners_html_text', $bInfo->banners_html_text); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_SCHEDULED_AT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_scheduled', $bInfo->date_scheduled, 'id="calendarValueDSE"'); ?><input type="button" value="..." id="calendarTriggerDSE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueDSE", ifFormat: "%Y-%m-%d", button: "calendarTriggerDSE" } );</script></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_scheduled', $bInfo->date_scheduled); ?><input type="button" value="..." id="calendarTriggerDSE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_scheduled", ifFormat: "%Y-%m-%d", button: "calendarTriggerDSE" } );</script></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_EXPIRES_ON . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_expires', $bInfo->expires_date, 'id="calendarValueDEE"'); ?><input type="button" value="..." id="calendarTriggerDEE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "calendarValueDEE", ifFormat: "%Y-%m-%d", button: "calendarTriggerDEE" } );</script><?php echo TEXT_BANNERS_OR_AT . '<br />' . osc_draw_input_field('expires_impressions', $bInfo->expires_impressions, 'maxlength="7" size="7"') . ' ' . TEXT_BANNERS_IMPRESSIONS; ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_input_field('date_expires', $bInfo->expires_date); ?><input type="button" value="..." id="calendarTriggerDEE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_expires", ifFormat: "%Y-%m-%d", button: "calendarTriggerDEE" } );</script><?php echo TEXT_BANNERS_OR_AT . '<br />' . osc_draw_input_field('expires_impressions', $bInfo->expires_impressions, 'maxlength="7" size="7"') . ' ' . TEXT_BANNERS_IMPRESSIONS; ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_BANNERS_STATUS . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('status', 'on', (($bInfo->status == 1) ? true : false)); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('status', 'on', ($bInfo->status == 1)); ?></td>
       </tr>
     </table>
 

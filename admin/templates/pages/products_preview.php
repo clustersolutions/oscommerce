@@ -38,7 +38,7 @@
     <td>
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo '<span id="lang_' . $l['code'] . '"' . (($l['code'] == $osC_Language->getCode()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . tep_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
+    echo '<span id="lang_' . $l['code'] . '"' . (($l['code'] == $osC_Language->getCode()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
   }
 ?>
     </td>
@@ -78,7 +78,7 @@
 <?php
   }
 
-  echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id) . '\';" class="operationButton"></p>';
+  echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&pID=' . $pInfo->products_id) . '\';" class="operationButton"></p>';
 ?>
 
 </form>

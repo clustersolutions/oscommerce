@@ -14,7 +14,7 @@
 // Redirect to another page or site
   function tep_redirect($url) {
     if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
-      $url = tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false);
+      $url = osc_href_link_admin(FILENAME_DEFAULT);
     }
 
     if (strpos($url, '&amp;') !== false) {
@@ -476,11 +476,11 @@
 ////
 // Alias function for Store configuration values in the Administration Tool
   function tep_cfg_pull_down_country_list($country_id) {
-    return tep_draw_pull_down_menu('configuration_value', tep_get_countries(), $country_id);
+    return osc_draw_pull_down_menu('configuration_value', tep_get_countries(), $country_id);
   }
 
   function tep_cfg_pull_down_zone_list($zone_id) {
-    return tep_draw_pull_down_menu('configuration_value', tep_get_country_zones(STORE_COUNTRY), $zone_id);
+    return osc_draw_pull_down_menu('configuration_value', tep_get_country_zones(STORE_COUNTRY), $zone_id);
   }
 
   function tep_cfg_pull_down_tax_classes($tax_class_id, $key = '') {
@@ -499,13 +499,13 @@
                                  'text' => $Qclasses->value('tax_class_title'));
     }
 
-    return tep_draw_pull_down_menu($name, $tax_class_array, $tax_class_id);
+    return osc_draw_pull_down_menu($name, $tax_class_array, $tax_class_id);
   }
 
 ////
 // Function to read in text area in admin
  function tep_cfg_textarea($text) {
-    return tep_draw_textarea_field('configuration_value', false, 35, 5, $text);
+    return osc_draw_textarea_field('configuration_value', $text, 35, 5);
   }
 
   function tep_cfg_get_zone_name($zone_id) {
@@ -536,7 +536,7 @@
                                     'text' => $Qclasses->value('weight_class_title'));
     }
 
-    return tep_draw_pull_down_menu($name, $weight_class_array, $weight_class_id);
+    return osc_draw_pull_down_menu($name, $weight_class_array, $weight_class_id);
   }
 
 ////
@@ -1150,7 +1150,7 @@
                                   'text' => $Qzones->value('geo_zone_name'));
     }
 
-    return tep_draw_pull_down_menu($name, $zone_class_array, $zone_class_id);
+    return osc_draw_pull_down_menu($name, $zone_class_array, $zone_class_id);
   }
 
   function tep_cfg_pull_down_order_statuses($order_status_id, $key = '') {
@@ -1170,7 +1170,7 @@
                                 'text' => $Qstatuses->value('orders_status_name'));
     }
 
-    return tep_draw_pull_down_menu($name, $statuses_array, $order_status_id);
+    return osc_draw_pull_down_menu($name, $statuses_array, $order_status_id);
   }
 
   function tep_cfg_checkboxes_credit_cards($selected, $key) {
@@ -1187,7 +1187,7 @@
                           'text' => $Qcc->value('credit_card_name'));
     }
 
-    return osc_draw_checkbox_field('configuration[' . $key . '][]', $cc_array, explode(',', $selected), '', false, '<br />');
+    return osc_draw_checkbox_field('configuration[' . $key . '][]', $cc_array, explode(',', $selected), null, '<br />');
   }
 
   function tep_get_order_status_name($order_status_id, $language_id = '') {
