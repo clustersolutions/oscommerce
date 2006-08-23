@@ -145,10 +145,12 @@
         }
       }
 
-      if (isset($_POST['postcode']) && (strlen(trim($_POST['postcode'])) >= ACCOUNT_POST_CODE)) {
-        $data['postcode'] = $_POST['postcode'];
-      } else {
-        $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
+      if (ACCOUNT_POST_CODE > -1) {
+        if (isset($_POST['postcode']) && (strlen(trim($_POST['postcode'])) >= ACCOUNT_POST_CODE)) {
+          $data['postcode'] = $_POST['postcode'];
+        } else {
+          $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
+        }
       }
 
       if (isset($_POST['city']) && (strlen(trim($_POST['city'])) >= ACCOUNT_CITY)) {

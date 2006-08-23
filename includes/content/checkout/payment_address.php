@@ -104,8 +104,10 @@
           }
         }
 
-        if (!isset($_POST['postcode']) || (strlen(trim($_POST['postcode'])) < ACCOUNT_POST_CODE)) {
-          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
+        if (ACCOUNT_POST_CODE > 0) {
+          if (!isset($_POST['postcode']) || (strlen(trim($_POST['postcode'])) < ACCOUNT_POST_CODE)) {
+            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
+          }
         }
 
         if (!isset($_POST['city']) || (strlen(trim($_POST['city'])) < ACCOUNT_CITY)) {
@@ -181,7 +183,7 @@
           $Qab->bindValue(':entry_lastname', trim($_POST['lastname']));
           $Qab->bindValue(':entry_street_address', trim($_POST['street_address']));
           $Qab->bindValue(':entry_suburb', ((ACCOUNT_SUBURB > -1) ? trim($_POST['suburb']) : ''));
-          $Qab->bindValue(':entry_postcode', trim($_POST['postcode']));
+          $Qab->bindValue(':entry_postcode', ((ACCOUNT_POST_CODE > -1) ? trim($_POST['postcode']) : ''));
           $Qab->bindValue(':entry_city', trim($_POST['city']));
           $Qab->bindValue(':entry_state', ((ACCOUNT_STATE > -1) ? (($zone_id > 0) ? '' : trim($_POST['state'])) : ''));
           $Qab->bindInt(':entry_country_id', $_POST['country']);

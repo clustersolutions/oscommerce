@@ -48,9 +48,16 @@
 
 <?php
   }
+
+  if (ACCOUNT_POST_CODE > -1) {
 ?>
 
-  <li><?php echo osc_draw_label($osC_Language->get('field_customer_post_code'), null, 'postcode', true) . osc_draw_input_field('postcode', (isset($Qentry) ? $Qentry->value('entry_postcode') : null)); ?></li>
+  <li><?php echo osc_draw_label($osC_Language->get('field_customer_post_code'), null, 'postcode', (ACCOUNT_POST_CODE > 0)) . osc_draw_input_field('postcode', (isset($Qentry) ? $Qentry->value('entry_postcode') : null)); ?></li>
+
+<?php
+  }
+?>
+
   <li><?php echo osc_draw_label($osC_Language->get('field_customer_city'), null, 'city', true) . osc_draw_input_field('city', (isset($Qentry) ? $Qentry->value('entry_city') : null)); ?></li>
 
 <?php

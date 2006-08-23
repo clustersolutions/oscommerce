@@ -89,7 +89,7 @@
       $Qab->bindValue(':entry_lastname', $data['lastname']);
       $Qab->bindValue(':entry_street_address', $data['street_address']);
       $Qab->bindValue(':entry_suburb', (ACCOUNT_SUBURB > -1) ? $data['suburb'] : '');
-      $Qab->bindValue(':entry_postcode', $data['postcode']);
+      $Qab->bindValue(':entry_postcode', (ACCOUNT_POST_CODE > -1) ? $data['postcode'] : '');
       $Qab->bindValue(':entry_city', $data['city']);
       $Qab->bindValue(':entry_state', (ACCOUNT_STATE > -1) ? ((isset($data['zone_id']) && ($data['zone_id'] > 0)) ? '' : $data['state']) : '');
       $Qab->bindInt(':entry_country_id', $data['country']);

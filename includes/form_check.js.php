@@ -124,9 +124,12 @@ function check_form(form_name) {
   if (ACCOUNT_SUBURB > 0) {
     echo '  check_input("suburb", ' . ACCOUNT_SUBURB . ', "' . sprintf($GLOBALS['osC_Language']->get('field_customer_suburb_error'), ACCOUNT_SUBURB) . '");' . "\n";
   }
+
+  if (ACCOUNT_POST_CODE > 0) {
+    echo '  check_input("postcode", ' . ACCOUNT_POST_CODE . ', "' . sprintf($GLOBALS['osC_Language']->get('field_customer_post_code_error'), ACCOUNT_POST_CODE) . '");' . "\n";
+  }
 ?>
 
-  check_input("postcode", <?php echo ACCOUNT_POST_CODE; ?>, "<?php echo sprintf($GLOBALS['osC_Language']->get('field_customer_post_code_error'), ACCOUNT_POST_CODE); ?>");
   check_input("city", <?php echo ACCOUNT_CITY; ?>, "<?php echo sprintf($GLOBALS['osC_Language']->get('field_customer_city_error'), ACCOUNT_CITY); ?>");
 
 <?php
