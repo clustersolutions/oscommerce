@@ -22,7 +22,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getShippingAddress('id'), true, ' ', '<br />'); ?>
+      <?php echo osC_Address::format($osC_ShoppingCart->getShippingAddress(), '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
@@ -74,7 +74,7 @@
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td width="10">&nbsp;</td>
-            <td colspan="3"><b><?php echo $quotes['module']; ?></b>&nbsp;<?php if (isset($quotes['icon']) && tep_not_null($quotes['icon'])) { echo $quotes['icon']; } ?></td>
+            <td colspan="3"><b><?php echo $quotes['module']; ?></b>&nbsp;<?php if (isset($quotes['icon']) && !empty($quotes['icon'])) { echo $quotes['icon']; } ?></td>
             <td width="10">&nbsp;</td>
           </tr>
 <?php

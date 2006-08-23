@@ -40,7 +40,7 @@
 
     </td>
     <td valign="top"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), '<b><u>' . $Qproducts->value('products_name') . '</u></b>') . '<br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($Qproducts->value('products_date_added')) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . $osC_Language->get('price') . ' ' . $products_price; ?></td>
-    <td align="right" valign="middle"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qproducts->value('products_id')), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))); ?></td>
+    <td align="right" valign="middle"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=buy_now&products_id=' . $Qproducts->value('products_id')), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))); ?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>

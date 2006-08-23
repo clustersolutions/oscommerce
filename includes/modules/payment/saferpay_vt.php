@@ -162,7 +162,7 @@
 
         $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
 
@@ -177,7 +177,7 @@
 
       $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
-      tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+      osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
     }
   }
 ?>

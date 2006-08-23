@@ -53,7 +53,7 @@
     $Qadmin = $osC_Database->query('insert into :table_administrators (user_name, user_password, user_full_name, user_email_address) values (:user_name, :user_password, :user_full_name, :user_email_address)');
   }
   $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-  $Qadmin->bindValue(':user_password', tep_encrypt_password(trim($_POST['CFG_ADMINISTRATOR_PASSWORD'])));
+  $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['CFG_ADMINISTRATOR_PASSWORD'])));
   $Qadmin->bindValue(':user_name', $_POST['CFG_ADMINISTRATOR_USERNAME']);
   $Qadmin->bindValue(':user_full_name', $_POST['CFG_STORE_OWNER_NAME']);
   $Qadmin->bindValue(':user_email_address', $_POST['CFG_STORE_OWNER_EMAIL_ADDRESS']);

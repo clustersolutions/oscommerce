@@ -27,7 +27,7 @@
   }
 ?>
 
-<form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=add_product'); ?>" method="post">
+<form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=add_product'); ?>" method="post">
 
 <p><?php echo $osC_Product->getDescription(); ?></p>
 
@@ -58,10 +58,10 @@
 <?php
   }
 
-  if ($osC_Services->isStarted('reviews') && osC_Reviews::exists(tep_get_prid($osC_Product->getID()))) {
+  if ($osC_Services->isStarted('reviews') && osC_Reviews::exists(osc_get_product_id($osC_Product->getID()))) {
 ?>
 
-<p><?php echo $osC_Language->get('number_of_product_reviews') . ' ' . osC_Reviews::getTotal(tep_get_prid($osC_Product->getID())); ?></p>
+<p><?php echo $osC_Language->get('number_of_product_reviews') . ' ' . osC_Reviews::getTotal(osc_get_product_id($osC_Product->getID())); ?></p>
 
 <?php
   }
@@ -87,10 +87,10 @@
 
 <?php
   if ($osC_Services->isStarted('reviews')) {
-    echo '<span style="float: left;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . tep_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews'))) . '</span>';
+    echo '<span style="float: left;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews'))) . '</span>';
   }
 ?>
-  <?php echo osc_draw_hidden_field('products_id', tep_get_prid($osC_Product->getID())) . osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
+  <?php echo osc_draw_hidden_field('products_id', osc_get_product_id($osC_Product->getID())) . osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
 </div>
 
 </form>

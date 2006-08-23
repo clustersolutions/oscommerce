@@ -66,7 +66,7 @@
         }
       }
 
-      tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
+      osc_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
     }
   }
 ?>

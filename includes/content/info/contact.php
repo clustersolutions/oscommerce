@@ -40,14 +40,14 @@
     function _process() {
       global $osC_Language, $messageStack;
 
-      $name = tep_sanitize_string($_POST['name']);
-      $email_address = tep_sanitize_string($_POST['email']);
-      $enquiry = tep_sanitize_string($_POST['enquiry']);
+      $name = osc_sanitize_string($_POST['name']);
+      $email_address = osc_sanitize_string($_POST['email']);
+      $enquiry = osc_sanitize_string($_POST['enquiry']);
 
-      if (tep_validate_email($email_address)) {
-        tep_mail(STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, $osC_Language->get('contact_email_subject'), $enquiry, $name, $email_address);
+      if (osc_validate_email_address($email_address)) {
+        osc_email(STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, $osC_Language->get('contact_email_subject'), $enquiry, $name, $email_address);
 
-        tep_redirect(osc_href_link(FILENAME_INFO, 'contact=success', 'AUTO'));
+        osc_redirect(osc_href_link(FILENAME_INFO, 'contact=success', 'AUTO'));
       } else {
         $messageStack->add('contact', $osC_Language->get('field_customer_email_address_check_error'));
       }

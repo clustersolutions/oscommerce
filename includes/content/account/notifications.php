@@ -99,7 +99,7 @@
           $updated = true;
         }
       } elseif (sizeof($products) > 0) {
-        $products_parsed = tep_array_filter($products, 'is_numeric');
+        $products_parsed = array_filter($products, 'is_numeric');
 
         if (sizeof($products_parsed) > 0) {
           $Qcheck = $osC_Database->query('select count(*) as total from :table_products_notifications where customers_id = :customers_id and products_id not in :products_id');
@@ -142,7 +142,7 @@
         $messageStack->add_session('account', $osC_Language->get('success_notifications_updated'), 'success');
       }
 
-      tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
+      osc_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
     }
   }
 ?>

@@ -28,7 +28,7 @@
       if ((ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($osC_Customer->isLoggedOn() === false)) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       $counter = 0;
@@ -77,7 +77,7 @@
         $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_customers_name_empty'));
       }
 
-      if (!tep_validate_email($_POST['from_email_address'])) {
+      if (!osc_validate_email_address($_POST['from_email_address'])) {
         $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_customers_email_address'));
       }
 
@@ -85,26 +85,26 @@
         $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_friends_name_empty'));
       }
 
-      if (!tep_validate_email($_POST['to_email_address'])) {
+      if (!osc_validate_email_address($_POST['to_email_address'])) {
         $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_friends_email_address'));
       }
 
       if ($messageStack->size('tell_a_friend') < 1) {
-        $email_subject = sprintf($osC_Language->get('email_tell_a_friend_subject'), tep_sanitize_string($_POST['from_name']), STORE_NAME);
-        $email_body = sprintf($osC_Language->get('email_tell_a_friend_intro'), tep_sanitize_string($_POST['to_name']), tep_sanitize_string($_POST['from_name']), $osC_Product->getTitle(), STORE_NAME) . "\n\n";
+        $email_subject = sprintf($osC_Language->get('email_tell_a_friend_subject'), osc_sanitize_string($_POST['from_name']), STORE_NAME);
+        $email_body = sprintf($osC_Language->get('email_tell_a_friend_intro'), osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['from_name']), $osC_Product->getTitle(), STORE_NAME) . "\n\n";
 
         if (!empty($_POST['message'])) {
-          $email_body .= tep_sanitize_string($_POST['message']) . "\n\n";
+          $email_body .= osc_sanitize_string($_POST['message']) . "\n\n";
         }
 
         $email_body .= sprintf($osC_Language->get('email_tell_a_friend_link'), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword(), 'NONSSL', false)) . "\n\n" .
                        sprintf($osC_Language->get('email_tell_a_friend_signature'), STORE_NAME . "\n" . HTTP_SERVER . DIR_WS_CATALOG . "\n");
 
-        tep_mail(tep_sanitize_string($_POST['to_name']), tep_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, tep_sanitize_string($_POST['from_name']), tep_sanitize_string($_POST['from_email_address']));
+        osc_email(osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, osc_sanitize_string($_POST['from_name']), osc_sanitize_string($_POST['from_email_address']));
 
-        $messageStack->add_session('header', sprintf($osC_Language->get('success_tell_a_friend_email_sent'), $osC_Product->getTitle(), tep_output_string_protected($_POST['to_name'])), 'success');
+        $messageStack->add_session('header', sprintf($osC_Language->get('success_tell_a_friend_email_sent'), $osC_Product->getTitle(), osc_output_string_protected($_POST['to_name'])), 'success');
 
-        tep_redirect(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID()));
+        osc_redirect(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID()));
       }
     }
   }

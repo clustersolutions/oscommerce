@@ -132,7 +132,7 @@
     }
 
     function &execute() {
-      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_Language, $osC_Image;
+      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_Language, $osC_Image, $osC_CategoryTree;
 
       $Qlisting = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, i.image, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price');
 
@@ -173,18 +173,10 @@
 
       if ($this->hasCategory()) {
         if ($this->isRecursive()) {
-          $subcategories_array = array();
-          tep_get_subcategories($subcategories_array, $this->_category);
+          $subcategories_array = array($this->_category);
 
-          $Qlisting->appendQuery('and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and (p2c.categories_id = :categories_id');
-          $Qlisting->bindInt(':categories_id', $this->_category);
-
-          foreach ($subcategories_array as $sc) {
-            $Qlisting->appendQuery('or p2c.categories_id = :categories_id');
-            $Qlisting->bindInt(':categories_id', $sc);
-          }
-
-          $Qlisting->appendQuery(')');
+          $Qlisting->appendQuery('and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (:categories_id)');
+          $Qlisting->bindRaw(':categories_id', implode(',', $osC_CategoryTree->getChildren($this->_category, $subcategories_array)));
         } else {
           $Qlisting->appendQuery('and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = :language_id and p2c.categories_id = :categories_id');
           $Qlisting->bindInt(':language_id', $osC_Language->getID());

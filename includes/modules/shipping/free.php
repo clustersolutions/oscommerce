@@ -71,7 +71,7 @@
                                                      'cost' => 0)),
                             'tax_class_id' => 0);
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
+      if (!empty($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
 
       return $this->quotes;
     }

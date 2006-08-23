@@ -13,7 +13,6 @@
 // define the database table names used in the project
   define('TABLE_ADMINISTRATORS', DB_TABLE_PREFIX . 'administrators');
   define('TABLE_ADDRESS_BOOK', DB_TABLE_PREFIX . 'address_book');
-  define('TABLE_ADDRESS_FORMAT', DB_TABLE_PREFIX . 'address_format');
   define('TABLE_BANNERS', DB_TABLE_PREFIX . 'banners');
   define('TABLE_BANNERS_HISTORY', DB_TABLE_PREFIX . 'banners_history');
   define('TABLE_CATEGORIES', DB_TABLE_PREFIX . 'categories');

@@ -215,7 +215,7 @@
                       'OwnerZip' => $osC_ShoppingCart->getBillingAddress('postcode'),
                       'Ecom_Payment_Card_Verification' => $osC_CreditCard->getCVC(),
                       'Operation' => 'RES', // RES=authorization, SAL=direct sale
-                      'REMOTE_ADDR' => tep_get_ip_address(),
+                      'REMOTE_ADDR' => osc_get_ip_address(),
                       'COM' => 'Customer ID: ' . $osC_Customer->getID());
 
       if (osc_empty(MODULE_PAYMENT_OGONE_DIRECTLINK_CC_USER_ID) === false) {
@@ -251,7 +251,7 @@
 
           $messageStack->add_session('checkout_payment', $osC_Language->get('payment_ogone_directlink_cc_error_general'), 'error');
 
-          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ogone_directlink_cc_owner=' . $osC_CreditCard->getOwner() . '&ogone_directlink_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ogone_directlink_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_VERIFY_WITH_CVC == '1' ? '&ogone_directlink_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ogone_directlink_cc_owner=' . $osC_CreditCard->getOwner() . '&ogone_directlink_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ogone_directlink_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_VERIFY_WITH_CVC == '1' ? '&ogone_directlink_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
 
           break;
       }
@@ -300,7 +300,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ogone_directlink_cc_owner=' . $osC_CreditCard->getOwner() . '&ogone_directlink_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ogone_directlink_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_VERIFY_WITH_CVC == '1' ? '&ogone_directlink_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ogone_directlink_cc_owner=' . $osC_CreditCard->getOwner() . '&ogone_directlink_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ogone_directlink_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_VERIFY_WITH_CVC == '1' ? '&ogone_directlink_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

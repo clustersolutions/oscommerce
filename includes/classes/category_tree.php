@@ -235,6 +235,19 @@
       return false;
     }
 
+    function getChildren($category_id, &$array) {
+      foreach ($this->data as $parent => $categories) {
+        if ($parent == $category_id) {
+          foreach ($categories as $id => $info) {
+            $array[] = $id;
+            $this->getChildren($id, $array);
+          }
+        }
+      }
+
+      return $array;
+    }
+
     function getData($id) {
       foreach ($this->data as $parent => $categories) {
         foreach ($categories as $category_id => $info) {

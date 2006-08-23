@@ -65,11 +65,11 @@
 
       if ($Qbanner->numberOfRows() > 0) {
         while ($Qbanner->next()) {
-          if (tep_not_null($Qbanner->value('expires_date'))) {
+          if (!osc_empty($Qbanner->value('expires_date'))) {
             if (date('Y-m-d H:i:s') >= $Qbanner->value('expires_date')) {
               $this->expire($Qbanner->valueInt('banners_id'));
             }
-          } elseif (tep_not_null($Qbanner->valueInt('expires_impressions'))) {
+          } elseif (!osc_empty($Qbanner->valueInt('expires_impressions'))) {
             if ( ($Qbanner->valueInt('expires_impressions') > 0) && ($Qbanner->valueInt('banners_shown') >= $Qbanner->valueInt('expires_impressions')) ) {
               $this->expire($Qbanner->valueInt('banners_id'));
             }
@@ -135,7 +135,7 @@
       $Qbanner->execute();
 
       if ($Qbanner->numberOfRows() > 0) {
-        if (tep_not_null($Qbanner->value('banners_html_text'))) {
+        if (!osc_empty($Qbanner->value('banners_html_text'))) {
           $banner_string = $Qbanner->value('banners_html_text');
         } else {
           $banner_string = osc_link_object(osc_href_link(FILENAME_REDIRECT, 'action=banner&goto=' . $Qbanner->valueInt('banners_id')), osc_image(DIR_WS_IMAGES . $Qbanner->value('banners_image'), $Qbanner->value('banners_title')), 'target="_blank"');

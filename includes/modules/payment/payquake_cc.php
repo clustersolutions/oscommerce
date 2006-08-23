@@ -213,11 +213,11 @@
                       'ci_phone' => $osC_ShoppingCart->getBillingAddress('telephone_number'),
                       'ci_email' => $osC_Customer->getEmailAddress(),
                       'email_from' => STORE_OWNER_EMAIL_ADDRESS,
-                      'ci_ipaddress' => tep_get_ip_address(),
+                      'ci_ipaddress' => osc_get_ip_address(),
                       'merchantordernumber' => $osC_Customer->getID(),
                       'pocustomerrefid' => $this->_order_id);
 
-      if (tep_not_null(MODULE_PAYMENT_PAYQUAKE_CC_3DES)) {
+      if (!osc_empty(MODULE_PAYMENT_PAYQUAKE_CC_3DES)) {
         $key = pack('H48', MODULE_PAYMENT_PAYQUAKE_CC_3DES);
         $data = bin2hex(mcrypt_encrypt(MCRYPT_3DES, $key, $osC_CreditCard->getNumber(), MCRYPT_MODE_ECB));
 
@@ -233,7 +233,7 @@
         $params['cvv2'] = $osC_CreditCard->getCVC();
       }
 
-      if (tep_not_null(MODULE_PAYMENT_PAYQUAKE_CC_MERCHANT_PIN)) {
+      if (!osc_empty(MODULE_PAYMENT_PAYQUAKE_CC_MERCHANT_PIN)) {
         $params['merchantPIN'] = MODULE_PAYMENT_PAYQUAKE_CC_MERCHANT_PIN;
       }
 
@@ -288,7 +288,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
@@ -325,7 +325,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

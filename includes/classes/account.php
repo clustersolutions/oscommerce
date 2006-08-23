@@ -50,8 +50,8 @@
       $Qcustomer->bindValue(':customers_email_address', $data['email_address']);
       $Qcustomer->bindValue(':customers_newsletter', (isset($data['newsletter']) && ($data['newsletter'] == '1') ? '1' : ''));
       $Qcustomer->bindValue(':customers_status', '1');
-      $Qcustomer->bindValue(':customers_ip_address', tep_get_ip_address());
-      $Qcustomer->bindValue(':customers_password', tep_encrypt_password($data['password']));
+      $Qcustomer->bindValue(':customers_ip_address', osc_get_ip_address());
+      $Qcustomer->bindValue(':customers_password', osc_encrypt_string($data['password']));
       $Qcustomer->bindValue(':customers_gender', (((ACCOUNT_GENDER > -1) && isset($data['gender']) && (($data['gender'] == 'm') || ($data['gender'] == 'f'))) ? $data['gender'] : ''));
       $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH == '1') ? date('Ymd', $data['dob']) : ''));
       $Qcustomer->execute();
@@ -93,7 +93,7 @@
 
           $email_text .= sprintf($osC_Language->get('email_create_account_body'), STORE_NAME, STORE_OWNER_EMAIL_ADDRESS);
 
-          tep_mail($osC_Customer->getName(), $osC_Customer->getEmailAddress(), sprintf($osC_Language->get('email_create_account_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          osc_email($osC_Customer->getName(), $osC_Customer->getEmailAddress(), sprintf($osC_Language->get('email_create_account_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
           return true;
         } else {
@@ -140,7 +140,7 @@
 
       $Qcustomer = $osC_Database->query('update :table_customers set customers_password = :customers_password where customers_id = :customers_id');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
-      $Qcustomer->bindValue(':customers_password', tep_encrypt_password($password));
+      $Qcustomer->bindValue(':customers_password', osc_encrypt_string($password));
       $Qcustomer->bindInt(':customers_id', $customer_id);
       $Qcustomer->execute();
 

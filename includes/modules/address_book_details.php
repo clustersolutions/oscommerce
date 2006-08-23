@@ -79,7 +79,15 @@
         echo osc_draw_input_field('state');
       }
     } else {
-      echo osc_draw_input_field('state', (isset($Qentry) ? tep_get_zone_name($Qentry->valueInt('entry_country_id'), $Qentry->valueInt('entry_zone_id'), $Qentry->value('entry_state')) : null));
+      if (isset($Qentry)) {
+        $zone = $Qentry->value('entry_state');
+
+        if ($Qentry->valueInt('entry_zone_id') > 0) {
+          $zone = osC_Address::getZoneName($Qentry->valueInt('entry_zone_id'));
+        }
+      }
+
+      echo osc_draw_input_field('state', (isset($Qentry) ? $zone : null));
     }
 ?>
 
@@ -89,7 +97,23 @@
   }
 ?>
 
-  <li><?php echo osc_draw_label($osC_Language->get('field_customer_country'), null, 'country', true) . tep_get_country_list('country', (isset($Qentry) ? $Qentry->valueInt('entry_country_id') : STORE_COUNTRY)); ?></li>
+  <li>
+
+<?php
+  echo osc_draw_label($osC_Language->get('field_customer_country'), null, 'country', true);
+
+  $countries_array = array(array('id' => '',
+                                 'text' => $osC_Language->get('pull_down_default')));
+
+  foreach (osC_Address::getCountries() as $country) {
+    $countries_array[] = array('id' => $country['id'],
+                               'text' => $country['name']);
+  }
+
+  echo osc_draw_pull_down_menu('country', $countries_array, (isset($Qentry) ? $Qentry->valueInt('entry_country_id') : STORE_COUNTRY));
+?>
+
+  </li>
 
 <?php
   if (ACCOUNT_TELEPHONE > -1) {

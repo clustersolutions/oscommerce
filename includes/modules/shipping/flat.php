@@ -71,7 +71,7 @@
                                                      'cost' => MODULE_SHIPPING_FLAT_COST)),
                             'tax_class_id' => $this->tax_class);
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
+      if (!empty($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
 
       return $this->quotes;
     }

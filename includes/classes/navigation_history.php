@@ -162,7 +162,7 @@
 
       $this->resetSnapshot();
 
-      tep_redirect($target);
+      osc_redirect($target);
     }
 
     function resetPath() {

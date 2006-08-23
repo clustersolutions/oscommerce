@@ -202,8 +202,6 @@
 
       $this->_order_id = osC_Order::insert();
 
-      $store_country = tep_get_countries_with_iso_codes(STORE_COUNTRY);
-
       $post_string = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
                      '<WIRECARD_BXML xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" xsi:noNamespaceSchemaLocation="wirecard.xsd">' . "\n" .
                      '  <W_REQUEST>' . "\n" .
@@ -217,7 +215,7 @@
                      '          <CommerceType>eCommerce</CommerceType>' . "\n" .
                      '          <Amount>' . $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $osC_Currencies->getCode()) * 100 . '</Amount>' . "\n" .
                      '          <Currency>' . $osC_Currencies->getCode() . '</Currency>' . "\n" .
-                     '          <CountryCode>' . $store_country['countries_iso_code_2'] . '</CountryCode>' . "\n" .
+                     '          <CountryCode>' . osC_Address::getCountryIsoCode2(STORE_COUNTRY) . '</CountryCode>' . "\n" .
                      '          <Usage>' . STORE_NAME . '</Usage>' . "\n" .
                      '          <RECURRING_TRANSACTION>' . "\n" .
                      '            <Type>Single</Type>' . "\n" .
@@ -234,7 +232,7 @@
                       '            <CardHolderName>' . $osC_CreditCard->getOwner() . '</CardHolderName>' . "\n" .
                       '          </CREDIT_CARD_DATA>' . "\n" .
                       '          <CONTACT_DATA>' . "\n" .
-                      '            <IPAddress>' . tep_get_ip_address() . '</IPAddress>' . "\n" .
+                      '            <IPAddress>' . osc_get_ip_address() . '</IPAddress>' . "\n" .
                       '          </CONTACT_DATA>' . "\n" .
                       '          <CORPTRUSTCENTER_DATA>' . "\n" .
                       '            <ADDRESS>' . "\n" .
@@ -309,7 +307,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
@@ -346,7 +344,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

@@ -9,8 +9,6 @@
 
   Released under the GNU General Public License
 */
-
-  $addresses_count = tep_count_customer_address_book_entries();
 ?>
 
 <?php echo osc_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
@@ -35,7 +33,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), true, ' ', '<br />'); ?>
+      <?php echo osC_Address::format($osC_ShoppingCart->getBillingAddress(), '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
@@ -51,7 +49,7 @@
 <?php
     }
 
-    if ($addresses_count > 1) {
+    if (osC_AddressBook::numberOfEntries() > 1) {
 ?>
 
 <div class="moduleBox">
@@ -96,7 +94,7 @@
             <td colspan="3"><table border="0" cellspacing="0" cellpadding="2">
               <tr>
                 <td width="10">&nbsp;</td>
-                <td><?php echo tep_address_format(tep_get_address_format_id($Qaddresses->valueInt('country_id')), $Qaddresses->toArray(), true, ' ', ', '); ?></td>
+                <td><?php echo osC_Address::format($Qaddresses->toArray(), ', '); ?></td>
                 <td width="10">&nbsp;</td>
               </tr>
             </table></td>
@@ -119,7 +117,7 @@
     }
   }
 
-  if ($addresses_count < MAX_ADDRESS_BOOK_ENTRIES) {
+  if (osC_AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES) {
 ?>
 
 <div class="moduleBox">

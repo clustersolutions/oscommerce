@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/address_book.php');
+
   class osC_Checkout_Payment_address extends osC_Template {
 
 /* Private variables */
@@ -27,11 +29,11 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
       $this->_page_title = $osC_Language->get('payment_address_heading');
@@ -71,7 +73,7 @@
       global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack;
 
 // process a new billing address
-      if (($osC_Customer->hasDefaultAddress() === false) || (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) ) {
+      if (($osC_Customer->hasDefaultAddress() === false) || (!empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['street_address'])) ) {
         if (ACCOUNT_GENDER > 0) {
           if (!isset($_POST['gender']) || (($_POST['gender'] != 'm') && ($_POST['gender'] != 'f'))) {
             $messageStack->add('checkout_address', $osC_Language->get('field_customer_gender_error'));
@@ -206,7 +208,7 @@
             $osC_ShoppingCart->setBillingAddress($address_book_id);
             $osC_ShoppingCart->resetBillingMethod();
 
-            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+            osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
           } else {
             $messageStack->add('checkout_address', 'Error inserting into address book table.');
           }
@@ -236,7 +238,7 @@
             $osC_ShoppingCart->resetBillingMethod();
           }
 
-          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
         } else {
           $osC_ShoppingCart->resetBillingAddress();
         }
@@ -244,7 +246,7 @@
       } else {
         $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
   }

@@ -99,7 +99,7 @@
             $debug = true;
           }
 
-          if (tep_not_null(SERVICE_DEBUG_EXECUTION_TIME_LOG) && (SERVICE_DEBUG_LOG_DB_QUERIES == '1')) {
+          if (!osc_empty(SERVICE_DEBUG_EXECUTION_TIME_LOG) && (SERVICE_DEBUG_LOG_DB_QUERIES == '1')) {
             @error_log('QUERY ' . $query . "\n", 3, SERVICE_DEBUG_EXECUTION_TIME_LOG);
           }
         } elseif ($debug === true) {
@@ -158,7 +158,7 @@
       $num_rows = $this->numberOfRows($resource);
 
       if ($num_rows > 0) {
-        $random_row = tep_rand(0, ($num_rows - 1));
+        $random_row = osc_rand(0, ($num_rows - 1));
 
         $this->dataSeek($random_row, $resource);
 

@@ -78,7 +78,7 @@
           $GLOBALS[$module]->process();
 
           foreach ($GLOBALS[$module]->output as $output) {
-            if (tep_not_null($output['title']) && tep_not_null($output['text'])) {
+            if (!empty($output['title']) && !empty($output['text'])) {
               $this->_data[] = array('code' => $GLOBALS[$module]->getCode(),
                                      'title' => $output['title'],
                                      'text' => $output['text'],

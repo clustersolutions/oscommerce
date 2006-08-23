@@ -27,17 +27,17 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if the order contains only virtual products, forward the customer to the billing page as
 // a shipping address is not needed
       if ($osC_ShoppingCart->getContentType() == 'virtual') {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
       $this->_page_title = $osC_Language->get('shipping_method_heading');
@@ -94,8 +94,8 @@
     function _process() {
       global $osC_ShoppingCart, $osC_Shipping;
 
-      if (tep_not_null($_POST['comments'])) {
-        $_SESSION['comments'] = tep_sanitize_string($_POST['comments']);
+      if (!empty($_POST['comments'])) {
+        $_SESSION['comments'] = osc_sanitize_string($_POST['comments']);
       }
 
       if ($osC_Shipping->hasQuotes()) {
@@ -111,7 +111,7 @@
             } else {
               $osC_ShoppingCart->setShippingMethod($quote);
 
-              tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+              osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
             }
           } else {
             $osC_ShoppingCart->resetShippingMethod();
@@ -120,7 +120,7 @@
       } else {
         $osC_ShoppingCart->resetShippingMethod();
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
   }

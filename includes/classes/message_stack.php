@@ -59,7 +59,7 @@
               $bullet_image = DIR_WS_IMAGES . 'icons/bullet_default.gif';
           }
 
-          $messages .= '<li style="list-style-image: url(\'' . $bullet_image . '\')">' . tep_output_string($this->messages[$i]['message']) . '</li>';
+          $messages .= '<li style="list-style-image: url(\'' . $bullet_image . '\')">' . osc_output_string($this->messages[$i]['message']) . '</li>';
         }
       }
       $messages .= '</ul>';
@@ -72,7 +72,7 @@
 
       for ($i=0, $n=sizeof($this->messages); $i<$n; $i++) {
         if ($this->messages[$i]['class'] == $class) {
-          $message = tep_output_string($this->messages[$i]['message']);
+          $message = osc_output_string($this->messages[$i]['message']);
           break;
         }
       }

@@ -234,7 +234,7 @@
                       'x_zip' => $osC_ShoppingCart->getBillingAddress('postcode'),
                       'x_country' => $osC_ShoppingCart->getBillingAddress('country_iso_code_2'),
                       'x_cust_id' => $osC_Customer->getID(),
-                      'x_customer_ip' => tep_get_ip_address(),
+                      'x_customer_ip' => osc_get_ip_address(),
                       'x_invoice_num' => $this->_order_id, 
                       'x_email' => $osC_Customer->getEmailAddress(),
                       'x_email_customer' => 'FALSE',
@@ -282,7 +282,7 @@
       $error = false;
 
       if ($regs[0] == '1') {
-        if (tep_not_null(MODULE_PAYMENT_AUTHORIZENET_ECHECK_MD5_HASH)) {
+        if (!osc_empty(MODULE_PAYMENT_AUTHORIZENET_ECHECK_MD5_HASH)) {
           if (strtoupper($regs[37]) != strtoupper(md5(MODULE_PAYMENT_AUTHORIZENET_ECHECK_MD5_HASH . MODULE_PAYMENT_AUTHORIZENET_ECHECK_LOGIN_ID . $regs[6] . $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $osC_Currencies->getCode())))) {
             $error = $osC_Language->get('payment_authorizenet_echeck_error_general');
           }
@@ -322,7 +322,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
       }
     }
 
@@ -361,7 +361,7 @@
       }
 
       if ($error !== false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
       }
     }
 

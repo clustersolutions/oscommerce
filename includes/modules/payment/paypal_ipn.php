@@ -102,7 +102,7 @@
                       'zip' => $osC_ShoppingCart->getBillingAddress('postcode'),
                       'country' => $osC_ShoppingCart->getBillingAddress('country_iso_code_2'),
                       'address_override' => '1',
-                      'notify_url' => osc_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code . (tep_not_null(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY) ? '&secret=' . MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY : ''), 'SSL', false, false, true),
+                      'notify_url' => osc_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code . (!osc_empty(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY) ? '&secret=' . MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY : ''), 'SSL', false, false, true),
                       'email' => $osC_Customer->getEmailAddress(),
                       'invoice' => $this->_order_id,
                       'shipping' => $osC_Currencies->formatRaw($osC_ShoppingCart->getShippingMethod('cost'), $currency),
@@ -121,7 +121,7 @@
       if (MODULE_PAYMENT_PAYPAL_IPN_EWP_STATUS == '1') {
         $params['cert_id'] = MODULE_PAYMENT_PAYPAL_IPN_EWP_CERT_ID;
 
-        $random_string = $osC_Customer->getID() . '-' . time() . '-' . tep_create_random_value(5) . '-';
+        $random_string = $osC_Customer->getID() . '-' . time() . '-' . osc_create_random_string(5) . '-';
 
         $data = '';
         foreach ($params as $key => $value) {
@@ -201,7 +201,7 @@
       global $osC_Database;
 
       if (isset($_POST['invoice']) && is_numeric($_POST['invoice']) && isset($_POST['receiver_email']) && ($_POST['receiver_email'] == MODULE_PAYMENT_PAYPAL_IPN_ID) && isset($_POST['verify_sign']) && (empty($_POST['verify_sign']) === false) && isset($_POST['txn_id']) && (empty($_POST['txn_id']) === false)) {
-        if (tep_not_null(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY)) {
+        if (!osc_empty(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY)) {
           if (isset($_GET['secret']) && ($_GET['secret'] == MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY)) {
             $pass = true;
           } else {

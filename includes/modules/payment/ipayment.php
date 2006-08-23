@@ -134,13 +134,7 @@
     function pre_confirmation_check() {
       global $osC_Language, $messageStack;
 
-      if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
-
-        $payment_error_return = 'ipayment_cc_owner=' . urlencode($_POST['ipayment_cc_owner']) . '&ipayment_cc_expires_month=' . urlencode($_POST['ipayment_cc_expires_month']) . '&ipayment_cc_expires_year=' . urlencode($_POST['ipayment_cc_expires_year']) . '&ipayment_cc_checkcode=' . urlencode($_POST['ipayment_cc_checkcode']);
-
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
-      }
+      $this->_verifyData();
 
       $this->cc_card_owner = $_POST['ipayment_cc_owner'];
       $this->cc_card_type = $_POST['ipayment_cc_type'];
@@ -161,7 +155,7 @@
                                               array('title' => $osC_Language->get('payment_ipayment_credit_card_expiry_date'),
                                                     'field' => strftime('%B, %Y', mktime(0,0,0,$this->cc_expiry_month, 1, '20' . $this->cc_expiry_year)))));
 
-      if (tep_not_null($this->cc_checkcode)) {
+      if (!empty($this->cc_checkcode)) {
         $confirmation['fields'][] = array('title' => $osC_Language->get('payment_ipayment_credit_card_checknumber'),
                                           'field' => $this->cc_checkcode);
       }
@@ -218,11 +212,11 @@
                                osc_draw_hidden_field('cc_expdate_year', $this->cc_expiry_year);
 
 
-      if (tep_not_null($this->cc_checkcode)) {
+      if (!empty($this->cc_checkcode)) {
         $process_button_string .= osc_draw_hidden_field('cc_checkcode', $this->cc_checkcode);
       }
 
-      if (tep_not_null(MODULE_PAYMENT_IPAYMENT_SECURITY_KEY)) {
+      if (!osc_empty(MODULE_PAYMENT_IPAYMENT_SECURITY_KEY)) {
         $process_button_string .= osc_draw_hidden_field('trx_securityhash', md5(MODULE_PAYMENT_IPAYMENT_USER_ID . number_format($order->info['total'] * 100 * $osC_Currencies->value($trx_currency), 0, '','') . $trx_currency . MODULE_PAYMENT_IPAYMENT_PASSWORD . MODULE_PAYMENT_IPAYMENT_SECURITY_KEY));
       }
 
@@ -284,6 +278,19 @@
       }
 
       return $this->_keys;
+    }
+
+    function _verifyData() {
+      global $osC_Language, $messageStack, $osC_CreditCard;
+
+      $osC_CreditCard = new osC_CreditCard($_POST['ipayment_cc_number'], $_POST['ipayment_cc_expires_month'], $_POST['ipayment_cc_expires_year']);
+      $osC_CreditCard->setOwner($_POST['ipayment_cc_owner']);
+
+      if ($result = $osC_CreditCard->isValid() !== true) {
+        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ipayment_cc_owner=' . $osC_CreditCard->getOwner() . '&ipayment_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ipayment_cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
+      }
     }
   }
 ?>

@@ -42,14 +42,6 @@ CREATE TABLE osc_address_book (
    KEY idx_address_book_customers_id (customers_id)
 );
 
-DROP TABLE IF EXISTS osc_address_format;
-CREATE TABLE osc_address_format (
-  address_format_id int NOT NULL auto_increment,
-  address_format varchar(128) NOT NULL,
-  address_summary varchar(48) NOT NULL,
-  PRIMARY KEY (address_format_id)
-);
-
 DROP TABLE IF EXISTS osc_administrators;
 CREATE TABLE osc_administrators (
   id int NOT NULL auto_increment,
@@ -146,7 +138,7 @@ CREATE TABLE osc_countries (
   countries_name varchar(64) NOT NULL,
   countries_iso_code_2 char(2) NOT NULL,
   countries_iso_code_3 char(3) NOT NULL,
-  address_format_id int NOT NULL,
+  address_format varchar(255) NULL,
   PRIMARY KEY (countries_id),
   KEY IDX_COUNTRIES_NAME (countries_name)
 );
@@ -310,10 +302,13 @@ CREATE TABLE osc_orders (
   customers_city varchar(32) NOT NULL,
   customers_postcode varchar(10) NOT NULL,
   customers_state varchar(32),
+  customers_state_code varchar(32),
   customers_country varchar(32) NOT NULL,
+  customers_country_iso2 char(2) NOT NULL,
+  customers_country_iso3 char(3) NOT NULL,
   customers_telephone varchar(32) NOT NULL,
   customers_email_address varchar(96) NOT NULL,
-  customers_address_format_id int(5) NOT NULL,
+  customers_address_format varchar(255) NOT NULL,
   customers_ip_address varchar(15),
   delivery_name varchar(64) NOT NULL,
   delivery_company varchar(32),
@@ -322,8 +317,11 @@ CREATE TABLE osc_orders (
   delivery_city varchar(32) NOT NULL,
   delivery_postcode varchar(10) NOT NULL,
   delivery_state varchar(32),
+  delivery_state_code varchar(32),
   delivery_country varchar(32) NOT NULL,
-  delivery_address_format_id int(5) NOT NULL,
+  delivery_country_iso2 char(2) NOT NULL,
+  delivery_country_iso3 char(3) NOT NULL,
+  delivery_address_format varchar(255) NOT NULL,
   billing_name varchar(64) NOT NULL,
   billing_company varchar(32),
   billing_street_address varchar(64) NOT NULL,
@@ -331,14 +329,13 @@ CREATE TABLE osc_orders (
   billing_city varchar(32) NOT NULL,
   billing_postcode varchar(10) NOT NULL,
   billing_state varchar(32),
+  billing_state_code varchar(32),
   billing_country varchar(32) NOT NULL,
-  billing_address_format_id int(5) NOT NULL,
+  billing_country_iso2 char(2) NOT NULL,
+  billing_country_iso3 char(3) NOT NULL,
+  billing_address_format varchar(255) NOT NULL,
   payment_method varchar(255) NOT NULL,
   payment_module varchar(255) NOT NULL,
-  cc_type varchar(20),
-  cc_owner varchar(64),
-  cc_number varchar(32),
-  cc_expires varchar(4),
   last_modified datetime,
   date_purchased datetime,
   orders_status int(5) NOT NULL,
@@ -710,20 +707,6 @@ CREATE TABLE osc_zones_to_geo_zones (
    PRIMARY KEY (association_id)
 );
 
-# 1 - Default, 2 - USA, 3 - Spain, 12 - Singapore, 5 - Germany
-INSERT INTO osc_address_format VALUES (1, '$firstname $lastname$cr$streets$cr$city, $postcode$cr$statecomma$country','$city / $country');
-INSERT INTO osc_address_format VALUES (2, '$firstname $lastname$cr$streets$cr$city, $state    $postcode$cr$country','$city, $state / $country');
-INSERT INTO osc_address_format VALUES (3, '$firstname $lastname$cr$streets$cr$city$cr$postcode - $statecomma$country','$state / $country');
-INSERT INTO osc_address_format VALUES (4, '$firstname $lastname$cr$streets$cr$city ($postcode)$cr$country', '$postcode / $country');
-INSERT INTO osc_address_format VALUES (5, '$firstname $lastname$cr$streets$cr$postcode $city$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (6, '$firstname $lastname$cr$streets$cr$city$cr$postcode$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (7, '$firstname $lastname$cr$streets$cr$city$cr$state$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (8, '$firstname $lastname$cr$streets$cr$city $postcode$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (9, '$firstname $lastname$cr$streets$cr$postcode $city $state$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (10, '$firstname $lastname$cr$streets$cr$city$cr$postcode $country','$city / $country');
-INSERT INTO osc_address_format VALUES (11, '$firstname $lastname$cr$streets$cr$city$cr$state$cr$postcode$cr$country','$city / $country');
-INSERT INTO osc_address_format VALUES (12, '$firstname $lastname$cr$streets$cr$city$cr$country $postcode','$city / $country');
-
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Name', 'STORE_NAME', 'osCommerce', 'The name of my store', '1', '1', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Owner', 'STORE_OWNER', 'Store Owner', 'The name of my store owner', '1', '2', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail Address', 'STORE_OWNER_EMAIL_ADDRESS', 'root@localhost', 'The e-mail address of my store owner', '1', '3', now());
@@ -840,245 +823,245 @@ INSERT INTO osc_configuration_group VALUES ('16', 'Regulations', 'Regulation opt
 INSERT INTO osc_configuration_group VALUES ('17', 'Credit Cards', 'Credit card options', '17', '1');
 INSERT INTO osc_configuration_group VALUES ('18', 'Program Locations', 'Locations to certain programs on the server.', '18', '1');
 
-INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG','1');
-INSERT INTO osc_countries VALUES (2,'Albania','AL','ALB','1');
-INSERT INTO osc_countries VALUES (3,'Algeria','DZ','DZA','1');
-INSERT INTO osc_countries VALUES (4,'American Samoa','AS','ASM','1');
-INSERT INTO osc_countries VALUES (5,'Andorra','AD','AND','1');
-INSERT INTO osc_countries VALUES (6,'Angola','AO','AGO','1');
-INSERT INTO osc_countries VALUES (7,'Anguilla','AI','AIA','1');
-INSERT INTO osc_countries VALUES (8,'Antarctica','AQ','ATA','1');
-INSERT INTO osc_countries VALUES (9,'Antigua and Barbuda','AG','ATG','1');
-INSERT INTO osc_countries VALUES (10,'Argentina','AR','ARG','1');
-INSERT INTO osc_countries VALUES (11,'Armenia','AM','ARM','1');
-INSERT INTO osc_countries VALUES (12,'Aruba','AW','ABW','1');
-INSERT INTO osc_countries VALUES (13,'Australia','AU','AUS','2');
-INSERT INTO osc_countries VALUES (14,'Austria','AT','AUT','5');
-INSERT INTO osc_countries VALUES (15,'Azerbaijan','AZ','AZE','1');
-INSERT INTO osc_countries VALUES (16,'Bahamas','BS','BHS','1');
-INSERT INTO osc_countries VALUES (17,'Bahrain','BH','BHR','1');
-INSERT INTO osc_countries VALUES (18,'Bangladesh','BD','BGD','1');
-INSERT INTO osc_countries VALUES (19,'Barbados','BB','BRB','1');
-INSERT INTO osc_countries VALUES (20,'Belarus','BY','BLR','1');
-INSERT INTO osc_countries VALUES (21,'Belgium','BE','BEL','5');
-INSERT INTO osc_countries VALUES (22,'Belize','BZ','BLZ','1');
-INSERT INTO osc_countries VALUES (23,'Benin','BJ','BEN','1');
-INSERT INTO osc_countries VALUES (24,'Bermuda','BM','BMU','1');
-INSERT INTO osc_countries VALUES (25,'Bhutan','BT','BTN','1');
-INSERT INTO osc_countries VALUES (26,'Bolivia','BO','BOL','1');
-INSERT INTO osc_countries VALUES (27,'Bosnia and Herzegowina','BA','BIH','1');
-INSERT INTO osc_countries VALUES (28,'Botswana','BW','BWA','1');
-INSERT INTO osc_countries VALUES (29,'Bouvet Island','BV','BVT','1');
-INSERT INTO osc_countries VALUES (30,'Brazil','BR','BRA','6');
-INSERT INTO osc_countries VALUES (31,'British Indian Ocean Territory','IO','IOT','1');
-INSERT INTO osc_countries VALUES (32,'Brunei Darussalam','BN','BRN','1');
-INSERT INTO osc_countries VALUES (33,'Bulgaria','BG','BGR','1');
-INSERT INTO osc_countries VALUES (34,'Burkina Faso','BF','BFA','1');
-INSERT INTO osc_countries VALUES (35,'Burundi','BI','BDI','1');
-INSERT INTO osc_countries VALUES (36,'Cambodia','KH','KHM','1');
-INSERT INTO osc_countries VALUES (37,'Cameroon','CM','CMR','1');
-INSERT INTO osc_countries VALUES (38,'Canada','CA','CAN','2');
-INSERT INTO osc_countries VALUES (39,'Cape Verde','CV','CPV','1');
-INSERT INTO osc_countries VALUES (40,'Cayman Islands','KY','CYM','1');
-INSERT INTO osc_countries VALUES (41,'Central African Republic','CF','CAF','1');
-INSERT INTO osc_countries VALUES (42,'Chad','TD','TCD','1');
-INSERT INTO osc_countries VALUES (43,'Chile','CL','CHL','1');
-INSERT INTO osc_countries VALUES (44,'China','CN','CHN','5');
-INSERT INTO osc_countries VALUES (45,'Christmas Island','CX','CXR','1');
-INSERT INTO osc_countries VALUES (46,'Cocos (Keeling) Islands','CC','CCK','1');
-INSERT INTO osc_countries VALUES (47,'Colombia','CO','COL','1');
-INSERT INTO osc_countries VALUES (48,'Comoros','KM','COM','1');
-INSERT INTO osc_countries VALUES (49,'Congo','CG','COG','1');
-INSERT INTO osc_countries VALUES (50,'Cook Islands','CK','COK','1');
-INSERT INTO osc_countries VALUES (51,'Costa Rica','CR','CRI','1');
-INSERT INTO osc_countries VALUES (52,'Cote D\'Ivoire','CI','CIV','1');
-INSERT INTO osc_countries VALUES (53,'Croatia','HR','HRV','1');
-INSERT INTO osc_countries VALUES (54,'Cuba','CU','CUB','1');
-INSERT INTO osc_countries VALUES (55,'Cyprus','CY','CYP','1');
-INSERT INTO osc_countries VALUES (56,'Czech Republic','CZ','CZE','1');
-INSERT INTO osc_countries VALUES (57,'Denmark','DK','DNK','5');
-INSERT INTO osc_countries VALUES (58,'Djibouti','DJ','DJI','1');
-INSERT INTO osc_countries VALUES (59,'Dominica','DM','DMA','1');
-INSERT INTO osc_countries VALUES (60,'Dominican Republic','DO','DOM','1');
-INSERT INTO osc_countries VALUES (61,'East Timor','TP','TMP','1');
-INSERT INTO osc_countries VALUES (62,'Ecuador','EC','ECU','1');
-INSERT INTO osc_countries VALUES (63,'Egypt','EG','EGY','1');
-INSERT INTO osc_countries VALUES (64,'El Salvador','SV','SLV','1');
-INSERT INTO osc_countries VALUES (65,'Equatorial Guinea','GQ','GNQ','1');
-INSERT INTO osc_countries VALUES (66,'Eritrea','ER','ERI','1');
-INSERT INTO osc_countries VALUES (67,'Estonia','EE','EST','1');
-INSERT INTO osc_countries VALUES (68,'Ethiopia','ET','ETH','1');
-INSERT INTO osc_countries VALUES (69,'Falkland Islands (Malvinas)','FK','FLK','1');
-INSERT INTO osc_countries VALUES (70,'Faroe Islands','FO','FRO','1');
-INSERT INTO osc_countries VALUES (71,'Fiji','FJ','FJI','1');
-INSERT INTO osc_countries VALUES (72,'Finland','FI','FIN','5');
-INSERT INTO osc_countries VALUES (73,'France','FR','FRA','5');
-INSERT INTO osc_countries VALUES (74,'France, Metropolitan','FX','FXX','1');
-INSERT INTO osc_countries VALUES (75,'French Guiana','GF','GUF','1');
-INSERT INTO osc_countries VALUES (76,'French Polynesia','PF','PYF','1');
-INSERT INTO osc_countries VALUES (77,'French Southern Territories','TF','ATF','1');
-INSERT INTO osc_countries VALUES (78,'Gabon','GA','GAB','1');
-INSERT INTO osc_countries VALUES (79,'Gambia','GM','GMB','1');
-INSERT INTO osc_countries VALUES (80,'Georgia','GE','GEO','1');
-INSERT INTO osc_countries VALUES (81,'Germany','DE','DEU','5');
-INSERT INTO osc_countries VALUES (82,'Ghana','GH','GHA','1');
-INSERT INTO osc_countries VALUES (83,'Gibraltar','GI','GIB','1');
-INSERT INTO osc_countries VALUES (84,'Greece','GR','GRC','1');
-INSERT INTO osc_countries VALUES (85,'Greenland','GL','GRL','5');
-INSERT INTO osc_countries VALUES (86,'Grenada','GD','GRD','1');
-INSERT INTO osc_countries VALUES (87,'Guadeloupe','GP','GLP','1');
-INSERT INTO osc_countries VALUES (88,'Guam','GU','GUM','1');
-INSERT INTO osc_countries VALUES (89,'Guatemala','GT','GTM','1');
-INSERT INTO osc_countries VALUES (90,'Guinea','GN','GIN','1');
-INSERT INTO osc_countries VALUES (91,'Guinea-bissau','GW','GNB','1');
-INSERT INTO osc_countries VALUES (92,'Guyana','GY','GUY','1');
-INSERT INTO osc_countries VALUES (93,'Haiti','HT','HTI','1');
-INSERT INTO osc_countries VALUES (94,'Heard and Mc Donald Islands','HM','HMD','1');
-INSERT INTO osc_countries VALUES (95,'Honduras','HN','HND','1');
-INSERT INTO osc_countries VALUES (96,'Hong Kong','HK','HKG','7');
-INSERT INTO osc_countries VALUES (97,'Hungary','HU','HUN','1');
-INSERT INTO osc_countries VALUES (98,'Iceland','IS','ISL','5');
-INSERT INTO osc_countries VALUES (99,'India','IN','IND','8');
-INSERT INTO osc_countries VALUES (100,'Indonesia','ID','IDN','8');
-INSERT INTO osc_countries VALUES (101,'Iran (Islamic Republic of)','IR','IRN','1');
-INSERT INTO osc_countries VALUES (102,'Iraq','IQ','IRQ','1');
-INSERT INTO osc_countries VALUES (103,'Ireland','IE','IRL','8');
-INSERT INTO osc_countries VALUES (104,'Israel','IL','ISR','5');
-INSERT INTO osc_countries VALUES (105,'Italy','IT','ITA','9');
-INSERT INTO osc_countries VALUES (106,'Jamaica','JM','JAM','1');
-INSERT INTO osc_countries VALUES (107,'Japan','JP','JPN','2');
-INSERT INTO osc_countries VALUES (108,'Jordan','JO','JOR','1');
-INSERT INTO osc_countries VALUES (109,'Kazakhstan','KZ','KAZ','1');
-INSERT INTO osc_countries VALUES (110,'Kenya','KE','KEN','1');
-INSERT INTO osc_countries VALUES (111,'Kiribati','KI','KIR','1');
-INSERT INTO osc_countries VALUES (112,'Korea, Democratic People\'s Republic of','KP','PRK','8');
-INSERT INTO osc_countries VALUES (113,'Korea, Republic of','KR','KOR','8');
-INSERT INTO osc_countries VALUES (114,'Kuwait','KW','KWT','1');
-INSERT INTO osc_countries VALUES (115,'Kyrgyzstan','KG','KGZ','1');
-INSERT INTO osc_countries VALUES (116,'Lao People\'s Democratic Republic','LA','LAO','1');
-INSERT INTO osc_countries VALUES (117,'Latvia','LV','LVA','1');
-INSERT INTO osc_countries VALUES (118,'Lebanon','LB','LBN','1');
-INSERT INTO osc_countries VALUES (119,'Lesotho','LS','LSO','1');
-INSERT INTO osc_countries VALUES (120,'Liberia','LR','LBR','1');
-INSERT INTO osc_countries VALUES (121,'Libyan Arab Jamahiriya','LY','LBY','1');
-INSERT INTO osc_countries VALUES (122,'Liechtenstein','LI','LIE','1');
-INSERT INTO osc_countries VALUES (123,'Lithuania','LT','LTU','1');
-INSERT INTO osc_countries VALUES (124,'Luxembourg','LU','LUX','5');
-INSERT INTO osc_countries VALUES (125,'Macau','MO','MAC','1');
-INSERT INTO osc_countries VALUES (126,'Macedonia, The Former Yugoslav Republic of','MK','MKD','1');
-INSERT INTO osc_countries VALUES (127,'Madagascar','MG','MDG','1');
-INSERT INTO osc_countries VALUES (128,'Malawi','MW','MWI','1');
-INSERT INTO osc_countries VALUES (129,'Malaysia','MY','MYS','1');
-INSERT INTO osc_countries VALUES (130,'Maldives','MV','MDV','1');
-INSERT INTO osc_countries VALUES (131,'Mali','ML','MLI','1');
-INSERT INTO osc_countries VALUES (132,'Malta','MT','MLT','1');
-INSERT INTO osc_countries VALUES (133,'Marshall Islands','MH','MHL','1');
-INSERT INTO osc_countries VALUES (134,'Martinique','MQ','MTQ','1');
-INSERT INTO osc_countries VALUES (135,'Mauritania','MR','MRT','1');
-INSERT INTO osc_countries VALUES (136,'Mauritius','MU','MUS','1');
-INSERT INTO osc_countries VALUES (137,'Mayotte','YT','MYT','1');
-INSERT INTO osc_countries VALUES (138,'Mexico','MX','MEX','9');
-INSERT INTO osc_countries VALUES (139,'Micronesia, Federated States of','FM','FSM','1');
-INSERT INTO osc_countries VALUES (140,'Moldova, Republic of','MD','MDA','1');
-INSERT INTO osc_countries VALUES (141,'Monaco','MC','MCO','1');
-INSERT INTO osc_countries VALUES (142,'Mongolia','MN','MNG','1');
-INSERT INTO osc_countries VALUES (143,'Montserrat','MS','MSR','1');
-INSERT INTO osc_countries VALUES (144,'Morocco','MA','MAR','1');
-INSERT INTO osc_countries VALUES (145,'Mozambique','MZ','MOZ','1');
-INSERT INTO osc_countries VALUES (146,'Myanmar','MM','MMR','1');
-INSERT INTO osc_countries VALUES (147,'Namibia','NA','NAM','1');
-INSERT INTO osc_countries VALUES (148,'Nauru','NR','NRU','1');
-INSERT INTO osc_countries VALUES (149,'Nepal','NP','NPL','1');
-INSERT INTO osc_countries VALUES (150,'Netherlands','NL','NLD','5');
-INSERT INTO osc_countries VALUES (151,'Netherlands Antilles','AN','ANT','1');
-INSERT INTO osc_countries VALUES (152,'New Caledonia','NC','NCL','1');
-INSERT INTO osc_countries VALUES (153,'New Zealand','NZ','NZL','8');
-INSERT INTO osc_countries VALUES (154,'Nicaragua','NI','NIC','1');
-INSERT INTO osc_countries VALUES (155,'Niger','NE','NER','1');
-INSERT INTO osc_countries VALUES (156,'Nigeria','NG','NGA','1');
-INSERT INTO osc_countries VALUES (157,'Niue','NU','NIU','1');
-INSERT INTO osc_countries VALUES (158,'Norfolk Island','NF','NFK','1');
-INSERT INTO osc_countries VALUES (159,'Northern Mariana Islands','MP','MNP','1');
-INSERT INTO osc_countries VALUES (160,'Norway','NO','NOR','5');
-INSERT INTO osc_countries VALUES (161,'Oman','OM','OMN','1');
-INSERT INTO osc_countries VALUES (162,'Pakistan','PK','PAK','1');
-INSERT INTO osc_countries VALUES (163,'Palau','PW','PLW','1');
-INSERT INTO osc_countries VALUES (164,'Panama','PA','PAN','1');
-INSERT INTO osc_countries VALUES (165,'Papua New Guinea','PG','PNG','1');
-INSERT INTO osc_countries VALUES (166,'Paraguay','PY','PRY','1');
-INSERT INTO osc_countries VALUES (167,'Peru','PE','PER','1');
-INSERT INTO osc_countries VALUES (168,'Philippines','PH','PHL','1');
-INSERT INTO osc_countries VALUES (169,'Pitcairn','PN','PCN','1');
-INSERT INTO osc_countries VALUES (170,'Poland','PL','POL','5');
-INSERT INTO osc_countries VALUES (171,'Portugal','PT','PRT','5');
-INSERT INTO osc_countries VALUES (172,'Puerto Rico','PR','PRI','1');
-INSERT INTO osc_countries VALUES (173,'Qatar','QA','QAT','1');
-INSERT INTO osc_countries VALUES (174,'Reunion','RE','REU','1');
-INSERT INTO osc_countries VALUES (175,'Romania','RO','ROM','1');
-INSERT INTO osc_countries VALUES (176,'Russian Federation','RU','RUS','5');
-INSERT INTO osc_countries VALUES (177,'Rwanda','RW','RWA','1');
-INSERT INTO osc_countries VALUES (178,'Saint Kitts and Nevis','KN','KNA','1');
-INSERT INTO osc_countries VALUES (179,'Saint Lucia','LC','LCA','1');
-INSERT INTO osc_countries VALUES (180,'Saint Vincent and the Grenadines','VC','VCT','1');
-INSERT INTO osc_countries VALUES (181,'Samoa','WS','WSM','1');
-INSERT INTO osc_countries VALUES (182,'San Marino','SM','SMR','1');
-INSERT INTO osc_countries VALUES (183,'Sao Tome and Principe','ST','STP','1');
-INSERT INTO osc_countries VALUES (184,'Saudi Arabia','SA','SAU','1');
-INSERT INTO osc_countries VALUES (185,'Senegal','SN','SEN','1');
-INSERT INTO osc_countries VALUES (186,'Seychelles','SC','SYC','1');
-INSERT INTO osc_countries VALUES (187,'Sierra Leone','SL','SLE','1');
-INSERT INTO osc_countries VALUES (188,'Singapore','SG','SGP', '12');
-INSERT INTO osc_countries VALUES (189,'Slovakia (Slovak Republic)','SK','SVK','1');
-INSERT INTO osc_countries VALUES (190,'Slovenia','SI','SVN','1');
-INSERT INTO osc_countries VALUES (191,'Solomon Islands','SB','SLB','1');
-INSERT INTO osc_countries VALUES (192,'Somalia','SO','SOM','1');
-INSERT INTO osc_countries VALUES (193,'South Africa','ZA','ZAF','10');
-INSERT INTO osc_countries VALUES (194,'South Georgia and the South Sandwich Islands','GS','SGS','1');
-INSERT INTO osc_countries VALUES (195,'Spain','ES','ESP','3');
-INSERT INTO osc_countries VALUES (196,'Sri Lanka','LK','LKA','1');
-INSERT INTO osc_countries VALUES (197,'St. Helena','SH','SHN','1');
-INSERT INTO osc_countries VALUES (198,'St. Pierre and Miquelon','PM','SPM','1');
-INSERT INTO osc_countries VALUES (199,'Sudan','SD','SDN','1');
-INSERT INTO osc_countries VALUES (200,'Suriname','SR','SUR','1');
-INSERT INTO osc_countries VALUES (201,'Svalbard and Jan Mayen Islands','SJ','SJM','1');
-INSERT INTO osc_countries VALUES (202,'Swaziland','SZ','SWZ','1');
-INSERT INTO osc_countries VALUES (203,'Sweden','SE','SWE','5');
-INSERT INTO osc_countries VALUES (204,'Switzerland','CH','CHE','5');
-INSERT INTO osc_countries VALUES (205,'Syrian Arab Republic','SY','SYR','1');
-INSERT INTO osc_countries VALUES (206,'Taiwan','TW','TWN','8');
-INSERT INTO osc_countries VALUES (207,'Tajikistan','TJ','TJK','1');
-INSERT INTO osc_countries VALUES (208,'Tanzania, United Republic of','TZ','TZA','1');
-INSERT INTO osc_countries VALUES (209,'Thailand','TH','THA','1');
-INSERT INTO osc_countries VALUES (210,'Togo','TG','TGO','1');
-INSERT INTO osc_countries VALUES (211,'Tokelau','TK','TKL','1');
-INSERT INTO osc_countries VALUES (212,'Tonga','TO','TON','1');
-INSERT INTO osc_countries VALUES (213,'Trinidad and Tobago','TT','TTO','1');
-INSERT INTO osc_countries VALUES (214,'Tunisia','TN','TUN','1');
-INSERT INTO osc_countries VALUES (215,'Turkey','TR','TUR','1');
-INSERT INTO osc_countries VALUES (216,'Turkmenistan','TM','TKM','1');
-INSERT INTO osc_countries VALUES (217,'Turks and Caicos Islands','TC','TCA','1');
-INSERT INTO osc_countries VALUES (218,'Tuvalu','TV','TUV','1');
-INSERT INTO osc_countries VALUES (219,'Uganda','UG','UGA','1');
-INSERT INTO osc_countries VALUES (220,'Ukraine','UA','UKR','1');
-INSERT INTO osc_countries VALUES (221,'United Arab Emirates','AE','ARE','1');
-INSERT INTO osc_countries VALUES (222,'United Kingdom','GB','GBR','11');
-INSERT INTO osc_countries VALUES (223,'United States','US','USA', '2');
-INSERT INTO osc_countries VALUES (224,'United States Minor Outlying Islands','UM','UMI','1');
-INSERT INTO osc_countries VALUES (225,'Uruguay','UY','URY','1');
-INSERT INTO osc_countries VALUES (226,'Uzbekistan','UZ','UZB','1');
-INSERT INTO osc_countries VALUES (227,'Vanuatu','VU','VUT','1');
-INSERT INTO osc_countries VALUES (228,'Vatican City State (Holy See)','VA','VAT','1');
-INSERT INTO osc_countries VALUES (229,'Venezuela','VE','VEN','1');
-INSERT INTO osc_countries VALUES (230,'Viet Nam','VN','VNM','1');
-INSERT INTO osc_countries VALUES (231,'Virgin Islands (British)','VG','VGB','1');
-INSERT INTO osc_countries VALUES (232,'Virgin Islands (U.S.)','VI','VIR','1');
-INSERT INTO osc_countries VALUES (233,'Wallis and Futuna Islands','WF','WLF','1');
-INSERT INTO osc_countries VALUES (234,'Western Sahara','EH','ESH','1');
-INSERT INTO osc_countries VALUES (235,'Yemen','YE','YEM','1');
-INSERT INTO osc_countries VALUES (236,'Yugoslavia','YU','YUG','1');
-INSERT INTO osc_countries VALUES (237,'Zaire','ZR','ZAR','1');
-INSERT INTO osc_countries VALUES (238,'Zambia','ZM','ZMB','1');
-INSERT INTO osc_countries VALUES (239,'Zimbabwe','ZW','ZWE','1');
+INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG','');
+INSERT INTO osc_countries VALUES (2,'Albania','AL','ALB','');
+INSERT INTO osc_countries VALUES (3,'Algeria','DZ','DZA','');
+INSERT INTO osc_countries VALUES (4,'American Samoa','AS','ASM','');
+INSERT INTO osc_countries VALUES (5,'Andorra','AD','AND','');
+INSERT INTO osc_countries VALUES (6,'Angola','AO','AGO','');
+INSERT INTO osc_countries VALUES (7,'Anguilla','AI','AIA','');
+INSERT INTO osc_countries VALUES (8,'Antarctica','AQ','ATA','');
+INSERT INTO osc_countries VALUES (9,'Antigua and Barbuda','AG','ATG','');
+INSERT INTO osc_countries VALUES (10,'Argentina','AR','ARG',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (11,'Armenia','AM','ARM','');
+INSERT INTO osc_countries VALUES (12,'Aruba','AW','ABW','');
+INSERT INTO osc_countries VALUES (13,'Australia','AU','AUS',":name\n:street_address\n:suburb :state_code :postcode\n:country");
+INSERT INTO osc_countries VALUES (14,'Austria','AT','AUT',":name\n:street_address\nA-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (15,'Azerbaijan','AZ','AZE','');
+INSERT INTO osc_countries VALUES (16,'Bahamas','BS','BHS','');
+INSERT INTO osc_countries VALUES (17,'Bahrain','BH','BHR','');
+INSERT INTO osc_countries VALUES (18,'Bangladesh','BD','BGD','');
+INSERT INTO osc_countries VALUES (19,'Barbados','BB','BRB','');
+INSERT INTO osc_countries VALUES (20,'Belarus','BY','BLR','');
+INSERT INTO osc_countries VALUES (21,'Belgium','BE','BEL',":name\n:street_address\nB-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (22,'Belize','BZ','BLZ','');
+INSERT INTO osc_countries VALUES (23,'Benin','BJ','BEN','');
+INSERT INTO osc_countries VALUES (24,'Bermuda','BM','BMU','');
+INSERT INTO osc_countries VALUES (25,'Bhutan','BT','BTN','');
+INSERT INTO osc_countries VALUES (26,'Bolivia','BO','BOL','');
+INSERT INTO osc_countries VALUES (27,'Bosnia and Herzegowina','BA','BIH','');
+INSERT INTO osc_countries VALUES (28,'Botswana','BW','BWA','');
+INSERT INTO osc_countries VALUES (29,'Bouvet Island','BV','BVT','');
+INSERT INTO osc_countries VALUES (30,'Brazil','BR','BRA',":name\n:street_address\n:state\n:postcode\n:country");
+INSERT INTO osc_countries VALUES (31,'British Indian Ocean Territory','IO','IOT','');
+INSERT INTO osc_countries VALUES (32,'Brunei Darussalam','BN','BRN','');
+INSERT INTO osc_countries VALUES (33,'Bulgaria','BG','BGR','');
+INSERT INTO osc_countries VALUES (34,'Burkina Faso','BF','BFA','');
+INSERT INTO osc_countries VALUES (35,'Burundi','BI','BDI','');
+INSERT INTO osc_countries VALUES (36,'Cambodia','KH','KHM','');
+INSERT INTO osc_countries VALUES (37,'Cameroon','CM','CMR','');
+INSERT INTO osc_countries VALUES (38,'Canada','CA','CAN',":name\n:street_address\n:city :state_code :postcode\n:country");
+INSERT INTO osc_countries VALUES (39,'Cape Verde','CV','CPV','');
+INSERT INTO osc_countries VALUES (40,'Cayman Islands','KY','CYM','');
+INSERT INTO osc_countries VALUES (41,'Central African Republic','CF','CAF','');
+INSERT INTO osc_countries VALUES (42,'Chad','TD','TCD','');
+INSERT INTO osc_countries VALUES (43,'Chile','CL','CHL','');
+INSERT INTO osc_countries VALUES (44,'China','CN','CHN',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (45,'Christmas Island','CX','CXR','');
+INSERT INTO osc_countries VALUES (46,'Cocos (Keeling) Islands','CC','CCK','');
+INSERT INTO osc_countries VALUES (47,'Colombia','CO','COL','');
+INSERT INTO osc_countries VALUES (48,'Comoros','KM','COM','');
+INSERT INTO osc_countries VALUES (49,'Congo','CG','COG','');
+INSERT INTO osc_countries VALUES (50,'Cook Islands','CK','COK','');
+INSERT INTO osc_countries VALUES (51,'Costa Rica','CR','CRI','');
+INSERT INTO osc_countries VALUES (52,'Cote D\'Ivoire','CI','CIV','');
+INSERT INTO osc_countries VALUES (53,'Croatia','HR','HRV','');
+INSERT INTO osc_countries VALUES (54,'Cuba','CU','CUB','');
+INSERT INTO osc_countries VALUES (55,'Cyprus','CY','CYP','');
+INSERT INTO osc_countries VALUES (56,'Czech Republic','CZ','CZE','');
+INSERT INTO osc_countries VALUES (57,'Denmark','DK','DNK',":name\n:street_address\nDK-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (58,'Djibouti','DJ','DJI','');
+INSERT INTO osc_countries VALUES (59,'Dominica','DM','DMA','');
+INSERT INTO osc_countries VALUES (60,'Dominican Republic','DO','DOM','');
+INSERT INTO osc_countries VALUES (61,'East Timor','TP','TMP','');
+INSERT INTO osc_countries VALUES (62,'Ecuador','EC','ECU','');
+INSERT INTO osc_countries VALUES (63,'Egypt','EG','EGY','');
+INSERT INTO osc_countries VALUES (64,'El Salvador','SV','SLV','');
+INSERT INTO osc_countries VALUES (65,'Equatorial Guinea','GQ','GNQ','');
+INSERT INTO osc_countries VALUES (66,'Eritrea','ER','ERI','');
+INSERT INTO osc_countries VALUES (67,'Estonia','EE','EST','');
+INSERT INTO osc_countries VALUES (68,'Ethiopia','ET','ETH','');
+INSERT INTO osc_countries VALUES (69,'Falkland Islands (Malvinas)','FK','FLK','');
+INSERT INTO osc_countries VALUES (70,'Faroe Islands','FO','FRO','');
+INSERT INTO osc_countries VALUES (71,'Fiji','FJ','FJI','');
+INSERT INTO osc_countries VALUES (72,'Finland','FI','FIN',":name\n:street_address\nFIN-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (73,'France','FR','FRA',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (74,'France, Metropolitan','FX','FXX',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (75,'French Guiana','GF','GUF',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (76,'French Polynesia','PF','PYF',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (77,'French Southern Territories','TF','ATF',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (78,'Gabon','GA','GAB','');
+INSERT INTO osc_countries VALUES (79,'Gambia','GM','GMB','');
+INSERT INTO osc_countries VALUES (80,'Georgia','GE','GEO','');
+INSERT INTO osc_countries VALUES (81,'Germany','DE','DEU',":name\n:street_address\nD-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (82,'Ghana','GH','GHA','');
+INSERT INTO osc_countries VALUES (83,'Gibraltar','GI','GIB','');
+INSERT INTO osc_countries VALUES (84,'Greece','GR','GRC','');
+INSERT INTO osc_countries VALUES (85,'Greenland','GL','GRL',":name\n:street_address\nDK-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (86,'Grenada','GD','GRD','');
+INSERT INTO osc_countries VALUES (87,'Guadeloupe','GP','GLP','');
+INSERT INTO osc_countries VALUES (88,'Guam','GU','GUM','');
+INSERT INTO osc_countries VALUES (89,'Guatemala','GT','GTM','');
+INSERT INTO osc_countries VALUES (90,'Guinea','GN','GIN','');
+INSERT INTO osc_countries VALUES (91,'Guinea-bissau','GW','GNB','');
+INSERT INTO osc_countries VALUES (92,'Guyana','GY','GUY','');
+INSERT INTO osc_countries VALUES (93,'Haiti','HT','HTI','');
+INSERT INTO osc_countries VALUES (94,'Heard and Mc Donald Islands','HM','HMD','');
+INSERT INTO osc_countries VALUES (95,'Honduras','HN','HND','');
+INSERT INTO osc_countries VALUES (96,'Hong Kong','HK','HKG',":name\n:street_address\n:city\n:country");
+INSERT INTO osc_countries VALUES (97,'Hungary','HU','HUN','');
+INSERT INTO osc_countries VALUES (98,'Iceland','IS','ISL',":name\n:street_address\nIS:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (99,'India','IN','IND',":name\n:street_address\n:city-:postcode\n:country");
+INSERT INTO osc_countries VALUES (100,'Indonesia','ID','IDN',":name\n:street_address\n:city :postcode\n:country");
+INSERT INTO osc_countries VALUES (101,'Iran (Islamic Republic of)','IR','IRN','');
+INSERT INTO osc_countries VALUES (102,'Iraq','IQ','IRQ','');
+INSERT INTO osc_countries VALUES (103,'Ireland','IE','IRL',":name\n:street_address\nIE-:city\n:country");
+INSERT INTO osc_countries VALUES (104,'Israel','IL','ISR',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (105,'Italy','IT','ITA',":name\n:street_address\n:postcode-:city :state_code\n:country");
+INSERT INTO osc_countries VALUES (106,'Jamaica','JM','JAM','');
+INSERT INTO osc_countries VALUES (107,'Japan','JP','JPN',":name\n:street_address, :suburb\n:city :postcode\n:country");
+INSERT INTO osc_countries VALUES (108,'Jordan','JO','JOR','');
+INSERT INTO osc_countries VALUES (109,'Kazakhstan','KZ','KAZ','');
+INSERT INTO osc_countries VALUES (110,'Kenya','KE','KEN','');
+INSERT INTO osc_countries VALUES (111,'Kiribati','KI','KIR','');
+INSERT INTO osc_countries VALUES (112,'Korea, Democratic People\'s Republic of','KP','PRK','');
+INSERT INTO osc_countries VALUES (113,'Korea, Republic of','KR','KOR','');
+INSERT INTO osc_countries VALUES (114,'Kuwait','KW','KWT','');
+INSERT INTO osc_countries VALUES (115,'Kyrgyzstan','KG','KGZ','');
+INSERT INTO osc_countries VALUES (116,'Lao People\'s Democratic Republic','LA','LAO','');
+INSERT INTO osc_countries VALUES (117,'Latvia','LV','LVA','');
+INSERT INTO osc_countries VALUES (118,'Lebanon','LB','LBN','');
+INSERT INTO osc_countries VALUES (119,'Lesotho','LS','LSO','');
+INSERT INTO osc_countries VALUES (120,'Liberia','LR','LBR','');
+INSERT INTO osc_countries VALUES (121,'Libyan Arab Jamahiriya','LY','LBY','');
+INSERT INTO osc_countries VALUES (122,'Liechtenstein','LI','LIE','');
+INSERT INTO osc_countries VALUES (123,'Lithuania','LT','LTU','');
+INSERT INTO osc_countries VALUES (124,'Luxembourg','LU','LUX',":name\n:street_address\nL-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (125,'Macau','MO','MAC','');
+INSERT INTO osc_countries VALUES (126,'Macedonia, The Former Yugoslav Republic of','MK','MKD','');
+INSERT INTO osc_countries VALUES (127,'Madagascar','MG','MDG','');
+INSERT INTO osc_countries VALUES (128,'Malawi','MW','MWI','');
+INSERT INTO osc_countries VALUES (129,'Malaysia','MY','MYS','');
+INSERT INTO osc_countries VALUES (130,'Maldives','MV','MDV','');
+INSERT INTO osc_countries VALUES (131,'Mali','ML','MLI','');
+INSERT INTO osc_countries VALUES (132,'Malta','MT','MLT','');
+INSERT INTO osc_countries VALUES (133,'Marshall Islands','MH','MHL','');
+INSERT INTO osc_countries VALUES (134,'Martinique','MQ','MTQ','');
+INSERT INTO osc_countries VALUES (135,'Mauritania','MR','MRT','');
+INSERT INTO osc_countries VALUES (136,'Mauritius','MU','MUS','');
+INSERT INTO osc_countries VALUES (137,'Mayotte','YT','MYT','');
+INSERT INTO osc_countries VALUES (138,'Mexico','MX','MEX',":name\n:street_address\n:postcode :city, :state_code\n:country");
+INSERT INTO osc_countries VALUES (139,'Micronesia, Federated States of','FM','FSM','');
+INSERT INTO osc_countries VALUES (140,'Moldova, Republic of','MD','MDA','');
+INSERT INTO osc_countries VALUES (141,'Monaco','MC','MCO','');
+INSERT INTO osc_countries VALUES (142,'Mongolia','MN','MNG','');
+INSERT INTO osc_countries VALUES (143,'Montserrat','MS','MSR','');
+INSERT INTO osc_countries VALUES (144,'Morocco','MA','MAR','');
+INSERT INTO osc_countries VALUES (145,'Mozambique','MZ','MOZ','');
+INSERT INTO osc_countries VALUES (146,'Myanmar','MM','MMR','');
+INSERT INTO osc_countries VALUES (147,'Namibia','NA','NAM','');
+INSERT INTO osc_countries VALUES (148,'Nauru','NR','NRU','');
+INSERT INTO osc_countries VALUES (149,'Nepal','NP','NPL','');
+INSERT INTO osc_countries VALUES (150,'Netherlands','NL','NLD',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (151,'Netherlands Antilles','AN','ANT',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (152,'New Caledonia','NC','NCL','');
+INSERT INTO osc_countries VALUES (153,'New Zealand','NZ','NZL',":name\n:street_address\n:suburb\n:city :postcode\n:country");
+INSERT INTO osc_countries VALUES (154,'Nicaragua','NI','NIC','');
+INSERT INTO osc_countries VALUES (155,'Niger','NE','NER','');
+INSERT INTO osc_countries VALUES (156,'Nigeria','NG','NGA','');
+INSERT INTO osc_countries VALUES (157,'Niue','NU','NIU','');
+INSERT INTO osc_countries VALUES (158,'Norfolk Island','NF','NFK','');
+INSERT INTO osc_countries VALUES (159,'Northern Mariana Islands','MP','MNP','');
+INSERT INTO osc_countries VALUES (160,'Norway','NO','NOR',":name\n:street_address\nNO-:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (161,'Oman','OM','OMN','');
+INSERT INTO osc_countries VALUES (162,'Pakistan','PK','PAK','');
+INSERT INTO osc_countries VALUES (163,'Palau','PW','PLW','');
+INSERT INTO osc_countries VALUES (164,'Panama','PA','PAN','');
+INSERT INTO osc_countries VALUES (165,'Papua New Guinea','PG','PNG','');
+INSERT INTO osc_countries VALUES (166,'Paraguay','PY','PRY','');
+INSERT INTO osc_countries VALUES (167,'Peru','PE','PER','');
+INSERT INTO osc_countries VALUES (168,'Philippines','PH','PHL','');
+INSERT INTO osc_countries VALUES (169,'Pitcairn','PN','PCN','');
+INSERT INTO osc_countries VALUES (170,'Poland','PL','POL',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (171,'Portugal','PT','PRT',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (172,'Puerto Rico','PR','PRI','');
+INSERT INTO osc_countries VALUES (173,'Qatar','QA','QAT','');
+INSERT INTO osc_countries VALUES (174,'Reunion','RE','REU','');
+INSERT INTO osc_countries VALUES (175,'Romania','RO','ROM','');
+INSERT INTO osc_countries VALUES (176,'Russian Federation','RU','RUS',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (177,'Rwanda','RW','RWA','');
+INSERT INTO osc_countries VALUES (178,'Saint Kitts and Nevis','KN','KNA','');
+INSERT INTO osc_countries VALUES (179,'Saint Lucia','LC','LCA','');
+INSERT INTO osc_countries VALUES (180,'Saint Vincent and the Grenadines','VC','VCT','');
+INSERT INTO osc_countries VALUES (181,'Samoa','WS','WSM','');
+INSERT INTO osc_countries VALUES (182,'San Marino','SM','SMR','');
+INSERT INTO osc_countries VALUES (183,'Sao Tome and Principe','ST','STP','');
+INSERT INTO osc_countries VALUES (184,'Saudi Arabia','SA','SAU','');
+INSERT INTO osc_countries VALUES (185,'Senegal','SN','SEN','');
+INSERT INTO osc_countries VALUES (186,'Seychelles','SC','SYC','');
+INSERT INTO osc_countries VALUES (187,'Sierra Leone','SL','SLE','');
+INSERT INTO osc_countries VALUES (188,'Singapore','SG','SGP', ":name\n:street_address\n:city :postcode\n:country");
+INSERT INTO osc_countries VALUES (189,'Slovakia (Slovak Republic)','SK','SVK','');
+INSERT INTO osc_countries VALUES (190,'Slovenia','SI','SVN','');
+INSERT INTO osc_countries VALUES (191,'Solomon Islands','SB','SLB','');
+INSERT INTO osc_countries VALUES (192,'Somalia','SO','SOM','');
+INSERT INTO osc_countries VALUES (193,'South Africa','ZA','ZAF',":name\n:street_address\n:suburb\n:city\n:postcode :country");
+INSERT INTO osc_countries VALUES (194,'South Georgia and the South Sandwich Islands','GS','SGS','');
+INSERT INTO osc_countries VALUES (195,'Spain','ES','ESP',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (196,'Sri Lanka','LK','LKA','');
+INSERT INTO osc_countries VALUES (197,'St. Helena','SH','SHN','');
+INSERT INTO osc_countries VALUES (198,'St. Pierre and Miquelon','PM','SPM','');
+INSERT INTO osc_countries VALUES (199,'Sudan','SD','SDN','');
+INSERT INTO osc_countries VALUES (200,'Suriname','SR','SUR','');
+INSERT INTO osc_countries VALUES (201,'Svalbard and Jan Mayen Islands','SJ','SJM','');
+INSERT INTO osc_countries VALUES (202,'Swaziland','SZ','SWZ','');
+INSERT INTO osc_countries VALUES (203,'Sweden','SE','SWE',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (204,'Switzerland','CH','CHE',":name\n:street_address\n:postcode :city\n:country");
+INSERT INTO osc_countries VALUES (205,'Syrian Arab Republic','SY','SYR','');
+INSERT INTO osc_countries VALUES (206,'Taiwan','TW','TWN',":name\n:street_address\n:city :postcode\n:country");
+INSERT INTO osc_countries VALUES (207,'Tajikistan','TJ','TJK','');
+INSERT INTO osc_countries VALUES (208,'Tanzania, United Republic of','TZ','TZA','');
+INSERT INTO osc_countries VALUES (209,'Thailand','TH','THA','');
+INSERT INTO osc_countries VALUES (210,'Togo','TG','TGO','');
+INSERT INTO osc_countries VALUES (211,'Tokelau','TK','TKL','');
+INSERT INTO osc_countries VALUES (212,'Tonga','TO','TON','');
+INSERT INTO osc_countries VALUES (213,'Trinidad and Tobago','TT','TTO','');
+INSERT INTO osc_countries VALUES (214,'Tunisia','TN','TUN','');
+INSERT INTO osc_countries VALUES (215,'Turkey','TR','TUR','');
+INSERT INTO osc_countries VALUES (216,'Turkmenistan','TM','TKM','');
+INSERT INTO osc_countries VALUES (217,'Turks and Caicos Islands','TC','TCA','');
+INSERT INTO osc_countries VALUES (218,'Tuvalu','TV','TUV','');
+INSERT INTO osc_countries VALUES (219,'Uganda','UG','UGA','');
+INSERT INTO osc_countries VALUES (220,'Ukraine','UA','UKR','');
+INSERT INTO osc_countries VALUES (221,'United Arab Emirates','AE','ARE','');
+INSERT INTO osc_countries VALUES (222,'United Kingdom','GB','GBR',":name\n:street_address\n:city\n:postcode\n:country");
+INSERT INTO osc_countries VALUES (223,'United States','US','USA',":name\n:street_address\n:city :state_code :postcode\n:country");
+INSERT INTO osc_countries VALUES (224,'United States Minor Outlying Islands','UM','UMI','');
+INSERT INTO osc_countries VALUES (225,'Uruguay','UY','URY','');
+INSERT INTO osc_countries VALUES (226,'Uzbekistan','UZ','UZB','');
+INSERT INTO osc_countries VALUES (227,'Vanuatu','VU','VUT','');
+INSERT INTO osc_countries VALUES (228,'Vatican City State (Holy See)','VA','VAT','');
+INSERT INTO osc_countries VALUES (229,'Venezuela','VE','VEN','');
+INSERT INTO osc_countries VALUES (230,'Viet Nam','VN','VNM','');
+INSERT INTO osc_countries VALUES (231,'Virgin Islands (British)','VG','VGB','');
+INSERT INTO osc_countries VALUES (232,'Virgin Islands (U.S.)','VI','VIR','');
+INSERT INTO osc_countries VALUES (233,'Wallis and Futuna Islands','WF','WLF','');
+INSERT INTO osc_countries VALUES (234,'Western Sahara','EH','ESH','');
+INSERT INTO osc_countries VALUES (235,'Yemen','YE','YEM','');
+INSERT INTO osc_countries VALUES (236,'Yugoslavia','YU','YUG','');
+INSERT INTO osc_countries VALUES (237,'Zaire','ZR','ZAR','');
+INSERT INTO osc_countries VALUES (238,'Zambia','ZM','ZMB','');
+INSERT INTO osc_countries VALUES (239,'Zimbabwe','ZW','ZWE','');
 
 # Regular expression patterns from http://www.creditcardcode.net
 INSERT INTO osc_credit_cards VALUES (1,'American Express','/^(34|37)\\d{13}$/','0','0');

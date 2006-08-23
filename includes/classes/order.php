@@ -30,7 +30,7 @@
       $this->customer = array();
       $this->delivery = array();
 
-      if (tep_not_null($order_id)) {
+      if (!empty($order_id)) {
         $this->query($order_id);
       } else {
         $this->cart();
@@ -114,7 +114,7 @@
         }
       }
 
-      $Qorder = $osC_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, payment_module, cc_type, cc_owner, cc_number, cc_expires, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_country, :customers_telephone, :customers_email_address, :customers_address_format_id, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_country, :delivery_address_format_id, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_country, :billing_address_format_id, :payment_method, :payment_module, :cc_type, :cc_owner, :cc_number, :cc_expires, now(), :orders_status, :currency, :currency_value)');
+      $Qorder = $osC_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_state_code, customers_country, customers_country_iso2, customers_country_iso3, customers_telephone, customers_email_address, customers_address_format, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_state_code, delivery_country, delivery_country_iso2, delivery_country_iso3, delivery_address_format, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_state_code, billing_country, billing_country_iso2, billing_country_iso3, billing_address_format, payment_method, payment_module, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_state_code, :customers_country, :customers_country_iso2, :customers_country_iso3, :customers_telephone, :customers_email_address, :customers_address_format, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_state_code, :delivery_country, :delivery_country_iso2, :delivery_country_iso3, :delivery_address_format, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_state_code, :billing_country, :billing_country_iso2, :billing_country_iso3, :billing_address_format, :payment_method, :payment_module, now(), :orders_status, :currency, :currency_value)');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
       $Qorder->bindInt(':customers_id', $osC_Customer->getID());
       $Qorder->bindValue(':customers_name', $osC_Customer->getName());
@@ -124,11 +124,14 @@
       $Qorder->bindValue(':customers_city', '' /*$order->customer['city']*/);
       $Qorder->bindValue(':customers_postcode', '' /*$order->customer['postcode']*/);
       $Qorder->bindValue(':customers_state', '' /*$order->customer['state']*/);
+      $Qorder->bindValue(':customers_state_code', '');
       $Qorder->bindValue(':customers_country', '' /*$order->customer['country']['title']*/);
+      $Qorder->bindValue(':customers_country_iso2', '');
+      $Qorder->bindValue(':customers_country_iso3', '');
       $Qorder->bindValue(':customers_telephone', '' /*$order->customer['telephone']*/);
       $Qorder->bindValue(':customers_email_address', $osC_Customer->getEmailAddress());
-      $Qorder->bindInt(':customers_address_format_id', $osC_Customer->getDefaultAddressID());
-      $Qorder->bindValue(':customers_ip_address', tep_get_ip_address());
+      $Qorder->bindValue(':customers_address_format', '');
+      $Qorder->bindValue(':customers_ip_address', osc_get_ip_address());
       $Qorder->bindValue(':delivery_name', $osC_ShoppingCart->getShippingAddress('firstname') . ' ' . $osC_ShoppingCart->getShippingAddress('lastname'));
       $Qorder->bindValue(':delivery_company', $osC_ShoppingCart->getShippingAddress('company'));
       $Qorder->bindValue(':delivery_street_address', $osC_ShoppingCart->getShippingAddress('street_address'));
@@ -136,8 +139,11 @@
       $Qorder->bindValue(':delivery_city', $osC_ShoppingCart->getShippingAddress('city'));
       $Qorder->bindValue(':delivery_postcode', $osC_ShoppingCart->getShippingAddress('postcode'));
       $Qorder->bindValue(':delivery_state', $osC_ShoppingCart->getShippingAddress('state'));
+      $Qorder->bindValue(':delivery_state_code', $osC_ShoppingCart->getShippingAddress('zone_code'));
       $Qorder->bindValue(':delivery_country', $osC_ShoppingCart->getShippingAddress('country_title'));
-      $Qorder->bindInt(':delivery_address_format_id', $osC_ShoppingCart->getShippingAddress('format_id'));
+      $Qorder->bindValue(':delivery_country_iso2', $osC_ShoppingCart->getShippingAddress('country_iso_code_2'));
+      $Qorder->bindValue(':delivery_country_iso3', $osC_ShoppingCart->getShippingAddress('country_iso_code_3'));
+      $Qorder->bindValue(':delivery_address_format', $osC_ShoppingCart->getShippingAddress('format'));
       $Qorder->bindValue(':billing_name', $osC_ShoppingCart->getBillingAddress('firstname') . ' ' . $osC_ShoppingCart->getBillingAddress('lastname'));
       $Qorder->bindValue(':billing_company', $osC_ShoppingCart->getBillingAddress('company'));
       $Qorder->bindValue(':billing_street_address', $osC_ShoppingCart->getBillingAddress('street_address'));
@@ -145,14 +151,13 @@
       $Qorder->bindValue(':billing_city', $osC_ShoppingCart->getBillingAddress('city'));
       $Qorder->bindValue(':billing_postcode', $osC_ShoppingCart->getBillingAddress('postcode'));
       $Qorder->bindValue(':billing_state', $osC_ShoppingCart->getBillingAddress('state'));
+      $Qorder->bindValue(':billing_state_code', $osC_ShoppingCart->getBillingAddress('zone_code'));
       $Qorder->bindValue(':billing_country', $osC_ShoppingCart->getBillingAddress('country_title'));
-      $Qorder->bindInt(':billing_address_format_id', $osC_ShoppingCart->getBillingAddress('format_id'));
+      $Qorder->bindValue(':billing_country_iso2', $osC_ShoppingCart->getBillingAddress('country_iso_code_2'));
+      $Qorder->bindValue(':billing_country_iso3', $osC_ShoppingCart->getBillingAddress('country_iso_code_3'));
+      $Qorder->bindValue(':billing_address_format', $osC_ShoppingCart->getBillingAddress('format'));
       $Qorder->bindValue(':payment_method', $osC_ShoppingCart->getBillingMethod('title'));
       $Qorder->bindValue(':payment_module', $GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->getCode());
-      $Qorder->bindValue(':cc_type', '' /*$order->info['cc_type']*/);
-      $Qorder->bindValue(':cc_owner', '' /*$order->info['cc_owner']*/);
-      $Qorder->bindValue(':cc_number', '' /*$order->info['cc_number']*/);
-      $Qorder->bindValue(':cc_expires', '' /*$order->info['cc_expires']*/);
       $Qorder->bindInt(':orders_status', 4);
       $Qorder->bindValue(':currency', $osC_Currencies->getCode());
       $Qorder->bindValue(':currency_value', $osC_Currencies->value($osC_Currencies->getCode()));
@@ -184,7 +189,7 @@
         $Qproducts = $osC_Database->query('insert into :table_orders_products (orders_id, products_id, products_model, products_name, products_price, final_price, products_tax, products_quantity) values (:orders_id, :products_id, :products_model, :products_name, :products_price, :final_price, :products_tax, :products_quantity)');
         $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
         $Qproducts->bindInt(':orders_id', $insert_id);
-        $Qproducts->bindInt(':products_id', tep_get_prid($products['id']));
+        $Qproducts->bindInt(':products_id', osc_get_product_id($products['id']));
         $Qproducts->bindValue(':products_model', '' /*$products['model']*/);
         $Qproducts->bindValue(':products_name', $products['name']);
         $Qproducts->bindValue(':products_price', $products['price']);
@@ -405,7 +410,7 @@
 
           $email_order .= "\n" . $osC_Language->get('email_order_delivery_address') . "\n" .
                           $osC_Language->get('email_order_separator') . "\n" .
-                          tep_address_format($Qorder->valueInt('delivery_address_format_id'), $address, false, '', "\n") . "\n";
+                          osC_Address::format($address, "\n") . "\n";
 
           unset($address);
         }
@@ -421,7 +426,7 @@
 
         $email_order .= "\n" . $osC_Language->get('email_order_billing_address') . "\n" .
                         $osC_Language->get('email_order_separator') . "\n" .
-                        tep_address_format($Qorder->valueInt('billing_address_format_id'), $address, false, '', "\n") . "\n\n";
+                        osC_Address::format($address, "\n") . "\n\n";
 
         unset($address);
 
@@ -457,11 +462,11 @@
 //          }
 //        }
 
-        tep_mail($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
 // send emails to other people
         if (SEND_EXTRA_ORDER_EMAILS_TO != '') {
-          tep_mail('', SEND_EXTRA_ORDER_EMAILS_TO, $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          osc_email('', SEND_EXTRA_ORDER_EMAILS_TO, $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
         }
       }
 
@@ -574,7 +579,7 @@
     function query($order_id) {
       global $osC_Database, $osC_Language;
 
-      $Qorder = $osC_Database->query('select customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_telephone, customers_email_address, customers_address_format_id, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, orders_status, last_modified from :table_orders where orders_id = :orders_id');
+      $Qorder = $osC_Database->query('select * from :table_orders where orders_id = :orders_id');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
       $Qorder->bindInt(':orders_id', $order_id);
       $Qorder->execute();
@@ -613,10 +618,6 @@
       $this->info = array('currency' => $Qorder->value('currency'),
                           'currency_value' => $Qorder->value('currency_value'),
                           'payment_method' => $Qorder->value('payment_method'),
-                          'cc_type' => $Qorder->value('cc_type'),
-                          'cc_owner' => $Qorder->valueProtected('cc_owner'),
-                          'cc_number' => $Qorder->valueProtected('cc_number'),
-                          'cc_expires' => $Qorder->valueProtected('cc_expires'),
                           'date_purchased' => $Qorder->value('date_purchased'),
                           'orders_status' => $Qstatus->value('orders_status_name'),
                           'last_modified' => $Qorder->value('last_modified'),
@@ -631,8 +632,11 @@
                               'city' => $Qorder->valueProtected('customers_city'),
                               'postcode' => $Qorder->valueProtected('customers_postcode'),
                               'state' => $Qorder->valueProtected('customers_state'),
+                              'state_code' => $Qorder->value('customers_state_code'),
                               'country' => $Qorder->valueProtected('customers_country'),
-                              'format_id' => $Qorder->valueInt('customers_address_format_id'),
+                              'country_iso2' => $Qorder->value('customers_country_iso2'),
+                              'country_iso3' => $Qorder->value('customers_country_iso3'),
+                              'format' => $Qorder->value('customers_address_format'),
                               'telephone' => $Qorder->valueProtected('customers_telephone'),
                               'email_address' => $Qorder->valueProtected('customers_email_address'));
 
@@ -643,8 +647,11 @@
                               'city' => $Qorder->valueProtected('delivery_city'),
                               'postcode' => $Qorder->valueProtected('delivery_postcode'),
                               'state' => $Qorder->valueProtected('delivery_state'),
+                              'state_code' => $Qorder->value('delivery_state_code'),
                               'country' => $Qorder->valueProtected('delivery_country'),
-                              'format_id' => $Qorder->valueInt('delivery_address_format_id'));
+                              'country_iso2' => $Qorder->value('delivery_country_iso2'),
+                              'country_iso3' => $Qorder->value('delivery_country_iso3'),
+                              'format' => $Qorder->value('delivery_address_format'));
 
       if (empty($this->delivery['name']) && empty($this->delivery['street_address'])) {
         $this->delivery = false;
@@ -657,8 +664,11 @@
                              'city' => $Qorder->valueProtected('billing_city'),
                              'postcode' => $Qorder->valueProtected('billing_postcode'),
                              'state' => $Qorder->valueProtected('billing_state'),
+                             'state_code' => $Qorder->value('billing_state_code'),
                              'country' => $Qorder->valueProtected('billing_country'),
-                             'format_id' => $Qorder->valueInt('billing_address_format_id'));
+                             'country_iso2' => $Qorder->value('billing_country_iso2'),
+                             'country_iso3' => $Qorder->value('billing_country_iso3'),
+                             'format' => $Qorder->value('billing_address_format'));
 
       $Qproducts = $osC_Database->query('select orders_products_id, products_id, products_name, products_model, products_price, products_tax, products_quantity, final_price from :table_orders_products where orders_id = :orders_id');
       $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);

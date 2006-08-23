@@ -11,6 +11,7 @@
 */
 
   require('includes/application_top.php');
+  require('../includes/classes/address.php');
 
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();
@@ -55,7 +56,7 @@
             <td class="main"><b><?php echo ENTRY_SOLD_TO; ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></td>
+            <td class="main"><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
@@ -72,7 +73,7 @@
             <td class="main"><b><?php echo ENTRY_SHIP_TO; ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br />'); ?></td>
+            <td class="main"><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></td>
           </tr>
         </table></td>
       </tr>

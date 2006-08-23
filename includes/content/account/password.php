@@ -57,7 +57,7 @@
           if (osC_Account::savePassword(trim($_POST['password_new']))) {
             $messageStack->add_session('account', $osC_Language->get('success_password_updated'), 'success');
 
-            tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
+            osc_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
           } else {
             $messageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
           }

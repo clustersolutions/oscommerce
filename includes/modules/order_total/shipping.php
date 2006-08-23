@@ -39,12 +39,12 @@
           $tax = $osC_Tax->getTaxRate($osC_ShoppingCart->getShippingMethod('tax_class_id'), $osC_ShoppingCart->getShippingAddress('country_id'), $osC_ShoppingCart->getShippingAddress('zone_id'));
           $tax_description = $osC_Tax->getTaxRateDescription($osC_ShoppingCart->getShippingMethod('tax_class_id'), $osC_ShoppingCart->getShippingAddress('country_id'), $osC_ShoppingCart->getShippingAddress('zone_id'));
 
-          $osC_ShoppingCart->addTaxAmount(tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
-          $osC_ShoppingCart->addTaxGroup($tax_description, tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
+          $osC_ShoppingCart->addTaxAmount($osC_Tax->calculate($osC_ShoppingCart->getShippingMethod('cost'), $tax));
+          $osC_ShoppingCart->addTaxGroup($tax_description, $osC_Tax->calculate($osC_ShoppingCart->getShippingMethod('cost'), $tax));
 
           if (DISPLAY_PRICE_WITH_TAX == '1') {
-            $osC_ShoppingCart->addToTotal(tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax));
-            $osC_ShoppingCart->_shipping_method['cost'] += tep_calculate_tax($osC_ShoppingCart->getShippingMethod('cost'), $tax);
+            $osC_ShoppingCart->addToTotal($osC_Tax->calculate($osC_ShoppingCart->getShippingMethod('cost'), $tax));
+            $osC_ShoppingCart->_shipping_method['cost'] += $osC_Tax->calculate($osC_ShoppingCart->getShippingMethod('cost'), $tax);
           }
         }
 

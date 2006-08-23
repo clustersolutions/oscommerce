@@ -51,7 +51,7 @@
 
         usort($this->_modules, array('osC_Payment', '_usortModules'));
 
-        if ( (tep_not_null($module)) && (in_array($module, $this->_modules)) && (isset($GLOBALS['osC_Payment_' . $module]->form_action_url)) ) {
+        if ( (!empty($module)) && (in_array($module, $this->_modules)) && (isset($GLOBALS['osC_Payment_' . $module]->form_action_url)) ) {
           $this->form_action_url = $GLOBALS['osC_Payment_' . $module]->form_action_url;
         }
       }

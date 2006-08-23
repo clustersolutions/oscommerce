@@ -40,7 +40,7 @@
 
       if (is_numeric($_GET[$this->_module])) {
         if (osC_Order::getCustomerID($_GET[$this->_module]) !== $osC_Customer->getID()) {
-          tep_redirect(osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
         }
 
         $this->_page_title = sprintf($osC_Language->get('order_information_heading'), $_GET[$this->_module]);

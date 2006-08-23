@@ -32,7 +32,7 @@
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
   <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
 </div>
@@ -94,7 +94,7 @@
       }
 
       if ($lc_key !== false) {
-        $lc_text = tep_create_sort_heading($lc_key, $lc_text);
+        $lc_text = osc_create_sort_heading($lc_key, $lc_text);
       }
 
       echo '      <td align="' . $lc_align . '" class="productListing-heading">&nbsp;' . $lc_text . '&nbsp;</td>' . "\n";
@@ -135,7 +135,7 @@
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
-            if (tep_not_null($Qlisting->value('specials_new_products_price'))) {
+            if (!osc_empty($Qlisting->value('specials_new_products_price'))) {
               $lc_text = '&nbsp;<s>' .  $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</s>&nbsp;&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qlisting->value('specials_new_products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</span>&nbsp;';
             } else {
               $lc_text = '&nbsp;' . $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '&nbsp;';
@@ -159,7 +159,7 @@
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qlisting->valueInt('products_id')), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
+            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=buy_now&products_id=' . $Qlisting->valueInt('products_id')), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
             break;
         }
 
@@ -185,7 +185,7 @@
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
   <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
 </div>

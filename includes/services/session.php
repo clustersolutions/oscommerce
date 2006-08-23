@@ -24,7 +24,7 @@
       $osC_Session = new osC_Session();
 
       if (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') {
-        tep_setcookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);
+        osc_setcookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);
 
         if (isset($_COOKIE['cookie_test'])) {
           $osC_Session->start();
@@ -63,7 +63,7 @@
           if ($_SESSION['SESSION_SSL_ID'] != $_SERVER['SSL_SESSION_ID']) {
             $osC_Session->destroy();
 
-            tep_redirect(osc_href_link(FILENAME_INFO, 'ssl_check', 'AUTO'));
+            osc_redirect(osc_href_link(FILENAME_INFO, 'ssl_check', 'AUTO'));
           }
         }
       }
@@ -79,20 +79,20 @@
         if ($_SESSION['SESSION_USER_AGENT'] != $http_user_agent) {
           $osC_Session->destroy();
 
-          tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 
 // verify the IP address
       if (SERVICE_SESSION_CHECK_IP_ADDRESS == '1') {
         if (isset($_SESSION['SESSION_IP_ADDRESS']) === false) {
-          $_SESSION['SESSION_IP_ADDRESS'] = tep_get_ip_address();
+          $_SESSION['SESSION_IP_ADDRESS'] = osc_get_ip_address();
         }
 
-        if ($_SESSION['SESSION_IP_ADDRESS'] != tep_get_ip_address()) {
+        if ($_SESSION['SESSION_IP_ADDRESS'] != osc_get_ip_address()) {
           $osC_Session->destroy();
 
-          tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 

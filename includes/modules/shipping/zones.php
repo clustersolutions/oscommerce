@@ -88,7 +88,7 @@
                                                      'cost' => $shipping_cost)),
                             'tax_class_id' => $this->tax_class);
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
+      if (!empty($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
 
       if ($error == true) $this->quotes['error'] = $osC_Language->get('shipping_zones_invalid_zone');
 

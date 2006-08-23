@@ -36,7 +36,7 @@
         $this->_page_contents = 'results.php';
 
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_search_results'), osc_href_link(FILENAME_SEARCH, tep_get_all_get_params()));
+          $breadcrumb->add($osC_Language->get('breadcrumb_search_results'), osc_href_link(FILENAME_SEARCH, osc_get_all_get_params()));
         }
 
         $this->_process();

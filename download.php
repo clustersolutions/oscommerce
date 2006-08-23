@@ -56,10 +56,10 @@
 function tep_random_name() {
   $letters = 'abcdefghijklmnopqrstuvwxyz';
   $dirname = '.';
-  $length = floor(tep_rand(16,20));
+  $length = floor(osc_rand(16,20));
 
   for ($i = 1; $i <= $length; $i++) {
-   $q = floor(tep_rand(1,26));
+   $q = floor(osc_rand(1,26));
    $dirname .= $letters[$q];
   }
 
@@ -103,7 +103,7 @@ function tep_unlink_temp_dir($dir) {
     umask(0000);
     mkdir(DIR_FS_DOWNLOAD_PUBLIC . $tempdir, 0777);
     symlink(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'), DIR_FS_DOWNLOAD_PUBLIC . $tempdir . '/' . $Qdownloads->value('orders_products_filename'));
-    tep_redirect(DIR_WS_DOWNLOAD_PUBLIC . $tempdir . '/' . $Qdownloads->value('orders_products_filename'));
+    osc_redirect(DIR_WS_DOWNLOAD_PUBLIC . $tempdir . '/' . $Qdownloads->value('orders_products_filename'));
   } else {
 // This will work on all systems, but will need considerable resources
 // We could also loop with fread($fp, 4096) to save memory

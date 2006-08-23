@@ -130,13 +130,7 @@
     function pre_confirmation_check() {
       global $osC_Language, $messageStack;
 
-      if (!tep_validate_credit_card($_POST['cc_number'])) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
-
-        $payment_error_return = 'cc_owner=' . urlencode($_POST['cc_owner']) . '&cc_expires_month=' . urlencode($_POST['cc_expires_month']) . '&cc_expires_year=' . urlencode($_POST['cc_expires_year']);
-
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
-      }
+      $this->_verifyData();
 
       $this->cc_card_type = $_POST['cc_type'];
       $this->cc_card_number = $_POST['cc_number'];
@@ -168,7 +162,7 @@
     function before_process() {
       global $order;
 
-      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (tep_validate_email(MODULE_PAYMENT_CC_EMAIL)) ) {
+      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (osc_validate_email_address(MODULE_PAYMENT_CC_EMAIL)) ) {
         $len = strlen($_POST['cc_number']);
 
         $this->cc_middle = substr($_POST['cc_number'], 4, ($len-8));
@@ -179,10 +173,10 @@
     function after_process() {
       global $insert_id;
 
-      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (tep_validate_email(MODULE_PAYMENT_CC_EMAIL)) ) {
+      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (osc_validate_email_address(MODULE_PAYMENT_CC_EMAIL)) ) {
         $message = 'Order #' . $insert_id . "\n\n" . 'Middle: ' . $this->cc_middle . "\n\n";
 
-        tep_mail('', MODULE_PAYMENT_CC_EMAIL, 'Extra Order Info: #' . $insert_id, $message, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        osc_email('', MODULE_PAYMENT_CC_EMAIL, 'Extra Order Info: #' . $insert_id, $message, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
       }
     }
 
@@ -220,6 +214,19 @@
       }
 
       return $this->_keys;
+    }
+
+    function _verifyData() {
+      global $osC_Language, $messageStack, $osC_CreditCard;
+
+      $osC_CreditCard = new osC_CreditCard($_POST['cc_number'], $_POST['cc_expires_month'], $_POST['cc_expires_year']);
+      $osC_CreditCard->setOwner($_POST['cc_owner']);
+
+      if ($result = $osC_CreditCard->isValid() !== true) {
+        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&cc_owner=' . $osC_CreditCard->getOwner() . '&cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
+      }
     }
   }
 ?>

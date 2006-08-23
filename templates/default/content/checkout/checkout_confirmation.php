@@ -25,7 +25,7 @@
   if ($osC_ShoppingCart->hasShippingAddress()) {
 ?>
           <p><?php echo '<b>' . $osC_Language->get('order_delivery_address_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
-          <p><?php echo tep_address_format($osC_ShoppingCart->getShippingAddress('format_id'), $osC_ShoppingCart->getShippingAddress(), 1, ' ', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($osC_ShoppingCart->getShippingAddress(), '<br />'); ?></p>
 
 <?php
     if ($osC_ShoppingCart->hasShippingMethod()) {
@@ -40,7 +40,7 @@
 ?>
 
           <p><?php echo '<b>' . $osC_Language->get('order_billing_address_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
-          <p><?php echo tep_address_format($osC_ShoppingCart->getBillingAddress('format_id'), $osC_ShoppingCart->getBillingAddress(), 1, ' ', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($osC_ShoppingCart->getBillingAddress(), '<br />'); ?></p>
 
           <p><?php echo '<b>' . $osC_Language->get('order_payment_method_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $osC_ShoppingCart->getBillingMethod('title'); ?></p>
@@ -75,8 +75,8 @@
          '                <td align="right" valign="top" width="30">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' . "\n" .
          '                <td valign="top">' . $products['name'];
 
-    if (STOCK_CHECK == '1') {
-      echo tep_check_stock($products['id'], $products['quantity']);
+    if ( (STOCK_CHECK == '1') && !$osC_ShoppingCart->isInStock($products['id']) ) {
+      echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
     }
 
     if ( (isset($products['attributes'])) && (sizeof($products['attributes']) > 0) ) {
@@ -88,10 +88,10 @@
     echo '</td>' . "\n";
 
     if (sizeof($osC_ShoppingCart->_tax_groups) > 1) {
-      echo '                <td valign="top" align="right">' . tep_display_tax_value($products['tax']) . '%</td>' . "\n";
+      echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue($products['tax']) . '</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->format(tep_add_tax($products['final_price'], $products['tax_class_id']) * $products['quantity'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>
@@ -176,14 +176,14 @@
     }
   }
 
-  if (tep_not_null($order->info['comments'])) {
+  if (!empty($order->info['comments'])) {
 ?>
 
 <div class="moduleBox">
   <h6><?php echo '<b>' . $osC_Language->get('order_comments_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></h6>
 
   <div class="content">
-    <?php echo nl2br(tep_output_string_protected($order->info['comments'])) . osc_draw_hidden_field('comments', $order->info['comments']); ?>
+    <?php echo nl2br(osc_output_string_protected($order->info['comments'])) . osc_draw_hidden_field('comments', $order->info['comments']); ?>
   </div>
 </div>
 

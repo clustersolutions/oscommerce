@@ -17,10 +17,10 @@
       $first_array = array_slice($_GET, 0, 1);
     }
 
-    if (empty($_GET) || (!empty($_GET) && !in_array(tep_sanitize_string(basename(key($first_array))), array('login', 'create', 'password_forgotten')))) {
+    if (empty($_GET) || (!empty($_GET) && !in_array(osc_sanitize_string(basename(key($first_array))), array('login', 'create', 'password_forgotten')))) {
       $osC_NavigationHistory->setSnapshot();
 
-      tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+      osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
     }
   }
 

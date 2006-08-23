@@ -126,7 +126,7 @@
 
         $Qspecials = $osC_Database->query('select specials_new_products_price from :table_specials where products_id = :products_id and status = 1');
         $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-        $Qspecials->bindInt(':products_id', tep_get_prid($Qproducts->value('products_id')));
+        $Qspecials->bindInt(':products_id', osc_get_product_id($Qproducts->value('products_id')));
         $Qspecials->execute();
 
         if ($Qspecials->numberOfRows() > 0) {
@@ -152,7 +152,7 @@
         $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
         $Qattributes->bindInt(':customers_id', $osC_Customer->getID());
         $Qattributes->bindValue(':products_id', $Qproducts->value('products_id'));
-        $Qattributes->bindInt(':products_id', tep_get_prid($Qproducts->value('products_id')));
+        $Qattributes->bindInt(':products_id', osc_get_product_id($Qproducts->value('products_id')));
         $Qattributes->bindInt(':language_id', $osC_Language->getID());
         $Qattributes->bindInt(':language_id', $osC_Language->getID());
         $Qattributes->execute();
@@ -217,8 +217,8 @@
     function add($products_id, $attributes = '', $quantity = '') {
       global $osC_Database, $osC_Language, $osC_Customer, $osC_Image;
 
-      $products_id_string = tep_get_uprid($products_id, $attributes);
-      $products_id = tep_get_prid($products_id_string);
+      $products_id_string = osc_get_product_id_string($products_id, $attributes);
+      $products_id = osc_get_product_id($products_id_string);
 
       if (is_numeric($products_id)) {
         $Qcheck = $osC_Database->query('select p.products_price, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag) where p.products_id = :products_id');
@@ -415,7 +415,7 @@
     }
 
     function generateCartID($length = 5) {
-      return tep_create_random_value($length, 'digits');
+      return osc_create_random_string($length, 'digits');
     }
 
     function hasCartID() {
@@ -499,7 +499,7 @@
 
       $Qstock = $osC_Database->query('select products_quantity from :table_products where products_id = :products_id');
       $Qstock->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qstock->bindInt(':products_id', tep_get_prid($products_id));
+      $Qstock->bindInt(':products_id', osc_get_product_id($products_id));
       $Qstock->execute();
 
       if (($Qstock->valueInt('products_quantity') - $this->_contents[$products_id]['quantity']) > 0) {
@@ -528,7 +528,7 @@
         $previous_address = $this->getShippingAddress();
       }
 
-      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format_id, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
       $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qaddress->bindTable(':table_zones', TABLE_ZONES);
       $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
@@ -551,7 +551,7 @@
                                        'country_title' => $Qaddress->value('countries_name'),
                                        'country_iso_code_2' => $Qaddress->value('countries_iso_code_2'),
                                        'country_iso_code_3' => $Qaddress->value('countries_iso_code_3'),
-                                       'format_id' => $Qaddress->valueInt('address_format_id'),
+                                       'format' => $Qaddress->value('address_format'),
                                        'telephone_number' => $Qaddress->value('entry_telephone'));
 
       if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_shipping_address['id']) || ($previous_address['country_id'] != $this->_shipping_address['country_id']) || ($previous_address['zone_id'] != $this->_shipping_address['zone_id']) || ($previous_address['state'] != $this->_shipping_address['state']) || ($previous_address['postcode'] != $this->_shipping_address['postcode']) ) ) {
@@ -616,7 +616,7 @@
         $previous_address = $this->getBillingAddress();
       }
 
-      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format_id, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
       $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qaddress->bindTable(':table_zones', TABLE_ZONES);
       $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
@@ -639,7 +639,7 @@
                                       'country_title' => $Qaddress->value('countries_name'),
                                       'country_iso_code_2' => $Qaddress->value('countries_iso_code_2'),
                                       'country_iso_code_3' => $Qaddress->value('countries_iso_code_3'),
-                                      'format_id' => $Qaddress->valueInt('address_format_id'),
+                                      'format' => $Qaddress->value('address_format'),
                                       'telephone_number' => $Qaddress->value('entry_telephone'));
 
       if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_billing_address['id']) || ($previous_address['country_id'] != $this->_billing_address['country_id']) || ($previous_address['zone_id'] != $this->_billing_address['zone_id']) || ($previous_address['state'] != $this->_billing_address['state']) || ($previous_address['postcode'] != $this->_billing_address['postcode']) ) ) {
@@ -759,7 +759,7 @@
     }
 
     function _calculate($set_shipping = true) {
-      global $osC_Tax, $osC_Weight, $osC_Shipping, $osC_OrderTotal;
+      global $osC_Currencies, $osC_Tax, $osC_Weight, $osC_Shipping, $osC_OrderTotal;
 
       $this->_sub_total = 0;
       $this->_total = 0;
@@ -776,7 +776,7 @@
           $tax = $osC_Tax->getTaxRate($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
           $tax_description = $osC_Tax->getTaxRateDescription($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
 
-          $shown_price = tep_add_tax($data['final_price'], $tax) * $data['quantity'];
+          $shown_price = $osC_Currencies->formatRawWithTaxRate($data['final_price'], $tax, $data['quantity']);
           $this->_sub_total += $shown_price;
           $this->_total += $shown_price;
 

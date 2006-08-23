@@ -22,7 +22,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->getID(), $_GET['address_book'], true, ' ', '<br />'); ?>
+      <?php echo osC_Address::format($_GET['address_book'], '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">

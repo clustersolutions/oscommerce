@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/address_book.php');
+
   class osC_Checkout_Shipping_address extends osC_Template {
 
 /* Private variables */
@@ -27,11 +29,11 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
       $this->_page_title = $osC_Language->get('shipping_address_heading');
@@ -45,7 +47,7 @@
         $osC_ShoppingCart->resetShippingAddress();
         $osC_ShoppingCart->resetShippingMethod();
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
 // if no shipping destination address was selected, use their own address as default
@@ -80,7 +82,7 @@
       global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_ShoppingCart, $messageStack;
 
 // process a new shipping address
-      if (($osC_Customer->hasDefaultAddress() === false) || (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) ) {
+      if (($osC_Customer->hasDefaultAddress() === false) || (!empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['street_address'])) ) {
         if (ACCOUNT_GENDER > 0) {
           if (!isset($_POST['gender']) || (($_POST['gender'] != 'm') && ($_POST['gender'] != 'f'))) {
             $messageStack->add('checkout_address', $osC_Language->get('field_customer_gender_error'));
@@ -214,7 +216,7 @@
 
             $osC_ShoppingCart->setShippingAddress($address_book_id);
 
-            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+            osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
           } else {
             $messageStack->add('checkout_address', 'Error inserting into address book table.');
           }
@@ -230,14 +232,14 @@
         $Qcheck->execute();
 
         if ($Qcheck->numberOfRows() === 1) {
-          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+          osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
         } else {
           $osC_ShoppingCart->resetShippingAddress();
         }
       } else {
         $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
     }
   }

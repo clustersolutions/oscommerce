@@ -54,6 +54,14 @@
     return preg_replace("/[<>]/", '_', $string);
   }
 
+  function osc_output_string($string, $translate = false, $protected = false) {
+    return tep_output_string($string, $translate, $protected);
+  }
+
+  function osc_output_string_protected($string) {
+    return tep_output_string_protected($string);
+  }
+
   function tep_date_long($raw_date) {
     if ( ($raw_date == '0000-00-00 00:00:00') || ($raw_date == '') ) return false;
 
@@ -196,80 +204,6 @@
 
     return $Qzone->value('geo_zone_name');
   }
-
-  function tep_address_format($address_format_id, $address, $html, $boln, $eoln) {
-    global $osC_Database;
-
-    $Qformat = $osC_Database->query('select address_format from :table_address_format where address_format_id = :address_format_id');
-    $Qformat->bindTable(':table_address_format', TABLE_ADDRESS_FORMAT);
-    $Qformat->bindInt(':address_format_id', $address_format_id);
-    $Qformat->execute();
-
-    $company = tep_output_string_protected($address['company']);
-    if (isset($address['firstname']) && tep_not_null($address['firstname'])) {
-      $firstname = tep_output_string_protected($address['firstname']);
-      $lastname = tep_output_string_protected($address['lastname']);
-    } elseif (isset($address['name']) && tep_not_null($address['name'])) {
-      $firstname = tep_output_string_protected($address['name']);
-      $lastname = '';
-    } else {
-      $firstname = '';
-      $lastname = '';
-    }
-    $street = tep_output_string_protected($address['street_address']);
-    $suburb = tep_output_string_protected($address['suburb']);
-    $city = tep_output_string_protected($address['city']);
-    $state = tep_output_string_protected($address['state']);
-    if (isset($address['country_id']) && tep_not_null($address['country_id'])) {
-      $country = tep_get_country_name($address['country_id']);
-
-      if (isset($address['zone_id']) && tep_not_null($address['zone_id'])) {
-        $state = tep_get_zone_code($address['country_id'], $address['zone_id'], $state);
-      }
-    } elseif (isset($address['country']) && tep_not_null($address['country'])) {
-      $country = tep_output_string_protected($address['country']);
-    } else {
-      $country = '';
-    }
-    $postcode = tep_output_string_protected($address['postcode']);
-    $zip = $postcode;
-
-    if ($html) {
-// HTML Mode
-      $HR = '<hr>';
-      $hr = '<hr>';
-      if ( ($boln == '') && ($eoln == "\n") ) { // Values not specified, use rational defaults
-        $CR = '<br />';
-        $cr = '<br />';
-        $eoln = $cr;
-      } else { // Use values supplied
-        $CR = $eoln . $boln;
-        $cr = $CR;
-      }
-    } else {
-// Text Mode
-      $CR = $eoln;
-      $cr = $CR;
-      $HR = '----------------------------------------';
-      $hr = '----------------------------------------';
-    }
-
-    $statecomma = '';
-    $streets = $street;
-    if ($suburb != '') $streets = $street . $cr . $suburb;
-    if ($country == '') $country = tep_output_string_protected($address['country']);
-    if ($state != '') $statecomma = $state . ', ';
-
-    $fmt = $Qformat->value('address_format');
-    eval("\$address = \"$fmt\";");
-
-    if ( (ACCOUNT_COMPANY == 'true') && (tep_not_null($company)) ) {
-      $address = $company . $cr . $address;
-    }
-
-    return $address;
-  }
-
 
   function tep_get_uprid($prid, $params) {
     $uprid = $prid;
@@ -453,24 +387,6 @@
     }
 
     return $zones;
-  }
-
-////
-// Get list of address_format_id's
-  function tep_get_address_formats() {
-    global $osC_Database;
-
-    $address_format_array = array();
-
-    $Qformats = $osC_Database->query('select address_format_id from :table_address_format order by address_format_id');
-    $Qformats->bindTable(':table_address_format', TABLE_ADDRESS_FORMAT);
-    $Qformats->execute();
-
-    while ($Qformats->next()) {
-      $address_format_array[] = array('id' => $Qformats->valueInt('address_format_id'),
-                                      'text' => $Qformats->valueInt('address_format_id'));
-    }
-    return $address_format_array;
   }
 
 ////

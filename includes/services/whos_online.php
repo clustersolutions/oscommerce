@@ -30,11 +30,11 @@
         if (SERVICE_WHOS_ONLINE_SPIDER_DETECTION == '1') {
           $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 
-          if (tep_not_null($user_agent)) {
+          if (!empty($user_agent)) {
             $spiders = file('includes/spiders.txt');
 
             foreach ($spiders as $spider) {
-              if (tep_not_null($spider)) {
+              if (!empty($spider)) {
                 if ((strpos($user_agent, trim($spider))) !== false) {
                   $wo_full_name = $spider;
                   break;
@@ -46,7 +46,7 @@
       }
 
       $wo_session_id = session_id();
-      $wo_ip_address = tep_get_ip_address();
+      $wo_ip_address = osc_get_ip_address();
       $wo_last_page_url = $_SERVER['REQUEST_URI'];
 
       $current_time = time();

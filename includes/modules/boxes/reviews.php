@@ -81,7 +81,7 @@
             $this->_content = '<div align="center">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), $osC_Image->show($data['image'], $data['products_name'])) . '</div>';
           }
 
-          $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), tep_break_string(tep_output_string_protected($data['reviews_text']), 15, '-<br />') . ' ..') . '<br /><div align="center">' . osc_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.gif' , sprintf($osC_Language->get('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
+          $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), wordwrap(osc_output_string_protected($data['reviews_text']), 15, '&shy;') . ' ..') . '<br /><div align="center">' . osc_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.gif' , sprintf($osC_Language->get('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
         }
       }
     }

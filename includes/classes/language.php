@@ -93,7 +93,7 @@
       }
 
       if (!isset($_COOKIE['language']) || (isset($_COOKIE['language']) && ($_COOKIE['language'] != $this->_code))) {
-        tep_setcookie('language', $this->_code, time()+60*60*24*90);
+        osc_setcookie('language', $this->_code, time()+60*60*24*90);
       }
 
       if ((isset($_SESSION['language']) === false) || (isset($_SESSION['language']) && ($_SESSION['language'] != $this->_code))) {

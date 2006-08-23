@@ -27,16 +27,16 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
       if ($osC_ShoppingCart->hasShippingAddress() == false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
       include('includes/classes/order.php');
@@ -51,8 +51,8 @@
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {
         unset($_SESSION['comments']);
-      } else if (tep_not_null($_POST['comments'])) {
-        $_SESSION['comments'] = tep_sanitize_string($_POST['comments']);
+      } else if (!empty($_POST['comments'])) {
+        $_SESSION['comments'] = osc_sanitize_string($_POST['comments']);
       }
 
       if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
@@ -74,7 +74,7 @@
       }
 
       if ($messageStack->size('checkout_payment') > 0) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
       if ($osC_Payment->hasActive()) {
@@ -82,16 +82,11 @@
       }
 
 // Stock Check
-      $any_out_of_stock = false;
-      if (STOCK_CHECK == '1') {
-        for ($i=0, $n=sizeof($order->products); $i<$n; $i++) {
-          if (tep_check_stock($order->products[$i]['id'], $order->products[$i]['qty'])) {
-            $any_out_of_stock = true;
+      if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
+        foreach ($osC_ShoppingCart->getProducts() as $product) {
+          if (!$osC_ShoppingCart->isInStock($product['id'])) {
+            osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'AUTO'));
           }
-        }
-// Out of Stock
-        if ( (STOCK_ALLOW_CHECKOUT == '-1') && ($any_out_of_stock == true) ) {
-          tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'AUTO'));
         }
       }
     }

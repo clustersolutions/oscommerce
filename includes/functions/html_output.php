@@ -64,7 +64,7 @@
     $link .= $page;
 
     if (!empty($parameters)) {
-      $link .= '?' . tep_output_string($parameters);
+      $link .= '?' . osc_output_string($parameters);
       $separator = '&';
     } else {
       $separator = '?';
@@ -86,14 +86,14 @@
     }
 
     if (isset($_sid)) {
-      $link .= $separator . tep_output_string($_sid);
+      $link .= $separator . osc_output_string($_sid);
     }
 
     while (strstr($link, '&&')) {
       $link = str_replace('&&', '&', $link);
     }
 
-    if ( ($search_engine_safe === true) && $osC_Services->isStarted('sefu')) {
+    if ( ($search_engine_safe === true) && isset($osC_Services) && $osC_Services->isStarted('sefu')) {
       $link = str_replace(array('?', '&', '='), '/', $link);
     } else {
       if (strpos($link, '&') !== false) {
@@ -141,10 +141,10 @@
       $height = 0;
     }
 
-    $image = '<img src="' . tep_output_string($image) . '" border="0" alt="' . tep_output_string($title) . '"';
+    $image = '<img src="' . osc_output_string($image) . '" border="0" alt="' . osc_output_string($title) . '"';
 
     if (!empty($alt)) {
-      $image .= ' title="' . tep_output_string($title) . '"';
+      $image .= ' title="' . osc_output_string($title) . '"';
     }
 
     if ($width > 0) {
@@ -176,10 +176,10 @@
   function osc_draw_image_submit_button($image, $title = null, $parameters = null) {
     global $osC_Language;
 
-    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '"';
+    $image_submit = '<input type="image" src="' . osc_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '"';
 
     if (!empty($title)) {
-      $image_submit .= ' alt="' . tep_output_string($title) . '" title="' . tep_output_string($title) . '"';
+      $image_submit .= ' alt="' . osc_output_string($title) . '" title="' . osc_output_string($title) . '"';
     }
 
     if (!empty($parameters)) {
@@ -234,14 +234,14 @@
       $type = 'text';
     }
 
-    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+    $field = '<input type="' . osc_output_string($type) . '" name="' . osc_output_string($name) . '"';
 
     if (strpos($parameters, 'id=') === false) {
-      $field .= ' id="' . tep_output_string($name) . '"';
+      $field .= ' id="' . osc_output_string($name) . '"';
     }
 
     if (!empty($value)) {
-      $field .= ' value="' . tep_output_string($value) . '"';
+      $field .= ' value="' . osc_output_string($value) . '"';
     }
 
     if (!empty($parameters)) {
@@ -290,7 +290,7 @@
       }
 
       if (!empty($upload_max_filesize)) {
-        $field .= '&nbsp;' . sprintf($osC_Language->get('maximum_file_upload_size'), tep_output_string($upload_max_filesize));
+        $field .= '&nbsp;' . sprintf($osC_Language->get('maximum_file_upload_size'), osc_output_string($upload_max_filesize));
       }
     }
 
@@ -335,14 +335,14 @@
         $selection_text = '';
       }
 
-      $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+      $field .= '<input type="' . osc_output_string($type) . '" name="' . osc_output_string($name) . '"';
 
       if (strpos($parameters, 'id=') === false) {
-        $field .= ' id="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
+        $field .= ' id="' . osc_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
       }
 
       if (!empty($selection_value)) {
-        $field .= ' value="' . tep_output_string($selection_value) . '"';
+        $field .= ' value="' . osc_output_string($selection_value) . '"';
       }
 
       if ((is_bool($default) && $default === true) || (!empty($default) && ((is_string($default) && ($default == $selection_value)) || (is_array($default) && in_array($selection_value, $default))))) {
@@ -356,7 +356,7 @@
       $field .= ' />';
 
       if (!empty($selection_text)) {
-        $field .= '<label for="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '" class="fieldLabel">' . $selection_text . '</label>';
+        $field .= '<label for="' . osc_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '" class="fieldLabel">' . $selection_text . '</label>';
       }
 
       $field .= $separator;
@@ -432,10 +432,10 @@
       $width = 5;
     }
 
-    $field = '<textarea name="' . tep_output_string($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
+    $field = '<textarea name="' . osc_output_string($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
 
     if (strpos($parameters, 'id=') === false) {
-      $field .= ' id="' . tep_output_string($name) . '"';
+      $field .= ' id="' . osc_output_string($name) . '"';
     }
 
     if (!empty($parameters)) {
@@ -457,10 +457,10 @@
  */
 
   function osc_draw_hidden_field($name, $value = null, $parameters = null) {
-    $field = '<input type="hidden" name="' . tep_output_string($name) . '"';
+    $field = '<input type="hidden" name="' . osc_output_string($name) . '"';
 
     if (!empty($value)) {
-      $field .= ' value="' . tep_output_string($value) . '"';
+      $field .= ' value="' . osc_output_string($value) . '"';
     }
 
     if (!empty($parameters)) {
@@ -505,10 +505,10 @@
       $default = $_POST[$name];
     }
 
-    $field = '<select name="' . tep_output_string($name) . '"';
+    $field = '<select name="' . osc_output_string($name) . '"';
 
     if (strpos($parameters, 'id=') === false) {
-      $field .= ' id="' . tep_output_string($name) . '"';
+      $field .= ' id="' . osc_output_string($name) . '"';
     }
 
     if (!empty($parameters)) {
@@ -522,17 +522,17 @@
         if ($group != $values[$i]['group']) {
           $group = $values[$i]['group'];
 
-          $field .= '<optgroup label="' . tep_output_string($values[$i]['group']) . '">';
+          $field .= '<optgroup label="' . osc_output_string($values[$i]['group']) . '">';
         }
       }
 
-      $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
+      $field .= '<option value="' . osc_output_string($values[$i]['id']) . '"';
 
-      if ( (is_string($default) && ($default == $values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
+      if ( (!is_null($default) && ($default == $values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
         $field .= ' selected="selected"';
       }
 
-      $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+      $field .= '>' . osc_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
 
       if ( ($group !== false) && (($group != $values[$i]['group']) || !isset($values[$i+1])) ) {
         $group = false;
@@ -561,7 +561,7 @@
       $required = false;
     }
 
-    return '<label for="' . tep_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . tep_output_string($access_key) . '"' : '') . '>' . tep_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
+    return '<label for="' . osc_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . osc_output_string($access_key) . '"' : '') . '>' . osc_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
   }
 
 /**

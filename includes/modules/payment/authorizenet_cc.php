@@ -226,7 +226,7 @@
                       'x_zip' => $osC_ShoppingCart->getBillingAddress('postcode'),
                       'x_country' => $osC_ShoppingCart->getBillingAddress('country_iso_code_2'),
                       'x_cust_id' => $osC_Customer->getID(),
-                      'x_customer_ip' => tep_get_ip_address(),
+                      'x_customer_ip' => osc_get_ip_address(),
                       'x_invoice_num' => $this->_order_id, 
                       'x_email' => $osC_Customer->getEmailAddress(),
                       'x_email_customer' => 'FALSE',
@@ -273,7 +273,7 @@
       $error = false;
 
       if ($regs[0] == '1') {
-        if (tep_not_null(MODULE_PAYMENT_AUTHORIZENET_CC_MD5_HASH)) {
+        if (!osc_empty(MODULE_PAYMENT_AUTHORIZENET_CC_MD5_HASH)) {
           if (strtoupper($regs[37]) != strtoupper(md5(MODULE_PAYMENT_AUTHORIZENET_CC_MD5_HASH . MODULE_PAYMENT_AUTHORIZENET_CC_LOGIN_ID . $regs[6] . $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $osC_Currencies->getCode())))) {
             $error = $osC_Language->get('payment_authorizenet_cc_error_general');
           }
@@ -314,7 +314,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_cc_owner=' . $osC_CreditCard->getOwner() . '&authorizenet_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&authorizenet_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_AUTHORIZENET_CC_VERIFY_WITH_CVC == '1' ? '&authorizenet_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_cc_owner=' . $osC_CreditCard->getOwner() . '&authorizenet_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&authorizenet_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_AUTHORIZENET_CC_VERIFY_WITH_CVC == '1' ? '&authorizenet_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
@@ -351,7 +351,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_cc_owner=' . $osC_CreditCard->getOwner() . '&authorizenet_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&authorizenet_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_AUTHORIZENET_CC_VERIFY_WITH_CVC == '1' ? '&authorizenet_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_cc_owner=' . $osC_CreditCard->getOwner() . '&authorizenet_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&authorizenet_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_AUTHORIZENET_CC_VERIFY_WITH_CVC == '1' ? '&authorizenet_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

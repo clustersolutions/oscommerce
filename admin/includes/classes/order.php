@@ -27,7 +27,7 @@
     function _getSummary($order_id) {
       global $osC_Database;
 
-      $Qorder = $osC_Database->query('select orders_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_country, customers_address_format_id, customers_telephone, customers_email_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_country, delivery_address_format_id, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_country, billing_address_format_id, payment_method, payment_module, cc_type, cc_owner, cc_number, cc_expires, currency, currency_value, date_purchased, last_modified, orders_status from :table_orders where orders_id = :orders_id');
+      $Qorder = $osC_Database->query('select * from :table_orders where orders_id = :orders_id');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
       $Qorder->bindInt(':orders_id', $order_id);
       $Qorder->execute();
@@ -44,8 +44,11 @@
                                  'city' => $Qorder->valueProtected('customers_city'),
                                  'postcode' => $Qorder->valueProtected('customers_postcode'),
                                  'state' => $Qorder->valueProtected('customers_state'),
+                                 'state_code' => $Qorder->value('customers_state_code'),
                                  'country' => $Qorder->value('customers_country'),
-                                 'format_id' => $Qorder->valueInt('customers_address_format_id'),
+                                 'country_iso2' => $Qorder->value('customers_country_iso2'),
+                                 'country_iso3' => $Qorder->value('customers_country_iso3'),
+                                 'format' => $Qorder->value('customers_address_format'),
                                  'telephone' => $Qorder->valueProtected('customers_telephone'),
                                  'email_address' => $Qorder->valueProtected('customers_email_address'));
 
@@ -56,8 +59,11 @@
                                  'city' => $Qorder->valueProtected('delivery_city'),
                                  'postcode' => $Qorder->valueProtected('delivery_postcode'),
                                  'state' => $Qorder->valueProtected('delivery_state'),
+                                 'state_code' => $Qorder->value('delivery_state_code'),
                                  'country' => $Qorder->value('delivery_country'),
-                                 'format_id' => $Qorder->valueInt('delivery_address_format_id'));
+                                 'country_iso2' => $Qorder->value('delivery_country_iso2'),
+                                 'country_iso3' => $Qorder->value('delivery_country_iso3'),
+                                 'format' => $Qorder->value('delivery_address_format'));
 
         $this->_billing = array('name' => $Qorder->valueProtected('billing_name'),
                                 'company' => $Qorder->valueProtected('billing_company'),
@@ -66,15 +72,14 @@
                                 'city' => $Qorder->valueProtected('billing_city'),
                                 'postcode' => $Qorder->valueProtected('billing_postcode'),
                                 'state' => $Qorder->valueProtected('billing_state'),
+                                'state_code' => $Qorder->value('billing_state_code'),
                                 'country' => $Qorder->value('billing_country'),
-                                'format_id' => $Qorder->valueInt('billing_address_format_id'));
+                                'country_iso2' => $Qorder->value('billing_country_iso2'),
+                                'country_iso3' => $Qorder->value('billing_country_iso3'),
+                                'format' => $Qorder->value('billing_address_format'));
 
         $this->_payment_method = $Qorder->value('payment_method');
         $this->_payment_module = $Qorder->value('payment_module');
-        $this->_credit_card = array('type' => $Qorder->value('cc_type'),
-                                    'owner' => $Qorder->valueProtected('cc_owner'),
-                                    'number' => $Qorder->valueProtected('cc_number'),
-                                    'expires' => $Qorder->value('cc_expires'));
 
         $this->_currency = array('code' => $Qorder->value('currency'),
                                  'value' => $Qorder->value('currency_value'));

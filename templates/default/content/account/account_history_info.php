@@ -33,10 +33,10 @@
 
           <h6><?php echo $osC_Language->get('order_delivery_address_title'); ?></h6>
 
-          <p><?php echo tep_address_format($order->delivery['format_id'], $order->delivery, 1, ' ', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($order->delivery, '<br />'); ?></p>
 
 <?php
-    if (tep_not_null($order->info['shipping_method'])) {
+    if (!empty($order->info['shipping_method'])) {
 ?>
 
           <h6><?php echo $osC_Language->get('order_shipping_method_title'); ?></h6>
@@ -50,7 +50,7 @@
 
           <h6><?php echo $osC_Language->get('order_billing_address_title'); ?></h6>
 
-          <p><?php echo tep_address_format($order->billing['format_id'], $order->billing, 1, ' ', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($order->billing, '<br />'); ?></p>
 
           <h6><?php echo $osC_Language->get('order_payment_method_title'); ?></h6>
 
@@ -95,10 +95,10 @@
     echo '</td>' . "\n";
 
     if (sizeof($order->info['tax_groups']) > 1) {
-      echo '                <td valign="top" align="right">' . tep_display_tax_value($product['tax']) . '%</td>' . "\n";
+      echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue($product['tax']) . '</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->format(tep_add_tax($product['final_price'], $product['tax']) * $product['qty'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], $product['qty'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>
@@ -143,7 +143,7 @@
       echo '    <tr>' . "\n" .
            '      <td valign="top" width="70">' . osC_DateTime::getShort($Qstatus->value('date_added')) . '</td>' . "\n" .
            '      <td valign="top" width="70">' . $Qstatus->value('orders_status_name') . '</td>' . "\n" .
-           '      <td valign="top">' . (tep_not_null($Qstatus->valueProtected('comments')) ? nl2br($Qstatus->valueProtected('comments')) : '&nbsp;') . '</td>' . "\n" .
+           '      <td valign="top">' . (!osc_empty($Qstatus->valueProtected('comments')) ? nl2br($Qstatus->valueProtected('comments')) : '&nbsp;') . '</td>' . "\n" .
            '    </tr>' . "\n";
     }
 ?>

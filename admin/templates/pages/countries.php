@@ -25,7 +25,7 @@
     </thead>
     <tbody>
 <?php
-  $Qcountries = $osC_Database->query('select SQL_CALC_FOUND_ROWS countries_id, countries_name, countries_iso_code_2, countries_iso_code_3, address_format_id from :table_countries order by countries_name');
+  $Qcountries = $osC_Database->query('select SQL_CALC_FOUND_ROWS countries_id, countries_name, countries_iso_code_2, countries_iso_code_3, address_format from :table_countries order by countries_name');
   $Qcountries->bindTable(':table_countries', TABLE_COUNTRIES);
   $Qcountries->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qcountries->execute();
@@ -99,7 +99,7 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ADDRESS_FORMAT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('address_format_id', tep_get_address_formats()); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('address_format'); ?></td>
       </tr>
     </table>
 
@@ -135,7 +135,7 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ADDRESS_FORMAT . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('address_format_id', tep_get_address_formats(), $cInfo->address_format_id); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('address_format', $cInfo->address_format); ?></td>
       </tr>
     </table>
 

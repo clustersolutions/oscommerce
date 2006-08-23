@@ -11,6 +11,7 @@
 */
 
   require('includes/application_top.php');
+  require('../includes/classes/address.php');
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
   $section = (isset($_GET['section']) ? $_GET['section'] : '');

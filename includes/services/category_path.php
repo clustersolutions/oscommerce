@@ -18,29 +18,34 @@
         $precedes;
 
     function start() {
-      global $cPath, $cPath_array, $current_category_id, $osC_CategoryTree;
+      global $osC_CategoryTree;
 
-      if (isset($_GET['cPath'])) {
-        $cPath = $_GET['cPath'];
-      } elseif (isset($_GET['products_id']) && !isset($_GET['manufacturers_id'])) {
-        $cPath = tep_get_product_path($_GET['products_id']);
-      } else {
-        $cPath = '';
-      }
-
-      if (!empty($cPath)) {
-        $cPath_array = tep_parse_category_path($cPath);
-        $cPath = implode('_', $cPath_array);
-
-        $current_category_id = end($cPath_array);
-      } else {
-        $current_category_id = 0;
-      }
+      osC_Services_category_path::process();
 
       include('includes/classes/category_tree.php');
       $osC_CategoryTree = new osC_CategoryTree();
 
       return true;
+    }
+
+    function process($id = null) {
+      global $cPath, $cPath_array, $current_category_id, $osC_CategoryTree;
+
+      $cPath = '';
+      $cPath_array = array();
+      $current_category_id = 0;
+
+      if (isset($_GET['cPath'])) {
+        $cPath = $_GET['cPath'];
+      } elseif (!empty($id)) {
+        $cPath = $osC_CategoryTree->buildBreadcrumb($id);
+      }
+
+      if (!empty($cPath)) {
+        $cPath_array = array_unique(array_filter(explode('_', $cPath), 'is_numeric'));
+        $cPath = implode('_', $cPath_array);
+        $current_category_id = end($cPath_array);
+      }
     }
 
     function stop() {

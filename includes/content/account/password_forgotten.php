@@ -50,7 +50,7 @@
       $Qcheck->execute();
 
       if ($Qcheck->numberOfRows() === 1) {
-        $password = tep_create_random_value(ACCOUNT_PASSWORD);
+        $password = osc_create_random_string(ACCOUNT_PASSWORD);
 
         if (osC_Account::savePassword($password, $Qcheck->valueInt('customers_id'))) {
           if (ACCOUNT_GENDER > -1) {
@@ -65,12 +65,12 @@
 
           $email_text .= sprintf($osC_Language->get('email_password_reminder_body'), getenv('REMOTE_ADDR'), STORE_NAME, $password, STORE_OWNER_EMAIL_ADDRESS);
 
-          tep_mail($Qcheck->valueProtected('customers_firstname') . ' ' . $Qcheck->valueProtected('customers_lastname'), $Qcheck->valueProtected('customers_email_address'), sprintf($osC_Language->get('email_password_reminder_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          osc_email($Qcheck->valueProtected('customers_firstname') . ' ' . $Qcheck->valueProtected('customers_lastname'), $Qcheck->valueProtected('customers_email_address'), sprintf($osC_Language->get('email_password_reminder_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
           $messageStack->add_session('login', $osC_Language->get('success_password_forgotten_sent'), 'success');
         }
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       } else {
         $messageStack->add('password_forgotten', $osC_Language->get('error_password_forgotten_no_email_address_found'));
       }

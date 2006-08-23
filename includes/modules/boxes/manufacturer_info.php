@@ -38,7 +38,7 @@
         if ($Qmanufacturer->numberOfRows()) {
           $this->_content = '';
 
-          if (tep_not_null($Qmanufacturer->value('manufacturers_image'))) {
+          if (!osc_empty($Qmanufacturer->value('manufacturers_image'))) {
             $this->_content .= '<div style="text-align: center;">' .
                                osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')), osc_image(DIR_WS_IMAGES . $Qmanufacturer->value('manufacturers_image'), $Qmanufacturer->value('manufacturers_name'))) .
                                '</div>';
@@ -46,7 +46,7 @@
 
           $this->_content .= '<ol style="list-style: none; margin: 0; padding: 0;">';
 
-          if (tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
+          if (!osc_empty($Qmanufacturer->value('manufacturers_url'))) {
             $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_REDIRECT, 'action=manufacturer&manufacturers_id=' . $Qmanufacturer->valueInt('manufacturers_id')), sprintf($osC_Language->get('box_manufacturer_info_website'), $Qmanufacturer->value('manufacturers_name')), 'target="_blank"') . '</li>';
           }
 

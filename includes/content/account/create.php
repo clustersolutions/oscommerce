@@ -90,7 +90,7 @@
       }
 
       if (isset($_POST['email_address']) && (strlen(trim($_POST['email_address'])) >= ACCOUNT_EMAIL_ADDRESS)) {
-        if (tep_validate_email($_POST['email_address'])) {
+        if (osc_validate_email_address($_POST['email_address'])) {
           if (osC_Account::checkDuplicateEntry($_POST['email_address']) === false) {
             $data['email_address'] = $_POST['email_address'];
           } else {
@@ -116,7 +116,7 @@
           $messageStack->add_session('create', $osC_Language->get('success_account_updated'), 'success');
         }
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'create=success', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'create=success', 'SSL'));
       }
     }
   }

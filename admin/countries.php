@@ -22,16 +22,16 @@
     switch ($action) {
       case 'save':
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-          $Qcountry = $osC_Database->query('update :table_countries set countries_name = :countries_name, countries_iso_code_2 = :countries_iso_code_2, countries_iso_code_3 = :countries_iso_code_3, address_format_id = :address_format_id where countries_id = :countries_id');
+          $Qcountry = $osC_Database->query('update :table_countries set countries_name = :countries_name, countries_iso_code_2 = :countries_iso_code_2, countries_iso_code_3 = :countries_iso_code_3, address_format = :address_format where countries_id = :countries_id');
           $Qcountry->bindInt(':countries_id', $_GET['cID']);
         } else {
-          $Qcountry = $osC_Database->query('insert into :table_countries (countries_name, countries_iso_code_2, countries_iso_code_3, address_format_id) values (:countries_name, :countries_iso_code_2, :countries_iso_code_3, :address_format_id)');
+          $Qcountry = $osC_Database->query('insert into :table_countries (countries_name, countries_iso_code_2, countries_iso_code_3, address_format) values (:countries_name, :countries_iso_code_2, :countries_iso_code_3, :address_format)');
         }
         $Qcountry->bindTable(':table_countries', TABLE_COUNTRIES);
         $Qcountry->bindValue(':countries_name', $_POST['countries_name']);
         $Qcountry->bindValue(':countries_iso_code_2', $_POST['countries_iso_code_2']);
         $Qcountry->bindValue(':countries_iso_code_3', $_POST['countries_iso_code_3']);
-        $Qcountry->bindInt(':address_format_id', $_POST['address_format_id']);
+        $Qcountry->bindValue(':address_format', $_POST['address_format']);
         $Qcountry->execute();
 
         if ($osC_Database->isError() === false) {

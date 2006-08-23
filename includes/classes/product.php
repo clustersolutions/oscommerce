@@ -23,7 +23,7 @@
 
         if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
           $Qproduct->appendQuery('p.products_id = :products_id');
-          $Qproduct->bindInt(':products_id', tep_get_prid($id));
+          $Qproduct->bindInt(':products_id', osc_get_product_id($id));
         } else {
           $Qproduct->appendQuery('pd.products_keyword = :products_keyword');
           $Qproduct->bindValue(':products_keyword', $id);
@@ -237,7 +237,7 @@
 
       if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
         $Qcheck->appendQuery('where p.products_id = :products_id');
-        $Qcheck->bindInt(':products_id', tep_get_prid($id));
+        $Qcheck->bindInt(':products_id', osc_get_product_id($id));
       } else {
         $Qcheck->appendQuery(', :table_products_description pd where pd.products_keyword = :products_keyword and pd.products_id = p.products_id');
         $Qcheck->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
@@ -259,7 +259,7 @@
 
       $Qupdate = $osC_Database->query('update :table_products_description set products_viewed = products_viewed+1 where products_id = :products_id and language_id = :language_id');
       $Qupdate->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qupdate->bindInt(':products_id', tep_get_prid($this->_data['id']));
+      $Qupdate->bindInt(':products_id', osc_get_product_id($this->_data['id']));
       $Qupdate->bindInt(':language_id', $osC_Language->getID());
       $Qupdate->execute();
     }

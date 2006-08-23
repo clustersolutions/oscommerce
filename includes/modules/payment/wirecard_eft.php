@@ -256,7 +256,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
       }
     }
 
@@ -276,7 +276,7 @@
       if (empty($_POST['wirecard_eft_owner_first']) || empty($_POST['wirecard_eft_owner_last']) || empty($_POST['wirecard_eft_account']) || (strlen($_POST['wirecard_eft_account']) < 3) || empty($_POST['wirecard_eft_bank']) || (strlen($_POST['wirecard_eft_bank']) !== 8) || (in_array($_POST['wirecard_eft_account_type'], array('C', 'S')) === false)) {
         $messageStack->add_session('checkout_payment', $osC_Language->get('payment_wirecard_eft_error_general'), 'error');
 
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
       }
     }
 

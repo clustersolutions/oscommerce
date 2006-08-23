@@ -48,6 +48,8 @@
             $this->addPageTags('keywords', $osC_Product->getTags());
           }
 
+          osC_Services_category_path::process($osC_Product->getCategoryID());
+
           if ($osC_Services->isStarted('breadcrumb')) {
             $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
           }

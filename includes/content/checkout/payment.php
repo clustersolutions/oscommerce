@@ -27,23 +27,23 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
       if ($osC_ShoppingCart->hasShippingMethod() === false) {
-        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
 // Stock Check
       if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
         foreach ($osC_ShoppingCart->getProducts() as $products) {
           if ($osC_ShoppingCart->isInStock($products['id']) === false) {
-            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'SSL'));
+            osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'SSL'));
             break;
           }
         }

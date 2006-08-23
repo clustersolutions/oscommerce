@@ -51,7 +51,7 @@
  * @seeAlso connect
  **/
     function httpClient($host = '', $port = '') {
-      if (tep_not_null($host)) {
+      if (!empty($host)) {
         $this->connect($host, $port);
       }
     }
@@ -136,7 +136,7 @@
     function Connect($host, $port = '') {
       $this->url['scheme'] = 'http';
       $this->url['host'] = $host;
-      if (tep_not_null($port)) $this->url['port'] = $port;
+      if (!empty($port)) $this->url['port'] = $port;
 
       return true;
     }
@@ -325,13 +325,13 @@
           $port = $this->url['port'];
         }
 
-        if (!tep_not_null($port)) $port = 80;
+        if (!!empty($port)) $port = 80;
 
         if (!$this->socket = fsockopen($host, $port, $this->reply, $this->replyString)) {
           return false;
         }
 
-        if (tep_not_null($this->requestBody)) {
+        if (!empty($this->requestBody)) {
           $this->addHeader('Content-Length', strlen($this->requestBody));
         }
 
@@ -344,7 +344,7 @@
           }
         }
 
-        if (tep_not_null($this->requestBody)) {
+        if (!empty($this->requestBody)) {
           $cmd .= "\r\n" . $this->requestBody;
         }
 

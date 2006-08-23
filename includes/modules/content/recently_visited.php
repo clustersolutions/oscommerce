@@ -81,7 +81,7 @@
                              '        <ol style="list-style: none; margin: 0; padding: 0;">';
 
           foreach ($osC_RecentlyVisited->getSearches() as $searchphrase) {
-            $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_SEARCH, 'keywords=' . $searchphrase['keywords']), tep_output_string_protected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
+            $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_SEARCH, 'keywords=' . $searchphrase['keywords']), osc_output_string_protected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
           }
 
           $this->_content .= '      </ol>' .

@@ -68,7 +68,7 @@
       $time_end = explode(' ', microtime());
       $parse_time = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
 
-      if (tep_not_null(SERVICE_DEBUG_EXECUTION_TIME_LOG)) {
+      if (!osc_empty(SERVICE_DEBUG_EXECUTION_TIME_LOG)) {
         if (!@error_log(strftime('%c') . ' - ' . $_SERVER['REQUEST_URI'] . ' (' . $parse_time . 's)' . "\n", 3, SERVICE_DEBUG_EXECUTION_TIME_LOG)) {
           if (!file_exists(SERVICE_DEBUG_EXECUTION_TIME_LOG) || !is_writable(SERVICE_DEBUG_EXECUTION_TIME_LOG)) {
             $messageStack->add('debug', 'Error: Execution time log file not writeable: ' . SERVICE_DEBUG_EXECUTION_TIME_LOG . ' [' . __CLASS__ . ']', 'error');

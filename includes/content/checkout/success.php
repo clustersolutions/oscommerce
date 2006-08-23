@@ -29,7 +29,7 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
@@ -55,7 +55,7 @@
 
       if (strlen($notify_string) > 0) $notify_string = substr($notify_string, 0, -1);
 
-      tep_redirect(osc_href_link(FILENAME_DEFAULT, $notify_string, 'AUTO'));
+      osc_redirect(osc_href_link(FILENAME_DEFAULT, $notify_string, 'AUTO'));
     }
   }
 ?>

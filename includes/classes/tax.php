@@ -82,5 +82,49 @@
 
       return $this->tax_rates[$class_id][$country_id][$zone_id]['description'];
     }
+
+    function calculate($price, $tax_rate) {
+      global $osC_Currencies;
+
+      return osc_round($price * $tax_rate / 100, $osC_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
+    }
+
+    function displayTaxRateValue($value, $padding = null) {
+      if (!is_numeric($padding)) {
+        $padding = TAX_DECIMAL_PLACES;
+      }
+
+      if (strpos($value, '.') !== false) {
+        while (true) {
+          if (substr($value, -1) == '0') {
+            $value = substr($value, 0, -1);
+          } else {
+            if (substr($value, -1) == '.') {
+              $value = substr($value, 0, -1);
+            }
+
+            break;
+          }
+        }
+      }
+
+      if ($padding > 0) {
+        if (($decimal_pos = strpos($value, '.')) !== false) {
+          $decimals = strlen(substr($value, ($decimal_pos+1)));
+
+          for ($i=$decimals; $i<$padding; $i++) {
+            $value .= '0';
+          }
+        } else {
+          $value .= '.';
+
+          for ($i=0; $i<$padding; $i++) {
+            $value .= '0';
+          }
+        }
+      }
+
+      return $value . '%';
+    }
   }
 ?>

@@ -137,13 +137,7 @@
       global $osC_Language, $messageStack;
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
-        if (!tep_validate_credit_card($_POST['ipayment_cc_number'])) {
-          $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
-
-          $payment_error_return = 'psigate_cc_owner=' . urlencode($_POST['psigate_cc_owner']) . '&psigate_cc_expires_month=' . urlencode($_POST['psigate_cc_expires_month']) . '&psigate_cc_expires_year=' . urlencode($_POST['psigate_cc_expires_year']);
-
-          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
-        }
+        $this->_verifyData();
 
         $this->cc_card_owner = $_POST['psigate_cc_owner'];
         $this->cc_card_type = $_POST['psigate_cc_type'];
@@ -242,7 +236,7 @@
                                 osc_draw_hidden_field('Scountry', $order->delivery['country']['iso_code_2']) .
                                 osc_draw_hidden_field('ChargeType', $transaction_type) .
                                 osc_draw_hidden_field('Result', $transaction_mode) .
-                                osc_draw_hidden_field('IP', tep_get_ip_address());
+                                osc_draw_hidden_field('IP', osc_get_ip_address());
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
         $process_button_string .= osc_draw_hidden_field('CardNumber', $this->cc_card_number) .
@@ -264,11 +258,11 @@
     function get_error() {
       global $osC_Language;
 
-      if (isset($_GET['ErrMsg']) && tep_not_null($_GET['ErrMsg'])) {
+      if (isset($_GET['ErrMsg']) && !empty($_GET['ErrMsg'])) {
         $error = urldecode($_GET['ErrMsg']);
-      } elseif (isset($_GET['Err']) && tep_not_null($_GET['Err'])) {
+      } elseif (isset($_GET['Err']) && !empty($_GET['Err'])) {
         $error = urldecode($_GET['Err']);
-      } elseif (isset($_GET['error']) && tep_not_null($_GET['error'])) {
+      } elseif (isset($_GET['error']) && !empty($_GET['error'])) {
         $error = urldecode($_GET['error']);
       } else {
         $error = $osC_Language->get('payment_psigate_error_message');
@@ -316,6 +310,19 @@
       }
 
       return $this->_keys;
+    }
+
+    function _verifyData() {
+      global $osC_Language, $messageStack, $osC_CreditCard;
+
+      $osC_CreditCard = new osC_CreditCard($_POST['psigate_cc_number'], $_POST['psigate_cc_expires_month'], $_POST['psigate_cc_expires_year']);
+      $osC_CreditCard->setOwner($_POST['psigate_cc_owner']);
+
+      if ($result = $osC_CreditCard->isValid() !== true) {
+        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&psigate_cc_owner=' . $osC_CreditCard->getOwner() . '&psigate_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&psigate_cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
+      }
     }
   }
 ?>

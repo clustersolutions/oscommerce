@@ -44,7 +44,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), true, ' ', '<br />'); ?>
+      <?php echo osC_Address::format($osC_ShoppingCart->getBillingAddress(), '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">

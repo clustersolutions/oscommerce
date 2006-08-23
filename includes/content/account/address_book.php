@@ -123,7 +123,7 @@
         $messageStack->add('address_book', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
       }
 
-      if (ACCOUNT_COMPANY >= 0) {
+      if (ACCOUNT_COMPANY > -1) {
         if (isset($_POST['company']) && (strlen(trim($_POST['company'])) >= ACCOUNT_COMPANY)) {
           $data['company'] = $_POST['company'];
         } else {
@@ -233,7 +233,7 @@
           $messageStack->add_session('address_book', $osC_Language->get('success_address_book_entry_updated'), 'success');
         }
 
-        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
       }
     }
 
@@ -248,7 +248,7 @@
         $messageStack->add_session('address_book', $osC_Language->get('warning_primary_address_deletion'), 'warning');
       }
 
-      tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
+      osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
     }
   }
 ?>

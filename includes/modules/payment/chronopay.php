@@ -130,9 +130,9 @@
     function callback() {
       global $osC_Database;
 
-      $ip_address = tep_get_ip_address();
+      $ip_address = osc_get_ip_address();
 
-      if ( (tep_get_ip_address() == '69.20.58.35') || (tep_get_ip_address() == '207.97.201.192') ) {
+      if ( ($ip_address == '69.20.58.35') || ($ip_address == '207.97.201.192') ) {
         if (isset($_POST['cs1']) && is_numeric($_POST['cs1']) && isset($_POST['cs2']) && is_numeric($_POST['cs2']) && isset($_POST['cs3']) && (empty($_POST['cs3']) === false) && isset($_POST['product_id']) && ($_POST['product_id'] == MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID) && isset($_POST['total']) && (empty($_POST['total']) === false) && isset($_POST['transaction_type']) && (empty($_POST['transaction_type']) === false)) {
           if (osC_Order::exists($_POST['cs2'], $_POST['cs1'])) {
             $pass = false;

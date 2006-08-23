@@ -26,7 +26,7 @@
       global $osC_Services, $osC_Language, $breadcrumb, $osC_Product, $osC_Customer, $osC_NavigationHistory;
 
       if ($osC_Services->isStarted('reviews') === false) {
-        tep_redirect(osc_href_link(FILENAME_DEFAULT));
+        osc_redirect(osc_href_link(FILENAME_DEFAULT));
       }
 
       $this->_page_title = $osC_Language->get('reviews_heading');
@@ -66,7 +66,7 @@
               if ( ($osC_Customer->isLoggedOn() === false ) && (SERVICE_REVIEW_ENABLE_REVIEWS == 1) ) {
                 $osC_NavigationHistory->setSnapshot();
 
-                tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+                osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
               }
 
               $osC_Product = new osC_Product($key);
@@ -142,7 +142,7 @@
 
         osC_Reviews::saveEntry($data);
 
-        tep_redirect(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . $id));
+        osc_redirect(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . $id));
       }
     }
   }

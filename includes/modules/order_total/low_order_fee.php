@@ -58,13 +58,13 @@
           $tax = $osC_Tax->getTaxRate(MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS, $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'));
           $tax_description = $osC_Tax->getTaxRateDescription(MODULE_ORDER_TOTAL_LOWORDERFEE_TAX_CLASS, $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'));
 
-          $osC_ShoppingCart->addTaxAmount(tep_calculate_tax(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
-          $osC_ShoppingCart->addTaxGroup($tax_description, tep_calculate_tax(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
-          $osC_ShoppingCart->addToTotal(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE + tep_calculate_tax(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+          $osC_ShoppingCart->addTaxAmount($osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+          $osC_ShoppingCart->addTaxGroup($tax_description, $osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+          $osC_ShoppingCart->addToTotal(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE + $osC_Tax->calculate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
 
           $this->output[] = array('title' => $this->_title . ':',
-                                  'text' => $osC_Currencies->format(tep_add_tax(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax)),
-                                  'value' => tep_add_tax(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
+                                  'text' => $osC_Currencies->displayPriceWithTaxRate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax),
+                                  'value' => $osC_Currencies->formatRawWithTaxRate(MODULE_ORDER_TOTAL_LOWORDERFEE_FEE, $tax));
         }
       }
     }

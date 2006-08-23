@@ -38,20 +38,20 @@
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo osc_icon('personal.png', ENTRY_CUSTOMER) . ' ' . ENTRY_CUSTOMER; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getCustomer('format_id'), $osC_Order->getCustomer(), 1, '', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($osC_Order->getCustomer(), '<br />'); ?></p>
           <p><?php echo osc_icon('telephone.png', ENTRY_TELEPHONE_NUMBER) . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . osc_icon('write.png', ENTRY_EMAIL_ADDRESS) . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo osc_icon('home.png', ENTRY_SHIPPING_ADDRESS) . ' ' . ENTRY_SHIPPING_ADDRESS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getDelivery('format_id'), $osC_Order->getDelivery(), 1, '', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></p>
         </div>
       </td>
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo osc_icon('bill.png', ENTRY_BILLING_ADDRESS) . ' ' . ENTRY_BILLING_ADDRESS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo tep_address_format($osC_Order->getBilling('format_id'), $osC_Order->getBilling(), 1, '', '<br />'); ?></p>
+          <p><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></p>
         </div>
       </td>
     </tr>

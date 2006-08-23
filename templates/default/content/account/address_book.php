@@ -26,7 +26,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo tep_address_label($osC_Customer->getID(), $osC_Customer->getDefaultAddressID(), true, ' ', '<br />'); ?>
+      <?php echo osC_Address::format($osC_Customer->getDefaultAddressID(), '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
@@ -49,7 +49,6 @@
   $Qaddresses = osC_AddressBook::getListing();
 
   while ($Qaddresses->next()) {
-    $format_id = tep_get_address_format_id($Qaddresses->valueInt('country_id'));
 ?>
 
       <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
@@ -66,7 +65,7 @@
         <td align="right"><?php echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&edit', 'SSL'), osc_draw_image_button('small_edit.gif', $osC_Language->get('button_edit'))) . '&nbsp;' . osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'address_book=' . $Qaddresses->valueInt('address_book_id') . '&delete', 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
       </tr>
       <tr>
-        <td colspan="2" style="padding: 0px 0px 10px 10px;"><?php echo tep_address_format($format_id, $Qaddresses->toArray(), true, ' ', '<br />'); ?></td>
+        <td colspan="2" style="padding: 0px 0px 10px 10px;"><?php echo osC_Address::format($Qaddresses->toArray(), '<br />'); ?></td>
       </tr>
 
 <?php

@@ -182,7 +182,7 @@
 
       if (empty($_GET) === false) {
         $first_array = array_slice($_GET, 0, 1);
-        $_module = tep_sanitize_string(basename(key($first_array)));
+        $_module = osc_sanitize_string(basename(key($first_array)));
 
         if (file_exists('includes/content/' . $group . '/' . $_module . '.php')) {
           $module = $_module;
