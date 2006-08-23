@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  if (!strstr($_SERVER['PHP_SELF'], FILENAME_ACCOUNT_HISTORY_INFO)) {
+  if (!strstr($_SERVER['SCRIPT_FILENAME'], FILENAME_ACCOUNT_HISTORY_INFO)) {
 // Get last order id for checkout_success
     $Qorder = $osC_Database->query('select orders_id from :table_orders where customers_id = :customers_id order by orders_id desc limit 1');
     $Qorder->bindTable(':table_orders', TABLE_ORDERS);
@@ -78,7 +78,7 @@
         </table></td>
       </tr>
 <?php
-    if (!strstr($_SERVER['PHP_SELF'], FILENAME_ACCOUNT_HISTORY_INFO)) {
+    if (!strstr($_SERVER['SCRIPT_FILENAME'], FILENAME_ACCOUNT_HISTORY_INFO)) {
 ?>
       <tr>
         <td width="10">&nbsp;</td>

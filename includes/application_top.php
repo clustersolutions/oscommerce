@@ -97,7 +97,7 @@
       $goto =  FILENAME_CHECKOUT;
       $parameters = array('action', 'cPath', 'products_id', 'pid');
     } else {
-      $goto = basename($_SERVER['PHP_SELF']);
+      $goto = basename($_SERVER['SCRIPT_FILENAME']);
       if ($_GET['action'] == 'buy_now') {
         $parameters = array('action', 'pid', 'products_id');
       } else {
@@ -154,7 +154,7 @@
                                 } elseif (isset($_POST['notify'])) {
                                   $notify = $_POST['notify'];
                                 } else {
-                                  osc_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action', 'notify'))));
+                                  osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action', 'notify'))));
                                 }
 
                                 if (!is_array($notify)) $notify = array($notify);
@@ -175,7 +175,7 @@
                                   }
                                 }
 
-                                osc_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action', 'notify'))));
+                                osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action', 'notify'))));
                               } else {
                                 $osC_NavigationHistory->setSnapshot();
 
@@ -197,7 +197,7 @@
                                   $Qn->execute();
                                 }
 
-                                osc_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action'))));
+                                osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action'))));
                               } else {
                                 $osC_NavigationHistory->setSnapshot();
 

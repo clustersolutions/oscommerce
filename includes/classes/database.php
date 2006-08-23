@@ -625,10 +625,10 @@
           }
         }
 
-        $display_links = '<form action="' . osc_href_link(basename($_SERVER['PHP_SELF'])) . '" action="get">';
+        $display_links = '<form action="' . osc_href_link(basename($_SERVER['SCRIPT_FILENAME'])) . '" action="get">';
 
         if ($this->batch_number > 1) {
-          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $osC_Language->get('result_set_previous_page'), 'class="splitPageLink"');
+          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $osC_Language->get('result_set_previous_page'), 'class="splitPageLink"');
         } else {
           $display_links .= $osC_Language->get('result_set_previous_page');
         }
@@ -636,7 +636,7 @@
         $display_links .= '&nbsp;&nbsp;' . sprintf($osC_Language->get('result_set_current_page'), osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onchange="this.form.submit();"'), $number_of_pages) . '&nbsp;&nbsp;';
 
         if (($this->batch_number < $number_of_pages) && ($number_of_pages != 1)) {
-          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)), $osC_Language->get('result_set_next_page'), 'class="splitPageLink"');
+          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)), $osC_Language->get('result_set_next_page'), 'class="splitPageLink"');
         } else {
           $display_links .= $osC_Language->get('result_set_previous_page');
         }

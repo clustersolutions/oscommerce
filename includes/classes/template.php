@@ -174,7 +174,7 @@
  */
 
     function &setup($module) {
-      $group = basename($_SERVER['PHP_SELF']);
+      $group = basename($_SERVER['SCRIPT_FILENAME']);
 
       if (($pos = strrpos($group, '.')) !== false) {
         $group = substr($group, 0, $pos);

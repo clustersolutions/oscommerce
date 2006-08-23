@@ -41,7 +41,7 @@
       $set = 'true';
 
       for ($i=0, $n=sizeof($this->_data); $i<$n; $i++) {
-        if ($this->_data[$i]['page'] == basename($_SERVER['PHP_SELF'])) {
+        if ($this->_data[$i]['page'] == basename($_SERVER['SCRIPT_FILENAME'])) {
           if (isset($cPath)) {
             if (!isset($this->_data[$i]['get']['cPath'])) {
               continue;
@@ -72,7 +72,7 @@
       }
 
       if ($set == 'true') {
-        $this->_data[] = array('page' => basename($_SERVER['PHP_SELF']),
+        $this->_data[] = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
                                'mode' => $request_type,
                                'get' => $_GET,
                                'post' => $_POST);
@@ -86,7 +86,7 @@
     function removeCurrentPage() {
       $last_entry_position = sizeof($this->_data) - 1;
 
-      if ($this->_data[$last_entry_position]['page'] == basename($_SERVER['PHP_SELF'])) {
+      if ($this->_data[$last_entry_position]['page'] == basename($_SERVER['SCRIPT_FILENAME'])) {
         unset($this->_data[$last_entry_position]);
 
         if (sizeof($this->_data) > 0) {
@@ -126,7 +126,7 @@
                                  'get' => $page['get'],
                                  'post' => $page['post']);
       } else {
-        $this->_snapshot = array('page' => basename($_SERVER['PHP_SELF']),
+        $this->_snapshot = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
                                  'mode' => $request_type,
                                  'get' => $_GET,
                                  'post' => $_POST);

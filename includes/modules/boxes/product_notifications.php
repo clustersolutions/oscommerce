@@ -43,11 +43,11 @@
             $Qcheck->execute();
 
             if ($Qcheck->numberOfRows() > 0) {
-              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=notify_remove', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()))) . '</div>' .
-                                osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=notify_remove', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()));
+              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action')) . '&action=notify_remove', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()))) . '</div>' .
+                                osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action')) . '&action=notify_remove', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()));
             } else {
-              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=notify', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications.gif', sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()))) . '</div>' .
-                                osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=notify', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()));
+              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action')) . '&action=notify', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications.gif', sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()))) . '</div>' .
+                                osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action')) . '&action=notify', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()));
             }
 
             $this->_content .= '<div style="clear: both;"></div>';

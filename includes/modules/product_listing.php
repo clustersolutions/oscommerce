@@ -159,7 +159,7 @@
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), osc_get_all_get_params(array('action')) . '&action=buy_now&products_id=' . $Qlisting->valueInt('products_id')), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
+            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action')) . '&action=buy_now&products_id=' . $Qlisting->valueInt('products_id')), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
             break;
         }
 

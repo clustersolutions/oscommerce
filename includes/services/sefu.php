@@ -19,7 +19,7 @@
 
     function start() {
       if (isset($_SERVER['PATH_INFO']) && (strlen($_SERVER['PATH_INFO']) > 1)) {
-        $_SERVER['PHP_SELF'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['PHP_SELF']);
+        $_SERVER['SCRIPT_FILENAME'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['SCRIPT_FILENAME']);
 
         $parameters = explode('/', substr($_SERVER['PATH_INFO'], 1));
 

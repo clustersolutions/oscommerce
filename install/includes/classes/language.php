@@ -26,7 +26,7 @@
 
       $this->_definitions = $this->_parseIniFile();
 
-      $this->load(basename($_SERVER['PHP_SELF']));
+      $this->load(basename($_SERVER['SCRIPT_FILENAME']));
     }
 
 /* Public methods */
