@@ -50,7 +50,7 @@
 
         $Qtables = $osC_Database->query('show tables');
         while ($Qtables->next()) {
-          list(,$table) = each($Qtables->toArray());
+          $table = $Qtables->value('Tables_in_' . DB_DATABASE);
 
           $schema = 'drop table if exists ' . $table . ';' . "\n" .
                     'create table ' . $table . ' (' . "\n";
