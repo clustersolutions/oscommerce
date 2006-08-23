@@ -863,7 +863,7 @@ INSERT INTO osc_countries VALUES (39,'Cape Verde','CV','CPV','');
 INSERT INTO osc_countries VALUES (40,'Cayman Islands','KY','CYM','');
 INSERT INTO osc_countries VALUES (41,'Central African Republic','CF','CAF','');
 INSERT INTO osc_countries VALUES (42,'Chad','TD','TCD','');
-INSERT INTO osc_countries VALUES (43,'Chile','CL','CHL','');
+INSERT INTO osc_countries VALUES (43,'Chile','CL','CHL',":name\n:street_address\n:city\n:country");
 INSERT INTO osc_countries VALUES (44,'China','CN','CHN',":name\n:street_address\n:postcode :city\n:country");
 INSERT INTO osc_countries VALUES (45,'Christmas Island','CX','CXR','');
 INSERT INTO osc_countries VALUES (46,'Cocos (Keeling) Islands','CC','CCK','');
