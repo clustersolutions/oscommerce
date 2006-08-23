@@ -161,7 +161,9 @@
         osc_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
         break;
       case 'move_category_confirm':
-        if (isset($_GET['cID']) && ($_GET['cID'] != end(explode('_', $_POST['move_to_category_id'])))) {
+        $category_array = explode('_', $_POST['move_to_category_id']);
+
+        if (isset($_GET['cID']) && ($_GET['cID'] != end($category_array))) {
           $path = explode('_', $_POST['move_to_category_id']);
 
           if (in_array($_GET['cID'], $path)) {
@@ -169,7 +171,7 @@
           } else {
             $Qupdate = $osC_Database->query('update :table_categories set parent_id = :parent_id, last_modified = now() where categories_id = :categories_id');
             $Qupdate->bindTable(':table_categories', TABLE_CATEGORIES);
-            $Qupdate->bindInt(':parent_id', end(explode('_', $_POST['move_to_category_id'])));
+            $Qupdate->bindInt(':parent_id', end($category_array));
             $Qupdate->bindInt(':categories_id', $_GET['cID']);
             $Qupdate->execute();
 

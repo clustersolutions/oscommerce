@@ -150,16 +150,18 @@
         break;
       case 'move_product_confirm':
         if (isset($_GET['pID']) && is_numeric($_GET['pID'])) {
+          $category_array = explode('_', $_POST['move_to_category_id']);
+
           $Qcheck = $osC_Database->query('select count(*) as total from :table_products_to_categories where products_id = :products_id and categories_id = :categories_id');
           $Qcheck->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
           $Qcheck->bindInt(':products_id', $_GET['pID']);
-          $Qcheck->bindInt(':categories_id', end(explode('_', $_POST['move_to_category_id'])));
+          $Qcheck->bindInt(':categories_id', end($category_array));
           $Qcheck->execute();
 
           if ($Qcheck->valueInt('total') < 1) {
             $Qupdate = $osC_Database->query('update :table_products_to_categories set categories_id = :categories_id where products_id = :products_id and categories_id = :current_categories_id');
             $Qupdate->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-            $Qupdate->bindInt(':categories_id', end(explode('_', $_POST['move_to_category_id'])));
+            $Qupdate->bindInt(':categories_id', end($category_array));
             $Qupdate->bindInt(':products_id', $_GET['pID']);
             $Qupdate->bindInt(':current_categories_id', $current_category_id);
             $Qupdate->execute();
@@ -405,19 +407,21 @@
         break;
       case 'copy_to_confirm':
         if (isset($_GET['pID']) && isset($_POST['categories_id'])) {
+          $category_array = explode('_', $_POST['categories_id']);
+
           if ($_POST['copy_as'] == 'link') {
-            if (end(explode('_', $_POST['categories_id'])) != $current_category_id) {
+            if (end($category_array) != $current_category_id) {
               $Qcheck = $osC_Database->query('select count(*) as total from :table_products_to_categories where products_id = :products_id and categories_id = :categories_id');
               $Qcheck->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
               $Qcheck->bindInt(':products_id', $_GET['pID']);
-              $Qcheck->bindInt(':categories_id', end(explode('_', $_POST['categories_id'])));
+              $Qcheck->bindInt(':categories_id', end($category_array));
               $Qcheck->execute();
 
               if ($Qcheck->valueInt('total') < 1) {
                 $Qcat = $osC_Database->query('insert into :table_products_to_categories (products_id, categories_id) values (:products_id, :categories_id)');
                 $Qcat->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
                 $Qcat->bindInt(':products_id', $_GET['pID']);
-                $Qcat->bindInt(':categories_id', end(explode('_', $_POST['categories_id'])));
+                $Qcat->bindInt(':categories_id', end($category_array));
                 $Qcat->execute();
 
                 if ($Qcat->affectedRows()) {
@@ -488,7 +492,7 @@
                   $Qp2c = $osC_Database->query('insert into :table_products_to_categories (products_id, categories_id) values (:products_id, :categories_id)');
                   $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
                   $Qp2c->bindInt(':products_id', $new_product_id);
-                  $Qp2c->bindInt(':categories_id', end(explode('_', $_POST['categories_id'])));
+                  $Qp2c->bindInt(':categories_id', end($category_array));
                   $Qp2c->execute();
 
                   if ($osC_Database->isError()) {
