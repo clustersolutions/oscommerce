@@ -233,7 +233,7 @@
 <div id="infoBox_lEdit" <?php if ($action != 'lEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo tep_image('templates/' . $template . '/images/icons/16x16/configure.png', IMAGE_EDIT, '16', '16') . ' ' . $lInfo->box_title; ?></div>
   <div class="infoBoxContent">
-    <?php echo tep_draw_form('lEdit', FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $_GET['set'] . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=save'); ?>
+    <?php echo tep_draw_form('lEdit', FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $lInfo->id . '&action=save'); ?>
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 

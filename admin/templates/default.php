@@ -22,15 +22,17 @@
 
 <?php
   if ($request_type == 'SSL') {
-    echo '<link rel="shortcut icon" href="images/favicon_ssl.ico" />';
+    echo '<link rel="shortcut icon" href="images/favicon_ssl.ico" type="image/x-icon" />';
   } else {
-    echo '<link rel="shortcut icon" href="images/favicon.ico" />';
+    echo '<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />';
   }
 ?>
 
 <title><?php echo TITLE; ?></title>
 
 <link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css">
+
+<meta name="Generator" value="osCommerce" />
 
 <script language="javascript" src="includes/general.js"></script>
 
