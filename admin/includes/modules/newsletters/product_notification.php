@@ -148,7 +148,7 @@ function selectAll(FormName, SelectBox) {
 
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
-                             '<p>' . nl2br(tep_output_string_protected($this->_newsletter_content)) . '</p>' .
+                             '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
                              '<form name="confirm" action="'. osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '" method="post">' .
                              '<p align="right">';
 

@@ -121,8 +121,19 @@
 <?php
     echo TEXT_MANUFACTURERS_URL;
 
+    $manufacturers_array = array();
+
+    $Qmanufacturer = $osC_Database->query('select manufacturers_url, languages_id from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
+    $Qmanufacturer->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
+    $Qmanufacturer->bindInt(':manufacturers_id', $mInfo->manufacturers_id);
+    $Qmanufacturer->execute();
+
+    while ($Qmanufacturer->next()) {
+      $manufacturers_array[$Qmanufacturer->valueInt('languages_id')] = $Qmanufacturer->value('manufacturers_url');
+    }
+
     foreach ($osC_Language->getAll() as $l) {
-      echo '<br />' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', tep_get_manufacturer_url($mInfo->manufacturers_id, $l['id']));
+      echo '<br />' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('manufacturers_url[' . $l['id'] . ']', $manufacturers_array[$l['id']]);
     }
 ?>
     </p>

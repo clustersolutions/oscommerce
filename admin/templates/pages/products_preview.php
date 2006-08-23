@@ -67,9 +67,9 @@
 
 <?php
     if ($pInfo->products_date_available > date('Y-m-d')) {
-      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_AVAILABLE, tep_date_long($pInfo->products_date_available)) . '</p>';
+      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_AVAILABLE, osC_DateTime::getLong($pInfo->products_date_available)) . '</p>';
     } else {
-      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_ADDED, tep_date_long($pInfo->products_date_added)) . '</p>';
+      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_ADDED, osC_DateTime::getLong($pInfo->products_date_added)) . '</p>';
     }
 ?>
 

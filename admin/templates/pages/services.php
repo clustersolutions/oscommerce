@@ -135,7 +135,7 @@
 <?php
     foreach ($sInfo->keys as $key => $value) {
       if (isset($value['set_function']) && !empty($value['set_function'])) {
-        eval('$value_field = ' . $value['set_function'] . "'" . $value['value'] . "', '" . $key . "');");
+        $value_field = osc_call_user_func($value['set_function'], $value['value'], $key);
       } else {
         $value_field = osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }

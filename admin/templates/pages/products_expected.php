@@ -48,7 +48,7 @@
     }
 ?>
         <td><?php echo $Qproducts->value('products_name'); ?></td>
-        <td><?php echo tep_date_short($Qproducts->value('products_date_available')); ?></td>
+        <td><?php echo osC_DateTime::getShort($Qproducts->value('products_date_available')); ?></td>
         <td align="right">
 <?php
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {

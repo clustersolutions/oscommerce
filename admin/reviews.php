@@ -59,7 +59,7 @@
               $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
             }
 
-            tep_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']));
+            osc_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']));
           }
         }
         break;
@@ -84,7 +84,7 @@
             $messageStack->add_session(ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
         }
         break;
       case 'rApprove':
@@ -108,7 +108,7 @@
             $messageStack->add_session(ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
         }
         break;
       case 'rReject':
@@ -132,7 +132,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page']));
         }
         break;
     }

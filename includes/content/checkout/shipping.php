@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/address_book.php');
+
   class osC_Checkout_Shipping extends osC_Template {
 
 /* Private variables */

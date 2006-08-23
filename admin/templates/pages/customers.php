@@ -84,7 +84,7 @@
 ?>
         <td><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
         <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
-        <td><?php echo tep_date_short($Qinfo->value('date_account_created')); ?></td>
+        <td><?php echo osC_DateTime::getShort($Qinfo->value('date_account_created')); ?></td>
         <td align="center"><?php echo osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php

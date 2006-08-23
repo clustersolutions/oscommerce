@@ -776,7 +776,7 @@
           $tax = $osC_Tax->getTaxRate($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
           $tax_description = $osC_Tax->getTaxRateDescription($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
 
-          $shown_price = $osC_Currencies->formatRawWithTaxRate($data['final_price'], $tax, $data['quantity']);
+          $shown_price = $osC_Currencies->addTaxRateToPrice($data['final_price'], $tax, $data['quantity']);
           $this->_sub_total += $shown_price;
           $this->_total += $shown_price;
 

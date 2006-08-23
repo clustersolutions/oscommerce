@@ -54,7 +54,7 @@
             $nmID = $osC_Database->nextID();
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmID));
+          osc_redirect(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $nmID));
         } else {
           $action = 'nmEdit';
         }
@@ -72,7 +72,7 @@
           $Qdelete->execute();
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page']));
         break;
     }
   }

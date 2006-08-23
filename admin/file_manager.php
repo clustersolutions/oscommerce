@@ -43,14 +43,14 @@
       case 'reset':
         unset($_SESSION['fm_directory']);
 
-        tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
+        osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
         break;
       case 'deleteconfirm':
         if (isset($_GET['entry']) && !empty($_GET['entry'])) {
           $target = $current_path . '/' . basename($_GET['entry']);
 
           if (is_writeable($target)) {
-            tep_remove($target);
+            osc_remove($target);
           } else {
             if (is_file($target)) {
               $osC_MessageStack->add_session('header', sprintf(ERROR_FILE_NOT_WRITEABLE, $target), 'error');
@@ -60,7 +60,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
+        osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
         break;
       case 'new_directory':
         if (isset($_POST['directory_name']) && !empty($_POST['directory_name'])) {
@@ -69,7 +69,7 @@
 
             if (file_exists($new_directory) === false) {
               if (mkdir($new_directory, 0777)) {
-                tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER, 'entry=' . urlencode(basename($_POST['directory_name']))));
+                osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER, 'entry=' . urlencode(basename($_POST['directory_name']))));
               }
             } else {
               $osC_MessageStack->add('header', sprintf(ERROR_DIRECTORY_EXISTS, $new_directory), 'error');
@@ -79,7 +79,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
+        osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
         break;
       case 'save':
         if ( (isset($_GET['entry']) && !empty($_GET['entry'])) || (isset($_POST['filename']) && !empty($_POST['filename'])) ) {
@@ -94,10 +94,10 @@
             fclose($fp);
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER, 'entry=' . $filename));
+          osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER, 'entry=' . $filename));
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
+        osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
         break;
       case 'processuploads':
         if (is_writeable($current_path)) {
@@ -108,7 +108,7 @@
           $osC_MessageStack->add_session('header', sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path), 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
+        osc_redirect(osc_href_link_admin(FILENAME_FILE_MANAGER));
         break;
       case 'download':
         if (isset($_GET['entry']) && !empty($_GET['entry'])) {

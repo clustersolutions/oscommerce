@@ -60,7 +60,7 @@
           osC_Cache::clear('configuration');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $_GET['template']));
+        osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $_GET['template']));
         break;
       case 'install':
       case 'remove':
@@ -78,7 +78,7 @@
         osC_Cache::clear('configuration');
         osC_Cache::clear('templates');
 
-        tep_redirect(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $_GET['template']));
+        osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $_GET['template']));
         break;
     }
   }

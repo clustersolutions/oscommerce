@@ -10,6 +10,9 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
+
   $osC_Order = new osC_Order($_GET['oID']);
 ?>
 
@@ -94,7 +97,7 @@
       <td width="33%" valign="top">
         <div class="infoBoxHeading"><?php echo osc_icon('history.png', ENTRY_STATUS) . ' ' . ENTRY_STATUS; ?></div>
         <div class="infoBoxContent">
-          <p><?php echo $osC_Order->getStatus() . '<br />' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? tep_datetime_short($osC_Order->getDateLastModified()) : tep_datetime_short($osC_Order->getDateCreated())); ?></p>
+          <p><?php echo $osC_Order->getStatus() . '<br />' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? osC_DateTime::getShort($osC_Order->getDateLastModified(), true) : osC_DateTime::getShort($osC_Order->getDateCreated(), true)); ?></p>
           <p><?php echo 'Comments: ' . $osC_Order->getNumberOfComments(); ?></p>
         </div>
       </td>
@@ -143,11 +146,11 @@
 ?>
       </td>
       <td class="dataTableContent" valign="top"><?php echo $products['model']; ?></td>
-      <td class="dataTableContent" valign="top" align="right"><?php echo tep_display_tax_value($products['tax']) . '%'; ?></td>
+      <td class="dataTableContent" valign="top" align="right"><?php echo $osC_Tax->displayTaxRateValue($products['tax']); ?></td>
       <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->format($products['final_price'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
-      <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->format(tep_add_tax($products['final_price'], $products['tax']), $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
+      <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPriceWithTaxRate($products['final_price'], $products['tax'], 1, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
       <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->format($products['final_price'] * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
-      <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->format(tep_add_tax($products['final_price'], $products['tax']) * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
+      <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPriceWithTaxRate($products['final_price'], $products['tax'], $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
     </tr>
 <?php
     }
@@ -182,7 +185,7 @@
 ?>
 
     <tr class="dataTableRow">
-      <td class="dataTableContent" valign="top"><?php echo tep_datetime_short($history['date_added']); ?></td>
+      <td class="dataTableContent" valign="top"><?php echo osC_DateTime::getShort($history['date_added'], true); ?></td>
       <td class="dataTableContent" valign="top"><?php echo (empty($history['status']) === false) ? $history['status'] : $history['status_id']; ?></td>
       <td class="dataTableContent" valign="top" align="center"><?php echo osc_icon(($history['return_status'] === 1 ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
       <td class="dataTableContent" valign="top"><?php echo nl2br($history['return_value']); ?></td>
@@ -224,7 +227,7 @@
     foreach ($osC_Order->getStatusHistory() as $status_history) {
 ?>
     <tr class="dataTableRow">
-      <td class="dataTableContent" valign="top"><?php echo tep_datetime_short($status_history['date_added']); ?></td>
+      <td class="dataTableContent" valign="top"><?php echo osC_DateTime::getShort($status_history['date_added'], true); ?></td>
       <td class="dataTableContent" valign="top"><?php echo $status_history['status']; ?></td>
       <td class="dataTableContent" valign="top"><?php echo nl2br($status_history['comment']); ?></td>
       <td class="dataTableContent" align="right" valign="top"><?php echo osc_icon((($status_history['customer_notified'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>

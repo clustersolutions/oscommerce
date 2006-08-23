@@ -199,7 +199,11 @@
       return $this->_languages[$this->_code]['charset'];
     }
 
-    function getDateFormatShort() {
+    function getDateFormatShort($with_time = false) {
+      if ($with_time === true) {
+        return $this->_languages[$this->_code]['date_format_short'] . ' ' . $this->getTimeFormat();
+      }
+
       return $this->_languages[$this->_code]['date_format_short'];
     }
 

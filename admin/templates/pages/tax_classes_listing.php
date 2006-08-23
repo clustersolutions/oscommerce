@@ -10,10 +10,24 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
+
   $Qclass = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class where tax_class_id = :tax_class_id');
   $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
   $Qclass->bindInt(':tax_class_id', $_GET['tcID']);
   $Qclass->execute();
+
+  $zones_array = array();
+
+  $Qzones = $osC_Database->query('select geo_zone_id, geo_zone_name from :table_geo_zones order by geo_zone_name');
+  $Qzones->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+  $Qzones->execute();
+
+  while ($Qzones->next()) {
+    $zones_array[] = array('id' => $Qzones->valueInt('geo_zone_id'),
+                           'text' => $Qzones->value('geo_zone_name'));
+  }
 ?>
 
 <h1><?php echo HEADING_TITLE . ': ' . $Qclass->value('tax_class_title'); ?></h1>
@@ -50,7 +64,7 @@
 ?>
         <td><?php echo $Qrates->valueInt('tax_priority'); ?></td>
         <td><?php echo $Qrates->value('geo_zone_name'); ?></td>
-        <td><?php echo tep_display_tax_value($Qrates->valueDecimal('tax_rate')); ?>%</td>
+        <td><?php echo $osC_Tax->displayTaxRateValue($Qrates->valueDecimal('tax_rate')); ?></td>
         <td align="right">
 <?php
     if (isset($trInfo) && ($Qrates->valueInt('tax_rates_id') == $trInfo->tax_rates_id)) {
@@ -89,7 +103,7 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ZONE_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo tep_geo_zones_pull_down('name="tax_zone_id"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('tax_zone_id', $zones_array); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE . '</b>'; ?></td>
@@ -125,7 +139,7 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ZONE_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo tep_geo_zones_pull_down('name="tax_zone_id"', $trInfo->geo_zone_id); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('tax_zone_id', $zones_array, $trInfo->geo_zone_id); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE . '</b>'; ?></td>
@@ -141,7 +155,7 @@
       </tr>
     </table>
 
-    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($trInfo->last_modified > $trInfo->date_added) ? tep_date_short($trInfo->last_modified) : tep_date_short($trInfo->date_added)); ?></p>
+    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($trInfo->last_modified > $trInfo->date_added) ? osC_DateTime::getShort($trInfo->last_modified) : osC_DateTime::getShort($trInfo->date_added)); ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'trDefault\');" class="operationButton">'; ?></p>
 

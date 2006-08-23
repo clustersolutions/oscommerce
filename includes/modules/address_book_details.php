@@ -62,7 +62,7 @@
 <?php
     echo osc_draw_label($osC_Language->get('field_customer_state'), null, 'state', (ACCOUNT_STATE > 0));
 
-    if ( (isset($_GET['new']) && ($_GET['new'] == 'save')) || (isset($_GET['edit']) && ($_GET['edit'] == 'save')) ) {
+    if ( (isset($_GET['new']) && ($_GET['new'] == 'save')) || (isset($_GET['edit']) && ($_GET['edit'] == 'save')) || (isset($_GET[$osC_Template->getModule()]) && ($_GET[$osC_Template->getModule()] == 'process')) ) {
       if ($entry_state_has_zones === true) {
         $Qzones = $osC_Database->query('select zone_name from :table_zones where zone_country_id = :zone_country_id order by zone_name');
         $Qzones->bindTable(':table_zones', TABLE_ZONES);

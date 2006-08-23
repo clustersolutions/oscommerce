@@ -42,7 +42,7 @@
 
       if (!isset($buInfo) && (!isset($_GET['file']) || (isset($_GET['file']) && ($_GET['file'] == $entry)))) {
         $file_array['file'] = $entry;
-        $file_array['date'] = date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry));
+        $file_array['date'] = osC_DateTime::getShort(filemtime(DIR_FS_BACKUP . $entry), true);
         $file_array['size'] = number_format(filesize(DIR_FS_BACKUP . $entry)) . ' bytes';
         switch (substr($entry, -3)) {
           case 'zip': $file_array['compression'] = 'ZIP'; break;
@@ -60,7 +60,7 @@
       }
 ?>
         <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'action=download&file=' . $entry), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $entry); ?></td>
-        <td><?php echo date(PHP_DATE_TIME_FORMAT, filemtime(DIR_FS_BACKUP . $entry)); ?></td>
+        <td><?php echo osC_DateTime::getShort(date('Y-m-d H:i:s', filemtime(DIR_FS_BACKUP . $entry)), true); ?></td>
         <td><?php echo number_format(filesize(DIR_FS_BACKUP . $entry)); ?> bytes</td>
         <td align="right">
 <?php
@@ -69,7 +69,7 @@
              '<a href="#" onclick="toggleInfoBox(\'bDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
       } else {
         echo osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bRestore'), osc_icon('tape.png', IMAGE_EDIT)) . '&nbsp;' .
-             osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bDelete') . '">' . osc_icon('trash.png', IMAGE_DELETE));
+             osc_link_object(osc_href_link_admin(FILENAME_BACKUP, 'file=' . $entry . '&action=bDelete'), osc_icon('trash.png', IMAGE_DELETE));
       }
 ?>
         </td>

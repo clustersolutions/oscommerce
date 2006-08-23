@@ -12,6 +12,9 @@
 
   require('includes/application_top.php');
 
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
+
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
   if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
@@ -66,7 +69,7 @@
             }
           }          	
         }
-        tep_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')));
+        osc_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')));
         break;
       case 'deleteconfirm':
         if (isset($_GET['sID']) && is_numeric($_GET['sID'])) {
@@ -82,7 +85,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page']));
         break;
     }
   }

@@ -45,7 +45,7 @@
     }
 ?>
       <td><?php echo $Qlog->value('email_address'); ?></td>
-      <td align="center"><?php echo osc_icon(tep_not_null($Qlog->value('date_sent') ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
+      <td align="center"><?php echo osc_icon(!osc_empty($Qlog->value('date_sent') ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
       <td align="right"><?php echo $Qlog->value('date_sent'); ?></td>
     </tr>
 <?php

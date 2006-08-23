@@ -62,7 +62,7 @@
 
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_NEWSLETTER_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
-                             '<p>' . nl2br(tep_output_string_protected($this->_newsletter_content)) . '</p>' .
+                             '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
                              '<p align="right">';
 
       if ($this->_audience_size > 0) {

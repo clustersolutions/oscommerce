@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  function tep_realpath($directory) {
+  function osc_realpath($directory) {
     return str_replace('\\', '/', realpath($directory));
   }
 ?>

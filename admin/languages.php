@@ -25,7 +25,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES));
+        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES));
         break;
         case 'export':
           $osC_Currencies = new osC_Currencies();
@@ -86,7 +86,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $_GET['lID']));
+          osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES, 'lID=' . $_GET['lID']));
           break;
       case 'deleteconfirm':
         if (isset($_GET['lID']) && is_numeric($_GET['lID'])) {
@@ -97,7 +97,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_LANGUAGES));
+        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES));
         break;
     }
   }

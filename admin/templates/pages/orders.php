@@ -73,7 +73,7 @@
 ?>
         <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit'), osc_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')); ?></td>
         <td><?php echo strip_tags($Qorders->value('order_total')); ?></td>
-        <td><?php echo tep_datetime_short($Qorders->value('date_purchased')); ?></td>
+        <td><?php echo osC_DateTime::getShort($Qorders->value('date_purchased'), true); ?></td>
         <td><?php echo $Qorders->value('orders_status_name'); ?></td>
         <td align="right">
 <?php

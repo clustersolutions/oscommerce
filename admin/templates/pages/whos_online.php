@@ -13,8 +13,8 @@
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();
 
-  require('../includes/classes/tax.php');
-  $osC_Tax = new osC_Tax();
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
 
   require('../includes/classes/weight.php');
   $osC_Weight = new osC_Weight();
@@ -70,14 +70,14 @@
       }
     }
 
-    $osC_Customer = unserialize(tep_get_serialized_variable($session_data, 'osC_Customer', 'object'));
+    $osC_Customer = unserialize(osc_get_serialized_variable($session_data, 'osC_Customer', 'object'));
 
-    $navigation = unserialize(tep_get_serialized_variable($session_data, 'navigation', 'object'));
+    $navigation = unserialize(osc_get_serialized_variable($session_data, 'navigation', 'object'));
     $last_page = end($navigation->path);
 
-    $currency = unserialize(tep_get_serialized_variable($session_data, 'currency', 'string'));
+    $currency = unserialize(osc_get_serialized_variable($session_data, 'currency', 'string'));
 
-    $cart = unserialize(tep_get_serialized_variable($session_data, 'cart', 'object'));
+    $cart = unserialize(osc_get_serialized_variable($session_data, 'cart', 'object'));
 
     if (!isset($wInfo) && (!isset($_GET['info']) || (isset($_GET['info']) && ($_GET['info'] == $Qwho->value('session_id'))))) {
       $wInfo = new objectInfo(array_merge($Qwho->toArray(), array('last_page' => $last_page)));
@@ -126,7 +126,7 @@
     }
 
     if (sizeof($wInfo->last_page['get']) > 0) {
-      $last_page_url .= '?' . tep_array_to_string($wInfo->last_page['get']);
+      $last_page_url .= '?' . osc_array_to_string($wInfo->last_page['get']);
     }
 ?>
 

@@ -9,6 +9,13 @@
 
   Released under the GNU General Public License
 */
+
+  $countries_array = array();
+
+  foreach (osC_Address::getCountries() as $country) {
+    $countries_array[] = array('id' => $country['id'],
+                               'text' => $country['name']);
+  }
 ?>
 
 <h1><?php echo HEADING_TITLE; ?></h1>
@@ -89,7 +96,7 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries()); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array); ?></td>
       </tr>
     </table>
 
@@ -119,7 +126,7 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_NAME . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(), $zInfo->countries_id); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, $zInfo->countries_id); ?></td>
       </tr>
     </table>
 

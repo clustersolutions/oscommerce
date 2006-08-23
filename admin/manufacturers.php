@@ -87,7 +87,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $manufacturers_id));
+        osc_redirect(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page'] . '&mID=' . $manufacturers_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['mID']) && is_numeric($_GET['mID'])) {
@@ -99,7 +99,7 @@
             $Qimage->bindInt(':manufacturers_id', $_GET['mID']);
             $Qimage->execute();
 
-            if ($Qimage->numberOfRows() && tep_not_null($Qimage->value('manufacturers_image'))) {
+            if ($Qimage->numberOfRows() && !osc_empty($Qimage->value('manufacturers_image'))) {
               if (file_exists(realpath('../images/' . $Qimage->value('manufacturers_image')))) {
                 @unlink(realpath('../images/' . $Qimage->value('manufacturers_image')));
               }
@@ -137,7 +137,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_MANUFACTURERS, 'page=' . $_GET['page']));
         break;
     }
   }

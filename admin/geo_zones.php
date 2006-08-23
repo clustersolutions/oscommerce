@@ -54,7 +54,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zone_id));
+        osc_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zone_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['zID']) && is_numeric($_GET['zID'])) {
@@ -90,7 +90,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page']));
         }
         break;
     }
@@ -127,7 +127,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $entry_id));
+        osc_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&zeID=' . $entry_id));
         break;
       case 'zeDeleteConfirm':
         if (isset($_GET['zeID']) && is_numeric($_GET['zeID'])) {
@@ -146,7 +146,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
+          osc_redirect(osc_href_link_admin(FILENAME_GEO_ZONES, 'page=' . $_GET['page'] . '&zID=' . $_GET['zID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
         }
         break;
     }

@@ -61,7 +61,7 @@
       return number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
     }
 
-    function formatRawWithTaxRate($price, $tax_rate, $quantity = 1, $currency_code = '', $currency_value = '') {
+    function addTaxRateToPrice($price, $tax_rate, $quantity = 1) {
       global $osC_Tax;
 
       $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
@@ -70,7 +70,7 @@
         $price += osc_round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
-      return $this->formatRaw($price * $quantity, $currency_code, $currency_value);
+      return osc_round($price * $quantity, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
     }
 
     function displayPrice($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {

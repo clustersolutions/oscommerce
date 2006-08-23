@@ -79,7 +79,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_ShoppingCart, $messageStack;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_Customer, $osC_ShoppingCart, $messageStack, $entry_state_has_zones;
 
 // process a new shipping address
       if (($osC_Customer->hasDefaultAddress() === false) || (!empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['street_address'])) ) {

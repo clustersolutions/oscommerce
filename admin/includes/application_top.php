@@ -13,6 +13,8 @@
 // start the timer for the page parse time log
   define('PAGE_PARSE_START_TIME', microtime());
 
+  define('OSC_IN_ADMIN', true);
+
 // set the local configuration parameters - mainly for developers
   if (file_exists('../includes/local/configure.php')) include('../includes/local/configure.php');
 
@@ -73,7 +75,9 @@
   $Qcfg->freeResult();
 
 // define our general functions used application-wide
+  require('../includes/functions/general.php');
   require('includes/functions/general.php');
+
   require('../includes/functions/html_output.php');
   require('includes/functions/html_output.php');
 
@@ -84,11 +88,14 @@
 
   if (isset($_SESSION['admin']) === false) {
     if (basename($_SERVER['SCRIPT_FILENAME']) != FILENAME_LOGIN) {
-      tep_redirect(osc_href_link_admin(FILENAME_LOGIN));
+      osc_redirect(osc_href_link_admin(FILENAME_LOGIN));
     }
   }
 
+  require('../includes/classes/address.php');
+  require('../includes/classes/weight.php');
   require('../includes/classes/xml.php');
+  require('../includes/classes/datetime.php');
 
 // set the language
   require('includes/classes/language.php');
@@ -112,9 +119,6 @@
 
 // define our localization functions
   require('includes/functions/localization.php');
-
-// Include validation functions (right now only email address)
-  require('includes/functions/validations.php');
 
 // initialize the message stack for output messages
   require('../includes/classes/message_stack.php');

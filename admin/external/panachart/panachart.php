@@ -463,7 +463,7 @@ class chart{
                         }
                 }
 
-                $image_function = 'image' . tep_dynamic_image_extension();
+                $image_function = 'image' . osc_dynamic_image_extension();
 
                 if(strlen($file) > 0){
                         $image_function($this->m_image, $file);

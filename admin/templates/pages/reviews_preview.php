@@ -33,9 +33,9 @@
 
 <h1><?php echo HEADING_TITLE; ?></h1>
 
-<p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . tep_date_short($rInfo->date_added); ?></p>
+<p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . osC_DateTime::getShort($rInfo->date_added); ?></p>
 
-<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . nl2br(tep_output_string_protected($rInfo->reviews_text)); ?></p>
+<p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . nl2br(osc_output_string_protected($rInfo->reviews_text)); ?></p>
 
 <p class="main"><?php echo '<b>' . ENTRY_RATING . '</b>&nbsp;' . osc_image('../images/stars_' . $rInfo->reviews_rating . '.gif', sprintf(TEXT_OF_5_STARS, $rInfo->reviews_rating)) . '&nbsp;<small>[' . sprintf(TEXT_OF_5_STARS, $rInfo->reviews_rating) . ']</small>'; ?></p>
 

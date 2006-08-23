@@ -69,7 +69,7 @@
   }
 
   foreach ($tax_class_array as $tc_entry) {
-    echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . tep_get_tax_rate_value($tc_entry['id']) . ';' . "\n";
+    echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $osC_Tax->getTaxRate($tc_entry['id']) . ';' . "\n";
   }
 ?>
 

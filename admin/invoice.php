@@ -11,7 +11,9 @@
 */
 
   require('includes/application_top.php');
-  require('../includes/classes/address.php');
+
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
 
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();
@@ -120,11 +122,11 @@
 
       echo '        </td>' . "\n" .
            '        <td class="dataTableContent" valign="top">' . $product['model'] . '</td>' . "\n";
-      echo '        <td class="dataTableContent" align="right" valign="top">' . tep_display_tax_value($product['tax']) . '%</td>' . "\n" .
+      echo '        <td class="dataTableContent" align="right" valign="top">' . $osC_Tax->displayTaxRateValue($product['tax']) . '</td>' . "\n" .
            '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format($product['final_price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format(tep_add_tax($product['final_price'], $product['tax']), true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], 1, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
            '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format($product['final_price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format(tep_add_tax($product['final_price'], $product['tax']) * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], $product['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
       echo '      </tr>' . "\n";
     }
 ?>

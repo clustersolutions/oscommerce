@@ -196,7 +196,7 @@
       $keys .= '<b>' . $value['title'] . '</b><br />' . $value['description'] . '<br />';
 
       if ($value['set_function']) {
-        eval('$keys .= ' . $value['set_function'] . "'" . $value['value'] . "', '" . $key . "');");
+        $keys .= osc_call_user_func($value['set_function'], $value['value'], $key);
       } else {
         $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }

@@ -10,27 +10,6 @@
   Released under the GNU General Public License
 */
 
-define('DATE_FORMAT_SHORT', '%m/%d/%Y');  // this is used for strftime()
-define('DATE_FORMAT_LONG', '%A %d %B, %Y'); // this is used for strftime()
-define('DATE_FORMAT', 'm/d/Y'); // this is used for date()
-define('PHP_DATE_TIME_FORMAT', 'm/d/Y H:i:s'); // this is used for date()
-define('DATE_TIME_FORMAT', DATE_FORMAT_SHORT . ' %H:%M:%S');
-
-////
-// Return date in raw format
-// $date should be in format mm/dd/yyyy
-// raw date is in format YYYYMMDD, or DDMMYYYY
-function tep_date_raw($date, $reverse = false) {
-  if ($reverse) {
-    return substr($date, 3, 2) . substr($date, 0, 2) . substr($date, 6, 4);
-  } else {
-    return substr($date, 6, 4) . substr($date, 0, 2) . substr($date, 3, 2);
-  }
-}
-
-define('NUMERIC_DECIMAL_SEPARATOR', '.');
-define('NUMERIC_THOUSANDS_SEPARATOR', ',');
-
 // page title
 define('TITLE', 'osCommerce');
 
@@ -262,7 +241,6 @@ define('ICON_FILES', 'Files');
 define('ICON_ORDERS', 'Orders');
 define('ICON_PRODUCTS', 'Products');
 
-// constants for use in tep_prev_next_display function
 define('TEXT_RESULT_PAGE', 'Page&nbsp;%s&nbsp;of&nbsp;%d');
 define('TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> administrators)');
 define('TEXT_DISPLAY_NUMBER_OF_BANNERS', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> banners)');

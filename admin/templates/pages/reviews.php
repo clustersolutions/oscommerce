@@ -64,7 +64,7 @@
         <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=rPreview'), osc_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')); ?></td>
         <td align="center"><?php echo osc_image('../includes/languages/' . $Qreviews->value('languages_directory') . '/images/' . $Qreviews->value('languages_image'), $Qreviews->value('languages_name')); ?></td>
         <td align="center"><?php echo osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf(TEXT_OF_5_STARS, $Qreviews->valueInt('reviews_rating'))); ?></td>
-        <td><?php echo tep_date_short($Qreviews->value('date_added')); ?></td>
+        <td><?php echo osC_DateTime::getShort($Qreviews->value('date_added')); ?></td>
 <?php
         if ( (defined('SERVICE_REVIEW_ENABLE_MODERATION')) && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {
           switch ($Qreviews->valueInt('reviews_status')) {

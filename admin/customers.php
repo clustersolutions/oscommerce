@@ -54,7 +54,7 @@
         if (!isset($_POST['email_address']) || (strlen(trim($_POST['email_address'])) < ACCOUNT_EMAIL_ADDRESS)) {
           $osC_MessageStack->add('header', ENTRY_EMAIL_ADDRESS_ERROR, 'error');
           $error = true;
-        } elseif (tep_validate_email($_POST['email_address']) == false) {
+        } elseif (osc_validate_email_address($_POST['email_address']) == false) {
           $osC_MessageStack->add('header', ENTRY_EMAIL_ADDRESS_CHECK_ERROR, 'error');
           $error = true;
         } else {
@@ -251,11 +251,9 @@
 
           if ($error === false) {
             if (isset($_POST['confirmation']) && !empty($_POST['confirmation']) && (trim($_POST['password']) == trim($_POST['confirmation']))) {
-              include('includes/functions/password_funcs.php');
-
               $Qpassword = $osC_Database->query('update :table_customers set customers_password = :customers_password where customers_id = :customers_id');
               $Qpassword->bindTable(':table_customers', TABLE_CUSTOMERS);
-              $Qpassword->bindValue(':customers_password', tep_encrypt_password(trim($_POST['password'])));
+              $Qpassword->bindValue(':customers_password', osc_encrypt_string(trim($_POST['password'])));
               $Qpassword->bindInt(':customers_id', $customer_id);
               $Qpassword->execute();
 
@@ -342,7 +340,7 @@
                 }
 
                 $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT; // . sprintf(EMAIL_PASSWORD, $customers_password);
-                tep_mail($full_name, $Qcustomer->value('customers_email_address'), EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+                osc_mail($full_name, $Qcustomer->value('customers_email_address'), EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
               }
 
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
@@ -355,7 +353,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $customer_id));
+          osc_redirect(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $customer_id));
         }
 
         break;
@@ -480,7 +478,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page']));
         break;
     }
   }

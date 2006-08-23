@@ -27,12 +27,12 @@
 
     $link .= $page;
 
-    if (empty($parameters) && tep_not_null(SID)) {
+    if (empty($parameters) && !osc_empty(SID)) {
       $link .= '?' . SID;
     } else {
       $link .= '?' . $parameters;
 
-      if (tep_not_null(SID)) {
+      if (!osc_empty(SID)) {
         $link .= '&' . SID;
       }
     }
@@ -63,7 +63,7 @@
 ////
 // javascript to dynamically update the states/provinces list when the country is changed
 // TABLES: zones
-  function tep_js_zone_list($country, $form, $field) {
+  function osc_js_zone_list($country, $form, $field) {
     global $osC_Database;
 
     $num_country = 1;

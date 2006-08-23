@@ -179,7 +179,7 @@
 
       echo osc_draw_pull_down_menu('ab_state', $zones_array);
     } else {
-      echo osc_draw_input_field('ab_state', (isset($Qab) ? tep_get_zone_name($Qab->value('entry_country_id'), $Qab->value('entry_zone_id'), $Qab->value('entry_state')) : null));
+      echo osc_draw_input_field('ab_state', (isset($Qab) ? (!osc_empty($Qab->value('entry_zone_id')) ? osC_Address::getZoneName($Qab->value('entry_zone_id')) : $Qab->value('entry_state')) : null));
     }
 ?>
       </td>
@@ -189,7 +189,20 @@
 ?>
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_COUNTRY; ?></td>
-      <td class="main" width="70%"><?php echo osc_draw_pull_down_menu('ab_country', tep_get_countries(), (isset($Qab) ? $Qab->value('entry_country_id') : STORE_COUNTRY)); ?></td>
+      <td class="main" width="70%">
+
+<?php
+  $countries_array = array();
+
+  foreach (osC_Address::getCountries() as $country) {
+    $countries_array[] = array('id' => $country['id'],
+                               'text' => $country['name']);
+  }
+
+  echo osc_draw_pull_down_menu('ab_country', $countries_array, (isset($Qab) ? $Qab->value('entry_country_id') : STORE_COUNTRY));
+?>
+
+      </td>
     </tr>
 <?php
   if (ACCOUNT_TELEPHONE > -1) {

@@ -15,7 +15,7 @@
       return date('Y-m-d H:i:s');      
     }
 
-    function getShort($date = '') {
+    function getShort($date = null, $with_time = false) {
       global $osC_Language;
 
       if (empty($date)) {
@@ -30,9 +30,9 @@
       $second = (int)substr($date, 17, 2);
 
       if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
-        return strftime($osC_Language->getDateFormatShort(), mktime($hour, $minute, $second, $month, $day, $year));
+        return strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatShort(), mktime($hour, $minute, $second, $month, $day, 2037)));
+        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 

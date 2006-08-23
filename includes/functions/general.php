@@ -21,7 +21,11 @@
     global $osC_Services;
 
     if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
-      $url = osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false);
+      if (defined('OSC_IN_ADMIN') && (OSC_IN_ADMIN === true)) {
+        $url = osc_href_link_admin(FILENAME_DEFAULT);
+      } else {
+        $url = osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false);
+      }
     }
 
     if (strpos($url, '&amp;') !== false) {

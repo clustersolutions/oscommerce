@@ -182,5 +182,23 @@
 
       return $Qzone->value('zone_code');
     }
+
+    function getCountryZones($id) {
+      global $osC_Database;
+
+      $zones_array = array();
+
+      $Qzones = $osC_Database->query('select zone_id, zone_name from :table_zones where zone_country_id = :zone_country_id order by zone_name');
+      $Qzones->bindTable(':table_zones', TABLE_ZONES);
+      $Qzones->bindInt(':zone_country_id', $id);
+      $Qzones->execute();
+
+      while ($Qzones->next()) {
+        $zones_array[] = array('id' => $Qzones->valueInt('zone_id'),
+                               'name' => $Qzones->value('zone_name'));
+      }
+
+      return $zones_array;
+    }
   }
 ?>

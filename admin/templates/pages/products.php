@@ -88,18 +88,12 @@
     echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product'), osc_icon('edit.png', IMAGE_EDIT)) . '&nbsp;';
 
     if (isset($pInfo) && ($Qproducts->valueInt('products_id') == $pInfo->products_id)) {
-      if ($current_category_id > 0) {
-        echo '<a href="#" onclick="toggleInfoBox(\'pMove\');">' . osc_icon('move.png', IMAGE_MOVE) . '</a>&nbsp;';
-      }
-
-      echo '<a href="#" onclick="toggleInfoBox(\'pCopyTo\');">' . osc_icon('copy.png', IMAGE_COPY_TO) . '</a>&nbsp;' .
+      echo '<a href="#" onclick="toggleInfoBox(\'pMove\');">' . osc_icon('move.png', IMAGE_MOVE) . '</a>&nbsp;' .
+           '<a href="#" onclick="toggleInfoBox(\'pCopyTo\');">' . osc_icon('copy.png', IMAGE_COPY_TO) . '</a>&nbsp;' .
            '<a href="#" onclick="toggleInfoBox(\'pDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
     } else {
-      if ($current_category_id > 0) {
-        echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pMove'), osc_icon('move.png', IMAGE_MOVE)) . '&nbsp;';
-      }
-
-      echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pCopyTo'), osc_icon('copy.png', IMAGE_COPY_TO)) . '&nbsp;' .
+      echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pMove'), osc_icon('move.png', IMAGE_MOVE)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pCopyTo'), osc_icon('copy.png', IMAGE_COPY_TO)) . '&nbsp;' .
            osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=pDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
@@ -123,7 +117,26 @@
 
 <?php
   if (isset($pInfo)) {
-    if ($current_category_id > 0) {
+    $in_categories = array();
+
+    $Qcategories = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
+    $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+    $Qcategories->bindInt(':products_id', $pInfo->products_id);
+    $Qcategories->execute();
+
+    while ($Qcategories->next()) {
+      $in_categories[] = $Qcategories->valueInt('categories_id');
+    }
+
+    $in_categories_path = '';
+
+    foreach ($in_categories as $category_id) {
+      $in_categories_path .= $osC_CategoryTree->getPath($category_id, 0, ' &gt; ') . '<br />';
+    }
+
+    if (!empty($in_categories_path)) {
+      $in_categories_path = substr($in_categories_path, 0, -6);
+    }
 ?>
 
 <div id="infoBox_pMove" <?php if ($action != 'pMove') { echo 'style="display: none;"'; } ?>>
@@ -132,7 +145,7 @@
     <form name="pMove" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=move_product_confirm'); ?>" method="post">
 
     <p><?php echo sprintf(TEXT_MOVE_PRODUCTS_INTRO, $pInfo->products_name); ?></p>
-    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
+    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . $in_categories_path; ?></p>
     <p><?php echo sprintf(TEXT_MOVE, $pInfo->products_name) . '<br />' . osc_draw_pull_down_menu('move_to_category_id', $categories_array, $cPath); ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_MOVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
@@ -141,17 +154,13 @@
   </div>
 </div>
 
-<?php
-    }
-?>
-
 <div id="infoBox_pCopyTo" <?php if ($action != 'pCopyTo') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('copy.png', IMAGE_COPY_TO) . ' ' . $pInfo->products_name; ?></div>
   <div class="infoBoxContent">
     <form name="pCopyTo" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $pInfo->products_id . '&action=copy_to_confirm'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_COPY_TO_INTRO; ?></p>
-    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . tep_output_generated_category_path($pInfo->products_id, 'product'); ?></p>
+    <p><?php echo TEXT_INFO_CURRENT_CATEGORIES . '<br />' . $in_categories_path; ?></p>
     <p><?php echo TEXT_CATEGORIES . '<br />' . osc_draw_pull_down_menu('categories_id', $categories_array, $cPath); ?></p>
     <p><?php echo TEXT_HOW_TO_COPY . '<br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', null, '<br />'); ?></p>
 
@@ -169,20 +178,16 @@
     <p><?php echo TEXT_DELETE_PRODUCT_INTRO; ?></p>
     <p><?php echo $pInfo->products_name; ?></p>
     <p>
-<?php
-    $product_categories_array = array();
-    $product_categories = tep_generate_category_path($pInfo->products_id, 'product');
-    for ($i=0, $n=sizeof($product_categories); $i<$n; $i++) {
-      $category_path = '';
-      for ($j=0, $k=sizeof($product_categories[$i]); $j<$k; $j++) {
-        $category_path .= $product_categories[$i][$j]['text'] . '&nbsp;&gt;&nbsp;';
-      }
-      $category_path = substr($category_path, 0, -16);
 
-      $product_categories_array[] = array('id' => $product_categories[$i][sizeof($product_categories[$i])-1]['id'], 'text' => $category_path);
+<?php
+    $categories_array = array();
+
+    foreach ($in_categories as $category_id) {
+      $categories_array[] = array('id' => $category_id,
+                                  'text' => $osC_CategoryTree->getPath($category_id));
     }
 
-    echo osc_draw_checkbox_field('product_categories[]', $product_categories_array, true, null, '<br />');
+    echo osc_draw_checkbox_field('product_categories[]', $categories_array, true, null, '<br />');
 ?>
     </p>
 

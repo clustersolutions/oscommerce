@@ -18,7 +18,7 @@
     $_GET['page'] = 1;
   }
 
-  $image_extension = tep_dynamic_image_extension();
+  $image_extension = osc_dynamic_image_extension();
 
   if (!empty($action)) {
     switch ($action) {
@@ -89,7 +89,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $banners_id));
+          osc_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $banners_id));
         }
         break;
       case 'deleteconfirm':
@@ -143,7 +143,7 @@
 
           $osC_MessageStack->add_session('header', SUCCESS_BANNER_REMOVED, 'success');
 
-          tep_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page']));
         }
         break;
     }

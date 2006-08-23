@@ -11,7 +11,6 @@
 */
 
   require('includes/application_top.php');
-  require('includes/functions/password_funcs.php');
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
@@ -25,10 +24,10 @@
           $Qadmin->execute();
 
           if ($Qadmin->numberOfRows()) {
-            if (tep_validate_password($_POST['user_password'], $Qadmin->value('user_password'))) {
+            if (osc_validate_password($_POST['user_password'], $Qadmin->value('user_password'))) {
               $_SESSION['admin'] = $Qadmin->value('user_name');
 
-              tep_redirect(osc_href_link_admin(FILENAME_DEFAULT));
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT));
             }
           }
         }
@@ -40,7 +39,7 @@
       case 'logoff':
         unset($_SESSION['admin']);
 
-        tep_redirect(osc_href_link_admin(FILENAME_DEFAULT));
+        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT));
 
         break;
     }

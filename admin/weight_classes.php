@@ -144,7 +144,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $weight_class_id));
+        osc_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $weight_class_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
@@ -162,7 +162,7 @@
               $osC_MessageStack->add_session('header', sprintf(TEXT_INFO_DELETE_PROHIBITED_PRODUCTS, $Qcheck->valueInt('total')), 'warning');
             }
 
-            tep_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $_GET['wcID']));
+            osc_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page'] . '&wcID=' . $_GET['wcID']));
           } else {
             $error = false;
 
@@ -202,7 +202,7 @@
               $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
             }
 
-            tep_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page']));
+            osc_redirect(osc_href_link_admin(FILENAME_WEIGHT_CLASSES, 'page=' . $_GET['page']));
           }
         }
         break;

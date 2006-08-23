@@ -87,14 +87,14 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $id));
+        osc_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['gID']) && is_numeric($_GET['gID'])) {
           if (DEFAULT_IMAGE_GROUP_ID == $_GET['gID']) {
             $osC_MessageStack->add_session('header', TEXT_INFO_DELETE_PROHIBITED, 'warning');
 
-            tep_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $_GET['gID']));
+            osc_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $_GET['gID']));
           } else {
             $Qdel = $osC_Database->query('delete from :table_products_images_groups where id = :id');
             $Qdel->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
@@ -111,7 +111,7 @@
               $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
             }
 
-            tep_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS));
+            osc_redirect(osc_href_link_admin(FILENAME_IMAGE_GROUPS));
           }
         }
         break;

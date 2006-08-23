@@ -121,7 +121,7 @@
       </tr>
     </table>
 
-    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($tcInfo->last_modified > $tcInfo->date_added) ? tep_date_short($tcInfo->last_modified) : tep_date_short($tcInfo->date_added)); ?></p>
+    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($tcInfo->last_modified > $tcInfo->date_added) ? osC_DateTime::getShort($tcInfo->last_modified) : osC_DateTime::getShort($tcInfo->date_added)); ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'tcDefault\');" class="operationButton">'; ?></p>
 

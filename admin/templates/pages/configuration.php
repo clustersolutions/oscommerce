@@ -35,18 +35,8 @@
   $Qcfg->execute();
 
   while ($Qcfg->next()) {
-    if (tep_not_null($Qcfg->value('use_function'))) {
-      $use_function = $Qcfg->value('use_function');
-      if (ereg('->', $use_function)) {
-        $class_method = explode('->', $use_function);
-        if (!is_object(${$class_method[0]})) {
-          include('includes/classes/' . $class_method[0] . '.php');
-          ${$class_method[0]} = new $class_method[0]();
-        }
-        $cfgValue = tep_call_function($class_method[1], $Qcfg->value('configuration_value'), ${$class_method[0]});
-      } else {
-        $cfgValue = tep_call_function($use_function, $Qcfg->value('configuration_value'));
-      }
+    if (!osc_empty($Qcfg->value('use_function'))) {
+      $cfgValue = osc_call_user_func($Qcfg->value('use_function'), $Qcfg->value('configuration_value'));
     } else {
       $cfgValue = $Qcfg->value('configuration_value');
     }
@@ -88,7 +78,7 @@
 <?php
   if (isset($cInfo)) {
     if (!empty($cInfo->set_function)) {
-      eval('$value_field = ' . $cInfo->set_function . '"' . htmlspecialchars($cInfo->configuration_value) . '");');
+      $value_field = osc_call_user_func($cInfo->set_function, $cInfo->configuration_value);
     } else {
       $value_field = osc_draw_input_field('configuration_value', $cInfo->configuration_value, 'style="width: 100%;"');
     }
@@ -108,7 +98,7 @@
       </tr>
     </table>
 
-    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (!empty($cInfo->last_modified) ? tep_date_short($cInfo->last_modified) : tep_date_short($cInfo->date_added)); ?></p>
+    <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (!empty($cInfo->last_modified) ? osC_DateTime::getShort($cInfo->last_modified) : osC_DateTime::getShort($cInfo->date_added)); ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'cDefault\');" class="operationButton">'; ?></p>
 

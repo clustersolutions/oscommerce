@@ -9,6 +9,11 @@
 
   Released under the GNU General Public License
 */
+
+  $categories_array = array();
+  foreach ($osC_CategoryTree->getTree() as $value) {
+    $categories_array[] = array('id' => $value['id'], 'text' => $value['title']);
+  }
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -59,8 +64,8 @@
 
   while ($Qcategories->next()) {
     if (!isset($cInfo) && (!isset($_GET['cID']) && !isset($_GET['pID']) || (isset($_GET['cID']) && ($_GET['cID'] == $Qcategories->valueInt('categories_id')))) && ($action != 'cNew')) {
-      $cInfo_extra = array('childs_count' => tep_childs_in_category_count($Qcategories->valueInt('categories_id')),
-                           'products_count' => tep_products_in_category_count($Qcategories->valueInt('categories_id')));
+      $cInfo_extra = array('childs_count' => sizeof($osC_CategoryTree->getChildren($Qcategories->valueInt('categories_id'), $dummy = array())),
+                           'products_count' => $osC_CategoryTree->getNumberOfProducts($Qcategories->valueInt('categories_id')));
 
       $cInfo = new objectInfo(array_merge($Qcategories->toArray(), $cInfo_extra));
     }

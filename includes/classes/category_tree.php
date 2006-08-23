@@ -307,6 +307,18 @@
       unset($totals);
     }
 
+    function getNumberOfProducts($id) {
+      foreach ($this->data as $parent => $categories) {
+        foreach ($categories as $category_id => $info) {
+          if ($id == $category_id) {
+            return $info['count'];
+          }
+        }
+      }
+
+      return false;
+    }
+
     function setRootCategoryID($root_category_id) {
       $this->root_category_id = $root_category_id;
     }

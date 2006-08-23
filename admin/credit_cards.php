@@ -50,7 +50,7 @@
             $osC_MessageStack->add_session('header', WARNING_DB_ROWS_NOT_UPDATED, 'warning');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . ((isset($_GET['ccID']) && is_numeric($_GET['ccID'])) ? $_GET['ccID'] : $osC_Database->nextID())));
+          osc_redirect(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page'] . '&ccID=' . ((isset($_GET['ccID']) && is_numeric($_GET['ccID'])) ? $_GET['ccID'] : $osC_Database->nextID())));
         } else {
           if ($action == 'insert') {
             $action = 'new';
@@ -76,7 +76,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_CREDIT_CARDS, 'page=' . $_GET['page']));
         break;
     }
   }

@@ -54,7 +54,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $tax_class_id));
+        osc_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $tax_class_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['tcID']) && is_numeric($_GET['tcID'])) {
@@ -90,7 +90,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page']));
+          osc_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page']));
         }
         break;
     }
@@ -129,7 +129,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $tax_rate_id));
+        osc_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $tax_rate_id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['trID']) && is_numeric($_GET['trID'])) {
@@ -148,7 +148,7 @@
             $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
           }
 
-          tep_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
+          osc_redirect(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
         }
         break;
     }

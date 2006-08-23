@@ -11,7 +11,6 @@
 */
 
   require('includes/application_top.php');
-  require('includes/functions/password_funcs.php');
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
@@ -39,7 +38,7 @@
 
           $Qadmin = $osC_Database->query('update :table_administrators set user_password = :user_password where id = :id');
           $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-          $Qadmin->bindValue(':user_password', tep_encrypt_password(trim($_POST['user_password'])));
+          $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['user_password'])));
           $Qadmin->bindInt(':id', $id);
           $Qadmin->execute();
         }
@@ -50,7 +49,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $id));
+        osc_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page'] . '&aID=' . $id));
         break;
       case 'deleteconfirm':
         if (isset($_GET['aID']) && is_numeric($_GET['aID'])) {
@@ -62,7 +61,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_ADMINISTRATORS, 'page=' . $_GET['page']));
         break;
     }
   }

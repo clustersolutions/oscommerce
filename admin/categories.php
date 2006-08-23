@@ -16,21 +16,16 @@
   $cPath = (isset($_GET['cPath']) ? $_GET['cPath'] : '');
 
   if (!empty($cPath)) {
-    $cPath_array = tep_parse_category_path($cPath);
+    $cPath_array = osc_parse_category_path($cPath);
     $cPath = implode('_', $cPath_array);
     $current_category_id = end($cPath_array);
   } else {
     $current_category_id = 0;
   }
 
-  require('../includes/classes/category_tree.php');
-  $osC_CategoryTree = new osC_CategoryTree();
+  require('includes/classes/category_tree.php');
+  $osC_CategoryTree = new osC_CategoryTree_Admin();
   $osC_CategoryTree->setSpacerString('&nbsp;', 2);
-
-  $categories_array = array();
-  foreach ($osC_CategoryTree->getTree() as $value) {
-    $categories_array[] = array('id' => $value['id'], 'text' => $value['title']);
-  }
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
@@ -111,7 +106,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&cID=' . $category_id));
+        osc_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&cID=' . $category_id));
         break;
       case 'delete_category_confirm':
         if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
@@ -146,10 +141,10 @@
             }
           }
 
-          tep_set_time_limit(0);
+          osc_set_time_limit(0);
 
           foreach ($categories as $c_entry) {
-            tep_remove_category($c_entry['id']);
+            osc_remove_category($c_entry['id']);
           }
 
           foreach ($products_delete as $id) {
@@ -163,7 +158,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
+        osc_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
         break;
       case 'move_category_confirm':
         if (isset($_GET['cID']) && ($_GET['cID'] != end(explode('_', $_POST['move_to_category_id'])))) {
@@ -185,12 +180,12 @@
 
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
 
-              tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
+              osc_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
             }
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&cID=' . $_GET['cID']));
+        osc_redirect(osc_href_link_admin(FILENAME_CATEGORIES, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&cID=' . $_GET['cID']));
         break;
     }
   }

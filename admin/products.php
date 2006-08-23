@@ -12,19 +12,22 @@
 
   require('includes/application_top.php');
 
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
+
 // calculate category path
   $cPath = (isset($_GET['cPath']) ? $_GET['cPath'] : '');
 
   if (!empty($cPath)) {
-    $cPath_array = tep_parse_category_path($cPath);
+    $cPath_array = osc_parse_category_path($cPath);
     $cPath = implode('_', $cPath_array);
     $current_category_id = end($cPath_array);
   } else {
     $current_category_id = 0;
   }
 
-  require('../includes/classes/category_tree.php');
-  $osC_CategoryTree = new osC_CategoryTree();
+  require('includes/classes/category_tree.php');
+  $osC_CategoryTree = new osC_CategoryTree_Admin();
   $osC_CategoryTree->setSpacerString('&nbsp;', 2);
 
   $categories_array = array();
@@ -143,7 +146,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search']));
         break;
       case 'move_product_confirm':
         if (isset($_GET['pID']) && is_numeric($_GET['pID'])) {
@@ -168,14 +171,14 @@
 
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
 
-              tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['move_to_category_id'] . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
+              osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['move_to_category_id'] . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
             } else {
               $osC_MessageStack->add_session('header', WARNING_DB_ROWS_NOT_UPDATED, 'warning');
             }
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
         break;
       case 'save_product':
         $error = false;
@@ -398,7 +401,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $products_id));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $products_id));
         break;
       case 'copy_to_confirm':
         if (isset($_GET['pID']) && isset($_POST['categories_id'])) {
@@ -420,7 +423,7 @@
                 if ($Qcat->affectedRows()) {
                   $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
 
-                  tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['categories_id'] . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
+                  osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['categories_id'] . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
                 }
               }
             } else {
@@ -442,7 +445,7 @@
               $Qnew->bindInt(':products_quantity', $Qproduct->valueInt('products_quantity'));
               $Qnew->bindValue(':products_price', $Qproduct->value('products_price'));
 
-              if (tep_not_null($Qproduct->value('products_date_available'))) {
+              if (!osc_empty($Qproduct->value('products_date_available'))) {
                 $Qnew->bindValue(':products_date_available', $Qproduct->value('products_date_available'));
               } else {
                 $Qnew->bindRaw(':products_date_available', 'null');
@@ -505,7 +508,7 @@
 
                 $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
 
-                tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['categories_id'] . '&search=' . $_GET['search'] . '&pID=' . $new_product_id));
+                osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $_POST['categories_id'] . '&search=' . $_GET['search'] . '&pID=' . $new_product_id));
               } else {
                 $osC_Database->rollbackTransaction();
 
@@ -515,7 +518,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS, 'page=' . $_GET['page'] . '&cPath=' . $cPath . '&search=' . $_GET['search'] . '&pID=' . $_GET['pID']));
         break;
     }
   }

@@ -27,12 +27,12 @@
           $products_attributes_maxdays = tep_db_prepare_input($HTTP_POST_VARS['products_attributes_maxdays']);
           $products_attributes_maxcount = tep_db_prepare_input($HTTP_POST_VARS['products_attributes_maxcount']);
 
-          if (tep_not_null($products_attributes_filename)) {
+          if (!empty($products_attributes_filename)) {
             tep_db_query("insert into " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " values (" . (int)$products_attributes_id . ", '" . tep_db_input($products_attributes_filename) . "', '" . tep_db_input($products_attributes_maxdays) . "', '" . tep_db_input($products_attributes_maxcount) . "')");
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, $page_info));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, $page_info));
         break;
 */
   require('includes/application_top.php');
@@ -94,7 +94,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $group_id));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $group_id));
         break;
       case 'deleteConfirm':
         if (isset($_GET['paID']) && is_numeric($_GET['paID'])) {
@@ -154,7 +154,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page']));
         break;
     }
   }
@@ -218,7 +218,7 @@
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&paeID=' . $entry_id));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&paeID=' . $entry_id));
         break;
       case 'deleteConfirm':
         if (isset($_GET['paeID']) && is_numeric($_GET['paeID'])) {
@@ -258,7 +258,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
+        osc_redirect(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $_GET['paID'] . '&action=list&entriesPage=' . $_GET['entriesPage']));
         break;
     }
   }

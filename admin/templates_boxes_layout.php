@@ -51,9 +51,9 @@
         }
 
         if (isset($_GET['lID']) && is_numeric($_GET['lID'])) {
-          tep_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $_GET['lID']));
+          osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template . '&lID=' . $_GET['lID']));
         } else {
-          tep_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template));
+          osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template));
         }
 
         break;
@@ -73,7 +73,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template));
+        osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES_LAYOUT, 'set=' . $set . '&filter=' . $filter_template));
         break;
     }
   }

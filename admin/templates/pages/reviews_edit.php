@@ -40,7 +40,7 @@
 
 <form name="review" action="<?php echo osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rPreview'); ?>" method="post">
 
-<p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . tep_date_short($rInfo->date_added); ?></p>
+<p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . osC_DateTime::getShort($rInfo->date_added); ?></p>
 
 <p class="main"><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . osc_draw_textarea_field('reviews_text', $rInfo->reviews_text, null, null, 'style="width: 100%;"') . '<br /><span class="smallText">' . ENTRY_REVIEW_TEXT . '</span>'; ?></p>
 

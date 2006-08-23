@@ -76,7 +76,7 @@
 ?>
         <td><?php echo osc_link_object($entry_url, $entry_icon . '&nbsp;' . $files[$i]['name']); ?></td>
         <td align="right"><?php echo number_format($files[$i]['size']); ?></td>
-        <td align="center"><tt><?php echo tep_get_file_permissions($files[$i]['permissions']); ?></tt></td>
+        <td align="center"><tt><?php echo osc_get_file_permissions($files[$i]['permissions']); ?></tt></td>
         <td><?php echo $file_owner['name']; ?></td>
         <td><?php echo $group_owner['name']; ?></td>
         <td align="center"><?php echo osc_icon(is_writable($osC_DirectoryListing->getDirectory() . '/' . $files[$i]['name']) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>

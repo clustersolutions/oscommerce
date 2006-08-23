@@ -28,10 +28,10 @@
 
         $osC_MessageStack->add_session('header', SUCCESS_LAST_RESTORE_CLEARED, 'success');
 
-        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
+        osc_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'backupnow':
-        tep_set_time_limit(0);
+        osc_set_time_limit(0);
 
         $backup_file = 'db_' . DB_DATABASE . '-' . date('YmdHis') . '.sql';
         $fp = fopen(DIR_FS_BACKUP . $backup_file, 'w');
@@ -45,7 +45,7 @@
                   '# Database: ' . DB_DATABASE . "\n" .
                   '# Database Server: ' . DB_SERVER . "\n" .
                   '#' . "\n" .
-                  '# Backup Date: ' . date(PHP_DATE_TIME_FORMAT) . "\n\n";
+                  '# Backup Date: ' . osC_DateTime::getShort(null, true) . "\n\n";
         fputs($fp, $schema);
 
         $Qtables = $osC_Database->query('show tables');
@@ -175,11 +175,11 @@
           $osC_MessageStack->add_session('header', SUCCESS_DATABASE_SAVED, 'success');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
+        osc_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'restorenow':
       case 'restorelocalnow':
-        tep_set_time_limit(0);
+        osc_set_time_limit(0);
 
         if ($action == 'restorenow') {
           $read_from = basename($_GET['file']);
@@ -334,7 +334,7 @@
           $osC_MessageStack->add_session('header', SUCCESS_DATABASE_RESTORED, 'success');
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
+        osc_redirect(osc_href_link_admin(FILENAME_BACKUP));
         break;
       case 'download':
         if (isset($_GET['file'])) {
@@ -360,12 +360,10 @@
       case 'deleteconfirm':
         if (isset($_GET['file'])) {
           if (file_exists(DIR_FS_BACKUP . basename($_GET['file']))) {
-            tep_remove(DIR_FS_BACKUP . basename($_GET['file']));
-
-            if (!$tep_remove_error) {
+            if (osc_remove(DIR_FS_BACKUP . basename($_GET['file']))) {
               $osC_MessageStack->add_session('header', SUCCESS_BACKUP_DELETED, 'success');
 
-              tep_redirect(osc_href_link_admin(FILENAME_BACKUP));
+              osc_redirect(osc_href_link_admin(FILENAME_BACKUP));
             }
           }
         }

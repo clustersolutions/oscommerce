@@ -9,6 +9,18 @@
 
   Released under the GNU General Public License
 */
+
+  $Qzone = $osC_Database->query('select geo_zone_name from :table_geo_zones where geo_zone_id = :geo_zone_id');
+  $Qzone->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+  $Qzone->bindInt('geo_zone_id', $_GET['zID']);
+  $Qzone->execute();
+
+  $countries_array = array(array('id' => '', 'text' => TEXT_ALL_COUNTRIES));
+
+  foreach (osC_Address::getCountries() as $country) {
+    $countries_array[] = array('id' => $country['id'],
+                               'text' => $country['name']);
+  }
 ?>
 
 <script type="text/javascript"><!--
@@ -23,12 +35,12 @@ function update_zone(theForm) {
 
   SelectedCountry = theForm.zone_country_id.options[theForm.zone_country_id.selectedIndex].value;
 
-<?php echo tep_js_zone_list('SelectedCountry', 'theForm', 'zone_id'); ?>
+<?php echo osc_js_zone_list('SelectedCountry', 'theForm', 'zone_id'); ?>
 
 }
 //--></script>
 
-<h1><?php echo HEADING_TITLE . ': ' . tep_get_geo_zone_name($_GET['zID']); ?></h1>
+<h1><?php echo HEADING_TITLE . ': ' . $Qzone->value('geo_zone_name'); ?></h1>
 
 <div id="infoBox_zeDefault" <?php if (!empty($entriesAction)) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
@@ -101,11 +113,11 @@ function update_zone(theForm) {
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), null, 'onchange="update_zone(this.form);"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, null, 'onchange="update_zone(this.form);"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_ZONE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_id', tep_prepare_country_zones_pull_down()); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_id', null); ?></td>
       </tr>
     </table>
 
@@ -117,6 +129,12 @@ function update_zone(theForm) {
 
 <?php
   if (isset($zeInfo)) {
+    $zones_array = array();
+
+    foreach (osC_Address::getCountryZones($zeInfo->zone_country_id) as $zone) {
+      $zones_array[] = array('id' => $zone['id'],
+                             'text' => $zone['name']);
+    }
 ?>
 
 <div id="infoBox_zeEdit" <?php if ($entriesAction != 'zeEdit') { echo 'style="display: none;"'; } ?>>
@@ -127,11 +145,11 @@ function update_zone(theForm) {
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', tep_get_countries(TEXT_ALL_COUNTRIES), $zeInfo->zone_country_id, 'onchange="update_zone(this.form);"'); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, $zeInfo->zone_country_id, 'onchange="update_zone(this.form);"'); ?></td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_ZONE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_id', tep_prepare_country_zones_pull_down($zeInfo->zone_country_id), $zeInfo->zone_id); ?></td>
+        <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_id', $zones_array, $zeInfo->zone_id); ?></td>
       </tr>
     </table>
 

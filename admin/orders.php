@@ -11,7 +11,7 @@
 */
 
   require('includes/application_top.php');
-  require('../includes/classes/address.php');
+  require('includes/classes/order.php');
 
   $action = (isset($_GET['action']) ? $_GET['action'] : '');
   $section = (isset($_GET['section']) ? $_GET['section'] : '');
@@ -43,7 +43,7 @@
             $Qorder->bindInt(':orders_id', $_GET['oID']);
             $Qorder->execute();
 
-            if ( ($Qorder->numberOfRows() === 1) && tep_not_null($Qorder->value('payment_module'))) {
+            if ( ($Qorder->numberOfRows() === 1) && !osc_empty($Qorder->value('payment_module'))) {
               if (file_exists('includes/modules/payment/' . $Qorder->value('payment_module') . '.php')) {
                 include('includes/classes/payment.php');
                 include('includes/modules/payment/' . $Qorder->value('payment_module') . '.php');
@@ -60,7 +60,7 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=transactionHistory'));
+        osc_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=transactionHistory'));
 
         break;
       case 'update_order':
@@ -80,7 +80,7 @@
 
               if ($Qupdate->affectedRows()) {
                 if (isset($_POST['notify_customer']) && ($_POST['notify_customer'] == 'on')) {
-                  $email_body = STORE_NAME . "\n" . EMAIL_SEPARATOR . "\n" . EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID . "\n" . EMAIL_TEXT_INVOICE_URL . ' ' . osc_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false, false, true) . "\n" . EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($Qorder->value('date_purchased')) . "\n\n";
+                  $email_body = STORE_NAME . "\n" . EMAIL_SEPARATOR . "\n" . EMAIL_TEXT_ORDER_NUMBER . ' ' . $oID . "\n" . EMAIL_TEXT_INVOICE_URL . ' ' . osc_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false, false, true) . "\n" . EMAIL_TEXT_DATE_ORDERED . ' ' . osC_DateTime::getLong($Qorder->value('date_purchased')) . "\n\n";
 
                   if (isset($_POST['append_comment']) && ($_POST['append_comment'] == 'on')) {
                     $email_body .= sprintf(EMAIL_TEXT_COMMENTS_UPDATE, $_POST['comment']) . "\n\n";
@@ -88,7 +88,7 @@
 
                   $email_body .= sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$_POST['status']]);
 
-                  tep_mail($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), EMAIL_TEXT_SUBJECT, $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+                  osc_mail($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), EMAIL_TEXT_SUBJECT, $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
                 }
 
                 $Qupdate = $osC_Database->query('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');
@@ -109,20 +109,18 @@
           }
         }
 
-        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=statusHistory'));
+        osc_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=oEdit&section=statusHistory'));
         break;
       case 'deleteconfirm':
-        tep_remove_order($_GET['oID'], (isset($_POST['restock']) && ($_POST['restock'] == 'on') ? true : false));
+        osC_Order::delete($_GET['oID'], (isset($_POST['restock']) && ($_POST['restock'] == 'on') ? true : false));
 
-        tep_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
+        osc_redirect(osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
         break;
     }
   }
 
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();
-
-  require('includes/classes/order.php');
 
   switch ($action) {
     case 'oEdit': $page_contents = 'orders_edit.php'; break;
