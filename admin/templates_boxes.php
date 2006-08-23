@@ -72,6 +72,11 @@
         if (file_exists('../includes/modules/' . $set . '/' . $_GET[$set] . $file_extension)) {
           include('../includes/modules/' . $set . '/' . $_GET[$set] . $file_extension);
           $class = 'osC_' . ucfirst($set) . '_' . $_GET[$set];
+
+          if (call_user_func(array($class, 'isInstalled'), $_GET[$set], $set) === false) {
+            $osC_Language->injectDefinitions('modules/' . $set . '/' . $_GET[$set] . '.xml');
+          }
+
           $module = new $class;
           if ($action == 'install') {
             $module->install();
