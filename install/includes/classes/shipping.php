@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  class osC_Shipping {
+  class osC_Shipping_Admin {
     var $_group = 'shipping';
 
     function install() {

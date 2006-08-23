@@ -215,23 +215,23 @@
           $Qupdate->bindValue(':configuration_key', 'MODULE_PAYMENT_COD_STATUS');
           $Qupdate->execute();
 
-          include('../includes/modules/shipping/flat.php');
+          include('../admin/includes/modules/shipping/flat.php');
           $module = new osC_Shipping_flat();
           $module->install();
 
-          include('../includes/modules/order_total/sub_total.php');
+          include('../admin/includes/modules/order_total/sub_total.php');
           $module = new osC_OrderTotal_sub_total();
           $module->install();
 
-          include('../includes/modules/order_total/shipping.php');
+          include('../admin/includes/modules/order_total/shipping.php');
           $module = new osC_OrderTotal_shipping();
           $module->install();
 
-          include('../includes/modules/order_total/tax.php');
+          include('../admin/includes/modules/order_total/tax.php');
           $module = new osC_OrderTotal_tax();
           $module->install();
 
-          include('../includes/modules/order_total/total.php');
+          include('../admin/includes/modules/order_total/total.php');
           $module = new osC_OrderTotal_total();
           $module->install();
         }

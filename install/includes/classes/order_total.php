@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  class osC_OrderTotal {
+  class osC_OrderTotal_Admin {
     var $_group = 'order_total';
 
     function install() {

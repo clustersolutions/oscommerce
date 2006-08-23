@@ -36,31 +36,5 @@
                               'text' => $osC_Currencies->format($osC_ShoppingCart->getSubTotal()),
                               'value' => $osC_ShoppingCart->getSubTotal());
     }
-
-    function check() {
-      if (!isset($this->_check)) {
-        $this->_check = defined('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS');
-      }
-
-      return $this->_check;
-    }
-
-    function install() {
-      global $osC_Database;
-
-      parent::install();
-
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Sub-Total', 'MODULE_ORDER_TOTAL_SUBTOTAL_STATUS', 'true', 'Do you want to display the order sub-total cost?', '6', '1', 'osc_cfg_set_boolean_value(array(\'true\', \'false\'))', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER', '1', 'Sort order of display.', '6', '2', now())");
-    }
-
-    function getKeys() {
-      if (!isset($this->_keys)) {
-        $this->_keys = array('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS',
-                             'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER');
-      }
-
-      return $this->_keys;
-    }
   }
 ?>
