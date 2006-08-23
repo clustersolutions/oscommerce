@@ -58,6 +58,8 @@
             }
           }
 
+          osC_Cache::clear('currencies');
+
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         } else {
           $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
@@ -79,6 +81,8 @@
             $Qdelete->execute();
 
             if ($osC_Database->isError() === false) {
+              osC_Cache::clear('currencies');
+
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
             } else {
               $osC_MessageStack->add_session('header', ERROR_DB_ROWS_NOT_UPDATED, 'error');
@@ -111,6 +115,8 @@
               $osC_MessageStack->add_session('header', sprintf(ERROR_CURRENCY_INVALID, $Qcurrencies->value('title'), $Qcurrencies->value('code'), $_POST['service']), 'error');
             }
           }
+
+          osC_Cache::clear('currencies');
 
           osc_redirect(osc_href_link_admin(FILENAME_CURRENCIES));
         }
