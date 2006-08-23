@@ -20,7 +20,7 @@
         $_exclude_entries = array('.', '..'),
         $_stats = false,
         $_recursive = false,
-        $_check_extension = false,
+        $_check_extension = array(),
         $_add_directory_to_filename = false,
         $_listing;
 
@@ -84,7 +84,7 @@
     }
 
     function setCheckExtension($extension) {
-      $this->_check_extension = $extension;
+      $this->_check_extension[] = $extension;
     }
 
     function setAddDirectoryToFilename($boolean) {
@@ -108,7 +108,7 @@
         while (($entry = $dir->read()) !== false) {
           if (!in_array($entry, $this->_exclude_entries)) {
             if (($this->_include_files === true) && is_file($dir->path . '/' . $entry)) {
-              if (($this->_check_extension === false) || (substr($entry, strrpos($entry, '.')+1) == $this->_check_extension)) {
+              if (empty($this->_check_extension) || in_array(substr($entry, strrpos($entry, '.')+1), $this->_check_extension)) {
                 if ($this->_add_directory_to_filename === true) {
                   if ($dir->path != $this->_directory) {
                     $entry = substr($dir->path, strlen($this->_directory)+1) . '/' . $entry;

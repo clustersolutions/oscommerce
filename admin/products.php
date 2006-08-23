@@ -47,31 +47,74 @@
 
   if (!empty($action)) {
     switch ($action) {
-      case 'fileUploadForm':
-        if (isset($_POST['submit']) && ($_POST['submit'] == 'true')) {
+      case 'fileUpload':
+        if (isset($_GET['pID'])) {
           $products_image = new upload('products_image');
 
           if ($products_image->exists()) {
             $products_image->set_destination(realpath('../images/products/originals'));
 
             if ($products_image->parse() && $products_image->save()) {
-              if (isset($_GET['pID'])) {
-                $default_flag = 1;
+              $default_flag = 1;
 
-                $Qcheck = $osC_Database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
-                $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-                $Qcheck->bindInt(':products_id', $_GET['pID']);
-                $Qcheck->bindInt(':default_flag', 1);
-                $Qcheck->execute();
+              $Qcheck = $osC_Database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
+              $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+              $Qcheck->bindInt(':products_id', $_GET['pID']);
+              $Qcheck->bindInt(':default_flag', 1);
+              $Qcheck->execute();
 
-                if ($Qcheck->numberOfRows() === 1) {
-                  $default_flag = 0;
+              if ($Qcheck->numberOfRows() === 1) {
+                $default_flag = 0;
+              }
+
+              $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
+              $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+              $Qimage->bindInt(':products_id', $_GET['pID']);
+              $Qimage->bindValue(':image', $products_image->filename);
+              $Qimage->bindInt(':default_flag', $default_flag);
+              $Qimage->bindInt(':sort_order', 0);
+              $Qimage->bindRaw(':date_added', 'now()');
+              $Qimage->execute();
+
+              foreach ($osC_Image->getGroups() as $group) {
+                if ($group['id'] != '1') {
+                  $osC_Image->resize($products_image->filename, $group['id']);
                 }
+              }
+            }
+          }
+        }
 
+        echo '<script language="javascript" type="text/javascript">window.parent.setFileUploadField(); window.parent.document.getElementById(\'showProgress\').style.display = \'none\'; window.parent.getImages();</script>';
+
+        exit;
+        break;
+      case 'assignLocalImages':
+        if (isset($_GET['pID']) && isset($_POST['localimages'])) {
+          $default_flag = 1;
+
+          $Qcheck = $osC_Database->query('select id from :table_products_images where products_id = :products_id and default_flag = :default_flag limit 1');
+          $Qcheck->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+          $Qcheck->bindInt(':products_id', $_GET['pID']);
+          $Qcheck->bindInt(':default_flag', 1);
+          $Qcheck->execute();
+
+          if ($Qcheck->numberOfRows() === 1) {
+            $default_flag = 0;
+          }
+
+          foreach ($_POST['localimages'] as $image) {
+            $image = basename($image);
+
+            if (file_exists('../images/products/_upload/' . $image)) {
+              copy('../images/products/_upload/' . $image, '../images/products/originals/' . $image);
+              @unlink('../images/products/_upload/' . $image);
+
+              if (isset($_GET['pID'])) {
                 $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
                 $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
                 $Qimage->bindInt(':products_id', $_GET['pID']);
-                $Qimage->bindValue(':image', $products_image->filename);
+                $Qimage->bindValue(':image', $image);
                 $Qimage->bindInt(':default_flag', $default_flag);
                 $Qimage->bindInt(':sort_order', 0);
                 $Qimage->bindRaw(':date_added', 'now()');
@@ -79,20 +122,16 @@
 
                 foreach ($osC_Image->getGroups() as $group) {
                   if ($group['id'] != '1') {
-                    $osC_Image->resize($products_image->filename, $group['id']);
+                    $osC_Image->resize($image, $group['id']);
                   }
                 }
               }
-
-              echo '<script language="javascript" type="text/javascript">window.parent.getImages();</script>';
             }
           }
         }
 
-        echo '<html><head><link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css"></head><body>' .
-        tep_draw_form('file_upload', FILENAME_PRODUCTS, (isset($_GET['pID']) ? 'pID=' . $_GET['pID'] . '&' : '') . 'action=fileUploadForm', 'post', 'enctype="multipart/form-data" onsubmit="document.getElementById(\'showProgress\').style.display=\'inline\';"') .
-        osc_draw_file_field('products_image') . osc_draw_hidden_field('submit', 'true') . '&nbsp;<input type="submit" value="Send To Server" class="operationButton" /><div id="showProgress" style="display: none; padding-left: 10px;">' . tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Uploading image to server...</div></form>' .
-        '</body></html>';
+        echo '<script language="javascript" type="text/javascript">window.parent.getLocalImages(); window.parent.document.getElementById(\'showProgressAssigningLocalImages\').style.display = \'none\'; window.parent.getImages();</script>';
+
         exit;
         break;
       case 'delete_product_confirm':
@@ -200,31 +239,54 @@
         }
 
         if ($error === false) {
+          $images = array();
+
           $products_image = new upload('products_image');
 
           if ($products_image->exists()) {
             $products_image->set_destination(realpath('../images/products/originals'));
 
             if ($products_image->parse() && $products_image->save()) {
-              $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
-              $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-              $Qimage->bindInt(':products_id', $products_id);
-              $Qimage->bindValue(':image', $products_image->filename);
-              $Qimage->bindInt(':default_flag', 1);
-              $Qimage->bindInt(':sort_order', 0);
-              $Qimage->bindRaw(':date_added', 'now()');
-              $Qimage->execute();
+              $images[] = $products_image->filename;
+            }
+          }
 
-              if ($osC_Database->isError()) {
-                $error = true;
-              } else {
-                foreach ($osC_Image->getGroups() as $group) {
-                  if ($group['id'] != '1') {
-                    $osC_Image->resize($products_image->filename, $group['id']);
-                  }
+          if (isset($_POST['localimages'])) {
+            foreach ($_POST['localimages'] as $image) {
+              $image = basename($image);
+
+              if (file_exists('../images/products/_upload/' . $image)) {
+                copy('../images/products/_upload/' . $image, '../images/products/originals/' . $image);
+                @unlink('../images/products/_upload/' . $image);
+
+                $images[] = $image;
+              }
+            }
+          }
+
+          $default_flag = 1;
+
+          foreach ($images as $image) {
+            $Qimage = $osC_Database->query('insert into :table_products_images (products_id, image, default_flag, sort_order, date_added) values (:products_id, :image, :default_flag, :sort_order, :date_added)');
+            $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+            $Qimage->bindInt(':products_id', $products_id);
+            $Qimage->bindValue(':image', $image);
+            $Qimage->bindInt(':default_flag', $default_flag);
+            $Qimage->bindInt(':sort_order', 0);
+            $Qimage->bindRaw(':date_added', 'now()');
+            $Qimage->execute();
+
+            if ($osC_Database->isError()) {
+              $error = true;
+            } else {
+              foreach ($osC_Image->getGroups() as $group) {
+                if ($group['id'] != '1') {
+                  $osC_Image->resize($image, $group['id']);
                 }
               }
             }
+
+            $default_flag = 0;
           }
         }
 

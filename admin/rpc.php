@@ -101,6 +101,26 @@
 
         exit;
         break;
+
+      case 'getLocalImages':
+        include('includes/classes/directory_listing.php');
+
+        $osC_DirectoryListing = new osC_DirectoryListing('../images/products/_upload', true);
+        $osC_DirectoryListing->setCheckExtension('gif');
+        $osC_DirectoryListing->setCheckExtension('jpg');
+        $osC_DirectoryListing->setCheckExtension('png');
+        $osC_DirectoryListing->setIncludeDirectories(false);
+
+        $array = array();
+
+        foreach ($osC_DirectoryListing->getFiles() as $file) {
+          $array[] = $file['name'];
+        }
+
+        echo '1:osCRPC:' . implode('#', $array);
+
+        exit;
+        break;
     }
   }
 

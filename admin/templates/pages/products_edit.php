@@ -289,7 +289,7 @@
       for (i = 0; i < str_array.length; ++i) {
         var str_ele = str_array[i].split('[-]');
 
-        var style = 'width: <?php echo $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) + 20; ?>px; padding: 10px; float: left; text-align: center;';
+        var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
 
         if (str_ele[1] == '1') { // original (products_images_groups_id)
           var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo tep_href_link('templates/' . $template . '/images/icons/16x16/drag.png', '', 'SSL'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
@@ -307,7 +307,7 @@
         }
 
         var newdiv = '<span id="image_' + str_ele[0] + '" style="' + style + '" onmouseover="' + onmouseover + '" onmouseout="' + onmouseout + '">';
-        newdiv += '<a href="' + str_ele[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/' . $osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID) . '/'; ?>' + str_ele[2] + '" border="0" height="<?php echo $osC_Image->getHeight($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)); ?>" alt="' + str_ele[2] + '" title="' + str_ele[2] + '" style="max-width: <?php echo $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) + 20; ?>px;" /></a><br />' + str_ele[3] + '<br />' + str_ele[5] + ' bytes<br />';
+        newdiv += '<a href="' + str_ele[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/mini/'; ?>' + str_ele[2] + '" border="0" height="<?php echo $osC_Image->getHeight('mini'); ?>" alt="' + str_ele[2] + '" title="' + str_ele[2] + '" style="max-width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px;" /></a><br />' + str_ele[3] + '<br />' + str_ele[5] + ' bytes<br />';
 
         if (str_ele[1] == '1') {
           if (str_ele[6] == '1') {
@@ -364,6 +364,64 @@
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others", {onSuccess: handleHttpResponseGetImages});
     }
   }
+
+  function handleHttpResponseGetLocalImages(http) {
+    var result = http.responseText.split(':osCRPC:', 2);
+
+    if (result[0] == '1') {
+      var i = 0;
+
+      var selectList = document.getElementById('localImagesSelection');
+
+      for (i = selectList.options.length; i >= 0; i--) {
+        selectList.options[i] = null;
+      }
+
+      if (result[1].length > 0) {
+        var entries = result[1].split('#');
+
+        for (i = 0; i < entries.length; i++) {
+          selectList.options[i] = new Option(entries[i]);
+          selectList.options[i].selected = false;
+        }
+      }
+    }
+
+    document.getElementById('showProgressGetLocalImages').style.display = 'none';
+  }
+
+  function getLocalImages() {
+    document.getElementById('showProgressGetLocalImages').style.display = 'inline';
+
+    new Ajax.Request("rpc.php?action=getLocalImages", {onSuccess: handleHttpResponseGetLocalImages});
+  }
+
+  function setFileUploadField() {
+    document.getElementById('fileUploadField').innerHTML = '<?php echo osc_draw_file_field('products_image'); ?>';
+  }
+
+  function switchImageFilesView(layer) {
+    if (layer == 'local') {
+      var layer1 = document.getElementById('remoteFiles');
+      var layer1link = document.getElementById('remoteFilesLink');
+      var layer2 = document.getElementById('localFiles');
+      var layer2link = document.getElementById('localFilesLink');
+    } else {
+      var layer1 = document.getElementById('localFiles');
+      var layer1link = document.getElementById('localFilesLink');
+      var layer2 = document.getElementById('remoteFiles');
+      var layer2link = document.getElementById('remoteFilesLink');
+    }
+
+    if ( (layer != 'local') || ((layer == 'local') && (layer1.style.display != 'none')) ) {
+      layer1.style.display='none';
+      layer2.style.display='inline';
+      layer1link.style.backgroundColor='';
+      layer2link.style.backgroundColor='#E5EFE5';
+    } else {
+      getLocalImages();
+    }
+  }
 //--></script>
 
 <style type="text/css"><!--
@@ -404,9 +462,7 @@
     var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );
   //--></script>
 
-<?php
-  echo tep_draw_form('product', FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save_product', 'post', 'enctype="multipart/form-data"');
-?>
+  <form name="product" method="post" enctype="multipart/form-data">
 
   <div class="tab-page" id="tabDescription">
     <h2 class="tab"><?php echo TAB_GENERAL; ?></h2>
@@ -551,18 +607,55 @@
       mainTabPane.addTabPage( document.getElementById( "tabImages" ) );
     //--></script>
 
-<?php
-  if (isset($pInfo)) {
-?>
-
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="100%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>Upload New Image</legend>
+            <legend>New Image</legend>
 
-            <iframe id="fileUpload" src="<?php echo tep_href_link(FILENAME_PRODUCTS, 'action=fileUploadForm' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')); ?>" frameborder="0" scrolling="0" style="width: 100%; height: 50px;"></iframe>
+            <div style="float: right;">
+              <a href="#" id="remoteFilesLink" onclick="switchImageFilesView('remote');" style="background-color: #E5EFE5;">Remote File Upload</a> | <a href="#" id="localFilesLink" onclick="switchImageFilesView('local');">Local Files</a>
+            </div>
+
+            <div id="remoteFiles">
+              <span id="fileUploadField"></span>
+
+<?php
+    if (isset($pInfo)) {
+      echo '<input type="submit" value="Send To Server" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Uploading image to server...</div>';
+    }
+?>
+            </div>
+
+<script type="text/javascript"><!--
+  setFileUploadField();
+//--></script>
+
+            <div id="localFiles" style="display: none;">
+              <p><?php echo 'Product images can be uploaded via FTP to the following directory:<br /><br />' . realpath('../images/products/_upload'); ?></p>
+
+              <select id="localImagesSelection" name="localimages[]" size="5" multiple="multiple" style="width: 100%;"></select>
+
+              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Retrieving local images..'; ?></div>
+
+<?php
+    if (isset($pInfo)) {
+      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . tep_image('templates/default/images/icons/16x16/progress_ani.gif', '', '16', '16') . '&nbsp;Uploading image(s) to server...</div>';
+    }
+?>
+
+            </div>
+
+            <iframe id="fileUploadFrame" name="fileUploadFrame" style="height: 0px; width: 0px; border: 0px"></iframe>
           </fieldset>
+
+<script type="text/javascript"><!--
+  getLocalImages();
+//--></script>
+
+<?php
+    if (isset($pInfo)) {
+?>
 
           <fieldset style="height: 100%;">
             <legend>Original Images</legend>
@@ -580,35 +673,13 @@
   getImages();
 //--></script>
 
+<?php
+    }
+?>
+
         </td>
       </tr>
     </table>
-
-<?php
-  } else {
-?>
-
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td class="smallText" height="100%" valign="top">
-          <fieldset style="height: 100%;">
-            <legend>Upload New Original Image</legend>
-
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
-              <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_IMAGE; ?></td>
-                <td class="smallText"><?php echo osc_draw_file_field('products_image'); ?></td>
-              </tr>
-            </table>
-          </fieldset>
-        </td>
-      </tr>
-    </table>
-
-<?php
-  }
-?>
-
   </div>
 
   <div class="tab-page" id="tabAttributes">
@@ -744,7 +815,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
+  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($pInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save_product') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . tep_href_link(FILENAME_PRODUCTS, 'cPath=' . $cPath . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
 
   </form>
 </div>

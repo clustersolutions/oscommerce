@@ -20,6 +20,14 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
 
+<?php
+  if ($request_type == 'SSL') {
+    echo '<link rel="shortcut icon" href="images/favicon_ssl.ico" />';
+  } else {
+    echo '<link rel="shortcut icon" href="images/favicon.ico" />';
+  }
+?>
+
 <title><?php echo TITLE; ?></title>
 
 <link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css">
