@@ -16,7 +16,6 @@
   require('includes/classes/tax.php');
   $osC_Tax = new osC_Tax_Admin();
 
-  require('../includes/classes/weight.php');
   $osC_Weight = new osC_Weight();
 
   require('../includes/classes/customer.php');
@@ -70,14 +69,12 @@
       }
     }
 
-    $osC_Customer = unserialize(osc_get_serialized_variable($session_data, 'osC_Customer', 'object'));
-
-    $navigation = unserialize(osc_get_serialized_variable($session_data, 'navigation', 'object'));
-    $last_page = end($navigation->path);
+    $navigation = unserialize(osc_get_serialized_variable($session_data, 'osC_NavigationHistory_data', 'array'));
+    $last_page = end($navigation);
 
     $currency = unserialize(osc_get_serialized_variable($session_data, 'currency', 'string'));
 
-    $cart = unserialize(osc_get_serialized_variable($session_data, 'cart', 'object'));
+    $cart = unserialize(osc_get_serialized_variable($session_data, 'osC_ShoppingCart_data', 'array'));
 
     if (!isset($wInfo) && (!isset($_GET['info']) || (isset($_GET['info']) && ($_GET['info'] == $Qwho->value('session_id'))))) {
       $wInfo = new objectInfo(array_merge($Qwho->toArray(), array('last_page' => $last_page)));
@@ -95,7 +92,7 @@
         <td><?php echo $Qwho->value('ip_address'); ?></td>
         <td><?php echo date('H:i:s', $Qwho->value('time_last_click')); ?></td>
         <td><?php echo $last_page['page']; ?></td>
-        <td><?php echo $osC_Currencies->format($cart->show_total(), true, $currency); ?></td>
+        <td><?php echo $osC_Currencies->format($cart['total_cost'], true, $currency); ?></td>
         <td align="right">
 <?php
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
@@ -193,31 +190,27 @@
         <td class="smallText" width="60%"><?php echo $last_page_url; ?></td>
       </tr>
 <?php
-    if (is_object($cart)) {
-      $products = $cart->get_products();
+    if (!empty($cart['contents'])) {
+      echo '      <tr>' . "\n" .
+           '        <td class="smallText" colspan="2">&nbsp;</td>' . "\n" .
+           '      </tr>' . "\n" .
+           '      <tr>' . "\n" .
+           '        <td class="smallText" width="40%" valign="top"><b>' . TEXT_SHOPPING_CART_PRODUCTS . '</b></td>' . "\n" .
+           '        <td class="smallText" width="60%"><table border="0" cellspacing="0" cellpadding="2">' . "\n";
 
-      if (sizeof($products) > 0) {
-        echo '      <tr>' . "\n" .
-             '        <td class="smallText" colspan="2">&nbsp;</td>' . "\n" .
-             '      </tr>' . "\n" .
-             '      <tr>' . "\n" .
-             '        <td class="smallText" width="40%" valign="top"><b>' . TEXT_SHOPPING_CART_PRODUCTS . '</b></td>' . "\n" .
-             '        <td class="smallText" width="60%"><table border="0" cellspacing="0" cellpadding="2">' . "\n";
-
-        for ($i=0, $n=sizeof($products); $i<$n; $i++) {
-          echo '          <tr>' . "\n" .
-               '            <td class="smallText" align="right">' . $products[$i]['quantity'] . ' x</td>' . "\n" .
-               '            <td class="smallText">' . $products[$i]['name'] . '</td>' . "\n" .
-               '          </tr>' . "\n";
-        }
-
-        echo '        </table></td>' . "\n" .
-             '      </tr>' . "\n" .
-             '      <tr>' . "\n" .
-             '        <td class="smallText" width="40%"><b>' . TEXT_SHOPPING_CART_TOTAL . '</b></td>' . "\n" .
-             '        <td class="smallText" width="60%">' . $osC_Currencies->format($cart->show_total(), true, $currency) . '</td>' . "\n" .
-             '      </tr>' . "\n";
+      foreach ($cart['contents'] as $product) {
+        echo '          <tr>' . "\n" .
+             '            <td class="smallText" align="right">' . $product['quantity'] . ' x</td>' . "\n" .
+             '            <td class="smallText">' . $product['name'] . '</td>' . "\n" .
+             '          </tr>' . "\n";
       }
+
+      echo '        </table></td>' . "\n" .
+           '      </tr>' . "\n" .
+           '      <tr>' . "\n" .
+           '        <td class="smallText" width="40%"><b>' . TEXT_SHOPPING_CART_TOTAL . '</b></td>' . "\n" .
+           '        <td class="smallText" width="60%">' . $osC_Currencies->format($cart['total_cost'], true, $currency) . '</td>' . "\n" .
+           '      </tr>' . "\n";
     }
 ?>
     </table>
