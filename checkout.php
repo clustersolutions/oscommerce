@@ -15,7 +15,7 @@
   $osC_Language->load('checkout');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add($osC_Language->get('breadcrumb_checkout'), tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+    $breadcrumb->add($osC_Language->get('breadcrumb_checkout'), osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
   }
 
   $osC_Template = osC_Template::setup('cart');

@@ -151,7 +151,7 @@
 
      if (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1') {
        $selection['fields'][] = array('title' => $osC_Language->get('payment_wirecard_cc_credit_card_cvc'),
-                                      'field' => osc_draw_input_field('wirecard_cc_cvc', '', 'size="5" maxlength="4"'));
+                                      'field' => osc_draw_input_field('wirecard_cc_cvc', null, 'size="5" maxlength="4"'));
      }
 
       return $selection;
@@ -309,7 +309,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
@@ -346,7 +346,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_cc_owner=' . $osC_CreditCard->getOwner() . '&wirecard_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&wirecard_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_WIRECARD_CC_VERIFY_WITH_CVC == '1' ? '&wirecard_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

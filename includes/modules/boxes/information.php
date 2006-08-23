@@ -21,17 +21,19 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_information_heading');
-      $this->_title_link = tep_href_link(FILENAME_INFO);
+      $this->_title_link = osc_href_link(FILENAME_INFO);
     }
 
     function initialize() {
       global $osC_Language;
 
-      $this->_content = '<a href="' . tep_href_link(FILENAME_INFO, 'shipping') . '">' . $osC_Language->get('box_information_shipping') . '</a><br />' .
-                        '<a href="' . tep_href_link(FILENAME_INFO, 'privacy') . '">' . $osC_Language->get('box_information_privacy') . '</a><br />' .
-                        '<a href="' . tep_href_link(FILENAME_INFO, 'conditions') . '">' . $osC_Language->get('box_information_conditions') . '</a><br />' .
-                        '<a href="' . tep_href_link(FILENAME_INFO, 'contact') . '">' . $osC_Language->get('box_information_contact') . '</a><br />' .
-                        '<a href="' . tep_href_link(FILENAME_INFO, 'sitemap') . '">' . $osC_Language->get('box_information_sitemap') . '</a>';
+      $this->_content = '<ol style="list-style: none; margin: 0; padding: 0;">' .
+                        '  <li>' . osc_link_object(osc_href_link(FILENAME_INFO, 'shipping'), $osC_Language->get('box_information_shipping')) . '</li>' .
+                        '  <li>' . osc_link_object(osc_href_link(FILENAME_INFO, 'privacy'), $osC_Language->get('box_information_privacy')) . '</li>' .
+                        '  <li>' . osc_link_object(osc_href_link(FILENAME_INFO, 'conditions'), $osC_Language->get('box_information_conditions')) . '</li>' .
+                        '  <li>' . osc_link_object(osc_href_link(FILENAME_INFO, 'contact'), $osC_Language->get('box_information_contact')) . '</li>' .
+                        '  <li>' . osc_link_object(osc_href_link(FILENAME_INFO, 'sitemap'), $osC_Language->get('box_information_sitemap')) . '</li>' .
+                        '</ol>';
     }
   }
 ?>

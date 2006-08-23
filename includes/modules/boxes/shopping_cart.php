@@ -21,7 +21,7 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_shopping_cart_heading');
-      $this->_title_link = tep_href_link(FILENAME_CHECKOUT, '', 'SSL');
+      $this->_title_link = osc_href_link(FILENAME_CHECKOUT, null, 'SSL');
     }
 
     function initialize() {
@@ -47,7 +47,7 @@
           }
 
           $data .= '</td>' . "\n" .
-                   '    <td valign="top"><a href="' . tep_href_link(FILENAME_PRODUCTS, $products['keyword']) . '">';
+                   '    <td valign="top"><a href="' . osc_href_link(FILENAME_PRODUCTS, $products['keyword']) . '">';
 
           if (isset($_SESSION['new_products_id_in_cart']) && ($_SESSION['new_products_id_in_cart'] == $products['id'])) {
             $data .= '<span class="newItemInCart">';

@@ -114,7 +114,7 @@
 
       $back = sizeof($this->_data) - $back;
 
-      return tep_href_link($this->_data[$back]['page'], $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
+      return osc_href_link($this->_data[$back]['page'], $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
     }
 
     function setSnapshot($page = '') {
@@ -149,9 +149,9 @@
 
     function getSnapshotURL($auto_mode = false) {
       if ($this->hasSnapshot()) {
-        $target = tep_href_link($this->_snapshot['page'], $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+        $target = osc_href_link($this->_snapshot['page'], $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       } else {
-        $target = tep_href_link(FILENAME_DEFAULT, '', ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+        $target = osc_href_link(FILENAME_DEFAULT, null, ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       }
 
       return $target;

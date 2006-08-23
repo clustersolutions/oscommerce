@@ -41,9 +41,9 @@
           }
         }
 
-        $this->_content = '<form name="templates" action="' . tep_href_link(basename($_SERVER['PHP_SELF']), '', $request_type, false) . '" method="get">' . "\n" .
-                          $hidden_get_variables . osc_draw_pull_down_menu('template', $data, $_SESSION['template']['code'], 'onchange="this.form.submit();" style="width: 100%"') . tep_hide_session_id() . "\n" .
-                          '</form>' . "\n";
+        $this->_content = '<form name="templates" action="' . osc_href_link(basename($_SERVER['PHP_SELF']), null, 'AUTO', false) . '" method="get">' .
+                          $hidden_get_variables . osc_draw_pull_down_menu('template', $data, $_SESSION['template']['code'], 'onchange="this.form.submit();" style="width: 100%"') . osc_draw_hidden_session_id_field() .
+                          '</form>';
       }
     }
   }

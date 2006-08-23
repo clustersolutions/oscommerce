@@ -43,7 +43,7 @@
           $Qcategories->freeResult();
 
           for ($i=0, $n=sizeof($cPath_array); $i<$n; $i++) {
-            $breadcrumb->add($categories[$cPath_array[$i]], tep_href_link(FILENAME_DEFAULT, 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
+            $breadcrumb->add($categories[$cPath_array[$i]], osc_href_link(FILENAME_DEFAULT, 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
           }
         }
 

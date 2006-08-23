@@ -177,7 +177,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
       }
     }
 
@@ -191,7 +191,7 @@
       if (empty($_POST['saferpay_elv_owner']) || empty($_POST['saferpay_elv_account']) || (strlen($_POST['saferpay_elv_account']) < 3) || empty($_POST['saferpay_elv_bank']) || (strlen($_POST['saferpay_elv_bank']) !== 8)) {
         $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_elv_error_general'), 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
       }
     }
   }

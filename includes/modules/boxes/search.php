@@ -21,15 +21,15 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_search_heading');
-      $this->_title_link = tep_href_link(FILENAME_SEARCH);
+      $this->_title_link = osc_href_link(FILENAME_SEARCH);
     }
 
     function initialize() {
       global $osC_Language;
 
-      $this->_content = '<form name="search" action="' . tep_href_link(FILENAME_SEARCH, '', 'NONSSL', false) . '" method="get">' . "\n" .
-                        osc_draw_input_field('keywords', '', 'style="width: 80%;" maxlength="30"') . '&nbsp;' . tep_hide_session_id() . tep_image_submit('button_quick_find.gif', $osC_Language->get('box_search_heading')) . '<br />' . sprintf($osC_Language->get('box_search_text'), tep_href_link(FILENAME_SEARCH)) . "\n" .
-                        '</form>' . "\n";
+      $this->_content = '<form name="search" action="' . osc_href_link(FILENAME_SEARCH, null, 'NONSSL', false) . '" method="get">' .
+                        osc_draw_input_field('keywords', null, 'style="width: 80%;" maxlength="30"') . '&nbsp;' . osc_draw_hidden_session_id_field() . osc_draw_image_submit_button('button_quick_find.gif', $osC_Language->get('box_search_heading')) . '<br />' . sprintf($osC_Language->get('box_search_text'), osc_href_link(FILENAME_SEARCH)) .
+                        '</form>';
     }
   }
 ?>

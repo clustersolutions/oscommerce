@@ -27,7 +27,7 @@
       $this->_page_title = $osC_Language->get('shopping_cart_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shopping_cart'), tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shopping_cart'), osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 //      if ($_GET[$this->_module] == 'update') {

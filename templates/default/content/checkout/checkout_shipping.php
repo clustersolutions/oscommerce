@@ -11,11 +11,11 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<form name="checkout_address" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'shipping=process', 'SSL'); ?>" method="post">
+<form name="checkout_address" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'shipping=process', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('shipping_address_title'); ?></h6>
@@ -26,10 +26,10 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('current_shipping_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('current_shipping_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
     </div>
 
-    <?php echo $osC_Language->get('choose_shipping_destination'). '<br /><br />' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL'), tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address'))); ?>
+    <?php echo $osC_Language->get('choose_shipping_destination'). '<br /><br />' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL'), osc_draw_image_button('button_change_address.gif', $osC_Language->get('button_change_address'))); ?>
 
     <div style="clear: both;"></div>
   </div>
@@ -49,7 +49,7 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('choose_shipping_method'); ?></p>
@@ -73,17 +73,17 @@
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="3"><b><?php echo $quotes['module']; ?></b>&nbsp;<?php if (isset($quotes['icon']) && tep_not_null($quotes['icon'])) { echo $quotes['icon']; } ?></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 <?php
       if (isset($quotes['error'])) {
 ?>
           <tr>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="3"><?php echo $quotes['error']; ?></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 <?php
       } else {
@@ -94,7 +94,7 @@
             echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
           }
 ?>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td width="75%"><?php echo $methods['title']; ?></td>
 <?php
           if ( ($osC_Shipping->numberOfQuotes() > 1) || (sizeof($quotes['methods']) > 1) ) {
@@ -108,7 +108,7 @@
 <?php
           }
 ?>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 <?php
           $radio_buttons++;
@@ -133,7 +133,7 @@
   <h6><?php echo $osC_Language->get('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''), 60, 5, 'soft', 'style="width: 98%;"'); ?>
+    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
   </div>
 </div>
 
@@ -142,7 +142,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+      <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
     </div>
 
     <?php echo '<b>' . $osC_Language->get('continue_checkout_procedure_title') . '</b><br />' . $osC_Language->get('continue_checkout_procedure_to_payment'); ?>

@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="create" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'create=save', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
+<form name="create" action="<?php echo osc_href_link(FILENAME_ACCOUNT, 'create=save', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
@@ -50,7 +50,7 @@
   if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
 
-      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . tep_draw_date_pull_down_menu('dob', null, false, true, true, date('Y')-1901, -5); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . osc_draw_date_pull_down_menu('dob', null, false, null, null, date('Y')-1901, -5); ?></li>
 
 <?php
   }
@@ -82,7 +82,7 @@
   <h6><?php echo $osC_Language->get('create_account_terms_heading'); ?></h6>
 
   <div class="content">
-    <?php echo sprintf($osC_Language->get('create_account_terms_description'), tep_href_link(FILENAME_INFO, 'privacy', 'AUTO')) . '<br /><br /><ol><li>' . osc_draw_checkbox_field('privacy_conditions', array(array('id' => 1, 'text' => $osC_Language->get('create_account_terms_confirm')))) . '</li></ol>'; ?>
+    <?php echo sprintf($osC_Language->get('create_account_terms_description'), osc_href_link(FILENAME_INFO, 'privacy', 'AUTO')) . '<br /><br /><ol><li>' . osc_draw_checkbox_field('privacy_conditions', array(array('id' => 1, 'text' => $osC_Language->get('create_account_terms_confirm')))) . '</li></ol>'; ?>
   </div>
 </div>
 
@@ -91,9 +91,9 @@
 ?>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, null, 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'), osc_draw_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 </form>

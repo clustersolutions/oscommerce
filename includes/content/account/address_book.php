@@ -29,7 +29,7 @@
       $this->_page_title = $osC_Language->get('address_book_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_address_book'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_address_book'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
@@ -39,7 +39,7 @@
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['new'])) {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_add_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
+          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_add_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
         }
 
         $this->_page_title = $osC_Language->get('address_book_add_entry_heading');
@@ -53,7 +53,7 @@
 
         if ($messageStack->size('address_book') == 0) {
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
+            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
           }
 
           $this->_page_title = $osC_Language->get('address_book_edit_entry_heading');
@@ -72,7 +72,7 @@
 
         if ($messageStack->size('address_book') == 0) {
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
+            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
           }
 
           $this->_page_title = $osC_Language->get('address_book_delete_entry_heading');
@@ -233,7 +233,7 @@
           $messageStack->add_session('address_book', $osC_Language->get('success_address_book_entry_updated'), 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
       }
     }
 
@@ -248,7 +248,7 @@
         $messageStack->add_session('address_book', $osC_Language->get('warning_primary_address_deletion'), 'warning');
       }
 
-      tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'));
     }
   }
 ?>

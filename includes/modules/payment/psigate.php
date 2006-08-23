@@ -142,7 +142,7 @@
 
           $payment_error_return = 'psigate_cc_owner=' . urlencode($_POST['psigate_cc_owner']) . '&psigate_cc_expires_month=' . urlencode($_POST['psigate_cc_expires_month']) . '&psigate_cc_expires_year=' . urlencode($_POST['psigate_cc_expires_year']);
 
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
+          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&' . $payment_error_return, 'SSL'));
         }
 
         $this->cc_card_owner = $_POST['psigate_cc_owner'];
@@ -213,8 +213,8 @@
 
       $process_button_string = osc_draw_hidden_field('MerchantID', MODULE_PAYMENT_PSIGATE_MERCHANT_ID) .
                                osc_draw_hidden_field('FullTotal', number_format($order->info['total'] * $osC_Currencies->value(MODULE_PAYMENT_PSIGATE_CURRENCY), $osC_Currencies->currencies[MODULE_PAYMENT_PSIGATE_CURRENCY]['decimal_places'])) .
-                               osc_draw_hidden_field('ThanksURL', tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true)) .
-                               osc_draw_hidden_field('NoThanksURL', tep_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->_code . $payment_error_return, 'SSL')) .
+                               osc_draw_hidden_field('ThanksURL', osc_href_link(FILENAME_CHECKOUT, 'process', 'SSL')) .
+                               osc_draw_hidden_field('NoThanksURL', osc_href_link(FILENAME_CHECKOUT, 'payment&payment_error=' . $this->_code . $payment_error_return, 'SSL')) .
                                osc_draw_hidden_field('Bname', ((MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') ? $_POST['psigate_cc_owner'] : $order->billing['firstname'] . ' ' . $order->billing['lastname'])) .
                                osc_draw_hidden_field('Baddr1', $order->billing['street_address']) .
                                osc_draw_hidden_field('Bcity', $order->billing['city']);

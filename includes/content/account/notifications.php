@@ -27,7 +27,7 @@
       $this->_page_title = $osC_Language->get('notifications_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_notifications'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_notifications'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!
@@ -142,7 +142,7 @@
         $messageStack->add_session('account', $osC_Language->get('success_notifications_updated'), 'success');
       }
 
-      tep_redirect(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
     }
   }
 ?>

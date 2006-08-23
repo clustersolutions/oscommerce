@@ -56,23 +56,16 @@
       }
 
       if ($Qbestsellers->numberOfRows() >= BOX_BEST_SELLERS_MIN_LIST) {
+        $this->_content = '<ol style="margin: 0; padding: 0 0 0 20px;">';
 
-        $data = '<table border="0" width="100%" cellspacing="0" cellpadding="1">' . "\n";
-
-        $counter = 0;
         while ($Qbestsellers->next()) {
-          $counter++;
-
-          $data .= '  <tr>' . "\n" .
-                   '    <td class="infoBoxContents" valign="top">' . tep_row_number_format($counter) . '.</td>' . "\n" .
-                   '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qbestsellers->value('products_keyword')) . '">' . $Qbestsellers->value('products_name') . '</a></td>' . "\n" .
-                   '  </tr>' . "\n";
+          $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qbestsellers->value('products_keyword')), $Qbestsellers->value('products_name')) . '</li>';
         }
 
-        $data .= '</table>' . "\n";
-
-        $this->_content = $data;
+        $this->_content .= '</ol>';
       }
+
+      $Qbestsellers->freeResult();
     }
 
     function install() {

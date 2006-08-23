@@ -37,7 +37,7 @@
         $this->_page_contents = 'create_success.php';
       } else {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_create_account'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+          $breadcrumb->add($osC_Language->get('breadcrumb_create_account'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
         }
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
@@ -116,7 +116,7 @@
           $messageStack->add_session('create', $osC_Language->get('success_account_updated'), 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'create=success', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'create=success', 'SSL'));
       }
     }
   }

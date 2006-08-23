@@ -16,7 +16,7 @@
     global $osC_Services;
 
     if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
-      $url = tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false);
+      $url = osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false);
     }
 
     if (strpos($url, '&amp;') !== false) {
@@ -145,7 +145,7 @@
       reset($_GET);
       while (list($key, $value) = each($_GET)) {
         if ( ($key != $osC_Session->getName()) && ($key != 'error') && (!in_array($key, $exclude_array)) && ($key != 'x') && ($key != 'y') ) {
-          $get_url .= $key . (empty($value) ? '&amp;' : '=' . rawurlencode($value) . '&amp;');
+          $get_url .= $key . (empty($value) ? '&' : '=' . rawurlencode($value) . '&');
         }
       }
     }
@@ -801,7 +801,7 @@
       }
     }
 
-    $sort_heading = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'sort')) . '&amp;sort=' . $key . ($direction == '+' ? '|d' : '')) . '" title="' . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? sprintf($osC_Language->get('listing_sort_ascendingly'), $heading) : sprintf($osC_Language->get('listing_sort_descendingly'), $heading)) . '" class="productListing-heading">' . $heading . (($key == $current) ? $direction : '') . '</a>';
+    $sort_heading = osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('page', 'sort')) . '&sort=' . $key . ($direction == '+' ? '|d' : '')), $heading . (($key == $current) ? $direction : ''), 'title="' . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? sprintf($osC_Language->get('listing_sort_ascendingly'), $heading) : sprintf($osC_Language->get('listing_sort_descendingly'), $heading)) . '" class="productListing-heading"');
 
     return $sort_heading;
   }
@@ -1008,7 +1008,7 @@
     return $rand_value;
   }
 
-  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&amp;') {
+  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&') {
     if (!is_array($exclude)) $exclude = array();
 
     $get_string = '';
@@ -1378,7 +1378,7 @@
       $countries_array[] = array('id' => $countries[$i]['countries_id'], 'text' => $countries[$i]['countries_name']);
     }
 
-    return osc_draw_pull_down_menu($name, $countries_array, $selected, $parameters, $required);
+    return osc_draw_pull_down_menu($name, $countries_array, $selected, $parameters);
   }
 
   function osc_setlocale($category, $locale) {

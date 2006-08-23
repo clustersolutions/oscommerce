@@ -77,7 +77,7 @@
         $image = 'products/' . $this->_groups[$group_id]['code'] . '/' . $image;
       }
 
-      return tep_image(DIR_WS_HTTP_CATALOG . DIR_WS_IMAGES . $image, $title, $width, $height, $parameters);
+      return osc_image(DIR_WS_IMAGES . $image, $title, $width, $height, $parameters);
     }
 
     function getAddress(&$image, $group = 'default') {

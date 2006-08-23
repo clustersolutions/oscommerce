@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -28,7 +28,7 @@
     $Qfilterlist->execute();
 
     if ($Qfilterlist->numberOfRows() > 1) {
-      echo '<p><form name="filter" action="' . tep_href_link(FILENAME_DEFAULT) . '" method="get">' . $osC_Language->get('filter_show') . '&nbsp;';
+      echo '<p><form name="filter" action="' . osc_href_link(FILENAME_DEFAULT) . '" method="get">' . $osC_Language->get('filter_show') . '&nbsp;';
       if (isset($_GET['manufacturers']) && tep_not_null($_GET['manufacturers'])) {
         echo osc_draw_hidden_field('manufacturers', $_GET['manufacturers']);
         $options = array(array('id' => '', 'text' => $osC_Language->get('filter_all_categories')));
@@ -41,8 +41,8 @@
       while ($Qfilterlist->next()) {
         $options[] = array('id' => $Qfilterlist->valueInt('id'), 'text' => $Qfilterlist->value('name'));
       }
-      echo osc_draw_pull_down_menu('filter', $options, (isset($_GET['filter']) ? $_GET['filter'] : ''), 'onchange="this.form.submit()"');
-      echo '</form></p>' . "\n";
+      echo osc_draw_pull_down_menu('filter', $options, (isset($_GET['filter']) ? $_GET['filter'] : null), 'onchange="this.form.submit()"');
+      echo osc_draw_hidden_session_id_field() . '</form></p>' . "\n";
     }
   }
 

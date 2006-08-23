@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -26,7 +26,7 @@
 <p><?php echo $osC_Language->get('contact_email_sent_successfully'); ?></p>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_link_object(tep_href_link(FILENAME_INFO), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_INFO), osc_draw_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>
 
 <?php
@@ -42,7 +42,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('contact_store_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('contact_store_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('contact'); ?></p>
@@ -51,20 +51,20 @@
   </div>
 </div>
 
-<form name="contact" action="<?php echo tep_href_link(FILENAME_INFO, 'contact=process'); ?>" method="post">
+<form name="contact" action="<?php echo osc_href_link(FILENAME_INFO, 'contact=process'); ?>" method="post">
 
 <div class="moduleBox">
   <div class="content">
     <ol>
       <li><?php echo osc_draw_label($osC_Language->get('contact_name_title'), 'name') . osc_draw_input_field('name'); ?></li>
       <li><?php echo osc_draw_label($osC_Language->get('contact_email_address_title'), 'email') . osc_draw_input_field('email'); ?></li>
-      <li><?php echo osc_draw_label($osC_Language->get('contact_enquiry_title'), 'enquiry') . osc_draw_textarea_field('enquiry', '', 50, 15); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('contact_enquiry_title'), 'enquiry') . osc_draw_textarea_field('enquiry', null, 50, 15); ?></li>
     </ol>
   </div>
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

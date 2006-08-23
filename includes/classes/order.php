@@ -353,7 +353,7 @@
         $email_order = STORE_NAME . "\n" .
                        $osC_Language->get('email_order_separator') . "\n" .
                        sprintf($osC_Language->get('email_order_order_number'), $id) . "\n" .
-                       sprintf($osC_Language->get('email_order_invoice_url'), tep_href_link(FILENAME_ACCOUNT, 'orders=' . $id, 'SSL', false, true, true)) . "\n" .
+                       sprintf($osC_Language->get('email_order_invoice_url'), osc_href_link(FILENAME_ACCOUNT, 'orders=' . $id, 'SSL', false, true, true)) . "\n" .
                        sprintf($osC_Language->get('email_order_date_ordered'), osC_DateTime::getLong()) . "\n\n" .
                        $osC_Language->get('email_order_products') . "\n" .
                        $osC_Language->get('email_order_separator') . "\n";

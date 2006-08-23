@@ -28,6 +28,11 @@
     return $link;
   }
 
+// HPDL; Provisional alias
+  function osc_href_link($page = '', $parameters = '', $connection = 'SSL') {
+    return tep_href_link($page, $parameters, $connection);
+  }
+
 ////
 // The HTML image wrapper function
   function tep_image($src, $alt = '', $width = '', $height = '', $params = '') {

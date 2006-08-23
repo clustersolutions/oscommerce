@@ -36,28 +36,23 @@
         $Qmanufacturer->execute();
 
         if ($Qmanufacturer->numberOfRows()) {
-          $data = '<table border="0" width="100%" cellspacing="0" cellpadding="0">' . "\n";
+          $this->_content = '';
 
           if (tep_not_null($Qmanufacturer->value('manufacturers_image'))) {
-            $data .= '  <tr>' . "\n" .
-                     '    <td align="center" class="infoBoxContents" colspan="2"><a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')) . '">' . tep_image(DIR_WS_IMAGES . $Qmanufacturer->value('manufacturers_image'), $Qmanufacturer->value('manufacturers_name')) . '</a></td>' . "\n" .
-                     '  </tr>' . "\n";
+            $this->_content .= '<div style="text-align: center;">' .
+                               osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')), osc_image(DIR_WS_IMAGES . $Qmanufacturer->value('manufacturers_image'), $Qmanufacturer->value('manufacturers_name'))) .
+                               '</div>';
           }
+
+          $this->_content .= '<ol style="list-style: none; margin: 0; padding: 0;">';
 
           if (tep_not_null($Qmanufacturer->value('manufacturers_url'))) {
-            $data .= '  <tr>' . "\n" .
-                     '    <td valign="top" class="infoBoxContents">-&nbsp;</td>' . "\n" .
-                     '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_REDIRECT, 'action=manufacturer&manufacturers_id=' . $Qmanufacturer->valueInt('manufacturers_id')) . '" target="_blank">' . sprintf($osC_Language->get('box_manufacturer_info_website'), $Qmanufacturer->value('manufacturers_name')) . '</a></td>' . "\n" .
-                     '  </tr>' . "\n";
+            $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_REDIRECT, 'action=manufacturer&manufacturers_id=' . $Qmanufacturer->valueInt('manufacturers_id')), sprintf($osC_Language->get('box_manufacturer_info_website'), $Qmanufacturer->value('manufacturers_name')), 'target="_blank"') . '</li>';
           }
 
-          $data .= '  <tr>' . "\n" .
-                   '    <td valign="top" class="infoBoxContents">-&nbsp;</td>' . "\n" .
-                   '    <td valign="top" class="infoBoxContents"><a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')) . '">' . $osC_Language->get('box_manufacturer_info_products') . '</a></td>' . "\n" .
-                   '  </tr>' . "\n" .
-                   '</table>' . "\n";
+          $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qmanufacturer->valueInt('manufacturers_id')), $osC_Language->get('box_manufacturer_info_products')) . '</li>';
 
-          $this->_content = $data;
+          $this->_content .= '</ol>';
         }
       }
     }

@@ -52,7 +52,7 @@
           setcookie($this->getName(), '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
         }
 
-        tep_redirect(tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false));
+        tep_redirect(osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false));
       } elseif (session_start()) {
         $this->setStarted(true);
         $this->setID();

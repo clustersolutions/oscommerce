@@ -1288,7 +1288,7 @@
     }
   }
 
-  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&amp;') {
+  function tep_array_to_string($array, $exclude = '', $equals = '=', $separator = '&') {
     if (!is_array($exclude)) $exclude = array();
 
     $get_string = '';

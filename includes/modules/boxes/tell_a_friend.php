@@ -27,8 +27,8 @@
       global $osC_Language, $osC_Template, $osC_Product;
 
       if (isset($osC_Product) && is_a($osC_Product, 'osC_Product') && ($osC_Template->getModule() != 'tell_a_friend')) {
-        $this->_content = '<form name="tell_a_friend" action="' . tep_href_link(FILENAME_PRODUCTS, 'tell_a_friend&' . $osC_Product->getKeyword()) . '" method="post">' . "\n" .
-                          osc_draw_input_field('to_email_address', '', 'style="width: 80%;"') . '&nbsp;' . tep_image_submit('button_tell_a_friend.gif', $osC_Language->get('box_tell_a_friend_text')) . '<br />' . $osC_Language->get('box_tell_a_friend_text') . "\n" .
+        $this->_content = '<form name="tell_a_friend" action="' . osc_href_link(FILENAME_PRODUCTS, 'tell_a_friend&' . $osC_Product->getKeyword()) . '" method="post">' . "\n" .
+                          osc_draw_input_field('to_email_address', null, 'style="width: 80%;"') . '&nbsp;' . osc_draw_image_submit_button('button_tell_a_friend.gif', $osC_Language->get('box_tell_a_friend_text')) . '<br />' . $osC_Language->get('box_tell_a_friend_text') . "\n" .
                           '</form>' . "\n";
       }
     }

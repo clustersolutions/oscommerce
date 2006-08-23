@@ -91,9 +91,9 @@
                                osc_draw_hidden_field('product_name', STORE_NAME) .
                                osc_draw_hidden_field('product_price', $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $currency)) .
                                osc_draw_hidden_field('product_price_currency', $currency) .
-                               osc_draw_hidden_field('cb_url', urlencode(tep_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code, 'SSL', true, true, true))) .
+                               osc_draw_hidden_field('cb_url', urlencode(osc_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code, 'SSL', null, null, true))) .
                                osc_draw_hidden_field('cb_type', 'P') .
-                               osc_draw_hidden_field('decline_url', urlencode(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', true, true, true))) .
+                               osc_draw_hidden_field('decline_url', urlencode(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', null, null, true))) .
                                osc_draw_hidden_field('language', 'EN') . //EN, RU, NL, ES
                                osc_draw_hidden_field('f_name', $osC_ShoppingCart->getBillingAddress('firstname')) .
                                osc_draw_hidden_field('s_name', $osC_ShoppingCart->getBillingAddress('lastname')) .

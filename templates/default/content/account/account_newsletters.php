@@ -11,11 +11,11 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<form name="account_newsletter" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'newsletters=save', 'SSL'); ?>" method="post">
+<form name="account_newsletter" action="<?php echo osc_href_link(FILENAME_ACCOUNT, 'newsletters=save', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('newsletter_subscriptions_heading'); ?></h6>
@@ -35,7 +35,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

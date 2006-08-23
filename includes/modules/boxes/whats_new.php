@@ -21,7 +21,7 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_whats_new_heading');
-      $this->_title_link = tep_href_link(FILENAME_PRODUCTS, 'new');
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'new');
     }
 
     function initialize() {
@@ -47,7 +47,7 @@
           $products_price = $osC_Currencies->displayPrice($Qnew->valueDecimal('products_price'), $Qnew->valueInt('products_tax_class_id'));
 
           if ($osC_Services->isStarted('specials') && $osC_Specials->isActive($Qnew->valueInt('products_id'))) {
-            $products_price = '<s>' . $new_products_price . '</s>&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($osC_Specials->getPrice($Qnew->valueInt('products_id')), $Qnew->valueInt('products_tax_class_id')) . '</span>';
+            $products_price = '<s>' . $products_price . '</s>&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($osC_Specials->getPrice($Qnew->valueInt('products_id')), $Qnew->valueInt('products_tax_class_id')) . '</span>';
           }
 
           $data['products_price'] = $products_price;
@@ -60,10 +60,10 @@
         $this->_content = '';
 
         if (empty($data['image']) === false) {
-          $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $osC_Image->show($data['image'], $data['products_name']) . '</a><br />';
+          $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, $data['products_keyword']), $osC_Image->show($data['image'], $data['products_name'])) . '<br />';
         }
 
-        $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
+        $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, $data['products_keyword']), $data['products_name']) . '<br />' . $data['products_price'];
       }
     }
 

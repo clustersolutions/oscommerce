@@ -63,7 +63,7 @@
           if ($_SESSION['SESSION_SSL_ID'] != $_SERVER['SSL_SESSION_ID']) {
             $osC_Session->destroy();
 
-            tep_redirect(tep_href_link(FILENAME_INFO, 'ssl_check', 'AUTO'));
+            tep_redirect(osc_href_link(FILENAME_INFO, 'ssl_check', 'AUTO'));
           }
         }
       }
@@ -79,7 +79,7 @@
         if ($_SESSION['SESSION_USER_AGENT'] != $http_user_agent) {
           $osC_Session->destroy();
 
-          tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+          tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 
@@ -92,7 +92,7 @@
         if ($_SESSION['SESSION_IP_ADDRESS'] != tep_get_ip_address()) {
           $osC_Session->destroy();
 
-          tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+          tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
 

@@ -31,7 +31,7 @@
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_edit_password'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_edit_password'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'save') {
@@ -57,7 +57,7 @@
           if (osC_Account::savePassword(trim($_POST['password_new']))) {
             $messageStack->add_session('account', $osC_Language->get('success_password_updated'), 'success');
 
-            tep_redirect(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+            tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
           } else {
             $messageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
           }

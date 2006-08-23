@@ -138,7 +138,7 @@
         if (tep_not_null($Qbanner->value('banners_html_text'))) {
           $banner_string = $Qbanner->value('banners_html_text');
         } else {
-          $banner_string = '<a href="' . tep_href_link(FILENAME_REDIRECT, 'action=banner&goto=' . $Qbanner->valueInt('banners_id')) . '" target="_blank">' . tep_image(DIR_WS_IMAGES . $Qbanner->value('banners_image'), $Qbanner->value('banners_title')) . '</a>';
+          $banner_string = osc_link_object(osc_href_link(FILENAME_REDIRECT, 'action=banner&goto=' . $Qbanner->valueInt('banners_id')), osc_image(DIR_WS_IMAGES . $Qbanner->value('banners_image'), $Qbanner->value('banners_title')), 'target="_blank"');
         }
 
         $this->_updateDisplayCount($Qbanner->valueInt('banners_id'));

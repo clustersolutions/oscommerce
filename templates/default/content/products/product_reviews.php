@@ -24,17 +24,21 @@
 ?>
 
 <div style="float: right; text-align: center;">
-  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'thumbnail'), 'target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
-  <?php echo '<p>' . osc_link_object(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now'), tep_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))) . '</p>'; ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'thumbnail'), 'target="_blank" onclick="window.open(\'' . osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
+  <?php echo '<p>' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now'), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))) . '</p>'; ?>
 </div>
 
 <?php
   }
+
+  if ($osC_Product->getData('reviews_average_rating') > 0) {
 ?>
 
-<p><?php echo $osC_Language->get('average_rating') . ' ' . tep_image(DIR_WS_IMAGES . 'stars_' . $osC_Product->getData('reviews_average_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $osC_Product->getData('reviews_average_rating'))); ?></p>
+<p><?php echo $osC_Language->get('average_rating') . ' ' . osc_image(DIR_WS_IMAGES . 'stars_' . $osC_Product->getData('reviews_average_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $osC_Product->getData('reviews_average_rating'))); ?></p>
 
 <?php
+  }
+
   $counter = 0;
   $Qreviews = osC_Reviews::getListing($osC_Product->getID());
   while ($Qreviews->next()) {
@@ -49,7 +53,7 @@
     }
 ?>
 
-<p><?php echo tep_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))) . '&nbsp;' . sprintf($osC_Language->get('reviewed_by'), $Qreviews->valueProtected('customers_name')) . '; ' . osC_DateTime::getLong($Qreviews->value('date_added')); ?></p>
+<p><?php echo osc_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))) . '&nbsp;' . sprintf($osC_Language->get('reviewed_by'), $Qreviews->valueProtected('customers_name')) . '; ' . osC_DateTime::getLong($Qreviews->value('date_added')); ?></p>
 
 <p><?php echo nl2br(tep_break_string($Qreviews->valueProtected('reviews_text'), 60, '-<br />')); ?></p>
 
@@ -69,11 +73,11 @@
   if ($osC_Reviews->is_enabled === true) {
 ?>
 
-    <span style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()), tep_image_button('button_write_review.gif', $osC_Language->get('button_write_review'))); ?></span>
+    <span style="float: right;"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()), osc_draw_image_button('button_write_review.gif', $osC_Language->get('button_write_review'))); ?></span>
 
 <?php
   }
 ?>
 
-  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), osc_draw_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>

@@ -13,7 +13,7 @@
   $order = new osC_Order($_GET['orders']);
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -162,5 +162,5 @@
 
 
 <div class="submitFormButtons">
-  <?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL'), osc_draw_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>

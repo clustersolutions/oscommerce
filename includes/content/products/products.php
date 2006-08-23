@@ -49,7 +49,7 @@
           }
 
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Product->getTitle(), tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
+            $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
           }
 
           $this->_page_title = $osC_Product->getTitle();

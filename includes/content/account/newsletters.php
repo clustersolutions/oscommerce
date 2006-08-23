@@ -27,7 +27,7 @@
       $this->_page_title = $osC_Language->get('newsletters_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_newsletters'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_newsletters'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!
@@ -66,7 +66,7 @@
         }
       }
 
-      tep_redirect(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
     }
   }
 ?>

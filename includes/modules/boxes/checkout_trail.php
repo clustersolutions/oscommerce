@@ -46,16 +46,16 @@
                         'active' => ($osC_Template->getModule() == 'success' ? true : false));
 
 
-      $content = tep_image('templates/' . $osC_Template->getCode() . '/images/icons/32x32/checkout_preparing_to_ship.gif') . '<br />';
+      $content = osc_image('templates/' . $osC_Template->getCode() . '/images/icons/32x32/checkout_preparing_to_ship.gif') . '<br />';
 
       $counter = 0;
       foreach ($steps as $step) {
         $counter++;
 
-        $content .= '<span style="white-space: nowrap;">&nbsp;' . tep_image('templates/' . $osC_Template->getCode() . '/images/icons/24x24/checkout_' . $counter . ($step['active'] === true ? '_on' : '') . '.gif', $step['title'], 24, 24, 'align="absmiddle"');
+        $content .= '<span style="white-space: nowrap;">&nbsp;' . osc_image('templates/' . $osC_Template->getCode() . '/images/icons/24x24/checkout_' . $counter . ($step['active'] === true ? '_on' : '') . '.gif', $step['title'], 24, 24, 'align="absmiddle"');
 
         if (isset($step['code'])) {
-          $content .= '<a href="' . tep_href_link(FILENAME_CHECKOUT, $step['code'], 'SSL') . '" class="boxCheckoutTrail' . ($step['active'] === true ? 'Active' : '') . '">' . $step['title'] . '</a>';
+          $content .= osc_link_object(osc_href_link(FILENAME_CHECKOUT, $step['code'], 'SSL'), $step['title'], 'class="boxCheckoutTrail' . ($step['active'] === true ? 'Active' : '') . '"');
         } else {
           $content .= '<span class="boxCheckoutTrail' . ($step['active'] === true ? 'Active' : '') . '">' . $step['title'] . '</span>';
         }
@@ -63,7 +63,7 @@
         $content .= '</span><br />';
       }
 
-      $content .= tep_image('templates/' . $osC_Template->getCode() . '/images/icons/32x32/checkout_ready_to_ship.gif');
+      $content .= osc_image('templates/' . $osC_Template->getCode() . '/images/icons/32x32/checkout_ready_to_ship.gif');
 
       $this->_content = $content;
     }

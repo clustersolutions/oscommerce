@@ -141,7 +141,7 @@
 
       if (MODULE_PAYMENT_SAFERPAY_CC_VERIFY_WITH_CVC == '1') {
         $selection['fields'][] = array('title' => $osC_Language->get('payment_saferpay_cc_credit_card_cvc'),
-                                       'field' => osc_draw_input_field('saferpay_cc_cvc', '', 'size="5" maxlength="4"'));
+                                       'field' => osc_draw_input_field('saferpay_cc_cvc', null, 'size="5" maxlength="4"'));
       }
 
       return $selection;
@@ -256,7 +256,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&saferpay_cc_owner=' . $osC_CreditCard->getOwner() . '&saferpay_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&saferpay_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_SAFERPAY_CC_VERIFY_WITH_CVC == '1' ? '&saferpay_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_cc_owner=' . $osC_CreditCard->getOwner() . '&saferpay_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&saferpay_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_SAFERPAY_CC_VERIFY_WITH_CVC == '1' ? '&saferpay_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
@@ -293,7 +293,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&saferpay_cc_owner=' . $osC_CreditCard->getOwner() . '&saferpay_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&saferpay_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_SAFERPAY_CC_VERIFY_WITH_CVC == '1' ? '&saferpay_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_cc_owner=' . $osC_CreditCard->getOwner() . '&saferpay_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&saferpay_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_SAFERPAY_CC_VERIFY_WITH_CVC == '1' ? '&saferpay_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
   }

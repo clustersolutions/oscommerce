@@ -322,7 +322,7 @@
 
         $messageStack->add_session('checkout_payment', $error, 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
       }
     }
 
@@ -361,7 +361,7 @@
       }
 
       if ($error !== false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
       }
     }
 

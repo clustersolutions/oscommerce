@@ -15,7 +15,7 @@
     function &getEntry() {
       global $osC_Database, $osC_Customer;
 
-      $Qaccount = $osC_Database->query('select customers_gender, customers_firstname, customers_lastname, unix_timestamp(customers_dob) as customers_dob, customers_email_address from :table_customers where customers_id = :customers_id');
+      $Qaccount = $osC_Database->query('select customers_gender, customers_firstname, customers_lastname, date_format(customers_dob, "%Y") as customers_dob_year, date_format(customers_dob, "%m") as customers_dob_month, date_format(customers_dob, "%d") as customers_dob_date, customers_email_address from :table_customers where customers_id = :customers_id');
       $Qaccount->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qaccount->bindInt(':customers_id', $osC_Customer->getID());
       $Qaccount->execute();

@@ -102,16 +102,16 @@
                       'zip' => $osC_ShoppingCart->getBillingAddress('postcode'),
                       'country' => $osC_ShoppingCart->getBillingAddress('country_iso_code_2'),
                       'address_override' => '1',
-                      'notify_url' => tep_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code . (tep_not_null(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY) ? '&secret=' . MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY : ''), 'SSL', false, false, true),
+                      'notify_url' => osc_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code . (tep_not_null(MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY) ? '&secret=' . MODULE_PAYMENT_PAYPAL_IPN_SECRET_KEY : ''), 'SSL', false, false, true),
                       'email' => $osC_Customer->getEmailAddress(),
                       'invoice' => $this->_order_id,
                       'shipping' => $osC_Currencies->formatRaw($osC_ShoppingCart->getShippingMethod('cost'), $currency),
                       'currency_code' => $currency,
                       'lc' => 'EN', //AU, DE, FR, IT, GB, ES, US
-                      'return' => tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true, true, true),
+                      'return' => osc_href_link(FILENAME_CHECKOUT, 'process', 'SSL', null, null, true),
                       'rm' => '2',
                       'no_note' => '1',
-                      'cancel_return' => tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', true, true, true),
+                      'cancel_return' => osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', null, null, true),
                       'paymentaction' => 'authorization');
 
       if ($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'US') {

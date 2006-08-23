@@ -19,7 +19,7 @@
   }
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -31,7 +31,7 @@
   if ( ($osC_Customer->hasDefaultAddress() === false) || (isset($_GET['new']) && (osC_AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry->numberOfRows() === 1)) ) {
 ?>
 
-<form name="address_book" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $_GET['address_book'] . '&' . (isset($_GET['edit']) ? 'edit' : 'new') . '=save', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
+<form name="address_book" action="<?php echo osc_href_link(FILENAME_ACCOUNT, 'address_book=' . $_GET['address_book'] . '&' . (isset($_GET['edit']) ? 'edit' : 'new') . '=save', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
@@ -48,18 +48,18 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
 <?php
     if ($osC_NavigationHistory->hasSnapshot()) {
       $back_link = $osC_NavigationHistory->getSnapshotURL();
     } elseif ($osC_Customer->hasDefaultAddress() === false) {
-      $back_link = tep_href_link(FILENAME_ACCOUNT, '', 'SSL');
+      $back_link = osc_href_link(FILENAME_ACCOUNT, null, 'SSL');
     } else {
-      $back_link = tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL');
+      $back_link = osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL');
     }
 
-    echo osc_link_object($back_link, tep_image_button('button_back.gif', $osC_Language->get('button_back')));
+    echo osc_link_object($back_link, osc_draw_image_button('button_back.gif', $osC_Language->get('button_back')));
 ?>
 
 </div>
@@ -71,7 +71,7 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
+  <?php osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'), osc_draw_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 <?php

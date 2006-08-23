@@ -43,7 +43,7 @@
   }
 
   function prepareDB() {
-    if (document.getElementById("cfg_dbimport").checked) {
+    if (document.getElementById("DB_INSERT_SAMPLE_DATA").checked) {
       if (formSubmited == true) {
         return false;
       }
@@ -98,27 +98,27 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_store_name') . '<br />' . osc_draw_input_field('CFG_STORE_NAME', '', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_store_name') . '<br />' . osc_draw_input_field('CFG_STORE_NAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_store_name_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_store_owner_name') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_NAME', '', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_store_owner_name') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_NAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_store_owner_name_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_store_owner_email_address') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_EMAIL_ADDRESS', '', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_store_owner_email_address') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_EMAIL_ADDRESS', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_store_owner_email_address_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_administrator_username') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_USERNAME', '', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_administrator_username') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_USERNAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_administrator_username_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_administrator_password') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_PASSWORD', '', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_administrator_password') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_PASSWORD', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_administrator_password_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo osc_draw_checkbox_field('DB_INSERT_SAMPLE_DATA', 'true', true, 'id="cfg_dbimport"') . '&nbsp;' . $osC_Language->get('param_database_import_sample_data'); ?></td>
+        <td class="inputField"><?php echo osc_draw_checkbox_field('DB_INSERT_SAMPLE_DATA', 'true', true) . '&nbsp;' . $osC_Language->get('param_database_import_sample_data'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_database_import_sample_data_description'); ?></td>
       </tr>
     </table>

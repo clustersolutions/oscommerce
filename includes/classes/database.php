@@ -614,21 +614,21 @@
         $get_parameter = '';
         $hidden_parameter = '';
         if (!empty($parameters)) {
-          $parameters = explode('&amp;', $parameters);
+          $parameters = explode('&', $parameters);
           foreach ($parameters as $parameter) {
             list($key, $value) = explode('=', $parameter);
 
             if ($key != $batch_keyword) {
-              $get_parameter .= $key . '=' . $value . '&amp;';
+              $get_parameter .= $key . '=' . $value . '&';
               $hidden_parameter .= osc_draw_hidden_field($key, $value);
             }
           }
         }
 
-        $display_links = '<form action="' . tep_href_link(basename($_SERVER['PHP_SELF'])) . '" action="get">';
+        $display_links = '<form action="' . osc_href_link(basename($_SERVER['PHP_SELF'])) . '" action="get">';
 
         if ($this->batch_number > 1) {
-          $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)) . '" class="splitPageLink">' . $osC_Language->get('result_set_previous_page') . '</a>';
+          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $osC_Language->get('result_set_previous_page'), 'class="splitPageLink"');
         } else {
           $display_links .= $osC_Language->get('result_set_previous_page');
         }
@@ -636,14 +636,12 @@
         $display_links .= '&nbsp;&nbsp;' . sprintf($osC_Language->get('result_set_current_page'), osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onchange="this.form.submit();"'), $number_of_pages) . '&nbsp;&nbsp;';
 
         if (($this->batch_number < $number_of_pages) && ($number_of_pages != 1)) {
-          $display_links .= '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)) . '" class="splitPageLink">' . $osC_Language->get('result_set_next_page') . '</a>';
+          $display_links .= osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)), $osC_Language->get('result_set_next_page'), 'class="splitPageLink"');
         } else {
           $display_links .= $osC_Language->get('result_set_previous_page');
         }
 
-//        if (SID) $display_links .= tep_draw_hidden_field(tep_session_name(), tep_session_id());
-
-        $display_links .= $hidden_parameter . '</form>';
+        $display_links .= $hidden_parameter . osc_draw_hidden_session_id_field() . '</form>';
       } else {
         $display_links = sprintf($osC_Language->get('result_set_current_page'), 1, 1);
       }

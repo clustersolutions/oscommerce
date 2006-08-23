@@ -35,13 +35,13 @@
 ?>
 <!-- downloads //-->
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+        <td width="10">&nbsp;</td>
       </tr>
       <tr>
         <td class="main"><b><?php echo $osC_Language->get('download_heading'); ?></b></td>
       </tr>
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+        <td width="10">&nbsp;</td>
       </tr>
       <tr>
         <td><table border="0" width="100%" cellspacing="1" cellpadding="2" class="infoBox">
@@ -62,7 +62,7 @@
 // - No expiry date is enforced (maxdays == 0), OR
 // - The expiry date is not reached
       if ( ($Qdownloads->valueInt('download_count') > 0) && (file_exists(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'))) && ( ($Qdownloads->value('download_maxdays') == 0) || ($download_timestamp > time())) ) {
-        echo '            <td class="main"><a href="' . tep_href_link(FILENAME_DOWNLOAD, 'order=' . $last_order . '&id=' . $Qdownloads->valueInt('orders_products_download_id')) . '">' . $Qdownloads->value('products_name') . '</a></td>' . "\n";
+        echo '            <td class="main">' . osc_link_object(osc_href_link(FILENAME_DOWNLOAD, 'order=' . $last_order . '&id=' . $Qdownloads->valueInt('orders_products_download_id')), $Qdownloads->value('products_name')) . '</td>' . "\n";
       } else {
         echo '            <td class="main">' . $Qdownloads->value('products_name') . '</td>' . "\n";
       }
@@ -81,10 +81,10 @@
     if (!strstr($_SERVER['PHP_SELF'], FILENAME_ACCOUNT_HISTORY_INFO)) {
 ?>
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+        <td width="10">&nbsp;</td>
       </tr>
       <tr>
-        <td class="smalltext" colspan="4"><p><?php sprintf($osC_Language->get('download_footer'), '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . $osC_Language->get('my_account') . '</a>'); ?></p></td>
+        <td class="smalltext" colspan="4"><p><?php sprintf($osC_Language->get('download_footer'), osc_link_object(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'), $osC_Language->get('my_account'))); ?></p></td>
       </tr>
 <?php
     }

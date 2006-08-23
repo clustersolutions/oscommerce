@@ -39,9 +39,9 @@
 
       $Qmanufacturers->freeResult();
 
-      $this->_content = '<form name="manufacturers" action="' . tep_href_link(FILENAME_DEFAULT, '', 'NONSSL', false) . '" method="get">' . "\n" .
-                        osc_draw_pull_down_menu('manufacturers', $manufacturers_array, '', 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . tep_hide_session_id() . "\n" .
-                        '</form>' . "\n";
+      $this->_content = '<form name="manufacturers" action="' . osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false) . '" method="get">' .
+                        osc_draw_pull_down_menu('manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . osc_draw_hidden_session_id_field() .
+                        '</form>';
     }
 
     function install() {

@@ -123,17 +123,13 @@
             $result .= $this->root_start_string;
           }
 
-          $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . '<a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category_link) . '">';
-          if ($this->follow_cpath === true) {
-            if (in_array($category_id, $this->cpath_array)) {
-              $result .= $this->cpath_start_string . $category['name'] . $this->cpath_end_string;
-            } else {
-              $result .= $category['name'];
-            }
+          if ( ($this->follow_cpath === true) && in_array($category_id, $this->cpath_array) ) {
+            $link_title = $this->cpath_start_string . $category['name'] . $this->cpath_end_string;
           } else {
-            $result .= $category['name'];
+            $link_title = $category['name'];
           }
-          $result .= '</a>';
+
+          $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $category_link), $link_title);
 
           if ($this->show_category_product_count === true) {
             $result .= $this->category_product_count_start_string . $category['count'] . $this->category_product_count_end_string;

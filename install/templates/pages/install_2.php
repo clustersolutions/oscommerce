@@ -68,7 +68,7 @@
 
     document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_test'); ?></p>';
 
-    cfgWork = document.getElementById("cfg_workdir").value;
+    cfgWork = document.getElementById("HTTP_WORK_DIRECTORY").value;
 
     loadXMLDoc("rpc.php?action=checkWorkDir&dir=" + urlEncode(cfgWork), handleHttpResponse);
   }
@@ -119,7 +119,7 @@
         <td class="inputDescription"><?php echo $osC_Language->get('param_web_root_directory_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_web_work_directory') . '<br /><span style="white-space: nowrap;">' . osc_draw_input_field('HTTP_WORK_DIRECTORY', $dir_fs_www_root . 'includes/work', 'id="cfg_workdir" class="text"'); ?><img src="images/progress_pending.gif" border="0" width="22" height="22" id="cfg_workdir_icon" /></span><div class="autoComplete" id="divAutoComplete"></div></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_web_work_directory') . '<br /><span style="white-space: nowrap;">' . osc_draw_input_field('HTTP_WORK_DIRECTORY', $dir_fs_www_root . 'includes/work', 'class="text"'); ?><img src="images/progress_pending.gif" border="0" width="22" height="22" id="HTTP_WORK_DIRECTORY_icon" /></span><div class="autoComplete" id="divAutoComplete"></div></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_web_work_directory_description'); ?></td>
       </tr>
     </table>
@@ -147,7 +147,7 @@
 <script language="javascript" type="text/javascript">
 <!--
 
-  new autoComplete(document.getElementById('cfg_workdir'), 'divAutoComplete');
+  new autoComplete(document.getElementById('HTTP_WORK_DIRECTORY'), 'divAutoComplete');
 
 //-->
 </script>

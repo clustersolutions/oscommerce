@@ -21,7 +21,7 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_reviews_heading');
-      $this->_title_link = tep_href_link(FILENAME_PRODUCTS, 'reviews');
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'reviews');
     }
 
     function initialize() {
@@ -71,19 +71,16 @@
 
         if (empty($data)) {
           if (isset($osC_Product) && is_a($osC_Product, 'osC_Product') && $osC_Product->isValid()) {
-            $this->_content = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
-                              '  <tr>' . "\n" .
-                              '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . tep_image(DIR_WS_IMAGES . 'box_write_review.gif', $osC_Language->get('button_write_review')) . '</a></td>' . "\n" .
-                              '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()) . '">' . $osC_Language->get('box_reviews_write') .'</a></td>' . "\n" .
-                              '  </tr>' . "\n" .
-                              '</table>' . "\n";
+            $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()), osc_image(DIR_WS_IMAGES . 'box_write_review.gif', $osC_Language->get('button_write_review'))) . '</div>' .
+                              osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getKeyword()), $osC_Language->get('box_reviews_write')) .
+                              '<div style="clear: both;"></div>';
           }
         } else {
-          if (empty($data['image']) === false) {
-            $this->_content = '<div align="center"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']) . '">' . $osC_Image->show($data['image'], $data['products_name']) . '</a></div>';
+          if (!empty($data['image'])) {
+            $this->_content = '<div align="center">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), $osC_Image->show($data['image'], $data['products_name'])) . '</div>';
           }
 
-          $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']) . '">' . tep_break_string(tep_output_string_protected($data['reviews_text']), 15, '-<br />') . ' ..</a><br /><div align="center">' . tep_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.gif' , sprintf($osC_Language->get('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
+          $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), tep_break_string(tep_output_string_protected($data['reviews_text']), 15, '-<br />') . ' ..') . '<br /><div align="center">' . osc_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.gif' , sprintf($osC_Language->get('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
         }
       }
     }

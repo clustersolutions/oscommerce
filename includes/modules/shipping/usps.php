@@ -120,7 +120,7 @@
                               'error' => $osC_Language->get('shipping_usps_error'));
       }
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->_title);
+      if (tep_not_null($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
 
       return $this->quotes;
     }

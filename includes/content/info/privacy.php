@@ -27,7 +27,7 @@
       $this->_page_title = $osC_Language->get('info_privacy_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_privacy'), tep_href_link(FILENAME_INFO, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_privacy'), osc_href_link(FILENAME_INFO, $this->_module));
       }
     }
   }

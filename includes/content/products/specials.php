@@ -28,7 +28,7 @@
       $this->_page_title = $osC_Language->get('specials_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_specials'), tep_href_link(FILENAME_PRODUCTS, $this->_module));
+        $breadcrumb->add($osC_Language->get('breadcrumb_specials'), osc_href_link(FILENAME_PRODUCTS, $this->_module));
       }
     }
   }

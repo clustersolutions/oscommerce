@@ -15,7 +15,7 @@
   $osC_Language->load('search');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add($osC_Language->get('breadcrumb_search'), tep_href_link(FILENAME_SEARCH));
+    $breadcrumb->add($osC_Language->get('breadcrumb_search'), osc_href_link(FILENAME_SEARCH));
   }
 
   $osC_Template = osC_Template::setup('search');

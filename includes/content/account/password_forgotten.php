@@ -31,7 +31,7 @@
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_password_forgotten'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_password_forgotten'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {
@@ -70,7 +70,7 @@
           $messageStack->add_session('login', $osC_Language->get('success_password_forgotten_sent'), 'success');
         }
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       } else {
         $messageStack->add('password_forgotten', $osC_Language->get('error_password_forgotten_no_email_address_found'));
       }

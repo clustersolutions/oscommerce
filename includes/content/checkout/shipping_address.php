@@ -27,11 +27,11 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
       $this->_page_title = $osC_Language->get('shipping_address_heading');
@@ -45,7 +45,7 @@
         $osC_ShoppingCart->resetShippingAddress();
         $osC_ShoppingCart->resetShippingMethod();
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
 // if no shipping destination address was selected, use their own address as default
@@ -54,8 +54,8 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping'), tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping_address'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping'), osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shipping_address'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if (($_GET[$this->_module] == 'process')) {
@@ -214,7 +214,7 @@
 
             $osC_ShoppingCart->setShippingAddress($address_book_id);
 
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
           } else {
             $messageStack->add('checkout_address', 'Error inserting into address book table.');
           }
@@ -230,14 +230,14 @@
         $Qcheck->execute();
 
         if ($Qcheck->numberOfRows() === 1) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
         } else {
           $osC_ShoppingCart->resetShippingAddress();
         }
       } else {
         $osC_ShoppingCart->setShippingAddress($osC_Customer->getDefaultAddressID());
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
     }
   }

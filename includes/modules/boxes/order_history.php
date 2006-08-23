@@ -44,24 +44,19 @@
 
           $product_ids = substr($product_ids, 0, -1);
 
-          $data = '<table border="0" width="100%" cellspacing="0" cellpadding="1">' . "\n";
-
           $Qproducts = $osC_Database->query('select products_id, products_name, products_keyword from :table_products_description where products_id in (:products_id) and language_id = :language_id order by products_name');
           $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qproducts->bindRaw(':products_id', $product_ids);
           $Qproducts->bindInt(':language_id', $osC_Language->getID());
           $Qproducts->execute();
 
+          $this->_content = '<ol style="list-style: none; margin: 0; padding: 0;">';
+
           while ($Qproducts->next()) {
-            $data .= '  <tr>' . "\n" .
-                     '    <td class="infoBoxContents"><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')) . '">' . $Qproducts->value('products_name') . '</a></td>' . "\n" .
-                     '    <td class="infoBoxContents" align="right" valign="top"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=cust_order&pid=' . $Qproducts->valueInt('products_id')) . '">' . tep_image(DIR_WS_IMAGES . 'icons/cart.gif', $osC_Language->get('icon_in_cart')) . '</a></td>' . "\n" .
-                     '  </tr>' . "\n";
+            $this->_content .= '<li>' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), $Qproducts->value('products_name')) . '</li>';
           }
 
-          $data .= '</table>';
-
-          $this->_content = $data;
+          $this->_content .= '</ol>';
         }
       }
     }

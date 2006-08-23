@@ -20,14 +20,14 @@
     if (empty($_GET) || (!empty($_GET) && !in_array(tep_sanitize_string(basename(key($first_array))), array('login', 'create', 'password_forgotten')))) {
       $osC_NavigationHistory->setSnapshot();
 
-      tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
     }
   }
 
   $osC_Language->load('account');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add($osC_Language->get('breadcrumb_my_account'), tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+    $breadcrumb->add($osC_Language->get('breadcrumb_my_account'), osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
   }
 
   $osC_Template = osC_Template::setup('account');

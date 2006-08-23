@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_login.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_login.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -22,7 +22,7 @@
 ?>
 
 <div class="moduleBox" style="width: 49%; float: right;">
-  <form name="login" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'login=process', 'SSL'); ?>" method="post">
+  <form name="login" action="<?php echo osc_href_link(FILENAME_ACCOUNT, 'login=process', 'SSL'); ?>" method="post">
 
   <h6><?php echo $osC_Language->get('login_returning_customer_heading'); ?></h6>
 
@@ -34,9 +34,9 @@
       <li><?php echo osc_draw_label($osC_Language->get('field_customer_password'), 'password') . osc_draw_password_field('password'); ?></li>
     </ol>
 
-    <p><?php echo sprintf($osC_Language->get('login_returning_customer_password_forgotten'), tep_href_link(FILENAME_ACCOUNT, 'password_forgotten', 'SSL')); ?></p>
+    <p><?php echo sprintf($osC_Language->get('login_returning_customer_password_forgotten'), osc_href_link(FILENAME_ACCOUNT, 'password_forgotten', 'SSL')); ?></p>
 
-    <p align="right"><?php echo tep_image_submit('button_login.gif', $osC_Language->get('button_sign_in')); ?></p>
+    <p align="right"><?php echo osc_draw_image_submit_button('button_login.gif', $osC_Language->get('button_sign_in')); ?></p>
   </div>
 
   </form>
@@ -50,6 +50,6 @@
   <div class="content">
     <p><?php echo $osC_Language->get('login_new_customer_text'); ?></p>
 
-    <p align="right"><?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'create', 'SSL'), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?></p>
+    <p align="right"><?php echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'create', 'SSL'), osc_draw_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?></p>
   </div>
 </div>

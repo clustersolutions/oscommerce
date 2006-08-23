@@ -21,7 +21,7 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_specials_heading');
-      $this->_title_link = tep_href_link(FILENAME_PRODUCTS, 'specials');
+      $this->_title_link = osc_href_link(FILENAME_PRODUCTS, 'specials');
     }
 
     function initialize() {
@@ -56,10 +56,10 @@
           $this->_content = '';
 
           if (empty($data['image']) === false) {
-            $this->_content = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $osC_Image->show($data['image'], $data['products_name']) . '</a><br />';
+            $this->_content = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $data['products_keyword']), $osC_Image->show($data['image'], $data['products_name'])) . '<br />';
           }
 
-          $this->_content .= '<a href="' . tep_href_link(FILENAME_PRODUCTS, $data['products_keyword']) . '">' . $data['products_name'] . '</a><br />' . $data['products_price'];
+          $this->_content .= osc_link_object(osc_href_link(FILENAME_PRODUCTS, $data['products_keyword']), $data['products_name']) . '<br />' . $data['products_price'];
         }
       }
     }

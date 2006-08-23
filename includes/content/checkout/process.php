@@ -24,16 +24,16 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
       if (($osC_ShoppingCart->hasShippingMethod() === false) && ($osC_ShoppingCart->getContentType() != 'virtual')) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
 // load selected payment module
@@ -41,7 +41,7 @@
       $osC_Payment = new osC_Payment($osC_ShoppingCart->getBillingMethod('id'));
 
       if ($osC_Payment->hasActive() && ($osC_ShoppingCart->hasBillingMethod() === false)) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
       include('includes/classes/order.php');
@@ -53,7 +53,7 @@
 // unregister session variables used during checkout
       unset($_SESSION['comments']);
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
     }
 
 /* Private methods */
@@ -285,7 +285,7 @@
       $email_order = STORE_NAME . "\n" .
                      $osC_Language->get('email_order_separator') . "\n" .
                      sprintf($osC_Language->get('email_order_order_number'), $insert_id) . "\n" .
-                     sprintf($osC_Language->get('email_order_invoice_url'), tep_href_link(FILENAME_ACCOUNT, 'orders=' . $insert_id, 'SSL', false)) . "\n" .
+                     sprintf($osC_Language->get('email_order_invoice_url'), osc_href_link(FILENAME_ACCOUNT, 'orders=' . $insert_id, 'SSL', false)) . "\n" .
                      sprintf($osC_Language->get('email_order_date_ordered'), osC_DateTime::getLong()) . "\n\n";
       if (isset($_SESSION['comments'])) {
         $email_order .= tep_output_string_protected($_SESSION['comments']) . "\n\n";
@@ -337,7 +337,7 @@
 // unregister session variables used during checkout
       unset($_SESSION['comments']);
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
     }
   }
 ?>

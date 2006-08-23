@@ -53,7 +53,7 @@ function loadImage(imageUrl) {
         $large_image = $osC_Image->show($images['image'], $osC_Product->getTitle(), 'id="productImageLarge"', 'large');
       }
 
-      echo '<span style="width: ' . $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px; padding: 2px; float: left; text-align: center;"><a href="' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword() . '&image=' . $images['id']) . '" onclick="loadImage(\'' . $osC_Image->getAddress($images['image'], 'large') . '\'); return false;">' . $osC_Image->show($images['image'], $osC_Product->getTitle(), 'height="' . $osC_Image->getHeight($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . '" style="max-width: ' . $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px;"') . '</a></span>';
+      echo '<span style="width: ' . $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px; padding: 2px; float: left; text-align: center;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword() . '&image=' . $images['id']),  $osC_Image->show($images['image'], $osC_Product->getTitle(), 'height="' . $osC_Image->getHeight($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . '" style="max-width: ' . $osC_Image->getWidth($osC_Image->getCode(DEFAULT_IMAGE_GROUP_ID)) . 'px;"'), 'onclick="loadImage(\'' . $osC_Image->getAddress($images['image'], 'large') . '\'); return false;"') . '</span>';
     }
 ?>
 

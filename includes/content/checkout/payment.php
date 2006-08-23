@@ -27,23 +27,23 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
       if ($osC_ShoppingCart->hasShippingMethod() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
 // Stock Check
       if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
         foreach ($osC_ShoppingCart->getProducts() as $products) {
           if ($osC_ShoppingCart->isInStock($products['id']) === false) {
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'SSL'));
+            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'SSL'));
             break;
           }
         }
@@ -52,7 +52,7 @@
       $this->_page_title = $osC_Language->get('payment_method_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
 // redirect to the billing address page when no default address exists

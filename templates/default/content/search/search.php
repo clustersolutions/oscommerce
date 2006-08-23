@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="search" action="<?php echo tep_href_link(FILENAME_SEARCH, '', 'NONSSL', false); ?>" method="get" onsubmit="return check_form(this);">
+<form name="search" action="<?php echo osc_href_link(FILENAME_SEARCH, null, 'NONSSL', false); ?>" method="get" onsubmit="return check_form(this);">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('search_criteria_title'); ?></h6>
@@ -32,9 +32,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_hide_session_id() . tep_image_submit('button_search.gif', $osC_Language->get('button_search')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_search.gif', $osC_Language->get('button_search')); ?></span>
 
-  <?php echo osc_link_object('javascript:popupWindow(\'' . tep_href_link(FILENAME_SEARCH, 'help') . '\');', $osC_Language->get('search_help_tips')); ?>
+  <?php echo osc_link_object('javascript:popupWindow(\'' . osc_href_link(FILENAME_SEARCH, 'help') . '\');', $osC_Language->get('search_help_tips')); ?>
 </div>
 
 <div class="moduleBox">
@@ -47,10 +47,14 @@
       <li><?php echo osc_draw_label($osC_Language->get('field_search_manufacturers'), 'manufacturer') . osc_draw_pull_down_menu('manufacturer', tep_get_manufacturers(array(array('id' => '', 'text' => $osC_Language->get('filter_all_manufacturers'))))); ?></li>
       <li><?php echo osc_draw_label($osC_Language->get('field_search_price_from'), 'pfrom') . osc_draw_input_field('pfrom'); ?></li>
       <li><?php echo osc_draw_label($osC_Language->get('field_search_price_to'), 'pto') . osc_draw_input_field('pto'); ?></li>
-      <li><?php echo osc_draw_label($osC_Language->get('field_search_date_from'), 'datefrom') . tep_draw_date_pull_down_menu('datefrom', '', false, true, true, date('Y') - $osC_Search->getMinYear(), 0); ?></li>
-      <li><?php echo osc_draw_label($osC_Language->get('field_search_date_to'), 'dateto') . tep_draw_date_pull_down_menu('dateto', '', true, true, true, date('Y') - $osC_Search->getMaxYear(), 0); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_search_date_from'), 'datefrom') . osc_draw_date_pull_down_menu('datefrom', null, false, null, null, date('Y') - $osC_Search->getMinYear(), 0); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_search_date_to'), 'dateto') . osc_draw_date_pull_down_menu('dateto', null, null, null, null, date('Y') - $osC_Search->getMaxYear(), 0); ?></li>
     </ol>
   </div>
 </div>
+
+<?php
+  echo osc_draw_hidden_session_id_field();
+?>
 
 </form>

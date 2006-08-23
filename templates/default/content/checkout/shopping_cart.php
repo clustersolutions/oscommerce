@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_cart.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_cart.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -19,7 +19,7 @@
   if ($osC_ShoppingCart->hasContents()) {
 ?>
 
-<form name="shopping_cart" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
+<form name="shopping_cart" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('shopping_cart_heading'); ?></h6>
@@ -44,11 +44,11 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'action=cartRemove&amp;products_id=' . $products['id'], 'SSL'), tep_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
+        <td valign="top" width="60"><?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'action=cartRemove&products_id=' . $products['id'], 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
         <td valign="top">
 
 <?php
-      echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $products['keyword']), '<b>' . $products['name'] . '</b>');
+      echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $products['keyword']), '<b>' . $products['name'] . '</b>');
 
       if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
@@ -107,9 +107,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), tep_image_button('button_checkout.gif', $osC_Language->get('button_checkout'))); ?></span>
+  <span style="float: right;"><?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), osc_draw_image_button('button_checkout.gif', $osC_Language->get('button_checkout'))); ?></span>
 
-  <?php echo tep_image_submit('button_update_cart.gif', $osC_Language->get('button_update_cart')); ?>
+  <?php echo osc_draw_image_submit_button('button_update_cart.gif', $osC_Language->get('button_update_cart')); ?>
 </div>
 
 </form>
@@ -121,7 +121,7 @@
 <p><?php echo $osC_Language->get('shopping_cart_empty'); ?></p>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_link_object(tep_href_link(FILENAME_DEFAULT), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT), osc_draw_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>
 
 <?php

@@ -71,7 +71,7 @@
                                                      'cost' => (MODULE_SHIPPING_ITEM_COST * $osC_ShoppingCart->numberOfItems()) + MODULE_SHIPPING_ITEM_HANDLING)),
                             'tax_class_id' => $this->tax_class);
 
-      if (tep_not_null($this->icon)) $this->quotes['icon'] = tep_image($this->icon, $this->_title);
+      if (tep_not_null($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
 
       return $this->quotes;
     }

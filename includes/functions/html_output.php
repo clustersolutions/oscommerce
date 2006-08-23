@@ -10,10 +10,36 @@
   Released under the GNU General Public License
 */
 
-////
-// The HTML href link wrapper function
-  function tep_href_link($page = '', $parameters = '', $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_full_address = false) {
+/**
+ * Generate an internal URL address
+ *
+ * @param string $page The page to link to
+ * @param string $parameters The parameters to pass to the page (in the GET scope)
+ * @param string $connection The connection type for the page (NONSSL, SSL, AUTO)
+ * @param boolean $add_session_id Conditionally add the session ID to the URL
+ * @param boolean $search_engine_friendly Convert the URL to be search engine friendly
+ * @param boolean $use_full_address Add the full server address to the URL
+ * @access public
+ */
+
+  function osc_href_link($page = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_full_address = false) {
     global $request_type, $osC_Session, $osC_Services;
+
+    if (!in_array($connection, array('NONSSL', 'SSL', 'AUTO'))) {
+      $connection = 'NONSSL';
+    }
+
+    if (!is_bool($add_session_id)) {
+      $add_session_id = true;
+    }
+
+    if (!is_bool($search_engine_safe)) {
+      $search_engine_safe = true;
+    }
+
+    if (!is_bool($use_full_address)) {
+      $use_full_address = false;
+    }
 
     if ($connection == 'AUTO') {
       if ( ($request_type == 'SSL') && (ENABLE_SSL === true) ) {
@@ -39,22 +65,18 @@
 
     if (!empty($parameters)) {
       $link .= '?' . tep_output_string($parameters);
-      $separator = '&amp;';
+      $separator = '&';
     } else {
       $separator = '?';
     }
 
-    while ( (substr($link, -5) == '&amp;') || (substr($link, -1) == '?') ) {
-      if (substr($link, -1) == '?') {
-        $link = substr($link, 0, -1);
-      } else {
-        $link = substr($link, 0, -5);
-      }
+    while ( (substr($link, -1) == '&') || (substr($link, -1) == '?') ) {
+      $link = substr($link, 0, -1);
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
     if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
-      if (osc_empty(SID) === false) {
+      if (!osc_empty(SID)) {
         $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
@@ -67,64 +89,73 @@
       $link .= $separator . tep_output_string($_sid);
     }
 
-    if ( ($search_engine_safe === true) && $osC_Services->isStarted('sefu')) {
-      while (strstr($link, '&amp;&amp;')) {
-        $link = str_replace('&amp;&amp;', '&amp;', $link);
-      }
+    while (strstr($link, '&&')) {
+      $link = str_replace('&&', '&', $link);
+    }
 
-      $link = str_replace(array('?', '&amp;', '='), '/', $link);
+    if ( ($search_engine_safe === true) && $osC_Services->isStarted('sefu')) {
+      $link = str_replace(array('?', '&', '='), '/', $link);
+    } else {
+      if (strpos($link, '&') !== false) {
+        $link = str_replace('&', '&amp;', $link);
+      }
     }
 
     return $link;
   }
 
+/**
+ * Links an object with a URL address
+ *
+ * @param string $link The URL address to link the object to
+ * @param string $object The object to set the link on
+ * @param string $parameters Additional parameters for the link
+ * @access public
+ */
+
   function osc_link_object($link, $object, $parameters = null) {
     return '<a href="' . $link . '"' . (!empty($parameters) ? ' ' . $parameters : '') . '>' . $object . '</a>';
   }
 
-////
-// The HTML image wrapper function
-  function tep_image($src, $alt = '', $width = '', $height = '', $parameters = '') {
-    if ( (empty($src) || ($src == DIR_WS_IMAGES)) && (IMAGE_REQUIRED == '-1') ) {
+/**
+ * Outputs an image
+ *
+ * @param string $image The image filename to display
+ * @param string $title The title of the image button
+ * @param int $width The width of the image
+ * @param int $height The height of the image
+ * @param string $parameters Additional parameters for the image
+ * @access public
+ */
+
+  function osc_image($image, $title = null, $width = 0, $height = 0, $parameters = null) {
+    if ( (empty($image) || ($image == DIR_WS_IMAGES)) && (IMAGE_REQUIRED == '-1') ) {
       return false;
     }
 
-// alt is added to the img tag even if it is null to prevent browsers from outputting
-// the image filename as default
-    $image = '<img src="' . tep_output_string($src) . '" border="0" alt="' . tep_output_string($alt) . '"';
-
-    if (empty($alt) === false) {
-      $image .= ' title=" ' . tep_output_string($alt) . ' "';
+    if (!is_numeric($width)) {
+      $width = 0;
     }
 
-/*
-    if ( (CONFIG_CALCULATE_IMAGE_SIZE == '1') && (empty($width) || empty($height)) ) {
-      if ($image_size = @getimagesize($src)) {
-        if (empty($width) && tep_not_null($height)) {
-          $ratio = $height / $image_size[1];
-          $width = (int)$image_size[0] * $ratio;
-        } elseif (tep_not_null($width) && empty($height)) {
-          $ratio = $width / $image_size[0];
-          $height = (int)$image_size[1] * $ratio;
-        } elseif (empty($width) && empty($height)) {
-          $width = (int)$image_size[0];
-          $height = (int)$image_size[1];
-        }
-      } elseif (IMAGE_REQUIRED == '-1') {
-        return false;
-      }
+    if (!is_numeric($height)) {
+      $height = 0;
     }
-*/
+
+    $image = '<img src="' . tep_output_string($image) . '" border="0" alt="' . tep_output_string($title) . '"';
+
+    if (!empty($alt)) {
+      $image .= ' title="' . tep_output_string($title) . '"';
+    }
 
     if ($width > 0) {
-      $image .= ' width="' . tep_output_string($width) . '"';
+      $image .= ' width="' . (int)$width . '"';
     }
 
     if ($height > 0) {
-      $image .= ' height="' . tep_output_string($height) . '"';
+      $image .= ' height="' . (int)$height . '"';
     }
 
-    if (empty($parameters) === false) {
+    if (!empty($parameters)) {
       $image .= ' ' . $parameters;
     }
 
@@ -133,52 +164,80 @@
     return $image;
   }
 
-////
-// The HTML form submit button wrapper function
-// Outputs a button in the selected language
-  function tep_image_submit($image, $alt = '', $parameters = '') {
+/**
+ * Outputs an image submit button
+ *
+ * @param string $image The image filename to display
+ * @param string $title The title of the image button
+ * @param string $parameters Additional parameters for the image submit button
+ * @access public
+ */
+
+  function osc_draw_image_submit_button($image, $title = null, $parameters = null) {
     global $osC_Language;
 
-    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '" border="0" alt="' . tep_output_string($alt) . '"';
+    $image_submit = '<input type="image" src="' . tep_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '"';
 
-    if (tep_not_null($alt)) $image_submit .= ' title=" ' . tep_output_string($alt) . ' "';
+    if (!empty($title)) {
+      $image_submit .= ' alt="' . tep_output_string($title) . '" title="' . tep_output_string($title) . '"';
+    }
 
-    if (tep_not_null($parameters)) $image_submit .= ' ' . $parameters;
+    if (!empty($parameters)) {
+      $image_submit .= ' ' . $parameters;
+    }
 
     $image_submit .= ' />';
 
     return $image_submit;
   }
 
-////
-// Output a function button in the selected language
-  function tep_image_button($image, $alt = '', $parameters = '') {
+/**
+ * Outputs an image button
+ *
+ * @param string $image The image filename to display
+ * @param string $title The title of the image button
+ * @param string $parameters Additional parameters for the image button
+ * @access public
+ */
+
+  function osc_draw_image_button($image, $title = null, $parameters = null) {
     global $osC_Language;
 
-    return tep_image('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image, $alt, '', '', $parameters);
+    return osc_image('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image, $title, null, null, $parameters);
   }
 
-////
-// Output a separator either through whitespace, or with an image
-  function tep_draw_separator($image = 'pixel_black.gif', $width = '100%', $height = '1') {
-    return tep_image(DIR_WS_IMAGES . $image, '', $width, $height);
-  }
+/**
+ * Outputs a form input field (text/password)
+ *
+ * @param string $name The name and ID of the input field
+ * @param string $value The default value for the input field
+ * @param string $parameters Additional parameters for the input field
+ * @param boolean $override Override the default value with the value found in the GET or POST scope
+ * @param string $type The type of input field to use (text/password)
+ * @access public
+ */
 
-  function osc_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
-    $field_value = $value;
+  function osc_draw_input_field($name, $value = null, $parameters = null, $override = true, $type = 'text') {
+    if (!is_bool($override)) {
+      $override = true;
+    }
 
-    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
-
-    if ($reinsert_value === true) {
+    if ($override === true) {
       if (isset($_GET[$name])) {
-        $field_value = $_GET[$name];
+        $value = $_GET[$name];
       } elseif (isset($_POST[$name])) {
-        $field_value = $_POST[$name];
+        $value = $_POST[$name];
       }
     }
 
-    if (strlen(trim($field_value)) > 0) {
-      $field .= ' value="' . tep_output_string($field_value) . '"';
+    if (!in_array($type, array('text', 'password'))) {
+      $type = 'text';
+    }
+
+    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
+
+    if (!empty($value)) {
+      $field .= ' value="' . tep_output_string($value) . '"';
     }
 
     if (!empty($parameters)) {
@@ -187,18 +246,34 @@
 
     $field .= ' />';
 
-    if ($required === true) {
-      $field .= '&nbsp;<span class="inputRequirement">*</span>';
-    }
-
     return $field;
   }
 
-  function osc_draw_password_field($name, $parameters = '', $required = false) {
-    return osc_draw_input_field($name, '', $parameters, $required, 'password', false);
+/**
+ * Outputs a form password field
+ *
+ * @param string $name The name and ID of the password field
+ * @param string $parameters Additional parameters for the password field
+ * @access public
+ */
+
+  function osc_draw_password_field($name, $parameters = null) {
+    return osc_draw_input_field($name, null, $parameters, false, 'password');
   }
 
-  function osc_draw_selection_field($name, $type, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
+/**
+ * Outputs a form selection field (checkbox/radio)
+ *
+ * @param string $name The name and indexed ID of the selection field
+ * @param string $type The type of the selection field (checkbox/radio)
+ * @param mixed $values The value of, or an array of values for, the selection field
+ * @param string $default The default value for the selection field
+ * @param string $parameters Additional parameters for the selection field
+ * @param string $separator The separator to use between multiple options for the selection field
+ * @access public
+ */
+
+  function osc_draw_selection_field($name, $type, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
     if (!is_array($values)) {
       $values = array($values);
     }
@@ -208,6 +283,8 @@
     } elseif (isset($_POST[$name])) {
       $default = $_POST[$name];
     }
+
+    $field = '';
 
     $counter = 0;
 
@@ -222,7 +299,6 @@
         $selection_text = '';
       }
 
-//      $field .= '<label style="width: auto;"><input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . $counter . '"';
       $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
 
       if (!empty($selection_value)) {
@@ -230,14 +306,13 @@
       }
 
       if ((is_bool($default) && $default === true) || (!empty($default) && ((is_string($default) && ($default == $selection_value)) || (is_array($default) && in_array($selection_value, $default))))) {
-        $field .= '  checked="checked"';
+        $field .= ' checked="checked"';
       }
 
       if (!empty($parameters)) {
         $field .= ' ' . $parameters;
       }
 
-//      $field .= ' />' . $selection_text . '</label>' . $separator;
       $field .= ' />';
 
       if (!empty($selection_text)) {
@@ -247,25 +322,61 @@
       $field .= $separator;
     }
 
-    $field = substr($field, 0, strlen($field)-strlen($separator));
-
-    if ($required === true) {
-      $field .= '&nbsp;<span class="inputRequirement">*</span>';
+    if (!empty($field)) {
+      $field = substr($field, 0, strlen($field)-strlen($separator));
     }
 
     return $field;
   }
 
-  function osc_draw_checkbox_field($name, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
-    return osc_draw_selection_field($name, 'checkbox', $values, $default, $parameters, $required, $separator);
+/**
+ * Outputs a form checkbox field
+ *
+ * @param string $name The name and indexed ID of the checkbox field
+ * @param mixed $values The value of, or an array of values for, the checkbox field
+ * @param string $default The default value for the checkbox field
+ * @param string $parameters Additional parameters for the checkbox field
+ * @param string $separator The separator to use between multiple options for the checkbox field
+ * @access public
+ */
+
+  function osc_draw_checkbox_field($name, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
+    return osc_draw_selection_field($name, 'checkbox', $values, $default, $parameters, $separator);
   }
 
-  function osc_draw_radio_field($name, $values, $default = '', $parameters = '', $required = false, $separator = '&nbsp;&nbsp;') {
-    return osc_draw_selection_field($name, 'radio', $values, $default, $parameters, $required, $separator);
+/**
+ * Outputs a form radio field
+ *
+ * @param string $name The name and indexed ID of the radio field
+ * @param mixed $values The value of, or an array of values for, the radio field
+ * @param string $default The default value for the radio field
+ * @param string $parameters Additional parameters for the radio field
+ * @param string $separator The separator to use between multiple options for the radio field
+ * @access public
+ */
+
+  function osc_draw_radio_field($name, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
+    return osc_draw_selection_field($name, 'radio', $values, $default, $parameters, $separator);
   }
 
-  function osc_draw_textarea_field($name, $value = '', $width = '60', $height = '5', $wrap = 'soft', $parameters = '', $reinsert_value = true, $required = false) {
-    if ($reinsert_value === true) {
+/**
+ * Outputs a form textarea field
+ *
+ * @param string $name The name and ID of the textarea field
+ * @param string $value The default value for the textarea field
+ * @param int $width The width of the textarea field
+ * @param int $height The height of the textarea field
+ * @param string $parameters Additional parameters for the textarea field
+ * @param boolean $override Override the default value with the value found in the GET or POST scope
+ * @access public
+ */
+
+  function osc_draw_textarea_field($name, $value = null, $width = 60, $height = 5, $parameters = null, $override = true) {
+    if (!is_bool($override)) {
+      $override = true;
+    }
+
+    if ($override === true) {
       if (isset($_GET[$name])) {
         $value = $_GET[$name];
       } elseif (isset($_POST[$name])) {
@@ -273,7 +384,15 @@
       }
     }
 
-    $field = '<textarea name="' . tep_output_string($name) . '" wrap="' . tep_output_string($wrap) . '" cols="' . tep_output_string($width) . '" rows="' . tep_output_string($height) . '"';
+    if (!is_numeric($width)) {
+      $width = 60;
+    }
+
+    if (!is_numeric($height)) {
+      $width = 5;
+    }
+
+    $field = '<textarea name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '" cols="' . (int)$width . '" rows="' . (int)$height . '"';
 
     if (!empty($parameters)) {
       $field .= ' ' . $parameters;
@@ -281,22 +400,19 @@
 
     $field .= '>' . $value . '</textarea>';
 
-    if ($required === true) {
-      $field .= '&nbsp;<span class="inputRequirement">*</span>';
-    }
-
     return $field;
   }
 
-  function osc_draw_hidden_field($name, $value = '', $parameters = '') {
-    if (empty($value)) {
-      if (isset($_GET[$name])) {
-        $value = $_GET[$name];
-      } elseif (isset($_POST[$name])) {
-        $value = $_POST[$name];
-      }
-    }
+/**
+ * Outputs a form hidden field
+ *
+ * @param string $name The name of the hidden field
+ * @param string $value The value for the hidden field
+ * @param string $parameters Additional parameters for the hidden field
+ * @access public
+ */
 
+  function osc_draw_hidden_field($name, $value = null, $parameters = null) {
     $field = '<input type="hidden" name="' . tep_output_string($name) . '"';
 
     if (!empty($value)) {
@@ -312,58 +428,144 @@
     return $field;
   }
 
-////
-// Hide form elements
-  function tep_hide_session_id() {
+/**
+ * Outputs a form hidden field containing the session name and ID if SID is not empty
+ *
+ * @access public
+ */
+
+  function osc_draw_hidden_session_id_field() {
     global $osC_Session;
 
-    if ($osC_Session->hasStarted() && (osc_empty(SID) === false)) {
+    if ($osC_Session->hasStarted() && !osc_empty(SID)) {
       return osc_draw_hidden_field($osC_Session->getName(), $osC_Session->getID());
     }
   }
 
-  function osc_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
+/**
+ * Outputs a form pull down menu field
+ *
+ * @param string $name The name of the pull down menu field
+ * @param array $values Defined values for the pull down menu field
+ * @param string $default The default value for the pull down menu field
+ * @param string $parameters Additional parameters for the pull down menu field
+ * @access public
+ */
+
+  function osc_draw_pull_down_menu($name, $values, $default = null, $parameters = null) {
+    if (isset($_GET[$name])) {
+      $default = $_GET[$name];
+    } elseif (isset($_POST[$name])) {
+      $default = $_POST[$name];
+    }
+
     $field = '<select name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
 
-    if (!empty($parameters)) $field .= ' ' . $parameters;
+    if (!empty($parameters)) {
+      $field .= ' ' . $parameters;
+    }
 
     $field .= '>';
 
-    $default_value = $default;
+    foreach ($values as $value) {
+      $field .= '<option value="' . tep_output_string($value['id']) . '"';
 
-    if (isset($_GET[$name])) {
-      $default_value = $_GET[$name];
-    } elseif (isset($_POST[$name])) {
-      $default_value = $_POST[$name];
-    }
-
-    for ($i=0, $n=sizeof($values); $i<$n; $i++) {
-      $field .= '<option value="' . tep_output_string($values[$i]['id']) . '"';
-
-      if ($default_value == $values[$i]['id']) {
+      if ($default == $value['id']) {
         $field .= ' selected="selected"';
       }
 
-      $field .= '>' . tep_output_string($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+      $field .= '>' . tep_output_string($value['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
     }
 
     $field .= '</select>';
 
-    if ($required === true) {
-      $field .= '&nbsp;<span class="inputRequirement">*</span>';
-    }
-
     return $field;
   }
 
+/**
+ * Outputs a label for form field elements
+ *
+ * @param string $text The text to use as the form field label
+ * @param string $for The ID of the form field element to assign the label to
+ * @param string $access_key The access key to use for the form field element
+ * @param bool $required A flag to show if the form field element requires input or not
+ * @access public
+ */
+
   function osc_draw_label($text, $for, $access_key = null, $required = false) {
+    if (!is_bool($required)) {
+      $required = false;
+    }
+
     return '<label for="' . tep_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . tep_output_string($access_key) . '"' : '') . '>' . tep_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
   }
 
-  function tep_draw_date_pull_down_menu($name, $value = '', $default_today = true, $show_days = true, $use_month_names = true, $year_range_start = '0', $year_range_end  = '1') {
+/**
+ * Outputs a form pull down menu for a date selection
+ *
+ * @param string $name The base name of the date pull down menu fields
+ * @param array $value An array containing the year, month, and date values for the default date
+ * @param boolean $default_today Default to todays date if no default value is used
+ * @param boolean $show_days Show the days in a pull down menu
+ * @param boolean $use_month_names Show the month names in the month pull down menu
+ * @param int $year_range_start The start of the years range to use for the year pull down menu
+ * @param int $year_range_end The end of the years range to use for the year pull down menu
+ * @access public
+ */
+
+  function osc_draw_date_pull_down_menu($name, $value = null, $default_today = true, $show_days = true, $use_month_names = true, $year_range_start = 0, $year_range_end = 1) {
+    $year = date('Y');
+
+    if (!is_bool($default_today)) {
+      $default_today = true;
+    }
+
+    if (!is_bool($show_days)) {
+      $show_days = true;
+    }
+
+    if (!is_bool($use_month_names)) {
+      $use_month_names = true;
+    }
+
+    if (!is_numeric($year_range_start)) {
+      $year_range_start = 0;
+    }
+
+    if (!is_numeric($year_range_end)) {
+      $year_range_end = 1;
+    }
+
+    if (!is_array($value)) {
+      $value = array();
+    }
+
+    if (!isset($value['year']) || !is_numeric($value['year']) || ($value['year'] < ($year - $year_range_start)) || ($value['year'] > ($year + $year_range_end))) {
+      if ($default_today === true) {
+        $value['year'] = $year;
+      } else {
+        $value['year'] = $year - $year_range_start;
+      }
+    }
+
+    if (!isset($value['month']) || !is_numeric($value['month']) || ($value['month'] < 1) || ($value['month'] > 12)) {
+      if ($default_today === true) {
+        $value['month'] = date('n');
+      } else {
+        $value['month'] = 1;
+      }
+    }
+
+    if (!isset($value['date']) || !is_numeric($value['date']) || ($value['date'] < 1) || ($value['date'] > 31)) {
+      if ($default_today === true) {
+        $value['date'] = date('j');
+      } else {
+        $value['date'] = 1;
+      }
+    }
+
     $params = '';
 
-// days pull down menu
     $days_select_string = '';
 
     if ($show_days === true) {
@@ -377,40 +579,16 @@
                               'text' => $i);
       }
 
-      if (isset($GLOBALS[$name . '_days'])) {
-        $days_default = $GLOBALS[$name . '_days'];
-      } elseif (!empty($value)) {
-        $days_default = date('j', $value);
-      } elseif ($default_today === true) {
-        $days_default = date('j');
-      } else {
-        $days_default = 1;
-      }
-
-      $days_select_string = osc_draw_pull_down_menu($name . '_days', $days_array, $days_default);
+      $days_select_string = osc_draw_pull_down_menu($name . '_days', $days_array, $value['date']);
     }
 
-// months pull down menu
     $months_array = array();
     for ($i=1; $i<=12; $i++) {
       $months_array[] = array('id' => $i,
                               'text' => (($use_month_names === true) ? strftime('%B', mktime(0, 0, 0, $i)) : $i));
     }
 
-    if (isset($GLOBALS[$name . '_months'])) {
-      $months_default = $GLOBALS[$name . '_months'];
-    } elseif (!empty($value)) {
-      $months_default = date('n', $value);
-    } elseif ($default_today === true) {
-      $months_default = date('n');
-    } else {
-      $months_default = 1;
-    }
-
-    $months_select_string = osc_draw_pull_down_menu($name . '_months', $months_array, $months_default, $params);
-
-// year pull down menu
-    $year = date('Y');
+    $months_select_string = osc_draw_pull_down_menu($name . '_months', $months_array, $value['month'], $params);
 
     $years_array = array();
     for ($i = ($year - $year_range_start); $i <= ($year + $year_range_end); $i++) {
@@ -418,17 +596,7 @@
                              'text' => $i);
     }
 
-    if (isset($GLOBALS[$name . '_years'])) {
-      $years_default = $GLOBALS[$name . '_years'];
-    } elseif (!empty($value)) {
-      $years_default = date('Y', $value);
-    } elseif ($default_today === true) {
-      $years_default = $year;
-    } else {
-      $years_default = $year - $year_range_start;
-    }
-
-    $years_select_string = osc_draw_pull_down_menu($name . '_years', $years_array, $years_default, $params);
+    $years_select_string = osc_draw_pull_down_menu($name . '_years', $years_array, $value['year'], $params);
 
     return $days_select_string . $months_select_string . $years_select_string;
   }

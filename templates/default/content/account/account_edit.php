@@ -13,7 +13,7 @@
   $Qaccount = osC_Account::getEntry();
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -23,7 +23,7 @@
   }
 ?>
 
-<form name="account_edit" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'edit=save', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
+<form name="account_edit" action="<?php echo osc_href_link(FILENAME_ACCOUNT, 'edit=save', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
@@ -52,7 +52,7 @@
   if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
 
-      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . tep_draw_date_pull_down_menu('dob', $Qaccount->value('customers_dob'), false, true, true, date('Y')-1901, -5); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . osc_draw_date_pull_down_menu('dob', array('year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')), false, null, null, date('Y')-1901, -5); ?></li>
 
 <?php
   }
@@ -64,7 +64,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

@@ -73,5 +73,5 @@
       break;
   }
 
-  tep_redirect(tep_href_link(FILENAME_DEFAULT));
+  tep_redirect(osc_href_link(FILENAME_DEFAULT));
 ?>

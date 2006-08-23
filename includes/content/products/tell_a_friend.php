@@ -28,7 +28,7 @@
       if ((ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($osC_Customer->isLoggedOn() === false)) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       $counter = 0;
@@ -49,8 +49,8 @@
             $this->_page_title = $osC_Product->getTitle();
 
             if ($osC_Services->isStarted('breadcrumb')) {
-              $breadcrumb->add($osC_Product->getTitle(), tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
-              $breadcrumb->add($osC_Language->get('breadcrumb_tell_a_friend'), tep_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
+              $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
+              $breadcrumb->add($osC_Language->get('breadcrumb_tell_a_friend'), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
             }
 
             if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
@@ -97,14 +97,14 @@
           $email_body .= tep_sanitize_string($_POST['message']) . "\n\n";
         }
 
-        $email_body .= sprintf($osC_Language->get('email_tell_a_friend_link'), tep_href_link(FILENAME_PRODUCTS, $osC_Product->getID())) . "\n\n" .
+        $email_body .= sprintf($osC_Language->get('email_tell_a_friend_link'), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID())) . "\n\n" .
                        sprintf($osC_Language->get('email_tell_a_friend_signature'), STORE_NAME . "\n" . HTTP_SERVER . DIR_WS_CATALOG . "\n");
 
         tep_mail(tep_sanitize_string($_POST['to_name']), tep_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, tep_sanitize_string($_POST['from_name']), tep_sanitize_string($_POST['from_email_address']));
 
         $messageStack->add_session('header', sprintf($osC_Language->get('success_tell_a_friend_email_sent'), $osC_Product->getTitle(), tep_output_string_protected($_POST['to_name'])), 'success');
 
-        tep_redirect(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getID()));
+        tep_redirect(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID()));
       }
     }
   }

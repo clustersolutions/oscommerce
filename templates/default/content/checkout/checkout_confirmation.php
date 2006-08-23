@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_confirmation.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_confirmation.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -24,14 +24,14 @@
 <?php
   if ($osC_ShoppingCart->hasShippingAddress()) {
 ?>
-          <p><?php echo '<b>' . $osC_Language->get('order_delivery_address_title') . '</b> ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_delivery_address_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo tep_address_format($osC_ShoppingCart->getShippingAddress('format_id'), $osC_ShoppingCart->getShippingAddress(), 1, ' ', '<br />'); ?></p>
 
 <?php
     if ($osC_ShoppingCart->hasShippingMethod()) {
 ?>
 
-          <p><?php echo '<b>' . $osC_Language->get('order_shipping_method_title') . '</b> ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_shipping_method_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $osC_ShoppingCart->getShippingMethod('title'); ?></p>
 
 <?php
@@ -39,10 +39,10 @@
   }
 ?>
 
-          <p><?php echo '<b>' . $osC_Language->get('order_billing_address_title') . '</b> ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_billing_address_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo tep_address_format($osC_ShoppingCart->getBillingAddress('format_id'), $osC_ShoppingCart->getBillingAddress(), 1, ' ', '<br />'); ?></p>
 
-          <p><?php echo '<b>' . $osC_Language->get('order_payment_method_title') . '</b> ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . $osC_Language->get('order_payment_method_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $osC_ShoppingCart->getBillingMethod('title'); ?></p>
         </td>
         <td width="70%" valign="top">
@@ -54,7 +54,7 @@
 ?>
 
               <tr>
-                <td colspan="2"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></td>
+                <td colspan="2"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></td>
                 <td align="right"><b><?php echo $osC_Language->get('order_tax_title'); ?></b></td>
                 <td align="right"><b><?php echo $osC_Language->get('order_total_title'); ?></b></td>
               </tr>
@@ -64,7 +64,7 @@
 ?>
 
               <tr>
-                <td colspan="3"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></td>
+                <td colspan="3"><?php echo '<b>' . $osC_Language->get('order_products_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></td>
               </tr>
 
 <?php
@@ -145,9 +145,9 @@
 ?>
 
       <tr>
-        <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+        <td width="10">&nbsp;</td>
         <td><?php echo $confirmation['fields'][$i]['title']; ?></td>
-        <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+        <td width="10">&nbsp;</td>
         <td><?php echo $confirmation['fields'][$i]['field']; ?></td>
       </tr>
 
@@ -180,7 +180,7 @@
 ?>
 
 <div class="moduleBox">
-  <h6><?php echo '<b>' . $osC_Language->get('order_comments_title') . '</b> <a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL') . '"><span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span></a>'; ?></h6>
+  <h6><?php echo '<b>' . $osC_Language->get('order_comments_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></h6>
 
   <div class="content">
     <?php echo nl2br(tep_output_string_protected($order->info['comments'])) . osc_draw_hidden_field('comments', $order->info['comments']); ?>
@@ -197,7 +197,7 @@
   if ($osC_Payment->hasActionURL()) {
     $form_action_url = $osC_Payment->getActionURL();
   } else {
-    $form_action_url = tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL');
+    $form_action_url = osc_href_link(FILENAME_CHECKOUT, 'process', 'SSL');
   }
 
   echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
@@ -206,7 +206,7 @@
     echo $osC_Payment->process_button();
   }
 
-  echo tep_image_submit('button_confirm_order.gif', $osC_Language->get('button_confirm_order')) . '</form>';
+  echo osc_draw_image_submit_button('button_confirm_order.gif', $osC_Language->get('button_confirm_order')) . '</form>';
 ?>
 
 </div>

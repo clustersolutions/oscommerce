@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_payment.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_payment.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="checkout_payment" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'); ?>" method="post" onsubmit="return check_form();">
+<form name="checkout_payment" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'); ?>" method="post" onsubmit="return check_form();">
 
 <?php
   if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
@@ -31,7 +31,7 @@
   <h6><?php echo $osC_Language->get('order_conditions_title'); ?></h6>
 
   <div class="content">
-    <?php echo sprintf($osC_Language->get('order_conditions_description'), tep_href_link(FILENAME_INFO, 'conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', array(array('id' => 1, 'text' => $osC_Language->get('order_conditions_acknowledge'))), false); ?>
+    <?php echo sprintf($osC_Language->get('order_conditions_description'), osc_href_link(FILENAME_INFO, 'conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', array(array('id' => 1, 'text' => $osC_Language->get('order_conditions_acknowledge'))), false); ?>
   </div>
 </div>
 
@@ -48,10 +48,10 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
     </div>
 
-    <?php echo $osC_Language->get('choose_billing_destination'). '<br /><br />' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address'))); ?>
+    <?php echo $osC_Language->get('choose_billing_destination'). '<br /><br />' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), osc_draw_image_button('button_change_address.gif', $osC_Language->get('button_change_address'))); ?>
 
     <div style="clear: both;"></div>
   </div>
@@ -69,7 +69,7 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('choose_payment_method'); ?></p>
@@ -102,7 +102,7 @@
     }
 ?>
 
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
 
 <?php
     if ($n > 1) {
@@ -121,7 +121,7 @@
   }
 ?>
 
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 
 <?php
@@ -129,9 +129,9 @@
 ?>
 
           <tr>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="4"><?php echo $selection[$i]['error']; ?></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 
 <?php
@@ -139,7 +139,7 @@
 ?>
 
           <tr>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="4"><table border="0" cellspacing="0" cellpadding="2">
 
 <?php
@@ -147,11 +147,11 @@
 ?>
 
               <tr>
-                <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+                <td width="10">&nbsp;</td>
                 <td><?php echo $selection[$i]['fields'][$j]['title']; ?></td>
-                <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+                <td width="10">&nbsp;</td>
                 <td><?php echo $selection[$i]['fields'][$j]['field']; ?></td>
-                <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+                <td width="10">&nbsp;</td>
               </tr>
 
 <?php
@@ -159,7 +159,7 @@
 ?>
 
             </table></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
 
 <?php
@@ -182,7 +182,7 @@
   <h6><?php echo $osC_Language->get('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''), 60, 5, 'soft', 'style="width: 98%;"'); ?>
+    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
   </div>
 </div>
 
@@ -191,7 +191,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+      <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
     </div>
 
     <?php echo '<b>' . $osC_Language->get('continue_checkout_procedure_title') . '</b><br />' . $osC_Language->get('continue_checkout_procedure_to_confirmation'); ?>

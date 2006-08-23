@@ -14,7 +14,7 @@
 <!-- box shopping_cart start //-->
 
 <div class="boxNew">
-  <div class="boxTitle"><?php echo '<a href="' . $osC_Box->getTitleLink() . '">' . $osC_Box->getTitle() . '</a>'; ?></div>
+  <div class="boxTitle"><?php echo osc_link_object($osC_Box->getTitleLink(), $osC_Box->getTitle()); ?></div>
 
   <div class="boxContents"><?php echo $osC_Box->getContent(); ?></div>
 </div>

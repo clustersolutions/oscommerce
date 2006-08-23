@@ -29,7 +29,7 @@
 
 <title><?php echo STORE_NAME . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
-<base href="<?php echo tep_href_link('', '', 'AUTO', false); ?>" />
+<base href="<?php echo osc_href_link(null, null, 'AUTO', false); ?>" />
 
 <link rel="stylesheet" type="text/css" href="templates/<?php echo $osC_Template->getCode(); ?>/stylesheet.css" />
 
@@ -43,7 +43,7 @@
   }
 ?>
 
-<meta name="Generator" value="osCommerce" />
+<meta name="Generator" content="osCommerce" />
 
 </head>
 
@@ -257,15 +257,15 @@
 <div id="pageHeader">
 
 <?php
-    echo osc_link_object(tep_href_link(FILENAME_DEFAULT), tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce'), 'id="siteLogo"');
+    echo osc_link_object(osc_href_link(FILENAME_DEFAULT), osc_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce'), 'id="siteLogo"');
 ?>
 
   <ul id="navigationIcons">
 
 <?php
-    echo '<li>' . osc_link_object(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account'))) . '</li>' .
-         '<li>' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents'))) . '</li>' .
-         '<li>' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout'))) . '</li>';
+    echo '<li>' . osc_link_object(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account'))) . '</li>' .
+         '<li>' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents'))) . '</li>' .
+         '<li>' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), osc_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout'))) . '</li>';
 ?>
 
   </ul>
@@ -288,10 +288,10 @@
     }
 
     if ($osC_Customer->isLoggedOn()) {
-      echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL'), $osC_Language->get('sign_out')) . ' &nbsp;|&nbsp; ';
+      echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL'), $osC_Language->get('sign_out')) . ' &nbsp;|&nbsp; ';
     }
 
-    echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), $osC_Language->get('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'), $osC_Language->get('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), $osC_Language->get('checkout'));
+    echo osc_link_object(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'), $osC_Language->get('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'), $osC_Language->get('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), $osC_Language->get('checkout'));
 ?>
 
   </div>
@@ -306,7 +306,7 @@
 <div id="pageFooter">
 
 <?php
-    echo sprintf($osC_Language->get('footer'), date('Y'), tep_href_link(FILENAME_DEFAULT), STORE_NAME);
+    echo sprintf($osC_Language->get('footer'), date('Y'), osc_href_link(FILENAME_DEFAULT), STORE_NAME);
 ?>
 
 </div>

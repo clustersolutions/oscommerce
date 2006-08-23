@@ -11,7 +11,7 @@
 */
 ?>
 
-<div style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'mini')); ?></div>
+<div style="float: right;"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'mini')); ?></div>
 
 <h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
 
@@ -23,7 +23,7 @@
   }
 ?>
 
-<form name="reviews_new" action="<?php echo tep_href_link(FILENAME_PRODUCTS, 'reviews=new&amp;' . $osC_Product->getID() . '&amp;action=process'); ?>" method="post" onsubmit="return checkForm(this);">
+<form name="reviews_new" action="<?php echo osc_href_link(FILENAME_PRODUCTS, 'reviews=new&' . $osC_Product->getID() . '&action=process'); ?>" method="post" onsubmit="return checkForm(this);">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('new_review_title'); ?></h6>
@@ -42,16 +42,16 @@
   }
 ?>
 
-      <li><?php echo osc_draw_textarea_field('review', null, 60, 15, 'soft', 'style="width: 98%;"'); ?></li>
+      <li><?php echo osc_draw_textarea_field('review', null, null, 15, 'style="width: 98%;"'); ?></li>
       <li><?php echo $osC_Language->get('field_review_rating') . ' ' . $osC_Language->get('review_lowest_rating_title') . ' ' . osc_draw_radio_field('rating', array('1', '2', '3', '4', '5')) . ' ' . $osC_Language->get('review_highest_rating_title'); ?></li>
     </ol>
   </div>
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . $osC_Product->getID()), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
+  <?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . $osC_Product->getID()), osc_draw_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 </form>

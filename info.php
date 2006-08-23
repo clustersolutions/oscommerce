@@ -15,7 +15,7 @@
   $osC_Language->load('info');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add($osC_Language->get('breadcrumb_information'), tep_href_link(FILENAME_INFO));
+    $breadcrumb->add($osC_Language->get('breadcrumb_information'), osc_href_link(FILENAME_INFO));
   }
 
   $osC_Template = osC_Template::setup('info');

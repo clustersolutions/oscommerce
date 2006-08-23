@@ -13,7 +13,7 @@
   $addresses_count = tep_count_customer_address_book_entries();
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . 'table_background_delivery.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -23,7 +23,7 @@
   }
 ?>
 
-<form name="checkout_address" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'payment_address=process', 'SSL'); ?>" method="post" onsubmit="return check_form_optional(checkout_address);">
+<form name="checkout_address" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'payment_address=process', 'SSL'); ?>" method="post" onsubmit="return check_form_optional(checkout_address);">
 
 <?php
   if ($_GET['payment_address'] != 'process') {
@@ -39,7 +39,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('current_billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('current_billing_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
     </div>
 
     <?php echo $osC_Language->get('selected_billing_destination'); ?>
@@ -59,7 +59,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . $osC_Language->get('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('select_another_billing_destination'); ?></p>
@@ -75,7 +75,7 @@
 ?>
 
       <tr>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+        <td width="10">&nbsp;</td>
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
@@ -86,24 +86,24 @@
         }
 ?>
 
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="2"><b><?php echo $Qaddresses->valueProtected('firstname') . ' ' . $Qaddresses->valueProtected('lastname'); ?></b></td>
             <td align="right"><?php echo osc_draw_radio_field('address', $Qaddresses->valueInt('address_book_id'), $osC_ShoppingCart->getBillingAddress('id')); ?></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
           <tr>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
             <td colspan="3"><table border="0" cellspacing="0" cellpadding="2">
               <tr>
-                <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+                <td width="10">&nbsp;</td>
                 <td><?php echo tep_address_format(tep_get_address_format_id($Qaddresses->valueInt('country_id')), $Qaddresses->toArray(), true, ' ', ', '); ?></td>
-                <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+                <td width="10">&nbsp;</td>
               </tr>
             </table></td>
-            <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+            <td width="10">&nbsp;</td>
           </tr>
         </table></td>
-        <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
+        <td width="10">&nbsp;</td>
       </tr>
 
 <?php
@@ -143,7 +143,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+      <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
     </div>
 
     <?php echo '<b>' . $osC_Language->get('continue_checkout_procedure_title') . '</b><br />' . $osC_Language->get('continue_checkout_procedure_to_payment'); ?>

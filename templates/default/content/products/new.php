@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -34,16 +34,16 @@
 
 <?php
       if (osc_empty($Qproducts->value('image')) === false) {
-        echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')) . '">' . $osC_Image->show($Qproducts->value('image'), $Qproducts->value('products_name')) . '</a>';
+        echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), $osC_Image->show($Qproducts->value('image'), $Qproducts->value('products_name')));
       }
 ?>
 
     </td>
-    <td valign="top"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')) . '"><b><u>' . $Qproducts->value('products_name') . '</u></b></a><br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($Qproducts->value('products_date_added')) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . $osC_Language->get('price') . ' ' . $products_price; ?></td>
-    <td align="right" valign="middle"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qproducts->value('products_id')) . '">' . tep_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')) . '</a>'; ?></td>
+    <td valign="top"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), '<b><u>' . $Qproducts->value('products_name') . '</u></b>') . '<br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($Qproducts->value('products_date_added')) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . $osC_Language->get('price') . ' ' . $products_price; ?></td>
+    <td align="right" valign="middle"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, tep_get_all_get_params(array('action')) . 'action=buy_now&products_id=' . $Qproducts->value('products_id')), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))); ?></td>
   </tr>
   <tr>
-    <td colspan="3"><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+    <td colspan="3">&nbsp;</td>
   </tr>
 
 <?php
@@ -55,7 +55,7 @@
     <td><?php echo $osC_Language->get('no_new_products'); ?></td>
   </tr>
   <tr>
-    <td><?php echo tep_draw_separator('pixel_trans.gif', '100%', '10'); ?></td>
+    <td colspan="3">&nbsp;</td>
   </tr>
 
 <?php

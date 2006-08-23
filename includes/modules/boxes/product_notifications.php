@@ -22,7 +22,7 @@
       global $osC_Language;
 
       $this->_title = $osC_Language->get('box_product_notifications_heading');
-      $this->_title_link = tep_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL');
+      $this->_title_link = osc_href_link(FILENAME_ACCOUNT, 'notifications', 'SSL');
     }
 
     function initialize() {
@@ -43,22 +43,14 @@
             $Qcheck->execute();
 
             if ($Qcheck->numberOfRows() > 0) {
-              $data = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
-                      '  <tr>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle())) . '</a></td>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', $request_type) . '">' . sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()) .'</a></td>' . "\n" .
-                      '  </tr>' . "\n" .
-                      '</table>' . "\n";
+              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications_remove.gif', sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()))) . '</div>' .
+                                osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify_remove', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_remove'), $osC_Product->getTitle()));
             } else {
-              $data = '<table border="0" cellspacing="0" cellpadding="2">' . "\n" .
-                      '  <tr>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . tep_image(DIR_WS_IMAGES . 'box_products_notifications.gif', sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle())) . '</a></td>' . "\n" .
-                      '    <td class="infoBoxContents"><a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', $request_type) . '">' . sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()) .'</a></td>' . "\n" .
-                      '  </tr>' . "\n" .
-                      '</table>' . "\n";
+              $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', 'AUTO'), osc_image(DIR_WS_IMAGES . 'box_products_notifications.gif', sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()))) . '</div>' .
+                                osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=notify', 'AUTO'), sprintf($osC_Language->get('box_product_notifications_add'), $osC_Product->getTitle()));
             }
 
-            $this->_content = $data;
+            $this->_content .= '<div style="clear: both;"></div>';
           }
         }
       }

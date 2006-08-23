@@ -26,14 +26,10 @@
     function initialize() {
       global $osC_Language, $request_type;
 
-      $data = '';
+      $this->_content = '';
 
       foreach ($osC_Language->getAll() as $key => $value) {
-        $data .= ' <a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('language', 'currency')) . 'language=' . $key, $request_type) . '">' . tep_image('includes/languages/' .  $key . '/images/' . $value['image'], $value['name']) . '</a> ';
-      }
-
-      if (empty($data) === false) {
-        $this->_content = $data;
+        $this->_content .= ' ' . osc_link_object(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('language', 'currency')) . 'language=' . $key, 'AUTO'), osc_image('includes/languages/' .  $key . '/images/' . $value['image'], $value['name'])) . ' ';
       }
     }
   }

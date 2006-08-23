@@ -69,9 +69,9 @@
 
       $params = array('ACCOUNTID' => MODULE_PAYMENT_SAFERPAY_CC_ACCOUNT_ID,
                       'ORDERID' => $this->_order_id,
-                      'SUCCESSLINK' => tep_href_link(FILENAME_CHECKOUT, 'process', 'SSL', true, true, true),
-                      'FAILLINK' => tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', true, true, true),
-                      'BACKLINK' => tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', true, true, true),
+                      'SUCCESSLINK' => osc_href_link(FILENAME_CHECKOUT, 'process', 'SSL', null, null, true),
+                      'FAILLINK' => osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', null, null, true),
+                      'BACKLINK' => osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL', null, null, true),
                       'AMOUNT' => $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $osC_Currencies->getCode()) * 100,
                       'CURRENCY' => $osC_Currencies->getCode(),
                       'DESCRIPTION' => STORE_NAME,
@@ -162,7 +162,7 @@
 
         $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
 
@@ -177,7 +177,7 @@
 
       $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+      tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
     }
   }
 ?>

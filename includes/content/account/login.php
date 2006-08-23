@@ -28,13 +28,13 @@
 
 // redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled (or the session has not started)
       if (osc_empty(session_id())) {
-        tep_redirect(tep_href_link(FILENAME_INFO, 'cookie', 'AUTO'));
+        tep_redirect(osc_href_link(FILENAME_INFO, 'cookie', 'AUTO'));
       }
 
       $this->_page_title = $osC_Language->get('sign_in_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_sign_in'), tep_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_sign_in'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {
@@ -67,7 +67,7 @@
           if ($osC_NavigationHistory->hasSnapshot()) {
             $osC_NavigationHistory->redirectToSnapshot();
           } else {
-            tep_redirect(tep_href_link(FILENAME_DEFAULT, '', 'AUTO'));
+            tep_redirect(osc_href_link(FILENAME_DEFAULT, null, 'AUTO'));
           }
         } else {
           $messageStack->add('login', $osC_Language->get('error_login_no_match'));

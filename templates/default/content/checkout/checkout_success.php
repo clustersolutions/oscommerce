@@ -36,10 +36,10 @@
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<form name="order" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'success=update', 'SSL'); ?>" method="post">
+<form name="order" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'success=update', 'SSL'); ?>" method="post">
 
 <div>
-  <div style="float: left;"><?php echo tep_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $osC_Template->getPageTitle()); ?></div>
+  <div style="float: left;"><?php echo osc_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $osC_Template->getPageTitle()); ?></div>
 
   <div style="padding-top: 30px;">
     <p><?php echo $osC_Language->get('order_processed_successfully'); ?></p>
@@ -60,7 +60,7 @@
 
     echo '</p>';
   } else {
-    echo sprintf($osC_Language->get('view_order_history'), tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL')) . '<br /><br />' . sprintf($osC_Language->get('contact_store_owner'), tep_href_link(FILENAME_INFO, 'contact'));
+    echo sprintf($osC_Language->get('view_order_history'), osc_href_link(FILENAME_ACCOUNT, null, 'SSL'), osc_href_link(FILENAME_ACCOUNT, 'orders', 'SSL')) . '<br /><br />' . sprintf($osC_Language->get('contact_store_owner'), osc_href_link(FILENAME_INFO, 'contact'));
   }
 ?>
 
@@ -71,7 +71,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 <?php

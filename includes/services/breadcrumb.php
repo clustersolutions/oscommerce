@@ -24,7 +24,7 @@
       $breadcrumb = new breadcrumb;
 
       $breadcrumb->add($osC_Language->get('breadcrumb_top'), HTTP_SERVER);
-      $breadcrumb->add($osC_Language->get('breadcrumb_shop'), tep_href_link(FILENAME_DEFAULT));
+      $breadcrumb->add($osC_Language->get('breadcrumb_shop'), osc_href_link(FILENAME_DEFAULT));
 
       return true;
     }

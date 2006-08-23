@@ -27,16 +27,16 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 // if no shipping method has been selected, redirect the customer to the shipping method selection page
       if ($osC_ShoppingCart->hasShippingAddress() == false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
       }
 
       include('includes/classes/order.php');
@@ -46,7 +46,7 @@
       $osC_Language->load('order');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {
@@ -74,7 +74,7 @@
       }
 
       if ($messageStack->size('checkout_payment') > 0) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
       if ($osC_Payment->hasActive()) {
@@ -91,7 +91,7 @@
         }
 // Out of Stock
         if ( (STOCK_ALLOW_CHECKOUT == '-1') && ($any_out_of_stock == true) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'AUTO'));
+          tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'AUTO'));
         }
       }
     }

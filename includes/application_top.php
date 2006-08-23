@@ -90,7 +90,7 @@
   if (isset($_GET['action'])) {
 // redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled
     if ($osC_Session->hasStarted() === false) {
-      tep_redirect(tep_href_link(FILENAME_INFO, 'cookie'));
+      tep_redirect(osc_href_link(FILENAME_INFO, 'cookie'));
     }
 
     if (DISPLAY_CART == '1') {
@@ -109,7 +109,7 @@
       // customer wants to remove a product from their shopping cart
       case 'cartRemove' :     $osC_ShoppingCart->remove($_GET['products_id']);
 
-                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
+                              tep_redirect(osc_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
       // customer wants to update the product quantity in their shopping cart
       case 'update_product' : for ($i=0, $n=sizeof($_POST['products_id']); $i<$n; $i++) {
@@ -117,7 +117,7 @@
                                 $osC_ShoppingCart->add($_POST['products_id'][$i], $attributes, $_POST['cart_quantity'][$i]);
                               }
 
-                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
+                              tep_redirect(osc_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
       // customer adds a product from the products page
       case 'add_product' :    if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
@@ -128,18 +128,18 @@
                                 }
                               }
 
-                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
+                              tep_redirect(osc_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
       // performed by the 'buy now' button in product listings and review page
       case 'buy_now' :        if (isset($_GET['products_id'])) {
                                 if (tep_has_product_attributes($_GET['products_id'])) {
-                                  tep_redirect(tep_href_link(FILENAME_PRODUCTS, $_GET['products_id']));
+                                  tep_redirect(osc_href_link(FILENAME_PRODUCTS, $_GET['products_id']));
                                 } else {
                                   $osC_ShoppingCart->add($_GET['products_id']);
                                 }
                               }
 
-                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
+                              tep_redirect(osc_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
       case 'notify' :         if ($osC_Customer->isLoggedOn()) {
                                 if (isset($_GET['products_id'])) {
@@ -149,7 +149,7 @@
                                 } elseif (isset($_POST['notify'])) {
                                   $notify = $_POST['notify'];
                                 } else {
-                                  tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action', 'notify'))));
+                                  tep_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action', 'notify'))));
                                 }
 
                                 if (!is_array($notify)) $notify = array($notify);
@@ -170,11 +170,11 @@
                                   }
                                 }
 
-                                tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action', 'notify'))));
+                                tep_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action', 'notify'))));
                               } else {
                                 $osC_NavigationHistory->setSnapshot();
 
-                                tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+                                tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
                               break;
       case 'notify_remove' :  if ($osC_Customer->isLoggedOn() && isset($_GET['products_id'])) {
@@ -192,22 +192,12 @@
                                   $Qn->execute();
                                 }
 
-                                tep_redirect(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action'))));
+                                tep_redirect(osc_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action'))));
                               } else {
                                 $osC_NavigationHistory->setSnapshot();
 
-                                tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+                                tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
                               }
-                              break;
-      case 'cust_order' :     if ($osC_Customer->isLoggedOn() && isset($_GET['pid'])) {
-                                if (tep_has_product_attributes($_GET['pid'])) {
-                                  tep_redirect(tep_href_link(FILENAME_PRODUCTS, $_GET['pid']));
-                                } else {
-                                  $osC_ShoppingCart->add($_GET['pid']);
-                                }
-                              }
-
-                              tep_redirect(tep_href_link($goto, tep_get_all_get_params($parameters)));
                               break;
     }
   }

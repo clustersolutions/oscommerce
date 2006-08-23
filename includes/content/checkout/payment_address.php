@@ -27,11 +27,11 @@
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
 
-        tep_redirect(tep_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       }
 
       if ($osC_ShoppingCart->hasContents() === false) {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
       $this->_page_title = $osC_Language->get('payment_address_heading');
@@ -45,8 +45,8 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), tep_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {
@@ -206,7 +206,7 @@
             $osC_ShoppingCart->setBillingAddress($address_book_id);
             $osC_ShoppingCart->resetBillingMethod();
 
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+            tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
           } else {
             $messageStack->add('checkout_address', 'Error inserting into address book table.');
           }
@@ -236,7 +236,7 @@
             $osC_ShoppingCart->resetBillingMethod();
           }
 
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+          tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
         } else {
           $osC_ShoppingCart->resetBillingAddress();
         }
@@ -244,7 +244,7 @@
       } else {
         $osC_ShoppingCart->setBillingAddress($osC_Customer->getDefaultAddressID());
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        tep_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
   }
