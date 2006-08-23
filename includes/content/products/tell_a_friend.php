@@ -97,7 +97,7 @@
           $email_body .= tep_sanitize_string($_POST['message']) . "\n\n";
         }
 
-        $email_body .= sprintf($osC_Language->get('email_tell_a_friend_link'), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID())) . "\n\n" .
+        $email_body .= sprintf($osC_Language->get('email_tell_a_friend_link'), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword(), 'NONSSL', false)) . "\n\n" .
                        sprintf($osC_Language->get('email_tell_a_friend_signature'), STORE_NAME . "\n" . HTTP_SERVER . DIR_WS_CATALOG . "\n");
 
         tep_mail(tep_sanitize_string($_POST['to_name']), tep_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, tep_sanitize_string($_POST['from_name']), tep_sanitize_string($_POST['from_email_address']));

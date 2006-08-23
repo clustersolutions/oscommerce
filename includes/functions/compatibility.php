@@ -46,7 +46,7 @@
   if ((int)get_magic_quotes_gpc() > 0) {
     $in = array(&$_GET, &$_POST, &$_COOKIE);
 
-    foreach ($in as $k => $v) {
+    while (list($k, $v) = each($in)) {
       foreach ($v as $key => $val) {
         if (!is_array($val)) {
           $in[$k][$key] = stripslashes($val);

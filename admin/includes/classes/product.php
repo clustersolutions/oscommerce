@@ -59,9 +59,10 @@
         }
 
         if ($error === false) {
-          $Qcba = $osC_Database->query('delete from :table_customers_basket_attributes where products_id = :products_id');
+          $Qcba = $osC_Database->query('delete from :table_customers_basket_attributes where products_id = :products_id or products_id like :products_id');
           $Qcba->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
           $Qcba->bindInt(':products_id', $id);
+          $Qcba->bindValue(':products_id', (int)$id . '{%');
           $Qcba->execute();
 
           if ($osC_Database->isError()) {
@@ -70,9 +71,10 @@
         }
 
         if ($error === false) {
-          $Qcb = $osC_Database->query('delete from :table_customers_basket where products_id = :products_id');
+          $Qcb = $osC_Database->query('delete from :table_customers_basket where products_id = :products_id or products_id like :products_id');
           $Qcb->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
           $Qcb->bindInt(':products_id', $id);
+          $Qcb->bindValue(':products_id', (int)$id . '{%');
           $Qcb->execute();
 
           if ($osC_Database->isError()) {
