@@ -43,6 +43,8 @@
   }
 ?>
 
+<meta name="Generator" value="osCommerce" />
+
 </head>
 
 <body>
@@ -89,7 +91,11 @@
       include('templates/' . DEFAULT_TEMPLATE . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
     }
   }
+?>
 
+<div style="clear: both;"></div>
+
+<?php
   if ($osC_Template->hasPageContentModules()) {
     foreach ($osC_Services->getCallAfterPageContent() as $service) {
       $$service[0]->$service[1]();
@@ -119,13 +125,11 @@
   </div>
 
 <?php
+  $content_left = '';
+
   if ($osC_Template->hasPageBoxModules()) {
-?>
+    ob_start();
 
-  <div id="pageColumnLeft">
-    <div class="boxGroup">
-
-<?php
     foreach ($osC_Template->getBoxModules('left') as $box) {
       $osC_Box = new $box();
       $osC_Box->initialize();
@@ -144,25 +148,49 @@
 
       unset($osC_Box);
     }
+
+    $content_left = ob_get_contents();
+    ob_end_clean();
+  }
+
+  if (!empty($content_left)) {
+?>
+
+  <div id="pageColumnLeft">
+    <div class="boxGroup">
+
+<?php
+    echo $content_left;
 ?>
 
     </div>
   </div>
 
 <?php
+  } else {
+?>
+
+<style type="text/css"><!--
+#pageContent {
+  width: 99%;
+  padding-left: 5px;
+}
+//--></style>
+
+<?php
   }
+
+  unset($content_left);
 ?>
 
 </div>
 
 <?php
+  $content_right = '';
+
   if ($osC_Template->hasPageBoxModules()) {
-?>
+    ob_start();
 
-<div id="pageColumnRight">
-  <div class="boxGroup">
-
-<?php
     foreach ($osC_Template->getBoxModules('right') as $box) {
       $osC_Box = new $box();
       $osC_Box->initialize();
@@ -181,74 +209,106 @@
 
       unset($osC_Box);
     }
+
+    $content_right = ob_get_contents();
+    ob_end_clean();
+  }
+
+  if (!empty($content_right)) {
+?>
+
+<div id="pageColumnRight">
+  <div class="boxGroup">
+
+<?php
+    echo $content_right;
 ?>
 
   </div>
 </div>
 
 <?php
+  } else {
+?>
+
+<style type="text/css"><!--
+#pageContent {
+  width: 82%;
+  padding-right: 5px;
+}
+
+#pageBlockLeft {
+  width: 99%;
+}
+
+#pageColumnLeft {
+  width: 16%;
+}
+//--></style>
+
+<?php
   }
+
+  unset($content_right);
 
   if ($osC_Template->hasPageHeader()) {
 ?>
 
 <div id="pageHeader">
-  <div id="header-content">
-    <div id="headerLogo">
 
 <?php
-    echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce') . '</a>';
+    echo osc_link_object(tep_href_link(FILENAME_DEFAULT), tep_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce'), 'id="siteLogo"');
 ?>
 
-    </div>
-
-    <div id="headerIcons">
+  <ul id="navigationIcons">
 
 <?php
-    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account')) . '</a>&nbsp;&nbsp;
-          <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents')) . '</a>&nbsp;&nbsp;
-          <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout')) . '</a>';
+    echo '<li>' . osc_link_object(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_account.gif', $osC_Language->get('my_account'))) . '</li>' .
+         '<li>' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_cart.gif', $osC_Language->get('cart_contents'))) . '</li>' .
+         '<li>' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), tep_image(DIR_WS_IMAGES . 'header_checkout.gif', $osC_Language->get('checkout'))) . '</li>';
 ?>
 
-    </div>
+  </ul>
 
-    <div id="headerBar">
-      <div id="breadcrumb" style="float: left;">
+  <div id="navigationBar">
 
 <?php
     if ($osC_Services->isStarted('breadcrumb')) {
-      echo $breadcrumb->trail(' &raquo; ');
-    }
 ?>
 
-      </div>
-      <div style="text-align: right;">
+    <div id="breadcrumbPath">
 
 <?php
-    if ($osC_Customer->isLoggedOn()) {
-      echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('sign_out') . '</a> &nbsp;|&nbsp; ';
-    }
-
-    echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('my_account') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, '', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('cart_contents') . '</a> &nbsp;|&nbsp; <a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '" class="headerNavigation">' . $osC_Language->get('checkout') . '</a>';
+      echo $breadcrumb->trail(' &raquo; ');
 ?>
 
-      </div>
     </div>
+
+<?php
+    }
+
+    if ($osC_Customer->isLoggedOn()) {
+      echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'logoff', 'SSL'), $osC_Language->get('sign_out')) . ' &nbsp;|&nbsp; ';
+    }
+
+    echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), $osC_Language->get('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'), $osC_Language->get('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), $osC_Language->get('checkout'));
+?>
+
   </div>
 </div>
 
 <?php
-  } // if ($osC_Template->hasPageHeader())
+  } // ($osC_Template->hasPageHeader())
 
   if ($osC_Template->hasPageFooter()) {
 ?>
 
 <div id="pageFooter">
-  <div id="footerBar">
-    <div><?php echo osC_DateTime::getLong(); ?></div>
-  </div>
 
-  <?php echo '<p align="center">' . sprintf($osC_Language->get('footer'), date('Y'), tep_href_link(FILENAME_DEFAULT), STORE_NAME) . '</p>'; ?>
+<?php
+    echo sprintf($osC_Language->get('footer'), date('Y'), tep_href_link(FILENAME_DEFAULT), STORE_NAME);
+?>
+
 </div>
 
 <?php

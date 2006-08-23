@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:checkout_payment.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_payment.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_payment.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -28,10 +28,10 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('order_conditions_title'); ?></div>
+  <h6><?php echo $osC_Language->get('order_conditions_title'); ?></h6>
 
   <div class="content">
-    <?php echo sprintf($osC_Language->get('order_conditions_description'), tep_href_link(FILENAME_INFO, 'conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', '1', false, 'id="conditions"') . '<label for="conditions">&nbsp;' . $osC_Language->get('order_conditions_acknowledge') . '</label>'; ?>
+    <?php echo sprintf($osC_Language->get('order_conditions_description'), tep_href_link(FILENAME_INFO, 'conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', array(array('id' => 1, 'text' => $osC_Language->get('order_conditions_acknowledge'))), false); ?>
   </div>
 </div>
 
@@ -40,21 +40,25 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('billing_address_title'); ?></div>
+  <h6><?php echo $osC_Language->get('billing_address_title'); ?></h6>
 
   <div class="content">
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td valign="top"><?php echo $osC_Language->get('choose_billing_destination'); ?><br /><br /><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL') . '">' . tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address')) . '</a>'; ?></td>
-        <td valign="top" align="center"><?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?></td>
-        <td valign="top"><?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), true, ' ', '<br />'); ?></td>
-      </tr>
-    </table>
+    <div style="float: right; padding: 0px 0px 10px 20px;">
+      <?php echo tep_address_label($osC_Customer->getID(), $osC_ShoppingCart->getBillingAddress('id'), true, ' ', '<br />'); ?>
+    </div>
+
+    <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
+      <?php echo '<b>' . $osC_Language->get('billing_address_title') . '</b><br />' . tep_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+    </div>
+
+    <?php echo $osC_Language->get('choose_billing_destination'). '<br /><br />' . osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'payment_address', 'SSL'), tep_image_button('button_change_address.gif', $osC_Language->get('button_change_address'))); ?>
+
+    <div style="clear: both;"></div>
   </div>
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('payment_method_title'); ?></div>
+  <h6><?php echo $osC_Language->get('payment_method_title'); ?></h6>
 
   <div class="content">
 
@@ -86,8 +90,10 @@
   $radio_buttons = 0;
   for ($i=0, $n=sizeof($selection); $i<$n; $i++) {
 ?>
+
       <tr>
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+
 <?php
     if ( ($n == 1) || ($selection[$i]['id'] == $osC_ShoppingCart->getBillingMethod('id')) ) {
       echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
@@ -95,20 +101,21 @@
       echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
     }
 ?>
+
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
 
 <?php
     if ($n > 1) {
 ?>
 
-            <td class="main" colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
-            <td class="main" align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
+            <td colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
+            <td align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
 
 <?php
     } else {
 ?>
 
-            <td class="main" colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
+            <td colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
 
 <?php
   }
@@ -116,41 +123,52 @@
 
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
+
 <?php
     if (isset($selection[$i]['error'])) {
 ?>
+
           <tr>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-            <td class="main" colspan="4"><?php echo $selection[$i]['error']; ?></td>
+            <td colspan="4"><?php echo $selection[$i]['error']; ?></td>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
+
 <?php
     } elseif (isset($selection[$i]['fields']) && is_array($selection[$i]['fields'])) {
 ?>
+
           <tr>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
             <td colspan="4"><table border="0" cellspacing="0" cellpadding="2">
+
 <?php
       for ($j=0, $n2=sizeof($selection[$i]['fields']); $j<$n2; $j++) {
 ?>
+
               <tr>
                 <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                <td class="main"><?php echo $selection[$i]['fields'][$j]['title']; ?></td>
+                <td><?php echo $selection[$i]['fields'][$j]['title']; ?></td>
                 <td><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-                <td class="main"><?php echo $selection[$i]['fields'][$j]['field']; ?></td>
+                <td><?php echo $selection[$i]['fields'][$j]['field']; ?></td>
                 <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
               </tr>
+
 <?php
       }
 ?>
+
             </table></td>
             <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
           </tr>
+
 <?php
     }
 ?>
+
         </table></td>
       </tr>
+
 <?php
     $radio_buttons++;
   }
@@ -161,12 +179,14 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('add_comment_to_order_title'); ?></div>
+  <h6><?php echo $osC_Language->get('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : '')); ?>
+    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''), 60, 5, 'soft', 'style="width: 98%;"'); ?>
   </div>
 </div>
+
+<br />
 
 <div class="moduleBox">
   <div class="content">

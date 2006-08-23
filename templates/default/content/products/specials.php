@@ -9,9 +9,11 @@
 
   Released under the GNU General Public License
 */
+
+  $Qspecials = osC_Specials::getListing();
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -19,20 +21,18 @@
   <tr>
 
 <?php
-  $Qspecials = osC_Specials::getListing();
-
   $row = 0;
 
   while ($Qspecials->next()) {
     $row++;
 
-    echo '    <td align="center" width="33%" class="smallText">';
+    echo '    <td align="center" width="33%">';
 
-    if (osc_empty($Qspecials->value('image')) === false) {
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')) . '">' . $osC_Image->show($Qspecials->value('image'), $Qspecials->value('products_name')) . '</a><br />';
+    if (!osc_empty($Qspecials->value('image'))) {
+      echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')), $osC_Image->show($Qspecials->value('image'), $Qspecials->value('products_name'))) . '<br />';
     }
 
-    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')) . '">' . $Qspecials->value('products_name') . '</a><br /><s>' . $osC_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span></td>' . "\n";
+    echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qspecials->value('products_keyword')), $Qspecials->value('products_name')) . '<br /><s>' . $osC_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span></td>' . "\n";
 
     if ((($row / 3) == floor($row / 3))) {
 ?>

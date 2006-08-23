@@ -1,24 +1,24 @@
 <?php
 /*
-  $Id:account_notifications.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <form name="account_notifications" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'notifications=save', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications'); ?></div>
+  <h6><?php echo $osC_Language->get('newsletter_product_notifications'); ?></h6>
 
   <div class="content">
     <?php echo $osC_Language->get('newsletter_product_notifications_description'); ?>
@@ -26,13 +26,13 @@
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications_global'); ?></div>
+  <h6><?php echo $osC_Language->get('newsletter_product_notifications_global'); ?></h6>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="checkBox('product_global');">
-        <td width="30"><?php echo osc_draw_checkbox_field('product_global', '1', $Qglobal->value('global_product_notifications'), 'onclick="checkBox(\'product_global\');"'); ?></td>
-        <td><b><?php echo $osC_Language->get('newsletter_product_notifications_global'); ?></b></td>
+      <tr>
+        <td width="30"><?php echo osc_draw_checkbox_field('product_global', '1', $Qglobal->value('global_product_notifications')); ?></td>
+        <td><b><?php echo osc_draw_label($osC_Language->get('newsletter_product_notifications_global'), 'product_global'); ?></b></td>
       </tr>
       <tr>
         <td width="30">&nbsp;</td>
@@ -47,7 +47,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_product_notifications_products'); ?></div>
+  <h6><?php echo $osC_Language->get('newsletter_product_notifications_products'); ?></h6>
 
   <div class="content">
 
@@ -57,24 +57,22 @@
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="main" colspan="2"><?php echo $osC_Language->get('newsletter_product_notifications_products_description'); ?></td>
+        <td colspan="2"><?php echo $osC_Language->get('newsletter_product_notifications_products_description'); ?></td>
       </tr>
 
 <?php
-      $counter = 0;
-
       $Qproducts = $osC_Template->getListing();
 
       while ($Qproducts->next()) {
+        $counter++;
 ?>
 
-      <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="checkBox('products[<?php echo $counter; ?>]');">
-        <td width="30"><?php echo osc_draw_checkbox_field('products[' . $counter . ']', $Qproducts->valueInt('products_id'), true, 'onclick="checkBox(\'products[' . $counter . ']\');"'); ?></td>
-        <td><b><?php echo $Qproducts->value('products_name'); ?></b></td>
+      <tr>
+        <td width="30"><?php echo osc_draw_checkbox_field('products[' . $counter . ']', $Qproducts->valueInt('products_id'), true); ?></td>
+        <td><b><?php echo osc_draw_label($Qproducts->value('products_name'), 'products[' . $counter . ']'); ?></b></td>
       </tr>
 
 <?php
-        $counter++;
       }
 ?>
 
@@ -93,10 +91,8 @@
   }
 ?>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
-
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

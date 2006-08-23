@@ -1,21 +1,17 @@
 <?php
 /*
-  $Id:address_book_process.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   if (isset($_GET['edit'])) {
-    if (osC_AddressBook::checkEntry($_GET['address_book'])) {
-      $Qentry = osC_AddressBook::getEntry($_GET['address_book']);
-    } else {
-      $messageStack->add('address_book', $osC_Language->get('error_address_book_entry_non_existing'), 'error');
-    }
+    $Qentry = osC_AddressBook::getEntry($_GET['address_book']);
   } else {
     if (osC_AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES) {
       $messageStack->add('address_book', $osC_Language->get('error_address_book_full'));
@@ -23,7 +19,7 @@
   }
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_address_book.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -38,16 +34,14 @@
 <form name="address_book" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'address_book=' . $_GET['address_book'] . '&' . (isset($_GET['edit']) ? 'edit' : 'new') . '=save', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
+  <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
 
-    <?php echo $osC_Language->get('address_book_new_address_title'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('address_book_new_address_title'); ?></h6>
 
   <div class="content">
 
 <?php
-  require('includes/modules/address_book_details.php');
+    include('includes/modules/address_book_details.php');
 ?>
 
   </div>
@@ -65,7 +59,7 @@
       $back_link = tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL');
     }
 
-    echo '<a href="' . $back_link . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>';
+    echo osc_link_object($back_link, tep_image_button('button_back.gif', $osC_Language->get('button_back')));
 ?>
 
 </div>
@@ -77,7 +71,7 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+  <?php osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'address_book', 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 <?php

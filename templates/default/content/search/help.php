@@ -26,10 +26,12 @@ div#pageBlockLeft {
 //-->
 </style>
 
-<div class="boxNew" style="padding: 10px;">
-  <div class="boxTitle"><?php echo $osC_Language->get('search_help_heading'); ?></div>
+<div class="moduleBox">
+  <h6><?php echo $osC_Language->get('search_help_heading'); ?></h6>
 
-  <div class="boxContents"><?php echo $osC_Language->get('search_help'); ?></div>
+  <div class="content">
+    <p><?php echo $osC_Language->get('search_help'); ?></p>
 
-  <p class="smallText" align="right"><?php echo '<a href="javascript:window.close()">' . $osC_Language->get('close_window') . '</a>'; ?></p>
+    <p align="right"><?php echo osc_link_object('javascript:window.close();', $osC_Language->get('close_window')); ?></p>
+  </div>
 </div>

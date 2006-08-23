@@ -30,21 +30,26 @@
 
   if ( ($Qlisting->numberOfRows() > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
 ?>
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?></td>
-    <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
-  </tr>
-</table>
+
+<div class="listingPageLinks">
+  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+
+  <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
+</div>
+
 <?php
   }
 ?>
+
 <div>
+  
 <?php
   if ($Qlisting->numberOfRows() > 0) {
 ?>
+
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
+
 <?php
     for ($col=0, $n=sizeof($column_list); $col<$n; $col++) {
       $lc_key = false;
@@ -95,7 +100,9 @@
       echo '      <td align="' . $lc_align . '" class="productListing-heading">&nbsp;' . $lc_text . '&nbsp;</td>' . "\n";
     }
 ?>
+
     </tr>
+
 <?php
     $rows = 0;
 
@@ -117,14 +124,14 @@
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . $Qlisting->value('products_name') . '</a>';
+              $lc_text = osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']), $Qlisting->value('products_name'));
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . $Qlisting->value('products_name') . '</a>&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')), $Qlisting->value('products_name')) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
             $lc_align = '';
-            $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qlisting->valueInt('manufacturers_id')) . '">' . $Qlisting->value('manufacturers_name') . '</a>&nbsp;';
+            $lc_text = '&nbsp;' . osc_link_object(tep_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qlisting->valueInt('manufacturers_id')), $Qlisting->value('manufacturers_name')) . '&nbsp;';
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
@@ -145,14 +152,14 @@
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']) . '">' . $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')) . '</a>';
+              $lc_text = osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&amp;manufacturers=' . $_GET['manufacturers']), $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')));
             } else {
-              $lc_text = '&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')) . '">' . $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')) . '</a>&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')), $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name'))) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = '<a href="' . tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qlisting->valueInt('products_id')) . '">' . tep_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now')) . '</a>&nbsp;';
+            $lc_text = osc_link_object(tep_href_link(basename($_SERVER['PHP_SELF']), tep_get_all_get_params(array('action')) . 'action=buy_now&amp;products_id=' . $Qlisting->valueInt('products_id')), tep_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
             break;
         }
 
@@ -161,28 +168,28 @@
 
       echo '    </tr>' . "\n";
     }
-
-    echo '  </table>' . "\n";
-  } else {
 ?>
-  <table border="0" width="100%" cellspacing="0" cellpadding="2">
-    <tr>
-      <td><?php echo $osC_Language->get('no_products_in_category'); ?></td>
-    </tr>
+
   </table>
+
 <?php
+  } else {
+    echo $osC_Language->get('no_products_in_category');
   }
 ?>
+
 </div>
+
 <?php
   if ( ($Qlisting->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
 ?>
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td class="smallText"><?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?></td>
-    <td class="smallText" align="right"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></td>
-  </tr>
-</table>
+
+<div class="listingPageLinks">
+  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+
+  <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
+</div>
+
 <?php
   }
 ?>

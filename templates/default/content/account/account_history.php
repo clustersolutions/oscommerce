@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:account_history.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -30,18 +30,16 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <span style="float: right; text-align: right;"><?php echo $osC_Language->get('order_status') . ' ' . $Qhistory->value('orders_status_name'); ?></span>
+  <span style="float: right;"><h6><?php echo $osC_Language->get('order_status') . ' ' . $Qhistory->value('orders_status_name'); ?></h6></span>
 
-    <?php echo $osC_Language->get('order_number') . ' ' . $Qhistory->valueInt('orders_id'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('order_number') . ' ' . $Qhistory->valueInt('orders_id'); ?></h6>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="2" cellpadding="4">
       <tr>
         <td width="50%" valign="top"><?php echo '<b>' . $osC_Language->get('order_date') . '</b> ' . osC_DateTime::getLong($Qhistory->value('date_purchased')) . '<br /><b>' . $order_type . '</b> ' . tep_output_string_protected($order_name); ?></td>
         <td width="30%" valign="top"><?php echo '<b>' . $osC_Language->get('order_products') . '</b> ' . osC_Order::numberOfProducts($Qhistory->valueInt('orders_id')) . '<br /><b>' . $osC_Language->get('order_cost') . '</b> ' . strip_tags($Qhistory->value('order_total')); ?></td>
-        <td width="20%"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qhistory->valueInt('orders_id') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL') . '">' . tep_image_button('small_view.gif', $osC_Language->get('button_view')) . '</a>'; ?></td>
+        <td width="20%"><?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'orders=' . $Qhistory->valueInt('orders_id') . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL'), tep_image_button('small_view.gif', $osC_Language->get('button_view'))); ?></td>
       </tr>
     </table>
   </div>
@@ -72,5 +70,5 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, null, 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>

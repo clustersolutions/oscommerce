@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:account_edit.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -29,5 +29,5 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo '<a href="' . $origin_href . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?>
+  <?php echo osc_link_object($origin_href, tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>

@@ -1,17 +1,17 @@
 <?php
 /*
-  $Id:account_edit.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -24,85 +24,53 @@
 <form name="create" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'create=save', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
+  <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
 
-    <?php echo $osC_Language->get('my_account_title'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('my_account_title'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
+    <ol>
 
 <?php
   if (ACCOUNT_GENDER > -1) {
     $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
                           array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
 ?>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_gender'); ?></td>
-        <td><?php echo osc_draw_radio_field('gender', $gender_array, '', '', (ACCOUNT_GENDER > 0)); ?></td>
-      </tr>
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
+
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_gender'), 'fake', null, (ACCOUNT_GENDER > 0)) . osc_draw_radio_field('gender', $gender_array); ?></li>
+
 <?php
   }
 ?>
 
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_first_name'); ?></td>
-        <td><?php echo osc_draw_input_field('firstname', '', '', true); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_last_name'); ?></td>
-        <td><?php echo osc_draw_input_field('lastname', '', '', true); ?></td>
-      </tr>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_first_name'), 'firstname', null, true) . osc_draw_input_field('firstname'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_last_name'), 'lastname', null, true) . osc_draw_input_field('lastname'); ?></li>
 
 <?php
   if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_date_of_birth'); ?></td>
-        <td><?php echo tep_draw_date_pull_down_menu('dob', '', false, true, true, date('Y')-1901, -5) . '&nbsp;<span class="inputRequirement">*</span>'; ?></td>
-      </tr>
+
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . tep_draw_date_pull_down_menu('dob', null, false, true, true, date('Y')-1901, -5); ?></li>
+
 <?php
   }
 ?>
 
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
-        <td><?php echo osc_draw_input_field('email_address', '', '', true); ?></td>
-      </tr>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_email_address'), 'email_address', null, true) . osc_draw_input_field('email_address'); ?></li>
 
 <?php
   if (ACCOUNT_NEWSLETTER == '1') {
 ?>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_newsletter'); ?></td>
-        <td><?php echo osc_draw_checkbox_field('newsletter', '1'); ?></td>
-      </tr>
+
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_newsletter'), 'newsletter') . osc_draw_checkbox_field('newsletter', '1'); ?></li>
+
 <?php
   }
 ?>
 
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_password'); ?></td>
-        <td><?php echo osc_draw_password_field('password', '', '', true); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_password_confirmation'); ?></td>
-        <td><?php echo osc_draw_password_field('confirmation', '', '', true); ?></td>
-      </tr>
-    </table>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_password'), 'password', null, true) . osc_draw_password_field('password'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_password_confirmation'), 'confirmation', null, true) . osc_draw_password_field('confirmation'); ?></li>
+    </ol>
   </div>
 </div>
 
@@ -111,16 +79,10 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <?php echo $osC_Language->get('create_account_terms_heading'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('create_account_terms_heading'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
-      <tr>
-        <td class="main"><?php echo sprintf($osC_Language->get('create_account_terms_description'), tep_href_link(FILENAME_INFO, 'privacy', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('privacy_conditions', '1', false, 'id="privacy"') . '<label for="privacy">&nbsp;' . $osC_Language->get('create_account_terms_confirm') . '</label>'; ?></td>
-      </tr>
-    </table>
+    <?php echo sprintf($osC_Language->get('create_account_terms_description'), tep_href_link(FILENAME_INFO, 'privacy', 'AUTO')) . '<br /><br /><ol><li>' . osc_draw_checkbox_field('privacy_conditions', array(array('id' => 1, 'text' => $osC_Language->get('create_account_terms_confirm')))) . '</li></ol>'; ?>
   </div>
 </div>
 
@@ -131,7 +93,7 @@
 <div class="submitFormButtons">
   <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, null, 'SSL'), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 </form>

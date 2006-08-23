@@ -35,11 +35,12 @@
     if ($num_products_ordered >= MODULE_CONTENT_ALSO_PURCHASED_MIN_DISPLAY) {
 ?>
 <!-- also_purchased_products //-->
-<div class="boxNew">
-  <div class="boxTitle"><?php echo $osC_Language->get('customers_also_purchased_title'); ?></div>
+<div class="moduleBox">
+  <h6><?php echo $osC_Language->get('customers_also_purchased_title'); ?></h6>
 
-  <div class="boxContents">
+  <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
+
 <?php
       $col = 0;
 
@@ -50,13 +51,13 @@
 
         $products_name = tep_get_products_name($Qorders->valueInt('products_id'));
 
-        echo '      <td align="center" class="smallText" width="33%" valign="top">';
+        echo '      <td align="center" width="33%" valign="top">';
 
         if (osc_empty($Qorders->value('image')) === false) {
-          echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . $osC_Image->show($Qorders->value('image'), $products_name) . '</a><br />';
+          echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')), $osC_Image->show($Qorders->value('image'), $products_name)) . '<br />';
         }
 
-        echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')) . '">' . $products_name . '</a></td>' . "\n";
+        echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qorders->value('products_keyword')), $products_name) . '</td>' . "\n";
 
         $col++;
 
@@ -73,10 +74,12 @@
 
       $Qorders->freeResult();
 ?>
+
     </table>
   </div>
 </div>
 <!-- also_purchased_products_eof //-->
+
 <?php
     }
   }

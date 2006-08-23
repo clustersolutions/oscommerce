@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id:account_edit.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,7 +13,7 @@
   $Qaccount = osC_Account::getEntry();
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -26,69 +26,45 @@
 <form name="account_edit" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'edit=save', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
+  <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
 
-    <?php echo $osC_Language->get('my_account_title'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('my_account_title'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
+    <ol>
 
 <?php
   if (ACCOUNT_GENDER > -1) {
     $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
                           array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
 ?>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_gender'); ?></td>
-        <td><?php echo osc_draw_radio_field('gender', $gender_array, $Qaccount->value('customers_gender'), '', (ACCOUNT_GENDER > 0)); ?></td>
-      </tr>
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
+
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_gender'), 'fake', null, (ACCOUNT_GENDER > 0)) . osc_draw_radio_field('gender', $gender_array, $Qaccount->value('customers_gender')); ?></li>
+
 <?php
   }
 ?>
 
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_first_name'); ?></td>
-        <td><?php echo osc_draw_input_field('firstname', $Qaccount->value('customers_firstname'), '', true); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_last_name'); ?></td>
-        <td><?php echo osc_draw_input_field('lastname', $Qaccount->value('customers_lastname'), '', true); ?></td>
-      </tr>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_first_name'), 'firstname', null, true) . ' ' . osc_draw_input_field('firstname', $Qaccount->value('customers_firstname')); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_last_name'), 'lastname', null, true) . ' ' . osc_draw_input_field('lastname', $Qaccount->value('customers_lastname')); ?></li>
 
 <?php
   if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_date_of_birth'); ?></td>
-        <td><?php echo tep_draw_date_pull_down_menu('dob', $Qaccount->value('customers_dob'), false, true, true, date('Y')-1901, -5) . '&nbsp;<span class="inputRequirement">*</span>'; ?></td>
-      </tr>
+
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . tep_draw_date_pull_down_menu('dob', $Qaccount->value('customers_dob'), false, true, true, date('Y')-1901, -5); ?></li>
+
 <?php
   }
 ?>
 
-      <tr>
-       <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
-        <td><?php echo osc_draw_input_field('email_address', $Qaccount->value('customers_email_address'), '', true); ?></td>
-      </tr>
-    </table>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_email_address'), 'email_address', null, true) . ' ' . osc_draw_input_field('email_address', $Qaccount->value('customers_email_address')); ?></li>
+    </ol>
   </div>
 </div>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
-
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

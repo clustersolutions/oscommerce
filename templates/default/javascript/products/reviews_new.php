@@ -1,7 +1,7 @@
 <script type="text/javascript"><!--
 function checkForm(form_name) {
   var error = 0;
-  var error_message = "<?php echo $osC_Language->get('js_error'); ?>";
+  var error_message = "<?php echo $GLOBALS['osC_Language']->get('js_error'); ?>";
 
   var review = form_name.review.value;
 

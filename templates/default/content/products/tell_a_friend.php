@@ -1,17 +1,17 @@
 <?php
 /*
-  $Id: tell_a_friend.php 210 2005-10-04 07:47:42 +0200 (Di, 04 Okt 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<h1 style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()) . '">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), $osC_Product->getTitle()) . '</a>'; ?></h1>
+<div style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'mini')); ?></div>
 
 <h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
 
@@ -24,60 +24,43 @@
 <form name="tell_a_friend" action="<?php echo tep_href_link(FILENAME_PRODUCTS, 'tell_a_friend&amp;' . $osC_Product->getKeyword() . '&amp;action=process'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <span class="inputRequirement" style="float: right;"><?php echo $osC_Language->get('form_required_information'); ?></span>
+  <em style="float: right; margin-top: 10px;"><?php echo $osC_Language->get('form_required_information'); ?></em>
 
-    <?php echo $osC_Language->get('customer_details_title'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('customer_details_title'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
-      <tr>
-        <td><?php echo $osC_Language->get('field_tell_a_friend_customer_name'); ?></td>
-        <td><?php echo osc_draw_input_field('from_name', ($osC_Customer->isLoggedOn() ? $osC_Customer->getName() : ''), '', true); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_tell_a_friend_customer_email_address'); ?></td>
-        <td><?php echo osc_draw_input_field('from_email_address', ($osC_Customer->isLoggedOn() ? $osC_Customer->getEmailAddress() : ''), '', true); ?></td>
-      </tr>
-    </table>
+    <ol>
+      <li><?php echo osc_draw_label($osC_Language->get('field_tell_a_friend_customer_name'), null, 'from_name', true) . osc_draw_input_field('from_name', ($osC_Customer->isLoggedOn() ? $osC_Customer->getName() : '')); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_tell_a_friend_customer_email_address'), null, 'from_email_address', true) . osc_draw_input_field('from_email_address', ($osC_Customer->isLoggedOn() ? $osC_Customer->getEmailAddress() : '')); ?></li>
+    </ol>
   </div>
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('friend_details_title'); ?></div>
+  <h6><?php echo $osC_Language->get('friend_details_title'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
-      <tr>
-        <td><?php echo $osC_Language->get('field_tell_a_friend_friends_name'); ?></td>
-        <td><?php echo osc_draw_input_field('to_name', '', '', true); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_tell_a_friend_friends_email_address'); ?></td>
-        <td><?php echo osc_draw_input_field('to_email_address', '', '', true); ?></td>
-      </tr>
-    </table>
+    <ol>
+      <li><?php echo osc_draw_label($osC_Language->get('field_tell_a_friend_friends_name'), null, 'to_name', true) . osc_draw_input_field('to_name'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_tell_a_friend_friends_email_address'), null, 'to_email_address', true) . osc_draw_input_field('to_email_address'); ?></li>
+    </ol>
   </div>
 </div>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('tell_a_friend_message'); ?></div>
+  <h6><?php echo $osC_Language->get('tell_a_friend_message'); ?></h6>
 
   <div class="content">
-    <table border="0" width="100%" cellspacing="2" cellpadding="2">
-      <tr>
-        <td><?php echo osc_draw_textarea_field('message', '', 40, 8); ?></td>
-      </tr>
-    </table>
+    <ol>
+      <li><?php echo osc_draw_textarea_field('message', null, 40, 8, 'soft', 'style="width: 98%;"'); ?></li>
+    </ol>
   </div>
 </div>
-
 
 <div class="submitFormButtons">
   <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()) . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 </form>

@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: index.php 199 2005-09-22 17:56:13 +0200 (Do, 22 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -9,44 +9,36 @@
 
   Released under the GNU General Public License
 */
+
+  $Qreviews = osC_Reviews::getListing();
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  $Qreviews = osC_Reviews::getListing();
   while ($Qreviews->next()) {
 ?>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td class="main"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&amp;' . $Qreviews->value('products_keyword')) . '"><u><b>' . $Qreviews->value('products_name') . '</b></u></a> <span class="smallText">' . sprintf($osC_Language->get('reviewed_by'), $Qreviews->valueProtected('customers_name')) . '</span>'; ?></td>
-    <td class="smallText" align="right"><?php echo sprintf($osC_Language->get('review_date_added'), osC_DateTime::getLong($Qreviews->value('date_added'))); ?></td>
-  </tr>
-</table>
+<div class="moduleBox">
+  <div style="float: right; margin-top: 5px;"><?php echo sprintf($osC_Language->get('review_date_added'), osC_DateTime::getLong($Qreviews->value('date_added'))); ?></div>
 
-<table border="0" width="100%" cellspacing="1" cellpadding="2" class="infoBox">
-  <tr class="infoBoxContents">
-    <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td width="10"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-        <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" align="center" valign="top" class="main">
+  <h6><?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&' . $Qreviews->value('products_keyword')), $Qreviews->value('products_name')); ?> (<?php echo sprintf($osC_Language->get('reviewed_by'), $Qreviews->valueProtected('customers_name')); ?>)</h6>
+
+  <div class="content">
 
 <?php
-    if (osc_empty($Qreviews->value('image')) === false) {
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&amp;' . $Qreviews->value('products_keyword')) . '">' . $osC_Image->show($Qreviews->value('image'), $Qreviews->value('products_name')) . '</a>';
+    if (!osc_empty($Qreviews->value('image'))) {
+      echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews=' . $Qreviews->valueInt('reviews_id') . '&' . $Qreviews->value('products_keyword')), $osC_Image->show($Qreviews->value('image'), $Qreviews->value('products_name'), 'style="float: left;"'));
     }
 ?>
 
-        </td>
-        <td valign="top" class="main"><?php echo tep_break_string($Qreviews->valueProtected('reviews_text'), 60, '-<br />') . ((strlen($Qreviews->valueProtected('reviews_text')) >= 100) ? '..' : '') . '<br /><br /><i>' . sprintf($osC_Language->get('review_rating'), tep_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))), sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))) . '</i>'; ?></td>
-        <td width="10" align="right"><?php echo tep_draw_separator('pixel_trans.gif', '10', '1'); ?></td>
-      </tr>
-    </table></td>
-  </tr>
-</table>
+    <p style="padding-left: 100px;"><?php echo tep_break_string($Qreviews->valueProtected('reviews_text'), 60, '-<br />') . ((strlen($Qreviews->valueProtected('reviews_text')) >= 100) ? '..' : '') . '<br /><br /><i>' . sprintf($osC_Language->get('review_rating'), tep_image(DIR_WS_IMAGES . 'stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))), sprintf($osC_Language->get('rating_of_5_stars'), $Qreviews->valueInt('reviews_rating'))) . '</i>'; ?></p>
+
+    <div style="clear: both;"></div>
+  </div>
+</div>
 
 <?php
   }

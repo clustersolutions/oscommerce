@@ -32,6 +32,7 @@
               <tr>
                 <td colspan="2"><?php echo tep_draw_separator(); ?></td>
               </tr>
+
 <?php
     $row = 0;
     while ($Qupcoming->next()) {
@@ -42,17 +43,19 @@
         echo '              <tr class="upcomingProducts-odd">' . "\n";
       }
 
-      echo '                <td class="smallText">&nbsp;<a href="' . tep_href_link(FILENAME_PRODUCTS, $Qupcoming->valueInt('products_id')) . '">' . $Qupcoming->value('products_name') . '</a>&nbsp;</td>' . "\n" .
+      echo '                <td class="smallText">&nbsp;' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qupcoming->valueInt('products_id')), $Qupcoming->value('products_name')) . '&nbsp;</td>' . "\n" .
            '                <td align="right" class="smallText">&nbsp;' . osC_DateTime::getShort($Qupcoming->value('date_expected')) . '&nbsp;</td>' . "\n" .
            '              </tr>' . "\n";
     }
 ?>
+
               <tr>
                 <td colspan="2"><?php echo tep_draw_separator(); ?></td>
               </tr>
             </table></td>
           </tr>
 <!-- upcoming_products_eof //-->
+
 <?php
 
     $Qupcoming->freeResult();

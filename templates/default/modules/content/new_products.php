@@ -40,11 +40,12 @@
   if ($Qnewproducts->numberOfRows()) {
 ?>
 <!-- new_products //-->
-<div class="boxNew">
-  <div class="boxTitle"><?php echo $osC_Language->get('new_products_title'); ?></div>
+<div class="moduleBox">
+  <h6><?php echo $osC_Language->get('new_products_title'); ?></h6>
 
-  <div class="boxContents">
+  <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
+
 <?php
     $col = 0;
 
@@ -61,7 +62,7 @@
         $products_price = '<s>' . $products_price . '</s>&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($specials_price, $Qnewproducts->valueInt('products_tax_class_id')) . '</span>';
       }
 
-      echo '        <td class="smallText" width="33%" align="center" valign="top"><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qnewproducts->value('products_keyword')) . '">' . $osC_Image->show($Qnewproducts->value('image'), $Qnewproducts->value('products_name')) . '</a><br /><a href="' . tep_href_link(FILENAME_PRODUCTS, $Qnewproducts->value('products_keyword')) . '">' . $Qnewproducts->value('products_name') . '</a><br />' . $products_price . '</td>' . "\n";
+      echo '        <td width="33%" align="center" valign="top">' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qnewproducts->value('products_keyword')), $osC_Image->show($Qnewproducts->value('image'), $Qnewproducts->value('products_name'))) . '<br />' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $Qnewproducts->value('products_keyword')), $Qnewproducts->value('products_name')) . '<br />' . $products_price . '</td>' . "\n";
 
       $col++;
 
@@ -78,10 +79,12 @@
 
     $Qnewproducts->freeResult();
 ?>
+
     </table>
   </div>
 </div>
 <!-- new_products_eof //-->
+
 <?php
   }
 ?>

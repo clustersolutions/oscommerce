@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id:address_book.php 188 2005-09-15 02:25:52 +0200 (Do, 15 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,7 +24,7 @@
 /* Class constructor */
 
     function osC_Account_Address_book() {
-      global $osC_Language, $osC_Services, $breadcrumb, $osC_Customer;
+      global $osC_Language, $osC_Services, $breadcrumb, $osC_Customer, $messageStack;
 
       $this->_page_title = $osC_Language->get('address_book_heading');
 
@@ -47,21 +47,37 @@
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['edit']) && is_numeric($_GET[$this->_module])) {
-        if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
+        if (!osC_AddressBook::checkEntry($_GET['address_book'])) {
+          $messageStack->add('address_book', $osC_Language->get('error_address_book_entry_non_existing'), 'error');
         }
 
-        $this->_page_title = $osC_Language->get('address_book_edit_entry_heading');
-        $this->_page_contents = 'address_book_process.php';
+        if ($messageStack->size('address_book') == 0) {
+          if ($osC_Services->isStarted('breadcrumb')) {
+            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
+          }
 
-        $this->addJavascriptPhpFilename('includes/form_check.js.php');
+          $this->_page_title = $osC_Language->get('address_book_edit_entry_heading');
+          $this->_page_contents = 'address_book_process.php';
+
+          $this->addJavascriptPhpFilename('includes/form_check.js.php');
+        }
       } elseif (isset($_GET['delete']) && is_numeric($_GET[$this->_module])) {
-        if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
+        if ($_GET['address_book'] == $osC_Customer->getDefaultAddressID()) {
+          $messageStack->add('address_book', $osC_Language->get('warning_primary_address_deletion'), 'warning');
+        } else {
+          if (!osC_AddressBook::checkEntry($_GET['address_book'])) {
+            $messageStack->add('address_book', $osC_Language->get('error_address_book_entry_non_existing'), 'error');
+          }
         }
 
-        $this->_page_title = $osC_Language->get('address_book_delete_entry_heading');
-        $this->_page_contents = 'address_book_delete.php';
+        if ($messageStack->size('address_book') == 0) {
+          if ($osC_Services->isStarted('breadcrumb')) {
+            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), tep_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
+          }
+
+          $this->_page_title = $osC_Language->get('address_book_delete_entry_heading');
+          $this->_page_contents = 'address_book_delete.php';
+        }
       }
 
       if (isset($_GET['new']) && ($_GET['new'] == 'save')) {

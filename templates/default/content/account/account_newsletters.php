@@ -1,30 +1,30 @@
 <?php
 /*
-  $Id:account_newsletters.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_account.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <form name="account_newsletter" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'newsletters=save', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('newsletter_subscriptions_heading'); ?></div>
+  <h6><?php echo $osC_Language->get('newsletter_subscriptions_heading'); ?></h6>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="checkBox('newsletter_general');">
-        <td width="30"><?php echo osc_draw_checkbox_field('newsletter_general', '1', $Qnewsletter->value('customers_newsletter'), 'onclick="checkBox(\'newsletter_general\')"'); ?></td>
-        <td><b><?php echo $osC_Language->get('newsletter_general'); ?></b></td>
+      <tr>
+        <td width="30"><?php echo osc_draw_checkbox_field('newsletter_general', '1', $Qnewsletter->value('customers_newsletter')); ?></td>
+        <td><b><?php echo osc_draw_label($osC_Language->get('newsletter_general'), 'newsletter_general'); ?></b></td>
       </tr>
       <tr>
         <td width="30">&nbsp;</td>
@@ -34,10 +34,8 @@
   </div>
 </div>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
-
-  <?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, '', 'SSL') . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

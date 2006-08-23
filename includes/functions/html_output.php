@@ -78,6 +78,10 @@
     return $link;
   }
 
+  function osc_link_object($link, $object, $parameters = null) {
+    return '<a href="' . $link . '"' . (!empty($parameters) ? ' ' . $parameters : '') . '>' . $object . '</a>';
+  }
+
 ////
 // The HTML image wrapper function
   function tep_image($src, $alt = '', $width = '', $height = '', $parameters = '') {
@@ -163,7 +167,7 @@
   function osc_draw_input_field($name, $value = '', $parameters = '', $required = false, $type = 'text', $reinsert_value = true) {
     $field_value = $value;
 
-    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+    $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
 
     if ($reinsert_value === true) {
       if (isset($_GET[$name])) {
@@ -205,9 +209,11 @@
       $default = $_POST[$name];
     }
 
-    $field = '';
+    $counter = 0;
 
     foreach ($values as $key => $value) {
+      $counter++;
+
       if (is_array($value)) {
         $selection_value = $value['id'];
         $selection_text = '&nbsp;' . $value['text'];
@@ -216,7 +222,8 @@
         $selection_text = '';
       }
 
-      $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
+//      $field .= '<label style="width: auto;"><input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . $counter . '"';
+      $field .= '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
 
       if (!empty($selection_value)) {
         $field .= ' value="' . tep_output_string($selection_value) . '"';
@@ -230,7 +237,14 @@
         $field .= ' ' . $parameters;
       }
 
-      $field .= ' />' . $selection_text . $separator;
+//      $field .= ' />' . $selection_text . '</label>' . $separator;
+      $field .= ' />';
+
+      if (!empty($selection_text)) {
+        $field .= '<label for="' . tep_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '" class="fieldLabel">' . $selection_text . '</label>';
+      }
+
+      $field .= $separator;
     }
 
     $field = substr($field, 0, strlen($field)-strlen($separator));
@@ -309,7 +323,7 @@
   }
 
   function osc_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
-    $field = '<select name="' . tep_output_string($name) . '"';
+    $field = '<select name="' . tep_output_string($name) . '" id="' . tep_output_string($name) . '"';
 
     if (!empty($parameters)) $field .= ' ' . $parameters;
 
@@ -340,6 +354,10 @@
     }
 
     return $field;
+  }
+
+  function osc_draw_label($text, $for, $access_key = null, $required = false) {
+    return '<label for="' . tep_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . tep_output_string($access_key) . '"' : '') . '>' . tep_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
   }
 
   function tep_draw_date_pull_down_menu($name, $value = '', $default_today = true, $show_days = true, $use_month_names = true, $year_range_start = '0', $year_range_end  = '1') {

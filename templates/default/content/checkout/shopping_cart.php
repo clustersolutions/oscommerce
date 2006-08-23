@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id:shopping_cart.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_cart.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_cart.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -22,13 +22,14 @@
 <form name="shopping_cart" action="<?php echo tep_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('shopping_cart_heading'); ?></div>
+  <h6><?php echo $osC_Language->get('shopping_cart_heading'); ?></h6>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
     $_cart_date_added = null;
+
     foreach ($osC_ShoppingCart->getProducts() as $products) {
       if ($products['date_added'] != $_cart_date_added) {
         $_cart_date_added = $products['date_added'];
@@ -43,11 +44,11 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'action=cartRemove&amp;products_id=' . $products['id'], 'SSL') . '">' . tep_image_button('small_delete.gif', $osC_Language->get('button_delete')) . '</a>'; ?></td>
+        <td valign="top" width="60"><?php echo osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'action=cartRemove&amp;products_id=' . $products['id'], 'SSL'), tep_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
         <td valign="top">
 
 <?php
-      echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $products['keyword']) . '"><b>' . $products['name'] . '</b></a>';
+      echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $products['keyword']), '<b>' . $products['name'] . '</b>');
 
       if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
@@ -79,12 +80,13 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
+// HPDL
 //    if ($osC_OrderTotal->hasActive()) {
 //      foreach ($osC_OrderTotal->getResult() as $module) {
       foreach ($osC_ShoppingCart->getOrderTotals() as $module) {
         echo '    <tr>' . "\n" .
-             '      <td align="right" class="main">' . $module['title'] . '</td>' . "\n" .
-             '      <td align="right" class="main">' . $module['text'] . '</td>' . "\n" .
+             '      <td align="right">' . $module['title'] . '</td>' . "\n" .
+             '      <td align="right">' . $module['text'] . '</td>' . "\n" .
              '    </tr>';
       }
 //    }
@@ -105,7 +107,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL') . '">' . tep_image_button('button_checkout.gif', $osC_Language->get('button_checkout')) . '</a>'; ?></span>
+  <span style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), tep_image_button('button_checkout.gif', $osC_Language->get('button_checkout'))); ?></span>
 
   <?php echo tep_image_submit('button_update_cart.gif', $osC_Language->get('button_update_cart')); ?>
 </div>
@@ -116,14 +118,10 @@
   } else {
 ?>
 
-<div class="moduleBox">
-  <div class="content">
-    <?php echo $osC_Language->get('shopping_cart_empty'); ?>
-  </div>
-</div>
+<p><?php echo $osC_Language->get('shopping_cart_empty'); ?></p>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo osc_link_object(tep_href_link(FILENAME_DEFAULT), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>
 
 <?php

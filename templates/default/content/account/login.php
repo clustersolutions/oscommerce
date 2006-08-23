@@ -1,17 +1,17 @@
 <?php
 /*
-  $Id:login.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_login.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_login.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -21,46 +21,35 @@
   }
 ?>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td width="50%" valign="top">
-      <div class="moduleBox">
-        <div class="outsideHeading"><?php echo $osC_Language->get('login_new_customer_heading'); ?></div>
+<div class="moduleBox" style="width: 49%; float: right;">
+  <form name="login" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'login=process', 'SSL'); ?>" method="post">
 
-        <div class="content">
-          <p><?php echo $osC_Language->get('login_new_customer_text'); ?></p>
+  <h6><?php echo $osC_Language->get('login_returning_customer_heading'); ?></h6>
 
-          <p align="right"><?php echo '<a href="' . tep_href_link(FILENAME_ACCOUNT, 'create', 'SSL') . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></p>
-        </div>
-      </div>
-    </td>
-    <td width="50%" valign="top">
-      <form name="login" action="<?php echo tep_href_link(FILENAME_ACCOUNT, 'login=process', 'SSL'); ?>" method="post">
+  <div class="content">
+    <p><?php echo $osC_Language->get('login_returning_customer_text'); ?></p>
 
-      <div class="moduleBox">
-        <div class="outsideHeading"><?php echo $osC_Language->get('login_returning_customer_heading'); ?></div>
+    <ol>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_email_address'), 'email_address') . osc_draw_input_field('email_address'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_password'), 'password') . osc_draw_password_field('password'); ?></li>
+    </ol>
 
-        <div class="content">
-          <p><?php echo $osC_Language->get('login_returning_customer_text'); ?></p>
+    <p><?php echo sprintf($osC_Language->get('login_returning_customer_password_forgotten'), tep_href_link(FILENAME_ACCOUNT, 'password_forgotten', 'SSL')); ?></p>
 
-          <table border="0" cellspacing="2" cellpadding="2">
-            <tr>
-              <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
-              <td><?php echo osc_draw_input_field('email_address'); ?></td>
-            </tr>
-            <tr>
-              <td><?php echo $osC_Language->get('field_customer_password'); ?></td>
-              <td><?php echo osc_draw_password_field('password'); ?></td>
-            </tr>
-          </table>
+    <p align="right"><?php echo tep_image_submit('button_login.gif', $osC_Language->get('button_sign_in')); ?></p>
+  </div>
 
-          <p><?php echo sprintf($osC_Language->get('login_returning_customer_password_forgotten'), tep_href_link(FILENAME_ACCOUNT, 'password_forgotten', 'SSL')); ?></p>
+  </form>
+</div>
 
-          <p align="right"><?php echo tep_image_submit('button_login.gif', $osC_Language->get('button_sign_in')); ?></p>
-        </div>
-      </div>
+<div class="moduleBox" style="width: 49%;">
+  <div class="outsideHeading">
+    <h6><?php echo $osC_Language->get('login_new_customer_heading'); ?></h6>
+  </div>
 
-      </form>
-    </td>
-  </tr>
-</table>
+  <div class="content">
+    <p><?php echo $osC_Language->get('login_new_customer_text'); ?></p>
+
+    <p align="right"><?php echo osc_link_object(tep_href_link(FILENAME_ACCOUNT, 'create', 'SSL'), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?></p>
+  </div>
+</div>

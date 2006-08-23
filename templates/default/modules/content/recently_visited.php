@@ -1,5 +1,7 @@
 <?php
 /*
+  $Id: $
+
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
@@ -12,7 +14,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading">Your Recent History</div>
+  <h6>Your Recent History</h6>
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -32,16 +34,16 @@
         echo '            <tr>' . "\n";
 
         if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES == '1') {
-          echo '              <td width="' . ($osC_Image->getWidth('mini') + 10) . '" align="center"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . $osC_Image->show($product['image'], $product['name'], '', 'mini') . '</a></td>' . "\n";
+          echo '              <td width="' . ($osC_Image->getWidth('mini') + 10) . '" align="center">' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $product['keyword']), $osC_Image->show($product['image'], $product['name'], '', 'mini')) . '</td>' . "\n";
         }
 
-        echo '              <td class="main"><a href="' . tep_href_link(FILENAME_PRODUCTS, $product['keyword']) . '">' . $product['name'] . '</a><br />';
+        echo '              <td>' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, $product['keyword']), $product['name']) . '<br />';
 
         if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == '1') {
           echo $product['price'] . '&nbsp;';
         }
 
-        echo '<i>(in <a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $product['category_path']) . '">' . $product['category_name'] . '</a>)</i></td>' . "\n" .
+        echo '<i>(in ' . osc_link_object(tep_href_link(FILENAME_DEFAULT, 'cPath=' . $product['category_path']), $product['category_name']) . ')</i></td>' . "\n" .
              '            </tr>' . "\n";
       }
 ?>
@@ -65,13 +67,13 @@
         echo '          <tr>' . "\n";
 
         if (SERVICE_RECENTLY_VISITED_SHOW_CATEGORY_IMAGES == '1') {
-          echo '              <td width="' . ((SMALL_IMAGE_WIDTH * 0.5) + 5) . '"><a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['path']) . '">' . tep_image(DIR_WS_IMAGES . $category['image'], $category['name'], SMALL_IMAGE_WIDTH*0.5, SMALL_IMAGE_HEIGHT*0.5) . '</a></td>' . "\n";
+          echo '              <td width="' . ((SMALL_IMAGE_WIDTH * 0.5) + 5) . '">' . osc_link_object(tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['path']), tep_image(DIR_WS_IMAGES . $category['image'], $category['name'], SMALL_IMAGE_WIDTH*0.5, SMALL_IMAGE_HEIGHT*0.5)) . '</td>' . "\n";
         }
 
-        echo '            <td class="main"><a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['path']) . '">' . $category['name'] . '</a>';
+        echo '            <td>' . osc_link_object(tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['path']), $category['name']);
 
         if (empty($category['parent_id']) === false) {
-          echo '&nbsp;<i>(in <a href="' . tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['parent_id']) . '">' . $category['parent_name'] . '</a>)</i>';
+          echo '&nbsp;<i>(in ' . osc_link_object(tep_href_link(FILENAME_DEFAULT, 'cPath=' . $category['parent_id']), $category['parent_name']) . ')</i>';
         }
 
         echo '</td>' . "\n" .
@@ -96,7 +98,7 @@
 <?php
       foreach ($osC_RecentlyVisited->getSearches() as $searchphrase) {
         echo '          <tr>' . "\n" .
-             '            <td class="main"><a href="' . tep_href_link(FILENAME_SEARCH, 'keywords=' . $searchphrase['keywords']) . '">' . $searchphrase['keywords'] . '</a> <i>(' . number_format($searchphrase['results']) . ' results)</i></td>' . "\n" .
+             '            <td>' . osc_link_object(tep_href_link(FILENAME_SEARCH, 'keywords=' . $searchphrase['keywords']), $searchphrase['keywords']) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></td>' . "\n" .
              '          </tr>' . "\n";
       }
 ?>

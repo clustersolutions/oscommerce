@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id:checkout_success.php 187 2005-09-14 14:22:13 +0200 (Mi, 14 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -45,6 +45,7 @@
     <p><?php echo $osC_Language->get('order_processed_successfully'); ?></p>
 
     <p>
+
 <?php
   if ($global['global_product_notifications'] != '1') {
     echo $osC_Language->get('add_selection_to_product_notifications') . '<br /><p class="productsNotifications">';
@@ -62,6 +63,7 @@
     echo sprintf($osC_Language->get('view_order_history'), tep_href_link(FILENAME_ACCOUNT, '', 'SSL'), tep_href_link(FILENAME_ACCOUNT, 'orders', 'SSL')) . '<br /><br />' . sprintf($osC_Language->get('contact_store_owner'), tep_href_link(FILENAME_INFO, 'contact'));
   }
 ?>
+
     </p>
 
     <h2 style="text-align: center;"><?php echo $osC_Language->get('thanks_for_shopping_with_us'); ?></h2>
@@ -72,8 +74,20 @@
   <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
+<?php
+  if (DOWNLOAD_ENABLED == '1') {
+?>
+
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <?php if (DOWNLOAD_ENABLED == '1') include('includes/modules/downloads.php'); ?>
+
+<?php
+  include('includes/modules/downloads.php');
+?>
+
 </table>
+
+<?php
+  }
+?>
 
 </form>

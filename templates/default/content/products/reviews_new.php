@@ -1,19 +1,21 @@
 <?php
 /*
-  $Id: product_reviews_write.php 213 2005-10-05 12:37:33 +0200 (Mi, 05 Okt 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<h1 style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, $osC_Product->getID()) . '">' . tep_image(DIR_WS_IMAGES . $osC_Product->getImage(), $osC_Product->getTitle()) . '</a>'; ?></h1>
+<div style="float: right;"><?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'mini')); ?></div>
 
 <h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
+
+<div style="clear: both;"></div>
 
 <?php
   if ($messageStack->size('reviews') > 0) {
@@ -24,56 +26,32 @@
 <form name="reviews_new" action="<?php echo tep_href_link(FILENAME_PRODUCTS, 'reviews=new&amp;' . $osC_Product->getID() . '&amp;action=process'); ?>" method="post" onsubmit="return checkForm(this);">
 
 <div class="moduleBox">
-  <div class="outsideHeading">
-    <?php echo $osC_Language->get('new_review_title'); ?>
-  </div>
+  <h6><?php echo $osC_Language->get('new_review_title'); ?></h6>
 
   <div class="content">
-    <table border="0" cellspacing="2" cellpadding="2">
+    <ol>
 
 <?php
-  if ($osC_Customer->isLoggedOn()) {
+  if (!$osC_Customer->isLoggedOn()) {
 ?>
 
-      <tr>
-        <td><?php echo $osC_Language->get('field_review_from'); ?></td>
-        <td><?php echo tep_output_string_protected($osC_Customer->getName()); ?></td>
-      </tr>
-
-<?php
-  } else {
-?>
-
-      <tr>
-        <td><?php echo ENTRY_NAME; ?></td>
-        <td><?php echo osc_draw_input_field('customer_name'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_customer_email_address'); ?></td>
-        <td><?php echo osc_draw_input_field('customer_email_address'); ?></td>
-      </tr>
+      <li><?php echo osc_draw_label(ENTRY_NAME, null, 'customer_name') . osc_draw_input_field('customer_name'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('field_customer_email_address'), null, 'customer_email_address') . osc_draw_input_field('customer_email_address'); ?></li>
 
 <?php
   }
 ?>
 
-    </table>
-
-    <table border="0" width="100%" cellspacing="2" cellpadding="2">
-      <tr>
-        <td><?php echo osc_draw_textarea_field('review', '', 60, 15); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('field_review_rating') . ' ' . $osC_Language->get('review_lowest_rating_title') . ' ' . osc_draw_radio_field('rating', array('1', '2', '3', '4', '5')) . ' ' . $osC_Language->get('review_highest_rating_title'); ?></td>
-      </tr>
-    </table>
+      <li><?php echo osc_draw_textarea_field('review', null, 60, 15, 'soft', 'style="width: 98%;"'); ?></li>
+      <li><?php echo $osC_Language->get('field_review_rating') . ' ' . $osC_Language->get('review_lowest_rating_title') . ' ' . osc_draw_radio_field('rating', array('1', '2', '3', '4', '5')) . ' ' . $osC_Language->get('review_highest_rating_title'); ?></li>
+    </ol>
   </div>
 </div>
 
 <div class="submitFormButtons">
   <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
 
-  <?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . $osC_Product->getID()) . '">' . tep_image_button('button_back.gif', $osC_Language->get('button_back')) . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . $osC_Product->getID()), tep_image_button('button_back.gif', $osC_Language->get('button_back'))); ?>
 </div>
 
 </form>

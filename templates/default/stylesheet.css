@@ -4,135 +4,183 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-/* Reset defaults */
-* {
-  padding: 0;
+/* MARKUP */
+
+BODY {
+  background: #FFFFFF;
   margin: 0;
-}
-/* Compensate for Firefox */
-select { min-width:1.5em; }
-
-li, dd {
-  margin-left: 20px;
-}
-
-body {
-  font: 10px Verdana, Arial, Geneva, sans-serif;
+  padding: 0;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  min-width: 760px;
 }
 
-h1 {
+H1 {
   color: #9A9A9A;
   font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
   font-size: 22px;
   font-weight: normal;
   white-space: nowrap;
+  margin: 5px 0 10px 0;
 }
 
-h2 {
+H2 {
   color: #9A9A9A;
   font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
   font-size: 20px;
   font-weight: normal;
   white-space: nowrap;
+  margin: 0;
 }
 
-td, p {
+H6 {
+  color: #000000;
+  font-family: Tahoma, 'Trebuchet MS', Verdana, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin: 0;
+}
+
+TD, P {
   font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   line-height: 1.5;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-img {
+IMG {
   border: 0;
 }
 
-/*
- * Layout
- */
+FORM {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+FORM OL {
+  margin: 0;
+  padding: 0;
+}
+
+FORM OL LI {
+  list-style: none;
+  margin: 0;
+  clear: left;
+}
+
+FORM LABEL {
+  float: left;
+  width: 160px;
+  margin: 5px;
+}
+
+FORM LABEL.fieldLabel {
+  float: none;
+}
+
+FORM INPUT, FORM SELECT, FORM TEXTAREA {
+  padding-left: 5px;
+}
+
+FORM EM {
+  color: #FF0000;
+  font-size: 9px;
+  margin-left: 2px;
+}
+
+/* LAYOUT */
 
 #pageHeader {
   position: absolute;
-  left: 0;
   top: 0;
-  height: 73px;
+  left: 0;
   width: 100%;
-  /* For IE 5.0 */
-  text-align: center;
-}
-
-#header-content #headerLogo {
-  float: left;
-}
-
-#header-content #headerIcons {
-  text-align: right;
-  padding-top: 20px;
-  height: 33px;
-}
-
-#header-content #headerBar {
-  padding: 0 0.5em;
 }
 
 #pageContent {
   float: right;
-  width: 77%;
-  margin: 0 0 10px 0;
-  padding: 0;
+  width: 78%;
 }
 
-div#pageColumnLeft {
+#pageColumnLeft {
   float: left;
-  width: 21.25%;
-  margin: 0;
+  width: 20%;
+  padding-left: 5px;
 }
 
-div#pageBlockLeft {
+#pageBlockLeft {
   float: left;
-  width: 80%;
-  margin: 80px 0 10px 0.5em;
+  width: 82%;
+  margin: 75px 0 10px 0;
 }
 
 #pageColumnRight {
   float: right;
-  width: 17%;
-  margin: 80px 0.5em 10px 0;
+  width: 16%;
+  margin: 75px 5px 10px 0;
 }
 
 #pageFooter {
   clear: both;
-  position: relative;
-  margin: 0;
-}
-
-#pageFooter p {
   text-align: center;
+  padding: 5px;
 }
 
-/*
- * End Layout
- */
+/* LINKS */
 
-#headerBar, #footerBar {
+#navigationBar A {
+  color: #FFFFFF;
+}
+
+#navigationBar A:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* DEFINITIONS */
+
+#siteLogo {
+  float: left;
+}
+
+#navigationIcons {
+  float: right;
+  margin: 0;
+  padding: 15px 0 0 0;
+  list-style-type: none;
+}
+
+#navigationIcons li {
+  display: inline;
+  padding: 5px;
+}
+
+#navigationBar {
   background-color: #BBC3D3;
-  padding: 2px;
-  color: white;
+  color: #FFFFFF;
   font-weight: bold;
+  margin-top: 50px;
+  text-align: right;
+  padding-right: 5px;
 }
 
-#breadcrumb {
+#breadcrumbPath {
+  float: left;
+  padding-left: 5px;
 }
 
-.pageIcon {
+#pageIcon {
   float: right;
   margin-right: 10px;
+  height: 40px;
 }
 
 .messageStack {
@@ -141,7 +189,6 @@ div#pageBlockLeft {
   border-color: #C8AD91;
   background-color: #FFFCF5;
   font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
   color: #465584;
   margin: 5px;
 }
@@ -152,19 +199,21 @@ div#pageBlockLeft {
 .moduleBox .content {
   border-width: 1px;
   border-style: solid;
-  border-color: #b6b7cb;
-  background-color: #f8f8f9;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
+  border-color: #B6B7CB;
+  background-color: #F8F8F9;
   padding: 5px;
   margin-bottom: 5px;
 }
 
-.moduleBox .outsideHeading {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: bold;
+.moduleBox H6 {
   padding: 5px 0px 5px 0px;
+}
+
+.inputRequirement {
+  font-size: 10px;
+  font-weight: normal;
+  color: #FF0000;
+  margin-top: 10px;
 }
 
 .submitFormButtons {
@@ -175,6 +224,11 @@ div#pageBlockLeft {
   padding: 5px;
 }
 
+
+
+
+
+
 .moduleRow { }
 
 .moduleRowOver {
@@ -183,13 +237,6 @@ div#pageBlockLeft {
 
 .moduleRowSelected {
   background-color: #E9F4FC;
-}
-
-.inputRequirement {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
-  font-weight: normal;
-  color: #FF0000;
 }
 
 
@@ -208,56 +255,6 @@ A {
 A:hover {
   color: #AABBDD;
   text-decoration: underline;
-}
-
-FORM {
-  display: inline;
-}
-
-TR.headerNavigation {
-  background: #bbc3d3;
-}
-
-TD.headerNavigation {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
-  background: #bbc3d3;
-  color: white;
-  font-weight : bold;
-}
-
-A.headerNavigation {
-  color: white;
-}
-
-A.headerNavigation:hover {
-  color: white;
-}
-
-TR.headerError {
-  background: #ff0000;
-}
-
-TD.headerError {
-  font-family: Tahoma, Verdana, Arial, sans-serif;
-  font-size: 12px;
-  background: #ff0000;
-  color: white;
-  font-weight : bold;
-  text-align : center;
-}
-
-TR.headerInfo {
-  background: #00ff00;
-}
-
-TD.headerInfo {
-  font-family: Tahoma, Verdana, Arial, sans-serif;
-  font-size: 12px;
-  background: #00ff00;
-  color: white;
-  font-weight: bold;
-  text-align: center;
 }
 
 .infoBox {
@@ -331,23 +328,6 @@ A.pageResults:hover {
   background: #FFFF33;
 }
 
-TD.pageHeading, DIV.pageHeading {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 20px;
-  font-weight: bold;
-  color: #9a9a9a;
-}
-
-TR.subBar {
-  background: #f4f7fd;
-}
-
-TD.subBar {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 10px;
-  color: black;
-}
-
 TD.main, P.main {
   font-family: Verdana, Arial, sans-serif;
   font-size: 11px;
@@ -357,23 +337,6 @@ TD.main, P.main {
 TD.smallText, SPAN.smallText, P.smallText {
   font-family: Verdana, Arial, sans-serif;
   font-size: 10px;
-}
-
-TD.accountCategory {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 13px;
-  color: #aabbdd;
-}
-
-TD.fieldKey {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-TD.fieldValue {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 12px;
 }
 
 TD.tableHeading {
@@ -388,34 +351,10 @@ SPAN.newItemInCart {
   color: #ff0000;
 }
 
-CHECKBOX, INPUT, RADIO, SELECT {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 11px;
-}
-
-TEXTAREA {
-  width: 100%;
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 11px;
-}
-
 SPAN.greetUser {
   font-family: Verdana, Arial, sans-serif;
   font-size: 12px;
   color: #f0a480;
-  font-weight: bold;
-}
-
-TABLE.formArea {
-  background: #f1f9fe;
-  border-color: #7b9ebd;
-  border-style: solid;
-  border-width: 1px;
-}
-
-TD.formAreaTitle {
-  font-family: Tahoma, Verdana, Arial, sans-serif;
-  font-size: 12px;
   font-weight: bold;
 }
 

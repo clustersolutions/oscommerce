@@ -20,7 +20,7 @@
 ?>
 
 <div style="float: right; text-align: center;">
-<?php echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '" target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;">' . $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'product_info') . '<br />' . $osC_Language->get('enlarge_image') . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'product_info') . '<br />' . $osC_Language->get('enlarge_image'), 'target="_blank" onclick="window.open(\'' . tep_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
 </div>
 
 <?php
@@ -37,7 +37,7 @@
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
-    <td class="main" colspan="2"><?php echo $osC_Language->get('product_attributes'); ?></td>
+    <td colspan="2"><?php echo $osC_Language->get('product_attributes'); ?></td>
   </tr>
 
 <?php
@@ -45,8 +45,8 @@
 ?>
 
   <tr>
-    <td class="main"><?php echo $values['options_name'] . ':'; ?></td>
-    <td class="main"><?php echo osc_draw_pull_down_menu('id[' . $options . ']', $values['data']); ?></td>
+    <td><?php echo $values['options_name'] . ':'; ?></td>
+    <td><?php echo osc_draw_pull_down_menu('id[' . $options . ']', $values['data']); ?></td>
   </tr>
 
 <?php
@@ -83,14 +83,14 @@
   }
 ?>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('products_id', tep_get_prid($osC_Product->getID())) . tep_image_submit('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?></span>
+<div class="submitFormButtons" style="text-align: right;">
 
 <?php
   if ($osC_Services->isStarted('reviews')) {
-    echo '<a href="' . tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . tep_get_all_get_params()) . '">' . tep_image_button('button_reviews.gif', $osC_Language->get('button_reviews')) . '</a>';
+    echo '<span style="float: left;">' . osc_link_object(tep_href_link(FILENAME_PRODUCTS, 'reviews&amp;' . tep_get_all_get_params()), tep_image_button('button_reviews.gif', $osC_Language->get('button_reviews'))) . '</span>';
   }
 ?>
+  <?php echo osc_draw_hidden_field('products_id', tep_get_prid($osC_Product->getID())) . tep_image_submit('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
 </div>
 
 </form>

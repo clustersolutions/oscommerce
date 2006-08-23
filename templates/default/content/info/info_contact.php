@@ -1,17 +1,17 @@
 <?php
 /*
-  $Id: shipping.php 5 2005-01-31 01:40:15Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 ?>
 
-<?php echo tep_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'class="pageIcon"'); ?>
+<?php echo tep_image(DIR_WS_IMAGES . 'table_background_contact_us.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -25,8 +25,8 @@
 
 <p><?php echo $osC_Language->get('contact_email_sent_successfully'); ?></p>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo '<a href="' . tep_href_link(FILENAME_INFO) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?></span>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo osc_link_object(tep_href_link(FILENAME_INFO), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>
 
 <?php
@@ -34,7 +34,7 @@
 ?>
 
 <div class="moduleBox">
-  <div class="outsideHeading"><?php echo $osC_Language->get('contact_title'); ?></div>
+  <h6><?php echo $osC_Language->get('contact_title'); ?></h6>
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
@@ -47,7 +47,7 @@
 
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('contact'); ?></p>
 
-    <p><?php echo nl2br(STORE_OWNER_EMAIL_ADDRESS); ?></p>
+    <div style="clear: both;"></div>
   </div>
 </div>
 
@@ -55,31 +55,16 @@
 
 <div class="moduleBox">
   <div class="content">
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td><?php echo $osC_Language->get('contact_name_title'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo osc_draw_input_field('name'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('contact_email_address_title'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo osc_draw_input_field('email'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo $osC_Language->get('contact_enquiry_title'); ?></td>
-      </tr>
-      <tr>
-        <td><?php echo osc_draw_textarea_field('enquiry', '', 50, 15); ?></td>
-      </tr>
-    </table>
+    <ol>
+      <li><?php echo osc_draw_label($osC_Language->get('contact_name_title'), 'name') . osc_draw_input_field('name'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('contact_email_address_title'), 'email') . osc_draw_input_field('email'); ?></li>
+      <li><?php echo osc_draw_label($osC_Language->get('contact_enquiry_title'), 'enquiry') . osc_draw_textarea_field('enquiry', '', 50, 15); ?></li>
+    </ol>
   </div>
 </div>
 
-<div class="submitFormButtons">
-  <span style="float: right;"><?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?></span>
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo tep_image_submit('button_continue.gif', $osC_Language->get('button_continue')); ?>
 </div>
 
 </form>

@@ -16,8 +16,7 @@
 <div class="boxNew">
   <div class="boxTitle"><?php echo $osC_Box->getTitle(); ?></div>
 
-  <div class="boxContents"><?php echo $osC_Box->getContent(); ?>
-  </div>
+  <div class="boxContents"><?php echo $osC_Box->getContent(); ?></div>
 </div>
 
 <!-- box checkout_trail end //-->

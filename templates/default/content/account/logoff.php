@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: login.php 156 2005-08-04 22:13:08 +0200 (Do, 04 Aug 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,5 +22,5 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT) . '">' . tep_image_button('button_continue.gif', $osC_Language->get('button_continue')) . '</a>'; ?>
+  <?php echo osc_link_object(tep_href_link(FILENAME_DEFAULT), tep_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
 </div>
