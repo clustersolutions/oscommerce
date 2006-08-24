@@ -127,16 +127,16 @@ define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
 define('BOX_HEADING_LOGOFF', 'Abmelden');
 
 // javascript messages
-define('JS_ERROR', 'Während der Eingabe sind Fehler aufgetreten!\nBitte korrigieren Sie folgendes:\n\n');
-define('JS_OPTIONS_VALUE_PRICE', '* Sie müssen diesem Wert einen Preis zuordnen\n');
-define('JS_OPTIONS_VALUE_PRICE_PREFIX', '* Sie müssen ein Vorzeichen für den Preis angeben (+/-)\n');
+define('JS_ERROR', 'WÃ¤hrend der Eingabe sind Fehler aufgetreten!\nBitte korrigieren Sie folgendes:\n\n');
+define('JS_OPTIONS_VALUE_PRICE', '* Sie mÃ¼ssen diesem Wert einen Preis zuordnen\n');
+define('JS_OPTIONS_VALUE_PRICE_PREFIX', '* Sie mÃ¼ssen ein Vorzeichen fÃ¼r den Preis angeben (+/-)\n');
 define('JS_PRODUCTS_NAME', '* Der neue Artikel muss einen Namen haben\n');
 define('JS_PRODUCTS_DESCRIPTION', '* Der neue Artikel muss eine Beschreibung haben\n');
 define('JS_PRODUCTS_PRICE', '* Der neue Artikel muss einen Preis haben\n');
 define('JS_PRODUCTS_WEIGHT', '* Der neue Artikel muss eine Gewichtsangabe haben\n');
-define('JS_PRODUCTS_QUANTITY', '* Sie müssen dem neuen Artikel eine verfügbare Anzahl zuordnen\n');
-define('JS_PRODUCTS_MODEL', '* Sie müssen dem neuen Artikel eine Artikel-Nr. zuordnen\n');
-define('JS_PRODUCTS_IMAGE', '* Sie müssen dem Artikel ein Bild zuordnen\n');
+define('JS_PRODUCTS_QUANTITY', '* Sie mÃ¼ssen dem neuen Artikel eine verfÃ¼gbare Anzahl zuordnen\n');
+define('JS_PRODUCTS_MODEL', '* Sie mÃ¼ssen dem neuen Artikel eine Artikel-Nr. zuordnen\n');
+define('JS_PRODUCTS_IMAGE', '* Sie mÃ¼ssen dem Artikel ein Bild zuordnen\n');
 define('JS_SPECIALS_PRODUCTS_PRICE', '* Es muss ein neuer Preis fr diesen Artikel festgelegt werden\n');
 define('JS_ORDER_DOES_NOT_EXIST', 'Auftragsnummer %s existiert nicht!');
 
@@ -207,8 +207,8 @@ define('IMAGE_ICON_STATUS_GREEN', 'aktiv');
 define('IMAGE_ICON_STATUS_GREEN_LIGHT', 'aktivieren');
 define('IMAGE_ICON_STATUS_RED', 'inaktiv');
 define('IMAGE_ICON_STATUS_RED_LIGHT', 'deaktivieren');
-define('IMAGE_ICON_INFO', 'Information');
 define('IMAGE_IMPORT', 'Import');
+define('IMAGE_INFO', 'Information');
 define('IMAGE_INSERT', 'Einf&uuml;gen');
 define('IMAGE_LOCK', 'Sperren');
 define('IMAGE_LOGIN', 'Login');

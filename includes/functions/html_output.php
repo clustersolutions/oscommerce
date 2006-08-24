@@ -143,7 +143,7 @@
 
     $image = '<img src="' . osc_output_string($image) . '" border="0" alt="' . osc_output_string($title) . '"';
 
-    if (!empty($alt)) {
+    if (!empty($title)) {
       $image .= ' title="' . osc_output_string($title) . '"';
     }
 

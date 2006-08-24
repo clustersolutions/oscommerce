@@ -96,9 +96,9 @@
         <td align="right">
 <?php
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . osc_icon('info.png', IMAGE_ICON_INFO) . '</a>';
+      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . osc_icon('info.png', IMAGE_INFO) . '</a>';
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo'), osc_icon('info.png', IMAGE_ICON_INFO));
+      echo osc_link_object(osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo'), osc_icon('info.png', IMAGE_INFO));
     }
 ?>
         </td>
@@ -128,7 +128,7 @@
 ?>
 
 <div id="infoBox_wInfo" <?php if ($action != 'wInfo') { echo 'style="display: none;"'; } ?>>
-  <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_ICON_INFO) . ' ' . $wInfo->full_name; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $wInfo->full_name; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
