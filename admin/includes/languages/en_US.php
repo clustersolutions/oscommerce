@@ -175,7 +175,6 @@ define('IMAGE_ICON_STATUS_GREEN', 'Active');
 define('IMAGE_ICON_STATUS_GREEN_LIGHT', 'Set Active');
 define('IMAGE_ICON_STATUS_RED', 'Inactive');
 define('IMAGE_ICON_STATUS_RED_LIGHT', 'Set Inactive');
-define('IMAGE_INFO', 'Info');
 define('IMAGE_IMPORT', 'Import');
 define('IMAGE_INFO', 'Info');
 define('IMAGE_INSERT', 'Insert');
