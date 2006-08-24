@@ -87,7 +87,6 @@ FORM LABEL.fieldLabel {
 }
 
 FORM INPUT, FORM SELECT, FORM TEXTAREA {
-  padding-left: 5px;
 }
 
 FORM EM {
