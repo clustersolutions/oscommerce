@@ -15,7 +15,7 @@
   $Qnewsletter->bindInt(':newsletters_id', $_GET['nmID']);
   $Qnewsletter->execute();
 
-  $osC_Language->load('modules/newsletters/' . $Qnewsletter->value('module') . '.php');
+  $osC_Language->loadConstants('modules/newsletters/' . $Qnewsletter->value('module') . '.php');
   include('includes/modules/newsletters/' . $Qnewsletter->value('module') . '.php');
 
   $module_name = 'osC_Newsletter_' . $Qnewsletter->value('module');

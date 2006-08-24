@@ -35,7 +35,7 @@
     $newsletter_module_class = 'osC_Newsletter_' . $Qnewsletters->value('module');
 
     if (class_exists($newsletter_module_class) === false) {
-      $osC_Language->load('modules/newsletters/' . $Qnewsletters->value('module') . '.php');
+      $osC_Language->loadConstants('modules/newsletters/' . $Qnewsletters->value('module') . '.php');
       include('includes/modules/newsletters/' . $Qnewsletters->value('module') . '.php');
 
       $$newsletter_module_class = new $newsletter_module_class();

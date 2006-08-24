@@ -29,7 +29,7 @@
   for ($i=0, $n=sizeof($files); $i<$n; $i++) {
     $module = substr($files[$i]['name'], 0, strrpos($files[$i]['name'], '.'));
 
-    $osC_Language->load('modules/newsletters/' . $files[$i]['name']);
+    $osC_Language->loadConstants('modules/newsletters/' . $files[$i]['name']);
     include('includes/modules/newsletters/' . $files[$i]['name']);
 
     $newsletter_module_class = 'osC_Newsletter_' . $module;
