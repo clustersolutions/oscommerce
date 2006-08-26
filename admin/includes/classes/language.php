@@ -50,17 +50,17 @@
         $osC_XML = new osC_XML(file_get_contents('../includes/languages/' . $file . '.xml'));
         $source = $osC_XML->toArray();
 
-        $language = array('name' => $source['data']['title'],
-                          'code' => $source['data']['code'],
-                          'locale' => $source['data']['locale'],
-                          'charset' => $source['data']['character_set'],
-                          'date_format_short' => $source['data']['date_format_short'],
-                          'date_format_long' => $source['data']['date_format_long'],
-                          'time_format' => $source['data']['time_format'],
-                          'text_direction' => $source['data']['text_direction'],
-                          'currencies_id' => $osC_Currencies->getID($source['data']['default_currency']),
-                          'numeric_separator_decimal' => $source['data']['numerical_decimal_separator'],
-                          'numeric_separator_thousands' => $source['data']['numerical_thousands_separator']
+        $language = array('name' => $source['language']['data']['title'],
+                          'code' => $source['language']['data']['code'],
+                          'locale' => $source['language']['data']['locale'],
+                          'charset' => $source['language']['data']['character_set'],
+                          'date_format_short' => $source['language']['data']['date_format_short'],
+                          'date_format_long' => $source['language']['data']['date_format_long'],
+                          'time_format' => $source['language']['data']['time_format'],
+                          'text_direction' => $source['language']['data']['text_direction'],
+                          'currencies_id' => $osC_Currencies->getID($source['language']['data']['default_currency']),
+                          'numeric_separator_decimal' => $source['language']['data']['numerical_decimal_separator'],
+                          'numeric_separator_thousands' => $source['language']['data']['numerical_thousands_separator']
                          );
 
         $definitions = $source['language']['definitions']['definition'];
