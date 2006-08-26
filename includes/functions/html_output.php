@@ -41,6 +41,10 @@
       $use_full_address = false;
     }
 
+    if (($search_engine_safe === true) && ($use_full_address === false) && isset($osC_Services) && $osC_Services->isStarted('sefu')) {
+      $use_full_address = true;
+    }
+
     if ($connection == 'AUTO') {
       if ( ($request_type == 'SSL') && (ENABLE_SSL === true) ) {
         $link = HTTPS_SERVER . DIR_WS_HTTPS_CATALOG;
@@ -94,7 +98,7 @@
     }
 
     if ( ($search_engine_safe === true) && isset($osC_Services) && $osC_Services->isStarted('sefu')) {
-      $link = str_replace(array('?', '&', '='), '/', $link);
+        $link = str_replace(array('?', '&', '='), array('/', '/', ','), $link);
     } else {
       if (strpos($link, '&') !== false) {
         $link = str_replace('&', '&amp;', $link);

@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-/*
+/**
  * Forcefully disable register_globals if enabled
  *
  * Based from work by Richard Heyes (http://www.phpguru.org)
@@ -37,7 +37,7 @@
     unset($v);
   }
 
-/*
+/**
  * Forcefully disable magic_quotes_gpc if enabled
  *
  * Based from work by Ilia Alshanetsky (Advanced PHP Security)
@@ -65,7 +65,7 @@
     unset($val);
   }
 
-/*
+/**
  * Fix SCRIPT_FILENAME under CGI based servers
  */
 
@@ -73,7 +73,7 @@
     $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
   }
 
-/*
+/**
  * checkdnsrr() not implemented on Microsoft Windows platforms
  */
 
@@ -93,7 +93,7 @@
     }
   }
 
-/*
+/**
  * ctype_alnum() natively supported from PHP 4.3
  */
 
@@ -103,7 +103,7 @@
     }
   }
 
-/*
+/**
  * ctype_xdigit() natively supported from PHP 4.3
  */
 
@@ -113,7 +113,7 @@
     }
   }
 
-/*
+/**
  * is_a() natively supported from PHP 4.2
  */
 
@@ -131,7 +131,7 @@
     }
   }
 
-/*
+/**
  * floatval() natively supported from PHP 4.2
  */
 
@@ -141,7 +141,7 @@
     }
   }
 
-/*
+/**
  * stream_get_contents() natively supported from PHP 5.0
  */
 
@@ -159,7 +159,7 @@
     }
   }
 
-/*
+/**
  * sha1() natively supported from PHP 4.3
  */
 

@@ -28,7 +28,7 @@
 /* Class constructor */
 
     function osC_Products_Images() {
-      global $osC_Language, $osC_Product;
+      global $osC_Session, $osC_Language, $osC_Product;
 
       if (empty($_GET) === false) {
         $id = false;
@@ -41,7 +41,7 @@
             continue;
           }
 
-          if (is_numeric($key) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $key) || ereg('[a-zA-Z0-9 -_]*$', $key)) {
+          if ( (is_numeric($key) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $key) || ereg('[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
             $id = $key;
           }
 

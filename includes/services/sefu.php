@@ -18,20 +18,27 @@
         $precedes = 'session';
 
     function start() {
+      if (isset($_SERVER['ORIG_PATH_INFO'])) {
+        if (isset($_SERVER['PATH_INFO']) && empty($_SERVER['PATH_INFO'])) {
+          $_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
+        }
+      }
+
       if (isset($_SERVER['PATH_INFO']) && (strlen($_SERVER['PATH_INFO']) > 1)) {
         $_SERVER['SCRIPT_FILENAME'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['SCRIPT_FILENAME']);
 
         $parameters = explode('/', substr($_SERVER['PATH_INFO'], 1));
 
+        $_GET = array();
         $GET_array = array();
 
-        for ($i=0, $n=sizeof($parameters); $i<$n; $i++) {
-          if (!isset($parameters[$i+1])) $parameters[$i+1] = '';
+        foreach ($parameters as $parameter) {
+          $param_array = explode(',', $parameter, 2);
 
-          if (strpos($parameters[$i], '[]')) {
-            $GET_array[substr($parameters[$i], 0, -2)][] = $parameters[$i+1];
+          if (strpos($param_array[0], '[]') !== false) {
+            $GET_array[substr($param_array[0], 0, -2)][] = $param_array[1];
           } else {
-            $_GET[$parameters[$i]] = $parameters[$i+1];
+            $_GET[$param_array[0]] = $param_array[1];
           }
 
           $i++;
