@@ -189,11 +189,11 @@
 
     if (is_array($params) && !empty($params)) {
       $attributes_check = true;
-      $attributes_ids = '';
+      $attributes_ids = array();
 
       foreach ($params as $option => $value) {
         if (is_numeric($option) && is_numeric($value)) {
-          $attributes_ids .= '{' . (int)$option . '}' . (int)$value;
+          $attributes_ids[] = (int)$option . ':' . (int)$value;
         } else {
           $attributes_check = false;
           break;
@@ -201,7 +201,7 @@
       }
 
       if ($attributes_check === true) {
-        $string .= $attributes_ids;
+        $string .= '#' . implode(';', $attributes_ids);
       }
     }
 
@@ -220,9 +220,9 @@
       return $id;
     }
 
-    $pieces = explode('{', $id);
+    $product = explode('#', $id, 2);
 
-    return $pieces[0];
+    return (int)$product[0];
   }
 
 /**

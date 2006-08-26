@@ -35,6 +35,10 @@
         foreach ($parameters as $parameter) {
           $param_array = explode(',', $parameter, 2);
 
+          if (!isset($param_array[1])) {
+            $param_array[1] = '';
+          }
+
           if (strpos($param_array[0], '[]') !== false) {
             $GET_array[substr($param_array[0], 0, -2)][] = $param_array[1];
           } else {

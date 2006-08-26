@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -21,7 +21,7 @@
         $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
 
-        if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
+        if (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $id)) {
           $Qproduct->appendQuery('p.products_id = :products_id');
           $Qproduct->bindInt(':products_id', osc_get_product_id($id));
         } else {
@@ -235,7 +235,7 @@
       $Qcheck = $osC_Database->query('select p.products_id from :table_products p');
       $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
 
-      if (is_numeric($id) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $id)) {
+      if (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $id)) {
         $Qcheck->appendQuery('where p.products_id = :products_id');
         $Qcheck->bindInt(':products_id', osc_get_product_id($id));
       } else {

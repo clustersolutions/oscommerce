@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id:success.php 188 2005-09-15 02:25:52 +0200 (Do, 15 Sep 2005) hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -44,16 +44,25 @@
 /* Private methods */
 
     function _process() {
-      $notify_string = 'action=notify&';
-      $notify = (isset($_POST['notify']) ? $_POST['notify'] : array());
+      $notify_string = '';
 
-      if (!is_array($notify)) $notify = array($notify);
+      $products_array = (isset($_POST['notify']) ? $_POST['notify'] : array());
 
-      for ($i=0, $n=sizeof($notify); $i<$n; $i++) {
-        $notify_string .= 'notify[]=' . $notify[$i] . '&';
+      if (!is_array($products_array)) {
+        $products_array = array($products_array);
       }
 
-      if (strlen($notify_string) > 0) $notify_string = substr($notify_string, 0, -1);
+      $notifications = array();
+
+      foreach ($products_array as $product_id) {
+        if (is_numeric($product_id) && !in_array($product_id, $notifications)) {
+          $notifications[] = $product_id;
+        }
+      }
+
+      if (!empty($notifications)) {
+        $notify_string = 'action=notify_add&products=' . implode(';', $notifications);
+      }
 
       osc_redirect(osc_href_link(FILENAME_DEFAULT, $notify_string, 'AUTO'));
     }

@@ -52,11 +52,11 @@
 
 // initialize the message stack for output messages
   require('includes/classes/message_stack.php');
-  $messageStack = new messageStack;
+  $messageStack = new messageStack();
 
 // initialize the cache class
   require('includes/classes/cache.php');
-  $osC_Cache = new osC_Cache;
+  $osC_Cache = new osC_Cache();
 
 // include the database class
   require('includes/classes/database.php');
@@ -83,127 +83,6 @@
 
 // include and start the services
   require('includes/classes/services.php');
-  $osC_Services = new osC_Services;
+  $osC_Services = new osC_Services();
   $osC_Services->startServices();
-
-// Shopping cart actions
-  if (isset($_GET['action'])) {
-// redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled
-    if ($osC_Session->hasStarted() === false) {
-      osc_redirect(osc_href_link(FILENAME_INFO, 'cookie'));
-    }
-
-    if (DISPLAY_CART == '1') {
-      $goto =  FILENAME_CHECKOUT;
-      $parameters = array('action', 'cPath', 'products_id', 'pid');
-    } else {
-      $goto = basename($_SERVER['SCRIPT_FILENAME']);
-      if ($_GET['action'] == 'buy_now') {
-        $parameters = array('action', 'pid', 'products_id');
-      } else {
-        $parameters = array('action', 'pid');
-      }
-    }
-
-    switch ($_GET['action']) {
-      // customer wants to remove a product from their shopping cart
-      case 'cartRemove' :     $osC_ShoppingCart->remove($_GET['products_id']);
-
-                              osc_redirect(osc_href_link($goto, osc_get_all_get_params($parameters)));
-                              break;
-      // customer wants to update the product quantity in their shopping cart
-      case 'update_product' : for ($i=0, $n=sizeof($_POST['products_id']); $i<$n; $i++) {
-                                $attributes = (isset($_POST['id']) && isset($_POST['id'][$_POST['products_id'][$i]])) ? $_POST['id'][$_POST['products_id'][$i]] : '';
-                                $osC_ShoppingCart->add($_POST['products_id'][$i], $attributes, $_POST['cart_quantity'][$i]);
-                              }
-
-                              osc_redirect(osc_href_link($goto, osc_get_all_get_params($parameters)));
-                              break;
-      // customer adds a product from the products page
-      case 'add_product' :    if (isset($_POST['products_id']) && is_numeric($_POST['products_id'])) {
-                                if (isset($_POST['id']) && is_array($_POST['id'])) {
-                                  $osC_ShoppingCart->add($_POST['products_id'], $_POST['id']);
-                                } else {
-                                  $osC_ShoppingCart->add($_POST['products_id']);
-                                }
-                              }
-
-                              osc_redirect(osc_href_link($goto, osc_get_all_get_params($parameters)));
-                              break;
-      // performed by the 'buy now' button in product listings and review page
-      case 'buy_now' :        if (isset($_GET['products_id']) && is_numeric($_GET['products_id'])) {
-                                $Qattributes = $osC_Database->query('select products_attributes_id from :table_products_attributes where products_id = :products_id limit 1');
-                                $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-                                $Qattributes->bindInt(':products_id', $_GET['products_id']);
-                                $Qattributes->execute();
-
-                                if ($Qattributes->numberOfRows() === 1) {
-                                  osc_redirect(osc_href_link(FILENAME_PRODUCTS, $_GET['products_id']));
-                                } else {
-                                  $osC_ShoppingCart->add($_GET['products_id']);
-                                }
-                              }
-
-                              osc_redirect(osc_href_link($goto, osc_get_all_get_params($parameters)));
-                              break;
-      case 'notify' :         if ($osC_Customer->isLoggedOn()) {
-                                if (isset($_GET['products_id'])) {
-                                  $notify = $_GET['products_id'];
-                                } elseif (isset($_GET['notify'])) {
-                                  $notify = $_GET['notify'];
-                                } elseif (isset($_POST['notify'])) {
-                                  $notify = $_POST['notify'];
-                                } else {
-                                  osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action', 'notify'))));
-                                }
-
-                                if (!is_array($notify)) $notify = array($notify);
-                                for ($i=0, $n=sizeof($notify); $i<$n; $i++) {
-                                  $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
-                                  $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
-                                  $Qcheck->bindInt(':products_id', $notify[$i]);
-                                  $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-                                  $Qcheck->execute();
-
-                                  if ($Qcheck->valueInt('count') < 1) {
-                                    $Qn = $osC_Database->query('insert into :table_products_notifications (products_id, customers_id, date_added) values (:products_id, :customers_id, :date_added)');
-                                    $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
-                                    $Qn->bindInt(':products_id', $notify[$i]);
-                                    $Qn->bindInt(':customers_id', $osC_Customer->getID());
-                                    $Qn->bindRaw(':date_added', 'now()');
-                                    $Qn->execute();
-                                  }
-                                }
-
-                                osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action', 'notify'))));
-                              } else {
-                                $osC_NavigationHistory->setSnapshot();
-
-                                osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
-                              }
-                              break;
-      case 'notify_remove' :  if ($osC_Customer->isLoggedOn() && isset($_GET['products_id'])) {
-                                $Qcheck = $osC_Database->query('select count(*) as count from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
-                                $Qcheck->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
-                                $Qcheck->bindInt(':products_id', $_GET['products_id']);
-                                $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-                                $Qcheck->execute();
-
-                                if ($Qcheck->valueInt('count') > 0) {
-                                  $Qn = $osC_Database->query('delete from :table_products_notifications where products_id = :products_id and customers_id = :customers_id');
-                                  $Qn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
-                                  $Qn->bindInt(':products_id', $_GET['products_id']);
-                                  $Qn->bindInt(':customers_id', $osC_Customer->getID());
-                                  $Qn->execute();
-                                }
-
-                                osc_redirect(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('action'))));
-                              } else {
-                                $osC_NavigationHistory->setSnapshot();
-
-                                osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
-                              }
-                              break;
-    }
-  }
 ?>

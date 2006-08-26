@@ -194,6 +194,9 @@
       $_page_module_name = 'osC_' . ucfirst($group) . '_' . ucfirst($module);
       $object = new $_page_module_name();
 
+      require('includes/classes/actions.php');
+      osC_Actions::parse();
+
       return $object;
     }
 

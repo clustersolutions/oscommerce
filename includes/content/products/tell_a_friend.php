@@ -39,7 +39,7 @@
           continue;
         }
 
-        if ( (is_numeric($key) || ereg('[0-9]+[{[0-9]+}[0-9]+]*$', $key) || ereg('[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
+        if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
           if (osC_Product::checkEntry($key) === false) {
             $this->_page_title = $osC_Language->get('product_not_found_heading');
             $this->_page_contents = 'info_not_found.php';

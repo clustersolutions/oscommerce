@@ -27,7 +27,7 @@
   }
 ?>
 
-<form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=add_product'); ?>" method="post">
+<form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=cart_add'); ?>" method="post">
 
 <p><?php echo $osC_Product->getDescription(); ?></p>
 
@@ -46,7 +46,7 @@
 
   <tr>
     <td><?php echo $values['options_name'] . ':'; ?></td>
-    <td><?php echo osc_draw_pull_down_menu('id[' . $options . ']', $values['data']); ?></td>
+    <td><?php echo osc_draw_pull_down_menu('attributes[' . $options . ']', $values['data']); ?></td>
   </tr>
 
 <?php
@@ -90,7 +90,7 @@
     echo '<span style="float: left;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews'))) . '</span>';
   }
 ?>
-  <?php echo osc_draw_hidden_field('products_id', osc_get_product_id($osC_Product->getID())) . osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
+  <?php echo osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
 </div>
 
 </form>

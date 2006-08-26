@@ -19,7 +19,7 @@
   if ($osC_ShoppingCart->hasContents()) {
 ?>
 
-<form name="shopping_cart" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'action=update_product', 'SSL'); ?>" method="post">
+<form name="shopping_cart" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'action=cart_update', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('shopping_cart_heading'); ?></h6>
@@ -44,7 +44,21 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'action=cartRemove&products_id=' . $products['id'], 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
+        <td valign="top" width="60">
+
+<?php
+      $attributes_array = array();
+
+      if ($osC_ShoppingCart->hasAttributes($products['id'])) {
+        foreach ($osC_ShoppingCart->getAttributes($products['id']) as $attributes) {
+          $attributes_array[] = $attributes['options_id'] . ':' . $attributes['options_values_id'];
+        }
+      }
+
+      echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, $products['keyword'] . (!empty($attributes_array) ? '&attributes=' . implode(';', $attributes_array) : '') . '&action=cart_remove', 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete')));
+?>
+
+        </td>
         <td valign="top">
 
 <?php
@@ -56,9 +70,11 @@
 
       echo '&nbsp;(Top Category)';
 
+      $atttributes_array = array();
+
       if ($osC_ShoppingCart->hasAttributes($products['id'])) {
         foreach ($osC_ShoppingCart->getAttributes($products['id']) as $attributes) {
-          echo osc_draw_hidden_field('id[' . $products['id'] . '][' . $attributes['options_id'] . ']', $attributes['options_values_id']);
+          $atttributes_array[$attributes['options_id']] = $attributes['options_values_id'];
 
           echo '<br />- ' . $attributes['products_options_name'] . ': ' . $attributes['products_options_values_name'];
         }
@@ -66,7 +82,7 @@
 ?>
 
         </td>
-        <td valign="top"><?php echo osc_draw_input_field('cart_quantity[]', $products['quantity'], 'size="4"') . osc_draw_hidden_field('products_id[]', $products['id']); ?></td>
+        <td valign="top"><?php echo osc_draw_input_field('products[' . osc_get_product_id_string($products['id'], $atttributes_array) . ']', $products['quantity'], 'size="4"'); ?></td>
         <td valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity']) . '</b>'; ?></td>
       </tr>
 
