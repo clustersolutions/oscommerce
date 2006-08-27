@@ -89,7 +89,13 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_VALUE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('value', null, 60, 4, 'style="width: 100%"'); ?></td>
+        <td class="smallText" width="60%">
+<?php
+  foreach ($osC_Language->getAll() as $l) {
+    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name'], null, null, 'style="vertical-align: top; padding-top: 5px; margin-left: -20px;"') . '&nbsp;' . osc_draw_textarea_field('value[' . $l['id'] . ']', null, 60, 4, 'style="width: 99%;"') . '<br />';
+  }
+?>
+        </td>
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFINITION_GROUP . '</b>'; ?></td>

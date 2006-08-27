@@ -19,13 +19,22 @@
       case 'insert':
         $error = false;
 
-        $Qdefinition = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-        $Qdefinition->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-        $Qdefinition->bindInt(':languages_id', $_GET['lID']);
-        $Qdefinition->bindValue(':content_group', (empty($_POST['group_new']) ? $_POST['group'] : $_POST['group_new']));
-        $Qdefinition->bindValue(':definition_key', $_POST['key']);
-        $Qdefinition->bindValue(':definition_value', $_POST['value']);
-        $Qdefinition->execute();
+        $osC_Database->startTransaction();
+
+        foreach ($osC_Language->getAll() as $l) {
+          $Qdefinition = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+          $Qdefinition->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdefinition->bindInt(':languages_id', $l['id']);
+          $Qdefinition->bindValue(':content_group', (empty($_POST['group_new']) ? $_POST['group'] : $_POST['group_new']));
+          $Qdefinition->bindValue(':definition_key', $_POST['key']);
+          $Qdefinition->bindValue(':definition_value', $_POST['value'][$l['id']]);
+          $Qdefinition->execute();
+
+          if ($osC_Database->isError()) {
+            $error = true;
+            break;
+          }
+        }
 
         if ($error === false) {
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
