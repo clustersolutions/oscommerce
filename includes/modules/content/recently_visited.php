@@ -43,13 +43,15 @@
               $this->_content .= '<span style="float: left; width: ' . ($osC_Image->getWidth('mini') + 10) . 'px; text-align: center;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $product['keyword']), $osC_Image->show($product['image'], $product['name'], null, 'mini')) . '</span>';
             }
 
-            $this->_content .= '<div style="padding-left: ' . ($osC_Image->getWidth('mini') + 10) . 'px;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $product['keyword']), $product['name']) . '<br />';
+            $this->_content .= '<div style="float: left;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $product['keyword']), $product['name']) . '<br />';
 
             if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == '1') {
               $this->_content .= $product['price'] . '&nbsp;';
             }
 
-            $this->_content .= '<i>(' . sprintf($osC_Language->get('recently_visited_item_in_category'), osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $product['category_path']), $product['category_name'])) . ')</i></div></li>';
+            $this->_content .= '<i>(' . sprintf($osC_Language->get('recently_visited_item_in_category'), osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $product['category_path']), $product['category_name'])) . ')</i></div>' .
+                               '<div style="clear: both;"></div>' .
+                               '</li>';
           }
 
           $this->_content .= '      </ol>' .

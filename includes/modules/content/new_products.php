@@ -50,7 +50,7 @@
       $Qnewproducts->execute();
 
       if ($Qnewproducts->numberOfRows()) {
-        $this->_content = '<div style="overflow: auto;">';
+        $this->_content = '<div style="overflow: auto; height: 100%;">';
 
         while ($Qnewproducts->next()) {
           $products_price = $osC_Currencies->displayPrice($Qnewproducts->valueDecimal('products_price'), $Qnewproducts->valueInt('products_tax_class_id'));
