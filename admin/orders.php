@@ -88,7 +88,7 @@
 
                   $email_body .= sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$_POST['status']]);
 
-                  osc_mail($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), EMAIL_TEXT_SUBJECT, $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+                  osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), EMAIL_TEXT_SUBJECT, $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
                 }
 
                 $Qupdate = $osC_Database->query('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');

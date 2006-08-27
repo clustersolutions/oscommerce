@@ -342,7 +342,7 @@
                 }
 
                 $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT; // . sprintf(EMAIL_PASSWORD, $customers_password);
-                osc_mail($full_name, $Qcustomer->value('customers_email_address'), EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+                osc_email($full_name, $Qcustomer->value('customers_email_address'), EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
               }
 
               $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
