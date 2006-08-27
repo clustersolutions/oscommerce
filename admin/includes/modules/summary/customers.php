@@ -44,15 +44,14 @@
                      '  </thead>' .
                      '  <tbody>';
 
-      $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_lastname, c.customers_firstname, c.customers_status, ci.customers_info_date_account_created from :table_customers c, :table_customers_info ci where c.customers_id = ci.customers_info_id order by ci.customers_info_date_account_created desc limit 6');
+      $Qcustomers = $osC_Database->query('select customers_id, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
       $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
-      $Qcustomers->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
       $Qcustomers->execute();
 
       while ($Qcustomers->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_CUSTOMERS, 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
-                        '      <td>' . $Qcustomers->value('customers_info_date_account_created') . '</td>' .
+                        '      <td>' . $Qcustomers->value('date_account_created') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';
       }

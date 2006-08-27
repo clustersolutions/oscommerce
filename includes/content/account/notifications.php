@@ -31,9 +31,9 @@
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!
-      $Qglobal = $osC_Database->query('select global_product_notifications from :table_customers_info where customers_info_id = :customers_info_id');
-      $Qglobal->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-      $Qglobal->bindInt(':customers_info_id', $osC_Customer->getID());
+      $Qglobal = $osC_Database->query('select global_product_notifications from :table_customers where customers_id = :customers_id');
+      $Qglobal->bindTable(':table_customers', TABLE_CUSTOMERS);
+      $Qglobal->bindInt(':customers_id', $osC_Customer->getID());
       $Qglobal->execute();
 
       if ($_GET[$this->_module] == 'save') {
@@ -89,10 +89,10 @@
       if ($product_global != $Qglobal->valueInt('global_product_notifications')) {
         $product_global = (($Qglobal->valueInt('global_product_notifications') == '1') ? '0' : '1');
 
-        $Qupdate = $osC_Database->query('update :table_customers_info set global_product_notifications = :global_product_notifications where customers_info_id = :customers_info_id');
-        $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
+        $Qupdate = $osC_Database->query('update :table_customers set global_product_notifications = :global_product_notifications where customers_id = :customers_id');
+        $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
         $Qupdate->bindInt(':global_product_notifications', $product_global);
-        $Qupdate->bindInt(':customers_info_id', $osC_Customer->getID());
+        $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
         $Qupdate->execute();
 
         if ($Qupdate->affectedRows() == 1) {

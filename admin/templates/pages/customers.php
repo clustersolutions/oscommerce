@@ -37,7 +37,7 @@
     </thead>
     <tbody>
 <?php
-  $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
+  $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.date_account_last_modified, c.date_last_logon, c.number_of_logons, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
   $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
   $Qcustomers->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
   if (isset($_GET['search']) && !empty($_GET['search'])) {
@@ -51,18 +51,13 @@
   $Qcustomers->execute();
 
   while ($Qcustomers->next()) {
-    $Qinfo = $osC_Database->query('select customers_info_date_account_created as date_account_created, customers_info_date_account_last_modified as date_account_last_modified, customers_info_date_of_last_logon as date_last_logon, customers_info_number_of_logons as number_of_logons from :table_customers_info where customers_info_id = :customers_info_id');
-    $Qinfo->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-    $Qinfo->bindInt(':customers_info_id', $Qcustomers->valueInt('customers_id'));
-    $Qinfo->execute();
-
     if (!isset($cInfo) && (!isset($_GET['cID']) || (isset($_GET['cID']) && ($_GET['cID'] == $Qcustomers->value('customers_id'))))) {
       $Qreviews = $osC_Database->query('select count(*) as number_of_reviews from :table_reviews where customers_id = :customers_id');
       $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qreviews->bindInt(':customers_id', $Qcustomers->valueInt('customers_id'));
       $Qreviews->execute();
 
-      $cInfo_array = array_merge($Qcustomers->toArray(), $Qinfo->toArray(), $Qreviews->toArray());
+      $cInfo_array = array_merge($Qcustomers->toArray(), $Qreviews->toArray());
 
       if ($Qcustomers->valueInt('entry_country_id') > 0) {
         $Qcountry = $osC_Database->query('select countries_name from :table_countries where countries_id = :countries_id');
@@ -84,7 +79,7 @@
 ?>
         <td><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
         <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
-        <td><?php echo osC_DateTime::getShort($Qinfo->value('date_account_created')); ?></td>
+        <td><?php echo osC_DateTime::getShort($Qcustomers->value('date_account_created')); ?></td>
         <td align="center"><?php echo osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
 <?php

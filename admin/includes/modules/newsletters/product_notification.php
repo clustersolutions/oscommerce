@@ -124,8 +124,8 @@ function selectAll(FormName, SelectBox) {
       global $osC_Database;
 
       if ( (isset($_POST['chosen']) && !empty($_POST['chosen'])) || (isset($_GET['global']) && ($_GET['global'] == 'true')) ) {
-        $Qcustomers = $osC_Database->query('select count(customers_info_id) as total from :table_customers_info where global_product_notifications = 1');
-        $Qcustomers->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
+        $Qcustomers = $osC_Database->query('select count(customers_id) as total from :table_customers where global_product_notifications = 1');
+        $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
         $Qcustomers->execute();
 
         $this->_audience_size = $Qcustomers->valueInt('total');
@@ -195,9 +195,8 @@ function selectAll(FormName, SelectBox) {
 
       $audience = array();
 
-      $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_firstname, c.customers_lastname, c.customers_email_address from :table_customers c, :table_customers_info ci where ci.global_product_notifications = 1 and ci.customers_info_id = c.customers_id');
+      $Qcustomers = $osC_Database->query('select customers_id, customers_firstname, customers_lastname, customers_email_address from :table_customers where global_product_notifications = 1');
       $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
-      $Qcustomers->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
       $Qcustomers->execute();
 
       while ($Qcustomers->next()) {

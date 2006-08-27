@@ -10,9 +10,9 @@
   Released under the GNU General Public License
 */
 
-  $Qglobal = $osC_Database->query('select global_product_notifications from :table_customers_info where customers_info_id =:customers_info_id');
-  $Qglobal->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-  $Qglobal->bindInt(':customers_info_id', $osC_Customer->getID());
+  $Qglobal = $osC_Database->query('select global_product_notifications from :table_customers where customers_id =:customers_id');
+  $Qglobal->bindTable(':table_customers', TABLE_CUSTOMERS);
+  $Qglobal->bindInt(':customers_id', $osC_Customer->getID());
   $Qglobal->execute();
 
   if ($Qglobal->valueInt('global_product_notifications') !== 1) {

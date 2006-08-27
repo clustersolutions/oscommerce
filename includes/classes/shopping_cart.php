@@ -22,7 +22,7 @@
         $_products_in_stock = true;
 
     function osC_ShoppingCart() {
-      if (isset($_SESSION['osC_ShoppingCart_data']) === false) {
+      if (!isset($_SESSION['osC_ShoppingCart_data'])) {
         $_SESSION['osC_ShoppingCart_data'] = array('contents' => array(),
                                                    'sub_total_cost' => 0,
                                                    'total_cost' => 0,
@@ -63,19 +63,19 @@
     }
 
     function synchronizeWithDatabase() {
-      global $osC_Database, $osC_Language, $osC_Customer, $osC_Image;
+      global $osC_Database, $osC_Services, $osC_Language, $osC_Customer, $osC_Image;
 
-      if ($osC_Customer->isLoggedOn() === false) {
+      if (!$osC_Customer->isLoggedOn()) {
         return false;
       }
 
 // insert current cart contents in database
       if ($this->hasContents()) {
-        foreach ($this->_contents as $products_id => $data) {
+        foreach ($this->_contents as $products_id_string => $data) {
           $Qproduct = $osC_Database->query('select products_id, customers_basket_quantity from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
           $Qproduct->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
           $Qproduct->bindInt(':customers_id', $osC_Customer->getID());
-          $Qproduct->bindValue(':products_id', $products_id);
+          $Qproduct->bindValue(':products_id', $products_id_string);
           $Qproduct->execute();
 
           if ($Qproduct->numberOfRows() > 0) {
@@ -83,27 +83,15 @@
             $Qupdate->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qupdate->bindInt(':customers_basket_quantity', $data['quantity'] + $Qproduct->valueInt('customers_basket_quantity'));
             $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
-            $Qupdate->bindValue(':products_id', $products_id);
+            $Qupdate->bindValue(':products_id', $products_id_string);
             $Qupdate->execute();
           } else {
             $Qnew = $osC_Database->query('insert into :table_customers_basket (customers_id, products_id, customers_basket_quantity, customers_basket_date_added) values (:customers_id, :products_id, :customers_basket_quantity, now())');
             $Qnew->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qnew->bindInt(':customers_id', $osC_Customer->getID());
-            $Qnew->bindValue(':products_id', $products_id);
+            $Qnew->bindValue(':products_id', $products_id_string);
             $Qnew->bindInt(':customers_basket_quantity', $data['quantity']);
             $Qnew->execute();
-
-            if (isset($data['attributes'])) {
-              foreach ($data['attributes'] as $option => $value) {
-                $Qnew = $osC_Database->query('insert into :table_customers_basket_attributes (customers_id, products_id, products_options_id, products_options_value_id) values (:customers_id, :products_id, :products_options_id, :products_options_value_id)');
-                $Qnew->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-                $Qnew->bindInt(':customers_id', $osC_Customer->getID());
-                $Qnew->bindValue(':products_id', $products_id);
-                $Qnew->bindInt(':products_options_id', $option);
-                $Qnew->bindInt(':products_options_value_id', $value['options_values_id']);
-                $Qnew->execute();
-              }
-            }
           }
         }
       }
@@ -122,15 +110,31 @@
       $Qproducts->execute();
 
       while ($Qproducts->next()) {
+        $product = explode('#', $Qproducts->value('products_id'), 2);
+        $attributes_array = array();
+
+        if (isset($product[1])) {
+          $attributes = explode(';', $product[1]);
+
+          foreach ($attributes as $set) {
+            $attribute = explode(':', $set);
+
+            if (!is_numeric($attribute[0]) || !is_numeric($attribute[1])) {
+              continue 2; // skip product
+            }
+
+            $attributes_array[$attribute[0]] = $attribute[1];
+          }
+        }
+
         $price = $Qproducts->value('products_price');
 
-        $Qspecials = $osC_Database->query('select specials_new_products_price from :table_specials where products_id = :products_id and status = 1');
-        $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-        $Qspecials->bindInt(':products_id', osc_get_product_id($Qproducts->value('products_id')));
-        $Qspecials->execute();
+        if ($osC_Services->isStarted('specials')) {
+          global $osC_Specials;
 
-        if ($Qspecials->numberOfRows() > 0) {
-          $price = $Qspecials->value('specials_new_products_price');
+          if ($new_price = $osC_Specials->getPrice(osc_get_product_id($Qproducts->value('products_id')))) {
+            $price = $new_price;
+          }
         }
 
         $this->_contents[$Qproducts->value('products_id')] = array('id' => $Qproducts->value('products_id'),
@@ -145,30 +149,36 @@
                                                                    'date_added' => osC_DateTime::getShort($Qproducts->value('customers_basket_date_added')),
                                                                    'weight_class_id' => $Qproducts->valueInt('products_weight_class'));
 
-        $Qattributes = $osC_Database->query('select cba.products_options_id, cba.products_options_value_id, po.products_options_name, pov.products_options_values_name, pa.options_values_price, pa.price_prefix from :table_customers_basket_attributes cba, :table_products_options po, :table_products_options_values pov, :table_products_attributes pa where cba.customers_id = 1 and cba.products_id = :products_id and pa.products_id = :products_id and cba.products_options_id = pa.options_id and pa.options_id = po.products_options_id and po.language_id = :language_id and cba.products_options_value_id = pa.options_values_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id');
-        $Qattributes->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-        $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-        $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-        $Qattributes->bindInt(':customers_id', $osC_Customer->getID());
-        $Qattributes->bindValue(':products_id', $Qproducts->value('products_id'));
-        $Qattributes->bindInt(':products_id', osc_get_product_id($Qproducts->value('products_id')));
-        $Qattributes->bindInt(':language_id', $osC_Language->getID());
-        $Qattributes->bindInt(':language_id', $osC_Language->getID());
-        $Qattributes->execute();
+        if (!empty($attributes_array)) {
+          foreach ($attributes_array as $option_id => $value_id) {
+            $Qattributes = $osC_Database->query('select pa.options_values_price, pa.price_prefix, po.products_options_name, pov.products_options_values_name from :table_products_attributes pa, :table_products_options po, :table_products_options_values pov where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_values_id = :options_values_id and pa.options_id = po.products_options_id and po.language_id = :language_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id');
+            $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
+            $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
+            $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
+            $Qattributes->bindInt(':products_id', osc_get_product_id($Qproducts->value('products_id')));
+            $Qattributes->bindInt(':options_id', $option_id);
+            $Qattributes->bindInt(':options_values_id', $value_id);
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
+            $Qattributes->bindInt(':language_id', $osC_Language->getID());
+            $Qattributes->execute();
 
-        while ($Qattributes->next()) {
-          $this->_contents[$Qproducts->value('products_id')]['attributes'][$Qattributes->valueInt('products_options_id')] = array('options_id' => $Qattributes->valueInt('products_options_id'),
-                                                                                                                                  'options_values_id' => $Qattributes->valueInt('products_options_value_id'),
-                                                                                                                                  'products_options_name' => $Qattributes->value('products_options_name'),
-                                                                                                                                  'products_options_values_name' => $Qattributes->value('products_options_values_name'),
-                                                                                                                                  'options_values_price' => $Qattributes->value('options_values_price'),
-                                                                                                                                  'price_prefix' => $Qattributes->value('price_prefix'));
+            if ($Qattributes->numberOfRows() > 0) {
+              $this->_contents[$Qproducts->value('products_id')]['attributes'][$option_id] = array('options_id' => $option_id,
+                                                                                                   'options_values_id' => $value_id,
+                                                                                                   'products_options_name' => $Qattributes->value('products_options_name'),
+                                                                                                   'products_options_values_name' => $Qattributes->value('products_options_values_name'),
+                                                                                                   'options_values_price' => $Qattributes->value('options_values_price'),
+                                                                                                   'price_prefix' => $Qattributes->value('price_prefix'));
 
-          if ($Qattributes->value('price_prefix') == '+') {
-            $this->_contents[$Qproducts->value('products_id')]['final_price'] += $Qattributes->value('options_values_price');
-          } else {
-            $this->_contents[$Qproducts->value('products_id')]['final_price'] -= $Qattributes->value('options_values_price');
+              if ($Qattributes->value('price_prefix') == '+') {
+                $this->_contents[$Qproducts->value('products_id')]['final_price'] += $Qattributes->value('options_values_price');
+              } else {
+                $this->_contents[$Qproducts->value('products_id')]['final_price'] -= $Qattributes->value('options_values_price');
+              }
+            } else {
+              unset($this->_contents[$Qproducts->value('products_id')]);
+              continue 2; // skip product
+            }
           }
         }
       }
@@ -181,18 +191,6 @@
       global $osC_Database, $osC_Customer;
 
       if (($reset_database === true) && $osC_Customer->isLoggedOn()) {
-        $Qcheck = $osC_Database->query('select customers_basket_attributes_id from :table_customers_basket_attributes where customers_id = :customers_id limit 1');
-        $Qcheck->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->execute();
-
-        if ($Qcheck->numberOfRows() > 0) {
-          $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id');
-          $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-          $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
-          $Qdelete->execute();
-        }
-
         $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id');
         $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
         $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
@@ -214,10 +212,10 @@
       $this->resetBillingMethod();
     }
 
-    function add($products_id, $attributes = '', $quantity = '') {
-      global $osC_Database, $osC_Language, $osC_Customer, $osC_Image;
+    function add($products_id_string, $attributes = null, $quantity = null) {
+      global $osC_Database, $osC_Services, $osC_Language, $osC_Customer, $osC_Image;
 
-      $products_id_string = osc_get_product_id_string($products_id, $attributes);
+      $products_id_string = osc_get_product_id_string($products_id_string, $attributes);
       $products_id = osc_get_product_id($products_id_string);
 
       if (is_numeric($products_id)) {
@@ -230,7 +228,7 @@
 
         if ($Qcheck->valueInt('products_status') === 1) {
           if ($this->exists($products_id_string)) {
-            if (is_numeric($quantity) === false) {
+            if (!is_numeric($quantity)) {
               $quantity = $this->getQuantity($products_id_string) + 1;
             }
 
@@ -246,7 +244,7 @@
               $Qupdate->execute();
             }
           } else {
-            if (is_numeric($quantity) === false) {
+            if (!is_numeric($quantity)) {
               $quantity = 1;
             }
 
@@ -258,13 +256,12 @@
 
             $price = $Qcheck->value('products_price');
 
-            $Qspecials = $osC_Database->query('select specials_new_products_price from :table_specials where products_id = :products_id and status = 1');
-            $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
-            $Qspecials->bindInt(':products_id', $products_id);
-            $Qspecials->execute();
+            if ($osC_Services->isStarted('specials')) {
+              global $osC_Specials;
 
-            if ($Qspecials->numberOfRows() > 0) {
-              $price = $Qspecials->value('specials_new_products_price');
+              if ($new_price = $osC_Specials->getPrice($products_id)) {
+                $price = $new_price;
+              }
             }
 
             $this->_contents[$products_id_string] = array('id' => $products_id_string,
@@ -289,7 +286,7 @@
               $Qnew->execute();
             }
 
-            if (is_array($attributes) && (empty($attributes) === false)) {
+            if (is_array($attributes) && !empty($attributes)) {
               foreach ($attributes as $option => $value) {
                 $Qattributes = $osC_Database->query('select pa.options_values_price, pa.price_prefix, po.products_options_name, pov.products_options_values_name from :table_products_attributes pa, :table_products_options po, :table_products_options_values pov where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_values_id = :options_values_id and pa.options_id = po.products_options_id and po.language_id = :language_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id');
                 $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
@@ -313,17 +310,6 @@
                   $this->_contents[$products_id_string]['final_price'] += $Qattributes->value('options_values_price');
                 } else {
                   $this->_contents[$products_id_string]['final_price'] -= $Qattributes->value('options_values_price');
-                }
-
-// insert into database
-                if ($osC_Customer->isLoggedOn()) {
-                  $Qnew = $osC_Database->query('insert into :table_customers_basket_attributes (customers_id, products_id, products_options_id, products_options_value_id) values (:customers_id, :products_id, :products_options_id, :products_options_value_id)');
-                  $Qnew->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-                  $Qnew->bindInt(':customers_id', $osC_Customer->getID());
-                  $Qnew->bindValue(':products_id', $products_id_string);
-                  $Qnew->bindInt(':products_options_id', $option);
-                  $Qnew->bindInt(':products_options_value_id', $value);
-                  $Qnew->execute();
                 }
               }
             }
@@ -366,20 +352,6 @@
 
 // remove from database
       if ($osC_Customer->isLoggedOn()) {
-        $Qcheck = $osC_Database->query('select customers_basket_attributes_id from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id limit 1');
-        $Qcheck->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-        $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-        $Qcheck->bindValue(':products_id', $products_id);
-        $Qcheck->execute();
-
-        if ($Qcheck->numberOfRows() > 0) {
-          $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
-          $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-          $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
-          $Qdelete->bindValue(':products_id', $products_id);
-          $Qdelete->execute();
-        }
-
         $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
         $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
         $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
@@ -485,11 +457,11 @@
     }
 
     function hasAttributes($products_id) {
-      return isset($this->_contents[$products_id]['attributes']) && (empty($this->_contents[$products_id]['attributes']) === false);
+      return isset($this->_contents[$products_id]['attributes']) && !empty($this->_contents[$products_id]['attributes']);
     }
 
     function getAttributes($products_id) {
-      if (isset($this->_contents[$products_id]['attributes']) && (empty($this->_contents[$products_id]['attributes']) === false)) {
+      if (isset($this->_contents[$products_id]['attributes']) && !empty($this->_contents[$products_id]['attributes'])) {
         return $this->_contents[$products_id]['attributes'];
       }
     }
@@ -544,7 +516,7 @@
                                        'suburb' => $Qaddress->valueProtected('entry_suburb'),
                                        'city' => $Qaddress->valueProtected('entry_city'),
                                        'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                       'state' => (osc_empty($Qaddress->valueProtected('entry_state')) === false) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                       'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
                                        'zone_id' => $Qaddress->valueInt('entry_zone_id'),
                                        'zone_code' => $Qaddress->value('zone_code'),
                                        'country_id' => $Qaddress->valueInt('entry_country_id'),
@@ -632,7 +604,7 @@
                                       'suburb' => $Qaddress->valueProtected('entry_suburb'),
                                       'city' => $Qaddress->valueProtected('entry_city'),
                                       'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                      'state' => (osc_empty($Qaddress->valueProtected('entry_state')) === false) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                      'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
                                       'zone_id' => $Qaddress->valueInt('entry_zone_id'),
                                       'zone_code' => $Qaddress->value('zone_code'),
                                       'country_id' => $Qaddress->valueInt('entry_country_id'),
@@ -734,20 +706,6 @@
 
 // remove from database
           if ($osC_Customer->isLoggedOn()) {
-            $Qcheck = $osC_Database->query('select customers_basket_attributes_id from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id limit 1');
-            $Qcheck->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-            $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
-            $Qcheck->bindValue(':products_id', $products_id);
-            $Qcheck->execute();
-
-            if ($Qcheck->numberOfRows() > 0) {
-              $Qdelete = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id and products_id = :products_id');
-              $Qdelete->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-              $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
-              $Qdelete->bindValue(':products_id', $products_id);
-              $Qdelete->execute();
-            }
-
             $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
             $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
@@ -811,11 +769,11 @@
       }
 
       if ($set_shipping === true) {
-        if (class_exists('osC_Shipping') === false) {
+        if (!class_exists('osC_Shipping')) {
           include('includes/classes/shipping.php');
         }
 
-        if ( ($this->hasShippingMethod() === false) || ($this->getShippingMethod('is_cheapest') === true) ) {
+        if (!$this->hasShippingMethod() || ($this->getShippingMethod('is_cheapest') === true)) {
           $osC_Shipping = new osC_Shipping();
           $this->setShippingMethod($osC_Shipping->getCheapestQuote(), false);
         } else {
@@ -824,7 +782,7 @@
         }
       }
 
-      if (class_exists('osC_OrderTotal') === false) {
+      if (!class_exists('osC_OrderTotal')) {
         include('includes/classes/order_total.php');
       }
 

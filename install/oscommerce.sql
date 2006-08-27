@@ -166,20 +166,25 @@ CREATE TABLE osc_currencies (
 
 DROP TABLE IF EXISTS osc_customers;
 CREATE TABLE osc_customers (
-   customers_id int NOT NULL auto_increment,
-   customers_gender char(1) NOT NULL,
-   customers_firstname varchar(32) NOT NULL,
-   customers_lastname varchar(32) NOT NULL,
-   customers_dob datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-   customers_email_address varchar(96) NOT NULL,
-   customers_default_address_id int NOT NULL,
-   customers_telephone varchar(32) NOT NULL,
-   customers_fax varchar(32),
-   customers_password varchar(40) NOT NULL,
-   customers_newsletter char(1),
-   customers_status int(1) DEFAULT '0',
-   customers_ip_address varchar(15),
-   PRIMARY KEY (customers_id)
+  customers_id int NOT NULL auto_increment,
+  customers_gender char(1) NOT NULL,
+  customers_firstname varchar(32) NOT NULL,
+  customers_lastname varchar(32) NOT NULL,
+  customers_dob datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+  customers_email_address varchar(96) NOT NULL,
+  customers_default_address_id int NOT NULL,
+  customers_telephone varchar(32) NOT NULL,
+  customers_fax varchar(32),
+  customers_password varchar(40) NOT NULL,
+  customers_newsletter char(1),
+  customers_status int(1) DEFAULT '0',
+  customers_ip_address varchar(15),
+  date_last_logon datetime,
+  number_of_logons int(5),
+  date_account_created datetime,
+  date_account_last_modified datetime,
+  global_product_notifications int(1) DEFAULT '0',
+  PRIMARY KEY (customers_id)
 );
 
 DROP TABLE IF EXISTS osc_customers_basket;
@@ -191,27 +196,6 @@ CREATE TABLE osc_customers_basket (
   final_price decimal(15,4) NOT NULL,
   customers_basket_date_added datetime,
   PRIMARY KEY (customers_basket_id)
-);
-
-DROP TABLE IF EXISTS osc_customers_basket_attributes;
-CREATE TABLE osc_customers_basket_attributes (
-  customers_basket_attributes_id int NOT NULL auto_increment,
-  customers_id int NOT NULL,
-  products_id tinytext NOT NULL,
-  products_options_id int NOT NULL,
-  products_options_value_id int NOT NULL,
-  PRIMARY KEY (customers_basket_attributes_id)
-);
-
-DROP TABLE IF EXISTS osc_customers_info;
-CREATE TABLE osc_customers_info (
-  customers_info_id int NOT NULL,
-  customers_info_date_of_last_logon datetime,
-  customers_info_number_of_logons int(5),
-  customers_info_date_account_created datetime,
-  customers_info_date_account_last_modified datetime,
-  global_product_notifications int(1) DEFAULT '0',
-  PRIMARY KEY (customers_info_id)
 );
 
 DROP TABLE IF EXISTS osc_languages;

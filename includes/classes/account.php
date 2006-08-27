@@ -41,9 +41,7 @@
     function createEntry($data) {
       global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_NavigationHistory;
 
-      $osC_Database->startTransaction();
-
-      $Qcustomer = $osC_Database->query('insert into :table_customers (customers_firstname, customers_lastname, customers_email_address, customers_newsletter, customers_status, customers_ip_address, customers_password, customers_gender, customers_dob) values (:customers_firstname, :customers_lastname, :customers_email_address, :customers_newsletter, :customers_status, :customers_ip_address, :customers_password, :customers_gender, :customers_dob)');
+      $Qcustomer = $osC_Database->query('insert into :table_customers (customers_firstname, customers_lastname, customers_email_address, customers_newsletter, customers_status, customers_ip_address, customers_password, customers_gender, customers_dob, number_of_logons, date_account_created) values (:customers_firstname, :customers_lastname, :customers_email_address, :customers_newsletter, :customers_status, :customers_ip_address, :customers_password, :customers_gender, :customers_dob, :number_of_logons, :date_account_created)');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomer->bindValue(':customers_firstname', $data['firstname']);
       $Qcustomer->bindValue(':customers_lastname', $data['lastname']);
@@ -54,53 +52,40 @@
       $Qcustomer->bindValue(':customers_password', osc_encrypt_string($data['password']));
       $Qcustomer->bindValue(':customers_gender', (((ACCOUNT_GENDER > -1) && isset($data['gender']) && (($data['gender'] == 'm') || ($data['gender'] == 'f'))) ? $data['gender'] : ''));
       $Qcustomer->bindValue(':customers_dob', ((ACCOUNT_DATE_OF_BIRTH == '1') ? date('Ymd', $data['dob']) : ''));
+      $Qcustomer->bindInt(':number_of_logons', 0);
+      $Qcustomer->bindRaw(':date_account_created', 'now()');
       $Qcustomer->execute();
 
       if ($Qcustomer->affectedRows() === 1) {
         $customer_id = $osC_Database->nextID();
 
-        $Qci = $osC_Database->query('insert into :table_customers_info (customers_info_id, customers_info_number_of_logons, customers_info_date_account_created) values (:customers_info_id, :customers_info_number_of_logons, :customers_info_date_account_created)');
-        $Qci->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-        $Qci->bindInt(':customers_info_id', $customer_id);
-        $Qci->bindInt(':customers_info_number_of_logons', 0);
-        $Qci->bindRaw(':customers_info_date_account_created', 'now()');
-        $Qci->execute();
+        if (SERVICE_SESSION_REGENERATE_ID == '1') {
+          $osC_Session->recreate();
+        }
 
-        if ($Qci->affectedRows() === 1) {
-          $osC_Database->commitTransaction();
-
-          if (SERVICE_SESSION_REGENERATE_ID == '1') {
-            $osC_Session->recreate();
-          }
-
-          $osC_Customer->setCustomerData($customer_id);
+        $osC_Customer->setCustomerData($customer_id);
 
 // restore cart contents
-          $osC_ShoppingCart->synchronizeWithDatabase();
+        $osC_ShoppingCart->synchronizeWithDatabase();
 
-          $osC_NavigationHistory->removeCurrentPage();
+        $osC_NavigationHistory->removeCurrentPage();
 
 // build the message content
-          if ((ACCOUNT_GENDER > -1) && isset($data['gender'])) {
-             if ($data['gender'] == 'm') {
-               $email_text = sprintf($osC_Language->get('email_addressing_gender_male'), $osC_Customer->getLastName()) . "\n\n";
-             } else {
-               $email_text = sprintf($osC_Language->get('email_addressing_gender_female'), $osC_Customer->getLastName()) . "\n\n";
-             }
-          } else {
-            $email_text = sprintf($osC_Language->get('email_addressing_gender_unknown'), $osC_Customer->getName()) . "\n\n";
-          }
-
-          $email_text .= sprintf($osC_Language->get('email_create_account_body'), STORE_NAME, STORE_OWNER_EMAIL_ADDRESS);
-
-          osc_email($osC_Customer->getName(), $osC_Customer->getEmailAddress(), sprintf($osC_Language->get('email_create_account_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
-
-          return true;
+        if ((ACCOUNT_GENDER > -1) && isset($data['gender'])) {
+           if ($data['gender'] == 'm') {
+             $email_text = sprintf($osC_Language->get('email_addressing_gender_male'), $osC_Customer->getLastName()) . "\n\n";
+           } else {
+             $email_text = sprintf($osC_Language->get('email_addressing_gender_female'), $osC_Customer->getLastName()) . "\n\n";
+           }
         } else {
-          $osC_Database->rollbackTransaction();
+          $email_text = sprintf($osC_Language->get('email_addressing_gender_unknown'), $osC_Customer->getName()) . "\n\n";
         }
-      } else {
-        $osC_Database->rollbackTransaction();
+
+        $email_text .= sprintf($osC_Language->get('email_create_account_body'), STORE_NAME, STORE_OWNER_EMAIL_ADDRESS);
+
+        osc_email($osC_Customer->getName(), $osC_Customer->getEmailAddress(), sprintf($osC_Language->get('email_create_account_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+
+        return true;
       }
 
       return false;
@@ -109,22 +94,18 @@
     function saveEntry($data) {
       global $osC_Database, $osC_Customer;
 
-      $Qcustomer = $osC_Database->query('update :table_customers set customers_gender = :customers_gender, customers_firstname = :customers_firstname, customers_lastname = :customers_lastname, customers_email_address = :customers_email_address, customers_dob = :customers_dob where customers_id = :customers_id');
+      $Qcustomer = $osC_Database->query('update :table_customers set customers_gender = :customers_gender, customers_firstname = :customers_firstname, customers_lastname = :customers_lastname, customers_email_address = :customers_email_address, customers_dob = :customers_dob, date_account_last_modified = :date_account_last_modified where customers_id = :customers_id');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomer->bindValue(':customers_gender', ((ACCOUNT_GENDER > -1) && isset($data['gender']) && (($data['gender'] == 'm') || ($data['gender'] == 'f'))) ? $data['gender'] : '');
       $Qcustomer->bindValue(':customers_firstname', $data['firstname']);
       $Qcustomer->bindValue(':customers_lastname', $data['lastname']);
       $Qcustomer->bindValue(':customers_email_address', $data['email_address']);
       $Qcustomer->bindValue(':customers_dob', (ACCOUNT_DATE_OF_BIRTH == '1') ? date('Ymd', $data['dob']) : '');
+      $Qcustomer->bindRaw(':date_account_last_modified', 'now()');
       $Qcustomer->bindInt(':customers_id', $osC_Customer->getID());
       $Qcustomer->execute();
 
       if ($Qcustomer->affectedRows() === 1) {
-        $Qupdate = $osC_Database->query('update :table_customers_info set customers_info_date_account_last_modified = now() where customers_info_id = :customers_info_id');
-        $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-        $Qupdate->bindInt(':customers_info_id', $osC_Customer->getID());
-        $Qupdate->execute();
-
         return true;
       }
 
@@ -138,18 +119,14 @@
         $customer_id = $osC_Customer->getID();
       }
 
-      $Qcustomer = $osC_Database->query('update :table_customers set customers_password = :customers_password where customers_id = :customers_id');
+      $Qcustomer = $osC_Database->query('update :table_customers set customers_password = :customers_password, date_account_last_modified = :date_account_last_modified where customers_id = :customers_id');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomer->bindValue(':customers_password', osc_encrypt_string($password));
+      $Qcustomer->bindRaw(':date_account_last_modified', 'now()');
       $Qcustomer->bindInt(':customers_id', $customer_id);
       $Qcustomer->execute();
 
       if ($Qcustomer->affectedRows() === 1) {
-        $Qupdate = $osC_Database->query('update :table_customers_info set customers_info_date_account_last_modified = now() where customers_info_id = :customers_info_id');
-        $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-        $Qupdate->bindInt(':customers_info_id', $customer_id);
-        $Qupdate->execute();
-
         return true;
       }
 

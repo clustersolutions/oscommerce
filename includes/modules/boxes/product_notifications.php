@@ -30,9 +30,9 @@
 
       if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
         if ($osC_Customer->isLoggedOn()) {
-          $Qcheck = $osC_Database->query('select global_product_notifications from :table_customers_info where customers_info_id = :customers_info_id');
-          $Qcheck->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-          $Qcheck->bindInt(':customers_info_id', $osC_Customer->getID());
+          $Qcheck = $osC_Database->query('select global_product_notifications from :table_customers where customers_id = :customers_id');
+          $Qcheck->bindTable(':table_customers', TABLE_CUSTOMERS);
+          $Qcheck->bindInt(':customers_id', $osC_Customer->getID());
           $Qcheck->execute();
 
           if ($Qcheck->valueInt('global_product_notifications') === 0) {

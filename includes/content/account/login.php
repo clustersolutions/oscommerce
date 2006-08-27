@@ -55,9 +55,10 @@
 
           $osC_Customer->setCustomerData(osC_Account::getID($_POST['email_address']));
 
-          $Qupdate = $osC_Database->query('update :table_customers_info set customers_info_date_of_last_logon = now(), customers_info_number_of_logons = customers_info_number_of_logons+1 where customers_info_id = :customers_info_id');
-          $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-          $Qupdate->bindInt(':customers_info_id', $osC_Customer->getID());
+          $Qupdate = $osC_Database->query('update :table_customers set date_last_logon = :date_last_logon, number_of_logons = number_of_logons+1 where customers_id = :customers_id');
+          $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
+          $Qupdate->bindRaw(':date_last_logon', 'now()');
+          $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
           $Qupdate->execute();
 
           $osC_ShoppingCart->synchronizeWithDatabase();

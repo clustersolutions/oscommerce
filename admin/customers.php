@@ -209,7 +209,9 @@
             $Qcustomer = $osC_Database->query('update :table_customers set customers_gender = :customers_gender, customers_firstname = :customers_firstname, customers_lastname = :customers_lastname, customers_email_address = :customers_email_address, customers_dob = :customers_dob, customers_newsletter = :customers_newsletter, customers_status = :customers_status where customers_id = :customers_id');
             $Qcustomer->bindInt(':customers_id', $customer_id);
           } else {
-            $Qcustomer = $osC_Database->query('insert into :table_customers (customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_dob, customers_newsletter, customers_status) values (:customers_gender, :customers_firstname, :customers_lastname, :customers_email_address, :customers_dob, :customers_newsletter, :customers_status)');
+            $Qcustomer = $osC_Database->query('insert into :table_customers (customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_dob, customers_newsletter, customers_status, number_of_logons, date_account_created) values (:customers_gender, :customers_firstname, :customers_lastname, :customers_email_address, :customers_dob, :customers_newsletter, :customers_status, :number_of_logons, :date_account_created)');
+            $Qcustomer->bindInt(':number_of_logons', 0);
+            $Qcustomer->bindRaw(':date_account_created', 'now()');
           }
           $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
           $Qcustomer->bindValue(':customers_gender', (((ACCOUNT_GENDER > -1) && isset($_POST['gender']) && (($_POST['gender'] == 'm') || ($_POST['gender'] == 'f'))) ? $_POST['gender'] : ''));
@@ -226,21 +228,11 @@
               $modified = true;
 
               if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-                $Qupdate = $osC_Database->query('update :table_customers_info set customers_info_date_account_last_modified = now() where customers_info_id = :customers_info_id');
-                $Qupdate->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-                $Qupdate->bindInt(':customers_info_id', $customer_id);
+                $Qupdate = $osC_Database->query('update :table_customers set date_account_last_modified = :date_account_last_modified where customers_id = :customers_id');
+                $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
+                $Qupdate->bindRaw(':date_account_last_modified', 'now()');
+                $Qupdate->bindInt(':customers_id', $customer_id);
                 $Qupdate->execute();
-
-                if ($osC_Database->isError()) {
-                  $error = true;
-                }
-              } else {
-                $customer_id = $osC_Database->nextID();
-
-                $Qinfo = $osC_Database->query('insert into :table_customers_info (customers_info_id, customers_info_number_of_logons, customers_info_date_account_created) values (:customers_info_id, 0, now())');
-                $Qinfo->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-                $Qinfo->bindInt(':customers_info_id', $customer_id);
-                $Qinfo->execute();
 
                 if ($osC_Database->isError()) {
                   $error = true;
@@ -415,32 +407,10 @@
           }
 
           if ($error === false) {
-            $Qci = $osC_Database->query('delete from :table_customers_info where customers_info_id = :customers_info_id');
-            $Qci->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
-            $Qci->bindInt(':customers_info_id', $_GET['cID']);
-            $Qci->execute();
-
-            if ($osC_Database->isError()) {
-              $error = true;
-            }
-          }
-
-          if ($error === false) {
             $Qcb = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id');
             $Qcb->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qcb->bindInt(':customers_id', $_GET['cID']);
             $Qcb->execute();
-
-            if ($osC_Database->isError()) {
-              $error = true;
-            }
-          }
-
-          if ($error === false) {
-            $Qcba = $osC_Database->query('delete from :table_customers_basket_attributes where customers_id = :customers_id');
-            $Qcba->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-            $Qcba->bindInt(':customers_id', $_GET['cID']);
-            $Qcba->execute();
 
             if ($osC_Database->isError()) {
               $error = true;

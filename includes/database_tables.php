@@ -26,8 +26,6 @@
   define('TABLE_CURRENCIES', DB_TABLE_PREFIX . 'currencies');
   define('TABLE_CUSTOMERS', DB_TABLE_PREFIX . 'customers');
   define('TABLE_CUSTOMERS_BASKET', DB_TABLE_PREFIX . 'customers_basket');
-  define('TABLE_CUSTOMERS_BASKET_ATTRIBUTES', DB_TABLE_PREFIX . 'customers_basket_attributes');
-  define('TABLE_CUSTOMERS_INFO', DB_TABLE_PREFIX . 'customers_info');
   define('TABLE_GEO_ZONES', DB_TABLE_PREFIX . 'geo_zones');
   define('TABLE_LANGUAGES', DB_TABLE_PREFIX . 'languages');
   define('TABLE_LANGUAGES_DEFINITIONS', DB_TABLE_PREFIX . 'languages_definitions');

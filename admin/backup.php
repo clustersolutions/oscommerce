@@ -266,7 +266,7 @@
             }
           }
 
-          $Qdrop = $osC_Database->query('drop table if exists :table_address_book, :table_banners, :table_banners_history, :table_categories, :table_categories_description, :table_configuration, :table_configuration_group, :table_countries, :table_currencies, :table_customers, :table_customers_basket, :table_customers_basket_attributes, :table_customers_info, :table_languages, :table_manufacturers, :table_manufacturers_info, :table_newsletters, :table_orders, :table_orders_products, :table_orders_products_attributes, :table_orders_products_download, :table_orders_status, :table_orders_status_history, :table_orders_total, :table_products, :table_products_attributes, :table_products_attributes_download, :table_products_description, :table_products_notifications, :table_products_options, :table_products_options_values, :table_products_options_values_to_products_options, :table_products_to_categories, :table_reviews, :table_sessions, :table_specials, :table_tax_class, :table_tax_rates, :table_geo_zones, :table_zones_to_geo_zones, :table_whos_online, :table_zones');
+          $Qdrop = $osC_Database->query('drop table if exists :table_address_book, :table_banners, :table_banners_history, :table_categories, :table_categories_description, :table_configuration, :table_configuration_group, :table_countries, :table_currencies, :table_customers, :table_customers_basket, :table_languages, :table_manufacturers, :table_manufacturers_info, :table_newsletters, :table_orders, :table_orders_products, :table_orders_products_attributes, :table_orders_products_download, :table_orders_status, :table_orders_status_history, :table_orders_total, :table_products, :table_products_attributes, :table_products_attributes_download, :table_products_description, :table_products_notifications, :table_products_options, :table_products_options_values, :table_products_options_values_to_products_options, :table_products_to_categories, :table_reviews, :table_sessions, :table_specials, :table_tax_class, :table_tax_rates, :table_geo_zones, :table_zones_to_geo_zones, :table_whos_online, :table_zones');
           $Qdrop->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
           $Qdrop->bindTable(':table_banners', TABLE_BANNERS);
           $Qdrop->bindTable(':table_banners_history', TABLE_BANNERS_HISTORY);
@@ -278,8 +278,6 @@
           $Qdrop->bindTable(':table_currencies', TABLE_CURRENCIES);
           $Qdrop->bindTable(':table_customers', TABLE_CUSTOMERS);
           $Qdrop->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-          $Qdrop->bindTable(':table_customers_basket_attributes', TABLE_CUSTOMERS_BASKET_ATTRIBUTES);
-          $Qdrop->bindTable(':table_customers_info', TABLE_CUSTOMERS_INFO);
           $Qdrop->bindTable(':table_languages', TABLE_LANGUAGES);
           $Qdrop->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
           $Qdrop->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
