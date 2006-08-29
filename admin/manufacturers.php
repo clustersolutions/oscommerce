@@ -42,7 +42,7 @@
             $manufacturers_id = $osC_Database->nextID();
           }
 
-          if ($manufacturers_image = new upload('manufacturers_image', realpath('../images'))) {
+          if ($manufacturers_image = new upload('manufacturers_image', realpath('../' . DIR_WS_IMAGES . 'manufacturers'))) {
             $Qimage = $osC_Database->query('update :table_manufacturers set manufacturers_image = :manufacturers_image where manufacturers_id = :manufacturers_id');
             $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
             $Qimage->bindValue(':manufacturers_image', $manufacturers_image->filename);
@@ -100,8 +100,8 @@
             $Qimage->execute();
 
             if ($Qimage->numberOfRows() && !osc_empty($Qimage->value('manufacturers_image'))) {
-              if (file_exists(realpath('../images/' . $Qimage->value('manufacturers_image')))) {
-                @unlink(realpath('../images/' . $Qimage->value('manufacturers_image')));
+              if (file_exists(realpath('../' . DIR_WS_IMAGES . 'manufacturers/' . $Qimage->value('manufacturers_image')))) {
+                @unlink(realpath('../' . DIR_WS_IMAGES . 'manufacturers/' . $Qimage->value('manufacturers_image')));
               }
             }
           }

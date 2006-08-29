@@ -202,7 +202,7 @@
     }
 ?>
     </p>
-    <p><?php echo osc_image('../images/' . $cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT) . '<br />' . DIR_WS_CATALOG . 'images/<br /><b>' . $cInfo->categories_image . '</b>'; ?></p>
+    <p><?php echo osc_image('../' . DIR_WS_IMAGES . 'categories/' . $cInfo->categories_image, $cInfo->categories_name, HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT) . '<br />' . DIR_WS_CATALOG . 'images/categories/<br /><b>' . $cInfo->categories_image . '</b>'; ?></p>
     <p><?php echo TEXT_EDIT_CATEGORIES_IMAGE . '<br />' . osc_draw_file_field('categories_image', true); ?></p>
     <p><?php echo TEXT_EDIT_SORT_ORDER . '<br />' . osc_draw_input_field('sort_order', $cInfo->sort_order); ?></p>
 

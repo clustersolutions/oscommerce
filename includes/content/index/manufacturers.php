@@ -36,7 +36,7 @@
         }
 
         $this->_page_title = $osC_Manufacturer->getTitle();
-        $this->_page_image = $osC_Manufacturer->getImage();
+        $this->_page_image = 'manufacturers/' . $osC_Manufacturer->getImage();
 
         $this->_process();
       } else {

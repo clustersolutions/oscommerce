@@ -103,8 +103,8 @@
             $Qcheck->execute();
 
             if ($Qcheck->numberOfRows() === 0) {
-              if (file_exists(realpath('../images/' . $Qimage->value('categories_image')))) {
-                @unlink(realpath('../images/' . $Qimage->value('categories_image')));
+              if (file_exists(realpath('../' . DIR_WS_IMAGES . 'categories/' . $Qimage->value('categories_image')))) {
+                @unlink(realpath('../' . DIR_WS_IMAGES . 'categories/' . $Qimage->value('categories_image')));
               }
             }
           }

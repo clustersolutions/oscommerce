@@ -115,7 +115,7 @@
 
     <p><?php echo TEXT_EDIT_INTRO; ?></p>
     <p><?php echo TEXT_MANUFACTURERS_NAME . '<br />' . osc_draw_input_field('manufacturers_name', $mInfo->manufacturers_name); ?></p>
-    <p><?php echo osc_image('../images/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br />' . DIR_WS_CATALOG . 'images/<br /><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
+    <p><?php echo osc_image('../' . DIR_WS_IMAGES . 'manufacturers/' . $mInfo->manufacturers_image, $mInfo->manufacturers_name) . '<br />' . DIR_WS_CATALOG . DIR_WS_IMAGES . 'manufacturers/<br /><b>' . $mInfo->manufacturers_image . '</b>'; ?></p>
     <p><?php echo TEXT_MANUFACTURERS_IMAGE . '<br />' . osc_draw_file_field('manufacturers_image', true); ?></p>
     <p>
 <?php
