@@ -19,6 +19,8 @@
   if (!empty($action)) {
     switch ($action) {
       case 'import':
+        $osC_Currencies = new osC_Currencies();
+
         if ($osC_Language->import($_POST['language_import'], $_POST['import_type'])) {
           $osC_MessageStack->add_session('header', SUCCESS_DB_ROWS_UPDATED, 'success');
         } else {

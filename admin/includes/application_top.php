@@ -22,7 +22,7 @@
   require('../includes/configure.php');
 
 // set the level of error reporting
-  error_reporting(E_ALL & ~E_NOTICE);
+  error_reporting(E_ALL);
 
 // Define the project version
   define('PROJECT_VERSION', 'osCommerce 3.0a3pre');

@@ -42,7 +42,7 @@
     }
 
     function import($file, $type) {
-      global $osC_Database, $osC_Language;
+      global $osC_Database, $osC_Language, $osC_Currencies;
 
       if (file_exists('../includes/languages/' . $file . '.xml')) {
         $osC_Currencies = new osC_Currencies();
@@ -58,10 +58,14 @@
                           'date_format_long' => $source['language']['data']['date_format_long'],
                           'time_format' => $source['language']['data']['time_format'],
                           'text_direction' => $source['language']['data']['text_direction'],
-                          'currencies_id' => $osC_Currencies->getID($source['language']['data']['default_currency']),
+                          'currency' => $source['language']['data']['default_currency'],
                           'numeric_separator_decimal' => $source['language']['data']['numerical_decimal_separator'],
                           'numeric_separator_thousands' => $source['language']['data']['numerical_thousands_separator']
                          );
+
+        if (!$osC_Currencies->exists($language['currency'])) {
+          $language['currency'] = DEFAULT_CURRENCY;
+        }
 
         $definitions = $source['language']['definitions']['definition'];
 
@@ -96,7 +100,7 @@
         $Qlanguage->bindValue(':date_format_long', $language['date_format_long']);
         $Qlanguage->bindValue(':time_format', $language['time_format']);
         $Qlanguage->bindValue(':text_direction', $language['text_direction']);
-        $Qlanguage->bindInt(':currencies_id', $language['currencies_id']);
+        $Qlanguage->bindInt(':currencies_id', $osC_Currencies->getID($language['currency']));
         $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
         $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
         $Qlanguage->execute();
@@ -306,24 +310,6 @@
                 break;
               }
             }
-          }
-        }
-      }
-
-      if ($error === false) {
-        if ($default === true) {
-          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qupdate->bindValue(':configuration_value', $language['code']);
-          $Qupdate->bindValue(':configuration_key', 'DEFAULT_LANGUAGE');
-          $Qupdate->execute();
-
-          if ($osC_Database->isError() === false) {
-            if ($Qupdate->affectedRows()) {
-              osC_Cache::clear('configuration');
-            }
-          } else {
-            $error = true;
           }
         }
       }
