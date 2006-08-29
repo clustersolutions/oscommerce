@@ -88,7 +88,7 @@ class XML{
 	var $last_opened_tag; #keeps track of the last tag opened.
 
 	function XML(){
- 		$this->parser = &xml_parser_create();
+ 		$this->parser = xml_parser_create();
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_object($this->parser, $this);
 		xml_set_element_handler($this->parser, 'open','close');
