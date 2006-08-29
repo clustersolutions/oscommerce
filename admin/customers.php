@@ -204,10 +204,8 @@
           $osC_Database->startTransaction();
 
           if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-            $customer_id = $_GET['cID'];
-
             $Qcustomer = $osC_Database->query('update :table_customers set customers_gender = :customers_gender, customers_firstname = :customers_firstname, customers_lastname = :customers_lastname, customers_email_address = :customers_email_address, customers_dob = :customers_dob, customers_newsletter = :customers_newsletter, customers_status = :customers_status where customers_id = :customers_id');
-            $Qcustomer->bindInt(':customers_id', $customer_id);
+            $Qcustomer->bindInt(':customers_id', $_GET['cID']);
           } else {
             $Qcustomer = $osC_Database->query('insert into :table_customers (customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_dob, customers_newsletter, customers_status, number_of_logons, date_account_created) values (:customers_gender, :customers_firstname, :customers_lastname, :customers_email_address, :customers_dob, :customers_newsletter, :customers_status, :number_of_logons, :date_account_created)');
             $Qcustomer->bindInt(':number_of_logons', 0);
@@ -228,6 +226,8 @@
               $modified = true;
 
               if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
+                $customer_id = $_GET['cID'];
+
                 $Qupdate = $osC_Database->query('update :table_customers set date_account_last_modified = :date_account_last_modified where customers_id = :customers_id');
                 $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
                 $Qupdate->bindRaw(':date_account_last_modified', 'now()');
@@ -237,6 +237,8 @@
                 if ($osC_Database->isError()) {
                   $error = true;
                 }
+              } else {
+                $customer_id = $osC_Database->nextID();
               }
             }
           } else {

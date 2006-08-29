@@ -454,7 +454,7 @@
               if (eregi('^[a-z][a-z]$', $top_level_domain) != 1) {
                 $tld_pattern = '';
 // Get authorized TLDs from text file
-                $tlds = file('includes/tld.txt');
+                $tlds = file(DIR_FS_CATALOG . 'includes/tld.txt');
                 while (list(,$line) = each($tlds)) {
 // Get rid of comments
                   $words = explode('#', $line);
