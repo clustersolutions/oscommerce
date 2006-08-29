@@ -16,7 +16,7 @@
 
     var $_module = 'products',
         $_group = 'products',
-        $_page_title = HEADING_TITLE_INDEX,
+        $_page_title,
         $_page_contents = 'info.php',
         $_page_image = 'table_background_list.gif';
 

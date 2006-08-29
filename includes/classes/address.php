@@ -17,8 +17,10 @@
       $address_format = '';
 
       if (is_numeric($address)) {
-        $Qaddress = $osC_Database->query('select entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from :table_address_book where address_book_id = :address_book_id');
+        $Qaddress = $osC_Database->query('select ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.address_book_id = :address_book_id and ab.entry_country_id = c.countries_id');
         $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+        $Qaddress->bindTable(':table_zones', TABLE_ZONES);
+        $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
@@ -35,16 +37,16 @@
       }
 
       $state = $address['state'];
-      $state_code = $address['state_code'];
+      $state_code = $address['zone_code'];
 
       if (isset($address['zone_id']) && is_numeric($address['zone_id']) && ($address['zone_id'] > 0)) {
         $state = osC_Address::getZoneName($address['zone_id']);
         $state_code = osC_Address::getZoneCode($address['zone_id']);
       }
 
-      $country = $address['country'];
+      $country = $address['country_title'];
 
-      if (isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0)) {
+      if (empty($country) && isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0)) {
         $country = osC_Address::getCountryName($address['country_id']);
       }
 

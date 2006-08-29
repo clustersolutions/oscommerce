@@ -20,7 +20,7 @@
   require('includes/configure.php');
 
 // set the level of error reporting
-  error_reporting(E_ALL & ~E_NOTICE);
+  error_reporting(E_ALL);
 
 // redirect to the installation module if DB_SERVER is empty
   if (strlen(DB_SERVER) < 1) {

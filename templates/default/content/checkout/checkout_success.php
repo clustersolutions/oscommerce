@@ -47,7 +47,7 @@
     <p>
 
 <?php
-  if ($global['global_product_notifications'] != '1') {
+  if ($Qglobal->valueInt('global_product_notifications') != 1) {
     echo $osC_Language->get('add_selection_to_product_notifications') . '<br /><p class="productsNotifications">';
 
     $products_displayed = array();

@@ -50,7 +50,7 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-  if (sizeof($order->info['tax_groups']) > 1) {
+  if ($osC_ShoppingCart->numberOfTaxGroups() > 1) {
 ?>
 
               <tr>
@@ -87,11 +87,11 @@
 
     echo '</td>' . "\n";
 
-    if (sizeof($osC_ShoppingCart->_tax_groups) > 1) {
+    if ($osC_ShoppingCart->numberOfTaxGroups() > 1) {
       echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue($products['tax']) . '</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>
@@ -176,14 +176,14 @@
     }
   }
 
-  if (!empty($order->info['comments'])) {
+  if (isset($_SESSION['comments']) && !empty($_SESSION['comments'])) {
 ?>
 
 <div class="moduleBox">
   <h6><?php echo '<b>' . $osC_Language->get('order_comments_title') . '</b> ' . osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'), '<span class="orderEdit">' . $osC_Language->get('order_text_edit_title') . '</span>'); ?></h6>
 
   <div class="content">
-    <?php echo nl2br(osc_output_string_protected($order->info['comments'])) . osc_draw_hidden_field('comments', $order->info['comments']); ?>
+    <?php echo nl2br(osc_output_string_protected($_SESSION['comments'])) . osc_draw_hidden_field('comments', $_SESSION['comments']); ?>
   </div>
 </div>
 

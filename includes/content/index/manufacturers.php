@@ -16,14 +16,16 @@
 
     var $_module = 'manufacturers',
         $_group = 'index',
-        $_page_title = HEADING_TITLE_INDEX,
+        $_page_title,
         $_page_contents = 'product_listing.php',
         $_page_image = 'table_background_list.gif';
 
 /* Class constructor */
 
     function osC_Index_Manufacturers() {
-      global $osC_Services, $breadcrumb, $osC_Manufacturer;
+      global $osC_Services, $osC_Language, $breadcrumb, $osC_Manufacturer;
+
+      $this->_page_title = sprintf($osC_Language->get('index_heading'), STORE_NAME);
 
       if (is_numeric($_GET[$this->_module])) {
         include('includes/classes/manufacturer.php');

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -54,32 +54,17 @@
     function isActive($id) {
       global $osC_Database;
 
-      if (isset($this->_specials[$id]) === false) {
-        $Qcheck = $osC_Database->query('select products_id from :table_specials where products_id = :products_id and status = 1');
-        $Qcheck->bindTable(':table_specials', TABLE_SPECIALS);
-        $Qcheck->bindInt(':products_id', $id);
-        $Qcheck->execute();
-
-        if ($Qcheck->numberOfRows() > 0) {
-          $this->_specials[$id] = true;
-        } else {
-          $this->_specials[$id] = false;
-        }
-
-        $Qcheck->freeResult();
+      if (!isset($this->_specials[$id])) {
+        $this->_specials[$id] = $this->getPrice($id);
       }
 
-      if ($this->_specials[$id] !== false) {
-        return true;
-      }
-
-      return false;
+      return is_numeric($this->_specials[$id]);
     }
 
     function getPrice($id) {
       global $osC_Database;
 
-      if ( (isset($this->_specials[$id]) === false) || (isset($this->_specials[$id]) && is_bool($this->_specials[$id])) ) {
+      if (!isset($this->_specials[$id])) {
         $Qspecial = $osC_Database->query('select specials_new_products_price from :table_specials where products_id = :products_id and status = 1');
         $Qspecial->bindTable(':table_specials', TABLE_SPECIALS);
         $Qspecial->bindInt(':products_id', $id);
@@ -87,6 +72,8 @@
 
         if ($Qspecial->numberOfRows() > 0) {
           $this->_specials[$id] = $Qspecial->valueDecimal('specials_new_products_price');
+        } else {
+          $this->_specials[$id] = null;
         }
 
         $Qspecial->freeResult();

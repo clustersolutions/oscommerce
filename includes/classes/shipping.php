@@ -119,7 +119,8 @@
               $rate = array('id' => $module,
                             'title' => $quote['module'] . ((empty($method['title']) === false) ? ' (' . $method['title'] . ')' : ''),
                             'cost' => $method['cost'],
-                            'tax_class_id' => $quote['tax_class_id']);
+                            'tax_class_id' => $quote['tax_class_id'],
+                            'is_cheapest' => null);
 
               break 2;
             }

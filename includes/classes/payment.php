@@ -259,7 +259,7 @@
 
     function pre_confirmation_check() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           $GLOBALS[$this->selected_module]->pre_confirmation_check();
         }
       }
@@ -267,7 +267,7 @@
 
     function confirmation() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->confirmation();
         }
       }
@@ -275,7 +275,7 @@
 
     function process_button() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->process_button();
         }
       }
@@ -283,7 +283,7 @@
 
     function process() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->process();
         }
       }
@@ -291,7 +291,7 @@
 
     function get_error() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           return $GLOBALS[$this->selected_module]->get_error();
         }
       }
@@ -299,7 +299,7 @@
 
     function hasActionURL() {
       if (is_array($this->_modules)) {
-        if (is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
+        if (isset($GLOBALS[$this->selected_module]) && is_object($GLOBALS[$this->selected_module]) && $GLOBALS[$this->selected_module]->isEnabled()) {
           if (isset($GLOBALS[$this->selected_module]->form_action_url) && (empty($GLOBALS[$this->selected_module]->form_action_url) === false)) {
             return true;
           }

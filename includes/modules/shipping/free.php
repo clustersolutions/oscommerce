@@ -15,7 +15,8 @@
 
     var $_title,
         $_code = 'free',
-        $_status = false;
+        $_status = false,
+        $_sort_order = 1;
 
 // class constructor
     function osC_Shipping_free() {
@@ -33,28 +34,30 @@
       global $osC_Database, $osC_ShoppingCart;
 
       if ($osC_ShoppingCart->getTotal() >= MODULE_SHIPPING_FREE_MINIMUM_ORDER) {
-        if ( ($this->_status === true) && ((int)MODULE_SHIPPING_FREE_ZONE > 0) ) {
-          $check_flag = false;
+        if ($this->_status === true) {
+          if ((int)MODULE_SHIPPING_FREE_ZONE > 0) {
+            $check_flag = false;
 
-          $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and (zone_country_id = :zone_country_id or zone_country_id = 0) order by zone_id');
-          $Qcheck->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
-          $Qcheck->bindInt(':geo_zone_id', MODULE_SHIPPING_FREE_ZONE);
-          $Qcheck->bindInt(':zone_country_id', $osC_ShoppingCart->getShippingAddress('country_id'));
-          $Qcheck->execute();
+            $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and (zone_country_id = :zone_country_id or zone_country_id = 0) order by zone_id');
+            $Qcheck->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
+            $Qcheck->bindInt(':geo_zone_id', MODULE_SHIPPING_FREE_ZONE);
+            $Qcheck->bindInt(':zone_country_id', $osC_ShoppingCart->getShippingAddress('country_id'));
+            $Qcheck->execute();
 
-          while ($Qcheck->next()) {
-            if ($Qcheck->valueInt('zone_id') < 1) {
-              $check_flag = true;
-              break;
-            } elseif ($Qcheck->valueInt('zone_id') == $osC_ShoppingCart->getShippingAddress('zone_id')) {
-              $check_flag = true;
-              break;
+            while ($Qcheck->next()) {
+              if ($Qcheck->valueInt('zone_id') < 1) {
+                $check_flag = true;
+                break;
+              } elseif ($Qcheck->valueInt('zone_id') == $osC_ShoppingCart->getShippingAddress('zone_id')) {
+                $check_flag = true;
+                break;
+              }
             }
-          }
 
-          $this->_status = $check_flag;
-        } else {
-          $this->_status = false;
+            $this->_status = $check_flag;
+          } else {
+            $this->_status = true;
+          }
         }
       } else {
         $this->_status = false;

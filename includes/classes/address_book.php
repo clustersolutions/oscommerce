@@ -15,8 +15,10 @@
     function &getListing() {
       global $osC_Database, $osC_Customer;
 
-      $Qaddresses = $osC_Database->query('select address_book_id, entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from :table_address_book where customers_id = :customers_id order by firstname, lastname');
+      $Qaddresses = $osC_Database->query('select ab.address_book_id, ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.customers_id = :customers_id and ab.entry_country_id = c.countries_id order by ab.entry_firstname, ab.entry_lastname');
       $Qaddresses->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+      $Qaddresses->bindTable(':table_zones', TABLE_ZONES);
+      $Qaddresses->bindTable(':table_countries', TABLE_COUNTRIES);
       $Qaddresses->bindInt(':customers_id', $osC_Customer->getID());
       $Qaddresses->execute();
 

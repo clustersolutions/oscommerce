@@ -673,6 +673,10 @@
       $this->_tax += $amount;
     }
 
+    function numberOfTaxGroups() {
+      return sizeof($this->_tax_groups);
+    }
+
     function addTaxGroup($group, $amount) {
       if (isset($this->_tax_groups[$group])) {
         $this->_tax_groups[$group] += $amount;
@@ -700,16 +704,16 @@
     function _cleanUp() {
       global $osC_Database, $osC_Customer;
 
-      foreach ($this->_contents as $products_id => $data) {
+      foreach ($this->_contents as $product_id_string => $data) {
         if ($data['quantity'] < 1) {
-          unset($this->_contents[$products_id]);
+          unset($this->_contents[$product_id_string]);
 
 // remove from database
           if ($osC_Customer->isLoggedOn()) {
             $Qdelete = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id and products_id = :products_id');
             $Qdelete->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
             $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
-            $Qdelete->bindValue(':products_id', $products_id);
+            $Qdelete->bindValue(':products_id', $product_id_string);
             $Qdelete->execute();
           }
         }
@@ -735,6 +739,7 @@
           $tax_description = $osC_Tax->getTaxRateDescription($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
 
           $shown_price = $osC_Currencies->addTaxRateToPrice($data['final_price'], $tax, $data['quantity']);
+
           $this->_sub_total += $shown_price;
           $this->_total += $shown_price;
 
@@ -742,6 +747,8 @@
             $tax_amount = $shown_price - ($shown_price / (($tax < 10) ? '1.0' . str_replace('.', '', $tax) : '1.' . str_replace('.', '', $tax)));
           } else {
             $tax_amount = ($tax / 100) * $shown_price;
+
+            $this->_total += $tax_amount;
           }
 
           $this->_tax += $tax_amount;

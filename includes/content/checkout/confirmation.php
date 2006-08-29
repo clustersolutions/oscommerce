@@ -51,7 +51,7 @@
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {
         unset($_SESSION['comments']);
-      } else if (!empty($_POST['comments'])) {
+      } elseif (!empty($_POST['comments'])) {
         $_SESSION['comments'] = osc_sanitize_string($_POST['comments']);
       }
 
@@ -63,7 +63,7 @@
 
 // load the selected payment module
       include('includes/classes/payment.php');
-      $osC_Payment = new osC_Payment($_POST['payment_method']);
+      $osC_Payment = new osC_Payment((isset($_POST['payment_method']) ? $_POST['payment_method'] : $osC_ShoppingCart->getBillingMethod('id')));
 
       if (isset($_POST['payment_method'])) {
         $osC_ShoppingCart->setBillingMethod(array('id' => $_POST['payment_method'], 'title' => $GLOBALS['osC_Payment_' . $_POST['payment_method']]->getMethodTitle()));
