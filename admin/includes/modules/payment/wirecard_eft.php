@@ -74,14 +74,16 @@
       $this->_status = (defined('MODULE_PAYMENT_WIRECARD_EFT_STATUS') && (MODULE_PAYMENT_WIRECARD_EFT_STATUS == '1') ? true : false);
       $this->_sort_order = (defined('MODULE_PAYMENT_WIRECARD_EFT_SORT_ORDER') ? MODULE_PAYMENT_WIRECARD_EFT_SORT_ORDER : '');
 
-      switch (MODULE_PAYMENT_WIRECARD_EFT_TRANSACTION_SERVER) {
-        case 'production':
-          $this->_gateway_url = 'https://' . MODULE_PAYMENT_WIRECARD_EFT_USERNAME . ':' . MODULE_PAYMENT_WIRECARD_EFT_PASSWORD . '@frontend-test.wirecard.com/secure/ssl-gateway';
-          break;
+      if (defined('MODULE_PAYMENT_WIRECARD_EFT_TRANSACTION_SERVER')) {
+        switch (MODULE_PAYMENT_WIRECARD_EFT_TRANSACTION_SERVER) {
+          case 'production':
+            $this->_gateway_url = 'https://' . MODULE_PAYMENT_WIRECARD_EFT_USERNAME . ':' . MODULE_PAYMENT_WIRECARD_EFT_PASSWORD . '@frontend-test.wirecard.com/secure/ssl-gateway';
+            break;
 
-        default:
-          $this->_gateway_url = 'https://' . MODULE_PAYMENT_WIRECARD_EFT_USERNAME . ':' . MODULE_PAYMENT_WIRECARD_EFT_PASSWORD . '@frontend-test.wirecard.com/secure/ssl-gateway';
-          break;
+          default:
+            $this->_gateway_url = 'https://' . MODULE_PAYMENT_WIRECARD_EFT_USERNAME . ':' . MODULE_PAYMENT_WIRECARD_EFT_PASSWORD . '@frontend-test.wirecard.com/secure/ssl-gateway';
+            break;
+        }
       }
     }
 

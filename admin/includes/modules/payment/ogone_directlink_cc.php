@@ -74,16 +74,18 @@
       $this->_status = (defined('MODULE_PAYMENT_OGONE_DIRECTLINK_CC_STATUS') && (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_STATUS == '1') ? true : false);
       $this->_sort_order = (defined('MODULE_PAYMENT_OGONE_DIRECTLINK_CC_SORT_ORDER') ? MODULE_PAYMENT_OGONE_DIRECTLINK_CC_SORT_ORDER : '');
 
-      switch (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_TRANSACTION_SERVER) {
-        case 'production':
-          $this->_maintenance_gateway_url = 'https://secure.ogone.com/ncol/prod/maintenancedirect.asp';
-          $this->_inquiry_gateway_url = 'https://secure.ogone.com/ncol/prod/querydirect.asp';
-          break;
+      if (defined('MODULE_PAYMENT_OGONE_DIRECTLINK_CC_TRANSACTION_SERVER')) {
+        switch (MODULE_PAYMENT_OGONE_DIRECTLINK_CC_TRANSACTION_SERVER) {
+          case 'production':
+            $this->_maintenance_gateway_url = 'https://secure.ogone.com/ncol/prod/maintenancedirect.asp';
+            $this->_inquiry_gateway_url = 'https://secure.ogone.com/ncol/prod/querydirect.asp';
+            break;
 
-        default:
-          $this->_maintenance_gateway_url = 'https://secure.ogone.com/ncol/test/maintenancedirect.asp';
-          $this->_inquiry_gateway_url = 'https://secure.ogone.com/ncol/test/querydirect.asp';
-          break;
+          default:
+            $this->_maintenance_gateway_url = 'https://secure.ogone.com/ncol/test/maintenancedirect.asp';
+            $this->_inquiry_gateway_url = 'https://secure.ogone.com/ncol/test/querydirect.asp';
+            break;
+        }
       }
     }
 

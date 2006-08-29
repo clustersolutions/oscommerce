@@ -74,16 +74,20 @@
       $this->_status = (defined('MODULE_PAYMENT_AUTHORIZENET_CC_STATUS') && (MODULE_PAYMENT_AUTHORIZENET_CC_STATUS == '1') ? true : false);
       $this->_sort_order = (defined('MODULE_PAYMENT_AUTHORIZENET_CC_SORT_ORDER') ? MODULE_PAYMENT_AUTHORIZENET_CC_SORT_ORDER : null);
 
-      switch (MODULE_PAYMENT_AUTHORIZENET_CC_TRANSACTION_SERVER) {
-        case 'production':
-          $this->_gateway_url = 'https://secure.authorize.net:443/gateway/transact.dll';
-          break;
-        case 'certification':
-          $this->_gateway_url = 'https://certification.authorize.net:443/gateway/transact.dll';
-          break;
-        default:
-          $this->_gateway_url = 'https://test.authorize.net:443/gateway/transact.dll';
-          break;
+      if (defined('MODULE_PAYMENT_AUTHORIZENET_CC_TRANSACTION_SERVER')) {
+        switch (MODULE_PAYMENT_AUTHORIZENET_CC_TRANSACTION_SERVER) {
+          case 'production':
+            $this->_gateway_url = 'https://secure.authorize.net:443/gateway/transact.dll';
+            break;
+
+          case 'certification':
+            $this->_gateway_url = 'https://certification.authorize.net:443/gateway/transact.dll';
+            break;
+
+          default:
+            $this->_gateway_url = 'https://test.authorize.net:443/gateway/transact.dll';
+            break;
+        }
       }
     }
 
