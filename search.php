@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  $_SERVER['SCRIPT_FILENAME'] = __FILE__;
+
   require('includes/application_top.php');
 
   $osC_Language->load('search');

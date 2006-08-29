@@ -25,8 +25,6 @@
       }
 
       if (isset($_SERVER['PATH_INFO']) && (strlen($_SERVER['PATH_INFO']) > 1)) {
-        $_SERVER['SCRIPT_FILENAME'] = str_replace($_SERVER['PATH_INFO'], '', $_SERVER['SCRIPT_FILENAME']);
-
         $parameters = explode('/', substr($_SERVER['PATH_INFO'], 1));
 
         $_GET = array();

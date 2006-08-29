@@ -10,6 +10,8 @@
   Released under the GNU General Public License
 */
 
+  $_SERVER['SCRIPT_FILENAME'] = __FILE__;
+
   include('includes/application_top.php');
 
   if ($osC_Customer->isLoggedOn() == false) die;

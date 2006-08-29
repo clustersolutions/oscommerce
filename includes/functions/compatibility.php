@@ -66,14 +66,6 @@
   }
 
 /**
- * Fix SCRIPT_FILENAME under CGI based servers
- */
-
-  if ( (strpos(php_sapi_name(), 'cgi') !== false) && !empty($_SERVER['PATH_TRANSLATED']) ) {
-    $_SERVER['SCRIPT_FILENAME'] = $_SERVER['PATH_TRANSLATED'];
-  }
-
-/**
  * checkdnsrr() not implemented on Microsoft Windows platforms
  */
 
