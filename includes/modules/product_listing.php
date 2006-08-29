@@ -111,8 +111,6 @@
 
       echo '    <tr class="' . ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd') . '">' . "\n";
 
-      $cur_row = sizeof($list_box_contents) - 1;
-
       for ($col=0, $n=sizeof($column_list); $col<$n; $col++) {
         $lc_align = '';
 
