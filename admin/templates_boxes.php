@@ -87,6 +87,7 @@
 
         osC_Cache::clear('configuration');
         osC_Cache::clear('modules_' . $set);
+        osC_Cache::clear('templates_' . $set . '_layout');
 
         osc_redirect(osc_href_link_admin(FILENAME_TEMPLATES_BOXES, 'set=' . $set . '&' . $set . '=' . $_GET[$set]));
         break;
