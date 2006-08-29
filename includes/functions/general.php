@@ -34,7 +34,9 @@
 
     header('Location: ' . $url);
 
-    $osC_Services->stopServices();
+    if (isset($osC_Services)) {
+      $osC_Services->stopServices();
+    }
 
     exit;
   }
