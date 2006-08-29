@@ -77,19 +77,23 @@
             }
           }
 
-          if (($error === false) && ($categories_image = new upload('categories_image', realpath('../' . DIR_WS_IMAGES . 'categories')))) {
-            $Qcf = $osC_Database->query('update :table_categories set categories_image = :categories_image where categories_id = :categories_id');
-            $Qcf->bindTable(':table_categories', TABLE_CATEGORIES);
-            $Qcf->bindValue(':categories_image', $categories_image->filename);
-            $Qcf->bindInt(':categories_id', $category_id);
-            $Qcf->execute();
+          if ($error === false) {
+            $categories_image = new upload('categories_image', realpath('../' . DIR_WS_IMAGES . 'categories'));
 
-            if ($osC_Database->isError()) {
-              $error = true;
+            if ($categories_image->exists()) {
+              if ($categories_image->parse() && $categories_image->save()) {
+                $Qcf = $osC_Database->query('update :table_categories set categories_image = :categories_image where categories_id = :categories_id');
+                $Qcf->bindTable(':table_categories', TABLE_CATEGORIES);
+                $Qcf->bindValue(':categories_image', $categories_image->filename);
+                $Qcf->bindInt(':categories_id', $category_id);
+                $Qcf->execute();
+
+                if ($osC_Database->isError()) {
+                  $error = true;
+                }
+              }
             }
           }
-        } else {
-          $error = true;
         }
 
         if ($error === false) {

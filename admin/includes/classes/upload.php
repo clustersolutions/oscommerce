@@ -20,19 +20,6 @@
       $this->set_extensions($extensions);
 
       $this->set_output_messages('direct');
-
-      if (!empty($this->file) && !empty($this->destination)) {
-        $this->set_output_messages('session');
-
-        if ( ($this->parse() == true) && ($this->save() == true) ) {
-          return true;
-        } else {
-// self destruct
-          unset($this);
-
-          return false;
-        }
-      }
     }
 
     function exists() {

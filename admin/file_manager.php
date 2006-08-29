@@ -102,7 +102,12 @@
       case 'processuploads':
         if (is_writeable($current_path)) {
           for ($i=0; $i<10; $i++) {
-            new upload('file_' . $i, $current_path);
+            $file = new upload('file_' . $i, $current_path);
+
+            if ($file->exists()) {
+              $file->parse();
+              $file->save();
+            }
           }
         } else {
           $osC_MessageStack->add_session('header', sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path), 'error');

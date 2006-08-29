@@ -37,8 +37,12 @@
 
         if (empty($_POST['banners_html_text'])) {
           if (empty($_POST['banners_image_local'])) {
-            if (!$banners_image = new upload('banners_image', realpath('../images/' . $_POST['banners_image_target']))) {
-              $banner_error = true;
+            $banners_image = new upload('banners_image', realpath('../images/' . $_POST['banners_image_target']));
+
+            if ($categories_image->exists()) {
+              if (!($categories_image->parse() && $categories_image->save())) {
+                $banner_error = true;
+              }
             }
           }
         }
