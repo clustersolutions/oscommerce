@@ -168,7 +168,7 @@
                 $Qdef->bindValue(':definition_key', $def['key']);
                 $Qdef->bindValue(':content_group', $def['group']);
               }
-              $Qdef->bindTable(':table_languages_definitions', 'osc_languages_definitions');
+              $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
               $Qdef->bindInt(':languages_id', $language_id);
               $Qdef->bindValue(':content_group', $def['group']);
               $Qdef->bindValue(':definition_key', $def['key']);
