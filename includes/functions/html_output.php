@@ -653,7 +653,7 @@
     $months_array = array();
     for ($i=1; $i<=12; $i++) {
       $months_array[] = array('id' => $i,
-                              'text' => (($use_month_names === true) ? strftime('%B', mktime(0, 0, 0, $i)) : $i));
+                              'text' => (($use_month_names === true) ? strftime('%B', mktime(0, 0, 0, $i, 1)) : $i));
     }
 
     $months_select_string = osc_draw_pull_down_menu($name . '_months', $months_array, $value['month'], $params);
