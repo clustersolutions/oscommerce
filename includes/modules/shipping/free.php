@@ -16,7 +16,7 @@
     var $_title,
         $_code = 'free',
         $_status = false,
-        $_sort_order = 1;
+        $_sort_order;
 
 // class constructor
     function osC_Shipping_free() {

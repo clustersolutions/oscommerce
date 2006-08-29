@@ -17,7 +17,8 @@
         $_code = 'free',
         $_author_name = 'osCommerce',
         $_author_www = 'http://www.oscommerce.com',
-        $_status = false;
+        $_status = false,
+        $_sort_order;
 
 // class constructor
     function osC_Shipping_free() {
