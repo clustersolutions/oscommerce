@@ -48,8 +48,6 @@
         } else {
           $this->_page_contents = 'reviews_not_found.php';
         }
-      } elseif (osC_Reviews::exists() === false) {
-        $this->_page_contents = 'reviews_not_found.php';
       } else {
         $counter = 0;
         foreach ($_GET as $key => $value) {
@@ -98,6 +96,12 @@
           }
 
           break;
+        }
+
+        if ($counter < 2) {
+          if (osC_Reviews::exists() === false) {
+            $this->_page_contents = 'reviews_not_found.php';
+          }
         }
       }
     }
