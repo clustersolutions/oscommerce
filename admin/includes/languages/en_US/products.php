@@ -69,6 +69,6 @@
   define('TEXT_COPY_AS_DUPLICATE', 'Duplicate product');
 
   define('ERROR_CANNOT_LINK_TO_SAME_CATEGORY', 'Error: Can not link products in the same category.');
-  define('ERROR_CATALOG_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Catalog images directory is not writeable: ' . realpath('../images'));
-  define('ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Catalog images directory does not exist: ' . realpath('../images'));
+  define('ERROR_CATALOG_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Product images directory is not writeable: ' . realpath('../images/products'));
+  define('ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Product images directory does not exist: ' . realpath('../images/products'));
 ?>
