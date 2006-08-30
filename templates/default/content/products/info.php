@@ -29,7 +29,7 @@
 
 <form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=cart_add'); ?>" method="post">
 
-<p><?php echo $osC_Product->getDescription(); ?></p>
+<div><?php echo $osC_Product->getDescription(); ?></div>
 
 <?php
   if ($osC_Product->hasAttributes()) {
