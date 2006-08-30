@@ -80,7 +80,7 @@
       return osc_image(DIR_WS_IMAGES . $image, $title, $width, $height, $parameters);
     }
 
-    function getAddress(&$image, $group = 'default') {
+    function getAddress($image, $group = 'default') {
       $group_id = $this->getID($group);
 
       return DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image;
