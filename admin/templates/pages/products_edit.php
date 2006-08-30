@@ -209,6 +209,10 @@
     }
   }
 
+<?php
+  if (isset($_GET['pID'])) {
+?>
+
   function handleHttpResponseRemoveImage(http) {
     var result = http.responseText.split(':osCRPC:', 2);
 
@@ -364,6 +368,10 @@
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others", {onSuccess: handleHttpResponseGetImages});
     }
   }
+
+<?php
+  }
+?>
 
   function handleHttpResponseGetLocalImages(http) {
     var result = http.responseText.split(':osCRPC:', 2);
