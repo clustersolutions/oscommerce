@@ -13,6 +13,7 @@
   require('includes/application_top.php');
   require('includes/classes/image.php');
 
+  $action = (isset($_GET['action']) ? $_GET['action'] : '');
   $module = (isset($_GET['module']) ? basename($_GET['module']) : '');
 
   if (!empty($module) && !file_exists('includes/modules/image/' . $module . '.php')) {
