@@ -42,7 +42,9 @@
         }
 
         $this->_content = '<form name="currencies" action="' . osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), null, 'AUTO', false) . '" method="get">' .
-                          osc_draw_pull_down_menu('currency', $data, $_SESSION['currency'], 'onchange="this.form.submit();" style="width: 100%"') . $hidden_get_variables . osc_draw_hidden_session_id_field() .
+                          $hidden_get_variables .
+                          osc_draw_pull_down_menu('currency', $data, $_SESSION['currency'], 'onchange="this.form.submit();" style="width: 100%"') .
+                          osc_draw_hidden_session_id_field() .
                           '</form>';
       }
     }
