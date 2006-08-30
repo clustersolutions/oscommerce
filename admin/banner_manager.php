@@ -30,7 +30,7 @@
           $banner_error = true;
         }
 
-        if (empty($_POST['banners_group'])) {
+        if (empty($_POST['banners_group']) && empty($_POST['new_banners_group'])) {
           $osC_MessageStack->add('header', ERROR_BANNER_GROUP_REQUIRED, 'error');
           $banner_error = true;
         }
@@ -39,8 +39,8 @@
           if (empty($_POST['banners_image_local'])) {
             $banners_image = new upload('banners_image', realpath('../images/' . $_POST['banners_image_target']));
 
-            if ($categories_image->exists()) {
-              if (!($categories_image->parse() && $categories_image->save())) {
+            if ($banners_image->exists()) {
+              if (!($banners_image->parse() && $banners_image->save())) {
                 $banner_error = true;
               }
             }
