@@ -21,10 +21,10 @@
   }
 ?>
 
-<form name="checkout_address" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'shipping_address=process', 'SSL'); ?>" method="post" onsubmit="return check_form_optional(checkout_address);">
+<form name="checkout_address" action="<?php echo osc_href_link(FILENAME_CHECKOUT, $osC_Template->getModule() . '=process', 'SSL'); ?>" method="post" onsubmit="return check_form_optional(checkout_address);">
 
 <?php
-  if ($_GET['shipping_address'] != 'process') {
+  if (isset($_GET[$osC_Template->getModule()]) && ($_GET[$osC_Template->getModule()] != 'process')) {
     if ($osC_Customer->hasDefaultAddress()) {
 ?>
 
