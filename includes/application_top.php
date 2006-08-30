@@ -30,7 +30,7 @@
   }
 
 // define the project version
-  define('PROJECT_VERSION', 'osCommerce 3.0a3pre');
+  define('PROJECT_VERSION', 'osCommerce 3.0a3');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';

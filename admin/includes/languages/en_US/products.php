@@ -71,4 +71,5 @@
   define('ERROR_CANNOT_LINK_TO_SAME_CATEGORY', 'Error: Can not link products in the same category.');
   define('ERROR_CATALOG_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Product images directory is not writeable: ' . realpath('../images/products'));
   define('ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Product images directory does not exist: ' . realpath('../images/products'));
+  define('ERROR_IMAGE_PROCESSOR_NOT_AVAILABLE', 'Error: Cannot process product images as ImageMagicks "convert" program is not available. This can be defined in Configuration -> Program Locations.');
 ?>

@@ -540,8 +540,19 @@
   }
 
   switch ($action) {
-    case 'new_product': $page_contents = 'products_edit.php'; break;
-    case 'preview': $page_contents = 'products_preview.php'; break;
+    case 'new_product':
+      $page_contents = 'products_edit.php';
+
+      if (osc_empty(CFG_APP_IMAGEMAGICK_CONVERT) || !file_exists(CFG_APP_IMAGEMAGICK_CONVERT)) {
+        $osC_MessageStack->add('header', ERROR_IMAGE_PROCESSOR_NOT_AVAILABLE, 'warning');
+      }
+
+      break;
+
+    case 'preview':
+      $page_contents = 'products_preview.php';
+      break;
+
     default: $page_contents = 'products.php';
   }
 
