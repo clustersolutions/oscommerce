@@ -11,7 +11,6 @@
 */
 
   require('includes/application_top.php');
-  require('../includes/classes/address.php');
 
   require('../includes/classes/currencies.php');
   $osC_Currencies = new osC_Currencies();
