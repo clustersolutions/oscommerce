@@ -349,7 +349,7 @@
         $field .= ' value="' . osc_output_string($selection_value) . '"';
       }
 
-      if ((is_bool($default) && $default === true) || (!empty($default) && ((is_string($default) && ($default == $selection_value)) || (is_array($default) && in_array($selection_value, $default))))) {
+      if ((is_bool($default) && $default === true) || ((is_string($default) && (trim($default) == trim($selection_value))) || (is_array($default) && in_array(trim($selection_value), $default)))) {
         $field .= ' checked="checked"';
       }
 
