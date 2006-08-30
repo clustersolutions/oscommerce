@@ -244,7 +244,7 @@
       $field .= ' id="' . osc_output_string($name) . '"';
     }
 
-    if (!empty($value)) {
+    if (trim($value) != '') {
       $field .= ' value="' . osc_output_string($value) . '"';
     }
 
@@ -345,7 +345,7 @@
         $field .= ' id="' . osc_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
       }
 
-      if (!empty($selection_value)) {
+      if (trim($selection_value) != '') {
         $field .= ' value="' . osc_output_string($selection_value) . '"';
       }
 
@@ -446,7 +446,7 @@
       $field .= ' ' . $parameters;
     }
 
-    $field .= '>' . $value . '</textarea>';
+    $field .= '>' . osc_output_string_protected($value) . '</textarea>';
 
     return $field;
   }
@@ -463,7 +463,7 @@
   function osc_draw_hidden_field($name, $value = null, $parameters = null) {
     $field = '<input type="hidden" name="' . osc_output_string($name) . '"';
 
-    if (!empty($value)) {
+    if (trim($value) != '') {
       $field .= ' value="' . osc_output_string($value) . '"';
     }
 
