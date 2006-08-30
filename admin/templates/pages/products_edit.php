@@ -798,13 +798,15 @@
 <?php
   $product_categories_array = array();
 
-  $Qcategories = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
-  $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-  $Qcategories->bindInt(':products_id', $_GET['pID']);
-  $Qcategories->execute();
+  if (isset($_GET['pID'])) {
+    $Qcategories = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
+    $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+    $Qcategories->bindInt(':products_id', $_GET['pID']);
+    $Qcategories->execute();
 
-  while ($Qcategories->next()) {
-    $product_categories_array[] = $Qcategories->valueInt('categories_id');
+    while ($Qcategories->next()) {
+      $product_categories_array[] = $Qcategories->valueInt('categories_id');
+    }
   }
 
   $assignedCategoryTree = new osC_CategoryTree();

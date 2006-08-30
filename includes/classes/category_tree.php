@@ -284,7 +284,7 @@
 
       foreach ($this->data as $parent => $categories) {
         foreach ($categories as $id => $info) {
-          if ($totals[$id] > 0) {
+          if (isset($totals[$id]) && ($totals[$id] > 0)) {
             $this->data[$parent][$id]['count'] = $totals[$id];
 
             $parent_category = $parent;
