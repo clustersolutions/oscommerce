@@ -13,7 +13,7 @@
 define('HEADING_TITLE', 'Manufacturers');
 
 define('TABLE_HEADING_MANUFACTURERS', 'Manufacturers');
-define('TABLE_HEADING_URL_CLICKS', 'URL CLicks');
+define('TABLE_HEADING_URL_CLICKS', 'URL Clicks');
 define('TABLE_HEADING_ACTION', 'Action');
 
 define('TEXT_HEADING_NEW_MANUFACTURER', 'New Manufacturer');
