@@ -729,36 +729,40 @@
           <fieldset>
             <legend><?php echo FIELDSET_ASSIGNED_ATTRIBUTES; ?></legend>
 
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  $Qattributes = $osC_Database->query('select po.products_options_id, po.products_options_name, pov.products_options_values_id, pov.products_options_values_name, pa.options_values_price, pa.price_prefix from :table_products_attributes pa, :table_products_options po, :table_products_options_values pov where pa.products_id = :products_id and pa.options_id = po.products_options_id and po.language_id = :language_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id order by po.products_options_name, pov.products_options_values_name');
-  $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-  $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-  $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-  $Qattributes->bindInt(':products_id', $_GET['pID']);
-  $Qattributes->bindInt(':language_id', $osC_Language->getID());
-  $Qattributes->bindInt(':language_id', $osC_Language->getID());
-  $Qattributes->execute();
+  if (isset($_GET['pID'])) {
+    echo '<table border="0" width="100%" cellspacing="0" cellpadding="2">';
 
-  $current_attribute_group = '';
+    $Qattributes = $osC_Database->query('select po.products_options_id, po.products_options_name, pov.products_options_values_id, pov.products_options_values_name, pa.options_values_price, pa.price_prefix from :table_products_attributes pa, :table_products_options po, :table_products_options_values pov where pa.products_id = :products_id and pa.options_id = po.products_options_id and po.language_id = :language_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id order by po.products_options_name, pov.products_options_values_name');
+    $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
+    $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
+    $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
+    $Qattributes->bindInt(':products_id', $_GET['pID']);
+    $Qattributes->bindInt(':language_id', $osC_Language->getID());
+    $Qattributes->bindInt(':language_id', $osC_Language->getID());
+    $Qattributes->execute();
 
-  while ($Qattributes->next()) {
-    if ($Qattributes->value('products_options_name') != $current_attribute_group) {
-      echo '              <tr>' . "\n" .
-           '                <td class="smallText" colspan="3"><b>' . $Qattributes->value('products_options_name') . '</b></td>' . "\n" .
+    $current_attribute_group = '';
+
+    while ($Qattributes->next()) {
+      if ($Qattributes->value('products_options_name') != $current_attribute_group) {
+        echo '              <tr>' . "\n" .
+             '                <td class="smallText" colspan="3"><b>' . $Qattributes->value('products_options_name') . '</b></td>' . "\n" .
+             '              </tr>' . "\n";
+
+        $current_attribute_group = $Qattributes->value('products_options_name');
+      }
+
+      echo '              <tr id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '">' . "\n" .
+           '                <td class="smallText" width="50%">' . $Qattributes->value('products_options_values_name') . '</td>' . "\n" .
+           '                <td class="smallText">' . osc_draw_pull_down_menu('attribute_prefix[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), $Qattributes->value('price_prefix')) . '&nbsp;' . osc_draw_input_field('attribute_price[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', $Qattributes->value('options_values_price')) . '</td>' . "\n" .
+           '                <td class="smallText" align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onclick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
            '              </tr>' . "\n";
-
-      $current_attribute_group = $Qattributes->value('products_options_name');
     }
 
-    echo '              <tr id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '">' . "\n" .
-         '                <td class="smallText" width="50%">' . $Qattributes->value('products_options_values_name') . '</td>' . "\n" .
-         '                <td class="smallText">' . osc_draw_pull_down_menu('attribute_prefix[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), $Qattributes->value('price_prefix')) . '&nbsp;' . osc_draw_input_field('attribute_price[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', $Qattributes->value('options_values_price')) . '</td>' . "\n" .
-         '                <td class="smallText" align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onclick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
-         '              </tr>' . "\n";
+    echo '</table>';
   }
 ?>
-            </table>
 
             <span id="writeroot"></span>
 
