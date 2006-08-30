@@ -195,12 +195,12 @@
 
       if ($this->hasDateSet('from')) {
         $Qlisting->appendQuery('and p.products_date_added >= :products_date_added');
-        $Qlisting->bindValue(':products_date_added', date('Ymd', $this->_date_from));
+        $Qlisting->bindValue(':products_date_added', date('Y-m-d H:i:s', $this->_date_from));
       }
 
       if ($this->hasDateSet('to')) {
         $Qlisting->appendQuery('and p.products_date_added <= :products_date_added');
-        $Qlisting->bindValue(':products_date_added', date('Ymd', $this->_date_to));
+        $Qlisting->bindValue(':products_date_added', date('Y-m-d H:i:s', $this->_date_to));
       }
 
       if ($this->hasPriceSet('from')) {

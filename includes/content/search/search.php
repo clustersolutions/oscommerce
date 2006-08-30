@@ -60,7 +60,7 @@
 
       if (isset($_GET['dateto_days']) && is_numeric($_GET['dateto_days']) && isset($_GET['dateto_months']) && is_numeric($_GET['dateto_months']) && isset($_GET['dateto_years']) && is_numeric($_GET['dateto_years'])) {
         if (@checkdate($_GET['dateto_months'], $_GET['dateto_days'], $_GET['dateto_years'])) {
-          $osC_Search->setDateTo(mktime(0, 0, 0, $_GET['dateto_months'], $_GET['dateto_days'], $_GET['dateto_years']));
+          $osC_Search->setDateTo(mktime(23, 59, 59, $_GET['dateto_months'], $_GET['dateto_days'], $_GET['dateto_years']));
         } else {
           $messageStack->add('search', $osC_Language->get('error_search_invalid_to_date'));
         }
