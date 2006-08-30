@@ -40,4 +40,6 @@
   define('EMPTY_CATEGORY', 'Empty Category');
 
   define('ERROR_CANNOT_MOVE_CATEGORY_TO_PARENT', 'Error: Category cannot be moved into child category.');
+  define('ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Category images directory is not writeable: ' . realpath('../images/categories'));
+  define('ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Category images directory does not exist: ' . realpath('../images/categories'));
 ?>

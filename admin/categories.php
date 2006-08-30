@@ -196,6 +196,15 @@
     }
   }
 
+// check if the categories image directory exists
+  if (is_dir(realpath('../images/categories'))) {
+    if (!is_writeable(realpath('../images/categories'))) {
+      $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
+    }
+  } else {
+    $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
+  }
+
   $page_contents = 'categories.php';
 
   require('templates/default.php');

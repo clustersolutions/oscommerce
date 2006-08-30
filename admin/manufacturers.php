@@ -146,6 +146,15 @@
     }
   }
 
+// check if the manufacturers image directory exists
+  if (is_dir(realpath('../images/manufacturers'))) {
+    if (!is_writeable(realpath('../images/manufacturers'))) {
+      $osC_MessageStack->add('header', ERROR_MANUFACTURERS_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
+    }
+  } else {
+    $osC_MessageStack->add('header', ERROR_MANUFACTURERS_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
+  }
+
   $page_contents = 'manufacturers.php';
 
   require('templates/default.php');
