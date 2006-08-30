@@ -141,9 +141,13 @@
                           'title' => $quote['module'] . ((empty($method['title']) === false) ? ' (' . $method['title'] . ')' : ''),
                           'cost' => $method['cost'],
                           'tax_class_id' => $quote['tax_class_id'],
-                          'is_cheapest' => true);
+                          'is_cheapest' => false);
           }
         }
+      }
+
+      if (!empty($rate)) {
+        $rate['is_cheapest'] = true;
       }
 
       return $rate;
@@ -177,7 +181,7 @@
         if (is_array($this->_modules)) {
           $include_quotes = array();
 
-          if (defined('MODULE_SHIPPING_FREE_STATUS') && (MODULE_SHIPPING_FREE_STATUS == 'True') && $GLOBALS['osC_Shipping_free']->isEnabled()) {
+          if (defined('MODULE_SHIPPING_FREE_STATUS') && isset($GLOBALS['osC_Shipping_free']) && $GLOBALS['osC_Shipping_free']->isEnabled()) {
             $include_quotes[] = 'osC_Shipping_free';
           } else {
             foreach ($this->_modules as $module) {
