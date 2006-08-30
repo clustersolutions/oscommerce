@@ -57,7 +57,11 @@
 
 <?php
   }
+?>
 
+<div style="clear: both;"></div>
+
+<?php
   if ($osC_Services->isStarted('reviews') && osC_Reviews::exists(osc_get_product_id($osC_Product->getID()))) {
 ?>
 
