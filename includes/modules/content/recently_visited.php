@@ -1,6 +1,7 @@
 <?php
 /*
   $Id: $
+
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
@@ -25,9 +26,9 @@
     }
 
     function initialize() {
-      global $osC_RecentlyVisited, $osC_Language, $osC_Image;
+      global $osC_Services, $osC_RecentlyVisited, $osC_Language, $osC_Image;
 
-      if ($osC_RecentlyVisited->hasHistory()) {
+      if ($osC_Services->isStarted('recently_visited') && $osC_RecentlyVisited->hasHistory()) {
         $this->_content = '<table border="0" width="100%" cellspacing="0" cellpadding="2">' .
                           '  <tr>';
 

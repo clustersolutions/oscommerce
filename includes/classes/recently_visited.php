@@ -1,10 +1,11 @@
 <?php
 /*
   $Id: $
+
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -116,11 +117,7 @@
     }
 
     function hasProducts() {
-      if (isset($this->visits['products']) && (empty($this->visits['products']) === false)) {
-        return true;
-      }
-
-      return false;
+      return ( (SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1') && isset($this->visits['products']) && !empty($this->visits['products']) );
     }
 
     function getProducts() {
@@ -154,11 +151,7 @@
     }
 
     function hasCategories() {
-      if (isset($this->visits['categories']) && (empty($this->visits['categories']) === false)) {
-        return true;
-      }
-
-      return false;
+      return ( (SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES == '1') && isset($this->visits['categories']) && !empty($this->visits['categories']) );
     }
 
     function getCategories() {
@@ -194,11 +187,7 @@
     }
 
     function hasSearches() {
-      if (isset($this->visits['searches']) && (empty($this->visits['searches']) === false)) {
-        return true;
-      }
-
-      return false;
+      return ( (SERVICE_RECENTLY_VISITED_SHOW_SEARCHES == '1') && isset($this->visits['searches']) && !empty($this->visits['searches']) );
     }
 
     function getSearches() {
