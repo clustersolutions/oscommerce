@@ -463,7 +463,7 @@
   </div>
 </div>
 
-<h1><?php echo (isset($pInfo->products_name[$osC_Language->getID()])) ? $pInfo->products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
+<h1><?php echo (isset($pInfo) && isset($pInfo->products_name[$osC_Language->getID()])) ? $pInfo->products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
 
 <div class="tab-pane" id="mainTabPane">
   <script type="text/javascript"><!--
