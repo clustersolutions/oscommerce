@@ -179,8 +179,6 @@
 
 <?php
   }
-
-  unset($content_left);
 ?>
 
 </div>
@@ -228,6 +226,16 @@
 </div>
 
 <?php
+  } elseif (empty($content_left)) {
+?>
+
+<style type="text/css"><!--
+#pageBlockLeft {
+  width: 99%;
+}
+//--></style>
+
+<?php
   } else {
 ?>
 
@@ -249,6 +257,7 @@
 <?php
   }
 
+  unset($content_left);
   unset($content_right);
 
   if ($osC_Template->hasPageHeader()) {

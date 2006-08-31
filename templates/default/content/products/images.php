@@ -15,15 +15,8 @@
 
 <style type="text/css">
 <!--
-#pageContent {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-div#pageBlockLeft {
-  width: 100%;
-  margin: 0;
+BODY {
+  min-width: 0;
 }
 //-->
 </style>
@@ -39,13 +32,13 @@ function loadImage(imageUrl) {
 //-->
 </script>
 
-<div style="padding: 10px;" class="moduleBox">
+<div class="moduleBox">
 
 <?php
   if ($osC_Product->numberOfImages() > 1) {
 ?>
 
-  <div id="productImageThumbnails" class="content" style="overflow: auto; width: <?php echo ($osC_Image->getWidth('thumbnails') * 2) + 25; ?>px;">
+  <div id="productImageThumbnails" class="content" style="position: absolute; top: 10px; overflow: auto; width: <?php echo ($osC_Image->getWidth('thumbnails') * 2) + 15; ?>px;">
 
 <?php
     foreach ($osC_Product->getImages() as $images) {
