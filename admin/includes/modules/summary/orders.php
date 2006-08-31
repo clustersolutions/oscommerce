@@ -45,7 +45,7 @@
                      '  </thead>' .
                      '  <tbody>';
 
-      $Qorders = $osC_Database->query('select o.orders_id, o.customers_name, greatest(o.date_purchased, o.last_modified) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
+      $Qorders = $osC_Database->query('select o.orders_id, o.customers_name, greatest(o.date_purchased, ifnull(o.last_modified, 0)) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
       $Qorders->bindTable(':table_orders', TABLE_ORDERS);
       $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
       $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
