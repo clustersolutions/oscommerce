@@ -19,13 +19,13 @@
 #       * Comments should be like these, full line comments.
 #         (don't use inline comments)
 
-INSERT INTO osc_categories VALUES (1, '', 0, 0, now(), null);
-INSERT INTO osc_categories VALUES (2, '', 1, 0, now(), null);
+INSERT INTO osc_categories VALUES (1, 'books.gif', 0, 0, now(), null);
+INSERT INTO osc_categories VALUES (2, 'php.gif', 1, 0, now(), null);
 
 INSERT INTO osc_categories_description VALUES (1, 1, 'Books');
 INSERT INTO osc_categories_description VALUES (2, 1, 'PHP');
 
-INSERT INTO osc_manufacturers VALUES (1, 'Apress', '', now(), null);
+INSERT INTO osc_manufacturers VALUES (1, 'Apress', 'apress.gif', now(), null);
 
 INSERT INTO osc_manufacturers_info VALUES (1, 1, 'http://www.apress.com', 0, null);
 
