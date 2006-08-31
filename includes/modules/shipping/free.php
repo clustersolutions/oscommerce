@@ -70,7 +70,7 @@
       $this->quotes = array('id' => $this->_code,
                             'module' => $this->_title,
                             'methods' => array(array('id' => $this->_code,
-                                                     'title' => sprintf($osC_Language->get('free_shipping_description'), $osC_Currencies->format(MODULE_SHIPPING_FREE_MINIMUM_ORDER)),
+                                                     'title' => sprintf($osC_Language->get('shipping_free_for_amount'), $osC_Currencies->format(MODULE_SHIPPING_FREE_MINIMUM_ORDER)),
                                                      'cost' => 0)),
                             'tax_class_id' => 0);
 

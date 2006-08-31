@@ -1139,16 +1139,6 @@ Note: If you did not request this action via our password forgotten page, please
       <group>checkout</group>
     </definition>
     <definition>
-      <key>free_shipping_title</key>
-      <value><![CDATA[Free Shipping]]></value>
-      <group>checkout</group>
-    </definition>
-    <definition>
-      <key>free_shipping_description</key>
-      <value><![CDATA[Free shipping for orders over %s]]></value>
-      <group>checkout</group>
-    </definition>
-    <definition>
       <key>order_delivery_address_title</key>
       <value><![CDATA[Delivery Address]]></value>
       <group>order</group>
