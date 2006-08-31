@@ -13,112 +13,115 @@
   class osC_Payment_cc extends osC_Payment {
     var $_title,
         $_code = 'cc',
-        $_author_name = 'osCommerce',
-        $_author_www = 'http://www.oscommerce.com',
         $_status = false,
-        $_sort_order;
+        $_sort_order,
+        $_order_id;
 
     function osC_Payment_cc() {
-      global $osC_Language;
+      global $osC_Database, $osC_Language, $osC_ShoppingCart;
 
       $this->_title = $osC_Language->get('payment_cc_title');
-      $this->_description = $osC_Language->get('payment_cc_description');
-      $this->_status = (defined('MODULE_PAYMENT_CC_STATUS') && (MODULE_PAYMENT_CC_STATUS == 'True') ? true : false);
-      $this->_sort_order = (defined('MODULE_PAYMENT_CC_SORT_ORDER') ? MODULE_PAYMENT_CC_SORT_ORDER : null);
+      $this->_method_title = $osC_Language->get('payment_cc_method_title');
+      $this->_status = (MODULE_PAYMENT_CC_STATUS == '1') ? true : false;
+      $this->_sort_order = MODULE_PAYMENT_CC_SORT_ORDER;
 
-      if (defined('MODULE_PAYMENT_CC_STATUS')) {
-        $this->initialize();
-      }
-    }
-
-    function initialize() {
-      global $order;
-
-      if ((int)MODULE_PAYMENT_CC_ORDER_STATUS_ID > 0) {
-        $this->order_status = MODULE_PAYMENT_CC_ORDER_STATUS_ID;
-      }
-
-      if (is_object($order)) $this->update_status();
-    }
-
-    function update_status() {
-      global $osC_Database, $order;
-
-      if ( ($this->_status === true) && ((int)MODULE_PAYMENT_CC_ZONE > 0) ) {
-        $check_flag = false;
-
-        $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
-        $Qcheck->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
-        $Qcheck->bindInt(':geo_zone_id', MODULE_PAYMENT_CC_ZONE);
-        $Qcheck->bindInt(':zone_country_id', $order->billing['country']['id']);
-        $Qcheck->execute();
-
-        while ($Qcheck->next()) {
-          if ($Qcheck->valueInt('zone_id') < 1) {
-            $check_flag = true;
-            break;
-          } elseif ($Qcheck->valueInt('zone_id') == $order->billing['zone_id']) {
-            $check_flag = true;
-            break;
-          }
+      if ($this->_status === true) {
+        if ((int)MODULE_PAYMENT_CC_ORDER_STATUS_ID > 0) {
+          $this->order_status = MODULE_PAYMENT_CC_ORDER_STATUS_ID;
         }
 
-        if ($check_flag == false) {
-          $this->_status = false;
+        if ((int)MODULE_PAYMENT_CC_ZONE > 0) {
+          $check_flag = false;
+
+          $Qcheck = $osC_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
+          $Qcheck->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
+          $Qcheck->bindInt(':geo_zone_id', MODULE_PAYMENT_CC_ZONE);
+          $Qcheck->bindInt(':zone_country_id', $osC_ShoppingCart->getBillingAddress('country_id'));
+          $Qcheck->execute();
+
+          while ($Qcheck->next()) {
+            if ($Qcheck->valueInt('zone_id') < 1) {
+              $check_flag = true;
+              break;
+            } elseif ($Qcheck->valueInt('zone_id') == $osC_ShoppingCart->getBillingAddress('zone_id')) {
+              $check_flag = true;
+              break;
+            }
+          }
+
+          if ($check_flag == false) {
+            $this->_status = false;
+          }
         }
       }
     }
 
     function getJavascriptBlock() {
-      global $osC_Language;
+      global $osC_Language, $osC_CreditCard;
+
+      $osC_CreditCard = new osC_CreditCard();
 
       $js = '  if (payment_value == "' . $this->_code . '") {' . "\n" .
             '    var cc_owner = document.checkout_payment.cc_owner.value;' . "\n" .
             '    var cc_number = document.checkout_payment.cc_number.value;' . "\n" .
-            '    if (cc_owner == "" || cc_owner.length < ' . CC_OWNER_MIN_LENGTH . ') {' . "\n" .
-            '      error_message = error_message + "' . sprintf($osC_Language->get('payment_cc_js_credit_card_owner'), CC_OWNER_MIN_LENGTH) . '\n";' . "\n" .
-            '      error = 1;' . "\n" .
-            '    }' . "\n" .
-            '    if (cc_number == "" || cc_number.length < ' . CC_NUMBER_MIN_LENGTH . ') {' . "\n" .
-            '      error_message = error_message + "' . sprintf($osC_Language->get('payment_cc_js_credit_card_number'), CC_NUMBER_MIN_LENGTH) . '\n";' . "\n" .
-            '      error = 1;' . "\n" .
-            '    }' . "\n" .
-            '  }' . "\n";
+            '    cc_number = cc_number.replace(/[^\d]/gi, "");' . "\n";
+
+      if (CFG_CREDIT_CARDS_VERIFY_WITH_JS == '1') {
+        $js .= '    var cc_type_match = false;' . "\n";
+      }
+
+      $js .= '    if (cc_owner == "" || cc_owner.length < ' . CC_OWNER_MIN_LENGTH . ') {' . "\n" .
+             '      error_message = error_message + "' . sprintf($osC_Language->get('payment_cc_js_credit_card_owner'), CC_OWNER_MIN_LENGTH) . '\n";' . "\n" .
+             '      error = 1;' . "\n" .
+             '    }' . "\n";
+
+      $has_type_patterns = false;
+
+      if ( (CFG_CREDIT_CARDS_VERIFY_WITH_JS == '1') && (osc_empty(MODULE_PAYMENT_CC_ACCEPTED_TYPES) === false) ) {
+        foreach (explode(',', MODULE_PAYMENT_CC_ACCEPTED_TYPES) as $type_id) {
+          if ($osC_CreditCard->typeExists($type_id)) {
+            $has_type_patterns = true;
+
+            $js .= '    if ( (cc_type_match == false) && (cc_number.match(' . $osC_CreditCard->getTypePattern($type_id) . ') != null) ) { ' . "\n" .
+                   '      cc_type_match = true;' . "\n" .
+                   '    }' . "\n";
+          }
+        }
+      }
+
+      if ($has_type_patterns === true) {
+        $js .= '    if ((cc_type_match == false) || (mod10(cc_number) == false)) {' . "\n" .
+               '      error_message = error_message + "' . $osC_Language->get('payment_cc_js_credit_card_not_accepted') . '\n";' . "\n" .
+               '      error = 1;' . "\n" .
+               '    }' . "\n";
+      } else {
+        $js .= '    if (cc_number == "" || cc_number.length < ' . CC_NUMBER_MIN_LENGTH . ') {' . "\n" .
+               '      error_message = error_message + "' . sprintf($osC_Language->get('payment_cc_js_credit_card_number'), CC_NUMBER_MIN_LENGTH) . '\n";' . "\n" .
+               '      error = 1;' . "\n" .
+               '    }' . "\n";
+      }
+
+      $js .= '  }' . "\n";
 
       return $js;
     }
 
     function selection() {
-      global $osC_Database, $osC_Language, $order;
+      global $osC_Database, $osC_Language, $osC_ShoppingCart;
 
       for ($i=1; $i<13; $i++) {
-        $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B',mktime(0,0,0,$i,1,2000)));
+        $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B',mktime(0,0,0,$i,1)));
       }
 
-      $today = getdate();
-      for ($i=$today['year']; $i < $today['year']+10; $i++) {
-        $expires_year[] = array('id' => strftime('%y',mktime(0,0,0,1,1,$i)), 'text' => strftime('%Y',mktime(0,0,0,1,1,$i)));
+      $year = date('Y');
+      for ($i=$year; $i < $year+10; $i++) {
+        $expires_year[] = array('id' => $i, 'text' => strftime('%Y',mktime(0,0,0,1,1,$i)));
       }
-
-      $Qcredit_cards = $osC_Database->query('select credit_card_name, credit_card_code from :table_credit_cards where credit_card_status = :credit_card_status');
-
-      $Qcredit_cards->bindRaw(':table_credit_cards', TABLE_CREDIT_CARDS);
-      $Qcredit_cards->bindInt(':credit_card_status', '1');
-      $Qcredit_cards->setCache('credit-cards');
-      $Qcredit_cards->execute();
-
-      while ($Qcredit_cards->next()) {
-        $credit_cards[] = array('id' => $Qcredit_cards->value('credit_card_code'), 'text' => $Qcredit_cards->value('credit_card_name'));
-      }
-
-      $Qcredit_cards->freeResult();
 
       $selection = array('id' => $this->_code,
-                         'module' => $this->_title,
+                         'module' => $this->_method_title,
                          'fields' => array(array('title' => $osC_Language->get('payment_cc_credit_card_owner'),
-                                                 'field' => osc_draw_input_field('cc_owner', $order->billing['firstname'] . ' ' . $order->billing['lastname'])),
-                                           array('title' => $osC_Language->get('payment_cc_credit_card_type'),
-                                                 'field' => osc_draw_pull_down_menu('cc_type', $credit_cards)),
+                                                 'field' => osc_draw_input_field('cc_owner', $osC_ShoppingCart->getBillingAddress('firstname') . ' ' . $osC_ShoppingCart->getBillingAddress('lastname'))),
                                            array('title' => $osC_Language->get('payment_cc_credit_card_number'),
                                                  'field' => osc_draw_input_field('cc_number')),
                                            array('title' => $osC_Language->get('payment_cc_credit_card_expiry_date'),
@@ -128,92 +131,70 @@
     }
 
     function pre_confirmation_check() {
-      global $osC_Language, $messageStack;
-
       $this->_verifyData();
-
-      $this->cc_card_type = $_POST['cc_type'];
-      $this->cc_card_number = $_POST['cc_number'];
     }
 
     function confirmation() {
-      global $osC_Language;
+      global $osC_Language, $osC_CreditCard;
 
-      $confirmation = array('title' => $this->_title . ': ' . $this->cc_card_type,
+      $confirmation = array('title' => $this->_method_title,
                             'fields' => array(array('title' => $osC_Language->get('payment_cc_credit_card_owner'),
-                                                    'field' => $_POST['cc_owner']),
+                                                    'field' => $osC_CreditCard->getOwner()),
                                               array('title' => $osC_Language->get('payment_cc_credit_card_number'),
-                                                    'field' => substr($this->cc_card_number, 0, 4) . str_repeat('X', (strlen($this->cc_card_number) - 8)) . substr($this->cc_card_number, -4)),
+                                                    'field' => $osC_CreditCard->getSafeNumber()),
                                               array('title' => $osC_Language->get('payment_cc_credit_card_expiry_date'),
-                                                    'field' => strftime('%B, %Y', mktime(0,0,0,$_POST['cc_expires_month'], 1, '20' . $_POST['cc_expires_year'])))));
+                                                    'field' => $osC_CreditCard->getExpiryMonth() . ' / ' . $osC_CreditCard->getExpiryYear())));
 
       return $confirmation;
     }
 
     function process_button() {
-      $process_button_string = osc_draw_hidden_field('cc_owner', $_POST['cc_owner']) .
-                               osc_draw_hidden_field('cc_expires', $_POST['cc_expires_month'] . $_POST['cc_expires_year']) .
-                               osc_draw_hidden_field('cc_type', $this->cc_card_type) .
-                               osc_draw_hidden_field('cc_number', $this->cc_card_number);
+      global $osC_CreditCard;
 
-      return $process_button_string;
+      $fields = osc_draw_hidden_field('cc_owner', $osC_CreditCard->getOwner()) .
+                osc_draw_hidden_field('cc_expires_month', $osC_CreditCard->getExpiryMonth()) .
+                osc_draw_hidden_field('cc_expires_year', $osC_CreditCard->getExpiryYear()) .
+                osc_draw_hidden_field('cc_number', $osC_CreditCard->getNumber());
+
+      return $fields;
     }
 
-    function before_process() {
-      global $order;
+    function process() {
+      global $osC_Database, $messageStack, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart, $osC_CreditCard;
 
-      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (osc_validate_email_address(MODULE_PAYMENT_CC_EMAIL)) ) {
-        $len = strlen($_POST['cc_number']);
+      $this->_verifyData();
 
-        $this->cc_middle = substr($_POST['cc_number'], 4, ($len-8));
-        $order->info['cc_number'] = substr($_POST['cc_number'], 0, 4) . str_repeat('X', (strlen($_POST['cc_number']) - 8)) . substr($_POST['cc_number'], -4);
-      }
-    }
+      $this->_order_id = osC_Order::insert();
 
-    function after_process() {
-      global $insert_id;
+      osC_Order::process($this->_order_id, $this->order_status);
 
-      if ( (defined('MODULE_PAYMENT_CC_EMAIL')) && (osc_validate_email_address(MODULE_PAYMENT_CC_EMAIL)) ) {
-        $message = 'Order #' . $insert_id . "\n\n" . 'Middle: ' . $this->cc_middle . "\n\n";
+      $data = array('cc_owner' => $_POST['cc_owner'],
+                    'cc_number' => $_POST['cc_number'],
+                    'cc_expires_month' => $_POST['cc_expires_month'],
+                    'cc_expires_year' => $_POST['cc_expires_year']);
 
-        osc_email('', MODULE_PAYMENT_CC_EMAIL, 'Extra Order Info: #' . $insert_id, $message, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
-      }
-    }
+      if (!osc_empty('MODULE_PAYMENT_CC_EMAIL') && osc_validate_email_address(MODULE_PAYMENT_CC_EMAIL)) {
+        $length = strlen($data['cc_number']);
 
-    function get_error() {
-      return false;
-    }
+        $cc_middle = substr($data['cc_number'], 4, ($length-8));
 
-    function check() {
-      if (!isset($this->_check)) {
-        $this->_check = defined('MODULE_PAYMENT_CC_STATUS');
+        $data['cc_number'] = substr($data['cc_number'], 0, 4) . str_repeat('X', (strlen($data['cc_number']) - 8)) . substr($data['cc_number'], -4);
+
+        $message = 'Order #' . $this->_order_id . "\n\n" . 'Middle: ' . $cc_middle . "\n\n";
+
+        osc_email('', MODULE_PAYMENT_CC_EMAIL, 'Extra Order Info: #' . $this->_order_id, $message, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
       }
 
-      return $this->_check;
-    }
+      $osC_XML = new osC_XML($data);
+      $result = $osC_XML->toXML();
 
-    function install() {
-      global $osC_Database;
-
-      parent::install();
-
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Credit Card Module', 'MODULE_PAYMENT_CC_STATUS', 'True', 'Do you want to accept credit card payments?', '6', '0', 'osc_cfg_set_boolean_value(array(\'True\', \'False\'))', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Split Credit Card E-Mail Address', 'MODULE_PAYMENT_CC_EMAIL', '', 'If an e-mail address is entered, the middle digits of the credit card number will be sent to the e-mail address (the outside digits are stored in the database with the middle digits censored)', '6', '0', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_CC_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0' , now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_CC_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '2', 'osc_cfg_use_get_zone_class_title', 'osc_cfg_set_zone_classes_pull_down_menu', now())");
-      $osC_Database->simpleQuery("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_CC_ORDER_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', '6', '0', 'osc_cfg_set_order_statuses_pull_down_menu', 'osc_cfg_use_get_order_status_title', now())");
-    }
-
-    function getKeys() {
-      if (!isset($this->_keys)) {
-        $this->_keys = array('MODULE_PAYMENT_CC_STATUS',
-                             'MODULE_PAYMENT_CC_EMAIL',
-                             'MODULE_PAYMENT_CC_ZONE',
-                             'MODULE_PAYMENT_CC_ORDER_STATUS_ID',
-                             'MODULE_PAYMENT_CC_SORT_ORDER');
-      }
-
-      return $this->_keys;
+      $Qtransaction = $osC_Database->query('insert into :table_orders_transactions_history (orders_id, transaction_code, transaction_return_value, transaction_return_status, date_added) values (:orders_id, :transaction_code, :transaction_return_value, :transaction_return_status, now())');
+      $Qtransaction->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
+      $Qtransaction->bindInt(':orders_id', $this->_order_id);
+      $Qtransaction->bindInt(':transaction_code', 1);
+      $Qtransaction->bindValue(':transaction_return_value', $result);
+      $Qtransaction->bindInt(':transaction_return_status', 1);
+      $Qtransaction->execute();
     }
 
     function _verifyData() {
@@ -222,8 +203,28 @@
       $osC_CreditCard = new osC_CreditCard($_POST['cc_number'], $_POST['cc_expires_month'], $_POST['cc_expires_year']);
       $osC_CreditCard->setOwner($_POST['cc_owner']);
 
-      if ($result = $osC_CreditCard->isValid() !== true) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+      if (($result = $osC_CreditCard->isValid(MODULE_PAYMENT_CC_ACCEPTED_TYPES)) !== true) {
+        $error = '';
+
+        switch ($result) {
+          case -2:
+            $error = $osC_Language->get('payment_cc_error_invalid_expiration_date');
+            break;
+
+          case -3:
+            $error = $osC_Language->get('payment_cc_error_expired');
+            break;
+
+          case -5:
+            $error = $osC_Language->get('payment_cc_error_not_accepted');
+            break;
+
+          default:
+            $error = $osC_Language->get('payment_cc_error_general');
+            break;
+        }
+
+        $messageStack->add_session('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&cc_owner=' . $osC_CreditCard->getOwner() . '&cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
       }

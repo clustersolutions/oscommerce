@@ -95,7 +95,7 @@
         <td colspan="2"><table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-    if ( ($n == 1) || ($selection[$i]['id'] == $osC_ShoppingCart->getBillingMethod('id')) ) {
+    if ( ($n == 1) || ($osC_ShoppingCart->hasBillingMethod() && ($selection[$i]['id'] == $osC_ShoppingCart->getBillingMethod('id'))) ) {
       echo '          <tr id="defaultSelected" class="moduleRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
     } else {
       echo '          <tr class="moduleRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="selectRowEffect(this, ' . $radio_buttons . ')">' . "\n";
@@ -109,7 +109,7 @@
 ?>
 
             <td colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
-            <td align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], $osC_ShoppingCart->getBillingMethod('id')); ?></td>
+            <td align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], ($osC_ShoppingCart->hasBillingMethod() ? $osC_ShoppingCart->getBillingMethod('id') : null)); ?></td>
 
 <?php
     } else {
