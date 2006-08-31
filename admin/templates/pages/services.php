@@ -92,7 +92,7 @@
       echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
     }
 
-    if (is_array($module_keys) && (sizeof($module_keys) > 0)) {
+    if (in_array($class_code, $installed) && is_array($module_keys) && (sizeof($module_keys) > 0)) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
         echo '<a href="#" onclick="toggleInfoBox(\'sEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
       } else {
