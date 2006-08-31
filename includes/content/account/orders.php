@@ -19,7 +19,8 @@
     var $_module = 'orders',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'account_history.php';
+        $_page_contents = 'account_history.php',
+        $_page_image = 'table_background_history.gif';
 
 /* Class constructor */
 

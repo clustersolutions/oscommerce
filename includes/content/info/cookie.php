@@ -17,7 +17,8 @@
     var $_module = 'cookie',
         $_group = 'info',
         $_page_title,
-        $_page_contents = 'cookie.php';
+        $_page_contents = 'cookie.php',
+        $_page_image = 'table_background_specials.gif';
 
 /* Class constructor */
 

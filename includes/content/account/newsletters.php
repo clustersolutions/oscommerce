@@ -17,7 +17,8 @@
     var $_module = 'newsletters',
         $_group = 'account',
         $_page_title ,
-        $_page_contents = 'account_newsletters.php';
+        $_page_contents = 'account_newsletters.php',
+        $_page_image = 'table_background_account.gif';
 
 /* Class constructor */
 

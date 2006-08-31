@@ -18,7 +18,7 @@
         $_group = 'index',
         $_page_title,
         $_page_contents = 'index.php',
-        $_page_image = 'table_background_list.gif';
+        $_page_image = 'table_background_default.gif';
 
 /* Class constructor */
 

@@ -17,7 +17,8 @@
     var $_module = 'ssl_check',
         $_group = 'info',
         $_page_title,
-        $_page_contents = 'ssl_check.php';
+        $_page_contents = 'ssl_check.php',
+        $_page_image = 'table_background_specials.gif';
 
 /* Class constructor */
 

@@ -19,7 +19,8 @@
     var $_module = 'payment',
         $_group = 'checkout',
         $_page_title,
-        $_page_contents = 'checkout_payment.php';
+        $_page_contents = 'checkout_payment.php',
+        $_page_image = 'table_background_payment.gif';
 
 /* Class constructor */
 

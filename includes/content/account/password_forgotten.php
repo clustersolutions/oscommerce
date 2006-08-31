@@ -19,7 +19,8 @@
     var $_module = 'password_forgotten',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'password_forgotten.php';
+        $_page_contents = 'password_forgotten.php',
+        $_page_image = 'table_background_password_forgotten.gif';
 
 /* Class constructor */
 

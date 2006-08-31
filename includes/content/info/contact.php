@@ -17,7 +17,8 @@
     var $_module = 'contact',
         $_group = 'info',
         $_page_title,
-        $_page_contents = 'info_contact.php';
+        $_page_contents = 'info_contact.php',
+        $_page_image = 'table_background_contact_us.gif';
 
 /* Class constructor */
 

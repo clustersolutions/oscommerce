@@ -17,7 +17,8 @@
     var $_module = 'info',
         $_group = 'info',
         $_page_title,
-        $_page_contents = 'info.php';
+        $_page_contents = 'info.php',
+        $_page_image = 'table_background_account.gif';
 
     function osC_Info_Info() {
       global $osC_Language;

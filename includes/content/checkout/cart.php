@@ -17,7 +17,8 @@
     var $_module = 'cart',
         $_group = 'checkout',
         $_page_title,
-        $_page_contents = 'shopping_cart.php';
+        $_page_contents = 'shopping_cart.php',
+        $_page_image = 'table_background_cart.gif';
 
 /* Class constructor */
 

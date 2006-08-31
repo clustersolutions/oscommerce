@@ -17,7 +17,8 @@
     var $_module = 'confirmation',
         $_group = 'checkout',
         $_page_title,
-        $_page_contents = 'checkout_confirmation.php';
+        $_page_contents = 'checkout_confirmation.php',
+        $_page_image = 'table_background_confirmation.gif';
 
 /* Class constructor */
 

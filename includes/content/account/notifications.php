@@ -17,7 +17,8 @@
     var $_module = 'notifications',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'account_notifications.php';
+        $_page_contents = 'account_notifications.php',
+        $_page_image = 'table_background_account.gif';
 
 /* Class constructor */
 

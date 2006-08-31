@@ -19,7 +19,8 @@
     var $_module = 'account',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'account.php';
+        $_page_contents = 'account.php',
+        $_page_image = 'table_background_account.gif';
 
     function osC_Account_Account() {
       global $osC_Language;

@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -30,7 +30,7 @@
 ?>
 
   <tr>
-    <td width="<?php echo SMALL_IMAGE_WIDTH + 10; ?>" valign="top">
+    <td width="<?php echo $osC_Image->getWidth('thumbnails') + 10; ?>" valign="top" align="center">
 
 <?php
       if (osc_empty($Qproducts->value('image')) === false) {

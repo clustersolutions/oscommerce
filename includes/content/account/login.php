@@ -19,7 +19,8 @@
     var $_module = 'login',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'login.php';
+        $_page_contents = 'login.php',
+        $_page_image = 'table_background_login.gif';
 
 /* Class constructor */
 

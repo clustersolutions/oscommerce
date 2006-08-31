@@ -17,7 +17,8 @@
     var $_module = 'privacy',
         $_group = 'info',
         $_page_title,
-        $_page_contents = 'info_privacy.php';
+        $_page_contents = 'info_privacy.php',
+        $_page_image = 'table_background_specials.gif';
 
 /* Class constructor */
 

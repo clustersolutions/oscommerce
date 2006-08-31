@@ -11,7 +11,7 @@
 */
 ?>
 
-<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
@@ -57,7 +57,7 @@
     while ($Qcategories->next()) {
       $rows++;
       $width = (int)(100 / MAX_DISPLAY_CATEGORIES_PER_ROW) . '%';
-      echo '    <td align="center" class="smallText" width="' . $width . '" valign="top">' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $osC_CategoryTree->buildBreadcrumb($Qcategories->valueInt('categories_id'))), osc_image(DIR_WS_IMAGES . 'categories/' . $Qcategories->value('categories_image'), $Qcategories->value('categories_name'), SUBCATEGORY_IMAGE_WIDTH, SUBCATEGORY_IMAGE_HEIGHT) . '<br />' . $Qcategories->value('categories_name')) . '</td>' . "\n";
+      echo '    <td align="center" class="smallText" width="' . $width . '" valign="top">' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $osC_CategoryTree->buildBreadcrumb($Qcategories->valueInt('categories_id'))), osc_image(DIR_WS_IMAGES . 'categories/' . $Qcategories->value('categories_image'), $Qcategories->value('categories_name')) . '<br />' . $Qcategories->value('categories_name')) . '</td>' . "\n";
       if ((($rows / MAX_DISPLAY_CATEGORIES_PER_ROW) == floor($rows / MAX_DISPLAY_CATEGORIES_PER_ROW)) && ($rows != $number_of_categories)) {
         echo '  </tr>' . "\n";
         echo '  <tr>' . "\n";

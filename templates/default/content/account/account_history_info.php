@@ -13,7 +13,7 @@
   $order = new osC_Order($_GET['orders']);
 ?>
 
-<?php echo osc_image(DIR_WS_IMAGES . 'table_background_history.gif', $osC_Template->getPageTitle(), null, null, 'id="pageIcon"'); ?>
+<?php echo osc_image(DIR_WS_IMAGES . $osC_Template->getPageImage(), $osC_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 

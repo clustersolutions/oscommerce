@@ -19,7 +19,8 @@
     var $_module = 'address_book',
         $_group = 'account',
         $_page_title,
-        $_page_contents = 'address_book.php';
+        $_page_contents = 'address_book.php',
+        $_page_image = 'table_background_address_book.gif';
 
 /* Class constructor */
 
