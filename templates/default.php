@@ -266,7 +266,7 @@
 <div id="pageHeader">
 
 <?php
-    echo osc_link_object(osc_href_link(FILENAME_DEFAULT), osc_image(DIR_WS_IMAGES . 'oscommerce.gif', 'osCommerce'), 'id="siteLogo"');
+    echo osc_link_object(osc_href_link(FILENAME_DEFAULT), osc_image(DIR_WS_IMAGES . 'store_logo.jpg', STORE_NAME), 'id="siteLogo"');
 ?>
 
   <ul id="navigationIcons">

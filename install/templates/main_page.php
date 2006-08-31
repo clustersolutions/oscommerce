@@ -35,7 +35,7 @@
   <div>
     <div style="float: right; padding-top: 40px; padding-right: 15px; color: #000000; font-weight: bold;"><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a> &nbsp;|&nbsp; <a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a> &nbsp;|&nbsp; <a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></div>
 
-    <a href="index.php"><img src="images/oscommerce_logo-silver.jpg" border="0" width="250" height="50" title="osCommerce, Open Source E-Commerce Solutions" style="margin: 10px 10px 0px 10px;" /></a>
+    <a href="index.php"><img src="images/oscommerce_logo-silver.jpg" border="0" width="250" height="50" title="osCommerce, 3.0 Alpha 3 &quot;Spekulatius&quot;" style="margin: 10px 10px 0px 10px;" /></a>
   </div>
 </div>
 

@@ -133,7 +133,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
-    <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.gif', 'osCommerce', '204', '50')); ?></td>
+    <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', 'osCommerce, 3.0 Alpha 3 "Spekulatius"')); ?></td>
     <td width="150" align="right" class="smallText">
 <?php
   if ($request_type == 'SSL') {
