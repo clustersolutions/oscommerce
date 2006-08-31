@@ -405,7 +405,10 @@
                            'suburb' => $Qorder->value('delivery_suburb'),
                            'city' => $Qorder->value('delivery_city'),
                            'state' => $Qorder->value('delivery_state'),
-                           'country' => $Qorder->value('delivery_country'),
+                           'zone_code' => $Qorder->value('delivery_state_code'),
+                           'country_title' => $Qorder->value('delivery_country'),
+                           'country_iso2' => $Qorder->value('delivery_country_iso2'),
+                           'country_iso3' => $Qorder->value('delivery_country_iso3'),
                            'postcode' => $Qorder->value('delivery_postcode'));
 
           $email_order .= "\n" . $osC_Language->get('email_order_delivery_address') . "\n" .
@@ -421,7 +424,10 @@
                          'suburb' => $Qorder->value('billing_suburb'),
                          'city' => $Qorder->value('billing_city'),
                          'state' => $Qorder->value('billing_state'),
-                         'country' => $Qorder->value('billing_country'),
+                         'zone_code' => $Qorder->value('billing_state_code'),
+                         'country_title' => $Qorder->value('billing_country'),
+                         'country_iso2' => $Qorder->value('billing_country_iso2'),
+                         'country_iso3' => $Qorder->value('billing_country_iso3'),
                          'postcode' => $Qorder->value('billing_postcode'));
 
         $email_order .= "\n" . $osC_Language->get('email_order_billing_address') . "\n" .
