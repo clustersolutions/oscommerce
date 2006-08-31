@@ -476,7 +476,7 @@
 
         if ($error === false) {
           $Qdefinitions = $osC_Database->query('delete from :table_languages_definitions where languages_id = :languages_id');
-          $Qdefinitions->bindTable(':table_languages', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdefinitions->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
           $Qdefinitions->bindInt(':languages_id', $id);
           $Qdefinitions->execute();
 
