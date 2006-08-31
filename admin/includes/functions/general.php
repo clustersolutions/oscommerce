@@ -35,7 +35,7 @@
     $Qdb_date = $osC_Database->query('select now() as datetime');
     $Qdb_uptime = $osC_Database->query('show status like "Uptime"');
 
-    list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
+    @list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
 
     $db_uptime = intval($Qdb_uptime->valueInt('Value') / 3600) . ':' . str_pad(intval(($Qdb_uptime->valueInt('Value') / 60) % 60), 2, '0', STR_PAD_LEFT);
 
