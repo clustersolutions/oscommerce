@@ -15,7 +15,7 @@
   class osC_LanguageInstall extends osC_Language_Admin {
 
 /* Private variables */
-    var $_languages = array('en_US' => array('code' => 'en_US', 'directory' => 'english'), 'es_ES' => array('code' => 'es_ES', 'directory' => 'espanol'), 'de_DE' => array('code' => 'de_DE', 'directory' => 'german'));
+    var $_languages = array('en_US' => array('code' => 'en_US'));
 
 /* Class constructor */
 
@@ -35,21 +35,17 @@
       $this->_definitions = array_merge($this->_definitions, $this->_parseIniFile($filename));
     }
 
-    function getDirectory() {
-      return $this->_languages[$this->_code]['directory'];
-    }
-
 /* Private methods */
 
     function _parseIniFile($filename = '', $comment = '#') {
       if (empty($filename)) {
-        $contents = file('includes/languages/' . $this->getDirectory() . '.php');
+        $contents = file('includes/languages/' . $this->getCode() . '.php');
       } else {
-        if (file_exists('includes/languages/' . $this->getDirectory() . '/' . $filename) === false) {
+        if (file_exists('includes/languages/' . $this->getCode() . '/' . $filename) === false) {
           return array();
         }
 
-        $contents = file('includes/languages/' . $this->getDirectory() . '/' . $filename);
+        $contents = file('includes/languages/' . $this->getCode() . '/' . $filename);
       }
 
       $ini_array = array();

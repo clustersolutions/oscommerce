@@ -13,7 +13,7 @@
 
 <div class="mainBlock">
   <div style="float: right;">
-    <?php echo $osC_Language->get('title_language'); ?> <a href="index.php?language=en_US">English</a> | <a href="index.php?language=de_DE">Deutsch</a> | <a href="index.php?language=es_ES">Espa&ntilde;ol</a>
+    <?php echo $osC_Language->get('title_language'); ?> <a href="index.php?language=en_US">English</a>
   </div>
 
   <h1><?php echo $osC_Language->get('page_title_welcome'); ?></h1>
@@ -123,10 +123,10 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="50%" align="center"><?php echo '<a href="install.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/install.gif" border="0" alt="' . $osC_Language->get('image_button_install') . '" /></a>'; ?></td>
+        <td width="50%" align="center"><?php echo '<a href="install.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/install.gif" border="0" alt="' . $osC_Language->get('image_button_install') . '" /></a>'; ?></td>
 
 <!--
-        <td width="50%" align="center"><?php echo '<a href="upgrade.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/upgrade.gif" border="0" alt="' . $osC_Language->get('image_button_upgrade') . '" /></a>'; ?></td>
+        <td width="50%" align="center"><?php echo '<a href="upgrade.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/upgrade.gif" border="0" alt="' . $osC_Language->get('image_button_upgrade') . '" /></a>'; ?></td>
 //-->
 
       </tr>

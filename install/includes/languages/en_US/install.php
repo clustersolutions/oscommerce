@@ -16,6 +16,7 @@ page_heading_step_4 = Finished!
 
 text_installation = <p>This web-based installation routine will correctly setup and configure osCommerce to run on this server.</p><p>Please following the on-screen instructions that will take you through the database server, web server, and store configuration options. If help is needed at any stage, please consult the documentation or seek help at the community support forums.</p>
 text_successful_installation = The installation and configuration was successful!
+text_go_to_shop_after_cfg_file_is_saved = Please visit your store after the configuration file has been saved:
 
 param_database_server = Database Server
 param_database_server_description = The address of the database server in the form of a hostname or IP address.

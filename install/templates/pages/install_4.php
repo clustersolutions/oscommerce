@@ -157,6 +157,11 @@
     $fp = fopen($dir_fs_document_root . 'includes/configure.php', 'w');
     fputs($fp, $file_contents);
     fclose($fp);
+?>
+
+    <p><?php echo $osC_Language->get('text_successful_installation'); ?></p>
+
+<?php
   } else {
 ?>
 
@@ -165,7 +170,7 @@
     <div class="noticeBox">
       <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), $dir_fs_document_root . 'includes/configure.php'); ?>
 
-      <p align="right"><?php echo '<input type="image" src="templates/' . $template . '/languages/' . $osC_Language->getDirectory() . '/images/buttons/retry.gif" border="0" alt="' . $osC_Language->get('image_button_retry') . '" />'; ?></p>
+      <p align="right"><?php echo '<input type="image" src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/buttons/retry.gif" border="0" alt="' . $osC_Language->get('image_button_retry') . '" />'; ?></p>
 
       <?php echo $osC_Language->get('error_configuration_file_alternate_method'); ?>
 
@@ -192,11 +197,11 @@
 
     </form>
 
+    <p><?php echo $osC_Language->get('text_go_to_shop_after_cfg_file_is_saved'); ?></p>
+
 <?php
   }
 ?>
-
-    <p><?php echo $osC_Language->get('text_successful_installation'); ?></p>
 
     <br />
 
