@@ -89,7 +89,7 @@
         <td class="smallText" width="60%">
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo osc_image('../includes/languages/' . $l['code'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
+    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
         </td>
@@ -129,7 +129,7 @@
     }
 
     foreach ($osC_Language->getAll() as $l) {
-      echo osc_image('../includes/languages/' . $l['code'] . '/images/icon.gif', $l['name']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']', (isset($entry_names[$l['id']]) ? $entry_names[$l['id']] : null)) . '<br />';
+      echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' .  osc_draw_input_field('entry_name[' . $l['id'] . ']', (isset($entry_names[$l['id']]) ? $entry_names[$l['id']] : null)) . '<br />';
     }
 ?>
         </td>

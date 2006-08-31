@@ -37,10 +37,10 @@
                                                               'date_format_long' => $Qlanguages->value('date_format_long'),
                                                               'time_format' => $Qlanguages->value('time_format'),
                                                               'text_direction' => $Qlanguages->value('text_direction'),
-                                                              'image' => $Qlanguages->value('image'),
                                                               'currencies_id' => $Qlanguages->valueInt('currencies_id'),
                                                               'numeric_separator_decimal' => $Qlanguages->value('numeric_separator_decimal'),
-                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'));
+                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'),
+                                                              'image' => 'icon.gif');
       }
 
       $Qlanguages->freeResult();

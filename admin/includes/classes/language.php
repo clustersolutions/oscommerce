@@ -334,7 +334,7 @@
 
       $osC_Database->startTransaction();
 
-      $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, image = :image, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, sort_order = :sort_order where languages_id = :languages_id');
+      $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, sort_order = :sort_order where languages_id = :languages_id');
       $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
       $Qlanguage->bindValue(':name', $language['name']);
       $Qlanguage->bindValue(':code', $language['code']);
@@ -344,7 +344,6 @@
       $Qlanguage->bindValue(':date_format_long', $language['date_format_long']);
       $Qlanguage->bindValue(':time_format', $language['time_format']);
       $Qlanguage->bindValue(':text_direction', $language['text_direction']);
-      $Qlanguage->bindValue(':image', $language['image']);
       $Qlanguage->bindInt(':currencies_id', $language['currencies_id']);
       $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
       $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);

@@ -170,10 +170,6 @@
         <td class="smallText" width="60%"><?php echo osc_draw_input_field('time_format', $lInfo->time_format, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
-        <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_IMAGE . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo osc_draw_input_field('image', $lInfo->image, 'style="width: 100%"'); ?></td>
-      </tr>
-      <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_LANGUAGE_DEFAULT_CURRENCY . '</b>'; ?></td>
         <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('currencies_id', $currencies_array, $lInfo->currencies_id, 'style="width: 100%"'); ?></td>
       </tr>

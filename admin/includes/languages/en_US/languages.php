@@ -31,7 +31,6 @@ define('TEXT_INFO_LANGUAGE_DATE_FORMAT_SHORT', 'Date Format (Short):');
 define('TEXT_INFO_LANGUAGE_DATE_FORMAT_LONG', 'Date Format (Long):');
 define('TEXT_INFO_LANGUAGE_TIME_FORMAT', 'Time Format:');
 define('TEXT_INFO_LANGUAGE_TEXT_DIRECTION', 'Text Direction:');
-define('TEXT_INFO_LANGUAGE_IMAGE', 'Image:');
 define('TEXT_INFO_LANGUAGE_DEFAULT_CURRENCY', 'Default Currency:');
 define('TEXT_INFO_LANGUAGE_NUMERIC_SEPARATOR_DECIMAL', 'Numeric Decimal Separator');
 define('TEXT_INFO_LANGUAGE_NUMERIC_SEPARATOR_THOUSANDS', 'Numeric Thousands Separator');

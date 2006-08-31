@@ -113,7 +113,7 @@
        '        [\'' . osc_icon('locale.png') . '\', \'' . addslashes(HEADER_TITLE_LANGUAGES) . '\', null, null, null,' . "\n";
 
   foreach ($osC_Language->getAll() as $l) {
-    echo '            [\'' . osc_image('../includes/languages/' . $l['code'] . '/images/icon.gif') . '\', \'' . addslashes($l['name']) . '\', \'' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '\', null, null],' . "\n";
+    echo '            [\'' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image']) . '\', \'' . addslashes($l['name']) . '\', \'' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '\', null, null],' . "\n";
   }
 
   echo '        ],' . "\n" .
