@@ -27,6 +27,8 @@
 
   require('../includes/classes/database.php');
 
+  session_start();
+
   require('includes/classes/language.php');
   $osC_Language = new osC_LanguageInstall();
 
