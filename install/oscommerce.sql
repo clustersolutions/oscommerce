@@ -485,7 +485,7 @@ CREATE TABLE osc_products_images (
 
 DROP TABLE IF EXISTS osc_products_images_groups;
 CREATE TABLE osc_products_images_groups (
-  id int NOT NULL auto_increment,
+  id int NOT NULL,
   language_id int NOT NULL,
   title varchar(255) not null,
   code varchar(32) not null,

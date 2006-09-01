@@ -314,6 +314,31 @@
               }
             }
           }
+
+          if ($error === false) {
+            $Qgroup = $osC_Database->query('select id, title, code, size_width, size_height, force_size from :table_products_images_groups where language_id = :language_id');
+            $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+            $Qgroup->bindInt(':language_id', $default_language_id);
+            $Qgroup->execute();
+
+            while ($Qgroup->next()) {
+              $Qinsert = $osC_Database->query('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
+              $Qinsert->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+              $Qinsert->bindInt(':id', $Qgroup->valueInt('id'));
+              $Qinsert->bindInt(':language_id', $language_id);
+              $Qinsert->bindValue(':title', $Qgroup->value('title'));
+              $Qinsert->bindValue(':code', $Qgroup->value('code'));
+              $Qinsert->bindInt(':size_width', $Qgroup->value('size_width'));
+              $Qinsert->bindInt(':size_height', $Qgroup->value('size_height'));
+              $Qinsert->bindInt(':force_size', $Qgroup->value('force_size'));
+              $Qinsert->execute();
+
+              if ($osC_Database->isError()) {
+                $error = true;
+                break;
+              }
+            }
+          }
         }
       }
 
@@ -460,6 +485,17 @@
           $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
           $Qstatus->bindInt(':language_id', $id);
           $Qstatus->execute();
+
+          if ($osC_Database->isError()) {
+            $error = true;
+          }
+        }
+
+        if ($error === false) {
+          $Qgroup = $osC_Database->query('delete from :table_products_images_groups where language_id = :language_id');
+          $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
+          $Qgroup->bindInt(':language_id', $id);
+          $Qgroup->execute();
 
           if ($osC_Database->isError()) {
             $error = true;
