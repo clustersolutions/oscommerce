@@ -15,7 +15,8 @@
   class osC_LanguageInstall extends osC_Language_Admin {
 
 /* Private variables */
-    var $_languages = array('en_US' => array('code' => 'en_US'));
+    var $_languages = array('en_US' => array('code' => 'en_US',
+                                             'charset' => 'utf-8'));
 
 /* Class constructor */
 

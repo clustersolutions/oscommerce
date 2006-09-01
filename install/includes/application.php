@@ -29,4 +29,6 @@
 
   require('includes/classes/language.php');
   $osC_Language = new osC_LanguageInstall();
+
+  header('Content-Type: text/html; charset=' . $osC_Language->getCharacterSet());
 ?>
