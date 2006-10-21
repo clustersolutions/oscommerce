@@ -539,7 +539,7 @@
  */
 
     function setPageContentsFilename($filename) {
-      $this->_page_contents_filename = $filename;
+      $this->_page_contents = $filename;
     }
 
 /**
