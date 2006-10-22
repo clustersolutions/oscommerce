@@ -36,7 +36,10 @@
         echo osc_draw_hidden_field('cPath', $cPath);
         $options = array(array('id' => '', 'text' => $osC_Language->get('filter_all_manufacturers')));
       }
-      echo osc_draw_hidden_field('sort', $_GET['sort']);
+
+      if (isset($_GET['sort'])) {
+        echo osc_draw_hidden_field('sort', $_GET['sort']);
+      }
 
       while ($Qfilterlist->next()) {
         $options[] = array('id' => $Qfilterlist->valueInt('id'), 'text' => $Qfilterlist->value('name'));
