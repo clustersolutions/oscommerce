@@ -129,7 +129,7 @@
 <div id="infoBox_sEdit" <?php if ($action != 'sEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $sInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="sEdit" action="<?php echo osc_href_link_admin(FILENAME_SERVICES, 'service=' . $_GET['service'] . '&action=save'); ?>" method="post">
+    <form name="sEdit" action="<?php echo osc_href_link_admin(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
