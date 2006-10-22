@@ -48,7 +48,8 @@
                       'title' => $module->getTitle(),
                       'author_name' => $module->getAuthorName(),
                       'author_www' => $module->getAuthorAddress(),
-                      'installed' => $module->isInstalled());
+                      'installed' => $module->isInstalled(),
+                      'keys' => array());
 
         if ($module->hasKeys()) {
           $keys = array();
