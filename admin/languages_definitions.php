@@ -48,7 +48,7 @@
           $osC_Database->rollbackTransaction();
         }
 
-        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_POST['content']));
+        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_POST['group']));
         break;
       case 'save':
         $error = false;
@@ -82,7 +82,7 @@
           $osC_Database->rollbackTransaction();
         }
 
-        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&content=' . $_GET['content']));
+        osc_redirect(osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group']));
         break;
       case 'deleteconfirm':
         $error = false;
