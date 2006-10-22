@@ -92,7 +92,7 @@
       $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
       $Qspecials->bindInt(':default_flag', 1);
       $Qspecials->bindInt(':language_id', $osC_Language->getID());
-      $Qspecials->setBatchLimit($_GET['page'], MAX_DISPLAY_SPECIAL_PRODUCTS);
+      $Qspecials->setBatchLimit((isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1), MAX_DISPLAY_SPECIAL_PRODUCTS);
       $Qspecials->execute();
 
       return $Qspecials;
