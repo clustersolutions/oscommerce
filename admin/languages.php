@@ -39,7 +39,7 @@
           $Qlanguage->bindInt(':languages_id', $_GET['lID']);
           $Qlanguage->execute();
 
-          if ($_POST['include_data'] == 'on') {
+          if (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')) {
             $export_array['language']['data'] = array('title-CDATA' => $Qlanguage->value('name'),
                                                       'code-CDATA' => $Qlanguage->value('code'),
                                                       'locale-CDATA' => $Qlanguage->value('locale'),
