@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,11 +24,7 @@
         $number_of_queries = 0,
         $time_of_queries = 0;
 
-    function &connect($server, $username, $password, $type = '') {
-      if (empty($type)) {
-        $type = DB_DATABASE_CLASS;
-      }
-
+    function &connect($server, $username, $password, $type = DB_DATABASE_CLASS) {
       require('database/' . $type . '.php');
 
       $class = 'osC_Database_' . $type;
