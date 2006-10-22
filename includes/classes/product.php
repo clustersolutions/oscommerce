@@ -278,7 +278,7 @@
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
       $Qproducts->bindInt(':default_flag', 1);
       $Qproducts->bindInt(':language_id', $osC_Language->getID());
-      $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_PRODUCTS_NEW);
+      $Qproducts->setBatchLimit((isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1), MAX_DISPLAY_PRODUCTS_NEW);
       $Qproducts->execute();
 
       return $Qproducts;
