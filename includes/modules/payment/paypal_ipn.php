@@ -183,6 +183,8 @@
 
         unset($data);
       } else {
+        $process_button_string = '';
+
         foreach ($params as $key => $value) {
           $process_button_string .= osc_draw_hidden_field($key, $value);
         }

@@ -69,7 +69,7 @@
         $Qdel->execute();
 
         $Qdel = $osC_Database->query('delete from :table_orders_products_attributes where orders_id = :orders_id');
-        $Qdel->bindTable(':table_orders_products_aattributes', TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
+        $Qdel->bindTable(':table_orders_products_attributes', TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
         $Qdel->bindInt(':orders_id', $id);
         $Qdel->execute();
 
