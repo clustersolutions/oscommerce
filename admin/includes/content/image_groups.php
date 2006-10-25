@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'image_groups',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'image_groups.php';
 
 /* Class constructor */
 
     function osC_Content_Image_groups() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

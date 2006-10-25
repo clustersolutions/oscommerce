@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'zone_groups',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'zone_groups.php';
 
 /* Class constructor */
 
     function osC_Content_Zone_groups() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

@@ -18,15 +18,13 @@
 /* Private variables */
 
     var $_module = 'banner_manager',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'banner_manager.php';
 
 /* Class constructor */
 
     function osC_Content_Banner_manager() {
       global $osC_MessageStack;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
@@ -42,10 +40,10 @@
       if (!empty($this->image_extension)) {
         if (is_dir('images/graphs')) {
           if (!is_writeable('images/graphs')) {
-            $osC_MessageStack->add($this->_module, ERROR_GRAPHS_DIRECTORY_NOT_WRITEABLE, 'error');
+            $osC_MessageStack->add('header', ERROR_GRAPHS_DIRECTORY_NOT_WRITEABLE, 'error');
           }
         } else {
-          $osC_MessageStack->add($this->_module, ERROR_GRAPHS_DIRECTORY_DOES_NOT_EXIST, 'error');
+          $osC_MessageStack->add('header', ERROR_GRAPHS_DIRECTORY_DOES_NOT_EXIST, 'error');
         }
       }
 

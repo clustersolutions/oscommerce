@@ -26,7 +26,9 @@
       $this->_title = MODULE_SUMMARY_REVIEWS_TITLE;
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'reviews');
 
-      $this->_setData();
+      if ( osC_Access::hasAccess( 'reviews' ) ) {
+        $this->_setData();
+      }
     }
 
 /* Private methods */

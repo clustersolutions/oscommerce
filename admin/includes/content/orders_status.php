@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'orders_status',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'orders_status.php';
 
 /* Class constructor */
 
     function osC_Content_Orders_status() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

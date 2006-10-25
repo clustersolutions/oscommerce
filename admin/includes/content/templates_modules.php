@@ -31,21 +31,19 @@
         $_GET['action'] = '';
       }
 
-      include('../includes/classes/modules.php');
-
       switch ($_GET['set']) {
         case 'content':
           $this->_page_title = HEADING_TITLE_MODULES_CONTENT;
-          define('TABLE_HEADING_MODULES_TITLE', TABLE_HEADING_MODULES_CONTENT);
           break;
 
         case 'boxes':
         default:
           $_GET['set'] = 'boxes';
           $this->_page_title = HEADING_TITLE_MODULES_BOXES;
-          define('TABLE_HEADING_MODULES_TITLE', TABLE_HEADING_MODULES_BOXES);
           break;
       }
+
+      include('../includes/classes/modules.php');
 
       $osC_Language->load('modules-' . $_GET['set']);
 
@@ -98,18 +96,18 @@
         }
       }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $_GET[$_GET['set']]));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&module=' . $_GET['module']));
     }
 
     function _install() {
       global $osC_Language;
 
-      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.php')) {
-        include('../includes/modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.php');
-        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET[$_GET['set']];
+      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php')) {
+        include('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php');
+        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET['module'];
 
-        if (call_user_func(array($class, 'isInstalled'), $_GET[$_GET['set']], $_GET['set']) === false) {
-          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.xml');
+        if (call_user_func(array($class, 'isInstalled'), $_GET['module'], $_GET['set']) === false) {
+          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET['module'] . '.xml');
         }
 
         $module = new $class();
@@ -120,18 +118,18 @@
       osC_Cache::clear('modules_' . $_GET['set']);
       osC_Cache::clear('templates_' . $_GET['set'] . '_layout');
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $_GET[$_GET['set']]));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&module=' . $_GET['module']));
     }
 
     function _remove() {
       global $osC_Language;
 
-      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.php')) {
-        include('../includes/modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.php');
-        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET[$_GET['set']];
+      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php')) {
+        include('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php');
+        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET['module'];
 
-        if (call_user_func(array($class, 'isInstalled'), $_GET[$_GET['set']], $_GET['set']) === false) {
-          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET[$_GET['set']] . '.xml');
+        if (call_user_func(array($class, 'isInstalled'), $_GET['module'], $_GET['set']) === false) {
+          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET['module'] . '.xml');
         }
 
         $module = new $class();
@@ -142,7 +140,7 @@
       osC_Cache::clear('modules_' . $_GET['set']);
       osC_Cache::clear('templates_' . $_GET['set'] . '_layout');
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $_GET[$_GET['set']]));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set']));
     }
   }
 ?>

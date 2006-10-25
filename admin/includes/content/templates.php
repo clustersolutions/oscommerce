@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'templates',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'templates.php';
 
 /* Class constructor */
 
     function osC_Content_Templates() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

@@ -10,7 +10,6 @@
   Released under the GNU General Public License
 */
 
-  require('includes/classes/directory_listing.php');
   $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/summary');
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();
@@ -31,11 +30,12 @@
   foreach ($files as $file) {
     include('includes/modules/summary/' . $file['name']);
 
-    $module = 'osC_Summary_' . substr($file['name'], 0, strrpos($file['name'], '.'));
+    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
+    $module_class = 'osC_Summary_' . $module;
 
-    $$module = new $module();
+    $osC_Summary = new $module_class();
 
-    if ($$module->hasData()) {
+    if ($osC_Summary->hasData()) {
       if ($col === 0) {
         echo '  <tr>' . "\n";
       }
@@ -46,17 +46,17 @@
         echo '    <td width="50%" valign="top">' . "\n";
       }
 
-      if ($$module->hasTitleLink()) {
-        echo '<a href="' . $$module->getTitleLink() . '">';
+      if ($osC_Summary->hasTitleLink()) {
+        echo '<a href="' . $osC_Summary->getTitleLink() . '">';
       }
 
-      echo '<h1>' . $$module->getTitle() . '</h1>';
+      echo '<h1>' . $osC_Summary->getTitle() . '</h1>';
 
-      if ($$module->hasTitleLink()) {
+      if ($osC_Summary->hasTitleLink()) {
         echo '</a>';
       }
 
-      echo $$module->getData();
+      echo $osC_Summary->getData();
 
       if ($col <= 2) {
         echo '    </td>' . "\n";
@@ -69,7 +69,7 @@
       }
     }
 
-    unset($$module);
+    unset($osC_Summary);
   }
 ?>
 

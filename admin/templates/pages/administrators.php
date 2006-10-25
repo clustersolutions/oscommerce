@@ -37,7 +37,18 @@
 
   while ($Qadmin->next()) {
     if (!isset($aInfo) && (!isset($_GET['aID']) || (isset($_GET['aID']) && ($_GET['aID'] == $Qadmin->value('id')))) && ($_GET['action'] != 'aNew')) {
-      $aInfo = new objectInfo($Qadmin->toArray());
+      $modules_array = array( 'access_modules' => array() );
+
+      $Qaccess = $osC_Database->query('select module from :table_administrators_access where administrators_id = :administrators_id');
+      $Qaccess->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+      $Qaccess->bindInt(':administrators_id', $Qadmin->valueInt('id'));
+      $Qaccess->execute();
+
+      while ( $Qaccess->next() ) {
+        $modules_array['access_modules'][] = $Qaccess->value('module');
+      }
+
+      $aInfo = new objectInfo( array_merge( $Qadmin->toArray(), $modules_array ) );
     }
 ?>
 
@@ -104,6 +115,35 @@
 
     <p><?php echo '<b>' . TEXT_ADMINISTRATOR_USERNAME . '</b><br />' . osc_draw_input_field('user_name', $aInfo->user_name, 'style="width: 100%;"'); ?></p>
     <p><?php echo '<b>' . TEXT_ADMINISTRATOR_PASSWORD . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
+
+<?php
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/access');
+  $osC_DirectoryListing->setIncludeDirectories(false);
+
+  $modules_array = array(array('id' => '*',
+                               'text' => '*',
+                               'group' => ''));
+
+  foreach ($osC_DirectoryListing->getFiles() as $file) {
+    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
+
+    if (!class_exists('osC_Access_' . ucfirst($module))) {
+      $osC_Language->loadConstants('modules/access/' . $file['name']);
+      include($osC_DirectoryListing->getDirectory() . '/' . $file['name']);
+    }
+
+    $module = 'osC_Access_' . ucfirst($module);
+    $module = new $module();
+
+    $modules_array[] = array('id' => $module->getModule(),
+                             'text' => $module->getTitle(),
+                             'group' => osC_Access::getGroupTitle( $module->getGroup() ));
+
+    usort( $modules_array, array( 'osC_Content_Administrators', 'sortAccessList' ) );
+  }
+
+  echo '<p>' . osc_draw_pull_down_menu('modules[]', $modules_array, $aInfo->access_modules, 'multiple="multiple" size="10" style="width: 100%;"') . '</p>';
+?>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'aDefault\');" class="operationButton">'; ?></p>
 

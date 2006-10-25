@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'services',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'services.php';
 
 /* Class constructor */
 
     function osC_Content_Services() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'countries',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'countries.php';
 
 /* Class constructor */
 
     function osC_Content_Countries() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

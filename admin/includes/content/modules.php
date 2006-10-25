@@ -15,7 +15,8 @@
 /* Private variables */
 
     var $_module = 'modules',
-        $_page_title,
+        $_module_type,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'modules.php';
 
 /* Class constructor */
@@ -23,37 +24,15 @@
     function osC_Content_Modules() {
       global $osC_Language;
 
-      if (!isset($_GET['set'])) {
-        $_GET['set'] = '';
+      if ( empty( $this->_module_type ) ) {
+        osc_redirect( osc_href_link_admin( FILENAME_DEFAULT ) );
       }
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }
 
-      switch ($_GET['set']) {
-        case 'shipping':
-          $this->_module_type = 'shipping';
-          $this->_module_class = 'osC_Shipping_';
-          $this->_page_title = HEADING_TITLE_MODULES_SHIPPING;
-          include('includes/classes/shipping.php');
-          break;
-
-        case 'ordertotal':
-          $this->_module_type = 'order_total';
-          $this->_module_class = 'osC_OrderTotal_';
-          $this->_page_title = HEADING_TITLE_MODULES_ORDER_TOTAL;
-          include('includes/classes/order_total.php');
-          break;
-
-        case 'payment':
-        default:
-          $this->_module_type = 'payment';
-          $this->_module_class = 'osC_Payment_';
-          $this->_page_title = HEADING_TITLE_MODULES_PAYMENT;
-          include('includes/classes/payment.php');
-          break;
-      }
+      include('includes/classes/' . $this->_module_type . '.php');
 
       $osC_Language->load('modules-' . $this->_module_type);
 
@@ -106,7 +85,7 @@
         }
       }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $this->_module_type . '&module=' . $_GET['module']));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&module=' . $_GET['module']));
     }
 
     function _install() {
@@ -120,10 +99,10 @@
         $module->install();
       }
 
-      osC_Cache::clear('modules-' , $this_>_module_type);
+      osC_Cache::clear('modules-' , $this->_module_type);
       osC_Cache::clear('configuration');
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $this->_module_type . '&module=' . $_GET['module']));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&module=' . $_GET['module']));
     }
 
     function _remove() {
@@ -137,10 +116,10 @@
         $module->remove();
       }
 
-      osC_Cache::clear('modules-' , $this_>_module_type);
+      osC_Cache::clear('modules-' , $this->_module_type);
       osC_Cache::clear('configuration');
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $this->_module_type));
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
     }
   }
 ?>

@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'manufacturers',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'manufacturers.php';
 
 /* Class constructor */
 
     function osC_Content_Manufacturers() {
       global $osC_MessageStack;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';

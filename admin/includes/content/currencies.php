@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'currencies',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'currencies.php';
 
 /* Class constructor */
 
     function osC_Content_Currencies() {
       global $osC_Currencies;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';

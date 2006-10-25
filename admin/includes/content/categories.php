@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'categories',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'categories.php';
 
 /* Class constructor */
 
     function osC_Content_Categories() {
       global $osC_MessageStack, $cPath, $cPath_array, $current_category_id, $osC_CategoryTree;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
@@ -36,10 +34,10 @@
 // check if the categories image directory exists
       if (is_dir(realpath('../images/categories'))) {
         if (!is_writeable(realpath('../images/categories'))) {
-          $osC_MessageStack->add($this->_module, ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
         }
       } else {
-        $osC_MessageStack->add($this->_module, ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
       }
 
 // calculate category path

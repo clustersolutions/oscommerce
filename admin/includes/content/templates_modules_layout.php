@@ -21,10 +21,8 @@
 /* Class constructor */
 
     function osC_Content_Templates_modules_layout() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['set'])) {
-        $_GET['set'] = 'boxes';
+        $_GET['set'] = '';
       }
 
       if (!isset($_GET['action'])) {
@@ -33,6 +31,18 @@
 
       if (!isset($_GET['filter'])) {
         $_GET['filter'] = DEFAULT_TEMPLATE;
+      }
+
+      switch ($_GET['set']) {
+        case 'content':
+          $this->_page_title = HEADING_TITLE_CONTENT_LAYOUT;
+          break;
+
+        case 'boxes':
+        default:
+          $_GET['set'] = 'boxes';
+          $this->_page_title = HEADING_TITLE_BOXES_LAYOUT;
+          break;
       }
 
       if (!empty($_GET['action'])) {

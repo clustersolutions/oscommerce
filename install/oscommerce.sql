@@ -50,6 +50,13 @@ CREATE TABLE osc_administrators (
   PRIMARY KEY (id)
 );
 
+DROP TABLE IF EXISTS osc_administrators_access;
+CREATE TABLE osc_administrators_access (
+  administrators_id int NOT NULL,
+  module varchar(255) NOT NULL,
+  PRIMARY KEY (administrators_id, module)
+);
+
 DROP TABLE IF EXISTS osc_banners;
 CREATE TABLE osc_banners (
   banners_id int NOT NULL auto_increment,

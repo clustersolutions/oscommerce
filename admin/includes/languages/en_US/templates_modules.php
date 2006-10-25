@@ -10,11 +10,10 @@
   Released under the GNU General Public License
 */
 
-define('HEADING_TITLE_MODULES_BOXES', 'Boxes');
-define('HEADING_TITLE_MODULES_CONTENT', 'Content Modules');
+define('HEADING_TITLE_MODULES_BOXES', 'Templates Modules Boxes');
+define('HEADING_TITLE_MODULES_CONTENT', 'Templates Modules Content');
 
-define('TABLE_HEADING_MODULES_BOXES', 'Boxes');
-define('TABLE_HEADING_MODULES_CONTENT', 'Content Modules');
+define('TABLE_HEADING_MODULES', 'Modules');
 define('TABLE_HEADING_STATUS', 'Status');
 define('TABLE_HEADING_ACTION', 'Action');
 

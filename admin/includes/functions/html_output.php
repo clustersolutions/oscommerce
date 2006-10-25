@@ -55,9 +55,9 @@
  */
 
   function osc_icon($image, $title = null, $group = '16x16', $parameters = null) {
-    global $template;
+    global $osC_Template;
 
-    return osc_image('templates/' . $template . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image, $title, null, null, $parameters);
+    return osc_image('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image, $title, null, null, $parameters);
   }
 
 ////

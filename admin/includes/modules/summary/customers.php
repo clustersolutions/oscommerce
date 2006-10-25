@@ -26,7 +26,9 @@
       $this->_title = MODULE_SUMMARY_CUSTOMERS_TITLE;
       $this->_title_link = osc_href_link(FILENAME_DEFAULT, 'customers');
 
-      $this->_setData();
+      if ( osC_Access::hasAccess( 'customers' ) ) {
+        $this->_setData();
+      }
     }
 
 /* Private methods */

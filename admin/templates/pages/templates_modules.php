@@ -10,8 +10,6 @@
   Released under the GNU General Public License
 */
 
-  require('includes/classes/directory_listing.php');
-
   $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/' . $_GET['set']);
   $osC_DirectoryListing->setIncludeDirectories(false);
 ?>
@@ -28,7 +26,7 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
-        <th><?php echo TABLE_HEADING_MODULES_TITLE; ?></th>
+        <th><?php echo TABLE_HEADING_MODULES; ?></th>
         <th><?php echo TABLE_HEADING_STATUS; ?></th>
         <th><?php echo TABLE_HEADING_ACTION; ?></th>
       </tr>
@@ -49,7 +47,7 @@
 
       $module = new $class();
 
-      if (!isset($mInfo) && (!isset($_GET[$_GET['set']]) || (isset($_GET[$_GET['set']]) && ($_GET[$_GET['set']] == $code)))) {
+      if (!isset($mInfo) && (!isset($_GET['module']) || (isset($_GET['module']) && ($_GET['module'] == $code)))) {
         $info = array('code' => $module->getCode(),
                       'title' => $module->getTitle(),
                       'author_name' => $module->getAuthorName(),
@@ -97,22 +95,22 @@
           echo osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
              osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $code . '&action=mInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=mInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;';
 
       if ($module->isInstalled() && $module->isActive()) {
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $code . '&action=mUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=mUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
 
         if ($module->hasKeys()) {
-          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $code . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT));
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT));
         } else {
           echo osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
              osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     }
@@ -159,14 +157,14 @@
   <div class="infoBoxContent">
     <p><?php echo INFO_UNINSTALL_INTRO; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
   </div>
 </div>
 
 <div id="infoBox_mEdit" <?php if ($_GET['action'] != 'mEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&' . $_GET['set'] . '=' . $mInfo->code . '&action=save'); ?>" method="post">
+    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $mInfo->code . '&action=save'); ?>" method="post">
 
 <?php
     $keys = '';

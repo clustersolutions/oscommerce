@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'images',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'images.php';
 
 /* Class constructor */
 
     function osC_Content_Images() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'customers',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'customers.php';
 
 /* Class constructor */
 
     function osC_Content_Customers() {
       include('external/adodb/adodb-time.inc.php');
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';

@@ -10,7 +10,8 @@
   Released under the GNU General Public License
 */
 
-define('HEADING_TITLE', 'Template Boxes Layout');
+define('HEADING_TITLE_BOXES_LAYOUT', 'Template Boxes Layout');
+define('HEADING_TITLE_CONTENT_LAYOUT', 'Template Content Layout');
 
 define('TABLE_HEADING_BOXES', 'Boxes');
 define('TABLE_HEADING_TEMPLATES', 'Templates');

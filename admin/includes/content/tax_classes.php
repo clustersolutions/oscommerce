@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'tax_classes',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'tax_classes.php';
 
 /* Class constructor */
 
     function osC_Content_Tax_classes() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

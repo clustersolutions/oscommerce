@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'credit_cards',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'credit_cards.php';
 
 /* Class constructor */
 
     function osC_Content_Credit_cards() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

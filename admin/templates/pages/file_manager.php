@@ -10,8 +10,6 @@
   Released under the GNU General Public License
 */
 
-  require('includes/classes/directory_listing.php');
-
   $osC_DirectoryListing = new osC_DirectoryListing($current_path);
   $osC_DirectoryListing->setStats(true);
   $files = $osC_DirectoryListing->getFiles();

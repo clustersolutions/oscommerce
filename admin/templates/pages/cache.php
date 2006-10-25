@@ -10,7 +10,6 @@
   Released under the GNU General Public License
 */
 
-  require('includes/classes/directory_listing.php');
   $osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_WORK);
   $osC_DirectoryListing->setIncludeDirectories(false);
   $osC_DirectoryListing->setCheckExtension('cache');

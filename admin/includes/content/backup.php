@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'backup',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'backup.php';
 
 /* Class constructor */
 
     function osC_Content_Backup() {
       global $osC_MessageStack;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
@@ -32,10 +30,10 @@
 // check if the backup directory exists
       if (is_dir(DIR_FS_BACKUP)) {
         if (!is_writeable(DIR_FS_BACKUP)) {
-          $osC_MessageStack->add($this->_module, ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
         }
       } else {
-        $osC_MessageStack->add($this->_module, ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST, 'error');
       }
 
       if (!empty($_GET['action'])) {

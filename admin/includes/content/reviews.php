@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'reviews',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'reviews.php';
 
 /* Class constructor */
 
     function osC_Content_Reviews() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

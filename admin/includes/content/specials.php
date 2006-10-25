@@ -15,15 +15,13 @@
 /* Private variables */
 
     var $_module = 'specials',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'specials.php';
 
 /* Class constructor */
 
     function osC_Content_Specials() {
       global $osC_Tax, $osC_Currencies;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';

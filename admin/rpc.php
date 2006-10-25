@@ -103,8 +103,6 @@
         break;
 
       case 'getLocalImages':
-        include('includes/classes/directory_listing.php');
-
         $osC_DirectoryListing = new osC_DirectoryListing('../images/products/_upload', true);
         $osC_DirectoryListing->setCheckExtension('gif');
         $osC_DirectoryListing->setCheckExtension('jpg');

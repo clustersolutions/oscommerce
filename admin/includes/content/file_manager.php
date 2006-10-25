@@ -17,15 +17,13 @@
 /* Private variables */
 
     var $_module = 'file_manager',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'file_manager.php';
 
 /* Class constructor */
 
     function osC_Content_File_manager() {
       global $current_path, $goto_array;
-
-      $this->_page_title = HEADING_TITLE;
 
       if (isset($_SESSION['fm_directory'])) {
         $current_path = $_SESSION['fm_directory'];

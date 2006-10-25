@@ -19,8 +19,6 @@
     $nmInfo = new objectInfo($Qnewsletter->toArray());
   }
 
-  require('includes/classes/directory_listing.php');
-
   $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/newsletters');
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();

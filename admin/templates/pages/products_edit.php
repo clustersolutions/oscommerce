@@ -297,7 +297,7 @@
         var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
 
         if (str_ele[1] == '1') { // original (products_images_groups_id)
-          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $template . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
+          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
 
           if (str_ele[6] == '1') { // default_flag
             style += ' background-color: #E5EFE5;';
@@ -439,14 +439,14 @@
 }
 
 #overlay {
-  background-image: url(<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>);
+  background-image: url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>);
 }
 
 * html #overlay {
   background-color: #000;
   back\ground-color: transparent;
-  background-image: url(<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>);
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo osc_href_link_admin('templates/' . $template . '/images/overlay.png'); ?>", sizingMethod="scale");
+  background-image: url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>);
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>", sizingMethod="scale");
   }
 //--></style>
 

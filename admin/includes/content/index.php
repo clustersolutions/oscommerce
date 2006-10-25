@@ -17,11 +17,5 @@
     var $_module = 'index',
         $_page_title,
         $_page_contents = 'index.php';
-
-/* Class constructor */
-
-    function osC_Content_Index() {
-//      $this->_page_title = sprintf($osC_Language->get('index_heading'), STORE_NAME);
-    }
   }
 ?>

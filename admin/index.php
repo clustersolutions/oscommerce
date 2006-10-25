@@ -23,16 +23,20 @@
     }
   }
 
+  if ( !osC_Access::hasAccess($module) ) {
+    $osC_MessageStack->add_session('header', 'No access.', 'error');
+
+    osc_redirect( osc_href_link_admin( FILENAME_DEFAULT ) );
+  }
+
   $osC_Language->loadConstants($module . '.php');
 
-  include('../includes/classes/template.php');
-  include('includes/content/' . $module . '.php');
+  require('../includes/classes/template.php');
+  require('includes/content/' . $module . '.php');
 
   $module_class = 'osC_Content_' . ucfirst($module);
 
   $osC_Template = new $module_class();
-
-  $page_contents = $osC_Template->getPageContentsFilename();
 
   require('templates/default.php');
 

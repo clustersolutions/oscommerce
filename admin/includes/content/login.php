@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'login',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'login.php';
 
 /* Class constructor */
 
     function osC_Content_Login() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }
@@ -46,14 +44,16 @@
       global $osC_Database, $osC_MessageStack;
 
       if (!empty($_POST['user_name']) && !empty($_POST['user_password'])) {
-        $Qadmin = $osC_Database->query('select user_name, user_password from :table_administrators where user_name = :user_name');
+        $Qadmin = $osC_Database->query('select id, user_name, user_password from :table_administrators where user_name = :user_name');
         $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
         $Qadmin->bindValue(':user_name', $_POST['user_name']);
         $Qadmin->execute();
 
         if ($Qadmin->numberOfRows()) {
           if (osc_validate_password($_POST['user_password'], $Qadmin->value('user_password'))) {
-            $_SESSION['admin'] = $Qadmin->value('user_name');
+            $_SESSION['admin'] = array('id' => $Qadmin->valueInt('id'),
+                                       'username' => $Qadmin->value('user_name'),
+                                       'access' => osC_Access::getUserLevels($Qadmin->valueInt('id')));
 
             osc_redirect(osc_href_link_admin(FILENAME_DEFAULT));
           }

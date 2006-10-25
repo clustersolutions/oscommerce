@@ -11,7 +11,6 @@
 */
 
   require('includes/templates/' . $_GET['filter'] . '.php');
-  require('includes/classes/directory_listing.php');
 
   $boxes_array = array();
 

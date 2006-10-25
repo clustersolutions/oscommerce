@@ -87,7 +87,7 @@
         <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'languages_definitions&lID=' . $Qlanguages->valueInt('languages_id')), osc_icon('edit.png', IMAGE_EDIT_DEFINITIONS)) . '&nbsp;';
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qlanguages->valueInt('languages_id')), osc_icon('edit.png', IMAGE_EDIT_DEFINITIONS)) . '&nbsp;';
 
     if (isset($lInfo) && ($Qlanguages->valueInt('languages_id') == $lInfo->languages_id)) {
       echo osc_link_object('#', osc_icon('configure.png', IMAGE_CONFIGURE), 'onclick="toggleInfoBox(\'lEdit\');"') . '&nbsp;' .

@@ -9,9 +9,8 @@
 
   Released under the GNU General Public License
 */
-
-  $template = 'default';
 ?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $osC_Language->getTextDirection(); ?>" xml:lang="<?php echo $osC_Language->getCode(); ?>" lang="<?php echo $osC_Language->getCode(); ?>">
@@ -42,7 +41,7 @@
 
 <?php require('templates/default/header.php'); ?>
 
-<div class="pageContents"><?php require('templates/pages/' . $page_contents); ?></div>
+<div class="pageContents"><?php require('templates/pages/' . $osC_Template->getPageContentsFilename()); ?></div>
 
 <?php require('templates/default/footer.php'); ?>
 

@@ -58,6 +58,29 @@
   $Qadmin->bindValue(':user_full_name', $_POST['CFG_STORE_OWNER_NAME']);
   $Qadmin->bindValue(':user_email_address', $_POST['CFG_STORE_OWNER_EMAIL_ADDRESS']);
   $Qadmin->execute();
+
+  $Qadmin = $osC_Database->query('select id from :table_administrators where user_name = :user_name');
+  $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+  $Qadmin->bindValue(':user_name', $_POST['CFG_ADMINISTRATOR_USERNAME']);
+  $Qadmin->execute();
+
+  $Qcheck = $osC_Database->query('select module from :table_administrators_access where administrators_id = :administrators_id limit 1');
+  $Qcheck->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+  $Qcheck->bindInt(':administrators_id', $Qadmin->valueInt('id'));
+  $Qcheck->execute();
+
+  if ($Qcheck->numberOfRows()) {
+    $Qdel = $osC_Database->query('delete from :table_administrators_access where administrators_id = :administrators_id');
+    $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+    $Qdel->bindInt(':administrators_id', $Qadmin->valueInt('id'));
+    $Qdel->execute();
+  }
+
+  $Qaccess = $osC_Database->query('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
+  $Qaccess->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+  $Qaccess->bindInt(':administrators_id', $Qadmin->valueInt('id'));
+  $Qaccess->bindValue(':module', '*');
+  $Qaccess->execute();
 ?>
 
 <div class="mainBlock">

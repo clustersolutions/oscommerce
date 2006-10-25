@@ -41,14 +41,12 @@
 /* Private variables */
 
     var $_module = 'products_attributes',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'products_attributes.php';
 
 /* Class constructor */
 
     function osC_Content_Products_attributes() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

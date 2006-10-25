@@ -99,6 +99,9 @@
     }
   }
 
+  require('includes/classes/directory_listing.php');
+  require('includes/classes/access.php');
+
   require('../includes/classes/address.php');
   require('../includes/classes/weight.php');
   require('../includes/classes/xml.php');

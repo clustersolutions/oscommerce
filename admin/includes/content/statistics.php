@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'statistics',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'statistics.php';
 
 /* Class constructor */
 
     function osC_Content_Statistics() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['module'])) {
         $_GET['module'] = '';
       }

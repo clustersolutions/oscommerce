@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'whos_online',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'whos_online.php';
 
 /* Class constructor */
 
     function osC_Content_Whos_online() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }

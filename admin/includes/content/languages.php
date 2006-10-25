@@ -15,14 +15,12 @@
 /* Private variables */
 
     var $_module = 'languages',
-        $_page_title,
+        $_page_title = HEADING_TITLE,
         $_page_contents = 'languages.php';
 
 /* Class constructor */
 
     function osC_Content_Languages() {
-      $this->_page_title = HEADING_TITLE;
-
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }
@@ -31,11 +29,19 @@
         $_GET['page'] = 1;
       }
 
-      include('includes/classes/directory_listing.php');
+      if (!empty($_GET[$this->_module]) && is_numeric($_GET[$this->_module])) {
+        $this->_page_title = HEADING_TITLE_DEFINITIONS;
+        $this->_page_contents = 'languages_definitions.php';
+      }
+
       include('../includes/classes/currencies.php');
 
       if (!empty($_GET['action'])) {
         switch ($_GET['action']) {
+          case 'lDefine':
+            $this->_page_contents = 'languages_definitions_listing.php';
+            break;
+
           case 'import':
             $this->_import();
             break;
@@ -50,6 +56,18 @@
 
           case 'deleteconfirm':
             $this->_delete();
+            break;
+
+          case 'insert_definition':
+            $this->_insertDefinition();
+            break;
+
+          case 'save_definition':
+            $this->_saveDefinition();
+            break;
+
+          case 'deleteconfirm_definition':
+            $this->_deleteDefinition();
             break;
         }
       }
@@ -150,6 +168,116 @@
       }
 
       osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+    }
+
+    function _insertDefinition() {
+      global $osC_Database, $osC_Language, $osC_MessageStack;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      foreach ($osC_Language->getAll() as $l) {
+        $Qdefinition = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+        $Qdefinition->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdefinition->bindInt(':languages_id', $l['id']);
+        $Qdefinition->bindValue(':content_group', (empty($_POST['group_new']) ? $_POST['group'] : $_POST['group_new']));
+        $Qdefinition->bindValue(':definition_key', $_POST['key']);
+        $Qdefinition->bindValue(':definition_value', $_POST['value'][$l['id']]);
+        $Qdefinition->execute();
+
+        if ($osC_Database->isError()) {
+          $error = true;
+          break;
+        }
+      }
+
+      if ($error === false) {
+        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('languages-' . $osC_Language->getCodeFromID($_GET[$this->_module]) . '-' . $_POST['group']);
+      } else {
+        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+
+        $osC_Database->rollbackTransaction();
+      }
+
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module] . '&group=' . $_POST['group']));
+    }
+
+    function _saveDefinition() {
+      global $osC_Database, $osC_Language, $osC_MessageStack;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      foreach ($_POST['def'] as $key => $value) {
+        $Qupdate = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
+        $Qupdate->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qupdate->bindValue(':definition_value', $value);
+        $Qupdate->bindValue(':definition_key', $key);
+        $Qupdate->bindInt(':languages_id', $_GET[$this->_module]);
+        $Qupdate->bindValue(':content_group', $_GET['group']);
+        $Qupdate->execute();
+
+        if ($osC_Database->isError()) {
+          $error = true;
+          break;
+        }
+      }
+
+      if ($error === false) {
+        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('languages-' . $osC_Language->getCodeFromID($_GET[$this->_module]) . '-' . $_GET['group']);
+      } else {
+        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+
+        $osC_Database->rollbackTransaction();
+      }
+
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module] . '&group=' . $_GET['group']));
+    }
+
+    function _deleteDefinition() {
+      global $osC_Database, $osC_Language, $osC_MessageStack;
+
+      if (isset($_POST['defs'])) {
+        $error = false;
+
+        $osC_Database->startTransaction();
+
+        foreach ($_POST['defs'] as $value) {
+          $Qdel = $osC_Database->query('delete from :table_languages_definitions where id = :id');
+          $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+          $Qdel->bindValue(':id', $value);
+          $Qdel->execute();
+
+          if ($osC_Database->isError()) {
+            $error = true;
+            break;
+          }
+        }
+
+        if ($error === false) {
+          $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+
+          $osC_Database->commitTransaction();
+
+          osC_Cache::clear('languages-' . $osC_Language->getCodeFromID($_GET[$this->_module]) . '-' . $_GET['group']);
+        } else {
+          $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+
+          $osC_Database->rollbackTransaction();
+        }
+      }
+
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module]));
     }
   }
 ?>

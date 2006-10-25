@@ -26,7 +26,9 @@
       $this->_title = MODULE_SUMMARY_PRODUCTS_TITLE;
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'products');
 
-      $this->_setData();
+      if ( osC_Access::hasAccess( 'products' ) ) {
+        $this->_setData();
+      }
     }
 
 /* Private methods */
