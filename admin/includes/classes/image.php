@@ -33,6 +33,10 @@
     }
 
     function resize($image, $group_id) {
+      if (osc_empty(CFG_APP_IMAGEMAGICK_CONVERT) || !file_exists(CFG_APP_IMAGEMAGICK_CONVERT)) {
+        return $this->resizeWithGD($image, $group_id);
+      }
+
       if (!file_exists(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'])) {
         mkdir(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code']);
         @chmod(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'], 0777);
@@ -40,6 +44,102 @@
 
       exec(escapeshellarg(CFG_APP_IMAGEMAGICK_CONVERT) . ' -resize ' . (int)$this->_groups[$group_id]['size_width'] . 'x' . (int)$this->_groups[$group_id]['size_height'] . (($this->_groups[$group_id]['force_size']) == '1' ? '!' : '') . ' ' . escapeshellarg(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[1]['code'] . '/' . $image) . ' ' . escapeshellarg(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image));
       @chmod(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image, 0777);
+    }
+
+    function resizeWithGD($image, $group_id) {
+      $img_type = false;
+
+      switch (substr($image, (strrpos($image, '.')+1))) {
+        case 'jpg':
+        case 'jpeg':
+          if (imagetypes() & IMG_JPG) {
+            $img_type = 'jpg';
+          }
+
+          break;
+
+        case 'gif':
+          if (imagetypes() & IMG_GIF) {
+            $img_type = 'gif';
+          }
+
+          break;
+
+        case 'png':
+          if (imagetypes() & IMG_PNG) {
+            $img_type = 'png';
+          }
+
+          break;
+      }
+
+      if ($img_type !== false) {
+        if (!file_exists(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'])) {
+          mkdir(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'], 0777);
+        }
+
+        list($orig_width, $orig_height) = getimagesize(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[1]['code'] . '/' . $image);
+
+        $height = $this->_groups[$group_id]['size_height'];
+
+        if ($this->_groups[$group_id]['force_size'] == '1') {
+          $width = $this->_groups[$group_id]['size_width'];
+        } else {
+          $width = round($orig_width * $height / $orig_height);
+        }
+
+        $im_p = imagecreatetruecolor($width, $height);
+
+        $x = 0;
+
+        if ($this->_groups[$group_id]['force_size'] == '1') {
+          $bgcolour = imagecolorallocate($im_p, 255, 255, 255); // white
+          imagefill($im_p, 0, 0, $bgcolour);
+
+          $width = round($orig_width * $height / $orig_height);
+
+          if ($width < $this->_groups[$group_id]['size_width']) {
+            $x = floor(($this->_groups[$group_id]['size_width'] - $width) / 2);
+          }
+        }
+
+        switch ($img_type) {
+          case 'jpg':
+            $im = imagecreatefromjpeg(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[1]['code'] . '/' . $image);
+            break;
+
+          case 'gif':
+            $im = imagecreatefromgif(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[1]['code'] . '/' . $image);
+            break;
+
+          case 'png':
+            $im = imagecreatefrompng(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[1]['code'] . '/' . $image);
+            break;
+        }
+
+        imagecopyresampled($im_p, $im, $x, 0, 0, 0, $width, $height, $orig_width, $orig_height);
+
+        switch ($img_type) {
+          case 'jpg':
+            imagejpeg($im_p, DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image);
+            break;
+
+          case 'gif':
+            imagegif($im_p, DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image);
+            break;
+
+          case 'png':
+            imagepng($im_p, DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image);
+            break;
+        }
+
+        imagedestroy($im_p);
+        imagedestroy($im);
+
+        chmod(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image, 0777);
+      } else {
+        return false;
+      }
     }
 
     function getModuleCode() {
