@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: languages.php 387 2006-01-18 16:49:58Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -11,12 +11,18 @@
 */
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&lID=' . $_GET['lID']), $osC_Template->getPageTitle()); ?></h1>
+
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
 
 <div id="infoBox_lDefine">
   <div class="infoBoxHeading"><?php echo osc_icon('edit.png', IMAGE_EDIT) . ' ' . $_GET['group']; ?></div>
   <div class="infoBoxContent">
-    <form name="lDefine" action="<?php echo osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group'] . '&action=save'); ?>" method="post">
+    <form name="lDefine" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&lID=' . $_GET['lID'] . '&group=' . $_GET['group'] . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -43,7 +49,7 @@
 
     </table>
 
-    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_LANGUAGES_DEFINITIONS, 'lID=' . $_GET['lID'] . '&group=' . $_GET['group']) . '\';" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&lID=' . $_GET['lID'] . '&group=' . $_GET['group']) . '\';" class="operationButton">'; ?></p>
 
     </form>
   </div>

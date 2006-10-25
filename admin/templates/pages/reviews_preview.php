@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -31,7 +31,13 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
 
 <p class="main"><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $rInfo->products_name . '<br /><b>' . ENTRY_FROM . '</b> ' . $rInfo->customers_name . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . osC_DateTime::getShort($rInfo->date_added); ?></p>
 
@@ -41,18 +47,19 @@
 
 <?php
   if (empty($_POST)) {
-    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
-    if ( (defined('SERVICE_REVIEW_ENABLE_MODERATION')) && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {
-      echo '<p align="right"><input type="button" value="' . IMAGE_APPROVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . IMAGE_REJECT . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
+    echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
+
+    if ( defined('SERVICE_REVIEW_ENABLE_MODERATION') && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {
+      echo '<p align="right"><input type="button" value="' . IMAGE_APPROVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . IMAGE_REJECT . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
     }
   } else {
-    echo '<form name="update" action="' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=update') . '" method="post" enctype="multipart/form-data">';
+    echo '<form name="update" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=update') . '" method="post" enctype="multipart/form-data">';
 
     foreach ($_POST as $key => $value) {
       echo osc_draw_hidden_field($key, $value);
     }
 
-    echo '<p align="right"><input type="submit" value="' . IMAGE_BACK . '" name="review_edit" class="operationButton"> <input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_REVIEWS, 'page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
+    echo '<p align="right"><input type="submit" value="' . IMAGE_BACK . '" name="review_edit" class="operationButton"> <input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID']) . '\';"></p>';
 
     echo '</form>';
   }

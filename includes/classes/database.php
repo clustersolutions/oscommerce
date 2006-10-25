@@ -609,19 +609,21 @@
 
         $get_parameter = '';
         $hidden_parameter = '';
+
         if (!empty($parameters)) {
           $parameters = explode('&', $parameters);
-          foreach ($parameters as $parameter) {
-            list($key, $value) = explode('=', $parameter);
 
-            if ($key != $batch_keyword) {
-              $get_parameter .= $key . '=' . $value . '&';
-              $hidden_parameter .= osc_draw_hidden_field($key, $value);
+          foreach ($parameters as $parameter) {
+            $keys = explode('=', $parameter, 2);
+
+            if ($keys[0] != $batch_keyword) {
+              $get_parameter .= $keys[0] . (isset($keys[1]) ? '=' . $keys[1] : '') . '&';
+              $hidden_parameter .= osc_draw_hidden_field($keys[0], (isset($keys[1]) ? $keys[1] : ''));
             }
           }
         }
 
-        $display_links = '<form action="' . osc_href_link(basename($_SERVER['SCRIPT_FILENAME'])) . '" action="get">';
+        $display_links = '<form action="' . osc_href_link(basename($_SERVER['SCRIPT_FILENAME'])) . '" action="get">' . $hidden_parameter;
 
         if ($this->batch_number > 1) {
           $display_links .= osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $osC_Language->get('result_set_previous_page'), 'class="splitPageLink"');
@@ -637,7 +639,7 @@
           $display_links .= $osC_Language->get('result_set_previous_page');
         }
 
-        $display_links .= $hidden_parameter . osc_draw_hidden_session_id_field() . '</form>';
+        $display_links .= osc_draw_hidden_session_id_field() . '</form>';
       } else {
         $display_links = sprintf($osC_Language->get('result_set_current_page'), 1, 1);
       }

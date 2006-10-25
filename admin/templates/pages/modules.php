@@ -5,20 +5,26 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/classes/directory_listing.php');
-  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/' . $module_type);
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/' . $osC_Template->_module_type);
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_mDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_mDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -29,17 +35,19 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $installed_modules = array();
+
   foreach ($files as $file) {
-    include('includes/modules/' . $module_type . '/' . $file['name']);
+    include('includes/modules/' . $osC_Template->_module_type . '/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    if (class_exists($module_class . $class)) {
-      $osC_Language->injectDefinitions('modules/' . $module_type . '/' . $class . '.xml');
+    if (class_exists($osC_Template->_module_class . $class)) {
+      $osC_Language->injectDefinitions('modules/' . $osC_Template->_module_type . '/' . $class . '.xml');
 
-      $module = $module_class . $class;
+      $module = $osC_Template->_module_class . $class;
       $module = new $module();
 
       if ($module->isInstalled()) {
@@ -74,42 +82,42 @@
 
         $mInfo = new objectInfo($module_info);
       }
-
-      if (isset($mInfo) && ($class == $mInfo->code) ) {
-        echo '      <tr class="selected">' . "\n";
-      } else {
-        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $class) . '\';">' . "\n";
-      }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td><?php echo $module->getTitle(); ?></td>
         <td><?php echo $module->getSortOrder(); ?></td>
         <td align="center"><?php echo osc_icon(($module->isInstalled() ? ($module->isEnabled() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif'), null, null); ?></td>
         <td align="right">
+
 <?php
     if (isset($mInfo) && ($class == $mInfo->code)) {
       if ($mInfo->installed === true) {
-        echo '<a href="#" onclick="toggleInfoBox(\'mUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;' .
-             '<a href="#" onclick="toggleInfoBox(\'mEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
+        echo osc_link_object('#', osc_icon('stop.png', IMAGE_MODULE_REMOVE), 'onclick="toggleInfoBox(\'mUninstall\');"') . '&nbsp;' .
+             osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'mEdit\');"');
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $class . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
              osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     } else {
       if ($module->isInstalled()) {
-        echo osc_link_object(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;' .
-             osc_link_object(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT));
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $class . '&action=mUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;' .
+             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $class . '&action=mEdit'), osc_icon('configure.png', IMAGE_EDIT));
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $class . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $class . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
              osc_image('images/pixel_trans.gif', '', '16', '16');
       }
     }
 ?>
+
         </td>
       </tr>
+
 <?php
     }
   }
 ?>
+
     </tbody>
   </table>
 </div>
@@ -118,21 +126,23 @@
   if (isset($mInfo)) {
 ?>
 
-<div id="infoBox_mUninstall" <?php if ($action != 'mUninstall') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_mUninstall" <?php if ($_GET['action'] != 'mUninstall') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo INFO_MODULE_UNINSTALL_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
+
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $mInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'mDefault\');">'; ?></p>
   </div>
 </div>
 
-<div id="infoBox_mEdit" <?php if ($action != 'mEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_mEdit" <?php if ($_GET['action'] != 'mEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $mInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_MODULES, 'set=' . $set . '&module=' . $mInfo->code . '&action=save'); ?>" method="post">
+    <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $osC_Template->_module_type . '&module=' . $mInfo->code . '&action=save'); ?>" method="post">
 
 <?php
     $keys = '';
+
     foreach ($mInfo->keys as $key => $value) {
       $keys .= '<b>' . $value['title'] . '</b><br />' . $value['description'] . '<br />';
 
@@ -141,10 +151,13 @@
       } else {
         $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }
+
       $keys .= '<br /><br />';
     }
+
     $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
 ?>
+
     <p><?php echo $keys; ?></p>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'mDefault\');" class="operationButton">'; ?></p>

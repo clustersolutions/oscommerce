@@ -107,11 +107,11 @@ function selectAll(FormName, SelectBox) {
 }
 //--></script>';
 
-      $audience_form .= '<form name="notifications" action="' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm') . '" method="post" onsubmit="return selectAll(\'notifications\', \'chosen[]\');">' .
+      $audience_form .= '<form name="notifications" action="' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm') . '" method="post" onsubmit="return selectAll(\'notifications\', \'chosen[]\');">' .
                         '  <table border="0" width="100%" cellspacing="0" cellpadding="2">' .
                         '    <tr>' .
                         '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('products', $products_array, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
-                        '      <td align="center" class="main">&nbsp;<br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_GLOBAL . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm&global=true') . '\';" class="operationButton"><br /><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_SELECT . '" style="width: 90px;" onclick="mover(\'remove\');" class="infoBoxButton"><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_UNSELECT . '" style="width: 90px;" onclick="mover(\'add\');" class="infoBoxButton"><br /><br /><br /><input type="submit" value="' . BUTTON_OK . '" style="width: 90px;" class="operationButton"><br /><br /><input type="button" value="' . BUTTON_CANCEL . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></td>' .
+                        '      <td align="center" class="main">&nbsp;<br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_GLOBAL . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm&global=true') . '\';" class="operationButton"><br /><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_SELECT . '" style="width: 90px;" onclick="mover(\'remove\');" class="infoBoxButton"><br /><br /><input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_UNSELECT . '" style="width: 90px;" onclick="mover(\'add\');" class="infoBoxButton"><br /><br /><br /><input type="submit" value="' . BUTTON_OK . '" style="width: 90px;" class="operationButton"><br /><br /><input type="button" value="' . BUTTON_CANCEL . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></td>' .
                         '      <td align="center" class="main"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_SELECTED_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('chosen[]', null, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
                         '    </tr>' .
                         '  </table>' .
@@ -149,7 +149,7 @@ function selectAll(FormName, SelectBox) {
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
-                             '<form name="confirm" action="'. osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '" method="post">' .
+                             '<form name="confirm" action="'. osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '" method="post">' .
                              '<p align="right">';
 
       if ($this->_audience_size > 0) {
@@ -164,7 +164,7 @@ function selectAll(FormName, SelectBox) {
         $confirmation_string .= '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton">&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
+      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
                               '</form>';
 
       return $confirmation_string;
@@ -247,8 +247,8 @@ function selectAll(FormName, SelectBox) {
 
           if ($timer_total > $max_execution_time) {
             echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
-                 '<p>' . osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)), TEXT_CONTINUE_MANUALLY) . '</p>' .
-                 '<META HTTP-EQUIV="refresh" content="2; URL=' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)) . '">';
+                 '<p>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)), TEXT_CONTINUE_MANUALLY) . '</p>' .
+                 '<META HTTP-EQUIV="refresh" content="2; URL=' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)) . '">';
             exit;
           }
         }

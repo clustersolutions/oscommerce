@@ -5,14 +5,14 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   $specials_array = array();
 
-  if (($action == 'sEdit') && isset($_GET['sID'])) {
+  if (($_GET['action'] == 'sEdit') && isset($_GET['sID'])) {
     $Qspecial = $osC_Database->query('select p.products_id, pd.products_name, p.products_price, p.products_tax_class_id, s.specials_new_products_price, s.expires_date, s.start_date, s.status from :table_specials s, :table_products p, :table_products_description pd where s.specials_id = :specials_id and s.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id');
     $Qspecial->bindTable(':table_specials', TABLE_SPECIALS);
     $Qspecial->bindTable(':table_products', TABLE_PRODUCTS);
@@ -165,9 +165,15 @@
   }
 //--></script>
 
-<h1><?php echo HEADING_TITLE; ?></p>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<form name="special" action="<?php echo osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '') . '&action=save'); ?>" method="post">
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<form name="special" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '') . '&action=save'); ?>" method="post">
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
@@ -200,7 +206,7 @@
   updateGross('specials_price', false);
 //--></script>
 
-<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SPECIALS, 'page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . (isset($_GET['sID']) ? '&sID=' . $_GET['sID'] : '')) . '\';">'; ?></p>
 
 <p class="main"><?php echo TEXT_SPECIALS_PRICE_TIP; ?></p>
 

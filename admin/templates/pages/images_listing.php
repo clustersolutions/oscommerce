@@ -19,9 +19,15 @@
   $module_parameters = array();
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_iDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_iDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -50,13 +56,15 @@
       <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td><?php echo $module->getTitle(); ?></td>
         <td align="right">
+
 <?php
       if ($module->hasParameters()) {
-        echo '<a href="#" onclick="toggleInfoBox(\'iEdit_' . $module->getModuleCode() . '\');">' . osc_icon('run.png', IMAGE_EXECUTE) . '</a>';
+        echo osc_link_object('#', osc_icon('run.png', IMAGE_EXECUTE), 'onclick="toggleInfoBox(\'iEdit_' . $module->getModuleCode() . '\');"');
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_IMAGES, 'module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png', IMAGE_EXECUTE));
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png', IMAGE_EXECUTE));
       }
 ?>
+
         </td>
       </tr>
 
@@ -73,10 +81,10 @@
   foreach ($module_parameters as $module) {
 ?>
 
-<div id="<?php echo 'infoBox_iEdit_' . $module['code']; ?>" <?php if ($action != 'iEdit_' . $module['code']) { echo 'style="display: none;"'; } ?>>
+<div id="<?php echo 'infoBox_iEdit_' . $module['code']; ?>" <?php if ($_GET['action'] != 'iEdit_' . $module['code']) { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $module['title']; ?></div>
   <div class="infoBoxContent">
-    <form name="iEdit" action="<?php echo osc_href_link_admin(FILENAME_IMAGES, 'module=' . $module['code']); ?>" method="post">
+    <form name="iEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module['code']); ?>" method="post">
 
     <p><?php echo $module['title']; ?></p>
 

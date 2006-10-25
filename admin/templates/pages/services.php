@@ -5,28 +5,37 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
   $directory_array = array();
+
   if ($dir = @dir('../includes/services/')) {
     while ($file = $dir->read()) {
       if (!is_dir('../includes/services/' . $file)) {
-        if (substr($file, strrpos($file, '.')) == $file_extension) {
+        if (substr($file, strrpos($file, '.')) == '.php') {
           $directory_array[] = $file;
         }
       }
     }
-    sort($directory_array);
+
     $dir->close();
+
+    sort($directory_array);
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_sDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_sDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -35,6 +44,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   foreach ($directory_array as $service_module) {
     include('../includes/services/' . $service_module);
@@ -48,7 +58,7 @@
       $module_info = array('code' => $class_code,
                            'title' => $module->title,
                            'description' => $module->description,
-                           'status' => in_array($class_code, $installed),
+                           'status' => in_array($class_code, $osC_Template->_installed),
                            'uninstallable' => $module->uninstallable,
                            'precedes' => $module->precedes,
                            'keys' => array());
@@ -70,68 +80,70 @@
 
       $sInfo = new objectInfo($module_info);
     }
-
-    if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-      echo '      <tr class="selected" title="' . $module->description . '">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code) . '\';" title="' . $module->description . '">' . "\n";
-    }
 ?>
+
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" title="<?php echo $module->description; ?>">
         <td><?php echo (isset($module->title) ? $module->title : $class_code); ?></td>
         <td align="right">
+
 <?php
-    if (in_array($class_code, $installed) === false) {
-      echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;';
+    if (!in_array($class_code, $osC_Template->_installed)) {
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&service=' . $class_code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;';
     } elseif ($module->uninstallable) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onclick="toggleInfoBox(\'sUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;';
+        echo osc_link_object('#', osc_icon('stop.png', IMAGE_MODULE_REMOVE), 'onclick="toggleInfoBox(\'sUninstall\');"') . '&nbsp;';
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=sDelete'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&service=' . $class_code . '&action=sDelete'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
       }
     } else {
       echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
     }
 
-    if (in_array($class_code, $installed) && is_array($module_keys) && (sizeof($module_keys) > 0)) {
+    if (in_array($class_code, $osC_Template->_installed) && is_array($module_keys) && (sizeof($module_keys) > 0)) {
       if (isset($sInfo) && ($class_code == $sInfo->code) ) {
-        echo '<a href="#" onclick="toggleInfoBox(\'sEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
+        echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'sEdit\');"');
       } else {
-        echo osc_link_object(osc_href_link_admin(FILENAME_SERVICES, 'service=' . $class_code . '&action=sEdit'), osc_icon('configure.png', IMAGE_EDIT));
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&service=' . $class_code . '&action=sEdit'), osc_icon('configure.png', IMAGE_EDIT));
       }
     } else {
       echo osc_image('images/pixel_trans.gif', '', '16', '16');
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
-
-  <p class="smallText"><?php echo TEXT_MODULE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/services/'); ?></p>
 </div>
 
 <?php
   if (isset($sInfo)) {
 ?>
 
-<div id="infoBox_sUninstall" <?php if ($action != 'sDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_sUninstall" <?php if ($_GET['action'] != 'sDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $sInfo->title; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_UNINSTALL_INTRO; ?></p>
+
     <p><?php echo '<b>' . $sInfo->title . '</b>'; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
+
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&service=' . $sInfo->code . '&action=remove') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 
-<div id="infoBox_sEdit" <?php if ($action != 'sEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_sEdit" <?php if ($_GET['action'] != 'sEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $sInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="sEdit" action="<?php echo osc_href_link_admin(FILENAME_SERVICES, 'service=' . $sInfo->code . '&action=save'); ?>" method="post">
+    <form name="sEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&service=' . $sInfo->code . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
+
 <?php
     foreach ($sInfo->keys as $key => $value) {
       if (isset($value['set_function']) && !empty($value['set_function'])) {
@@ -140,13 +152,16 @@
         $value_field = osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }
 ?>
+
       <tr>
         <td class="smallText" width="40%" valign="top"><?php echo '<b>' . $value['title'] . '</b><br />' . $value['description']; ?></td>
         <td class="smallText" width="60%" valign="top"><?php echo $value_field; ?></td>
       </tr>
+
 <?php
     }
 ?>
+
     </table>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'sDefault\');" class="operationButton">'; ?></p>

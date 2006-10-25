@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,7 @@
 
   $Qclass = $osC_Database->query('select tax_class_id, tax_class_title from :table_tax_class where tax_class_id = :tax_class_id');
   $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
-  $Qclass->bindInt(':tax_class_id', $_GET['tcID']);
+  $Qclass->bindInt(':tax_class_id', $_GET[$osC_Template->getModule()]);
   $Qclass->execute();
 
   $zones_array = array();
@@ -30,9 +30,15 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE . ': ' . $Qclass->value('tax_class_title'); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle() . ': ' . $Qclass->value('tax_class_title')); ?></h1>
 
-<div id="infoBox_trDefault" <?php if (!empty($entriesAction)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_trDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -43,11 +49,12 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qrates = $osC_Database->query('select r.tax_rates_id, r.tax_priority, r.tax_rate, r.tax_description, r.date_added, r.last_modified, z.geo_zone_id, z.geo_zone_name from :table_tax_rates r, :table_geo_zones z where r.tax_class_id = :tax_class_id and r.tax_zone_id = z.geo_zone_id order by r.tax_priority, z.geo_zone_name');
   $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
   $Qrates->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
-  $Qrates->bindInt(':tax_class_id', $_GET['tcID']);
+  $Qrates->bindInt(':tax_class_id', $_GET[$osC_Template->getModule()]);
   $Qrates->setBatchLimit($_GET['entriesPage'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qrates->execute();
 
@@ -55,48 +62,48 @@
     if (!isset($trInfo) && (!isset($_GET['trID']) || (isset($_GET['trID']) && ($_GET['trID'] == $Qrates->valueInt('tax_rates_id'))))) {
       $trInfo = new objectInfo(array_merge($Qclass->toArray(), $Qrates->toArray()));
     }
-
-    if (isset($trInfo) && ($Qrates->valueInt('tax_rates_id') == $trInfo->tax_rates_id)) {
-      echo '      <tr class="selected" title="' . $Qrates->valueProtected('tax_description') . '">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id')) . '\';" title="' . $Qrates->valueProtected('tax_description') . '">' . "\n";
-    }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" title="<?php echo $Qrates->valueProtected('tax_description'); ?>">
         <td><?php echo $Qrates->valueInt('tax_priority'); ?></td>
         <td><?php echo $Qrates->value('geo_zone_name'); ?></td>
         <td><?php echo $osC_Tax->displayTaxRateValue($Qrates->valueDecimal('tax_rate')); ?></td>
         <td align="right">
+
 <?php
     if (isset($trInfo) && ($Qrates->valueInt('tax_rates_id') == $trInfo->tax_rates_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'trEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'trDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
+      echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'trEdit\');"') . '&nbsp;' .
+           osc_link_object('#', osc_icon('trash.png', IMAGE_DELETE), 'onclick="toggleInfoBox(\'trDelete\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&entriesAction=trDelete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&action=trEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&action=trDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td class="smallText"><?php echo $Qrates->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_TAX_RATES); ?></td>
-      <td class="smallText" align="right"><?php echo $Qrates->displayBatchLinksPullDown('entriesPage'); ?></td>
+      <td class="smallText" align="right"><?php echo $Qrates->displayBatchLinksPullDown('entriesPage', $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']); ?></td>
     </tr>
   </table>
 
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID']) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'trNew\');" class="infoBoxButton">'; ?></p>
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&tcID=' . $_GET[$osC_Template->getModule()]) . '\';" class="infoBoxButton"> <input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'trNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
-<div id="infoBox_trNew" <?php if ($entriesAction != 'trNew') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_trNew" <?php if ($_GET['action'] != 'trNew') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_TAX_RATE; ?></div>
   <div class="infoBoxContent">
-    <form name="trNew" action="<?php echo osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&entriesAction=save'); ?>" method="post">
+    <form name="trNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&entriesPage=' . $_GET['entriesPage'] . '&action=save_entry'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -129,10 +136,10 @@
   if (isset($trInfo)) {
 ?>
 
-<div id="infoBox_trEdit" <?php if ($entriesAction != 'trEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_trEdit" <?php if ($_GET['action'] != 'trEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
   <div class="infoBoxContent">
-    <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=save'); ?>" method="post">
+    <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&action=save_entry'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -163,12 +170,14 @@
   </div>
 </div>
 
-<div id="infoBox_trDelete" <?php if ($entriesAction != 'trDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_trDelete" <?php if ($_GET['action'] != 'trDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></div>
   <div class="infoBoxContent">
     <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
-    <p><?php echo '<b>' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TAX_CLASSES, 'page=' . $_GET['page'] . '&tcID=' . $_GET['tcID'] . '&action=list&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&entriesAction=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'trDefault\');" class="operationButton">'; ?></p>
+
+    <p><?php echo '<b>' . $trInfo->tax_class_title . ': ' . $trInfo->geo_zone_name . '</b>'; ?></p>
+
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&entriesPage=' . $_GET['entriesPage'] . '&trID=' . $trInfo->tax_rates_id  .'&action=delete_entry_confirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'trDefault\');" class="operationButton">'; ?></p>
   </div>
 </div>
 

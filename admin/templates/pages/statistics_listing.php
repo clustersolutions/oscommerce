@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,7 +24,13 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
@@ -33,6 +39,7 @@
     </tr>
   </thead>
   <tbody>
+
 <?php
   $installed_modules = array();
   foreach ($directory_array as $file) {
@@ -42,13 +49,16 @@
     if (class_exists($class)) {
       $module = new $class;
 ?>
+
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_STATISTICS, 'module=' . substr($file, 0, strrpos($file, '.'))), $module->getIcon() . '&nbsp;' . $module->getTitle()); ?></td>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file, 0, strrpos($file, '.'))), $module->getIcon() . '&nbsp;' . $module->getTitle()); ?></td>
     </tr>
+
 <?php
     }
   }
 ?>
+
   </tbody>
 </table>
 

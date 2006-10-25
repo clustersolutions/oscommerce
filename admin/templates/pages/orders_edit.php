@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,16 +18,20 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><h1><?php echo HEADING_TITLE; ?></h1></td>
-    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
+    <td><h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1></td>
+    <td class="smallText" align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID']) . '\';" class="operationButton">'; ?></td>
   </tr>
 </table>
 
 <?php
-  if ($osC_Order->isValid() === false) {
-    $osC_MessageStack->add('orders_edit', sprintf(ERROR_ORDER_DOES_NOT_EXIST, $_GET['oID']), 'error');
-    echo $osC_MessageStack->output('orders_edit');
+  if (!$osC_Order->isValid()) {
+    $osC_MessageStack->add($osC_Template->getModule(), sprintf(ERROR_ORDER_DOES_NOT_EXIST, $_GET['oID']), 'error');
+
+    echo $osC_MessageStack->output($osC_Template->getModule());
   } else {
+    if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+      echo $osC_MessageStack->output($osC_Template->getModule());
+    }
 ?>
 
 <p>
@@ -35,7 +39,7 @@
   <input type="button" value="<?php echo IMAGE_ORDERS_INVOICE; ?>" onclick="window.open('<?php echo osc_href_link_admin(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton"> <input type="button" value="<?php echo IMAGE_ORDERS_PACKINGSLIP; ?>" onclick="window.open('<?php echo osc_href_link_admin(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']); ?>');" class="infoBoxButton">
 </p>
 
-<div id="sectionSummary" <?php if (!empty($section)) { echo 'style="display: none;"'; } ?>>
+<div id="sectionSummary" <?php if (!empty($_GET['section'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="0" class="infoBoxContent">
     <tr>
       <td width="33%" valign="top">
@@ -68,9 +72,11 @@
         <div class="infoBoxHeading"><?php echo osc_icon('payment.png', ENTRY_PAYMENT_METHOD) . ' ' . ENTRY_PAYMENT_METHOD; ?></div>
         <div class="infoBoxContent">
           <p><?php echo $osC_Order->getPaymentMethod(); ?></p>
+
 <?php
     if ($osC_Order->isValidCreditCard()) {
 ?>
+
           <table border="0" cellspacing="0" cellpadding="0">
             <tr>
               <td class="smallText"><?php echo ENTRY_CREDIT_CARD_TYPE; ?></td>
@@ -89,9 +95,11 @@
               <td class="smallText"><?php echo $osC_Order->getCreditCardDetails('expires'); ?></td>
             </tr>
           </table>
+
 <?php
     }
 ?>
+
         </div>
       </td>
       <td width="33%" valign="top">
@@ -112,7 +120,7 @@
   </table>
 </div>
 
-<div id="sectionProducts" <?php if ($section != 'products') { echo 'style="display: none;"'; } ?>>
+<div id="sectionProducts" <?php if ($_GET['section'] != 'products') { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr class="dataTableHeadingRow">
       <td class="dataTableHeadingContent" colspan="2"><?php echo TABLE_HEADING_PRODUCTS; ?></td>
@@ -123,12 +131,15 @@
       <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_TOTAL_EXCLUDING_TAX; ?></td>
       <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_TOTAL_INCLUDING_TAX; ?></td>
     </tr>
+
 <?php
     foreach ($osC_Order->getProducts() as $products) {
 ?>
+
     <tr class="dataTableRow">
       <td class="dataTableContent" valign="top" align="right"><?php echo $products['quantity'] . '&nbsp;x'; ?></td>
       <td class="dataTableContent" valign="top">
+
 <?php
       echo $products['name'];
 
@@ -144,6 +155,7 @@
         }
       }
 ?>
+
       </td>
       <td class="dataTableContent" valign="top"><?php echo $products['model']; ?></td>
       <td class="dataTableContent" valign="top" align="right"><?php echo $osC_Tax->displayTaxRateValue($products['tax']); ?></td>
@@ -152,26 +164,32 @@
       <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->format($products['final_price'] * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
       <td class="dataTableContent" valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPriceWithTaxRate($products['final_price'], $products['tax'], $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b>'; ?></td>
     </tr>
+
 <?php
     }
 ?>
+
   </table>
 
   <table border="0" cellspacing="0" cellpadding="2" align="right">
+
 <?php
     foreach ($osC_Order->getTotals() as $totals) {
 ?>
+
     <tr>
       <td class="smallText" align="right"><?php echo $totals['title']; ?></td>
       <td class="smallText" align="right"><?php echo $totals['text']; ?></td>
     </tr>
+
 <?php
     }
 ?>
+
   </table>
 </div>
 
-<div id="sectionTransactionHistory" <?php if ($section != 'transactionHistory') { echo 'style="display: none;"'; } ?>>
+<div id="sectionTransactionHistory" <?php if ($_GET['section'] != 'transactionHistory') { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr class="dataTableHeadingRow">
       <td class="dataTableHeadingContent" width="130"><?php echo TABLE_HEADING_DATE_ADDED; ?></td>
@@ -203,7 +221,7 @@
 
   <br />
 
-  <form name="transaction" action="<?php echo osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_transaction'); ?>" method="post">
+  <form name="transaction" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_transaction'); ?>" method="post">
 
   <p><?php echo ENTRY_POST_TRANSACTION_ACTIONS . ' '. osc_draw_pull_down_menu('transaction', $osC_Order->getPostTransactionActions()) . ' <input type="submit" value="' . IMAGE_EXECUTE . '" class="operationButton">'; ?></p>
 
@@ -215,7 +233,7 @@
 
 </div>
 
-<div id="sectionStatusHistory" <?php if ($section != 'statusHistory') { echo 'style="display: none;"'; } ?>>
+<div id="sectionStatusHistory" <?php if ($_GET['section'] != 'statusHistory') { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr class="dataTableHeadingRow">
       <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_DATE_ADDED; ?></td>
@@ -223,23 +241,27 @@
       <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_COMMENTS; ?></td>
       <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_CUSTOMER_NOTIFIED; ?></td>
     </tr>
+
 <?php
     foreach ($osC_Order->getStatusHistory() as $status_history) {
 ?>
+
     <tr class="dataTableRow">
       <td class="dataTableContent" valign="top"><?php echo osC_DateTime::getShort($status_history['date_added'], true); ?></td>
       <td class="dataTableContent" valign="top"><?php echo $status_history['status']; ?></td>
       <td class="dataTableContent" valign="top"><?php echo nl2br($status_history['comment']); ?></td>
       <td class="dataTableContent" align="right" valign="top"><?php echo osc_icon((($status_history['customer_notified'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif'), null, null); ?></td>
     </tr>
+
 <?php
     }
 ?>
+
   </table>
 
   <br />
 
-  <form name="status" action="<?php echo osc_href_link_admin(FILENAME_ORDERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_order'); ?>" method="post">
+  <form name="status" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=update_order'); ?>" method="post">
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>

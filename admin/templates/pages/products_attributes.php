@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -45,9 +45,15 @@
 */
 ?>
 
-<h1><?php echo HEADING_TITLE;?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_paDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_paDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -57,6 +63,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qgroups = $osC_Database->query('select products_options_id, products_options_name from :table_products_options where language_id = :language_id order by products_options_name');
   $Qgroups->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
@@ -78,47 +85,47 @@
 
       $paInfo = new objectInfo(array_merge($Qgroups->toArray(), $Qentries->toArray(), $Qproducts->toArray()));
     }
-
-    if (isset($paInfo) && ($Qgroups->valueInt('products_options_id') == $paInfo->products_options_id)) {
-      echo '      <tr class="selected">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id')) . '\';">' . "\n";
-    }
 ?>
-        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=list'), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('products_options_name')); ?></td>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
+        <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qgroups->valueInt('products_options_id') . '&page=' . $_GET['page']), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('products_options_name')); ?></td>
         <td><?php echo $Qentries->valueInt('total_entries'); ?></td>
         <td align="right">
+
 <?php
     if (isset($paInfo) && ($Qgroups->valueInt('products_options_id') == $paInfo->products_options_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'paEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'paDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
+      echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'paEdit\');"') . '&nbsp;' .
+           osc_link_object('#', osc_icon('trash.png', IMAGE_DELETE), 'onclick="toggleInfoBox(\'paDelete\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paDelete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $Qgroups->valueInt('products_options_id') . '&action=paDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td class="smallText"><?php echo $Qgroups->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_PRODUCT_ATTRIBUTES_GROUPS); ?></td>
-      <td class="smallText" align="right"><?php echo $Qgroups->displayBatchLinksPullDown(); ?></td>
+      <td class="smallText" align="right"><?php echo $Qgroups->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
     </tr>
   </table>
 
   <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'paNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
-<div id="infoBox_paNew" <?php if ($action != 'paNew') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_paNew" <?php if ($_GET['action'] != 'paNew') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_ATTRIBUTE_GROUP; ?></div>
   <div class="infoBoxContent">
-    <form name="paNew" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'action=saveGroup'); ?>" method="post">
+    <form name="paNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_ATTRIBUTE_INTRO; ?></p>
 
@@ -126,11 +133,13 @@
       <tr>
         <td class="smallText" width="40%" valign="top"><?php echo '<b>' . TEXT_INFO_ATTRIBUTE_GROUP_NAME . '</b>'; ?></td>
         <td class="smallText" width="60%">
+
 <?php
   foreach ($osC_Language->getAll() as $l) {
     echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']') . '<br />';
   }
 ?>
+
         </td>
       </tr>
     </table>
@@ -145,10 +154,10 @@
   if (isset($paInfo)) {
 ?>
 
-<div id="infoBox_paEdit" <?php if ($action != 'paEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_paEdit" <?php if ($_GET['action'] != 'paEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $paInfo->products_options_name; ?></div>
   <div class="infoBoxContent">
-    <form name="paEdit" action="<?php echo osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=saveGroup'); ?>" method="post">
+    <form name="paEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -156,6 +165,7 @@
       <tr>
         <td class="smallText" width="40%" valign="top"><?php echo '<b>' . TEXT_INFO_ATTRIBUTE_GROUP_NAME . '</b>'; ?></td>
         <td class="smallText" width="60%">
+
 <?php
     $Qgd = $osC_Database->query('select language_id, products_options_name from :table_products_options where products_options_id = :products_options_id');
     $Qgd->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
@@ -171,6 +181,7 @@
       echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' .  osc_draw_input_field('group_name[' . $l['id'] . ']', (isset($group_names[$l['id']]) ? $group_names[$l['id']] : null)) . '<br />';
     }
 ?>
+
         </td>
       </tr>
     </table>
@@ -181,7 +192,7 @@
   </div>
 </div>
 
-<div id="infoBox_paDelete" <?php if ($action != 'paDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_paDelete" <?php if ($_GET['action'] != 'paDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $paInfo->products_options_name; ?></div>
   <div class="infoBoxContent">
 
@@ -197,7 +208,7 @@
         echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_ATTRIBUTE_GROUP_WARNING, $paInfo->total_entries) . '</b></p>' . "\n";
       }
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_PRODUCTS_ATTRIBUTES, 'page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=deleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $paInfo->products_options_id . '&action=deleteConfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'paDefault\');" class="operationButton"></p>' . "\n";
     }
 ?>
 

@@ -49,7 +49,7 @@
     <td><h1><?php echo HEADING_TITLE . ': ' . $Qbanner->value('banners_title'); ?></h1></td>
     <td class="smallText" align="right">
 <?php
-  echo '<form name="type" action="' . osc_href_link_admin(FILENAME_BANNER_MANAGER) . ' method="get">' . osc_draw_hidden_field('page', $_GET['page']) . osc_draw_hidden_field('bID', $_GET['bID']) . osc_draw_hidden_field('action', 'statistics') .
+  echo '<form name="type" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()) . ' method="get">' . osc_draw_hidden_field('page', $_GET['page']) . osc_draw_hidden_field('bID', $_GET['bID']) . osc_draw_hidden_field('action', 'statistics') .
        TITLE_TYPE . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onchange="this.form.submit();"');
 
   switch ($type) {
@@ -70,7 +70,13 @@
 </table>
 
 <?php
-  if (($dir_ok == true) && !empty($image_extension)) {
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<?php
+  if (is_dir('images/graphs') && is_writeable('images/graphs') && !empty($osC_Template->image_extension)) {
     switch ($type) {
       case 'yearly':
         include('includes/graphs/banner_yearly.php');
@@ -99,15 +105,17 @@
   </thead>
   <tbody>
 <?php
-  for ($i=0, $n=sizeof($stats); $i<$n; $i++) {
-    echo '    <tr>' . "\n" .
-         '      <td>' . $stats[$i][0] . '</td>' . "\n" .
-         '      <td>' . number_format($stats[$i][1]) . '</td>' . "\n" .
-         '      <td>' . number_format($stats[$i][2]) . '</td>' . "\n" .
-         '    </tr>' . "\n";
+  if (isset($stats)) {
+    for ($i=0, $n=sizeof($stats); $i<$n; $i++) {
+      echo '    <tr>' . "\n" .
+           '      <td>' . $stats[$i][0] . '</td>' . "\n" .
+           '      <td>' . number_format($stats[$i][1]) . '</td>' . "\n" .
+           '      <td>' . number_format($stats[$i][2]) . '</td>' . "\n" .
+           '    </tr>' . "\n";
+    }
   }
 ?>
   </tbody>
 </table>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_BANNER_MANAGER, 'page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';">'; ?></p>

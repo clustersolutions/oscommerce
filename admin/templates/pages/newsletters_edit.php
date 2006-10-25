@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -39,9 +39,15 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<form name="newsletter" action="<?php echo osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] . '&' : '') . 'action=save'); ?>" method="post">
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<form name="newsletter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] . '&' : '') . 'action=save'); ?>" method="post">
 
 <table border="0" cellspacing="0" cellpadding="2">
   <tr>
@@ -64,6 +70,6 @@
   </tr>
 </table>
 
-<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . BUTTON_SAVE . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&' . (isset($_GET['nmID']) ? 'nmID=' . $_GET['nmID'] : '')) . '\';" class="operationButton">'; ?></p>
 
 </form>

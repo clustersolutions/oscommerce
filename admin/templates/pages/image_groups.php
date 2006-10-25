@@ -11,9 +11,15 @@
 */
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_gDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_gDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -22,6 +28,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qgroups = $osC_Database->query('select * from :table_products_images_groups where language_id = :language_id order by title');
   $Qgroups->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
@@ -32,44 +39,49 @@
     if (!isset($gInfo) && (!isset($_GET['gID']) || (isset($_GET['gID']) && ($_GET['gID'] == $Qgroups->valueInt('id'))))) {
       $gInfo = new objectInfo($Qgroups->toArray());
     }
+?>
 
-    if (isset($gInfo) && ($Qgroups->valueInt('id') == $gInfo->id)) {
-      echo '      <tr class="selected">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_IMAGE_GROUPS, '&gID=' . $Qgroups->valueInt('id')) . '\';">' . "\n";
-    }
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
+        <td>
 
+<?php
     if (DEFAULT_IMAGE_GROUP_ID == $Qgroups->valueInt('id')) {
-      echo '        <td><b>' . $Qgroups->value('title') . ' (' . TEXT_DEFAULT . ')</b></td>' . "\n";
+      echo '<b>' . $Qgroups->value('title') . ' (' . TEXT_DEFAULT . ')</b>';
     } else {
-      echo '        <td>' . $Qgroups->value('title') . '</td>' . "\n";
+      echo $Qgroups->value('title');
     }
 ?>
+
+        </td>
         <td align="right">
+
 <?php
     if (isset($gInfo) && ($Qgroups->valueInt('id') == $gInfo->id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'gEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'gDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
+      echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'gEdit\');"') . '&nbsp;' .
+           osc_link_object('#', osc_icon('trash.png', IMAGE_DELETE), 'onclick="toggleInfoBox(\'gDelete\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $Qgroups->valueInt('id') . '&action=gDelete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $Qgroups->valueInt('id') . '&action=gEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $Qgroups->valueInt('id') . '&action=gDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 
   <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'gNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
-<div id="infoBox_gNew" <?php if ($action != 'gNew') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_gNew" <?php if ($_GET['action'] != 'gNew') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_IMAGE_GROUP; ?></div>
   <div class="infoBoxContent">
-    <form name="gNew" action="<?php echo osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'action=save'); ?>" method="post">
+    <form name="gNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
 
@@ -77,11 +89,13 @@
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_IMAGE_GROUP_TITLE . '</b>'; ?></td>
         <td class="smallText" width="60%">
+
 <?php
   foreach ($osC_Language->getAll() as $l) {
     echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('title[' . $l['id'] . ']') . '<br />';
   }
 ?>
+
         </td>
       </tr>
       <tr>
@@ -116,10 +130,10 @@
   if (isset($gInfo)) {
 ?>
 
-<div id="infoBox_gEdit" <?php if ($action != 'gEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_gEdit" <?php if ($_GET['action'] != 'gEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $gInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="gEdit" action="<?php echo osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=save'); ?>" method="post">
+    <form name="gEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $gInfo->id . '&action=save'); ?>" method="post">
 
     <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 
@@ -185,7 +199,7 @@
   </div>
 </div>
 
-<div id="infoBox_gDelete" <?php if ($action != 'gDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_gDelete" <?php if ($_GET['action'] != 'gDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $gInfo->title; ?></div>
   <div class="infoBoxContent">
 
@@ -205,7 +219,7 @@
 
     <p><?php echo '<b>' . $gInfo->title . '</b>'; ?></p>
 
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_IMAGE_GROUPS, 'gID=' . $gInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'gDefault\');" class="operationButton">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_DELETE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $gInfo->id . '&action=deleteconfirm') . '\';" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'gDefault\');" class="operationButton">'; ?></p>
 
 <?php
     }

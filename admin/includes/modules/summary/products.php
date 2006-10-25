@@ -24,7 +24,7 @@
 
     function osC_Summary_products() {
       $this->_title = MODULE_SUMMARY_PRODUCTS_TITLE;
-      $this->_title_link = osc_href_link_admin(FILENAME_PRODUCTS);
+      $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'products');
 
       $this->_setData();
     }
@@ -61,7 +61,7 @@
 
       while ($Qproducts->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'pID=' . $Qproducts->valueInt('products_id') . '&action=new_product'), osc_icon('products.png', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $Qproducts->valueInt('products_id') . '&action=new_product'), osc_icon('products.png', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
                         '      <td>' . $osC_Currencies->format($Qproducts->value('products_price')) . '</td>' .
                         '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .

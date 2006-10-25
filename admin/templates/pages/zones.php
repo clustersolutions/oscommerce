@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,9 +18,15 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_zDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_zDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -31,6 +37,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qzones = $osC_Database->query('select z.zone_id, c.countries_id, c.countries_name, z.zone_name, z.zone_code, z.zone_country_id from :table_zones z, :table_countries c where z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name');
   $Qzones->bindTable(':table_zones', TABLE_ZONES);
@@ -42,48 +49,48 @@
     if (!isset($zInfo) && (!isset($_GET['zID']) || (isset($_GET['zID']) && ($_GET['zID'] == $Qzones->valueInt('zone_id'))))) {
       $zInfo = new objectInfo($Qzones->toArray());
     }
-
-    if (isset($zInfo) && ($Qzones->valueInt('zone_id') == $zInfo->zone_id)) {
-      echo '      <tr class="selected">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id')) . '\'">' . "\n";
-    }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td><?php echo $Qzones->value('countries_name'); ?></td>
         <td><?php echo $Qzones->value('zone_name'); ?></td>
         <td><?php echo $Qzones->value('zone_code'); ?></td>
         <td align="right">
+
 <?php
     if (isset($zInfo) && ($Qzones->valueInt('zone_id') == $zInfo->zone_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'zEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;' .
-           '<a href="#" onclick="toggleInfoBox(\'zDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>';
+      echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'zEdit\');"') . '&nbsp;' .
+           osc_link_object('#', osc_icon('trash.png', IMAGE_DELETE), 'onclick="toggleInfoBox(\'zDelete\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zDelete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('zone_id') . '&action=zDelete'), osc_icon('trash.png', IMAGE_DELETE));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td class="smallText"><?php echo $Qzones->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ZONES); ?></td>
-      <td class="smallText" align="right"><?php echo $Qzones->displayBatchLinksPullDown(); ?></td>
+      <td class="smallText" align="right"><?php echo $Qzones->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
     </tr>
   </table>
 
   <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'zNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
-<div id="infoBox_zNew" <?php if ($action != 'zNew') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_zNew" <?php if ($_GET['action'] != 'zNew') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_ZONE; ?></div>
   <div class="infoBoxContent">
-    <form name="zNew" action="<?php echo osc_href_link_admin(FILENAME_ZONES, 'action=save'); ?>" method="post">
+    <form name="zNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -110,10 +117,10 @@
   if (isset($zInfo)) {
 ?>
 
-<div id="infoBox_zEdit" <?php if ($action != 'zEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_zEdit" <?php if ($_GET['action'] != 'zEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $zInfo->zone_name; ?></div>
   <div class="infoBoxContent">
-    <form name="zEdit" action="<?php echo osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=save'); ?>" method="post">
+    <form name="zEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
@@ -136,9 +143,10 @@
   </div>
 </div>
 
-<div id="infoBox_zDelete" <?php if ($action != 'zDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_zDelete" <?php if ($_GET['action'] != 'zDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $zInfo->zone_name; ?></div>
   <div class="infoBoxContent">
+
 <?php
     $can_be_deleted = true;
 
@@ -168,11 +176,12 @@
       echo '    <p>' . TEXT_INFO_DELETE_INTRO . '</p>' . "\n" .
            '    <p><b>' . $zInfo->zone_name . '</b></p>' . "\n";
 
-      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ZONES, 'page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
+      echo '    <p align="center"><input type="button" value="' . IMAGE_DELETE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $zInfo->zone_id . '&action=deleteconfirm') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
     } else {
       echo '    <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'zDefault\');" class="operationButton"></p>' . "\n";
     }
 ?>
+
   </div>
 </div>
 

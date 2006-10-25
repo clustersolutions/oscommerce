@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -33,9 +33,15 @@
   $Qdelete->execute();
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_wDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_wDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -50,6 +56,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qwho = $osC_Database->query('select customer_id, full_name, ip_address, time_entry, time_last_click, session_id from :table_whos_online order by time_last_click desc');
   $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
@@ -79,13 +86,9 @@
     if (!isset($wInfo) && (!isset($_GET['info']) || (isset($_GET['info']) && ($_GET['info'] == $Qwho->value('session_id'))))) {
       $wInfo = new objectInfo(array_merge($Qwho->toArray(), array('last_page' => $last_page)));
     }
-
-    if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
-      echo '      <tr class="selected">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id')) . '\';">' . "\n";
-    }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td><?php echo gmdate('H:i:s', time() - $Qwho->value('time_entry')); ?></td>
         <td><?php echo $Qwho->value('customer_id'); ?></td>
         <td><?php echo $Qwho->value('full_name'); ?></td>
@@ -94,18 +97,22 @@
         <td><?php echo $last_page['page']; ?></td>
         <td><?php echo $osC_Currencies->format($cart['total_cost'], true, $currency); ?></td>
         <td align="right">
+
 <?php
     if (isset($wInfo) && ($Qwho->value('session_id') == $wInfo->session_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'wInfo\');">' . osc_icon('info.png', IMAGE_INFO) . '</a>';
+      echo osc_link_object('#', osc_icon('info.png', IMAGE_INFO), 'onclick="toggleInfoBox(\'wInfo\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_WHOS_ONLINE, 'info=' . $Qwho->value('session_id') . '&action=wInfo'), osc_icon('info.png', IMAGE_INFO));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&info=' . $Qwho->value('session_id') . '&action=wInfo'), osc_icon('info.png', IMAGE_INFO));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 
@@ -127,7 +134,7 @@
     }
 ?>
 
-<div id="infoBox_wInfo" <?php if ($action != 'wInfo') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_wInfo" <?php if ($_GET['action'] != 'wInfo') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $wInfo->full_name; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -160,6 +167,7 @@
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_IP_ADDRESS . '</b>'; ?></td>
         <td class="smallText" width="60%"><?php echo $wInfo->ip_address; ?></td>
       </tr>
+
 <?php
     if ($osC_IP_Locator->isLoaded()) {
       if (($data = $osC_IP_Locator->getData($wInfo->ip_address)) !== false) {
@@ -174,6 +182,7 @@
       $osC_IP_Locator->unload();
     }
 ?>
+
       <tr>
         <td class="smallText" colspan="2">&nbsp;</td>
       </tr>
@@ -189,6 +198,7 @@
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_LAST_PAGE_URL . '</b>'; ?></td>
         <td class="smallText" width="60%"><?php echo $last_page_url; ?></td>
       </tr>
+
 <?php
     if (!empty($cart['contents'])) {
       echo '      <tr>' . "\n" .
@@ -213,6 +223,7 @@
            '      </tr>' . "\n";
     }
 ?>
+
     </table>
 
     <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'wDefault\');" class="operationButton">'; ?></p>

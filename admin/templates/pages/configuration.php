@@ -5,29 +5,31 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
-
-  $Qcg = $osC_Database->query('select configuration_group_title from :table_configuration_group where configuration_group_id = :configuration_group_id');
-  $Qcg->bindTable(':table_configuration_group', TABLE_CONFIGURATION_GROUP);
-  $Qcg->bindInt(':configuration_group_id', $_GET['gID']);
-  $Qcg->execute();
 ?>
 
-<h1><?php echo $Qcg->value('configuration_group_title'); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $_GET['gID']), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_cDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_cDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
-        <th><?php echo TABLE_HEADING_CONFIGURATION_TITLE; ?></th>
+        <th width="35%;"><?php echo TABLE_HEADING_CONFIGURATION_TITLE; ?></th>
         <th><?php echo TABLE_HEADING_CONFIGURATION_VALUE; ?></th>
         <th><?php echo TABLE_HEADING_ACTION; ?></th>
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qcfg = $osC_Database->query('select configuration_id, configuration_title, configuration_description, configuration_value, use_function from :table_configuration where configuration_group_id = :configuration_group_id order by sort_order');
   $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
@@ -49,28 +51,28 @@
 
       $cInfo = new objectInfo(array_merge($Qcfg->toArray(), $Qcv->toArray()));
     }
-
-    if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
-      echo '      <tr class="selected" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id')) . '\';" title="' . $Qcfg->valueProtected('configuration_description') . '">' . "\n";
-    }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" title="<?php echo $Qcfg->valueProtected('configuration_description'); ?>">
         <td><?php echo $Qcfg->value('configuration_title'); ?></td>
         <td><?php echo htmlspecialchars($cfgValue); ?></td>
         <td align="right">
+
 <?php
     if (isset($cInfo) && ($Qcfg->valueInt('configuration_id') == $cInfo->configuration_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
+      echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'cEdit\');"');
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT));
+      echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT));
     }
 ?>
+
         </td>
       </tr>
+
 <?php
   }
 ?>
+
     </tbody>
   </table>
 </div>
@@ -84,19 +86,14 @@
     }
 ?>
 
-<div id="infoBox_cEdit" <?php if ($action != 'cEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_cEdit" <?php if ($_GET['action'] != 'cEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $cInfo->configuration_title; ?></div>
   <div class="infoBoxContent">
-    <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_CONFIGURATION, 'gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'); ?>" method="post">
+    <form name="cEdit" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $_GET['gID'] . '&cID=' . $cInfo->configuration_id . '&action=save'); ?>" method="post">
 
     <p><?php echo $cInfo->configuration_description; ?></p>
 
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td class="smallText" width="40%"><?php echo '<b>' . $cInfo->configuration_title . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo $value_field; ?></td>
-      </tr>
-    </table>
+    <p><?php echo '<b>' . $cInfo->configuration_title . ':</b><br />' . $value_field; ?></p>
 
     <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (!empty($cInfo->last_modified) ? osC_DateTime::getShort($cInfo->last_modified) : osC_DateTime::getShort($cInfo->date_added)); ?></p>
 

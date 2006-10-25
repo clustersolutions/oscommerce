@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -31,24 +31,34 @@
   }
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<form name="customers" action="<?php echo osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '') . '&action=save'); ?>" method="post">
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<form name="customers" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '') . '&action=save'); ?>" method="post">
 
 <p class="formAreaTitle"><?php echo CATEGORY_PERSONAL; ?></p>
 
 <div class="formArea">
   <table border="0" width="100%" cellspacing="2" cellpadding="2">
+
 <?php
   if (ACCOUNT_GENDER > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_GENDER; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_radio_field('gender', $gender_array, (isset($Qaccount) ? $Qaccount->value('customers_gender') : null)); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_FIRST_NAME; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('firstname', (isset($Qaccount) ? $Qaccount->value('customers_firstname') : null)); ?></td>
@@ -57,16 +67,20 @@
       <td class="main" width="30%"><?php echo ENTRY_LAST_NAME; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('lastname', (isset($Qaccount) ? $Qaccount->value('customers_lastname') : null)); ?></td>
     </tr>
+
 <?php
   if (ACCOUNT_DATE_OF_BIRTH == '1') {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_DATE_OF_BIRTH; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_date_pull_down_menu('dob', (isset($Qaccount) ? array('year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')) : null), false, null, null, date('Y')-1901, -5) . '&nbsp;<span class="inputRequirement">*</span>'; ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
@@ -74,16 +88,20 @@
       <td class="main" width="30%"><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('email_address', (isset($Qaccount) ? $Qaccount->value('customers_email_address') : null)); ?></td>
     </tr>
+
 <?php
   if (ACCOUNT_NEWSLETTER == '1') {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_NEWSLETTER; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_checkbox_field('newsletter', null, (isset($Qaccount) && ($Qaccount->valueInt('customers_newsletter') === 1))); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
@@ -109,16 +127,20 @@
 
 <div class="formArea">
   <table border="0" width="100%" cellspacing="2" cellpadding="2">
+
 <?php
   if (ACCOUNT_GENDER > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_GENDER; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_radio_field('ab_gender', $gender_array, (isset($Qab) ? $Qab->value('entry_gender') : null)); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_FIRST_NAME; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_firstname', (isset($Qab) ? $Qab->value('entry_firstname') : null)); ?></td>
@@ -127,30 +149,38 @@
       <td class="main" width="30%"><?php echo ENTRY_LAST_NAME; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_lastname', (isset($Qab) ? $Qab->value('entry_lastname') : null)); ?></td>
     </tr>
+
 <?php
   if (ACCOUNT_COMPANY > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_COMPANY; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_company', (isset($Qab) ? $Qab->value('entry_company') : null)); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_STREET_ADDRESS; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_street_address', (isset($Qab) ? $Qab->value('entry_street_address') : null)); ?></td>
     </tr>
+
 <?php
   if (ACCOUNT_SUBURB > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_SUBURB; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_suburb', (isset($Qab) ? $Qab->value('entry_suburb') : null)); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_POST_CODE; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_postcode', (isset($Qab) ? $Qab->value('entry_postcode') : null)); ?></td>
@@ -159,14 +189,17 @@
       <td class="main" width="30%"><?php echo ENTRY_CITY; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_city', (isset($Qab) ? $Qab->value('entry_city') : null)); ?></td>
     </tr>
+
 <?php
   if (ACCOUNT_STATE > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_STATE; ?></td>
       <td class="main" width="70%">
+
 <?php
-    if ( ($action == 'save') && isset($entry_state_has_zones) && ($entry_state_has_zones === true) ) {
+    if ( ($_GET['action'] == 'save') && isset($entry_state_has_zones) && ($entry_state_has_zones === true) ) {
       $Qzones = $osC_Database->query('select zone_name from :table_zones where zone_country_id = :zone_country_id order by zone_name');
       $Qzones->bindTable(':table_zones', TABLE_ZONES);
       $Qzones->bindInt(':zone_country_id', $_POST['ab_country']);
@@ -182,11 +215,14 @@
       echo osc_draw_input_field('ab_state', (isset($Qab) ? (!osc_empty($Qab->value('entry_zone_id')) ? osC_Address::getZoneName($Qab->value('entry_zone_id')) : $Qab->value('entry_state')) : null));
     }
 ?>
+
       </td>
     </tr>
+
 <?php
   }
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_COUNTRY; ?></td>
       <td class="main" width="70%">
@@ -204,28 +240,34 @@
 
       </td>
     </tr>
+
 <?php
   if (ACCOUNT_TELEPHONE > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_TELEPHONE_NUMBER; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_telephone', (isset($Qab) ? $Qab->value('entry_telephone') : null)); ?></td>
     </tr>
+
 <?php
   }
 
   if (ACCOUNT_FAX > -1) {
 ?>
+
     <tr>
       <td class="main" width="30%"><?php echo ENTRY_FAX_NUMBER; ?></td>
       <td class="main" width="70%"><?php echo osc_draw_input_field('ab_fax', (isset($Qab) ? $Qab->value('entry_fax') : null)); ?></td>
     </tr>
+
 <?php
   }
 ?>
+
   </table>
 </div>
 
-<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '')) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . (isset($_GET['cID']) ? '&cID=' . $_GET['cID'] : '')) . '\';">'; ?></p>
 
 </form>

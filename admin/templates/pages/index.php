@@ -21,7 +21,7 @@
   $Qonline->execute();
 ?>
 
-<p><?php echo osc_link_object(osc_href_link_admin(FILENAME_WHOS_ONLINE), osc_icon('people.png', ICON_PREVIEW) . '&nbsp;' . sprintf(TEXT_NUMBER_OF_CUSTOMERS_ONLINE, $Qonline->valueInt('total'))); ?></p>
+<p><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'whos_online'), osc_icon('people.png', ICON_PREVIEW) . '&nbsp;' . sprintf(TEXT_NUMBER_OF_CUSTOMERS_ONLINE, $Qonline->valueInt('total'))); ?></p>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
 

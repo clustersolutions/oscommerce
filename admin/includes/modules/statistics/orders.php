@@ -63,7 +63,7 @@
       $this->_resultset->execute();
 
       while ($this->_resultset->next()) {
-        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_ORDERS, 'oID=' . $this->_resultset->value('orders_id') . '&action=oEdit'), $this->_icon . '&nbsp;' . $this->_resultset->value('customers_name')),
+        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $this->_resultset->value('orders_id') . '&action=oEdit'), $this->_icon . '&nbsp;' . $this->_resultset->value('customers_name')),
                                $osC_Currencies->format($this->_resultset->valueInt('value')));
       }
     }

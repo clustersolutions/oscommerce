@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: modules.php 241 2005-11-13 22:56:32Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -16,9 +16,15 @@
   $files = $osC_DirectoryListing->getFiles();
 ?>
 
-<h1><?php echo HEADING_TITLE; ?></h1>
+<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div id="infoBox_tDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_tDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -67,14 +73,9 @@
 
         $tInfo = new objectInfo($template_info);
       }
-
-      if (isset($tInfo) && ($code == $tInfo->code) ) {
-        echo '      <tr class="selected">' . "\n";
-      } else {
-        echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code) . '\';">' . "\n";
-      }
 ?>
 
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td>
 
 <?php
@@ -88,41 +89,44 @@
         </td>
         <td align="center"><?php echo osc_icon(($module->isInstalled() ? ($module->isActive() ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif') : 'checkbox.gif'), null, null); ?></td>
         <td align="right">
+
 <?php
       if (isset($tInfo) && ($code == $tInfo->code)) {
         if ($tInfo->installed === true) {
-          echo '<a href="#" onclick="toggleInfoBox(\'tInfo\');">' . osc_icon('info.png', IMAGE_INFO) . '</a>&nbsp;' .
-               '<a href="#" onclick="toggleInfoBox(\'tUninstall\');">' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '</a>&nbsp;';
+          echo osc_link_object('#', osc_icon('info.png', IMAGE_INFO), 'onclick="toggleInfoBox(\'tInfo\');"') . '&nbsp;' .
+               osc_link_object('#', osc_icon('stop.png', IMAGE_MODULE_REMOVE), 'onclick="toggleInfoBox(\'tUninstall\');"') . '&nbsp;';
 
           if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-            echo '<a href="#" onclick="toggleInfoBox(\'tEdit\');">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>';
+            echo osc_link_object('#', osc_icon('configure.png', IMAGE_EDIT), 'onclick="toggleInfoBox(\'tEdit\');"');
           } else {
             echo osc_image('images/pixel_trans.gif', '', '16', '16');
           }
         } else {
-          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
                osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       } else {
         if ($module->isInstalled() && $module->isActive()) {
-          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=tUninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
 
           if ($module->hasKeys() || ($module->getCode() != DEFAULT_TEMPLATE)) {
-            echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tEdit'), osc_icon('configure.png', IMAGE_EDIT));
+            echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=tEdit'), osc_icon('configure.png', IMAGE_EDIT));
           } else {
             echo osc_image('images/pixel_trans.gif', '', '16', '16');
           }
         } else {
-          echo osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-               osc_link_object(osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=tInfo'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
+               osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;' .
                osc_image('images/pixel_trans.gif', '', '16', '16');
         }
       }
 ?>
+
         </td>
       </tr>
+
 <?php
     }
   }
@@ -136,7 +140,7 @@
   if (isset($tInfo)) {
 ?>
 
-<div id="infoBox_tInfo" <?php if ($action != 'tInfo') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_tInfo" <?php if ($_GET['action'] != 'tInfo') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -166,32 +170,39 @@
   </div>
 </div>
 
-<div id="infoBox_tUninstall" <?php if ($action != 'tUninstall') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_tUninstall" <?php if ($_GET['action'] != 'tUninstall') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
+
 <?php
     if ($tInfo->code == DEFAULT_TEMPLATE) {
 ?>
+
     <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
     <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="toggleInfoBox(\'tDefault\');" class="operationButton">'; ?></p>
+
 <?php
     } else {
 ?>
+
     <p><?php echo INFO_TEMPLATE_UNINSTALL_INTRO; ?></p>
-    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'tDefault\');">'; ?></p>
+    <p align="center"><?php echo '<input type="button" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $tInfo->code . '&action=remove') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="toggleInfoBox(\'tDefault\');">'; ?></p>
+
 <?php
     }
 ?>
+
   </div>
 </div>
 
-<div id="infoBox_tEdit" <?php if ($action != 'tEdit') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_tEdit" <?php if ($_GET['action'] != 'tEdit') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $tInfo->title; ?></div>
   <div class="infoBoxContent">
-    <form name="tEdit" action="<?php echo osc_href_link_admin(FILENAME_TEMPLATES, 'template=' . $tInfo->code . '&action=save'); ?>" method="post">
+    <form name="tEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&template=' . $tInfo->code . '&action=save'); ?>" method="post">
 
 <?php
     $keys = '';
+
     foreach ($tInfo->keys as $key => $value) {
       $keys .= '<b>' . $value['title'] . '</b><br />' . $value['description'] . '<br />';
 
@@ -200,21 +211,26 @@
       } else {
         $keys .= osc_draw_input_field('configuration[' . $key . ']', $value['value']);
       }
+
       $keys .= '<br /><br />';
     }
+
     $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
 ?>
+
     <p><?php echo $keys; ?></p>
 
 <?php
     if ($tInfo->code != DEFAULT_TEMPLATE) {
 ?>
+
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_SET_DEFAULT . '</b>'; ?></td>
         <td class="smallText" width="60%"><?php echo osc_draw_checkbox_field('default'); ?></td>
       </tr>
     </table>
+
 <?php
     }
 ?>

@@ -25,7 +25,7 @@
   error_reporting(E_ALL);
 
 // Define the project version
-  define('PROJECT_VERSION', 'osCommerce 3.0a3');
+  define('PROJECT_VERSION', 'osCommerce 3.0a4pre');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
@@ -86,9 +86,16 @@
   $osC_Session = new osC_Session('osCAdminID');
   $osC_Session->start();
 
-  if (isset($_SESSION['admin']) === false) {
-    if (basename($_SERVER['SCRIPT_FILENAME']) != FILENAME_LOGIN) {
-      osc_redirect(osc_href_link_admin(FILENAME_LOGIN));
+  if (!isset($_SESSION['admin'])) {
+    if (!empty($_GET)) {
+      $first_array = array_slice($_GET, 0, 1);
+      $_module = osc_sanitize_string(basename(key($first_array)));
+
+      if ($_module != 'login') {
+        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
+      }
+    } else {
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
     }
   }
 
@@ -111,10 +118,8 @@
 
   osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
 
-  $osC_Language->loadConstants(basename($_SERVER['SCRIPT_FILENAME']));
-
 // load general definitions due to the split page results language definitions the database class uses
-// (quick fix; will be properly fixed in a later alpha release)
+//HPDL (quick fix; will be properly fixed in a later alpha release)
   $osC_Language->load('general');
 
 // define our localization functions

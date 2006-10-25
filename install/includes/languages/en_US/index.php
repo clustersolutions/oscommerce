@@ -7,7 +7,7 @@
 #
 # Released under the GNU General Public License
 
-page_title_welcome = Welcome to osCommerce 3.0a3!
+page_title_welcome = Welcome to osCommerce 3.0a4pre!
 
 page_heading_installation_type = Installation Type
 

@@ -66,10 +66,10 @@
                              '<p align="right">';
 
       if ($this->_audience_size > 0) {
-        $confirmation_string .= '<input type="button" value="' . BUTTON_SEND . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '\';" class="operationButton">&nbsp;';
+        $confirmation_string .= '<input type="button" value="' . BUTTON_SEND . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '\';" class="operationButton">&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>';
+      $confirmation_string .= '<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>';
 
       return $confirmation_string;
     }
@@ -105,8 +105,8 @@
 
           if ($timer_total > $max_execution_time) {
             echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
-                 '<p>' . osc_link_object(osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm'), TEXT_CONTINUE_MANUALLY) . '</p>' .
-                 '<META HTTP-EQUIV="refresh" content="2; URL=' . osc_href_link_admin(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm') . '">';
+                 '<p>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm'), TEXT_CONTINUE_MANUALLY) . '</p>' .
+                 '<META HTTP-EQUIV="refresh" content="2; URL=' . osc_href_link_admin(FILENAME_DEFAULTS, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm') . '">';
             exit;
           }
         }

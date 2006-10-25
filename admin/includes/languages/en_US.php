@@ -65,7 +65,7 @@ define('BOX_CUSTOMERS_ORDERS', 'Orders');
 define('BOX_HEADING_LOCATION_AND_TAXES', 'Locations / Taxes');
 define('BOX_TAXES_COUNTRIES', 'Countries');
 define('BOX_TAXES_ZONES', 'Zones');
-define('BOX_TAXES_GEO_ZONES', 'Tax Zones');
+define('BOX_TAXES_ZONE_GROUPS', 'Zone Groups');
 define('BOX_TAXES_TAX_CLASSES', 'Tax Classes');
 
 // reports box text in includes/boxes/reports.php
@@ -180,6 +180,7 @@ define('IMAGE_IMPORT', 'Import');
 define('IMAGE_INFO', 'Info');
 define('IMAGE_INSERT', 'Insert');
 define('IMAGE_LOCK', 'Lock');
+define('IMAGE_LOG', 'Log');
 define('IMAGE_LOGIN', 'Login');
 define('IMAGE_MODULE_INSTALL', 'Install Module');
 define('IMAGE_MODULE_REMOVE', 'Remove Module');

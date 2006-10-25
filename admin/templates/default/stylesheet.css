@@ -29,7 +29,7 @@ a.splitPageLink:hover { font-family: Verdana, Arial, sans-serif; font-size: 10px
 /* page */
 BODY { background-color: #ffffff; color: #000000; margin: 0px; font-family: Verdana, Arial, sans-serif; font-size: 10px; }
 P { font-family: Verdana, Arial, sans-serif; font-size: 10px; }
-H1, .pageHeading { font-family: Verdana, Arial, sans-serif; font-size: 18px; color: #727272; font-weight: bold; margin: 10px 0px; }
+H1, H1 a:link, H1 a:visited, H1 a:active, .pageHeading { font-family: Verdana, Arial, sans-serif; font-size: 18px; color: #727272; font-weight: bold; margin: 10px 0px; }
 
 /* data table */
 .dataTableHeadingRow { background-color: #C9C9C9; }

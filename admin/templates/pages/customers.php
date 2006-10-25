@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,18 +13,26 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><h1><?php echo HEADING_TITLE; ?></h1></td>
+    <td><h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1></td>
     <td class="smallText" align="right">
+
 <?php
-  echo '<form name="search" action="' . osc_href_link_admin(FILENAME_CUSTOMERS) . '" method="get">' .
+  echo '<form name="search" action="' . osc_href_link(FILENAME_DEFAULT) . '" method="get">' . osc_draw_hidden_field($osC_Template->getModule(), null) .
        HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') .
        '<input type="submit" value="GO" class="operationButton"></form>';
 ?>
+
     </td>
   </tr>
 </table>
 
-<div id="infoBox_cDefault" <?php if (!empty($action)) { echo 'style="display: none;"'; } ?>>
+<?php
+  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
+<div id="infoBox_cDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
@@ -36,6 +44,7 @@
       </tr>
     </thead>
     <tbody>
+
 <?php
   $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.date_account_last_modified, c.date_last_logon, c.number_of_logons, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
   $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
@@ -70,52 +79,54 @@
 
       $cInfo = new objectInfo($cInfo_array);
     }
-
-    if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
-      echo '      <tr class="selected">' . "\n";
-    } else {
-      echo '      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . "\n";
-    }
 ?>
+
+      <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
         <td><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
         <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
         <td><?php echo osC_DateTime::getShort($Qcustomers->value('date_account_created')); ?></td>
         <td align="center"><?php echo osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null); ?></td>
         <td align="right">
+
 <?php
-    echo '<a href="#" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit') . '\';">' . osc_icon('configure.png', IMAGE_EDIT) . '</a>&nbsp;';
+    echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;';
 
     if (isset($cInfo) && ($Qcustomers->valueInt('customers_id') == $cInfo->customers_id)) {
-      echo '<a href="#" onclick="toggleInfoBox(\'cDelete\');">' . osc_icon('trash.png', IMAGE_DELETE) . '</a>&nbsp;';
+      echo osc_link_object('#', osc_icon('trash.png', IMAGE_DELETE), 'onclick="toggleInfoBox(\'cDelete\');"') . '&nbsp;';
     } else {
-      echo osc_link_object(osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cDelete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
+      echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cDelete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
     }
 
-    echo '<a href="#" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_ORDERS, 'cID=' . $Qcustomers->valueInt('customers_id')) . '\';">' . osc_icon('orders.png', IMAGE_ORDERS) . '</a>';
+    echo osc_link_object(osc_href_link(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png', IMAGE_ORDERS));
 ?>
+
         </td>
       </tr>
+
 <?php
     }
 ?>
+
     </tbody>
   </table>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td class="smallText"><?php echo $Qcustomers->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_CUSTOMERS); ?></td>
-      <td class="smallText" align="right"><?php echo $Qcustomers->displayBatchLinksPullDown(); ?></td>
+      <td class="smallText" align="right"><?php echo $Qcustomers->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
     </tr>
   </table>
 
   <p align="right">
+
 <?php
     if (isset($_GET['search']) && !empty($_GET['search'])) {
-      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS) . '\';"> ';
+      echo '<input type="button" value="' . IMAGE_RESET . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';"> ';
     }
 
-    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_CUSTOMERS, 'page=' . $_GET['page'] . '&action=cNew') . '\';">';
+    echo '<input type="button" value="' . IMAGE_INSERT . '" class="infoBoxButton" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=cNew') . '\';">';
 ?>
+
   </p>
 </div>
 
@@ -123,10 +134,10 @@
   if (isset($cInfo)) {
 ?>
 
-<div id="infoBox_cDelete" <?php if ($action != 'cDelete') { echo 'style="display: none;"'; } ?>>
+<div id="infoBox_cDelete" <?php if ($_GET['action'] != 'cDelete') { echo 'style="display: none;"'; } ?>>
   <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname; ?></div>
   <div class="infoBoxContent">
-    <form name="cDelete" action="<?php echo osc_href_link_admin(FILENAME_CUSTOMERS, (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $cInfo->customers_id . '&action=deleteconfirm'); ?>" method="post">
+    <form name="cDelete" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . 'page=' . $_GET['page'] . '&cID=' . $cInfo->customers_id . '&action=deleteconfirm'); ?>" method="post">
 
     <p><?php echo TEXT_DELETE_INTRO; ?></p>
     <p><?php echo '<b>' . $cInfo->customers_firstname . ' ' . $cInfo->customers_lastname . '</b>'; ?></p>

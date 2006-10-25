@@ -24,7 +24,7 @@
 
     function osC_Summary_orders() {
       $this->_title = MODULE_SUMMARY_ORDERS_TITLE;
-      $this->_title_link = osc_href_link_admin(FILENAME_ORDERS);
+      $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'orders');
 
       $this->_setData();
     }
@@ -54,7 +54,7 @@
 
       while ($Qorders->next()) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_ORDERS, 'oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .
                         '      <td>' . $Qorders->value('orders_status_name') . '</td>' .

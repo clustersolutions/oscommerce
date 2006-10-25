@@ -56,7 +56,7 @@
       $this->_resultset->execute();
 
       while ($this->_resultset->next()) {
-        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_PRODUCTS, 'pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
+        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
                                $this->_resultset->valueInt('products_quantity'));
       }
     }
