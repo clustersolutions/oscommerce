@@ -9,6 +9,28 @@
 
   Released under the GNU General Public License
 */
+
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/access');
+  $osC_DirectoryListing->setIncludeDirectories(false);
+
+  $access_modules_array = array();
+
+  foreach ($osC_DirectoryListing->getFiles() as $file) {
+    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
+
+    if (!class_exists('osC_Access_' . ucfirst($module))) {
+      $osC_Language->loadConstants('modules/access/' . $file['name']);
+      include($osC_DirectoryListing->getDirectory() . '/' . $file['name']);
+    }
+
+    $module = 'osC_Access_' . ucfirst($module);
+    $module = new $module();
+
+    $access_modules_array[osC_Access::getGroupTitle( $module->getGroup() )][] = array('id' => $module->getModule(),
+                                                                                      'text' => $module->getTitle());
+  }
+
+  ksort($access_modules_array);
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -96,6 +118,27 @@
     <p><?php echo '<b>' . TEXT_ADMINISTRATOR_USERNAME . '</b><br />' . osc_draw_input_field('user_name', null, 'style="width: 100%;"'); ?></p>
     <p><?php echo '<b>' . TEXT_ADMINISTRATOR_PASSWORD . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
 
+<?php
+  echo '<ul style="list-style-type: none; padding-left: 0;">' .
+       '  <li>' . osc_draw_checkbox_field('modules[]', '*', null, 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . TEXT_GLOBAL_ACCESS . '</b></label></li>' .
+       '</ul>' .
+       '<ul style="list-style-type: none; padding-left: 0;">';
+
+  foreach ( $access_modules_array as $group => $modules ) {
+    echo '  <li><b>' . $group . '</b>' .
+         '    <ul style="list-style-type: none; padding-left: 15px;">';
+
+    foreach ($modules as $module) {
+      echo '      <li>' . osc_draw_checkbox_field('modules[]', $module['id'], null, 'id="access_' . $module['id'] . '"') . '&nbsp;<label for="access_' . $module['id'] . '" class="fieldLabel">' . $module['text'] . '</label></li>';
+    }
+
+    echo '    </ul>' .
+         '  </li>';
+  }
+
+  echo '</ul>';
+?>
+
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'aDefault\');" class="operationButton">'; ?></p>
 
     </form>
@@ -117,32 +160,24 @@
     <p><?php echo '<b>' . TEXT_ADMINISTRATOR_PASSWORD . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
 
 <?php
-  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/access');
-  $osC_DirectoryListing->setIncludeDirectories(false);
+  echo '<ul style="list-style-type: none; padding-left: 0;">' .
+       '  <li>' . osc_draw_checkbox_field('modules[]', '*', in_array('*', $aInfo->access_modules), 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . TEXT_GLOBAL_ACCESS . '</b></label></li>' .
+       '</ul>' .
+       '<ul style="list-style-type: none; padding-left: 0;">';
 
-  $modules_array = array(array('id' => '*',
-                               'text' => '*',
-                               'group' => ''));
+  foreach ( $access_modules_array as $group => $modules ) {
+    echo '  <li><b>' . $group . '</b>' .
+         '    <ul style="list-style-type: none; padding-left: 15px;">';
 
-  foreach ($osC_DirectoryListing->getFiles() as $file) {
-    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
-
-    if (!class_exists('osC_Access_' . ucfirst($module))) {
-      $osC_Language->loadConstants('modules/access/' . $file['name']);
-      include($osC_DirectoryListing->getDirectory() . '/' . $file['name']);
+    foreach ($modules as $module) {
+      echo '      <li>' . osc_draw_checkbox_field('modules[]', $module['id'], in_array($module['id'], $aInfo->access_modules), 'id="access_' . $module['id'] . '"') . '&nbsp;<label for="access_' . $module['id'] . '" class="fieldLabel">' . $module['text'] . '</label></li>';
     }
 
-    $module = 'osC_Access_' . ucfirst($module);
-    $module = new $module();
-
-    $modules_array[] = array('id' => $module->getModule(),
-                             'text' => $module->getTitle(),
-                             'group' => osC_Access::getGroupTitle( $module->getGroup() ));
-
-    usort( $modules_array, array( 'osC_Content_Administrators', 'sortAccessList' ) );
+    echo '    </ul>' .
+         '  </li>';
   }
 
-  echo '<p>' . osc_draw_pull_down_menu('modules[]', $modules_array, $aInfo->access_modules, 'multiple="multiple" size="10" style="width: 100%;"') . '</p>';
+  echo '</ul>';
 ?>
 
     <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="toggleInfoBox(\'aDefault\');" class="operationButton">'; ?></p>

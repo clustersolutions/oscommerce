@@ -94,7 +94,8 @@
        '    </li>';
 
   if (isset($_SESSION['admin'])) {
-    echo '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . BOX_HEADING_LOGOFF . '</a></li>';
+    echo '    <li></li>' .
+         '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . BOX_HEADING_LOGOFF . '</a></li>';
   }
 ?>
 

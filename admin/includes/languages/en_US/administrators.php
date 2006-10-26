@@ -24,4 +24,8 @@ define('TEXT_ADMINISTRATOR_USERNAME', 'Administrator Name:');
 define('TEXT_ADMINISTRATOR_PASSWORD', 'Administrator Password:');
 
 define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this administrator?');
+
+define('TEXT_GLOBAL_ACCESS', 'Global Access');
+
+define('ERROR_ADMINISTRATORS_USERNAME_EXISTS', 'Error: Administrator username already exists.');
 ?>

@@ -61,101 +61,120 @@
 
       $error = false;
 
-      $osC_Database->startTransaction();
-
+      $Qcheck = $osC_Database->query('select id from :table_administrators where user_name = :user_name');
       if (isset($_GET['aID']) && is_numeric($_GET['aID'])) {
-        $Qadmin = $osC_Database->query('update :table_administrators set user_name = :user_name where id = :id');
-        $Qadmin->bindInt(':id', $_GET['aID']);
-      } else {
-        $Qadmin = $osC_Database->query('insert into :table_administrators (user_name) values (:user_name)');
+        $Qcheck->appendQuery('and id != :id limit 1');
+        $Qcheck->bindInt(':id', $_GET['aID']);
       }
-      $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-      $Qadmin->bindValue(':user_name', $_POST['user_name']);
-      $Qadmin->execute();
+      $Qcheck->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+      $Qcheck->bindValue(':user_name', $_POST['user_name']);
+      $Qcheck->execute();
 
-      if ( !$osC_Database->isError() ) {
-        $id = (isset($_GET['aID']) && is_numeric($_GET['aID']) ? $_GET['aID'] : $osC_Database->nextID());
+      if ($Qcheck->numberOfRows() < 1) {
+        $osC_Database->startTransaction();
 
-        if ( !empty($_POST['user_password']) ) {
-          $Qadmin = $osC_Database->query('update :table_administrators set user_password = :user_password where id = :id');
-          $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-          $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['user_password'])));
-          $Qadmin->bindInt(':id', $id);
-          $Qadmin->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
+        if (isset($_GET['aID']) && is_numeric($_GET['aID'])) {
+          $Qadmin = $osC_Database->query('update :table_administrators set user_name = :user_name where id = :id');
+          $Qadmin->bindInt(':id', $_GET['aID']);
+        } else {
+          $Qadmin = $osC_Database->query('insert into :table_administrators (user_name) values (:user_name)');
         }
-      } else {
-        $error = true;
-      }
+        $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+        $Qadmin->bindValue(':user_name', $_POST['user_name']);
+        $Qadmin->execute();
 
-      if ( $error === false ) {
-        $modules_array = array();
+        if ( !$osC_Database->isError() ) {
+          $id = (isset($_GET['aID']) && is_numeric($_GET['aID']) ? $_GET['aID'] : $osC_Database->nextID());
 
-        if ( isset($_POST['modules']) ) {
-          if ( in_array( '*', $_POST['modules'] ) ) {
-            $_POST['modules'] = array('*');
+          if ( !empty($_POST['user_password']) ) {
+            $Qadmin = $osC_Database->query('update :table_administrators set user_password = :user_password where id = :id');
+            $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+            $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['user_password'])));
+            $Qadmin->bindInt(':id', $id);
+            $Qadmin->execute();
+
+            if ( $osC_Database->isError() ) {
+              $error = true;
+            }
           }
+        } else {
+          $error = true;
+        }
 
-          foreach ($_POST['modules'] as $module) {
-            $modules_array[] = '\'' . $module . '\'';
+        if ( $error === false ) {
+          $modules_array = array();
 
-            $Qcheck = $osC_Database->query('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
-            $Qcheck->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
-            $Qcheck->bindInt(':administrators_id', $id);
-            $Qcheck->bindValue(':module', $module);
-            $Qcheck->execute();
+          if ( isset($_POST['modules']) ) {
+            if ( in_array( '*', $_POST['modules'] ) ) {
+              $_POST['modules'] = array('*');
+            }
 
-            if ( $Qcheck->numberOfRows() < 1 ) {
-              $Qinsert = $osC_Database->query('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
-              $Qinsert->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
-              $Qinsert->bindInt(':administrators_id', $id);
-              $Qinsert->bindValue(':module', $module);
-              $Qinsert->execute();
+            foreach ($_POST['modules'] as $module) {
+              $modules_array[] = '\'' . $module . '\'';
 
-              if ( $osC_Database->isError() ) {
-                $error = true;
-                break;
+              $Qcheck = $osC_Database->query('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
+              $Qcheck->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+              $Qcheck->bindInt(':administrators_id', $id);
+              $Qcheck->bindValue(':module', $module);
+              $Qcheck->execute();
+
+              if ( $Qcheck->numberOfRows() < 1 ) {
+                $Qinsert = $osC_Database->query('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
+                $Qinsert->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+                $Qinsert->bindInt(':administrators_id', $id);
+                $Qinsert->bindValue(':module', $module);
+                $Qinsert->execute();
+
+                if ( $osC_Database->isError() ) {
+                  $error = true;
+                  break;
+                }
               }
             }
           }
         }
-      }
 
-      if ( $error === false ) {
-        $Qdel = $osC_Database->query('delete from :table_administrators_access where administrators_id = :administrators_id');
+        if ( $error === false ) {
+          $Qdel = $osC_Database->query('delete from :table_administrators_access where administrators_id = :administrators_id');
 
-        if ( !empty($modules_array) ) {
-          $Qdel->appendQuery('and module not in (:module)');
-          $Qdel->bindRaw(':module', implode(',', $modules_array));
-        }
+          if ( !empty($modules_array) ) {
+            $Qdel->appendQuery('and module not in (:module)');
+            $Qdel->bindRaw(':module', implode(',', $modules_array));
+          }
 
-        $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
-        $Qdel->bindInt(':administrators_id', $id);
-        $Qdel->execute();
+          $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+          $Qdel->bindInt(':administrators_id', $id);
+          $Qdel->execute();
 
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        } else {
-          if ($id == $_SESSION['admin']['id']) {
-            $_SESSION['admin']['access'] = osC_Access::getUserLevels($id);
+          if ( $osC_Database->isError() ) {
+            $error = true;
+          } else {
+            if ($id == $_SESSION['admin']['id']) {
+              $_SESSION['admin']['access'] = osC_Access::getUserLevels($id);
+            }
           }
         }
-      }
 
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
+        if ( $error === false ) {
+          $osC_Database->commitTransaction();
 
-        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+          $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+        } else {
+          $osC_Database->rollbackTransaction();
+
+          $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+        }
+
+        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . (isset($id) ? '&aID=' . $id : '')));
       } else {
-        $osC_Database->rollbackTransaction();
+        $osC_MessageStack->add($this->_module, ERROR_ADMINISTRATORS_USERNAME_EXISTS, 'error');
 
-        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+        if (isset($_GET['aID']) && is_numeric($_GET['aID'])) {
+          $_GET['action'] = 'aEdit';
+        } else {
+          $_GET['action'] = 'aNew';
+        }
       }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . (isset($id) ? '&aID=' . $id : '')));
     }
 
     function _delete() {
