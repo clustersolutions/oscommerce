@@ -37,6 +37,7 @@
   $module_class = 'osC_Content_' . ucfirst($module);
 
   $osC_Template = new $module_class();
+  $osC_Template->set('default');
 
   require('templates/default.php');
 

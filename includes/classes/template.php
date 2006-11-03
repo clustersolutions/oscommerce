@@ -478,14 +478,17 @@
 /**
  * Sets the template to use
  *
+ * @param string $code The code of the template to use
  * @access public
  */
 
-    function set() {
-      global $osC_Database;
-
-      if ( (isset($_SESSION['template']) === false) || (isset($_GET['template']) && !empty($_GET['template'])) ) {
-        $set_template = (isset($_GET['template']) && !empty($_GET['template'])) ? $_GET['template'] : DEFAULT_TEMPLATE;
+    function set($code = null) {
+      if ( (isset($_SESSION['template']) === false) || !empty($code) || (isset($_GET['template']) && !empty($_GET['template'])) ) {
+        if ( !empty( $code ) ) {
+          $set_template = $code;
+        } else {
+          $set_template = (isset($_GET['template']) && !empty($_GET['template'])) ? $_GET['template'] : DEFAULT_TEMPLATE;
+        }
 
         $data = array();
         $data_default = array();
