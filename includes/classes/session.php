@@ -32,6 +32,8 @@
                                  array(&$this, '_write'),
                                  array(&$this, '_destroy'),
                                  array(&$this, '_gc'));
+
+        register_shutdown_function('session_write_close');
       }
     }
 
