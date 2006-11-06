@@ -77,7 +77,8 @@
           $Qadmin = $osC_Database->query('update :table_administrators set user_name = :user_name where id = :id');
           $Qadmin->bindInt(':id', $_GET['aID']);
         } else {
-          $Qadmin = $osC_Database->query('insert into :table_administrators (user_name) values (:user_name)');
+          $Qadmin = $osC_Database->query('insert into :table_administrators (user_name, user_password) values (:user_name, :user_password)');
+          $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['user_password'])));
         }
         $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
         $Qadmin->bindValue(':user_name', $_POST['user_name']);
@@ -86,7 +87,7 @@
         if ( !$osC_Database->isError() ) {
           $id = (isset($_GET['aID']) && is_numeric($_GET['aID']) ? $_GET['aID'] : $osC_Database->nextID());
 
-          if ( !empty($_POST['user_password']) ) {
+          if ( isset($_GET['aID']) && is_numeric($_GET['aID']) && !empty($_POST['user_password']) ) {
             $Qadmin = $osC_Database->query('update :table_administrators set user_password = :user_password where id = :id');
             $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
             $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($_POST['user_password'])));

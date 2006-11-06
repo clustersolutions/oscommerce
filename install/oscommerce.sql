@@ -45,8 +45,6 @@ CREATE TABLE osc_administrators (
   id int NOT NULL auto_increment,
   user_name varchar(32) NOT NULL,
   user_password varchar(40) NOT NULL,
-  user_full_name varchar(255) NOT NULL,
-  user_email_address varchar(255) NOT NULL,
   PRIMARY KEY (id)
 );
 
