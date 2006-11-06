@@ -81,7 +81,7 @@ INSERT INTO osc_products_description VALUES (1, 1, 'Pro PHP Security', '<p><i>Pr
 
 INSERT INTO osc_products_to_categories VALUES (1, 2);
 
-INSERT INTO osc_products_images VALUES ('', 1, 'pro_php_security.jpg', 1, 0, now());
+INSERT INTO osc_products_images VALUES (1, 1, 'pro_php_security.jpg', 1, 0, now());
 
 #INSERT INTO osc_reviews VALUES (1,19,0,'John doe',5,1,'this has to be one of the funniest movies released for 1999!',now(),null,0,1);
 
