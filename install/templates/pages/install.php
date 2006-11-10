@@ -30,14 +30,14 @@
   function handleHttpResponse_DoImport() {
     if (http.readyState == 4) {
       if (http.status == 200) {
-        var result = http.responseText.split(':osCRPC:', 2);
+        var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-        if (result[0] == '1') {
+        if (result[1] == '1') {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_imported'); ?></p>';
 
           setTimeout("document.getElementById('installForm').submit();", 2000);
         } else {
-          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_import_error'); ?></p>'.replace('%s', result[1]);
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_import_error'); ?></p>'.replace('%s', result[2]);
         }
       }
 
@@ -48,14 +48,14 @@
   function handleHttpResponse() {
     if (http.readyState == 4) {
       if (http.status == 200) {
-        var result = http.responseText.split(':osCRPC:', 2);
+        var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-        if (result[0] == '1') {
+        if (result[1] == '1') {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_importing'); ?></p>';
 
           loadXMLDoc("rpc.php?action=dbImport&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass) + "&import=0&prefix=" + urlEncode(dbPrefix), handleHttpResponse_DoImport);
         } else {
-          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_connection_error'); ?></p>'.replace('%s', result[1]);
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_connection_error'); ?></p>'.replace('%s', result[2]);
           formSubmited = false;
         }
       } else {

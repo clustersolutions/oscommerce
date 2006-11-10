@@ -215,12 +215,12 @@
 ?>
 
   function handleHttpResponseRemoveImage(http) {
-    var result = http.responseText.split(':osCRPC:', 2);
+    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-    if (result[0] == '1') {
-      document.getElementById('image_' + result[1]).style.display = 'none';
+    if (result[1] == '1') {
+      document.getElementById('image_' + result[2]).style.display = 'none';
 
-      if (document.getElementById('image_' + result[1]).parentNode.id == 'imagesOriginal') {
+      if (document.getElementById('image_' + result[2]).parentNode.id == 'imagesOriginal') {
         getImagesOthers();
       }
     }
@@ -264,9 +264,9 @@
   }
 
   function handleHttpResponseSetDefaultImage(http) {
-    var result = http.responseText.split(':osCRPC:', 2);
+    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-    if (result[0] == '1') {
+    if (result[1] == '1') {
       getImagesOriginals();
     }
   }
@@ -278,18 +278,18 @@
   }
 
   function handleHttpResponseReorderImages(http) {
-    var result = http.responseText.split(':osCRPC:', 2);
+    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-    if (result[0] == '1') {
+    if (result[1] == '1') {
       getImagesOthers();
     }
   }
 
   function handleHttpResponseGetImages(http) {
-    var result = http.responseText.split(':osCRPC:', 2);
+    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-    if (result[0] == '1') {
-      var str_array = result[1].split('[x]');
+    if (result[1] == '1') {
+      var str_array = result[2].split('[x]');
 
       for (i = 0; i < str_array.length; ++i) {
         var str_ele = str_array[i].split('[-]');
@@ -375,9 +375,9 @@
 ?>
 
   function handleHttpResponseGetLocalImages(http) {
-    var result = http.responseText.split(':osCRPC:', 2);
+    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
 
-    if (result[0] == '1') {
+    if (result[1] == '1') {
       var i = 0;
 
       var selectList = document.getElementById('localImagesSelection');
@@ -386,8 +386,8 @@
         selectList.options[i] = null;
       }
 
-      if (result[1].length > 0) {
-        var entries = result[1].split('#');
+      if (result[2].length > 0) {
+        var entries = result[2].split('#');
 
         for (i = 0; i < entries.length; i++) {
           selectList.options[i] = new Option(entries[i]);

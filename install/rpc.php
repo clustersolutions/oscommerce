@@ -34,9 +34,9 @@
         }
 
         if ($osC_Database->isError()) {
-          echo '0:osCRPC:' . $osC_Database->getError();
+          echo '[[0|' . $osC_Database->getError() . ']]';
         } else {
-          echo '1';
+          echo '[[1]]';
         }
 
         exit;
@@ -248,9 +248,9 @@
         }
 
         if ($osC_Database->isError()) {
-          echo '0:osCRPC:' . $osC_Database->getError();
+          echo '[[0|' . $osC_Database->getError() . ']]';
         } else {
-          echo '1';
+          echo '[[1]]';
         }
 
         exit;
@@ -278,9 +278,9 @@
         }
 
         if ($osC_Database->isError()) {
-          echo '0:osCRPC:' . $osC_Database->getError();
+          echo '[[0|' . $osC_Database->getError() . ']]';
         } else {
-          echo '1';
+          echo '[[1]]';
         }
 
         exit;
@@ -300,12 +300,12 @@
               }
             }
 
-            echo '1';
+            echo '[[1]]';
           } else {
-            echo '0:osCRPC:' . $directory;
+            echo '[[0|' . $directory . ']]';
           }
         } else {
-          echo '-1:osCRPC:' . $directory;
+          echo '[[-1|' . $directory . ']]';
         }
 
         exit;
@@ -336,15 +336,15 @@
             if (sizeof($dirs) > 0) {
               sort($dirs);
 
-              echo '0:osCRPC:' . implode('|', $dirs);
+              echo '[[0|' . implode(';', $dirs) . ']]';
             } else {
-              echo '-1:osCRPC:invalidPath';
+              echo '[[-1|invalidPath]]';
             }
           } else {
-            echo '-1:osCRPC:invalidPath';
+            echo '[[-1|invalidPath]]';
           }
         } else {
-          echo '1:osCRPC:' . $directory;
+          echo '[[1|' . $directory . ']]';
         }
 
         exit;
@@ -352,5 +352,5 @@
     }
   }
 
-  echo '-100:osCRPC:noActionError';
+  echo '[[-100|noActionError]]';
 ?>

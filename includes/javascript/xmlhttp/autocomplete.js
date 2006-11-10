@@ -209,9 +209,9 @@ function autoComplete(autoCompleteField, divBlock) {
       if (http.status == 200) {
         my.autoCompleteListing = new Array();
 
-        var response = http.responseText.split(':osCRPC:', 2);
-        if (response[0] == '0') {
-          my.autoCompleteListing = response[1].split('|');
+        var response = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
+        if (response[1] == '0') {
+          my.autoCompleteListing = response[2].split(';');
 
           my.createDiv();
           my.positionDiv();
@@ -220,7 +220,7 @@ function autoComplete(autoCompleteField, divBlock) {
           if (document.getElementById(my.autoCompleteField.id + "_icon")) {
             document.getElementById(my.autoCompleteField.id + "_icon").src = "images/progress_pending.gif";
           }
-        } else if (response[0] == '1') {
+        } else if (response[1] == '1') {
           if (document.getElementById(my.autoCompleteField.id + "_icon")) {
             document.getElementById(my.autoCompleteField.id + "_icon").src = "images/progress_pending.gif";
           }
@@ -228,7 +228,7 @@ function autoComplete(autoCompleteField, divBlock) {
           if (isDivVisible(my.autoCompleteDivBlock)) {
             my.hideDiv();
           }
-        } else if (response[0] == '-1') {
+        } else if (response[1] == '-1') {
           if (document.getElementById(my.autoCompleteField.id + "_icon")) {
             document.getElementById(my.autoCompleteField.id + "_icon").src = "images/failed.gif";
           }

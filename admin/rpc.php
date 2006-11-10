@@ -55,9 +55,9 @@
         }
 
         if (empty($array)) {
-          echo '0:osCRPC:' . $_GET['pID'];
+          echo '[[0|' . $_GET['pID'] . ']]';
         } else {
-          echo '1:osCRPC:' . implode('[x]', $array);
+          echo '[[1|' . implode('[x]', $array) . ']]';
         }
 
         exit;
@@ -68,9 +68,9 @@
         $osC_Image = new osC_Image_Admin();
 
         if ($osC_Image->setAsDefault($_GET['image'])) {
-          echo '1:osCRPC:' . $_GET['image'];
+          echo '[[1|' . $_GET['image'] . ']]';
         } else {
-          echo '0:osCRPC:' . $_GET['image'];
+          echo '[[0|' . $_GET['image'] . ']]';
         }
 
         exit;
@@ -81,9 +81,9 @@
         $osC_Image = new osC_Image_Admin();
 
         if ($osC_Image->reorderImages($_GET['imagesOriginal'])) {
-          echo '1:osCRPC:' . $_GET['pID'];
+          echo '[[1|' . $_GET['pID'] . ']]';
         } else {
-          echo '0:osCRPC:' . $_GET['pID'];
+          echo '[[0|' . $_GET['pID'] . ']]';
         }
 
         exit;
@@ -94,9 +94,9 @@
         $osC_Image = new osC_Image_Admin();
 
         if ($osC_Image->delete($_GET['image'])) {
-          echo '1:osCRPC:' . $_GET['image'];
+          echo '[[1|' . $_GET['image'] . ']]';
         } else {
-          echo '0:osCRPC:' . $_GET['image'];
+          echo '[[0|' . $_GET['image'] . ']]';
         }
 
         exit;
@@ -115,12 +115,12 @@
           $array[] = $file['name'];
         }
 
-        echo '1:osCRPC:' . implode('#', $array);
+        echo '[[1|' . implode('#', $array) . ']]';
 
         exit;
         break;
     }
   }
 
-  echo '-100:osCRPC:noActionError';
+  echo '[[-100|noActionError]]';
 ?>
