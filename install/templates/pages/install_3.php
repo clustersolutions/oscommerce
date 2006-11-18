@@ -27,14 +27,15 @@
   function handleHttpResponse() {
     if (http.readyState == 4) {
       if (http.status == 200) {
-        var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
+        var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
+        result.shift();
 
-        if (result[1] == '1') {
+        if (result[0] == '1') {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_sample_data_imported'); ?></p>';
 
           setTimeout("document.getElementById('installForm').submit();", 2000);
         } else {
-          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_sample_data_import_error'); ?></p>'.replace('%s', result[2]);
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_sample_data_import_error'); ?></p>'.replace('%s', result[1]);
         }
       }
 

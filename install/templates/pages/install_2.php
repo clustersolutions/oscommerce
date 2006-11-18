@@ -47,16 +47,17 @@
   function handleHttpResponse() {
     if (http.readyState == 4) {
       if (http.status == 200) {
-        var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
+        var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
+        result.shift();
 
-        if (result[1] == '1') {
+        if (result[0] == '1') {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_configured'); ?></p>';
 
           setTimeout("document.getElementById('installForm').submit();", 2000);
-        } else if (result[1] == '0') {
-          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_not_writeable'); ?></p>'.replace('%s', result[2].wordWrap(30, '<br />', true));
+        } else if (result[0] == '0') {
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_not_writeable'); ?></p>'.replace('%s', result[1].wordWrap(30, '<br />', true));
         } else {
-          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_non_existent'); ?></p>'.replace('%s', result[2].wordWrap(30, '<br />', true));
+          document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_work_directory_error_non_existent'); ?></p>'.replace('%s', result[1].wordWrap(30, '<br />', true));
         }
       }
 
