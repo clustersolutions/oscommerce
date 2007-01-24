@@ -41,7 +41,7 @@
 /* Private methods */
 
     function _save() {
-      global $osC_Database, $osC_MessageStack;
+      global $osC_Database, $osC_Language, $osC_MessageStack;
 
       if (isset($_GET['gID']) && is_numeric($_GET['gID'])) {
         $id = $_GET['gID'];
