@@ -289,7 +289,8 @@
   }
 
   function handleHttpResponseGetImages(http) {
-    var result = http.responseText.split(/\[{2}([^|]*?)(?:\|([^|]*?)){0,1}\]{2}/);
+    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
+    result.shift();
 
     if (result[0] == '1') {
       var str_array = result[1].split('[x]');
