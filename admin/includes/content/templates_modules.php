@@ -58,7 +58,7 @@
             break;
 
           case 'remove':
-            $this->_remove();
+            $this->_delete();
             break;
         }
       }
@@ -121,7 +121,7 @@
       osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&module=' . $_GET['module']));
     }
 
-    function _remove() {
+    function _delete() {
       global $osC_Language;
 
       if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php')) {

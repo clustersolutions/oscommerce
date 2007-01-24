@@ -38,7 +38,7 @@
             break;
 
           case 'remove':
-            $this->_remove();
+            $this->_delete();
             break;
         }
       }
@@ -163,7 +163,7 @@
       osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&service=' . $_GET['service']));
     }
 
-    function _remove() {
+    function _delete() {
       global $osC_Database, $osC_MessageStack;
 
       if (($key = array_search($_GET['service'], $this->_installed)) !== false) {

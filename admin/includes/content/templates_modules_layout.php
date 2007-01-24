@@ -99,7 +99,7 @@
       }
     }
 
-    function _remove() {
+    function _delete() {
       global $osC_Database, $osC_MessageStack;
 
       if (isset($_GET['lID']) && is_numeric($_GET['lID'])) {

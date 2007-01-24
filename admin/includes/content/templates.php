@@ -36,7 +36,7 @@
             break;
 
           case 'remove':
-            $this->_remove();
+            $this->_delete();
             break;
         }
       }
@@ -107,7 +107,7 @@
       osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&template=' . $_GET['template']));
     }
 
-    function _remove() {
+    function _delete() {
       if (file_exists('includes/templates/' . $_GET['template'] . '.php')) {
         include('includes/templates/' . $_GET['template'] . '.php');
 
