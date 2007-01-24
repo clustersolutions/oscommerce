@@ -63,6 +63,9 @@
     <p style="margin-top: 0px;"><?php echo $osC_Language->get('select_another_billing_destination'); ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <tr>
+        <td height="30" colspan="4">&nbsp;</td>
+      </tr>
 
 <?php
       $radio_buttons = 0;
