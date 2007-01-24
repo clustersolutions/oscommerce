@@ -62,6 +62,7 @@
 
 <?php
       $Qproducts = $osC_Template->getListing();
+      $counter = 0;
 
       while ($Qproducts->next()) {
         $counter++;
