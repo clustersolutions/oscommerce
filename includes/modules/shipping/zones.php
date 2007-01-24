@@ -42,7 +42,7 @@
     function quote() {
       global $osC_Language, $osC_ShoppingCart, $osC_Weight;
 
-      $dest_country = $osC_ShoppingCart_>getShippingAddress('country_iso_code_2');
+      $dest_country = $osC_ShoppingCart->getShippingAddress('country_iso_code_2');
       $dest_zone = 0;
       $error = false;
 
