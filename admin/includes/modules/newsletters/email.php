@@ -85,7 +85,7 @@
 
         $Qcustomers->execute();
 
-        $this->_audience_size =+ $Qcustomers->valueInt('total');
+        $this->_audience_size += $Qcustomers->valueInt('total');
       }
 
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_EMAIL_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
