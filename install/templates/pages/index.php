@@ -12,9 +12,16 @@
 ?>
 
 <div class="mainBlock">
-  <div style="float: right;">
-    <?php echo $osC_Language->get('title_language'); ?> <a href="index.php?language=en_US">English</a>
-  </div>
+  <ul style="list-style-type: none; padding: 5px; margin: 0px; display: inline; float: right;">
+    <li style="font-weight: bold; display: inline;"><?php echo $osC_Language->get('title_language'); ?></li>
+<?php
+  foreach ($osC_Language->getAll() as $available_language) {
+?>
+    <li style="display: inline;"><?php echo '<a href="index.php?language=' . $available_language['code'] . '"><img src="../includes/languages/' . $available_language['code'] . '/images/icon.gif" border="0" title="' . $available_language['name'] . '" /></a>'; ?></li>
+<?php      
+  }
+?>
+  </ul>
 
   <h1><?php echo $osC_Language->get('page_title_welcome'); ?></h1>
 

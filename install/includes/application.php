@@ -27,7 +27,11 @@
 
   require('../includes/classes/database.php');
 
+  require('../includes/classes/xml.php');
+
   session_start();
+
+  require('../admin/includes/classes/directory_listing.php');
 
   require('includes/classes/language.php');
   $osC_Language = new osC_LanguageInstall();

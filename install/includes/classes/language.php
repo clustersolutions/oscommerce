@@ -15,12 +15,25 @@
   class osC_LanguageInstall extends osC_Language_Admin {
 
 /* Private variables */
-    var $_languages = array('en_US' => array('code' => 'en_US',
-                                             'charset' => 'utf-8'));
-
+    var $_languages = array();
+    
 /* Class constructor */
 
     function osC_LanguageInstall() {
+      $osC_DirectoryListing = new osC_DirectoryListing('../includes/languages');
+      $osC_DirectoryListing->setIncludeDirectories(false);
+
+      foreach ($osC_DirectoryListing->getFiles() as $file) {
+        $osC_XML = new osC_XML(file_get_contents('../includes/languages/' . $file['name']));
+        $lang = $osC_XML->toArray();
+
+        $this->_languages[$lang['language']['data']['code']] = array('name' => $lang['language']['data']['title'],
+                                                                     'code' => $lang['language']['data']['code'],
+                                                                     'charset' => $lang['language']['data']['character_set']);
+      }
+
+      unset($lang);
+
       $language = (isset($_GET['language']) && !empty($_GET['language']) ? $_GET['language'] : '');
 
       $this->set($language);
