@@ -5,12 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Statistics')) {
+  if ( !class_exists('osC_Statistics') ) {
     include('includes/classes/statistics.php');
   }
 
@@ -23,8 +23,8 @@
 
       $osC_Language->loadConstants('modules/statistics/orders.php');
 
-      if (!isset($osC_Currencies)) {
-        if (!class_exists('osC_Currencies')) {
+      if ( !isset($osC_Currencies) ) {
+        if ( !class_exists('osC_Currencies') ) {
           include('../includes/classes/currencies.php');
         }
 
@@ -62,8 +62,8 @@
       $this->_resultset->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
       $this->_resultset->execute();
 
-      while ($this->_resultset->next()) {
-        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $this->_resultset->value('orders_id') . '&action=oEdit'), $this->_icon . '&nbsp;' . $this->_resultset->value('customers_name')),
+      while ( $this->_resultset->next() ) {
+        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $this->_resultset->value('orders_id') . '&action=save'), $this->_icon . '&nbsp;' . $this->_resultset->value('customers_name')),
                                $osC_Currencies->format($this->_resultset->valueInt('value')));
       }
     }

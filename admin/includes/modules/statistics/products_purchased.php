@@ -5,12 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Statistics')) {
+  if ( !class_exists('osC_Statistics') ) {
     include('includes/classes/statistics.php');
   }
 
@@ -54,8 +54,8 @@
       $this->_resultset->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
       $this->_resultset->execute();
 
-      while ($this->_resultset->next()) {
-        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $this->_resultset->valueInt('products_id') . '&action=new_product_preview&read=only'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
+      while ( $this->_resultset->next() ) {
+        $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $this->_resultset->valueInt('products_id') . '&action=preview'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
                                $this->_resultset->valueInt('products_ordered'));
       }
     }

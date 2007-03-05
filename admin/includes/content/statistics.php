@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,25 +16,25 @@
 
     var $_module = 'statistics',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'statistics.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Statistics() {
-      if (!isset($_GET['module'])) {
+      if ( !isset($_GET['module']) ) {
         $_GET['module'] = '';
       }
 
-      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+      if ( !isset($_GET['page']) || ( isset($_GET['page']) && !is_numeric($_GET['page']) ) ) {
         $_GET['page'] = 1;
       }
 
-      if (!empty($_GET['module']) && !file_exists('includes/modules/statistics/' . $_GET['module'] . '.php')) {
+      if ( !empty($_GET['module']) && !file_exists('includes/modules/statistics/' . $_GET['module'] . '.php') ) {
         $_GET['module'] = '';
       }
 
-      if (empty($_GET['module'])) {
-        $this->_page_contents = 'statistics_listing.php';
+      if ( empty($_GET['module']) ) {
+        $this->_page_contents = 'listing.php';
       }
     }
   }
