@@ -20,7 +20,7 @@
     function osC_Access_Products() {
       $this->_subgroups = array(array('icon' => 'specials.png',
                                       'title' => ACCESS_PRODUCTS_NEW_TITLE,
-                                      'identifier' => 'action=new'));
+                                      'identifier' => 'action=save'));
     }
   }
 ?>

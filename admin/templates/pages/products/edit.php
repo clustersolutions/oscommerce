@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -10,28 +10,29 @@
   Released under the GNU General Public License
 */
 
-  if (isset($_GET['pID'])) {
-    $Qp = $osC_Database->query('select products_id, products_quantity, products_price, products_weight, products_weight_class, products_date_added, products_last_modified, date_format(products_date_available, "%Y-%m-%d") as products_date_available, products_status, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
-    $Qp->bindTable(':table_products', TABLE_PRODUCTS);
-    $Qp->bindInt(':products_id', $_GET['pID']);
-    $Qp->execute();
+  if ( isset($_GET['pID']) ) {
+    $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::getData($_GET['pID']));
 
     $Qpd = $osC_Database->query('select products_name, products_description, products_model, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
     $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
     $Qpd->bindInt(':products_id', $_GET['pID']);
     $Qpd->execute();
 
-    $pd_extra = array();
-    while ($Qpd->next()) {
-      $pd_extra['products_name'][$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
-      $pd_extra['products_description'][$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
-      $pd_extra['products_model'][$Qpd->valueInt('language_id')] = $Qpd->value('products_model');
-      $pd_extra['products_keyword'][$Qpd->valueInt('language_id')] = $Qpd->value('products_keyword');
-      $pd_extra['products_tags'][$Qpd->valueInt('language_id')] = $Qpd->value('products_tags');
-      $pd_extra['products_url'][$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
-    }
+    $products_name = array();
+    $products_description = array();
+    $products_model = array();
+    $products_keyword = array();
+    $products_tags = array();
+    $products_url = array();
 
-    $pInfo = new objectInfo(array_merge($Qp->toArray(), $pd_extra));
+    while ($Qpd->next()) {
+      $products_name[$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
+      $products_description[$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
+      $products_model[$Qpd->valueInt('language_id')] = $Qpd->value('products_model');
+      $products_keyword[$Qpd->valueInt('language_id')] = $Qpd->value('products_keyword');
+      $products_tags[$Qpd->valueInt('language_id')] = $Qpd->value('products_tags');
+      $products_url[$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
+    }
   }
 
   $Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
@@ -39,6 +40,7 @@
   $Qmanufacturers->execute();
 
   $manufacturers_array = array(array('id' => '', 'text' => TEXT_NONE));
+
   while ($Qmanufacturers->next()) {
     $manufacturers_array[] = array('id' => $Qmanufacturers->valueInt('manufacturers_id'),
                                    'text' => $Qmanufacturers->value('manufacturers_name'));
@@ -49,6 +51,7 @@
   $Qtc->execute();
 
   $tax_class_array = array(array('id' => '0', 'text' => TEXT_NONE));
+
   while ($Qtc->next()) {
     $tax_class_array[] = array('id' => $Qtc->valueInt('tax_class_id'),
                                'text' => $Qtc->value('tax_class_title'));
@@ -60,6 +63,7 @@
   $Qwc->execute();
 
   $weight_class_array = array();
+
   while ($Qwc->next()) {
     $weight_class_array[] = array('id' => $Qwc->valueInt('weight_class_id'),
                                   'text' => $Qwc->value('weight_class_title'));
@@ -74,7 +78,7 @@
 <script type="text/javascript" src="external/jscalendar/lang/calendar-en.js"></script>
 <script type="text/javascript" src="external/jscalendar/calendar-setup.js"></script>
 
-<style type="text/css">
+<style type="text/css"><!--
 .attributeRemove {
   background-color: #FFC6C6;
 }
@@ -82,14 +86,14 @@
 .attributeAdd {
   background-color: #E8FFC6;
 }
-</style>
+//--></style>
 
 <script type="text/javascript"><!--
   var tax_rates = new Array();
 
 <?php
   foreach ($tax_class_array as $tc_entry) {
-    if ($tc_entry['id'] > 0) {
+    if ( $tc_entry['id'] > 0 ) {
       echo '  tax_rates["' . $tc_entry['id'] . '"] = ' . $osC_Tax->getTaxRate($tc_entry['id']) . ';' . "\n";
     }
   }
@@ -211,7 +215,7 @@
   }
 
 <?php
-  if (isset($_GET['pID'])) {
+  if ( isset($_GET['pID']) ) {
 ?>
 
   function handleHttpResponseRemoveImage(http) {
@@ -469,14 +473,14 @@
   </div>
 </div>
 
-<h1><?php echo (isset($pInfo) && isset($pInfo->products_name[$osC_Language->getID()])) ? $pInfo->products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
+<h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
 
 <div class="tab-pane" id="mainTabPane">
   <script type="text/javascript"><!--
     var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );
   //--></script>
 
-  <form name="product" method="post" enctype="multipart/form-data">
+  <form name="product" action="#" method="post" enctype="multipart/form-data">
 
   <div class="tab-page" id="tabDescription">
     <h2 class="tab"><?php echo TAB_GENERAL; ?></h2>
@@ -504,27 +508,27 @@
         <table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_NAME; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_name) && isset($pInfo->products_name[$l['id']]) ? $pInfo->products_name[$l['id']] : null)); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText" valign="top"><?php echo TEXT_PRODUCTS_DESCRIPTION; ?></td>
-            <td class="smallText"><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_description) && isset($pInfo->products_description[$l['id']]) ? $pInfo->products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
+            <td class="smallText"><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_MODEL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_model) && isset($pInfo->products_model[$l['id']]) ? $pInfo->products_model[$l['id']] : null)); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_model[$l['id']]) ? $products_model[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_KEYWORD; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_keyword) && isset($pInfo->products_keyword[$l['id']]) ? $pInfo->products_keyword[$l['id']] : null)); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_TAGS; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_tags) && isset($pInfo->products_tags[$l['id']]) ? $pInfo->products_tags[$l['id']] : null)); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></td>
           </tr>
           <tr>
             <td class="smallText"><?php echo TEXT_PRODUCTS_URL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($pInfo) && is_array($pInfo->products_url) && isset($pInfo->products_url[$l['id']]) ? $pInfo->products_url[$l['id']] : null)); ?></td>
+            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></td>
           </tr>
         </table>
       </div>
@@ -552,15 +556,15 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_TAX_CLASS; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($pInfo) ? $pInfo->products_tax_class_id : null), 'onchange="updateGross(\'products_price\');"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_tax_class_id') : null), 'onchange="updateGross(\'products_price\');"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_NET; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($pInfo) ? $pInfo->products_price : null), 'onkeyup="updateGross(\'products_price\')"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateGross(\'products_price\')"'); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_GROSS; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($pInfo) ? $pInfo->products_price : null), 'onkeyup="updateNet(\'products_price\')"'); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateNet(\'products_price\')"'); ?></td>
               </tr>
             </table>
 
@@ -576,15 +580,15 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_MANUFACTURER; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($pInfo) ? $pInfo->manufacturers_id : null)); ?></td>
+                <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('manufacturers_id') : null)); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_QUANTITY; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_quantity', (isset($pInfo) ? $pInfo->products_quantity : null)); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></td>
               </tr>
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_WEIGHT; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_weight', (isset($pInfo) ? $pInfo->products_weight : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($pInfo) ? $pInfo->products_weight_class : SHIPPING_WEIGHT_UNIT)); ?></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></td>
               </tr>
             </table>
           </fieldset>
@@ -595,7 +599,7 @@
           <fieldset style="height: 100%;">
             <legend><?php echo TEXT_PRODUCTS_STATUS; ?></legend>
 
-            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($pInfo) ? $pInfo->products_status : '0'), null, '<br />'); ?>
+            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0'), null, '<br />'); ?>
           </fieldset>
         </td>
         <td class="smallText" width="50%" height="100%" valign="top">
@@ -605,7 +609,7 @@
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
                 <td class="smallText"><?php echo TEXT_PRODUCTS_DATE_AVAILABLE; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_date_available', (isset($pInfo) ? $pInfo->products_date_available : null)); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
+                <td class="smallText"><?php echo osc_draw_input_field('products_date_available', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_date_available') : null)); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
               </tr>
             </table>
           </fieldset>
@@ -635,7 +639,7 @@
               <span id="fileUploadField"></span>
 
 <?php
-    if (isset($pInfo)) {
+    if ( isset($osC_ObjectInfo) ) {
       echo '<input type="submit" value="Send To Server" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image to server...</div>';
     }
 ?>
@@ -653,7 +657,7 @@
               <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Retrieving local images..'; ?></div>
 
 <?php
-    if (isset($pInfo)) {
+    if ( isset($osC_ObjectInfo) ) {
       echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image(s) to server...</div>';
     }
 ?>
@@ -668,7 +672,7 @@
 //--></script>
 
 <?php
-    if (isset($pInfo)) {
+    if ( isset($osC_ObjectInfo) ) {
 ?>
 
           <fieldset style="height: 100%;">
@@ -835,7 +839,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($pInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save') . '\';"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton">'; ?></p>
+  <p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($osC_ObjectInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save') . '\';" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

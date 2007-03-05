@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -30,7 +30,12 @@
     $pd_extra['products_url'][$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
   }
 
-  $pInfo = new objectInfo(array_merge($Qp->toArray(), $pd_extra));
+  $osC_ObjectInfo = new osC_ObjectInfo(array_merge($Qp->toArray(), $pd_extra));
+
+  $products_name = $osC_ObjectInfo->get('products_name');
+  $products_model = $osC_ObjectInfo->get('products_model');
+  $products_description = $osC_ObjectInfo->get('products_description');
+  $products_url = $osC_ObjectInfo->get('products_url');
 ?>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -54,24 +59,24 @@
 <div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['code'] != $osC_Language->getCode()) ? ' style="display: none;"' : ''); ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><h1><?php echo $pInfo->products_name[$l['id']] . (!empty($pInfo->products_model[$l['id']]) ? '<br /><span class="smallText">' . $pInfo->products_model[$l['id']] . '</span>': ''); ?></h1></td>
-      <td align="right"><h1><?php echo $osC_Currencies->format($pInfo->products_price); ?></h1></td>
+      <td><h1><?php echo $products_name[$l['id']] . (!empty($products_model[$l['id']]) ? '<br /><span class="smallText">' . $products_model[$l['id']] . '</span>': ''); ?></h1></td>
+      <td align="right"><h1><?php echo $osC_Currencies->format($osC_ObjectInfo->get('products_price')); ?></h1></td>
     </tr>
   </table>
 
-  <p class="main"><?php echo $osC_Image->show($pInfo->image, $pInfo->products_name[$l['id']], 'align="right" hspace="5" vspace="5"', 'product_info') . $pInfo->products_description[$l['id']]; ?></p>
+  <p class="main"><?php echo $osC_Image->show($osC_ObjectInfo->get('image'), $products_name[$l['id']], 'align="right" hspace="5" vspace="5"', 'product_info') . $products_description[$l['id']]; ?></p>
 
 <?php
-    if (!empty($pInfo->products_url[$l['id']])) {
-      echo '<p class="main">' . sprintf(TEXT_PRODUCT_MORE_INFORMATION, $pInfo->products_url[$l['id']]) . '</p>';
+    if (!empty($products_url[$l['id']])) {
+      echo '<p class="main">' . sprintf(TEXT_PRODUCT_MORE_INFORMATION, $products_url[$l['id']]) . '</p>';
     }
 ?>
 
 <?php
-    if ($pInfo->products_date_available > date('Y-m-d')) {
-      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_AVAILABLE, osC_DateTime::getLong($pInfo->products_date_available)) . '</p>';
+    if ($osC_ObjectInfo->get('products_date_available') > date('Y-m-d')) {
+      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_AVAILABLE, osC_DateTime::getLong($osC_ObjectInfo->get('products_date_available'))) . '</p>';
     } else {
-      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_ADDED, osC_DateTime::getLong($pInfo->products_date_added)) . '</p>';
+      echo '<p class="smallText" align="center">' . sprintf(TEXT_PRODUCT_DATE_ADDED, osC_DateTime::getLong($osC_ObjectInfo->get('products_date_added'))) . '</p>';
     }
 ?>
 
@@ -79,8 +84,6 @@
 
 <?php
   }
-
-  echo '<p align="right"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&pID=' . $pInfo->products_id) . '\';" class="operationButton"></p>';
 ?>
 
-</form>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>

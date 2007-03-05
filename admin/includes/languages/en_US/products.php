@@ -34,9 +34,11 @@
   define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
 
   define('TEXT_INFO_COPY_TO_INTRO', 'Please choose a new category you wish to copy this product to');
+  define('TEXT_INFO_COPY_TO_BATCH_INTRO', 'Please choose a new category you wish to copy these products to');
   define('TEXT_INFO_CURRENT_CATEGORIES', 'Current Categories:');
 
   define('TEXT_DELETE_PRODUCT_INTRO', 'Are you sure you want to permanently delete this product?');
+  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to permanently delete these products?');
 
   define('TEXT_MOVE_PRODUCTS_INTRO', 'Please select which category you wish <b>%s</b> to reside in');
   define('TEXT_MOVE', 'Move <b>%s</b> to:');
