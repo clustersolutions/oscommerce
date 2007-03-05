@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id:output_compression.php 293 2005-11-29 17:34:26Z hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */

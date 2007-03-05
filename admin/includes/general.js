@@ -142,6 +142,17 @@ function resetPullDownMenuSelection(field) {
   }
 }
 
+function flagCheckboxes(element) {
+  var elementForm = element.form;
+  var i = 0;
+
+  for (i = 0; i < elementForm.length; i++) {
+    if (elementForm[i].type == 'checkbox') {
+      elementForm[i].checked = element.checked;
+    }
+  }
+}
+
 // Returns array with x,y page scroll values
 // Core code from - quirksmode.org
 function getPageScroll() {

@@ -41,7 +41,7 @@
 
 <?php require('templates/default/header.php'); ?>
 
-<div class="pageContents"><?php require('templates/pages/' . $osC_Template->getPageContentsFilename()); ?></div>
+<div class="pageContents"><?php require('templates/pages/' . $osC_Template->getModule() . '/' . $osC_Template->getPageContentsFilename()); ?></div>
 
 <?php require('templates/default/footer.php'); ?>
 

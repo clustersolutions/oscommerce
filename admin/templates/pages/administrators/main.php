@@ -42,21 +42,42 @@
 ?>
 
 <div id="infoBox_aDefault" <?php if (!empty($_GET['action'])) { echo 'style="display: none;"'; } ?>>
-  <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
-    <thead>
-      <tr>
-        <th><?php echo TABLE_HEADING_ADMINISTRATORS; ?></th>
-        <th><?php echo TABLE_HEADING_ACTION; ?></th>
-      </tr>
-    </thead>
-    <tbody>
+
+  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'aNew\');" class="infoBoxButton">'; ?></p>
 
 <?php
   $Qadmin = $osC_Database->query('select id, user_name from :table_administrators order by user_name');
   $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
   $Qadmin->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qadmin->execute();
+?>
 
+  <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr>
+      <td><?php echo $Qadmin->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS); ?></td>
+      <td align="right"><?php echo $Qadmin->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
+    </tr>
+  </table>
+
+  <form name="batch" action="#" method="post">
+
+  <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
+    <thead>
+      <tr>
+        <th><?php echo TABLE_HEADING_ADMINISTRATORS; ?></th>
+        <th><?php echo TABLE_HEADING_ACTION; ?></th>
+        <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('configure.png') . '" title="' . IMAGE_EDIT . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave') . '\';" />&nbsp;<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+        <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      </tr>
+    </tfoot>
+    <tbody>
+
+<?php
   while ($Qadmin->next()) {
     if (!isset($aInfo) && (!isset($_GET['aID']) || (isset($_GET['aID']) && ($_GET['aID'] == $Qadmin->value('id')))) && ($_GET['action'] != 'aNew')) {
       $modules_array = array( 'access_modules' => array() );
@@ -75,7 +96,7 @@
 ?>
 
       <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-        <td><?php echo $Qadmin->value('user_name'); ?></td>
+        <td onclick="document.getElementById('batch<?php echo $Qadmin->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qadmin->valueInt('id'); ?>').checked;"><?php echo $Qadmin->value('user_name'); ?></td>
         <td align="right">
 
 <?php
@@ -89,6 +110,7 @@
 ?>
 
         </td>
+        <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qadmin->valueInt('id'), null, 'id="batch' . $Qadmin->valueInt('id') . '"'); ?></td>
       </tr>
 
 <?php
@@ -98,14 +120,13 @@
     </tbody>
   </table>
 
+  </form>
+
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><?php echo $Qadmin->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ADMINISTRATORS); ?></td>
       <td align="right"><?php echo $Qadmin->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
     </tr>
   </table>
-
-  <p align="right"><?php echo '<input type="button" value="' . IMAGE_INSERT . '" onclick="toggleInfoBox(\'aNew\');" class="infoBoxButton">'; ?></p>
 </div>
 
 <div id="infoBox_aNew" <?php if ($_GET['action'] != 'aNew') { echo 'style="display: none;"'; } ?>>

@@ -60,6 +60,20 @@
     return osc_image('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image, $title, null, null, $parameters);
   }
 
+/**
+ * Get the raw URL to an icon from a template set
+ *
+ * @param string $image The icon to display
+ * @param string $group The size group of the icon
+ * @access public
+ */
+
+  function osc_icon_raw($image, $group = '16x16') {
+    global $osC_Template;
+
+    return 'templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image;
+  }
+
 ////
 // javascript to dynamically update the states/provinces list when the country is changed
 // TABLES: zones
