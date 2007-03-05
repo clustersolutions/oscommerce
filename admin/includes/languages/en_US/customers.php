@@ -19,6 +19,9 @@ define('TABLE_HEADING_ACCOUNT_CREATED', 'Account Created');
 define('TABLE_HEADING_ACTION', 'Action');
 define('TABLE_HEADING_STATUS', 'Status');
 
+define('CATEGORY_PERSONAL', 'Personal');
+define('CATEGORY_ADDRESS_BOOK', 'Address Book');
+
 define('TEXT_DATE_ACCOUNT_CREATED', 'Account Created:');
 define('TEXT_DATE_ACCOUNT_LAST_MODIFIED', 'Last Modified:');
 define('TEXT_INFO_DATE_LAST_LOGON', 'Last Logon:');
@@ -26,8 +29,13 @@ define('TEXT_INFO_NUMBER_OF_LOGONS', 'Number of Logons:');
 define('TEXT_INFO_COUNTRY', 'Country:');
 define('TEXT_INFO_NUMBER_OF_REVIEWS', 'Number of Reviews:');
 define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this customer?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following customers?');
+define('TEXT_DELETE_ADDRESS_BOOK_INTRO', 'Are you sure you want to delete this customers address book entry?');
 define('TEXT_DELETE_REVIEWS', 'Delete %s review(s)');
 define('TEXT_INFO_HEADING_DELETE_CUSTOMER', 'Delete Customer');
+define('TEXT_INFO_HEADING_NEW_CUSTOMER', 'New Customer');
+define('TEXT_INFO_HEADING_NEW_ADDRESS_BOOK_ENTRY', 'New Address Book Entry');
+define('TEXT_BATCH_DELETE_REVIEWS', 'Delete customer reviews?');
 define('TYPE_BELOW', 'Type below');
 define('PLEASE_SELECT', 'Select One');
 define('EMAIL_SUBJECT', 'Welcome to ' . STORE_NAME);
@@ -40,4 +48,7 @@ define('EMAIL_CONTACT', 'For help with any of our online services, please email 
 define('EMAIL_PASSWORD', '<b>Note:</b> This account has been created for you by the store owner. The password to access this account is %s.' . "\n");
 
 define('ENTRY_STATUS', 'Status:');
+define('ENTRY_SET_AS_PRIMARY', 'Set As Primary Address:');
+
+define('TEXT_INFO_DELETE_ADDRESS_BOOK_PROHIBITED', 'Warning: The customers primary address can not be removed. Please assign another address as the primary address and try again.');
 ?>

@@ -45,12 +45,6 @@ define('JS_PRODUCTS_IMAGE', '* The new product needs an image value\n');
 define('JS_SPECIALS_PRODUCTS_PRICE', '* A new price for this product needs to be set\n');
 define('JS_ORDER_DOES_NOT_EXIST', 'Order Number %s does not exist!');
 
-define('CATEGORY_PERSONAL', 'Personal');
-define('CATEGORY_ADDRESS', 'Address');
-define('CATEGORY_CONTACT', 'Contact');
-define('CATEGORY_COMPANY', 'Company');
-define('CATEGORY_OPTIONS', 'Options');
-
 define('ENTRY_GENDER', 'Gender:');
 define('ENTRY_GENDER_ERROR', 'Please select your Gender.');
 define('ENTRY_FIRST_NAME', 'First Name:');
