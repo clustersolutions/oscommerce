@@ -5,16 +5,24 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-  class objectInfo {
-    function objectInfo($object_array) {
-      foreach ($object_array as $key => $value) {
+  class osC_ObjectInfo {
+    function osC_ObjectInfo($array) {
+      foreach ($array as $key => $value) {
         $this->$key = $value;
       }
+    }
+
+    function get($value) {
+      return $this->$value;
+    }
+
+    function set($key, $value) {
+      $this->$key = $value;
     }
   }
 ?>

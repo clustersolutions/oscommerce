@@ -11,13 +11,14 @@
 */
 
 // page title
-define('TITLE', 'osCommerce');
+define('TITLE', 'osCommerce Administration Tool');
 
 // header text in includes/header.php
 define('HEADER_TITLE_HELP', 'Help');
 define('HEADER_TITLE_OSCOMMERCE_SUPPORT_SITE', 'osCommerce Support Site');
 define('HEADER_TITLE_ONLINE_CATALOG', 'Online Catalog');
 define('HEADER_TITLE_LANGUAGES', 'Languages');
+define('HEADER_TITLE_LOGOFF', 'Logoff');
 
 define('BOX_CONNECTION_PROTECTED', 'You are protected by a %s secure SSL connection.');
 define('BOX_CONNECTION_UNPROTECTED', 'You are <font color="#ff0000">not</font> protected by a secure SSL connection.');
@@ -29,69 +30,6 @@ define('FEMALE', 'Female');
 
 // text for date of birth example
 define('DOB_FORMAT_STRING', 'mm/dd/yyyy');
-
-define('BOX_CONFIGURATION_ADMINISTRATORS', 'Administrators');
-
-// configuration box text in includes/boxes/configuration.php
-define('BOX_HEADING_CONFIGURATION', 'Configuration');
-define('BOX_CONFIGURATION_MYSTORE', 'My Store');
-define('BOX_CONFIGURATION_LOGGING', 'Logging');
-define('BOX_CONFIGURATION_CACHE', 'Cache');
-define('BOX_CONFIGURATION_SERVICES', 'Services');
-define('BOX_CONFIGURATION_CREDIT_CARD_TYPES', 'Credit Card Types');
-
-// modules box text in includes/boxes/modules.php
-define('BOX_HEADING_MODULES', 'Modules');
-define('BOX_MODULES_PAYMENT', 'Payment');
-define('BOX_MODULES_SHIPPING', 'Shipping');
-define('BOX_MODULES_ORDER_TOTAL', 'Order Total');
-
-// categories box text in includes/boxes/catalog.php
-define('BOX_HEADING_CATALOG', 'Catalog');
-define('BOX_CATALOG_CATEGORIES', 'Categories');
-define('BOX_CATALOG_PRODUCTS', 'Products');
-define('BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES', 'Products Attributes');
-define('BOX_CATALOG_MANUFACTURERS', 'Manufacturers');
-define('BOX_CATALOG_REVIEWS', 'Reviews');
-define('BOX_CATALOG_SPECIALS', 'Specials');
-define('BOX_CATALOG_PRODUCTS_EXPECTED', 'Products Expected');
-
-// customers box text in includes/boxes/customers.php
-define('BOX_HEADING_CUSTOMERS', 'Customers');
-define('BOX_CUSTOMERS_CUSTOMERS', 'Customers');
-define('BOX_CUSTOMERS_ORDERS', 'Orders');
-
-// taxes box text in includes/boxes/taxes.php
-define('BOX_HEADING_LOCATION_AND_TAXES', 'Locations / Taxes');
-define('BOX_TAXES_COUNTRIES', 'Countries');
-define('BOX_TAXES_ZONES', 'Zones');
-define('BOX_TAXES_ZONE_GROUPS', 'Zone Groups');
-define('BOX_TAXES_TAX_CLASSES', 'Tax Classes');
-
-// reports box text in includes/boxes/reports.php
-define('BOX_HEADING_REPORTS', 'Reports');
-define('BOX_REPORTS_STATISTICS', 'Statistics');
-
-// tools text in includes/boxes/tools.php
-define('BOX_HEADING_TOOLS', 'Tools');
-define('BOX_TOOLS_BACKUP', 'Database Backup');
-define('BOX_TOOLS_BANNER_MANAGER', 'Banner Manager');
-define('BOX_TOOLS_CACHE', 'Cache Control');
-define('BOX_TOOLS_IMAGES', 'Images');
-define('BOX_TOOLS_FILE_MANAGER', 'File Manager');
-define('BOX_TOOLS_NEWSLETTER_MANAGER', 'Newsletter Manager');
-define('BOX_TOOLS_SERVER_INFO', 'Server Info');
-define('BOX_TOOLS_WHOS_ONLINE', 'Who\'s Online');
-
-// localizaion box text in includes/boxes/localization.php
-define('BOX_HEADING_LOCALIZATION', 'Localization');
-define('BOX_LOCALIZATION_CURRENCIES', 'Currencies');
-define('BOX_LOCALIZATION_LANGUAGES', 'Languages');
-define('BOX_LOCALIZATION_ORDERS_STATUS', 'Orders Status');
-define('BOX_LOCALIZATION_WEIGHT_CLASSES', 'Weight Classes');
-define('BOX_LOCALIZATION_IMAGE_GROUPS', 'Image Groups');
-
-define('BOX_HEADING_LOGOFF', 'Logoff');
 
 // javascript messages
 define('JS_ERROR', 'Errors have occured during the process of your form!\nPlease make the following corrections:\n\n');
@@ -289,6 +227,7 @@ define('TEXT_TOP', 'Top');
 define('TEXT_TRUE', 'True');
 define('TEXT_FALSE', 'False');
 define('TEXT_OPTIONAL', 'Voluntary');
+define('TEXT_LEGEND', 'Legend');
 
 define('ERROR_DESTINATION_DOES_NOT_EXIST', 'Error: Destination does not exist.');
 define('ERROR_DESTINATION_NOT_WRITEABLE', 'Error: Destination not writeable.');

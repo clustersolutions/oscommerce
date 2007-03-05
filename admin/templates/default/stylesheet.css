@@ -89,8 +89,12 @@ H1, H1 a:link, H1 a:visited, H1 a:active, .pageHeading { font-family: Verdana, A
   background-color: #FBEBB1;
 }
 
-.dataTable tr.mouseOver td {
+.dataTable tr.mouseOver td, .dataTable tr.mouseOverDeactivatedRow td {
   background-color: #FFFAF3;
+}
+
+.dataTable tr.deactivatedRow td {
+  background-color: #F69095;
 }
 
 /* info box */

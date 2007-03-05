@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,26 +23,18 @@
     }
 
     function exists() {
-      if (isset($_FILES[$this->file])) {
+      $file = array();
+
+      if ( is_array($this->file) ) {
+        $file = $this->file;
+      } elseif ( isset($_FILES[$this->file]) ) {
         $file = array('name' => $_FILES[$this->file]['name'],
                       'type' => $_FILES[$this->file]['type'],
                       'size' => $_FILES[$this->file]['size'],
                       'tmp_name' => $_FILES[$this->file]['tmp_name']);
-      } elseif (isset($GLOBALS['HTTP_POST_FILES'][$this->file])) {
-        global $HTTP_POST_FILES;
-
-        $file = array('name' => $HTTP_POST_FILES[$this->file]['name'],
-                      'type' => $HTTP_POST_FILES[$this->file]['type'],
-                      'size' => $HTTP_POST_FILES[$this->file]['size'],
-                      'tmp_name' => $HTTP_POST_FILES[$this->file]['tmp_name']);
-      } else {
-        $file = array('name' => (isset($GLOBALS[$this->file . '_name']) ? $GLOBALS[$this->file . '_name'] : ''),
-                      'type' => (isset($GLOBALS[$this->file . '_type']) ? $GLOBALS[$this->file . '_type'] : ''),
-                      'size' => (isset($GLOBALS[$this->file . '_size']) ? $GLOBALS[$this->file . '_size'] : ''),
-                      'tmp_name' => (isset($GLOBALS[$this->file]) && is_string($GLOBALS[$this->file]) ? $GLOBALS[$this->file] : ''));
       }
 
-      if ( !empty($file['tmp_name']) && ($file['tmp_name'] != 'none') && is_uploaded_file($file['tmp_name']) ) {
+      if ( isset($file['tmp_name']) && !empty($file['tmp_name']) && ($file['tmp_name'] != 'none') && is_uploaded_file($file['tmp_name']) ) {
         return true;
       }
 
@@ -52,26 +44,18 @@
     function parse() {
       global $osC_MessageStack;
 
-      if (isset($_FILES[$this->file])) {
+      $file = array();
+
+      if ( is_array($this->file) ) {
+        $file = $this->file;
+      } elseif ( isset($_FILES[$this->file]) ) {
         $file = array('name' => $_FILES[$this->file]['name'],
                       'type' => $_FILES[$this->file]['type'],
                       'size' => $_FILES[$this->file]['size'],
                       'tmp_name' => $_FILES[$this->file]['tmp_name']);
-      } elseif (isset($GLOBALS['HTTP_POST_FILES'][$this->file])) {
-        global $HTTP_POST_FILES;
-
-        $file = array('name' => $HTTP_POST_FILES[$this->file]['name'],
-                      'type' => $HTTP_POST_FILES[$this->file]['type'],
-                      'size' => $HTTP_POST_FILES[$this->file]['size'],
-                      'tmp_name' => $HTTP_POST_FILES[$this->file]['tmp_name']);
-      } else {
-        $file = array('name' => (isset($GLOBALS[$this->file . '_name']) ? $GLOBALS[$this->file . '_name'] : ''),
-                      'type' => (isset($GLOBALS[$this->file . '_type']) ? $GLOBALS[$this->file . '_type'] : ''),
-                      'size' => (isset($GLOBALS[$this->file . '_size']) ? $GLOBALS[$this->file . '_size'] : ''),
-                      'tmp_name' => (isset($GLOBALS[$this->file]) ? $GLOBALS[$this->file] : ''));
       }
 
-      if ( !empty($file['tmp_name']) && ($file['tmp_name'] != 'none') && is_uploaded_file($file['tmp_name']) ) {
+      if ( isset($file['tmp_name']) && !empty($file['tmp_name']) && ($file['tmp_name'] != 'none') && is_uploaded_file($file['tmp_name']) ) {
         if (sizeof($this->extensions) > 0) {
           if (!in_array(strtolower(substr($file['name'], strrpos($file['name'], '.')+1)), $this->extensions)) {
             if ($this->message_location == 'direct') {

@@ -1,9 +1,17 @@
 function rowOverEffect(object) {
-  object.className = 'mouseOver';
+  if (object.className == 'deactivatedRow') {
+    object.className = 'mouseOverDeactivatedRow';
+  } else {
+    object.className = 'mouseOver';
+  }
 }
 
 function rowOutEffect(object) {
-  object.className = '';
+  if (object.className == 'mouseOverDeactivatedRow') {
+    object.className = 'deactivatedRow';
+  } else {
+    object.className = '';
+  }
 }
 
 function updateDatePullDownMenu(objForm, fieldName) {

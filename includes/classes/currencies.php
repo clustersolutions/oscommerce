@@ -121,6 +121,10 @@
       return false;
     }
 
+    function getData() {
+      return $this->currencies;
+    }
+
     function getCode($id = '') {
       if (is_numeric($id)) {
         foreach ($this->currencies as $key => $value) {
