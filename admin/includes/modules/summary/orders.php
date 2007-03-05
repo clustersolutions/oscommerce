@@ -5,16 +5,16 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Summary')) {
+  if ( !class_exists('osC_Summary') ) {
     include('includes/classes/summary.php');
   }
 
-  if (!defined('MODULE_SUMMARY_ORDERS_TITLE')) {
+  if ( !defined('MODULE_SUMMARY_ORDERS_TITLE') ) {
     $osC_Language->loadConstants('modules/summary/orders.php');
   }
 
@@ -26,7 +26,7 @@
       $this->_title = MODULE_SUMMARY_ORDERS_TITLE;
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'orders');
 
-      if ( osC_Access::hasAccess( 'orders' ) ) {
+      if ( osC_Access::hasAccess('orders') ) {
         $this->_setData();
       }
     }
@@ -54,19 +54,19 @@
       $Qorders->bindInt(':language_id', $osC_Language->getID());
       $Qorders->execute();
 
-      while ($Qorders->next()) {
+      while ( $Qorders->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=oEdit'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=save'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .
                         '      <td>' . $Qorders->value('orders_status_name') . '</td>' .
                         '    </tr>';
       }
 
-      $Qorders->freeResult();
-
       $this->_data .= '  </tbody>' .
                       '</table>';
+
+      $Qorders->freeResult();
     }
   }
 ?>

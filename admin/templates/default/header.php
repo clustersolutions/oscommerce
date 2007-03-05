@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -17,15 +17,17 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
-    <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', 'osCommerce, 3.0 Alpha 4')); ?></td>
-    <td width="150" align="right" class="smallText">
+    <td style="padding-left: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', 'osCommerce, 3.0 Alpha 4')); ?></td>
+    <td width="150" align="right" style="padding-right: 5px;">
+
 <?php
-  if ($request_type == 'SSL') {
+  if ( $request_type == 'SSL' ) {
     echo sprintf(BOX_CONNECTION_PROTECTED, (isset($_SERVER['SSL_CIPHER_ALGKEYSIZE']) ? $_SERVER['SSL_CIPHER_ALGKEYSIZE'] . '-bit' : '<i>' . BOX_CONNECTION_UNKNOWN . '</i>')) . osc_icon('locked.png', ICON_LOCKED);
   } else {
     echo BOX_CONNECTION_UNPROTECTED . ' ' . osc_icon('unlocked.png', ICON_UNLOCKED);
   }
 ?>
+
     </td>
   </tr>
 </table>
@@ -36,25 +38,25 @@
 <?php
   $access = array();
 
-  if (isset($_SESSION['admin'])) {
+  if ( isset($_SESSION['admin']) ) {
     $access = osC_Access::getLevels();
   }
 
   ksort($access);
 
-  foreach ($access as $group => $links) {
-    echo '    <li><span></span><span>' . osC_Access::getGroupTitle( $group ) . '</span>' .
+  foreach ( $access as $group => $links ) {
+    echo '    <li><span></span><span>' . osC_Access::getGroupTitle($group) . '</span>' .
          '      <ul>';
 
-    ksort( $links );
+    ksort($links);
 
-    foreach ($links as $link) {
+    foreach ( $links as $link ) {
       echo '        <li><span>' . osc_icon($link['icon']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a>';
 
       if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
         echo '          <ul>';
 
-        foreach ($link['subgroups'] as $subgroup) {
+        foreach ( $link['subgroups'] as $subgroup ) {
           echo '            <li><span>' . osc_icon($subgroup['icon']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module'] . '&' . $subgroup['identifier']) . '">' . $subgroup['title'] . '</a></li>';
         }
 
@@ -83,17 +85,17 @@
        '        <li><span>' . osc_icon('locale.png') . '</span><span>' . HEADER_TITLE_LANGUAGES . '</span>' .
        '          <ul>';
 
-  foreach ($osC_Language->getAll() as $l) {
+  foreach ( $osC_Language->getAll() as $l ) {
     echo '            <li><span>' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '">' . $l['name'] . '</a></li>';
   }
 
   echo '          </ul>' .
        '        </li>' .
-       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link(null, null, 'NONSSL', false, false, true) . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a></li>' .
+       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('../', null, 'NONSSL', false, false, true) . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a></li>' .
        '      </ul>' .
        '    </li>';
 
-  if (isset($_SESSION['admin'])) {
+  if ( isset($_SESSION['admin']) ) {
     echo '    <li></li>' .
          '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . HEADER_TITLE_LOGOFF . '</a></li>';
   }
@@ -107,7 +109,7 @@
 //--></script>
 
 <?php
-  if ($osC_MessageStack->size('header') > 0) {
+  if ( $osC_MessageStack->size('header') > 0 ) {
     echo $osC_MessageStack->output('header');
   }
 ?>

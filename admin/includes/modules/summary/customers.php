@@ -5,16 +5,16 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Summary')) {
+  if ( !class_exists('osC_Summary') ) {
     include('includes/classes/summary.php');
   }
 
-  if (!defined('MODULE_SUMMARY_CUSTOMERS_TITLE')) {
+  if ( !defined('MODULE_SUMMARY_CUSTOMERS_TITLE') ) {
     $osC_Language->loadConstants('modules/summary/customers.php');
   }
 
@@ -26,7 +26,7 @@
       $this->_title = MODULE_SUMMARY_CUSTOMERS_TITLE;
       $this->_title_link = osc_href_link(FILENAME_DEFAULT, 'customers');
 
-      if ( osC_Access::hasAccess( 'customers' ) ) {
+      if ( osC_Access::hasAccess('customers') ) {
         $this->_setData();
       }
     }
@@ -50,18 +50,18 @@
       $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomers->execute();
 
-      while ($Qcustomers->next()) {
+      while ( $Qcustomers->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'customers&cID=' . $Qcustomers->valueInt('customers_id') . '&action=cEdit'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'customers&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
                         '      <td>' . $Qcustomers->value('date_account_created') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';
       }
 
-      $Qcustomers->freeResult();
-
       $this->_data .= '  </tbody>' .
                       '</table>';
+
+      $Qcustomers->freeResult();
     }
   }
 ?>

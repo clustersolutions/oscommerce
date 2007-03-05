@@ -5,16 +5,16 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Summary')) {
+  if ( !class_exists('osC_Summary') ) {
     include('includes/classes/summary.php');
   }
 
-  if (!defined('MODULE_SUMMARY_PRODUCTS_TITLE')) {
+  if ( !defined('MODULE_SUMMARY_PRODUCTS_TITLE') ) {
     $osC_Language->loadConstants('modules/summary/products.php');
   }
 
@@ -26,7 +26,7 @@
       $this->_title = MODULE_SUMMARY_PRODUCTS_TITLE;
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'products');
 
-      if ( osC_Access::hasAccess( 'products' ) ) {
+      if ( osC_Access::hasAccess('products') ) {
         $this->_setData();
       }
     }
@@ -36,8 +36,8 @@
     function _setData() {
       global $osC_Database, $osC_Language, $osC_Currencies;
 
-      if (!isset($osC_Currencies)) {
-        if (!class_exists('osC_Currencies')) {
+      if ( !isset($osC_Currencies) ) {
+        if ( !class_exists('osC_Currencies') ) {
           include('../includes/classes/currencies.php');
         }
 
@@ -61,19 +61,19 @@
       $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
 
-      while ($Qproducts->next()) {
+      while ( $Qproducts->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $Qproducts->valueInt('products_id') . '&action=new'), osc_icon('products.png', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $Qproducts->valueInt('products_id') . '&action=save'), osc_icon('products.png', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
                         '      <td>' . $osC_Currencies->format($Qproducts->value('products_price')) . '</td>' .
                         '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';
       }
 
-      $Qproducts->freeResult();
-
       $this->_data .= '  </tbody>' .
                       '</table>';
+
+      $Qproducts->freeResult();
     }
   }
 ?>

@@ -5,16 +5,16 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!class_exists('osC_Summary')) {
+  if ( !class_exists('osC_Summary') ) {
     include('includes/classes/summary.php');
   }
 
-  if (!defined('MODULE_SUMMARY_REVIEWS_TITLE')) {
+  if ( !defined('MODULE_SUMMARY_REVIEWS_TITLE') ) {
     $osC_Language->loadConstants('modules/summary/reviews.php');
   }
 
@@ -26,7 +26,7 @@
       $this->_title = MODULE_SUMMARY_REVIEWS_TITLE;
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'reviews');
 
-      if ( osC_Access::hasAccess( 'reviews' ) ) {
+      if ( osC_Access::hasAccess('reviews') ) {
         $this->_setData();
       }
     }
@@ -53,19 +53,19 @@
       $Qreviews->bindTable(':table_languages', TABLE_LANGUAGES);
       $Qreviews->execute();
 
-      while ($Qreviews->next()) {
+      while ( $Qreviews->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'reviews&rID=' . $Qreviews->valueInt('reviews_id') . '&action=rEdit'), osc_icon('write.png', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'reviews&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('write.png', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
                         '      <td align="center">' . osc_image('../includes/languages/' . $Qreviews->value('languages_code') . '/images/icon.gif', $Qreviews->value('languages_name')) . '</td>' .
                         '      <td align="center">' . osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .
                         '      <td>' . $Qreviews->value('date_last_modified') . '</td>' .
                         '    </tr>';
       }
 
-      $Qreviews->freeResult();
-
       $this->_data .= '  </tbody>' .
                       '</table>';
+
+      $Qreviews->freeResult();
     }
   }
 ?>
