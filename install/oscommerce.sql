@@ -55,6 +55,21 @@ CREATE TABLE osc_administrators_access (
   PRIMARY KEY (administrators_id, module)
 );
 
+DROP TABLE IF EXISTS osc_administrators_log;
+CREATE TABLE osc_administrators_log (
+  id int NOT NULL,
+  module varchar(255) NOT NULL,
+  module_action varchar(32),
+  module_id int,
+  field_key varchar(255) NOT NULL,
+  old_value text,
+  new_value text,
+  action varchar(255) NOT NULL,
+  administrators_id int NOT NULL,
+  datestamp datetime NOT NULL,
+  KEY idx_administrators_log_id (id)
+);
+
 DROP TABLE IF EXISTS osc_banners;
 CREATE TABLE osc_banners (
   banners_id int NOT NULL auto_increment,

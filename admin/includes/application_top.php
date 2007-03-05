@@ -61,6 +61,9 @@
   require('../includes/classes/cache.php');
   $osC_Cache = new osC_Cache();
 
+// include the administrators log class
+  require('includes/classes/administrators_log.php');
+
 // include the database class
   require('../includes/classes/database.php');
 

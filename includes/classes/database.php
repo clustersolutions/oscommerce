@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,7 +22,10 @@
         $password,
         $debug = false,
         $number_of_queries = 0,
-        $time_of_queries = 0;
+        $time_of_queries = 0,
+        $nextID = null,
+        $logging_transaction = false,
+        $logging_transaction_action = false;
 
     function &connect($server, $username, $password, $type = DB_DATABASE_CLASS) {
       require('database/' . $type . '.php');
@@ -290,7 +293,12 @@
         $batch_size,
         $batch_to,
         $batch_from,
-        $batch_select_field;
+        $batch_select_field,
+        $logging = false,
+        $logging_module,
+        $logging_module_id,
+        $logging_fields = array(),
+        $logging_changed = array();
 
     function osC_Database_Result(&$db_class) {
       $this->db_class =& $db_class;
@@ -353,7 +361,11 @@
       return $this->valueMixed($column, 'decimal');
     }
 
-    function bindValueMixed($place_holder, $value, $type = 'string') {
+    function bindValueMixed($place_holder, $value, $type = 'string', $log = true) {
+      if ($log === true) {
+        $this->logging_fields[substr($place_holder, 1)] = $value;
+      }
+
       switch ($type) {
         case 'int':
           $value = intval($value);
@@ -401,7 +413,7 @@
     }
 
     function bindTable($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'raw');
+      $this->bindValueMixed($place_holder, $value, 'raw', false);
     }
 
     function next() {
@@ -478,7 +490,62 @@
       }
 
       if ($this->cache_read === false) {
+        if ($this->logging === true) {
+          $this->logging_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
+
+          if ($this->logging_action == 'update') {
+            $db = split(' ', $this->sql_query, 3);
+            $this->logging_database = $db[1];
+
+            $test = $this->db_class->simpleQuery('select ' . implode(', ', array_keys($this->logging_fields)) . ' from ' . $this->logging_database . substr($this->sql_query, osc_strrpos_string($this->sql_query, ' where ')));
+
+            while ($result = $this->db_class->next($test)) {
+              foreach ($this->logging_fields as $key => $value) {
+                if ($result[$key] != $value) {
+                  $this->logging_changed[] = array('key' => $this->logging_database . '.' . $key, 'old' => $result[$key], 'new' => $value);
+                }
+              }
+            }
+          } elseif ($this->logging_action == 'insert') {
+            $db = split(' ', $this->sql_query, 4);
+            $this->logging_database = $db[2];
+
+            foreach ($this->logging_fields as $key => $value) {
+              $this->logging_changed[] = array('key' => $this->logging_database . '.' . $key, 'old' => '', 'new' => $value);
+            }
+          } elseif ($this->logging_action == 'delete') {
+            $db = split(' ', $this->sql_query, 4);
+            $this->logging_database = $db[2];
+
+            $del = $this->db_class->simpleQuery('select * from ' . $this->logging_database . ' ' . $db[3]);
+            while ($result = $this->db_class->next($del)) {
+              foreach ($result as $key => $value) {
+                $this->logging_changed[] = array('key' => $this->logging_database . '.' . $key, 'old' => $value, 'new' => '');
+              }
+            }
+          }
+        }
+
         $this->query_handler = $this->db_class->simpleQuery($this->sql_query, $this->debug);
+
+        if ($this->logging === true) {
+          if ($this->db_class->logging_transaction_action === false) {
+            $this->db_class->logging_transaction_action = $this->logging_action;
+          }
+
+          if ($this->affectedRows($this->query_handler) > 0) {
+            if (!empty($this->logging_changed)) {
+              if ( ($this->logging_action == 'insert') && !is_numeric($this->logging_module_id) ) {
+                $this->logging_module_id = $this->db_class->nextID();
+                $this->setNextID($this->logging_module_id);
+              }
+
+              if ( class_exists('osC_AdministratorsLog') ) {
+                osC_AdministratorsLog::insert($this->logging_module, $this->db_class->logging_transaction_action, $this->logging_module_id, $this->logging_action, $this->logging_changed, $this->db_class->logging_transaction);
+              }
+            }
+          }
+        }
 
         if ($this->batch_query === true) {
           $this->getBatchSize();
@@ -511,6 +578,16 @@
     function setCache($key, $expire = 0) {
       $this->cache_key = $key;
       $this->cache_expire = $expire;
+    }
+
+    function setLogging($module, $id = null) {
+      $this->logging = true;
+      $this->logging_module = $module;
+      $this->logging_module_id = $id;
+    }
+
+    function setNextID($id) {
+      $this->db_class->nextID = $id;
     }
 
     function toArray() {

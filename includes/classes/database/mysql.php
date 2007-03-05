@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -183,7 +183,12 @@
     }
 
     function nextID() {
-      if ($id = @mysql_insert_id($this->link)) {
+      if ( is_numeric($this->nextID) ) {
+        $id = $this->nextID;
+        $this->nextID = null;
+
+        return $id;
+      } elseif ($id = @mysql_insert_id($this->link)) {
         return $id;
       } else {
         $this->setError(mysql_error($this->link), mysql_errno($this->link));
@@ -201,6 +206,8 @@
     }
 
     function startTransaction() {
+      $this->logging_transaction = true;
+
       if ($this->use_transactions === true) {
         return $this->simpleQuery('start transaction');
       }
@@ -209,6 +216,11 @@
     }
 
     function commitTransaction() {
+      if ($this->logging_transaction === true) {
+        $this->logging_transaction = false;
+        $this->logging_transaction_action = false;
+      }
+
       if ($this->use_transactions === true) {
         return $this->simpleQuery('commit');
       }
@@ -217,6 +229,11 @@
     }
 
     function rollbackTransaction() {
+      if ($this->logging_transaction === true) {
+        $this->logging_transaction = false;
+        $this->logging_transaction_action = false;
+      }
+
       if ($this->use_transactions === true) {
         return $this->simpleQuery('rollback');
       }

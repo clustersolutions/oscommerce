@@ -170,4 +170,24 @@
       return calc_sha1($source);
     }
   }
+
+  function osc_strrpos_string($haystack, $needle, $offset = 0) {
+    if ( !empty($haystack) && !empty($needle) && ( $offset <= strlen($haystack) ) ) {
+      $last_pos = $offset;
+      $found = false;
+
+      while ( ( $curr_pos = strpos($haystack, $needle, $last_pos) ) !== false ) {
+        $found = true;
+        $last_pos = $curr_pos + 1;
+      }
+
+      if ( $found === true ) {
+        return $last_pos - 1;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 ?>

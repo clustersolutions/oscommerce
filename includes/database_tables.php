@@ -5,14 +5,14 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-// define the database table names used in the project
   define('TABLE_ADMINISTRATORS', DB_TABLE_PREFIX . 'administrators');
   define('TABLE_ADMINISTRATORS_ACCESS', DB_TABLE_PREFIX . 'administrators_access');
+  define('TABLE_ADMINISTRATORS_LOG', DB_TABLE_PREFIX . 'administrators_log');
   define('TABLE_ADDRESS_BOOK', DB_TABLE_PREFIX . 'address_book');
   define('TABLE_BANNERS', DB_TABLE_PREFIX . 'banners');
   define('TABLE_BANNERS_HISTORY', DB_TABLE_PREFIX . 'banners_history');
