@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,8 +13,13 @@
 // start the timer for the page parse time log
   define('PAGE_PARSE_START_TIME', microtime());
 
+// set the level of error reporting to E_ALL except E_NOTICE
+  error_reporting(E_ALL ^ E_NOTICE);
+
 // set the local configuration parameters - mainly for developers
-  if (file_exists('includes/local/configure.php')) include('includes/local/configure.php');
+  if ( file_exists('includes/local/configure.php') ) {
+    include('includes/local/configure.php');
+  }
 
 // include server parameters
   require('includes/configure.php');

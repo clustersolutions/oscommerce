@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,13 +15,18 @@
 
   define('OSC_IN_ADMIN', true);
 
+// set the level of error reporting to E_ALL except E_NOTICE
+  error_reporting(E_ALL ^ E_NOTICE);
+
 // set the local configuration parameters - mainly for developers
-  if (file_exists('../includes/local/configure.php')) include('../includes/local/configure.php');
+  if ( file_exists('../includes/local/configure.php') ) {
+    include('../includes/local/configure.php');
+  }
 
 // include server parameters
   require('../includes/configure.php');
 
-// set the level of error reporting
+// set the level of error reporting to E_ALL
   error_reporting(E_ALL);
 
 // Define the project version
