@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,7 @@
   $Qstats->bindInt(':banners_id', $_GET['bID']);
   $Qstats->execute();
 
-  while ($Qstats->next()) {
+  while ( $Qstats->next() ) {
     $stats[] = array($Qstats->valueInt('year'), (($Qstats->valueInt('value') > 0) ? $Qstats->valueInt('value') : '0'), (($Qstats->valueInt('dvalue') > 0) ? $Qstats->valueInt('dvalue') : '0'));
 
     $views[] = $Qstats->valueInt('value');
@@ -32,7 +32,7 @@
   }
 
   $ochart = new chart(600,350, 5, '#eeeeee');
-  $ochart->setTitle(sprintf(TEXT_BANNERS_YEARLY_STATISTICS, $Qbanner->value('banners_title')), '#000000', 2);
+  $ochart->setTitle(sprintf(TEXT_BANNERS_YEARLY_STATISTICS, $osC_ObjectInfo->get('banners_title')), '#000000', 2);
   $ochart->setPlotArea(SOLID, '#444444', '#dddddd');
   $ochart->setFormat(0, ',', '.');
   $ochart->setXAxis('#000000', SOLID, 1, '');
@@ -41,5 +41,5 @@
   $ochart->setGrid('#bbbbbb', DASHED, '#bbbbbb', DOTTED);
   $ochart->addSeries($views, 'area', 'Series1', SOLID, '#000000', '#0000ff');
   $ochart->addSeries($clicks, 'area', 'Series1', SOLID, '#000000', '#ff0000');
-  $ochart->plot('images/graphs/banner_yearly-' . $_GET['bID'] . '.' . $image_extension);
+  $ochart->plot('images/graphs/banner_yearly-' . $_GET['bID'] . '.' . $osC_Template->image_extension);
 ?>

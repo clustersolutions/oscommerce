@@ -50,6 +50,7 @@ define('TEXT_BANNERS_BANNER_CLICKS', 'Banner Clicks');
 define('TEXT_INFO_INSERT_INTRO', 'Please enter the new banner with its related data');
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this banner?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following banners?');
 define('TEXT_INFO_DELETE_IMAGE', 'Delete banner image');
 
 define('TEXT_INFO_HEADING_NEW_BANNER', 'New Banner');

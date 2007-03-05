@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,8 @@
   $year = isset($_GET['year']) ? $_GET['year'] : date('Y');
 
   $stats = array();
-  for ($i=1; $i<13; $i++) {
+
+  for ( $i = 1; $i < 13; $i++ ) {
     $stats[] = array(strftime('%b', mktime(0, 0, 0, $i, 1, $year)), '0', '0');
   }
 
@@ -28,7 +29,7 @@
   $Qstats->bindInt(':year', $year);
   $Qstats->execute();
 
-  while ($Qstats->next()) {
+  while ( $Qstats->next() ) {
     $stats[($Qstats->valueInt('banner_month')-1)] = array(strftime('%b', mktime(0, 0, 0, $Qstats->valueInt('banner_month'), 1, $year)), (($Qstats->valueInt('value') > 0) ? $Qstats->valueInt('value') : '0'), (($Qstats->valueInt('dvalue') > 0) ? $Qstats->valueInt('dvalue') : '0'));
 
     $views[($Qstats->valueInt('banner_month')-1)] = $Qstats->valueInt('value');
@@ -36,20 +37,21 @@
   }
 
   $vLabels = array();
-  for ($i=1; $i<13; $i++) {
+
+  for ( $i = 1; $i < 13; $i++ ) {
     $vLabels[] = strftime('%b', mktime(0, 0, 0, $i, 1, $year));
 
-    if (!isset($views[$i-1])) {
+    if ( !isset($views[$i-1]) ) {
       $views[$i-1] = 0;
     }
 
-    if (!isset($clicks[$i-1])) {
+    if ( !isset($clicks[$i-1]) ) {
       $clicks[$i-1] = 0;
     }
   }
 
   $ochart = new chart(600,350, 5, '#eeeeee');
-  $ochart->setTitle(sprintf(TEXT_BANNERS_MONTHLY_STATISTICS, $Qbanner->value('banners_title'), $year), '#000000', 2);
+  $ochart->setTitle(sprintf(TEXT_BANNERS_MONTHLY_STATISTICS, $osC_ObjectInfo->get('banners_title'), $year), '#000000', 2);
   $ochart->setPlotArea(SOLID, '#444444', '#dddddd');
   $ochart->setFormat(0, ',', '.');
   $ochart->setXAxis('#000000', SOLID, 1, $year);
@@ -58,5 +60,5 @@
   $ochart->setGrid('#bbbbbb', DASHED, '#bbbbbb', DOTTED);
   $ochart->addSeries($views, 'area', 'Series1', SOLID, '#000000', '#0000ff');
   $ochart->addSeries($clicks, 'area', 'Series1', SOLID, '#000000', '#ff0000');
-  $ochart->plot('images/graphs/banner_monthly-' . $_GET['bID'] . '.' . $image_extension);
+  $ochart->plot('images/graphs/banner_monthly-' . $_GET['bID'] . '.' . $osC_Template->image_extension);
 ?>
