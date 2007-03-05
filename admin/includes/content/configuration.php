@@ -16,7 +16,7 @@
 
     var $_module = 'configuration',
         $_page_title,
-        $_page_contents = 'configuration.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
