@@ -5,10 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
+
+  require('includes/classes/image_groups.php');
 
   class osC_Content_Image_groups extends osC_Template {
 
@@ -16,131 +18,88 @@
 
     var $_module = 'image_groups',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'image_groups.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Image_groups() {
-      if (!isset($_GET['action'])) {
+      global $osC_MessageStack;
+
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
+      if ( !isset($_GET['page']) || ( isset($_GET['page']) && !is_numeric($_GET['page']) ) ) {
+        $_GET['page'] = 1;
+      }
+
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
           case 'save':
-            $this->_save();
-            break;
-
-          case 'deleteconfirm':
-            $this->_delete();
-            break;
-        }
-      }
-    }
-
-/* Private methods */
-
-    function _save() {
-      global $osC_Database, $osC_Language, $osC_MessageStack;
-
-      if (isset($_GET['gID']) && is_numeric($_GET['gID'])) {
-        $id = $_GET['gID'];
-      } else {
-        $Qgroup = $osC_Database->query('select max(id) as id from :table_products_images_groups');
-        $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-        $Qgroup->execute();
-
-        $id = ($Qgroup->valueInt('id') + 1);
-      }
-
-      $error = false;
-
-      $osC_Database->startTransaction();
-
-      foreach ($osC_Language->getAll() as $l) {
-        if (isset($_GET['gID']) && is_numeric($_GET['gID'])) {
-          $Qgroup = $osC_Database->query('update :table_products_images_groups set title = :title, code = :code, size_width = :size_width, size_height = :size_height, force_size = :force_size where id = :id and language_id = :language_id');
-        } else {
-          $Qgroup = $osC_Database->query('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
-        }
-        $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-        $Qgroup->bindInt(':id', $id);
-        $Qgroup->bindValue(':title', $_POST['title'][$l['id']]);
-        $Qgroup->bindValue(':code', $_POST['code']);
-        $Qgroup->bindInt(':size_width', $_POST['width']);
-        $Qgroup->bindInt(':size_height', $_POST['height']);
-        $Qgroup->bindInt(':force_size', (isset($_POST['force_size']) && ($_POST['force_size'] == '1')) ? 1 : 0);
-        $Qgroup->bindInt(':language_id', $l['id']);
-        $Qgroup->execute();
-
-        if ($osC_Database->isError()) {
-          $error = true;
-          break;
-        }
-      }
-
-      if ($error === false) {
-        if (isset($_POST['default']) && ($_POST['default'] == 'on') && (DEFAULT_IMAGE_GROUP_ID != $id)) {
-          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qupdate->bindInt(':configuration_value', $id);
-          $Qupdate->bindValue(':configuration_key', 'DEFAULT_IMAGE_GROUP_ID');
-          $Qupdate->execute();
-
-          if ($osC_Database->isError() === false) {
-            $clear_cache = ($Qupdate->affectedRows() ? true : false);
-          } else {
-            $error = true;
-          }
-        }
-      }
-
-      if ($error === false) {
-        $osC_Database->commitTransaction();
-
-        osC_Cache::clear('images_groups');
-
-        if (isset($_POST['default']) && ($_POST['default'] == 'on') && (DEFAULT_IMAGE_GROUP_ID != $id)) {
-          if ($clear_cache === true) {
-            osC_Cache::clear('configuration');
-          }
-        }
-
-        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-      } else {
-        $osC_Database->rollbackTransaction();
-
-        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&gID=' . $id));
-    }
-
-    function _delete() {
-      global $osC_Database, $osC_MessageStack;
-
-      if (isset($_GET['gID']) && is_numeric($_GET['gID'])) {
-        if (DEFAULT_IMAGE_GROUP_ID == $_GET['gID']) {
-          $osC_MessageStack->add_session($this->_module, TEXT_INFO_DELETE_PROHIBITED, 'warning');
-
-          osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&gID=' . $_GET['gID']));
-        } else {
-          $Qdel = $osC_Database->query('delete from :table_products_images_groups where id = :id');
-          $Qdel->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-          $Qdel->bindInt(':id', $_GET['gID']);
-          $Qdel->execute();
-
-          if ($osC_Database->isError() === false) {
-            if ($Qdel->affectedRows()) {
-              $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+            if ( isset($_GET['gID']) && is_numeric($_GET['gID']) ) {
+              $this->_page_contents = 'edit.php';
             } else {
-              $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              $this->_page_contents = 'new.php';
             }
-          } else {
-            $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-          }
 
-          osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('title' => $_POST['title'],
+                            'code' => $_POST['code'],
+                            'width' => $_POST['width'],
+                            'height' => $_POST['height'],
+                            'force_size' => isset($_POST['force_size']) && ( $_POST['force_size'] == 'on' ) ? true : false);
+
+              if ( osC_ImageGroups_Admin::save((isset($_GET['gID']) ? $_GET['gID'] : null), $data, ( isset($_POST['default']) && ( $_POST['default'] == 'on' ) ? true : false )) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page' . $_GET['page']));
+            }
+
+            break;
+
+          case 'delete':
+            $this->_page_contents = 'delete.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_ImageGroups_Admin::delete($_GET['gID']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
+            break;
+
+          case 'batchDelete':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_delete.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $error = false;
+
+                foreach ($_POST['batch'] as $id) {
+                  if ( !osC_ImageGroups_Admin::delete($id) ) {
+                    $error = true;
+                    break;
+                  }
+                }
+
+                if ( $error === false ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+              }
+            }
+
+            break;
         }
       }
     }
