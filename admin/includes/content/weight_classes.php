@@ -5,10 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
+
+  require('includes/classes/weight_classes.php');
 
   class osC_Content_Weight_classes extends osC_Template {
 
@@ -16,222 +18,86 @@
 
     var $_module = 'weight_classes',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'weight_classes.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Weight_classes() {
-      if (!isset($_GET['action'])) {
+      global $osC_MessageStack;
+
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
-      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+      if ( !isset($_GET['page']) || ( isset($_GET['page']) && !is_numeric($_GET['page']) ) ) {
         $_GET['page'] = 1;
       }
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
           case 'save':
-            $this->_save();
-            break;
-
-          case 'deleteconfirm':
-            $this->_delete();
-            break;
-        }
-      }
-    }
-
-/* Private methods */
-
-    function _save() {
-      global $osC_Database, $osC_Language, $osC_MessageStack;
-
-      if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
-        $weight_class_id = $_GET['wcID'];
-      } else {
-        $Qwc = $osC_Database->query('select max(weight_class_id) as weight_class_id from :table_weight_classes');
-        $Qwc->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-        $Qwc->execute();
-
-        $weight_class_id = ($Qwc->valueInt('weight_class_id') + 1);
-      }
-
-      $error = false;
-
-      $osC_Database->startTransaction();
-
-      foreach ($osC_Language->getAll() as $l) {
-        if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
-          $Qwc = $osC_Database->query('update :table_weight_classes set weight_class_key = :weight_class_key, weight_class_title = :weight_class_title where weight_class_id = :weight_class_id and language_id = :language_id');
-        } else {
-          $Qwc = $osC_Database->query('insert into :table_weight_classes (weight_class_id, language_id, weight_class_key, weight_class_title) values (:weight_class_id, :language_id, :weight_class_key, :weight_class_title)');
-        }
-        $Qwc->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-        $Qwc->bindInt(':weight_class_id', $weight_class_id);
-        $Qwc->bindInt(':language_id', $l['id']);
-        $Qwc->bindValue(':weight_class_key', $_POST['weight_class_key'][$l['id']]);
-        $Qwc->bindValue(':weight_class_title', $_POST['weight_class_title'][$l['id']]);
-        $Qwc->execute();
-
-        if ($osC_Database->isError()) {
-          $error = true;
-          break;
-        }
-      }
-
-      if ($error === false) {
-        if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
-          $Qrules = $osC_Database->query('select weight_class_to_id from :table_weight_classes_rules where weight_class_from_id = :weight_class_from_id and weight_class_to_id != :weight_class_to_id');
-          $Qrules->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-          $Qrules->bindInt(':weight_class_from_id', $weight_class_id);
-          $Qrules->bindInt(':weight_class_to_id', $weight_class_id);
-          $Qrules->execute();
-
-          while ($Qrules->next()) {
-            $Qrule = $osC_Database->query('update :table_weight_classes_rules set weight_class_rule = :weight_class_rule where weight_class_from_id = :weight_class_from_id and weight_class_to_id = :weight_class_to_id');
-            $Qrule->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-            $Qrule->bindValue(':weight_class_rule', $_POST['weight_class_rules'][$Qrules->valueInt('weight_class_to_id')]);
-            $Qrule->bindInt(':weight_class_from_id', $weight_class_id);
-            $Qrule->bindInt(':weight_class_to_id', $Qrules->valueInt('weight_class_to_id'));
-            $Qrule->execute();
-
-            if ($osC_Database->isError()) {
-              $error = true;
-              break;
-            }
-          }
-        } else {
-          $Qclasses = $osC_Database->query('select weight_class_id from :table_weight_classes where weight_class_id != :weight_class_id and language_id = :language_id');
-          $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-          $Qclasses->bindInt(':weight_class_id', $weight_class_id);
-          $Qclasses->bindInt(':language_id', $osC_Language->getID());
-          $Qclasses->execute();
-
-          while ($Qclasses->next()) {
-            $Qdefault = $osC_Database->query('insert into :table_weight_classes_rules (weight_class_from_id, weight_class_to_id, weight_class_rule) values (:weight_class_from_id, :weight_class_to_id, :weight_class_rule)');
-            $Qdefault->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-            $Qdefault->bindInt(':weight_class_from_id', $Qclasses->valueInt('weight_class_id'));
-            $Qdefault->bindInt(':weight_class_to_id', $weight_class_id);
-            $Qdefault->bindValue(':weight_class_rule', '1');
-            $Qdefault->execute();
-
-            if ($osC_Database->isError()) {
-              $error = true;
-              break;
+            if ( isset($_GET['wcID']) && is_numeric($_GET['wcID']) ) {
+              $this->_page_contents = 'edit.php';
+            } else {
+              $this->_page_contents = 'new.php';
             }
 
-            if ($error === false) {
-              $Qnew = $osC_Database->query('insert into :table_weight_classes_rules (weight_class_from_id, weight_class_to_id, weight_class_rule) values (:weight_class_from_id, :weight_class_to_id, :weight_class_rule)');
-              $Qnew->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-              $Qnew->bindInt(':weight_class_from_id', $weight_class_id);
-              $Qnew->bindInt(':weight_class_to_id', $Qclasses->valueInt('weight_class_id'));
-              $Qnew->bindValue(':weight_class_rule', $_POST['weight_class_rules'][$Qclasses->valueInt('weight_class_id')]);
-              $Qnew->execute();
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('name' => $_POST['name'],
+                            'key' => $_POST['key'],
+                            'rules' => $_POST['rules']);
 
-              if ($osC_Database->isError()) {
-                $error = true;
-                break;
+              if ( osC_WeightClasses_Admin::save((isset($_GET['wcID']) ? $_GET['wcID'] : null), $data, ( isset($_POST['default']) && ( $_POST['default'] == 'on' ) ? true : false )) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page' . $_GET['page']));
+            }
+
+            break;
+
+          case 'delete':
+            $this->_page_contents = 'delete.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_WeightClasses_Admin::delete($_GET['wcID']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
+            break;
+
+          case 'batchDelete':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_delete.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $error = false;
+
+                foreach ($_POST['batch'] as $id) {
+                  if ( !osC_WeightClasses_Admin::delete($id) ) {
+                    $error = true;
+                    break;
+                  }
+                }
+
+                if ( $error === false ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
               }
             }
-          }
-        }
-      }
 
-      if ($error === false) {
-        if (isset($_POST['default']) && ($_POST['default'] == 'on') && (SHIPPING_WEIGHT_UNIT != $weight_class_id)) {
-          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qupdate->bindInt(':configuration_value', $weight_class_id);
-          $Qupdate->bindValue(':configuration_key', 'SHIPPING_WEIGHT_UNIT');
-          $Qupdate->execute();
-
-          if ($osC_Database->isError() === false) {
-            $clear_cache = ($Qupdate->affectedRows() ? true : false);
-          } else {
-            $error = true;
-          }
-        }
-      }
-
-      if ($error === false) {
-        $osC_Database->commitTransaction();
-
-        if (isset($_POST['default']) && ($_POST['default'] == 'on') && (SHIPPING_WEIGHT_UNIT != $weight_class_id)) {
-          if ($clear_cache === true) {
-            osC_Cache::clear('configuration');
-          }
-        }
-
-        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-      } else {
-        $osC_Database->rollbackTransaction();
-
-        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&wcID=' . $weight_class_id));
-    }
-
-    function _delete() {
-      global $osC_Database, $osC_MessageStack;
-
-      if (isset($_GET['wcID']) && is_numeric($_GET['wcID'])) {
-        $Qcheck = $osC_Database->query('select count(*) as total from :table_products where products_weight_class = :products_weight_class');
-        $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qcheck->bindInt(':products_weight_class', $_GET['wcID']);
-        $Qcheck->execute();
-
-        if ( (SHIPPING_WEIGHT_UNIT == $_GET['wcID']) || ($Qcheck->valueInt('total') > 0) ) {
-          if (SHIPPING_WEIGHT_UNIT == $_GET['wcID']) {
-            $osC_MessageStack->add_session($this->_module, TEXT_INFO_DELETE_PROHIBITED, 'warning');
-          }
-
-          if ($Qcheck->valueInt('total') > 0) {
-            $osC_MessageStack->add_session($this->_module, sprintf(TEXT_INFO_DELETE_PROHIBITED_PRODUCTS, $Qcheck->valueInt('total')), 'warning');
-          }
-
-          osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&wcID=' . $_GET['wcID']));
-        } else {
-          $error = false;
-
-          $osC_Database->startTransaction();
-
-          $Qrules = $osC_Database->query('delete from :table_weight_classes_rules where weight_class_from_id = :weight_class_from_id or weight_class_to_id = :weight_class_to_id');
-          $Qrules->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-          $Qrules->bindInt(':weight_class_from_id', $_GET['wcID']);
-          $Qrules->bindInt(':weight_class_to_id', $_GET['wcID']);
-          $Qrules->execute();
-
-          if ($osC_Database->isError()) {
-            $error = true;
-          }
-
-          if ($error === false) {
-            $Qclasses = $osC_Database->query('delete from :table_weight_classes where weight_class_id = :weight_class_id');
-            $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-            $Qclasses->bindInt(':weight_class_id', $_GET['wcID']);
-            $Qclasses->execute();
-
-            if ($osC_Database->isError()) {
-              $error = true;
-            }
-          }
-
-          if ($error === false) {
-            $osC_Database->commitTransaction();
-
-            osC_Cache::clear('weight-classes');
-            osC_Cache::clear('weight-rules');
-
-            $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-          } else {
-            $osC_Database->rollbackTransaction();
-
-            $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-          }
-
-          osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            break;
         }
       }
     }

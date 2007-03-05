@@ -19,6 +19,7 @@ define('TABLE_HEADING_ACTION', 'Action');
 define('TEXT_INFO_INSERT_INTRO', 'Please enter the new weight class with its related data');
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this weight class?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following weight classes?');
 
 define('TEXT_INFO_WEIGHT_CLASS_TITLE', 'Weight Class Title / Unit:');
 define('TEXT_INFO_CLASS_DESCRIPTION', 'Title:');
