@@ -500,5 +500,27 @@
 
       return false;
     }
+
+    function setDateAvailable($id, $data) {
+      global $osC_Database;
+
+      $Qproduct = $osC_Database->query('update :table_products set products_date_available = :products_date_available, products_last_modified = now() where products_id = :products_id');
+      $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+
+      if ( date('Y-m-d') < $data['date_available'] ) {
+        $Qproduct->bindValue(':products_date_available', $data['date_available']);
+      } else {
+        $Qproduct->bindRaw(':products_date_available', 'null');
+      }
+
+      $Qproduct->bindInt(':products_id', $id);
+      $Qproduct->execute();
+
+      if ( !$osC_Database->isError() ) {
+        return true;
+      }
+
+      return false;
+    }
   }
 ?>
