@@ -39,7 +39,7 @@
         }
 
         $this->_content .= '</table>' .
-                           '<p style="text-align: right">' . $osC_Language->get('box_shopping_cart_subtotal') . ' ' . $osC_Currencies->formatClean($osC_ShoppingCart->getSubTotal($osC_Currencies->getCode())) . '</p>';
+                           '<p style="text-align: right">' . $osC_Language->get('box_shopping_cart_subtotal') . ' ' . $osC_Currencies->format($osC_ShoppingCart->getSubTotal()) . '</p>';
       } else {
         $this->_content = $osC_Language->get('box_shopping_cart_empty');
       }
