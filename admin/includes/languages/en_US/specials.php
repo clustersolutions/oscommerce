@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,8 +14,12 @@ define('HEADING_TITLE', 'Specials');
 
 define('TABLE_HEADING_PRODUCTS', 'Products');
 define('TABLE_HEADING_PRODUCTS_PRICE', 'Products Price');
-define('TABLE_HEADING_STATUS', 'Status');
 define('TABLE_HEADING_ACTION', 'Action');
+
+define('TEXT_HEADING_NEW_SPECIAL', 'New Product On Special');
+
+define('TEXT_NEW_INTRO', 'Please fill out the following information for the new product on special');
+define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
 
 define('TEXT_SPECIALS_PRODUCT', 'Product:');
 define('TEXT_SPECIALS_SPECIAL_PRICE_NET', 'Special Price (Net):');
@@ -35,6 +39,7 @@ define('TEXT_INFO_STATUS_CHANGE', 'Status Change:');
 
 define('TEXT_INFO_HEADING_DELETE_SPECIALS', 'Delete Special');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete the special products price?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete these products on special?');
 
 define('ERROR_SPECIALS_PRICE', 'Specials price cannot be negative or greater than original price');
 define('ERROR_SPECIALS_DATE', 'The expiry date is before the start date');
