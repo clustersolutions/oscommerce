@@ -43,7 +43,7 @@ CREATE TABLE osc_address_book (
 DROP TABLE IF EXISTS osc_administrators;
 CREATE TABLE osc_administrators (
   id int NOT NULL auto_increment,
-  user_name varchar(32) NOT NULL,
+  user_name varchar(32) CHARACTER SET binary NOT NULL,
   user_password varchar(40) NOT NULL,
   PRIMARY KEY (id)
 );
