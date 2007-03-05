@@ -31,5 +31,5 @@ define('TEXT_SHOPPING_CART_PRODUCTS', 'Products In Shopping Cart:');
 define('TEXT_SHOPPING_CART_TOTAL', 'Shopping Cart Total:');
 
 define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this customers session?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete thes following customer sessions?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following customer sessions?');
 ?>
