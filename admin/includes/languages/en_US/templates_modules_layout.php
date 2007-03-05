@@ -35,6 +35,7 @@ define('TEXT_PLEASE_SELECT', '--Please Select--');
 define('TEXT_INFO_INSERT_INTRO', 'Please enter the new box layout with its related data');
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to remove this box layout from the template?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following box layouts from the template?');
 
 define('INFO_BOX_REMOVETEXT_INFO_DELETE_PROHIBITED', 'Warning: The default template can not be removed. Please set another template as the default, and try again.');
 ?>
