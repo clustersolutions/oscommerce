@@ -26,6 +26,8 @@ define('TEXT_INFO_EDIT_ZONE_INTRO', 'Please make any necessary changes');
 
 define('TEXT_INFO_HEADING_DELETE_ZONE', 'Delete Zone');
 define('TEXT_INFO_DELETE_ZONE_INTRO', 'Are you sure you want to delete this zone?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following zone groups?');
+define('TEXT_DELETE_ENTRIES_BATCH_INTRO', 'Are you sure you want to delete the following zone group entries?');
 
 define('TEXT_INFO_HEADING_NEW_SUB_ZONE', 'New Sub Zone');
 define('TEXT_INFO_NEW_SUB_ZONE_INTRO', 'Please enter the new sub zone information');
@@ -48,5 +50,6 @@ define('PLEASE_SELECT', 'All Zones');
 define('TEXT_ALL_COUNTRIES', 'All Countries');
 
 define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: This Tax Zone cannot be deleted as it is currently assigned to one or more tax rates.');
+define('TEXT_INFO_BATCH_DELETE_PROHIBITED_TAX_ZONES', 'Warning: The following zone groups cannot be deleted as they are currently assigned to tax zones.');
 define('TEXT_INFO_DELETE_ZONE_WARNING', 'Warning: This Tax Zone has %s zone(s) assigned which would also be deleted.');
 ?>
