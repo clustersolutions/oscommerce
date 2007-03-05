@@ -55,5 +55,145 @@
 
       return $this->tax_rates[$class_id][$country_id][$zone_id]['rate'];
     }
+
+    function getData($id, $key = null) {
+      global $osC_Database;
+
+      $Qclasses = $osC_Database->query('select * from :table_tax_class where tax_class_id = :tax_class_id');
+      $Qclasses->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+      $Qclasses->bindInt(':tax_class_id', $id);
+      $Qclasses->execute();
+
+      $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
+      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrates->bindInt(':tax_class_id', $id);
+      $Qrates->execute();
+
+      $data = array_merge($Qclasses->toArray(), $Qrates->toArray());
+
+      $Qrates->freeResult();
+      $Qclasses->freeResult();
+
+      if ( empty($key) ) {
+        return $data;
+      } else {
+        return $data[$key];
+      }
+    }
+
+    function getEntryData($id) {
+      global $osC_Database;
+
+      $Qrates = $osC_Database->query('select r.*, tc.tax_class_title, z.geo_zone_id, z.geo_zone_name from :table_tax_rates r, :table_tax_class tc, :table_geo_zones z where r.tax_rates_id = :tax_rates_id and r.tax_class_id = tc.tax_class_id and r.tax_zone_id = z.geo_zone_id');
+      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrates->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+      $Qrates->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+      $Qrates->bindInt(':tax_rates_id', $id);
+      $Qrates->execute();
+
+      $data = $Qrates->toArray();
+
+      $Qrates->freeResult();
+
+      return $data;
+    }
+
+    function save($id = null, $data) {
+      global $osC_Database;
+
+      if ( is_numeric($id) ) {
+        $Qclass = $osC_Database->query('update :table_tax_class set tax_class_title = :tax_class_title, tax_class_description = :tax_class_description, last_modified = now() where tax_class_id = :tax_class_id');
+        $Qclass->bindInt(':tax_class_id', $id);
+      } else {
+        $Qclass = $osC_Database->query('insert into :table_tax_class (tax_class_title, tax_class_description, date_added) values (:tax_class_title, :tax_class_description, now())');
+      }
+
+      $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+      $Qclass->bindValue(':tax_class_title', $data['title']);
+      $Qclass->bindValue(':tax_class_description', $data['description']);
+      $Qclass->execute();
+
+      if ( !$osC_Database->isError() ) {
+        return true;
+      }
+
+      return false;
+    }
+
+    function delete($id) {
+      global $osC_Database;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      $Qrates = $osC_Database->query('delete from :table_tax_rates where tax_class_id = :tax_class_id');
+      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrates->bindInt(':tax_class_id', $id);
+      $Qrates->execute();
+
+      if ( !$osC_Database->isError() ) {
+        $Qclass = $osC_Database->query('delete from :table_tax_class where tax_class_id = :tax_class_id');
+        $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+        $Qclass->bindInt(':tax_class_id', $id);
+        $Qclass->execute();
+
+        if ( $osC_Database->isError() ) {
+          $error = true;
+        }
+      } else {
+        $error = true;
+      }
+
+      if ( $error === false ) {
+        $osC_Database->commitTransaction();
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
+
+      return false;
+    }
+
+    function saveEntry($id = null, $data) {
+      global $osC_Database;
+
+      if ( is_numeric($id) ) {
+        $Qrate = $osC_Database->query('update :table_tax_rates set tax_zone_id = :tax_zone_id, tax_priority = :tax_priority, tax_rate = :tax_rate, tax_description = :tax_description, last_modified = now() where tax_rates_id = :tax_rates_id');
+        $Qrate->bindInt(':tax_rates_id', $id);
+      } else {
+        $Qrate = $osC_Database->query('insert into :table_tax_rates (tax_zone_id, tax_class_id, tax_priority, tax_rate, tax_description, date_added) values (:tax_zone_id, :tax_class_id, :tax_priority, :tax_rate, :tax_description, now())');
+        $Qrate->bindInt(':tax_class_id', $data['tax_class_id']);
+      }
+
+      $Qrate->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrate->bindInt(':tax_zone_id', $data['zone_id']);
+      $Qrate->bindInt(':tax_priority', $data['priority']);
+      $Qrate->bindValue(':tax_rate', $data['rate']);
+      $Qrate->bindValue(':tax_description', $data['description']);
+      $Qrate->execute();
+
+      if ( !$osC_Database->isError() ) {
+        return true;
+      }
+
+      return false;
+    }
+
+    function deleteEntry($id) {
+      global $osC_Database;
+
+      $Qrate = $osC_Database->query('delete from :table_tax_rates where tax_rates_id = :tax_rates_id');
+      $Qrate->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrate->bindInt(':tax_rates_id', $id);
+      $Qrate->execute();
+
+      if ( !$osC_Database->isError() ) {
+        return true;
+      }
+
+      return false;
+    }
   }
 ?>
