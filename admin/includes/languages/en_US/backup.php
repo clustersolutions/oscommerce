@@ -33,6 +33,7 @@ define('TEXT_INFO_USE_NO_COMPRESSION', 'No Compression (Pure SQL)');
 define('TEXT_INFO_DOWNLOAD_ONLY', 'Download only (do not store server side)');
 define('TEXT_INFO_BEST_THROUGH_HTTPS', 'Best through a HTTPS connection');
 define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this backup?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following backup dumps?');
 define('TEXT_NO_EXTENSION', 'None');
 define('TEXT_BACKUP_DIRECTORY', 'Backup Directory:');
 define('TEXT_LAST_RESTORATION', 'Last Restoration:');
