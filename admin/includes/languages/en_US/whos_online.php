@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,4 +29,7 @@ define('TEXT_LAST_CLICK', 'Last Click:');
 define('TEXT_LAST_PAGE_URL', 'Last Page URL:');
 define('TEXT_SHOPPING_CART_PRODUCTS', 'Products In Shopping Cart:');
 define('TEXT_SHOPPING_CART_TOTAL', 'Shopping Cart Total:');
+
+define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this customers session?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete thes following customer sessions?');
 ?>
