@@ -5,23 +5,17 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2006 osCommerce
 
   Released under the GNU General Public License
 */
 
-  if (!function_exists('mysql_fetch_assoc')) {
-    function mysql_fetch_assoc($resource) {
-      return mysql_fetch_array($resource, MYSQL_ASSOC);
-    }
-  }
-
   class osC_Database_mysql extends osC_Database {
-    var $sql_parse_string = 'addslashes',
-        $sql_parse_string_with_connection_handler = false,
-        $use_transactions = false,
+    var $use_transactions = false,
         $use_fulltext = false,
-        $use_fulltext_boolean = false;
+        $use_fulltext_boolean = false,
+        $sql_parse_string = 'mysql_escape_string',
+        $sql_parse_string_with_connection_handler = false;
 
     function osC_Database_mysql($server, $username, $password) {
       $this->server = $server;
@@ -31,8 +25,6 @@
       if (function_exists('mysql_real_escape_string')) {
         $this->sql_parse_string = 'mysql_real_escape_string';
         $this->sql_parse_string_with_connection_handler = true;
-      } elseif (function_exists('mysql_escape_string')) {
-        $this->sql_parse_string = 'mysql_escape_string';
       }
 
       if ($this->is_connected === false) {
@@ -81,6 +73,14 @@
         }
       } else {
         return false;
+      }
+    }
+
+    function parseString($value) {
+      if ($this->sql_parse_string_with_connection_handler === true) {
+        return call_user_func_array($this->sql_parse_string, array($value, $this->link));
+      } else {
+        return call_user_func_array($this->sql_parse_string, array($value));
       }
     }
 

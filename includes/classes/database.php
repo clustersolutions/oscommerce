@@ -354,8 +354,6 @@
     }
 
     function bindValueMixed($place_holder, $value, $type = 'string') {
-      static $sql_parse_string;
-
       switch ($type) {
         case 'int':
           $value = intval($value);
@@ -367,15 +365,7 @@
           break;
         case 'string':
         default:
-          $sql_parse_string = $this->db_class->sql_parse_string;
-
-          $value = trim($value);
-
-          if ($this->db_class->sql_parse_string_with_connection_handler === true) {
-            $value = "'" . $sql_parse_string($value, $this->db_class->link) . "'";
-          } else {
-            $value = "'" . $sql_parse_string($value) . "'";
-          }
+          $value = "'" . $this->db_class->parseString(trim($value)) . "'";
       }
 
       $this->bindReplace($place_holder, $value);
