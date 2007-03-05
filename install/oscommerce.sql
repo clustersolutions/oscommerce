@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2006 osCommerce
+# Copyright (c) 2007 osCommerce
 #
 # Released under the GNU General Public License
 #
@@ -172,15 +172,15 @@ CREATE TABLE osc_currencies (
 DROP TABLE IF EXISTS osc_customers;
 CREATE TABLE osc_customers (
   customers_id int NOT NULL auto_increment,
-  customers_gender char(1) NOT NULL,
+  customers_gender char(1),
   customers_firstname varchar(32) NOT NULL,
   customers_lastname varchar(32) NOT NULL,
-  customers_dob datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+  customers_dob datetime,
   customers_email_address varchar(96) NOT NULL,
-  customers_default_address_id int NOT NULL,
-  customers_telephone varchar(32) NOT NULL,
+  customers_default_address_id int,
+  customers_telephone varchar(32),
   customers_fax varchar(32),
-  customers_password varchar(40) NOT NULL,
+  customers_password varchar(40),
   customers_newsletter char(1),
   customers_status int(1) DEFAULT '0',
   customers_ip_address varchar(15),
