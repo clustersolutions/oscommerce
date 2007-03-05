@@ -16,7 +16,7 @@
 
     var $_module = 'login',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'login.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
