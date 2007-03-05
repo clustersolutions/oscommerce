@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -134,7 +134,6 @@
     $http_work_directory .= '/';
   }
 
-  include('../admin/includes/classes/directory_listing.php');
   $osC_DirectoryListing = new osC_DirectoryListing($http_work_directory);
   $osC_DirectoryListing->setIncludeDirectories(false);
   $osC_DirectoryListing->setCheckExtension('cache');

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,6 +22,7 @@
     function osC_LanguageInstall() {
       $osC_DirectoryListing = new osC_DirectoryListing('../includes/languages');
       $osC_DirectoryListing->setIncludeDirectories(false);
+      $osC_DirectoryListing->setCheckExtension('xml');
 
       foreach ($osC_DirectoryListing->getFiles() as $file) {
         $osC_XML = new osC_XML(file_get_contents('../includes/languages/' . $file['name']));

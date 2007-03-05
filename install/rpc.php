@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -71,9 +71,6 @@
         }
 
         if ($osC_Database->isError() === false) {
-          include('../includes/classes/xml.php');
-          include('../admin/includes/classes/directory_listing.php');
-
           foreach ($osC_Language->extractDefinitions('en_US.xml') as $def) {
             $Qdef = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
             $Qdef->bindTable(':table_languages_definitions', $db['DB_TABLE_PREFIX'] . 'languages_definitions');
