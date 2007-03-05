@@ -115,7 +115,8 @@ function WebFXTabPane( el, bUseCookie ) {
 WebFXTabPane.prototype.classNameTag = "dynamic-tab-pane-control";
 
 WebFXTabPane.prototype.setSelectedIndex = function ( n ) {
-	if (this.selectedIndex != n) {
+//HPDL	if (this.selectedIndex != n ) {
+	if (this.selectedIndex != n && this.pages[ n ] != null) {
 		if (this.selectedIndex != null && this.pages[ this.selectedIndex ] != null )
 			this.pages[ this.selectedIndex ].hide();
 		this.selectedIndex = n;
