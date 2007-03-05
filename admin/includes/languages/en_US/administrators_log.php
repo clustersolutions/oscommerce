@@ -23,6 +23,8 @@ define('TABLE_HEADING_FIELD', 'Field');
 define('TABLE_HEADING_OLD_VALUE', 'Old');
 define('TABLE_HEADING_NEW_VALUE', 'New Value');
 
+define('TEXT_MODULES', 'Modules:');
+define('TEXT_USERS', 'Users:');
 define('TEXT_DATE', 'Date:');
 
 define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this administrator log entry?');

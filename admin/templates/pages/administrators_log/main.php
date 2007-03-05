@@ -43,10 +43,10 @@
 <div align="right">
   <form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?>
 
-  Modules: <?php echo osc_draw_pull_down_menu('fm', $modules_array); ?>
-  Users: <?php echo osc_draw_pull_down_menu('fu', $admins_array); ?>
+  <?php echo TEXT_MODULES . ' ' . osc_draw_pull_down_menu('fm', $modules_array); ?>
+  <?php echo TEXT_USERS . ' ' . osc_draw_pull_down_menu('fu', $admins_array); ?>
 
-  <input type="submit" value="GO">
+  <input type="submit" value="GO" class="operationButton" />
 
   </form>
 </div>
