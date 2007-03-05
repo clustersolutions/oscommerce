@@ -40,7 +40,7 @@
       }
 
       if ( $error === false ) {
-        $image_location = (!empty($data['image_local']) ? $data['image_local'] : $data['image_target'] . $image->filename);
+        $image_location = (!empty($data['image_local']) ? $data['image_local'] : (isset($image) ? $data['image_target'] . $image->filename : null));
 
         if ( is_numeric($id) ) {
           $Qbanner = $osC_Database->query('update :table_banners set banners_title = :banners_title, banners_url = :banners_url, banners_image = :banners_image, banners_group = :banners_group, banners_html_text = :banners_html_text, expires_date = :expires_date, expires_impressions = :expires_impressions, date_scheduled = :date_scheduled, status = :status where banners_id = :banners_id');

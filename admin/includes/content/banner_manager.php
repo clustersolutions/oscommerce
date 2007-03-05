@@ -71,7 +71,7 @@
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               $data = array('title' => $_POST['title'],
                             'url' => $_POST['url'],
-                            'group' => $_POST['group'],
+                            'group' => (isset($_POST['group']) ? $_POST['group'] : null),
                             'group_new' => $_POST['group_new'],
                             'image' => (isset($_FILES['image']) ? $_FILES['image'] : null),
                             'image_local' => $_POST['image_local'],
@@ -79,6 +79,7 @@
                             'html_text' => $_POST['html_text'],
                             'date_scheduled' => $_POST['date_scheduled'],
                             'date_expires' => $_POST['date_expires'],
+                            'expires_impressions' => $_POST['expires_impressions'],
                             'status' => (isset($_POST['status']) && ($_POST['status'] == 'on') ? true : false));
 
               if ( osC_BannerManager_Admin::save((isset($_GET['bID']) && is_numeric($_GET['bID']) ? $_GET['bID'] : null), $data) ) {

@@ -44,7 +44,7 @@
             $this->_page_contents = 'backup.php';
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              if ( osC_Backup_Admin::backup($_POST['compression'], ($_POST['download_only'] == 'yes' ? true : false)) ) {
+              if ( osC_Backup_Admin::backup($_POST['compression'], (isset($_POST['download_only']) && ($_POST['download_only'] == 'yes') ? true : false)) ) {
                 $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
               } else {
                 $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
