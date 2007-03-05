@@ -5,10 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
+
+  require('includes/classes/file_manager.php');
 
   define('OSC_ADMIN_FILE_MANAGER_ROOT_PATH', realpath('../'));
 
@@ -18,189 +20,126 @@
 
     var $_module = 'file_manager',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'file_manager.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_File_manager() {
-      global $current_path, $goto_array;
+      global $osC_MessageStack;
 
-      if (isset($_SESSION['fm_directory'])) {
-        $current_path = $_SESSION['fm_directory'];
-      } else {
-        $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
-        $_SESSION['fm_directory'] = $current_path;
+      if ( !isset($_SESSION['fm_directory']) ) {
+        $_SESSION['fm_directory'] = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
       }
 
-      if (isset($_GET['directory'])) {
-        $current_path .= '/' . $_GET['directory'];
-        $_SESSION['fm_directory'] = $current_path;
-      } elseif (isset($_GET['goto'])) {
-        $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH . '/' . urldecode($_GET['goto']);
-        $_SESSION['fm_directory'] = $current_path;
+      if ( isset($_GET['directory']) ) {
+        $_SESSION['fm_directory'] .= '/' . $_GET['directory'];
+      } elseif ( isset($_GET['goto']) ) {
+        $_SESSION['fm_directory'] = OSC_ADMIN_FILE_MANAGER_ROOT_PATH . '/' . urldecode($_GET['goto']);
       }
 
-      $current_path = realpath($current_path);
+      $_SESSION['fm_directory'] = realpath($_SESSION['fm_directory']);
 
-      if ( (substr($current_path, 0, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)) != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) || (is_dir($current_path) === false) ) {
-        $current_path = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
-        $_SESSION['fm_directory'] = $current_path;
+      if ( ( substr($_SESSION['fm_directory'], 0, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)) != OSC_ADMIN_FILE_MANAGER_ROOT_PATH ) || !is_dir($_SESSION['fm_directory']) ) {
+        $_SESSION['fm_directory'] = OSC_ADMIN_FILE_MANAGER_ROOT_PATH;
       }
 
-      if (!isset($_GET['action'])) {
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
-      $goto_array = array(array('id' => '', 'text' => '--TOP--'));
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
+          case 'saveDirectory':
+            $this->_page_contents = 'directory_new.php';
 
-      if ($current_path != OSC_ADMIN_FILE_MANAGER_ROOT_PATH) {
-        $path_array = explode('/', substr($current_path, strlen(OSC_ADMIN_FILE_MANAGER_ROOT_PATH)+1));
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_FileManager_Admin::createDirectory($_POST['directory_name'], $_SESSION['fm_directory']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
 
-        foreach ($path_array as $value) {
-          if (sizeof($goto_array) < 2) {
-            $goto_array[] = array('id' => $value, 'text' => $value);
-          } else {
-            $parent = end($goto_array);
-            $goto_array[] = array('id' => $parent['id'] . '/' . $value, 'text' => $parent['id'] . '/' . $value);
-          }
-        }
-      }
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
-          case 'reset':
-            $this->_reset();
-            break;
-
-          case 'deleteconfirm':
-            $this->_delete();
-            break;
-
-          case 'new_directory':
-            $this->_newDirectory();
             break;
 
           case 'save':
-            $this->_save();
+            if ( isset($_GET['entry']) && !empty($_GET['entry']) ) {
+              $this->_page_contents = 'file_edit.php';
+            } else {
+              $this->_page_contents = 'file_new.php';
+            }
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_FileManager_Admin::saveFile($_POST['filename'], $_POST['contents'], $_SESSION['fm_directory']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
+
             break;
 
-          case 'processuploads':
-            $this->_processUploads();
+          case 'upload':
+            $this->_page_contents = 'upload.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $error = false;
+
+              for ( $i = 0; $i < 10; $i++ ) {
+                if ( is_uploaded_file($_FILES['file_' . $i]['tmp_name']) ) {
+                  if ( !osC_FileManager_Admin::storeFileUpload('file_' . $i, $_SESSION['fm_directory']) ) {
+                    $error = true;
+                    break;
+                  }
+                }
+              }
+
+              if ( $error === false ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
+
             break;
+
+          case 'delete':
+            $this->_page_contents = 'delete.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_FileManager_Admin::delete($_GET['entry'], $_SESSION['fm_directory']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
+
+            break;
+
 
           case 'download':
-            $this->_download();
-            break;
+            $filename = basename($_GET['entry']);
 
-          case 'fmEdit':
-            $this->_page_contents = 'file_manager_edit.php';
-            break;
-        }
-      }
-    }
+            if ( file_exists($_SESSION['fm_directory'] . '/' . $filename) ) {
+              header('Content-type: application/x-octet-stream');
+              header('Content-disposition: attachment; filename=' . urldecode($filename));
 
-/* Private methods */
+              readfile($_SESSION['fm_directory'] . '/' . $filename);
 
-    function _reset() {
-      unset($_SESSION['fm_directory']);
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-    }
-
-    function _delete() {
-      global $osC_MessageStack, $current_path;
-
-      if (isset($_GET['entry']) && !empty($_GET['entry'])) {
-        $target = $current_path . '/' . basename($_GET['entry']);
-
-        if (is_writeable($target)) {
-          osc_remove($target);
-        } else {
-          if (is_file($target)) {
-            $osC_MessageStack->add_session($this->_module, sprintf(ERROR_FILE_NOT_WRITEABLE, $target), 'error');
-          } else {
-            $osC_MessageStack->add_session($this->_module, sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $target), 'error');
-          }
-        }
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, 'file_manager'));
-    }
-
-    function _newDirectory() {
-      global $osC_MessageStack, $current_path;
-
-      if (isset($_POST['directory_name']) && !empty($_POST['directory_name'])) {
-        if (is_writeable($current_path)) {
-          $new_directory = $current_path . '/' . basename($_POST['directory_name']);
-
-          if (file_exists($new_directory) === false) {
-            if (mkdir($new_directory, 0777)) {
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module, '&entry=' . urlencode(basename($_POST['directory_name']))));
+              exit;
             }
-          } else {
-            $osC_MessageStack->add($this->_module, sprintf(ERROR_DIRECTORY_EXISTS, $new_directory), 'error');
-          }
-        } else {
-          $osC_MessageStack->add_session($this->_module, sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path), 'error');
-        }
-      }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-    }
+            $osC_MessageStack->add($this->_module, ERROR_DOWNLOAD_LINK_NOT_ACCEPTABLE, 'error');
 
-    function _save() {
-      global $current_path;
-
-      if ( (isset($_GET['entry']) && !empty($_GET['entry'])) || (isset($_POST['filename']) && !empty($_POST['filename'])) ) {
-        if (isset($_GET['entry']) && !empty($_GET['entry'])) {
-          $filename = basename($_GET['entry']);
-        } elseif (isset($_POST['filename']) && !empty($_POST['filename'])) {
-          $filename = basename($_POST['filename']);
-        }
-
-        if ($fp = fopen($current_path . '/' . $filename, 'w+')) {
-          fputs($fp, $_POST['contents']);
-          fclose($fp);
-        }
-
-        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&entry=' . $filename));
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-    }
-
-    function _processUploads() {
-      global $osC_MessageStack, $current_path;
-
-      if (is_writeable($current_path)) {
-        for ($i=0; $i<10; $i++) {
-          $file = new upload('file_' . $i, $current_path);
-
-          if ($file->exists()) {
-            $file->parse();
-            $file->save();
-          }
-        }
-      } else {
-        $osC_MessageStack->add_session($this->_module, sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $current_path), 'error');
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
-    }
-
-    function _download() {
-      global $current_path;
-
-      if (isset($_GET['entry']) && !empty($_GET['entry'])) {
-        $target = $current_path . '/' . basename($_GET['entry']);
-
-        if (file_exists($target)) {
-          header('Content-type: application/x-octet-stream');
-          header('Content-disposition: attachment; filename=' . urldecode(basename($_GET['entry'])));
-
-          readfile($target);
-          exit;
+            break;
         }
       }
     }
