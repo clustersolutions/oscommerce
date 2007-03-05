@@ -23,6 +23,7 @@ define('TEXT_INFO_IMPORT_INTRO', 'Please select which language to import and the
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_EXPORT_INTRO', 'Please select which groups to export:');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this language?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following languages?');
 
 define('TEXT_INFO_LANGUAGE_NAME', 'Name:');
 define('TEXT_INFO_LANGUAGE_CODE', 'Code:');

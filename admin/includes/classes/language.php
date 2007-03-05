@@ -41,12 +41,58 @@
       return $definitions['language']['definitions']['definition'];
     }
 
+    function export($id, $groups, $include_language_data = true) {
+      global $osC_Database, $osC_Currencies;
+
+      $language = osC_Language_Admin::getData($id);
+
+      $export_array = array();
+
+      if ( $include_language_data === true ) {
+        $export_array['language']['data'] = array('title-CDATA' => $language['name'],
+                                                  'code-CDATA' => $language['code'],
+                                                  'locale-CDATA' => $language['locale'],
+                                                  'character_set-CDATA' => $language['charset'],
+                                                  'text_direction-CDATA' => $language['text_direction'],
+                                                  'date_format_short-CDATA' => $language['date_format_short'],
+                                                  'date_format_long-CDATA' => $language['date_format_long'],
+                                                  'time_format-CDATA' => $language['time_format'],
+                                                  'default_currency-CDATA' => $osC_Currencies->getCode($language['currencies_id']),
+                                                  'numerical_decimal_separator-CDATA' => $language['numeric_separator_decimal'],
+                                                  'numerical_thousands_separator-CDATA' => $language['numeric_separator_thousands']);
+      }
+
+      $Qdefs = $osC_Database->query('select content_group, definition_key, definition_value from :table_languages_definitions where languages_id = :languages_id and content_group in (":content_group") order by content_group, definition_key');
+      $Qdefs->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+      $Qdefs->bindInt(':languages_id', $id);
+      $Qdefs->bindRaw(':content_group', implode('", "', $groups));
+      $Qdefs->execute();
+
+      while ($Qdefs->next()) {
+        $export_array['language']['definitions']['definition'][] = array('key' => $Qdefs->value('definition_key'),
+                                                                         'value-CDATA' => $Qdefs->value('definition_value'),
+                                                                         'group' => $Qdefs->value('content_group'));
+      }
+
+      $osC_XML = new osC_XML($export_array, $language['charset']);
+      $xml = $osC_XML->toXML();
+
+      header('Content-disposition: attachment; filename=' . $language['code'] . '.xml');
+      header('Content-Type: application/force-download');
+      header('Content-Transfer-Encoding: binary');
+      header('Content-Length: ' . strlen($xml));
+      header('Pragma: no-cache');
+      header('Expires: 0');
+
+      echo $xml;
+
+      exit;
+    }
+
     function import($file, $type) {
-      global $osC_Database, $osC_Language, $osC_Currencies;
+      global $osC_Database, $osC_Currencies;
 
       if (file_exists('../includes/languages/' . $file . '.xml')) {
-        $osC_Currencies = new osC_Currencies();
-
         $osC_XML = new osC_XML(file_get_contents('../includes/languages/' . $file . '.xml'));
         $source = $osC_XML->toArray();
 
@@ -112,7 +158,7 @@
             $language_id = $osC_Database->nextID();
           }
 
-          $default_language_id = $this->getData('id', DEFAULT_LANGUAGE);
+          $default_language_id = osC_Language_Admin::getData(osC_Language_Admin::getID(DEFAULT_LANGUAGE), 'languages_id');
 
           if ($type == 'replace') {
             $Qdel =  $osC_Database->query('delete from :table_languages_definitions where languages_id = :languages_id');
@@ -134,7 +180,7 @@
           $osC_DirectoryListing->setCheckExtension('xml');
 
           foreach ($osC_DirectoryListing->getFiles() as $files) {
-            $definitions = array_merge($definitions, $osC_Language->extractDefinitions($file . '/' . $files['name']));
+            $definitions = array_merge($definitions, osC_Language_Admin::extractDefinitions($file . '/' . $files['name']));
           }
 
           foreach ($definitions as $def) {
@@ -355,6 +401,44 @@
       return false;
     }
 
+    function getData($id, $key = null) {
+      global $osC_Database;
+
+      $Qlanguage = $osC_Database->query('select * from :table_languages where languages_id = :languages_id');
+      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage->bindInt(':languages_id', $id);
+      $Qlanguage->execute();
+
+      $result = $Qlanguage->toArray();
+
+      $Qlanguage->freeResult();
+
+      if ( empty($key) ) {
+        return $result;
+      } else {
+        return $result[$key];
+      }
+    }
+
+    function getID($code = null) {
+      global $osC_Database;
+
+      if ( empty($code) ) {
+        return $this->_languages[$this->_code]['id'];
+      }
+
+      $Qlanguage = $osC_Database->query('select languages_id from :table_languages where code = :code');
+      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage->bindValue(':code', $code);
+      $Qlanguage->execute();
+
+      $result = $Qlanguage->toArray();
+
+      $Qlanguage->freeResult();
+
+      return $result['languages_id'];
+    }
+
     function update($id, $language, $default = false) {
       global $osC_Database;
 
@@ -410,6 +494,76 @@
       } else {
         $osC_Database->rollbackTransaction();
       }
+
+      return false;
+    }
+
+    function saveDefinitions($id, $group, $data) {
+      global $osC_Database;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      foreach ($data as $key => $value) {
+        $Qupdate = $osC_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
+        $Qupdate->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qupdate->bindValue(':definition_value', $value);
+        $Qupdate->bindValue(':definition_key', $key);
+        $Qupdate->bindInt(':languages_id', $id);
+        $Qupdate->bindValue(':content_group', $group);
+        $Qupdate->execute();
+
+        if ($osC_Database->isError()) {
+          $error = true;
+          break;
+        }
+      }
+
+      if ($error === false) {
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('languages-' . osC_Language_Admin::getData($id, 'code') . '-' . $group);
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
+
+      return false;
+    }
+
+    function insertDefinition($group, $data) {
+      global $osC_Database, $osC_Language;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      foreach ($osC_Language->getAll() as $l) {
+        $Qdefinition = $osC_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+        $Qdefinition->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdefinition->bindInt(':languages_id', $l['id']);
+        $Qdefinition->bindValue(':content_group', $group);
+        $Qdefinition->bindValue(':definition_key', $data['key']);
+        $Qdefinition->bindValue(':definition_value', $data['value'][$l['id']]);
+        $Qdefinition->execute();
+
+        if ($osC_Database->isError()) {
+          $error = true;
+          break;
+        }
+      }
+
+      if ($error === false) {
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('languages-' . osC_Language_Admin::getData($id, 'code') . '-' . $group);
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
 
       return false;
     }
@@ -534,6 +688,38 @@
           $osC_Database->rollbackTransaction();
         }
       }
+
+      return false;
+    }
+
+    function deleteDefinitions($language_id, $group, $keys) {
+      global $osC_Database;
+
+      $error = false;
+
+      $osC_Database->startTransaction();
+
+      foreach ($keys as $id) {
+        $Qdel = $osC_Database->query('delete from :table_languages_definitions where id = :id');
+        $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+        $Qdel->bindValue(':id', $id);
+        $Qdel->execute();
+
+        if ($osC_Database->isError()) {
+          $error = true;
+          break;
+        }
+      }
+
+      if ($error === false) {
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('languages-' . osC_Language_Admin::getData($language_id, 'code') . '-' . $group);
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
 
       return false;
     }
