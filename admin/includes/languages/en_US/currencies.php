@@ -21,6 +21,7 @@ define('TABLE_HEADING_ACTION', 'Action');
 define('TEXT_INFO_INSERT_INTRO', 'Please enter the new currency with its related data');
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this currency?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following currencies?');
 define('TEXT_INFO_UPDATE_SERVICE_INTRO', 'Please select the currency update service to use.');
 
 define('TEXT_INFO_HEADING_NEW_CURRENCY', 'New Currency');

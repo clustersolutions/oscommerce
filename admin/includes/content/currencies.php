@@ -10,18 +10,20 @@
   Released under the GNU General Public License
 */
 
+  require('includes/classes/currencies.php');
+
   class osC_Content_Currencies extends osC_Template {
 
 /* Private variables */
 
     var $_module = 'currencies',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'currencies.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Currencies() {
-      global $osC_Currencies;
+      global $osC_Currencies, $osC_MessageStack;
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
@@ -31,132 +33,98 @@
         $_GET['page'] = 1;
       }
 
-      include('../includes/classes/currencies.php');
-      $osC_Currencies = new osC_Currencies();
+      $osC_Currencies = new osC_Currencies_Admin();
 
       if (!empty($_GET['action'])) {
         switch ($_GET['action']) {
           case 'save':
-            $this->_save();
+            if ( isset($_GET['cID']) && is_numeric($_GET['cID']) ) {
+              $this->_page_contents = 'edit.php';
+            } else {
+              $this->_page_contents = 'new.php';
+            }
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('title' => $_POST['title'],
+                            'code' => $_POST['code'],
+                            'symbol_left' => $_POST['symbol_left'],
+                            'symbol_right' => $_POST['symbol_right'],
+                            'decimal_places' => $_POST['decimal_places'],
+                            'value' => $_POST['value']);
+
+              if ( osC_Currencies_Admin::save((isset($_GET['cID']) && is_numeric($_GET['cID']) ? $_GET['cID'] : null), $data, ((isset($_POST['default']) && ($_POST['default'] == 'on')) || (isset($_POST['is_default']) && ($_POST['is_default'] == 'true') && ($_POST['code'] != DEFAULT_CURRENCY)))) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
             break;
 
-          case 'deleteconfirm':
-            $this->_delete();
+          case 'delete':
+            $this->_page_contents = 'delete.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_Currencies_Admin::delete($_GET['cID']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
             break;
 
-          case 'update_currencies':
-            $this->_updateRates();
+          case 'updateRates':
+            $this->_page_contents = 'update_rates.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( isset($_POST['service']) && (($_POST['service'] == 'oanda') || ($_POST['service'] == 'xe')) ) {
+                $results = osC_Currencies_Admin::updateRates($_POST['service']);
+
+                foreach ($results[0] as $result) {
+                  $osC_MessageStack->add_session($this->_module, sprintf(ERROR_CURRENCY_INVALID, $result['title'], $result['code'], $_POST['service']), 'error');
+                }
+
+                foreach ($results[1] as $result) {
+                  $osC_MessageStack->add_session($this->_module, sprintf(TEXT_INFO_CURRENCY_UPDATED, $result['title'], $result['code'], $_POST['service']), 'success');
+                }
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
+            break;
+
+          case 'batchDelete':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_delete.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $error = false;
+
+                foreach ($_POST['batch'] as $id) {
+                  if ( !osC_Currencies_Admin::delete($id) ) {
+                    $error = true;
+                    break;
+                  }
+                }
+
+                if ( $error === false ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+              }
+            }
+
             break;
         }
-      }
-    }
-
-/* Private methods */
-
-    function _save() {
-      global $osC_Database, $osC_MessageStack;
-
-      if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-        $Qcurrency = $osC_Database->query('update :table_currencies set title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_places = :decimal_places, value = :value where currencies_id = :currencies_id');
-        $Qcurrency->bindInt(':currencies_id', $_GET['cID']);
-      } else {
-        $Qcurrency = $osC_Database->query('insert into :table_currencies (title, code, symbol_left, symbol_right, decimal_places, value) values (:title, :code, :symbol_left, :symbol_right, :decimal_places, :value)');
-      }
-      $Qcurrency->bindTable(':table_currencies', TABLE_CURRENCIES);
-      $Qcurrency->bindValue(':title', $_POST['title']);
-      $Qcurrency->bindValue(':code', $_POST['code']);
-      $Qcurrency->bindValue(':symbol_left', $_POST['symbol_left']);
-      $Qcurrency->bindValue(':symbol_right', $_POST['symbol_right']);
-      $Qcurrency->bindInt(':decimal_places', $_POST['decimal_places']);
-      $Qcurrency->bindValue(':value', $_POST['value']);
-      $Qcurrency->execute();
-
-      if ($osC_Database->isError() === false) {
-        if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-          $currency_id = $_GET['cID'];
-        } else {
-          $currency_id = $osC_Database->nextID();
-        }
-
-        if ( (isset($_POST['default']) && ($_POST['default'] == 'on')) || (isset($_POST['is_default']) && ($_POST['is_default'] == 'true') && ($_POST['code'] != DEFAULT_CURRENCY)) ) {
-          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qupdate->bindValue(':configuration_value', $_POST['code']);
-          $Qupdate->bindValue(':configuration_key', 'DEFAULT_CURRENCY');
-          $Qupdate->execute();
-
-          if ($Qupdate->affectedRows()) {
-            osC_Cache::clear('configuration');
-          }
-        }
-
-        osC_Cache::clear('currencies');
-
-        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-      } else {
-        $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-      }
-
-      osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cID=' . $currency_id));
-    }
-
-    function _delete() {
-      global $osC_Database, $osC_MessageStack;
-
-      if (isset($_GET['cID']) && is_numeric($_GET['cID'])) {
-        $Qcheck = $osC_Database->query('select code from :table_currencies where currencies_id = :currencies_id');
-        $Qcheck->bindTable(':table_currencies', TABLE_CURRENCIES);
-        $Qcheck->bindInt(':currencies_id', $_GET['cID']);
-        $Qcheck->execute();
-
-        if ($Qcheck->value('code') != DEFAULT_CURRENCY) {
-          $Qdelete = $osC_Database->query('delete from :table_currencies where currencies_id = :currencies_id');
-          $Qdelete->bindTable(':table_currencies', TABLE_CURRENCIES);
-          $Qdelete->bindInt(':currencies_id', $_GET['cID']);
-          $Qdelete->execute();
-
-          if ($osC_Database->isError() === false) {
-            osC_Cache::clear('currencies');
-
-            $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-          } else {
-            $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
-          }
-        }
-      }
-
-      osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
-    }
-
-    function _updateRates() {
-      global $osC_Databasem, $osC_MessageStack;
-
-      if (isset($_POST['service']) && (($_POST['service'] == 'oanda') || ($_POST['service'] == 'xe'))) {
-        $quote_function = 'quote_' . $_POST['service'] . '_currency';
-
-        $Qcurrencies = $osC_Database->query('select currencies_id, code, title from :table_currencies');
-        $Qcurrencies->bindTable(':table_currencies', TABLE_CURRENCIES);
-        $Qcurrencies->execute();
-
-        while ($Qcurrencies->next()) {
-          $rate = $quote_function($Qcurrencies->value('code'));
-
-          if (!empty($rate)) {
-            $Qupdate = $osC_Database->query('update :table_currencies set value = :value, last_updated = now() where currencies_id = :currencies_id');
-            $Qupdate->bindTable(':table_currencies', TABLE_CURRENCIES);
-            $Qupdate->bindValue(':value', $rate);
-            $Qupdate->bindInt(':currencies_id', $Qcurrencies->valueInt('currencies_id'));
-            $Qupdate->execute();
-
-            $osC_MessageStack->add_session($this->_module, sprintf(TEXT_INFO_CURRENCY_UPDATED, $Qcurrencies->value('title'), $Qcurrencies->value('code'), $_POST['service']), 'success');
-          } else {
-            $osC_MessageStack->add_session($this->_module, sprintf(ERROR_CURRENCY_INVALID, $Qcurrencies->value('title'), $Qcurrencies->value('code'), $_POST['service']), 'error');
-          }
-        }
-
-        osC_Cache::clear('currencies');
-
-        osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module));
       }
     }
   }
