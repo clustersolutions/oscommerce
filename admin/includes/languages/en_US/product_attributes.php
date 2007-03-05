@@ -25,8 +25,10 @@
 
   define('TEXT_INFO_INSERT_ATTRIBUTE_INTRO', 'Please enter the new Attribute Group information');
   define('TEXT_INFO_DELETE_ATTRIBUTE_INTRO', 'Are you sure you want to delete this Attribute Group?');
+  define('TEXT_INFO_DELETE_ATTRIBUTE_BATCH_INTRO', 'Are you sure you want to delete these Attribute Groups?');
   define('TEXT_INFO_INSERT_ATTRIBUTE_ENTRY_INTRO', 'Please enter the new Attribute Entry information');
   define('TEXT_INFO_DELETE_ATTRIBUTE_ENTRY_INTRO', 'Are you sure you want to delete this Attribute Entry?');
+  define('TEXT_INFO_DELETE_ATTRIBUTE_ENTRY_BATCH_INTRO', 'Are you sure you want to delete these Attribute Entries?');
   define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 
   define('TEXT_INFO_DELETE_ATTRIBUTE_GROUP_PROHIBITED', 'Warning: This Attribute Group cannot be deleted as it is currently assigned to %s products.');
