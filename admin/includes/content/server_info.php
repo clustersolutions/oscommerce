@@ -16,7 +16,7 @@
 
     var $_module = 'server_info',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'server_info.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
