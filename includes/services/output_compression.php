@@ -20,17 +20,10 @@
     function start() {
       if (extension_loaded('zlib')) {
         if ((int)ini_get('zlib.output_compression') < 1) {
-          if (function_exists('ob_gzhandler')) {
-            ini_set('zlib.output_compression_level', SERVICE_OUTPUT_COMPRESSION_GZIP_LEVEL);
-            ob_start('ob_gzhandler');
+          ini_set('zlib.output_compression_level', SERVICE_OUTPUT_COMPRESSION_GZIP_LEVEL);
+          ob_start('ob_gzhandler');
 
-            return false; // no call to stop() is needed
-          } else {
-            ob_start();
-            ob_implicit_flush();
-          }
-
-          return true;
+          return false; // no call to stop() is needed
         }
       }
 
@@ -38,35 +31,6 @@
     }
 
     function stop() {
-      $encoding = false;
-      if (!headers_sent() && !connection_aborted()) {
-        if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)) {
-          $encoding = 'x-gzip';
-        } elseif (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)) {
-          $encoding = 'gzip';
-        }
-      }
-
-      if ($encoding !== false) {
-        $contents = ob_get_contents();
-        ob_end_clean();
-
-        header('Content-Encoding: ' . $encoding);
-
-        $size = strlen($contents);
-        $crc = crc32($contents);
-
-        $contents = gzcompress($contents, SERVICE_OUTPUT_COMPRESSION_GZIP_LEVEL);
-        $contents = substr($contents, 0, strlen($contents) - 4);
-
-        echo "\x1f\x8b\x08\x00\x00\x00\x00\x00";
-        echo $contents;
-        echo pack('V', $crc);
-        echo pack('V', $size);
-      } else {
-        ob_end_flush();
-      }
-
       return true;
     }
 
