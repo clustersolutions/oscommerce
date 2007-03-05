@@ -91,6 +91,7 @@
         $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
         $Qsu->bindValue(':configuration_value', $value);
         $Qsu->bindvalue(':configuration_key', $key);
+        $Qsu->setLogging($_SESSION['module']);
         $Qsu->execute();
 
         if ( $osC_Database->isError() ) {

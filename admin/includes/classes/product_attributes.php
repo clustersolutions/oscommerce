@@ -79,6 +79,7 @@
         $Qgroup->bindInt(':products_options_id', $group_id);
         $Qgroup->bindValue(':products_options_name', $data['name'][$l['id']]);
         $Qgroup->bindInt(':language_id', $l['id']);
+        $Qgroup->setLogging($_SESSION['module'], $group_id);
         $Qgroup->execute();
 
         if ( $osC_Database->isError() ) {
@@ -114,6 +115,7 @@
         $Qdelete = $osC_Database->query('delete from :table_products_options_values where products_options_values_id = :products_options_values_id');
         $Qdelete->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
         $Qdelete->bindInt(':products_options_values_id', $Qentries->valueInt('products_options_values_id'));
+        $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( $osC_Database->isError() ) {
@@ -126,6 +128,7 @@
         $Qdelete = $osC_Database->query('delete from :table_products_options_values_to_products_options where products_options_id = :products_options_id');
         $Qdelete->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
         $Qdelete->bindInt(':products_options_id', $id);
+        $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( $osC_Database->isError() ) {
@@ -138,6 +141,7 @@
         $Qdelete = $osC_Database->query('delete from :table_products_options where products_options_id = :products_options_id');
         $Qdelete->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
         $Qdelete->bindInt(':products_options_id', $id);
+        $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( $osC_Database->isError() ) {
@@ -213,6 +217,7 @@
         $Qentry->bindInt(':products_options_values_id', $entry_id);
         $Qentry->bindValue(':products_options_values_name', $data['name'][$l['id']]);
         $Qentry->bindInt(':language_id', $l['id']);
+        $Qentry->setLogging($_SESSION['module'], $entry_id);
         $Qentry->execute();
 
         if ( $osC_Database->isError() ) {
@@ -227,6 +232,7 @@
           $Qlink->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
           $Qlink->bindInt(':products_options_id', $data['products_options_id']);
           $Qlink->bindInt(':products_options_values_id', $entry_id);
+          $Qlink->setLogging($_SESSION['module'], $entry_id);
           $Qlink->execute();
 
           if ( $osC_Database->isError() ) {
@@ -256,6 +262,7 @@
       $Qentry = $osC_Database->query('delete from :table_products_options_values where products_options_values_id = :products_options_values_id');
       $Qentry->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
       $Qentry->bindInt(':products_options_values_id', $id);
+      $Qentry->setLogging($_SESSION['module'], $id);
       $Qentry->execute();
 
       if ( $osC_Database->isError() ) {
@@ -267,6 +274,7 @@
         $Qlink->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
         $Qlink->bindInt(':products_options_id', $group_id);
         $Qlink->bindInt(':products_options_values_id', $id);
+        $Qlink->setLogging($_SESSION['module'], $id);
         $Qlink->execute();
 
         if ( $osC_Database->isError() ) {

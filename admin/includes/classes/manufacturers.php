@@ -64,6 +64,7 @@
 
       $Qmanufacturer->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qmanufacturer->bindValue(':manufacturers_name', $data['name']);
+      $Qmanufacturer->setLogging($_SESSION['module'], $id);
       $Qmanufacturer->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -81,6 +82,7 @@
             $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
             $Qimage->bindValue(':manufacturers_image', $image->filename);
             $Qimage->bindInt(':manufacturers_id', $manufacturers_id);
+            $Qimage->setLogging($_SESSION['module'], $manufaacturers_id);
             $Qimage->execute();
 
             if ( $osC_Database->isError() ) {
@@ -104,6 +106,7 @@
           $Qurl->bindInt(':manufacturers_id', $manufacturers_id);
           $Qurl->bindInt(':languages_id', $l['id']);
           $Qurl->bindValue(':manufacturers_url', $data['url'][$l['id']]);
+          $Qurl->setLogging($_SESSION['module'], $manufacturers_id);
           $Qurl->execute();
 
           if ( $osC_Database->isError() ) {
@@ -145,11 +148,13 @@
       $Qm = $osC_Database->query('delete from :table_manufacturers where manufacturers_id = :manufacturers_id');
       $Qm->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qm->bindInt(':manufacturers_id', $id);
+      $Qm->setLogging($_SESSION['module'], $id);
       $Qm->execute();
 
       $Qmi = $osC_Database->query('delete from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
       $Qmi->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
       $Qmi->bindInt(':manufacturers_id', $id);
+      $Qmi->setLogging($_SESSION['module'], $id);
       $Qmi->execute();
 
       if ( $delete_products === true ) {
@@ -165,6 +170,7 @@
         $Qupdate = $osC_Database->query('update :table_products set manufacturers_id = null where manufacturers_id = :manufacturers_id');
         $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
         $Qupdate->bindInt(':manufacturers_id', $id);
+        $Qupdate->setLogging($_SESSION['module'], $id);
         $Qupdate->execute();
       }
 

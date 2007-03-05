@@ -59,6 +59,7 @@
         $Qgroup->bindInt(':size_height', $data['height']);
         $Qgroup->bindInt(':force_size', ( $data['force_size'] === true ) ? 1 : 0);
         $Qgroup->bindInt(':language_id', $l['id']);
+        $Qgroup->setLogging($_SESSION['module'], $group_id);
         $Qgroup->execute();
 
         if ( $osC_Database->isError() ) {
@@ -73,6 +74,7 @@
           $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qupdate->bindInt(':configuration_value', $group_id);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_IMAGE_GROUP_ID');
+          $Qupdate->setLogging($_SESSION['module'], $group_id);
           $Qupdate->execute();
 
           if ( $osC_Database->isError() ) {
@@ -104,6 +106,7 @@
       $Qdel = $osC_Database->query('delete from :table_products_images_groups where id = :id');
       $Qdel->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
       $Qdel->bindInt(':id', $id);
+      $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
 
       if ( !$osC_Database->isError() ) {

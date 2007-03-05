@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -80,6 +80,7 @@
 
         $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
         $Qadmin->bindValue(':user_name', $data['username']);
+        $Qadmin->setLogging($_SESSION['module'], $id);
         $Qadmin->execute();
 
         if ( !$osC_Database->isError() ) {
@@ -108,6 +109,7 @@
                 $Qinsert->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
                 $Qinsert->bindInt(':administrators_id', $id);
                 $Qinsert->bindValue(':module', $module);
+                $Qinsert->setLogging($_SESSION['module'], $id);
                 $Qinsert->execute();
 
                 if ( $osC_Database->isError() ) {
@@ -129,6 +131,7 @@
 
           $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
           $Qdel->bindInt(':administrators_id', $id);
+          $Qdel->setLogging($_SESSION['module'], $id);
           $Qdel->execute();
 
           if ( $osC_Database->isError() ) {
@@ -158,12 +161,14 @@
       $Qdel = $osC_Database->query('delete from :table_administrators_access where administrators_id = :administrators_id');
       $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
       $Qdel->bindInt(':administrators_id', $id);
+      $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
 
       if ( !$osC_Database->isError() ) {
         $Qdel = $osC_Database->query('delete from :table_administrators where id = :id');
         $Qdel->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
         $Qdel->bindInt(':id', $id);
+        $Qdel->setLogging($_SESSION['module'], $id);
         $Qdel->execute();
 
         if ( !$osC_Database->isError() ) {
@@ -217,6 +222,7 @@
               $Qinsert->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
               $Qinsert->bindInt(':administrators_id', $id);
               $Qinsert->bindValue(':module', $module);
+              $Qinsert->setLogging($_SESSION['module'], $id);
               $Qinsert->execute();
 
               if ( $osC_Database->isError() ) {
@@ -245,6 +251,7 @@
 
             $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
             $Qdel->bindInt(':administrators_id', $id);
+            $Qdel->setLogging($_SESSION['module'], $id);
             $Qdel->execute();
 
             if ( $osC_Database->isError() ) {

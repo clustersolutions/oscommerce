@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -149,6 +149,7 @@
         $Qlanguage->bindInt(':currencies_id', $osC_Currencies->getID($language['currency']));
         $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
         $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
+        $Qlanguage->setLogging($_SESSION['module'], ($Qcheck->numberOfRows() === 1 ? $language_id : null));
         $Qlanguage->execute();
 
         if ($osC_Database->isError()) {
@@ -461,6 +462,7 @@
       $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
       $Qlanguage->bindInt(':sort_order', $language['sort_order']);
       $Qlanguage->bindInt(':languages_id', $id);
+      $Qlanguage->setLogging($_SESSION['module'], $id);
       $Qlanguage->execute();
 
       if ($osC_Database->isError()) {
@@ -473,6 +475,7 @@
           $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qupdate->bindValue(':configuration_value', $language['code']);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_LANGUAGE');
+          $Qupdate->setLogging($_SESSION['module'], $id);
           $Qupdate->execute();
 
           if ($osC_Database->isError() === false) {
@@ -512,6 +515,7 @@
         $Qupdate->bindValue(':definition_key', $key);
         $Qupdate->bindInt(':languages_id', $id);
         $Qupdate->bindValue(':content_group', $group);
+        $Qupdate->setLogging($_SESSION['module'], $id);
         $Qupdate->execute();
 
         if ($osC_Database->isError()) {
@@ -547,6 +551,7 @@
         $Qdefinition->bindValue(':content_group', $group);
         $Qdefinition->bindValue(':definition_key', $data['key']);
         $Qdefinition->bindValue(':definition_value', $data['value'][$l['id']]);
+        $Qdefinition->setLogging($_SESSION['module']);
         $Qdefinition->execute();
 
         if ($osC_Database->isError()) {
@@ -660,6 +665,7 @@
           $Qlanguages = $osC_Database->query('delete from :table_languages where languages_id = :languages_id');
           $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
           $Qlanguages->bindInt(':languages_id', $id);
+          $Qlanguages->setLogging($_SESSION['module'], $id);
           $Qlanguages->execute();
 
           if ($osC_Database->isError()) {
@@ -703,6 +709,7 @@
         $Qdel = $osC_Database->query('delete from :table_languages_definitions where id = :id');
         $Qdel->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
         $Qdel->bindValue(':id', $id);
+        $Qdel->setLogging($_SESSION['module'], $id);
         $Qdel->execute();
 
         if ($osC_Database->isError()) {

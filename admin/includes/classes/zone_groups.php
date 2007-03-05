@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -49,6 +49,7 @@
       $Qzone->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
       $Qzone->bindValue(':geo_zone_name', $data['zone_name']);
       $Qzone->bindValue(':geo_zone_description', $data['zone_description']);
+      $Qzone->setLogging($_SESSION['module'], $id);
       $Qzone->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -68,12 +69,14 @@
       $Qentry = $osC_Database->query('delete from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id');
       $Qentry->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
       $Qentry->bindInt(':geo_zone_id', $id);
+      $Qentry->setLogging($_SESSION['module'], $id);
       $Qentry->execute();
 
       if ( !$osC_Database->isError() ) {
         $Qzone = $osC_Database->query('delete from :table_geo_zones where geo_zone_id = :geo_zone_id');
         $Qzone->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
         $Qzone->bindInt(':geo_zone_id', $id);
+        $Qzone->setLogging($_SESSION['module'], $id);
         $Qzone->execute();
 
         if ( $osC_Database->isError() ) {
@@ -124,6 +127,7 @@
       $Qentry->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
       $Qentry->bindInt(':zone_country_id', $data['country_id']);
       $Qentry->bindInt(':zone_id', $data['zone_id']);
+      $Qentry->setLogging($_SESSION['module'], $id);
       $Qentry->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -139,6 +143,7 @@
       $Qentry = $osC_Database->query('delete from :table_zones_to_geo_zones where association_id = :association_id');
       $Qentry->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
       $Qentry->bindInt(':association_id', $id);
+      $Qentry->setLogging($_SESSION['module'], $id);
       $Qentry->execute();
 
       if ( !$osC_Database->isError() ) {

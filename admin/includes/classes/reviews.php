@@ -43,6 +43,7 @@
       $Qreview->bindValue(':reviews_text', $data['review']);
       $Qreview->bindInt(':reviews_rating', $data['rating']);
       $Qreview->bindInt(':reviews_id', $id);
+      $Qreview->setLogging($_SESSION['module'], $id);
       $Qreview->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -58,6 +59,7 @@
       $Qreview = $osC_Database->query('delete from :table_reviews where reviews_id = :reviews_id');
       $Qreview->bindTable(':table_reviews', TABLE_REVIEWS);
       $Qreview->bindInt(':reviews_id', $id);
+      $Qreview->setLogging($_SESSION['module'], $id);
       $Qreview->execute();
 
       if ( !$osC_Database->isError() ) {

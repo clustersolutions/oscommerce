@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -41,6 +41,7 @@
       $Qcc->bindValue(':pattern', $data['pattern']);
       $Qcc->bindInt(':credit_card_status', $data['status']);
       $Qcc->bindInt(':sort_order', $data['sort_order']);
+      $Qcc->setLogging($_SESSION['module'], $id);
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {
@@ -58,6 +59,7 @@
       $Qdel = $osC_Database->query('delete from :table_credit_cards where id = :id');
       $Qdel->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
       $Qdel->bindInt(':id', $id);
+      $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
 
       if ( $Qdel->affectedRows() ) {
@@ -76,6 +78,7 @@
       $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
       $Qcc->bindInt(':credit_card_status', ($status === true) ? 1 : 0);
       $Qcc->bindInt(':id', $id);
+      $Qcc->setLogging($_SESSION['module'], $id);
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {

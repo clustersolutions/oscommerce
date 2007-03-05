@@ -72,6 +72,7 @@
           $Qbanner->bindInt(':status', ($data['date_scheduled'] > date('Y-m-d') ? 0 : (($data['status'] === true) ? 1 : 0)));
         }
 
+        $Qbanner->setLogging($_SESSION['module'], $id);
         $Qbanner->execute();
 
         if ( !$osC_Database->isError() ) {
@@ -99,6 +100,7 @@
       $Qdelete = $osC_Database->query('delete from :table_banners where banners_id = :banners_id');
       $Qdelete->bindTable(':table_banners', TABLE_BANNERS);
       $Qdelete->bindInt(':banners_id', $id);
+      $Qdelete->setLogging($_SESSION['module'], $id);
       $Qdelete->execute();
 
       if ( $osC_Database->isError() ) {

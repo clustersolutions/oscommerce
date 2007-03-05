@@ -94,6 +94,7 @@
       $Qcustomer->bindValue(':customers_dob', $data['dob_year'] . '-' . $data['dob_month'] . '-' . $data['dob_day'] . ' 00:00:00');
       $Qcustomer->bindInt(':customers_newsletter', $data['newsletter']);
       $Qcustomer->bindInt(':customers_status', $data['status']);
+      $Qcustomer->setLogging($_SESSION['module'], $id);
       $Qcustomer->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -104,6 +105,7 @@
           $Qpassword->bindTable(':table_customers', TABLE_CUSTOMERS);
           $Qpassword->bindValue(':customers_password', osc_encrypt_string(trim($data['password'])));
           $Qpassword->bindInt(':customers_id', $customer_id);
+          $Qpassword->setLogging($_SESSION['module'], $customer_id);
           $Qpassword->execute();
 
           if ( $osC_Database->isError() ) {
@@ -156,6 +158,7 @@
         $Qreviews = $osC_Database->query('delete from :table_reviews where customers_id = :customers_id');
         $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
         $Qreviews->bindInt(':customers_id', $id);
+        $Qreviews->setLogging($_SESSION['module'], $id);
         $Qreviews->execute();
 
         if ( $osC_Database->isError() ) {
@@ -171,6 +174,7 @@
           $Qreviews = $osC_Database->query('update :table_reviews set customers_id = null where customers_id = :customers_id');
           $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
           $Qreviews->bindInt(':customers_id', $id);
+          $Qreviews->setLogging($_SESSION['module'], $id);
           $Qreviews->execute();
 
           if ( $osC_Database->isError() ) {
@@ -183,6 +187,7 @@
         $Qab = $osC_Database->query('delete from :table_address_book where customers_id = :customers_id');
         $Qab->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
         $Qab->bindInt(':customers_id', $id);
+        $Qab->setLogging($_SESSION['module'], $id);
         $Qab->execute();
 
         if ( $osC_Database->isError() ) {
@@ -205,6 +210,7 @@
         $Qpn = $osC_Database->query('delete from :table_products_notifications where customers_id = :customers_id');
         $Qpn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
         $Qpn->bindInt(':customers_id', $id);
+        $Qpn->setLogging($_SESSION['module'], $id);
         $Qpn->execute();
 
         if ( $osC_Database->isError() ) {
@@ -236,6 +242,7 @@
         $Qcustomers = $osC_Database->query('delete from :table_customers where customers_id = :customers_id');
         $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
         $Qcustomers->bindInt(':customers_id', $id);
+        $Qcustomers->setLogging($_SESSION['module'], $id);
         $Qcustomers->execute();
 
         if ( $osC_Database->isError() ) {
@@ -288,6 +295,7 @@
       $Qab->bindInt(':entry_zone_id', $data['zone_id']);
       $Qab->bindValue(':entry_telephone', $data['telephone']);
       $Qab->bindValue(':entry_fax', $data['fax']);
+      $Qab->setLogging($_SESSION['module'], $id);
       $Qab->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -298,6 +306,7 @@
           $Qupdate->bindTable(':table_customers', TABLE_CUSTOMERS);
           $Qupdate->bindInt(':customers_default_address_id', $address_book_id);
           $Qupdate->bindInt(':customers_id', $data['customer_id']);
+          $Qupdate->setLogging($_SESSION['module'], $address_book_id);
           $Qupdate->execute();
 
           if ( $osC_Database->isError() ) {
@@ -331,6 +340,7 @@
 
       $Qdelete->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qdelete->bindInt(':address_book_id', $id);
+      $Qdelete->setLogging($_SESSION['module'], $id);
       $Qdelete->execute();
 
       if ( !$osC_Database->isError() ) {

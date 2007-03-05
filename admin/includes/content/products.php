@@ -253,6 +253,7 @@
             $Qimage->bindInt(':default_flag', $default_flag);
             $Qimage->bindInt(':sort_order', 0);
             $Qimage->bindRaw(':date_added', 'now()');
+            $Qimage->setLogging($_SESSION['module'], $_GET['pID']);
             $Qimage->execute();
 
             foreach ($osC_Image->getGroups() as $group) {
@@ -300,6 +301,7 @@
               $Qimage->bindInt(':default_flag', $default_flag);
               $Qimage->bindInt(':sort_order', 0);
               $Qimage->bindRaw(':date_added', 'now()');
+              $Qimage->setLogging($_SESSION['module'], $_GET['pID']);
               $Qimage->execute();
 
               foreach ($osC_Image->getGroups() as $group) {

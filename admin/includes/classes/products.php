@@ -60,6 +60,7 @@
       $Qproduct->bindInt(':products_status', $data['status']);
       $Qproduct->bindInt(':products_tax_class_id', $data['tax_class_id']);
       $Qproduct->bindInt(':manufacturers_id', $data['manufacturers_id']);
+      $Qproduct->setLogging($_SESSION['module'], $id);
       $Qproduct->execute();
 
       if ( $osC_Database->isError() ) {
@@ -74,6 +75,7 @@
         $Qcategories = $osC_Database->query('delete from :table_products_to_categories where products_id = :products_id');
         $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
         $Qcategories->bindInt(':products_id', $products_id);
+        $Qcategories->setLogging($_SESSION['module'], $products_id);
         $Qcategories->execute();
 
         if ( $osC_Database->isError() ) {
@@ -85,6 +87,7 @@
               $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
               $Qp2c->bindInt(':products_id', $products_id);
               $Qp2c->bindInt(':categories_id', $category_id);
+              $Qp2c->setLogging($_SESSION['module'], $products_id);
               $Qp2c->execute();
 
               if ( $osC_Database->isError() ) {
@@ -132,6 +135,7 @@
           $Qimage->bindInt(':default_flag', $default_flag);
           $Qimage->bindInt(':sort_order', 0);
           $Qimage->bindRaw(':date_added', 'now()');
+          $Qimage->setLogging($_SESSION['module'], $products_id);
           $Qimage->execute();
 
           if ( $osC_Database->isError() ) {
@@ -165,6 +169,7 @@
           $Qpd->bindValue(':products_keyword', $data['products_keyword'][$l['id']]);
           $Qpd->bindValue(':products_tags', $data['products_tags'][$l['id']]);
           $Qpd->bindValue(':products_url', $data['products_url'][$l['id']]);
+          $Qpd->setLogging($_SESSION['module'], $products_id);
           $Qpd->execute();
 
           if ( $osC_Database->isError() ) {
@@ -202,6 +207,7 @@
                 $Qattribute->bindInt(':options_values_id', $key);
                 $Qattribute->bindValue(':options_values_price', $data['attribute_price'][$groups][$key]);
                 $Qattribute->bindValue(':price_prefix', $value);
+                $Qattribute->setLogging($_SESSION['module'], $products_id);
                 $Qattribute->execute();
 
                 if ( $osC_Database->isError() ) {
@@ -224,12 +230,14 @@
             $Qdelete = $osC_Database->query('delete from :table_products_attributes where products_attributes_id = :products_attributes_id');
             $Qdelete->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
             $Qdelete->bindInt(':products_attributes_id', $Qcheck->valueInt('products_attributes_id'));
+            $Qdelete->setLogging($_SESSION['module'], $products_id);
             $Qdelete->execute();
 
             if ( !$osC_Database->isError() ) {
               $Qdelete = $osC_Database->query('delete from :table_products_attributes_download where products_attributes_id = :products_attributes_id');
               $Qdelete->bindTable(':table_products_attributes_download', TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD);
               $Qdelete->bindInt(':products_attributes_id', $Qcheck->valueInt('products_attributes_id'));
+              $Qdelete->setLogging($_SESSION['module'], $products_id);
               $Qdelete->execute();
 
               if ( $osC_Database->isError() ) {
@@ -276,6 +284,7 @@
           $Qcat->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
           $Qcat->bindInt(':products_id', $id);
           $Qcat->bindInt(':categories_id', end($category_array));
+          $Qcat->setLogging($_SESSION['module'], $id);
           $Qcat->execute();
 
           if ( $Qcat->affectedRows() ) {
@@ -308,6 +317,7 @@
           $Qnew->bindInt(':products_weight_class', $Qproduct->valueInt('products_weight_class'));
           $Qnew->bindInt(':products_tax_class_id', $Qproduct->valueInt('products_tax_class_id'));
           $Qnew->bindInt(':manufacturers_id', $Qproduct->valueInt('manufacturers_id'));
+          $Qnew->setLogging($_SESSION['module']);
           $Qnew->execute();
 
           if ( $Qnew->affectedRows() ) {
@@ -328,6 +338,7 @@
               $Qnewdesc->bindValue(':products_tags', $Qdesc->value('products_tags'));
               $Qnewdesc->bindValue(':products_description', $Qdesc->value('products_description'));
               $Qnewdesc->bindValue(':products_url', $Qdesc->value('products_url'));
+              $Qnewdesc->setLogging($_SESSION['module'], $new_product_id);
               $Qnewdesc->execute();
 
               if ($osC_Database->isError()) {
@@ -341,6 +352,7 @@
               $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
               $Qp2c->bindInt(':products_id', $new_product_id);
               $Qp2c->bindInt(':categories_id', end($category_array));
+              $Qp2c->setLogging($_SESSION['module'], $new_product_id);
               $Qp2c->execute();
 
               if ( $osC_Database->isError() ) {
@@ -381,6 +393,7 @@
         $Qpc->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
         $Qpc->bindInt(':products_id', $id);
         $Qpc->bindRaw(':categories_id', '("' . implode('", "', $categories) . '")');
+        $Qpc->setLogging($_SESSION['module'], $id);
         $Qpc->execute();
 
         if ( !$osC_Database->isError() ) {
@@ -401,6 +414,7 @@
         $Qr = $osC_Database->query('delete from :table_reviews where products_id = :products_id');
         $Qr->bindTable(':table_reviews', TABLE_REVIEWS);
         $Qr->bindInt(':products_id', $id);
+        $Qr->setLogging($_SESSION['module'], $id);
         $Qr->execute();
 
         if ( $osC_Database->isError() ) {
@@ -423,6 +437,7 @@
           $Qp2c = $osC_Database->query('delete from :table_products_to_categories where products_id = :products_id');
           $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
           $Qp2c->bindInt(':products_id', $id);
+          $Qp2c->setLogging($_SESSION['module'], $id);
           $Qp2c->execute();
 
           if ( $osC_Database->isError() ) {
@@ -434,6 +449,7 @@
           $Qs = $osC_Database->query('delete from :table_specials where products_id = :products_id');
           $Qs->bindTable(':table_specials', TABLE_SPECIALS);
           $Qs->bindInt(':products_id', $id);
+          $Qs->setLogging($_SESSION['module'], $id);
           $Qs->execute();
 
           if ( $osC_Database->isError() ) {
@@ -445,6 +461,7 @@
           $Qpa = $osC_Database->query('delete from :table_products_attributes where products_id = :products_id');
           $Qpa->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
           $Qpa->bindInt(':products_id', $id);
+          $Qpa->setLogging($_SESSION['module'], $id);
           $Qpa->execute();
 
           if ( $osC_Database->isError() ) {
@@ -456,6 +473,7 @@
           $Qpd = $osC_Database->query('delete from :table_products_description where products_id = :products_id');
           $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qpd->bindInt(':products_id', $id);
+          $Qpd->setLogging($_SESSION['module'], $id);
           $Qpd->execute();
 
           if ( $osC_Database->isError() ) {
@@ -467,6 +485,7 @@
           $Qp = $osC_Database->query('delete from :table_products where products_id = :products_id');
           $Qp->bindTable(':table_products', TABLE_PRODUCTS);
           $Qp->bindInt(':products_id', $id);
+          $Qp->setLogging($_SESSION['module'], $id);
           $Qp->execute();
 
           if ( $osC_Database->isError() ) {
@@ -514,6 +533,7 @@
       }
 
       $Qproduct->bindInt(':products_id', $id);
+      $Qproduct->setLogging($_SESSION['module'], $id);
       $Qproduct->execute();
 
       if ( !$osC_Database->isError() ) {

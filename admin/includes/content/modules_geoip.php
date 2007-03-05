@@ -96,6 +96,7 @@
         $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
         $Qupdate->bindValue(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
         $Qupdate->bindValue(':configuration_key', $key);
+        $Qupdate->setLogging($_SESSION['module']);
         $Qupdate->execute();
 
         if ( $osC_Database->isError() ) {

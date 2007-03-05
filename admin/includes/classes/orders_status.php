@@ -55,6 +55,7 @@
         $Qstatus->bindInt(':orders_status_id', $orders_status_id);
         $Qstatus->bindValue(':orders_status_name', $data['name'][$l['id']]);
         $Qstatus->bindInt(':language_id', $l['id']);
+        $Qstatus->setLogging($_SESSION['module'], $orders_status_id);
         $Qstatus->execute();
 
         if ( $osC_Database->isError() ) {
@@ -69,6 +70,7 @@
           $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qupdate->bindInt(':configuration_value', $orders_status_id);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_ORDERS_STATUS_ID');
+          $Qupdate->setLogging($_SESSION['module'], $orders_status_id);
           $Qupdate->execute();
 
           if ( $osC_Database->isError() ) {
@@ -98,6 +100,7 @@
       $Qstatus = $osC_Database->query('delete from :table_orders_status where orders_status_id = :orders_status_id');
       $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
       $Qstatus->bindInt(':orders_status_id', $id);
+      $Qstatus->setLogging($_SESSION['module'], $id);
       $Qstatus->execute();
 
       if ( !$osC_Database->isError() ) {

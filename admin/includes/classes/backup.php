@@ -360,6 +360,7 @@
       $Qcfg = $osC_Database->query('delete from :table_configuration where configuration_key = :configuration_key');
       $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qcfg->bindValue(':configuration_key', 'DB_LAST_RESTORE');
+      $Qcfg->setLogging($_SESSION['module']);
       $Qcfg->execute();
 
       if ( !$osC_Database->isError() ) {

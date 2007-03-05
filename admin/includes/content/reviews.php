@@ -119,6 +119,7 @@
         $Qreview = $osC_Database->query('update :table_reviews set reviews_status = 1 where reviews_id = :reviews_id');
         $Qreview->bindTable(':table_reviews', TABLE_REVIEWS);
         $Qreview->bindInt(':reviews_id', $_GET['rID']);
+        $Qreview->setLogging($_SESSION['module'], $_GET['rID']);
         $Qreview->execute();
 
         if (!$osC_Database->isError()) {
@@ -138,6 +139,7 @@
         $Qreview = $osC_Database->query('update :table_reviews set reviews_status = 2 where reviews_id = :reviews_id');
         $Qreview->bindTable(':table_reviews', TABLE_REVIEWS);
         $Qreview->bindInt(':reviews_id', $_GET['rID']);
+        $Qreview->setLogging($_SESSION['module'], $_GET['rID']);
         $Qreview->execute();
 
         if (!$osC_Database->isError()) {

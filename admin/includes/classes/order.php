@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -476,6 +476,7 @@
           $Qupdate->bindInt(':products_quantity', $Qproducts->valueInt('products_quantity'));
           $Qupdate->bindInt(':products_ordered', $Qproducts->valueInt('products_quantity'));
           $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
+          $Qupdate->setLogging($_SESSION['module'], $id);
           $Qupdate->execute();
 
           if ($osC_Database->isError() === true) {
@@ -492,6 +493,7 @@
             $Qstatus = $osC_Database->query('update :table_products set products_status = 1 where products_id = :products_id');
             $Qstatus->bindTable(':table_products', TABLE_PRODUCTS);
             $Qstatus->bindInt(':products_id', $Qproducts->valueInt('products_id'));
+            $Qstatus->setLogging($_SESSION['module'], $id);
             $Qstatus->execute();
 
             if ($osC_Database->isError() === true) {
@@ -506,6 +508,7 @@
         $Qopa = $osC_Database->query('delete from :table_orders_products_attributes where orders_id = :orders_id');
         $Qopa->bindTable(':table_orders_products_attributes', TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
         $Qopa->bindInt(':orders_id', $id);
+        $Qopa->setLogging($_SESSION['module'], $id);
         $Qopa->execute();
 
         if ($osC_Database->isError() === true) {
@@ -517,6 +520,7 @@
         $Qop = $osC_Database->query('delete from :table_orders_products where orders_id = :orders_id');
         $Qop->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
         $Qop->bindInt(':orders_id', $id);
+        $Qop->setLogging($_SESSION['module'], $id);
         $Qop->execute();
 
         if ($osC_Database->isError() === true) {
@@ -528,6 +532,7 @@
         $Qosh = $osC_Database->query('delete from :table_orders_transactions_history where orders_id = :orders_id');
         $Qosh->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
         $Qosh->bindInt(':orders_id', $id);
+        $Qosh->setLogging($_SESSION['module'], $id);
         $Qosh->execute();
 
         if ($osC_Database->isError() === true) {
@@ -539,6 +544,7 @@
         $Qosh = $osC_Database->query('delete from :table_orders_status_history where orders_id = :orders_id');
         $Qosh->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
         $Qosh->bindInt(':orders_id', $id);
+        $Qosh->setLogging($_SESSION['module'], $id);
         $Qosh->execute();
 
         if ($osC_Database->isError() === true) {
@@ -550,6 +556,7 @@
         $Qot = $osC_Database->query('delete from :table_orders_total where orders_id = :orders_id');
         $Qot->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
         $Qot->bindInt(':orders_id', $id);
+        $Qot->setLogging($_SESSION['module'], $id);
         $Qot->execute();
 
         if ($osC_Database->isError() === true) {
@@ -561,6 +568,7 @@
         $Qo = $osC_Database->query('delete from :table_orders where orders_id = :orders_id');
         $Qo->bindTable(':table_orders', TABLE_ORDERS);
         $Qo->bindInt(':orders_id', $id);
+        $Qo->setLogging($_SESSION['module'], $id);
         $Qo->execute();
 
         if ($osC_Database->isError() === true) {

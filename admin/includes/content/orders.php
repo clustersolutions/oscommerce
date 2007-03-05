@@ -179,6 +179,7 @@
       $Qupdate->bindTable(':table_orders', TABLE_ORDERS);
       $Qupdate->bindInt(':orders_status', $data['status_id']);
       $Qupdate->bindInt(':orders_id', $id);
+      $Qupdate->setLogging($_SESSION['module'], $id);
       $Qupdate->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -200,6 +201,7 @@
         $Qupdate->bindInt(':orders_status_id', $data['status_id']);
         $Qupdate->bindInt(':customer_notified', ( $data['notify_customer'] === true ? '1' : '0'));
         $Qupdate->bindValue(':comments', $data['comment']);
+        $Qupdate->setLogging($_SESSION['module'], $id);
         $Qupdate->execute();
 
         if ( $osC_Database->isError() ) {

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -26,6 +26,8 @@
     function save($id = null, $data, $set_default = false) {
       global $osC_Database;
 
+      $osC_Database->startTransaction();
+
       if ( is_numeric($id) ) {
         $Qcurrency = $osC_Database->query('update :table_currencies set title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_places = :decimal_places, value = :value where currencies_id = :currencies_id');
         $Qcurrency->bindInt(':currencies_id', $id);
@@ -40,6 +42,7 @@
       $Qcurrency->bindValue(':symbol_right', $data['symbol_right']);
       $Qcurrency->bindInt(':decimal_places', $data['decimal_places']);
       $Qcurrency->bindValue(':value', $data['value']);
+      $Qcurrency->setLogging($_SESSION['module'], $id);
       $Qcurrency->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -52,9 +55,10 @@
           $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qupdate->bindValue(':configuration_value', $data['code']);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_CURRENCY');
+          $Qupdate->setLogging($_SESSION['module'], $id);
           $Qupdate->execute();
 
-          if ($Qupdate->affectedRows()) {
+          if ( $Qupdate->affectedRows() ) {
             osC_Cache::clear('configuration');
           }
         }
@@ -79,6 +83,7 @@
         $Qdelete = $osC_Database->query('delete from :table_currencies where currencies_id = :currencies_id');
         $Qdelete->bindTable(':table_currencies', TABLE_CURRENCIES);
         $Qdelete->bindInt(':currencies_id', $id);
+        $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( !$osC_Database->isError() ) {
@@ -108,6 +113,7 @@
           $Qupdate->bindTable(':table_currencies', TABLE_CURRENCIES);
           $Qupdate->bindValue(':value', $rate);
           $Qupdate->bindInt(':currencies_id', $Qcurrencies->valueInt('currencies_id'));
+          $Qupdate->setLogging($_SESSION['module'], $Qcurrencies->valueInt('currencies_id'));
           $Qupdate->execute();
 
           $updated[1][] = array('title' => $Qcurrencies->value('title'),

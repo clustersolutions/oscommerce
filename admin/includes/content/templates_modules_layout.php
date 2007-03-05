@@ -141,6 +141,7 @@
       $Qlayout->bindValue(':boxes_group', $data['group']);
       $Qlayout->bindInt(':sort_order', $data['sort_order']);
       $Qlayout->bindInt(':page_specific', ($data['page_specific'] === true) ? '1' : '0');
+      $Qlayout->setLogging($_SESSION['module'], $id);
       $Qlayout->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -158,6 +159,7 @@
       $Qdel = $osC_Database->query('delete from :table_templates_boxes_to_pages where id = :id');
       $Qdel->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
       $Qdel->bindInt(':id', $id);
+      $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
 
       if ( !$osC_Database->isError() ) {

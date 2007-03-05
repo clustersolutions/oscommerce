@@ -99,6 +99,7 @@
           $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
           $Qupdate->bindValue(':configuration_value', $value);
           $Qupdate->bindValue(':configuration_key', $key);
+          $Qupdate->setLogging($_SESSION['module']);
           $Qupdate->execute();
 
           if ( $osC_Database->isError() ) {
@@ -111,6 +112,7 @@
         $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
         $Qupdate->bindValue(':configuration_value', $module_name);
         $Qupdate->bindValue(':configuration_key', 'DEFAULT_TEMPLATE');
+        $Qupdate->setLogging($_SESSION['module']);
         $Qupdate->execute();
 
         if ( $osC_Database->isError() ) {

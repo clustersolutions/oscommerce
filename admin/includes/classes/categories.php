@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -53,6 +53,7 @@
 
       $Qcat->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qcat->bindInt(':sort_order', $data['sort_order']);
+      $Qcat->setLogging($_SESSION['module'], $id);
       $Qcat->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -69,6 +70,7 @@
           $Qcd->bindInt(':categories_id', $category_id);
           $Qcd->bindInt(':language_id', $l['id']);
           $Qcd->bindValue(':categories_name', $data['name'][$l['id']]);
+          $Qcd->setLogging($_SESSION['module'], $category_id);
           $Qcd->execute();
 
           if ( $osC_Database->isError() ) {
@@ -85,6 +87,7 @@
             $Qcf->bindTable(':table_categories', TABLE_CATEGORIES);
             $Qcf->bindValue(':categories_image', $categories_image->filename);
             $Qcf->bindInt(':categories_id', $category_id);
+            $Qcf->setLogging($_SESSION['module'], $category_id);
             $Qcf->execute();
 
             if ( $osC_Database->isError() ) {
@@ -155,18 +158,21 @@
           $Qc = $osC_Database->query('delete from :table_categories where categories_id = :categories_id');
           $Qc->bindTable(':table_categories', TABLE_CATEGORIES);
           $Qc->bindInt(':categories_id', $c_entry['id']);
+          $Qc->setLogging($_SESSION['module'], $id);
           $Qc->execute();
 
           if ( !$osC_Database->isError() ) {
             $Qcd = $osC_Database->query('delete from :table_categories_description where categories_id = :categories_id');
             $Qcd->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
             $Qcd->bindInt(':categories_id', $c_entry['id']);
+            $Qcd->setLogging($_SESSION['module'], $id);
             $Qcd->execute();
 
             if ( !$osC_Database->isError() ) {
               $Qp2c = $osC_Database->query('delete from :table_products_to_categories where categories_id = :categories_id');
               $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
               $Qp2c->bindInt(':categories_id', $c_entry['id']);
+              $Qp2c->setLogging($_SESSION['module'], $id);
               $Qp2c->execute();
 
               if ( !$osC_Database->isError() ) {
@@ -226,6 +232,7 @@
       $Qupdate->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qupdate->bindInt(':parent_id', end($category_array));
       $Qupdate->bindInt(':categories_id', $id);
+      $Qupdate->setLogging($_SESSION['module'], $id);
       $Qupdate->execute();
 
       osC_Cache::clear('categories');

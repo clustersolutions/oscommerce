@@ -71,6 +71,7 @@
         $Qspecial->bindValue(':expires_date', $data['expires_date']);
         $Qspecial->bindValue(':start_date', $data['start_date']);
         $Qspecial->bindInt(':status', $data['status']);
+        $Qspecial->setLogging($_SESSION['module'], $id);
         $Qspecial->execute();
 
         if ( $osC_Database->isError() ) {
@@ -91,6 +92,7 @@
       $Qspecial = $osC_Database->query('delete from :table_specials where specials_id = :specials_id');
       $Qspecial->bindTable(':table_specials', TABLE_SPECIALS);
       $Qspecial->bindInt(':specials_id', $id);
+      $Qspecial->setLogging($_SESSION['module'], $id);
       $Qspecial->execute();
 
       if ( !$osC_Database->isError() ) {

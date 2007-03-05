@@ -40,6 +40,7 @@
       $Qemail->bindValue(':title', $data['title']);
       $Qemail->bindValue(':content', $data['content']);
       $Qemail->bindValue(':module', $data['module']);
+      $Qemail->setLogging($_SESSION['module'], $id);
       $Qemail->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -69,6 +70,7 @@
         $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
         $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
         $Qdelete->bindInt(':newsletters_id', $id);
+        $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( $osC_Database->isError() ) {

@@ -62,6 +62,7 @@
       $Qcountry->bindValue(':countries_iso_code_2', $data['iso_code_2']);
       $Qcountry->bindValue(':countries_iso_code_3', $data['iso_code_3']);
       $Qcountry->bindValue(':address_format', $data['address_format']);
+      $Qcountry->setLogging($_SESSION['module'], $id);
       $Qcountry->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -81,12 +82,14 @@
       $Qzones = $osC_Database->query('delete from :table_zones where zone_country_id = :zone_country_id');
       $Qzones->bindTable(':table_zones', TABLE_ZONES);
       $Qzones->bindInt(':zone_country_id', $id);
+      $Qzones->setLogging($_SESSION['module'], $id);
       $Qzones->execute();
 
       if ( !$osC_Database->isError() ) {
         $Qcountry = $osC_Database->query('delete from :table_countries where countries_id = :countries_id');
         $Qcountry->bindTable(':table_countries', TABLE_COUNTRIES);
         $Qcountry->bindInt(':countries_id', $id);
+        $Qcountry->setLogging($_SESSION['module'], $id);
         $Qcountry->execute();
 
         if ( $osC_Database->isError() ) {
@@ -120,6 +123,7 @@
       $Qzone->bindValue(':zone_name', $data['name']);
       $Qzone->bindValue(':zone_code', $data['code']);
       $Qzone->bindInt(':zone_country_id', $data['country_id']);
+      $Qzone->setLogging($_SESSION['module'], $id);
       $Qzone->execute();
 
       if ( !$osC_Database->isError() ) {
@@ -135,6 +139,7 @@
       $Qzone = $osC_Database->query('delete from :table_zones where zone_id = :zone_id');
       $Qzone->bindTable(':table_zones', TABLE_ZONES);
       $Qzone->bindInt(':zone_id', $id);
+      $Qzone->setLogging($_SESSION['module'], $id);
       $Qzone->execute();
 
       if ( !$osC_Database->isError() ) {
