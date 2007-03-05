@@ -11,7 +11,8 @@
 */
 
   $db_table_types = array(array('id' => 'mysql', 'text' => 'MySQL - MyISAM (Default)'),
-                          array('id' => 'mysql_innodb', 'text' => 'MySQL - InnoDB (Transaction-Safe)'));
+                          array('id' => 'mysql_innodb', 'text' => 'MySQL - InnoDB (Transaction-Safe)'),
+                          array('id' => 'mysqli', 'text' => 'MySQLi (PHP 5 / MySQL 4.1)'));
 ?>
 
 <script language="javascript" type="text/javascript" src="../includes/javascript/xmlhttp/xmlhttp.js"></script>
