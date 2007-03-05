@@ -146,10 +146,10 @@
                    '  define(\'HTTP_SERVER\', \'' . $http_server . '\');' . "\n" .
                    '  define(\'HTTPS_SERVER\', \'' . $http_server . '\');' . "\n" .
                    '  define(\'ENABLE_SSL\', false);' . "\n" .
-                   '  define(\'HTTP_COOKIE_DOMAIN\', \'\');' . "\n" .
-                   '  define(\'HTTPS_COOKIE_DOMAIN\', \'\');' . "\n" .
-                   '  define(\'HTTP_COOKIE_PATH\', \'\');' . "\n" .
-                   '  define(\'HTTPS_COOKIE_PATH\', \'\');' . "\n" .
+                   '  define(\'HTTP_COOKIE_DOMAIN\', \'' . $http_url['host'] . '\');' . "\n" .
+                   '  define(\'HTTPS_COOKIE_DOMAIN\', \'' . $http_url['host'] . '\');' . "\n" .
+                   '  define(\'HTTP_COOKIE_PATH\', \'' . $http_catalog . '\');' . "\n" .
+                   '  define(\'HTTPS_COOKIE_PATH\', \'' . $http_catalog . '\');' . "\n" .
                    '  define(\'DIR_WS_HTTP_CATALOG\', \'' . $http_catalog . '\');' . "\n" .
                    '  define(\'DIR_WS_HTTPS_CATALOG\', \'' . $http_catalog . '\');' . "\n" .
                    '  define(\'DIR_WS_IMAGES\', \'images/\');' . "\n\n" .
@@ -163,7 +163,7 @@
                    '  define(\'DB_SERVER_USERNAME\', \'' . $_POST['DB_SERVER_USERNAME'] . '\');' . "\n" .
                    '  define(\'DB_SERVER_PASSWORD\', \'' . $_POST['DB_SERVER_PASSWORD']. '\');' . "\n" .
                    '  define(\'DB_DATABASE\', \'' . $_POST['DB_DATABASE']. '\');' . "\n" .
-                   '  define(\'DB_DATABASE_CLASS\', \'' . (($_POST['DB_DATABASE_CLASS'] == 'mysql_innodb') && ($db_has_innodb === true) ? 'mysql_innodb' : 'mysql') . '\');' . "\n" .
+                   '  define(\'DB_DATABASE_CLASS\', \'' . $_POST['DB_DATABASE_CLASS'] . '\');' . "\n" .
                    '  define(\'DB_TABLE_PREFIX\', \'' . $_POST['DB_TABLE_PREFIX']. '\');' . "\n" .
                    '  define(\'USE_PCONNECT\', \'false\');' . "\n" .
                    '  define(\'STORE_SESSIONS\', \'mysql\');' . "\n" .
@@ -194,11 +194,7 @@
 
       <?php echo $osC_Language->get('error_configuration_file_alternate_method'); ?>
 
-      <textarea name="contents" readonly="readonly" style="width: 100%; height: 120px;">
-<?php
-    echo $file_contents;
-?>
-      </textarea>
+      <?php echo osc_draw_textarea_field('contents', $file_contents, 60, 5, 'readonly="readonly" style="width: 100%; height: 120px;"', false); ?>
     </div>
 
 <?php
