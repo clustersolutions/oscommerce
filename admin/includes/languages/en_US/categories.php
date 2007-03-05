@@ -19,6 +19,7 @@
   define('TABLE_HEADING_STATUS', 'Status');
 
   define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
+  define('TEXT_EDIT_PARENT_CATEGORY', 'Parent Category:');
   define('TEXT_EDIT_CATEGORIES_NAME', 'Category Name:');
   define('TEXT_EDIT_CATEGORIES_IMAGE', 'Category Image:');
   define('TEXT_EDIT_SORT_ORDER', 'Sort Order:');
@@ -26,10 +27,12 @@
   define('TEXT_INFO_HEADING_NEW_CATEGORY', 'New Category');
 
   define('TEXT_DELETE_CATEGORY_INTRO', 'Are you sure you want to delete this category?');
+  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following categories?');
   define('TEXT_DELETE_WARNING_CHILDS', '<b>WARNING:</b> There are %s (child-)categories still linked to this category!');
   define('TEXT_DELETE_WARNING_PRODUCTS', '<b>WARNING:</b> There are %s products still linked to this category!');
 
   define('TEXT_MOVE_CATEGORIES_INTRO', 'Please select which category you wish <b>%s</b> to reside in');
+  define('TEXT_MOVE_BATCH_INTRO', 'Please select which category you wish to move the following categories to');
   define('TEXT_MOVE', 'Move <b>%s</b> to:');
 
   define('TEXT_NEW_CATEGORY_INTRO', 'Please fill out the following information for the new category');
