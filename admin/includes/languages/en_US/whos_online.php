@@ -13,9 +13,7 @@
 define('HEADING_TITLE', 'Who\'s Online');
 
 define('TABLE_HEADING_ONLINE', 'Online');
-define('TABLE_HEADING_CUSTOMER_ID', 'ID');
 define('TABLE_HEADING_FULL_NAME', 'Full Name');
-define('TABLE_HEADING_IP_ADDRESS', 'IP Address');
 define('TABLE_HEADING_LAST_CLICK', 'Last Click');
 define('TABLE_HEADING_LAST_PAGE_URL', 'Last URL');
 define('TABLE_HEADING_SHOPPING_CART_TOTAL', 'Total');
@@ -31,6 +29,4 @@ define('TEXT_LAST_CLICK', 'Last Click:');
 define('TEXT_LAST_PAGE_URL', 'Last Page URL:');
 define('TEXT_SHOPPING_CART_PRODUCTS', 'Products In Shopping Cart:');
 define('TEXT_SHOPPING_CART_TOTAL', 'Shopping Cart Total:');
-
-define('TEXT_DISPLAY_NUMBER_OF_WHOS_ONLINE', 'There are currently %s customers online');
 ?>

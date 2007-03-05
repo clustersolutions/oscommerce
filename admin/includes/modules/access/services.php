@@ -15,6 +15,6 @@
         $_group = 'modules',
         $_icon = 'services.png',
         $_title = ACCESS_SERVICES_TITLE,
-        $_sort_order = 400;
+        $_sort_order = 500;
   }
 ?>

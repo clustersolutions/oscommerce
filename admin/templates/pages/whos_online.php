@@ -22,7 +22,11 @@
   require('../includes/classes/navigation_history.php');
   require('../includes/classes/shopping_cart.php');
 
-  require('includes/classes/ip_locator.php');
+  require('includes/classes/geoip.php');
+  $osC_GeoIP = osC_GeoIP_Admin::load();
+  if ($osC_GeoIP->isInstalled()) {
+    $osC_GeoIP->activate();
+  }
 
   $xx_mins_ago = (time() - 900);
 
@@ -45,10 +49,9 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
     <thead>
       <tr>
+        <th width="22">&nbsp;</th>
         <th><?php echo TABLE_HEADING_ONLINE; ?></th>
-        <th><?php echo TABLE_HEADING_CUSTOMER_ID; ?></th>
         <th><?php echo TABLE_HEADING_FULL_NAME; ?></th>
-        <th><?php echo TABLE_HEADING_IP_ADDRESS; ?></th>
         <th><?php echo TABLE_HEADING_LAST_CLICK; ?></th>
         <th><?php echo TABLE_HEADING_LAST_PAGE_URL; ?></th>
         <th><?php echo TABLE_HEADING_SHOPPING_CART_TOTAL; ?></th>
@@ -60,6 +63,7 @@
 <?php
   $Qwho = $osC_Database->query('select customer_id, full_name, ip_address, time_entry, time_last_click, session_id from :table_whos_online order by time_last_click desc');
   $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
+  $Qwho->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qwho->execute();
 
   while ($Qwho->next()) {
@@ -89,10 +93,19 @@
 ?>
 
       <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
+        <td align="center">
+
+<?php
+    if ($osC_GeoIP->isActive() && $osC_GeoIP->isValid($Qwho->value('ip_address'))) {
+      echo osc_image('../images/worldflags/' . $osC_GeoIP->getCountryISOCode2($Qwho->value('ip_address')) . '.png', $osC_GeoIP->getCountryName($Qwho->value('ip_address')) . ', ' . $Qwho->value('ip_address'), 18, 12);
+    } else {
+      echo osc_image('images/pixel_trans.gif', $Qwho->value('ip_address'), 18, 12);
+    }
+?>
+
+        </td>
         <td><?php echo gmdate('H:i:s', time() - $Qwho->value('time_entry')); ?></td>
-        <td><?php echo $Qwho->value('customer_id'); ?></td>
-        <td><?php echo $Qwho->value('full_name'); ?></td>
-        <td><?php echo $Qwho->value('ip_address'); ?></td>
+        <td><?php echo $Qwho->value('full_name') . ' (' . $Qwho->valueInt('customer_id') . ')'; ?></td>
         <td><?php echo date('H:i:s', $Qwho->value('time_last_click')); ?></td>
         <td><?php echo $last_page['page']; ?></td>
         <td><?php echo $osC_Currencies->format($cart['total_cost'], true, $currency); ?></td>
@@ -116,13 +129,16 @@
     </tbody>
   </table>
 
-  <p><?php echo sprintf(TEXT_DISPLAY_NUMBER_OF_WHOS_ONLINE, $Qwho->numberOfRows()); ?></p>
+  <table border="0" width="100%" cellspacing="0" cellpadding="2">
+    <tr>
+      <td><?php echo $Qwho->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_WHOS_ONLINE); ?></td>
+      <td align="right"><?php echo $Qwho->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
+    </tr>
+  </table>
 </div>
 
 <?php
   if (isset($wInfo)) {
-    $osC_IP_Locator = new osC_IP_Locator();
-
     $last_page_url = $wInfo->last_page['page'];
 
     if (isset($wInfo->last_page['get']['osCsid'])) {
@@ -165,24 +181,18 @@
       </tr>
       <tr>
         <td class="smallText" width="40%"><?php echo '<b>' . TEXT_IP_ADDRESS . '</b>'; ?></td>
-        <td class="smallText" width="60%"><?php echo $wInfo->ip_address; ?></td>
-      </tr>
+        <td class="smallText" width="60%">
 
 <?php
-    if ($osC_IP_Locator->isLoaded()) {
-      if (($data = $osC_IP_Locator->getData($wInfo->ip_address)) !== false) {
-        foreach ($data as $entry) {
-          echo '      <tr>' . "\n" .
-               '        <td class="smallText" width="40%"><b>' . $entry['key'] . '</b></td>' . "\n" .
-               '        <td class="smallText" width="60%">' . $entry['value'] . '</td>' . "\n" .
-               '      </tr>' . "\n";
-        }
-      }
+    echo $wInfo->ip_address;
 
-      $osC_IP_Locator->unload();
+    if ($osC_GeoIP->isActive() && $osC_GeoIP->isValid($wInfo->ip_address)) {
+      echo '<p>' . implode('<br />', $osC_GeoIP->getData($wInfo->ip_address)) . '</p>';
     }
 ?>
 
+        </td>
+      </tr>
       <tr>
         <td class="smallText" colspan="2">&nbsp;</td>
       </tr>
@@ -231,5 +241,9 @@
 </div>
 
 <?php
+  }
+
+  if ($osC_GeoIP->isActive()) {
+    $osC_GeoIP->deactivate();
   }
 ?>

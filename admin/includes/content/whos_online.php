@@ -24,6 +24,10 @@
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
       }
+
+      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+        $_GET['page'] = 1;
+      }
     }
   }
 ?>
