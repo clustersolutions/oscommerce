@@ -18,6 +18,7 @@ define('TABLE_HEADING_ACTION', 'Action');
 define('TEXT_INFO_INSERT_INTRO', 'Please enter the new orders status with its related data');
 define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
 define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this order status?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following order statuses?');
 
 define('TEXT_INFO_ORDERS_STATUS_NAME', 'Orders Status:');
 
