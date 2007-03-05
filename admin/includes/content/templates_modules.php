@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,30 +16,32 @@
 
     var $_module = 'templates_modules',
         $_page_title,
-        $_page_contents = 'templates_modules.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Templates_modules() {
-      global $osC_Language;
+      global $osC_Language, $osC_MessageStack;
 
-      if (!isset($_GET['set'])) {
+      if ( !isset($_GET['set']) ) {
         $_GET['set'] = '';
       }
 
-      if (!isset($_GET['action'])) {
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
-      switch ($_GET['set']) {
+      switch ( $_GET['set'] ) {
         case 'content':
           $this->_page_title = HEADING_TITLE_MODULES_CONTENT;
+
           break;
 
         case 'boxes':
         default:
           $_GET['set'] = 'boxes';
           $this->_page_title = HEADING_TITLE_MODULES_BOXES;
+
           break;
       }
 
@@ -47,18 +49,54 @@
 
       $osC_Language->load('modules-' . $_GET['set']);
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
+          case 'info':
+            $this->_page_contents = 'info.php';
+
+            break;
+
           case 'save':
-            $this->_save();
+            $this->_page_contents = 'edit.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('configuration' => $_POST['configuration']);
+
+              if ( $this->_save($data) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set']));
+            }
+
             break;
 
           case 'install':
-            $this->_install();
+            if ( $this->_install($_GET['module'], $_GET['set']) ) {
+              $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+            } else {
+              $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+            }
+
+            osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set']));
+
             break;
 
-          case 'remove':
-            $this->_delete();
+          case 'uninstall':
+            $this->_page_contents = 'uninstall.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( $this->_uninstall($_GET['module'], $_GET['set']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set']));
+            }
+
             break;
         }
       }
@@ -66,81 +104,83 @@
 
 /* Private methods */
 
-    function _save() {
+    function _save($data) {
       global $osC_Database;
 
-      if (isset($_POST['configuration']) && is_array($_POST['configuration'])) {
-        $error = false;
+      $error = false;
 
-        $osC_Database->startTransaction();
+      $osC_Database->startTransaction();
 
-        foreach ($_POST['configuration'] as $key => $value) {
-          $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qupdate->bindValue(':configuration_value', $value);
-          $Qupdate->bindValue(':configuration_key', $key);
-          $Qupdate->execute();
+      foreach ( $data['configuration'] as $key => $value ) {
+        $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+        $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
+        $Qupdate->bindValue(':configuration_value', $value);
+        $Qupdate->bindValue(':configuration_key', $key);
+        $Qupdate->execute();
 
-          if ($osC_Database->isError()) {
-            $error = true;
-            break;
-          }
-        }
-
-        if ($error === false) {
-          $osC_Database->commitTransaction();
-
-          osC_Cache::clear('configuration');
-        } else {
-          $osC_Database->rollbackTransaction();
+        if ( $osC_Database->isError() ) {
+          $error = true;
+          break;
         }
       }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&module=' . $_GET['module']));
+      if ( $error === false ) {
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('configuration');
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
+
+      return false;
     }
 
-    function _install() {
+    function _install($module_name, $set) {
       global $osC_Language;
 
-      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php')) {
-        include('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php');
-        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET['module'];
+      if ( file_exists('../includes/modules/' . $set . '/' . $module_name . '.php') ) {
+        include('../includes/modules/' . $set . '/' . $module_name . '.php');
 
-        if (call_user_func(array($class, 'isInstalled'), $_GET['module'], $_GET['set']) === false) {
-          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET['module'] . '.xml');
-        }
+        $osC_Language->injectDefinitions('modules/' . $set . '/' . $module_name . '.xml');
+
+        $class = 'osC_' . ucfirst($set) . '_' . $module_name;
 
         $module = new $class();
         $module->install();
+
+        osC_Cache::clear('configuration');
+        osC_Cache::clear('modules_' . $set);
+        osC_Cache::clear('templates_' . $set . '_layout');
+
+        return true;
       }
 
-      osC_Cache::clear('configuration');
-      osC_Cache::clear('modules_' . $_GET['set']);
-      osC_Cache::clear('templates_' . $_GET['set'] . '_layout');
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&module=' . $_GET['module']));
+      return false;
     }
 
-    function _delete() {
+    function _uninstall($module_name, $set) {
       global $osC_Language;
 
-      if (file_exists('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php')) {
-        include('../includes/modules/' . $_GET['set'] . '/' . $_GET['module'] . '.php');
-        $class = 'osC_' . ucfirst($_GET['set']) . '_' . $_GET['module'];
+      if ( file_exists('../includes/modules/' . $set . '/' . $module_name . '.php') ) {
+        include('../includes/modules/' . $set . '/' . $module_name . '.php');
 
-        if (call_user_func(array($class, 'isInstalled'), $_GET['module'], $_GET['set']) === false) {
-          $osC_Language->injectDefinitions('modules/' . $_GET['set'] . '/' . $_GET['module'] . '.xml');
-        }
+        $osC_Language->injectDefinitions('modules/' . $set . '/' . $module_name . '.xml');
+
+        $class = 'osC_' . ucfirst($set) . '_' . $module_name;
 
         $module = new $class();
         $module->remove();
+
+        osC_Cache::clear('configuration');
+        osC_Cache::clear('modules_' . $set);
+        osC_Cache::clear('templates_' . $set . '_layout');
+
+        return true;
       }
 
-      osC_Cache::clear('configuration');
-      osC_Cache::clear('modules_' . $_GET['set']);
-      osC_Cache::clear('templates_' . $_GET['set'] . '_layout');
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set']));
+      return false;
     }
   }
 ?>
