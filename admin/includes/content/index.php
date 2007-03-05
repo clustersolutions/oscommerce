@@ -16,6 +16,6 @@
 
     var $_module = 'index',
         $_page_title,
-        $_page_contents = 'index.php';
+        $_page_contents = 'main.php';
   }
 ?>
