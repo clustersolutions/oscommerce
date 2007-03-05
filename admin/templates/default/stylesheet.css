@@ -74,6 +74,10 @@ H1, H1 a:link, H1 a:visited, H1 a:active, .pageHeading { font-family: Verdana, A
   color: #000000;
 }
 
+.dataTable thead tr, .dataTable tfoot tr, .dataTable tbody tr {
+  height: 20px;
+}
+
 .dataTable tbody td {
   background-color: #F0F1F1;
   border-width: 1px;
