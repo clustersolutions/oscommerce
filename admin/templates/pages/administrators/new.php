@@ -41,32 +41,16 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' Batch Edit'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_HEADING_NEW_ADMINISTRATOR; ?></div>
 <div class="infoBoxContent">
-  <form name="aEditBatch" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave'); ?>" method="post">
+  <form name="aEdit" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_BATCH_INTRO; ?></p>
+  <p><?php echo TEXT_NEW_INTRO; ?></p>
+
+  <p><?php echo '<b>' . TEXT_ADMINISTRATOR_USERNAME . '</b><br />' . osc_draw_input_field('user_name', null, 'style="width: 100%;"'); ?></p>
+  <p><?php echo '<b>' . TEXT_ADMINISTRATOR_PASSWORD . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
 
 <?php
-  $Qadmins = $osC_Database->query('select id, user_name from :table_administrators where id in (":id") order by user_name');
-  $Qadmins->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-  $Qadmins->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qadmins->execute();
-
-  $names_string = '';
-
-  while ($Qadmins->next()) {
-    $names_string .= osc_draw_hidden_field('batch[]', $Qadmins->valueInt('id')) . '<b>' . $Qadmins->value('user_name') . '</b>, ';
-  }
-
-  if ( !empty($names_string) ) {
-    $names_string = substr($names_string, 0, -2);
-  }
-
-  echo '<p>' . $names_string . '</p>';
-
-  echo '<p>' . osc_draw_radio_field('mode', array(array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_ADD, 'text' => 'Add To'), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_REMOVE, 'text' => 'Remove From'), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_SET, 'text' => 'Set To')), OSC_ADMINISTRATORS_ACCESS_MODE_ADD) . '</p>';
-
   echo '<ul style="list-style-type: none; padding-left: 0;">' .
        '  <li>' . osc_draw_checkbox_field('modules[]', '*', null, 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . TEXT_GLOBAL_ACCESS . '</b></label></li>' .
        '</ul>' .
