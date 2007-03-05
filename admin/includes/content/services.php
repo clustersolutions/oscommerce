@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,29 +16,62 @@
 
     var $_module = 'services',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'services.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Services() {
-      if (!isset($_GET['action'])) {
+      global $osC_MessageStack;
+
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
       $this->_installed = explode(';', MODULE_SERVICES_INSTALLED);
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
           case 'save':
-            $this->_save();
+            $this->_page_contents = 'edit.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('configuration' => $_POST['configuration']);
+
+              if ( $this->_save($data) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
+
             break;
 
           case 'install':
-            $this->_install();
+            if ( $this->_install($_GET['module']) ) {
+              $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+            } else {
+              $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+            }
+
+            osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+
             break;
 
-          case 'remove':
-            $this->_delete();
+          case 'uninstall':
+            $this->_page_contents = 'uninstall.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( $this->_uninstall($_GET['module']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            }
+
             break;
         }
       }
@@ -46,150 +79,137 @@
 
 /* Private methods */
 
-    function _save() {
-      global $osC_Database, $osC_MessageStack;
+    function _save($data) {
+      global $osC_Database;
 
-      if (isset($_POST['configuration' ]) && is_array($_POST['configuration']) && (sizeof($_POST['configuration']) > 0)) {
-        $osC_Database->startTransaction();
+      $error = false;
 
-        $error = false;
-        $modified = false;
+      $osC_Database->startTransaction();
 
-        foreach ($_POST['configuration'] as $key => $value) {
-          $Qsu = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-          $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
-          $Qsu->bindValue(':configuration_value', $value);
-          $Qsu->bindvalue(':configuration_key', $key);
-          $Qsu->execute();
-
-          if ($Qsu->affectedRows() && ($modified === false)) {
-            $modified = true;
-          }
-
-          if ($osC_Database->isError()) {
-            $error = true;
-            break;
-          }
-        }
-
-        if (($modified === true) && ($error === false)) {
-          $osC_Database->commitTransaction();
-
-          osC_Cache::clear('configuration');
-
-          $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-        } else {
-          $osC_Database->rollbackTransaction();
-
-          $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
-        }
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&service=' . $_GET['service']));
-    }
-
-    function _install() {
-      global $osC_Database, $osC_MessageStack;
-
-      if (!array_search($_GET['service'], $this->_installed)) {
-        include('../includes/services/' . $_GET['service'] . '.php');
-        $class = 'osC_Services_' . $_GET['service'];
-        $module = new $class();
-        $module->install();
-
-        if (isset($module->depends)) {
-          if (is_string($module->depends) && (($key = array_search($module->depends, $this->_installed)) !== false)) {
-            if (isset($this->_installed[$key+1])) {
-              array_splice($this->_installed, $key+1, 0, $_GET['service']);
-            } else {
-              $this->_installed[] = $_GET['service'];
-            }
-          } elseif (is_array($module->depends)) {
-            foreach ($module->depends as $depends_module) {
-              if (($key = array_search($depends_module, $this->_installed)) !== false) {
-                if (!isset($array_position) || ($key > $array_position)) {
-                  $array_position = $key;
-                }
-              }
-            }
-
-            if (isset($array_position)) {
-              array_splice($this->_installed, $array_position+1, 0, $_GET['service']);
-            } else {
-              $this->_installed[] = $_GET['service'];
-            }
-          }
-        } elseif (isset($module->precedes)) {
-          if (is_string($module->precedes)) {
-            if ((($key = array_search($module->precedes, $this->_installed)) !== false)) {
-              array_splice($this->_installed, $key, 0, $_GET['service']);
-            } else {
-              $this->_installed[] = $_GET['service'];
-            }
-          } elseif (is_array($module->precedes)) {
-            foreach ($module->precedes as $precedes_module) {
-              if (($key = array_search($precedes_module, $this->_installed)) !== false) {
-                if (!isset($array_position) || ($key < $array_position)) {
-                  $array_position = $key;
-                }
-              }
-            }
-
-            if (isset($array_position)) {
-              array_splice($this->_installed, $array_position, 0, $_GET['service']);
-            } else {
-              $this->_installed[] = $_GET['service'];
-            }
-          }
-        } else {
-          $this->_installed[] = $_GET['service'];
-        }
-
+      foreach ( $data['configuration'] as $key => $value ) {
         $Qsu = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
         $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
-        $Qsu->bindValue(':configuration_value', implode(';', $this->_installed));
-        $Qsu->bindValue(':configuration_key', 'MODULE_SERVICES_INSTALLED');
+        $Qsu->bindValue(':configuration_value', $value);
+        $Qsu->bindvalue(':configuration_key', $key);
         $Qsu->execute();
 
-        if ($Qsu->affectedRows()) {
-          osC_Cache::clear('configuration');
-
-          $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-        } else {
-          $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+        if ( $osC_Database->isError() ) {
+          $error = true;
+          break;
         }
       }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&service=' . $_GET['service']));
+      if ( $error === false ) {
+        $osC_Database->commitTransaction();
+
+        osC_Cache::clear('configuration');
+
+        return true;
+      }
+
+      $osC_Database->rollbackTransaction();
+
+      return false;
     }
 
-    function _delete() {
-      global $osC_Database, $osC_MessageStack;
+    function _install($module_key) {
+      global $osC_Database;
 
-      if (($key = array_search($_GET['service'], $this->_installed)) !== false) {
-        include('../includes/services/' . $_GET['service'] . '.php');
-        $class = 'osC_Services_' . $_GET['service'];
-        $module = new $class();
-        $module->remove();
+      include('../includes/services/' . $module_key . '.php');
 
-        unset($this->_installed[$key]);
+      $class = 'osC_Services_' . $module_key;
 
-        $Qsu = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
-        $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
-        $Qsu->bindValue(':configuration_value', implode(';', $this->_installed));
-        $Qsu->bindValue(':configuration_key', 'MODULE_SERVICES_INSTALLED');
-        $Qsu->execute();
+      $module = new $class();
+      $module->install();
 
-        if ($Qsu->affectedRows()) {
-          osC_Cache::clear('configuration');
+      if ( isset($module->depends) ) {
+        if ( is_string($module->depends) && ( ( $key = array_search($module->depends, $this->_installed) ) !== false ) ) {
+          if ( isset($this->_installed[$key+1]) ) {
+            array_splice($this->_installed, $key+1, 0, $module_key);
+          } else {
+            $this->_installed[] = $module_key;
+          }
+        } elseif ( is_array($module->depends) ) {
+          foreach ( $module->depends as $depends_module ) {
+            if ( ( $key = array_search($depends_module, $this->_installed) ) !== false ) {
+              if ( !isset($array_position) || ( $key > $array_position ) ) {
+                $array_position = $key;
+              }
+            }
+          }
 
-          $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-        } else {
-          $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+          if ( isset($array_position) ) {
+            array_splice($this->_installed, $array_position+1, 0, $module_key);
+          } else {
+            $this->_installed[] = $module_key;
+          }
         }
+      } elseif ( isset($module->precedes) ) {
+        if ( is_string($module->precedes) ) {
+          if ( ( $key = array_search($module->precedes, $this->_installed) ) !== false ) {
+            array_splice($this->_installed, $key, 0, $module_key);
+          } else {
+            $this->_installed[] = $module_key;
+          }
+        } elseif ( is_array($module->precedes) ) {
+          foreach ( $module->precedes as $precedes_module ) {
+            if ( ( $key = array_search($precedes_module, $this->_installed) ) !== false ) {
+              if ( !isset($array_position) || ( $key < $array_position ) ) {
+                $array_position = $key;
+              }
+            }
+          }
+
+          if ( isset($array_position) ) {
+            array_splice($this->_installed, $array_position, 0, $module_key);
+          } else {
+            $this->_installed[] = $module_key;
+          }
+        }
+      } else {
+        $this->_installed[] = $module_key;
       }
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+      $Qsu = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+      $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qsu->bindValue(':configuration_value', implode(';', $this->_installed));
+      $Qsu->bindValue(':configuration_key', 'MODULE_SERVICES_INSTALLED');
+      $Qsu->execute();
+
+      if ( !$osC_Database->isError() ) {
+        osC_Cache::clear('configuration');
+
+        return true;
+      }
+
+      return false;
+    }
+
+    function _uninstall($module_key) {
+      global $osC_Database;
+
+      include('../includes/services/' . $module_key . '.php');
+
+      $class = 'osC_Services_' . $module_key;
+
+      $module = new $class();
+      $module->remove();
+
+      unset($this->_installed[array_search($module_key, $this->_installed)]);
+
+      $Qsu = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+      $Qsu->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qsu->bindValue(':configuration_value', implode(';', $this->_installed));
+      $Qsu->bindValue(':configuration_key', 'MODULE_SERVICES_INSTALLED');
+      $Qsu->execute();
+
+      if ( !$osC_Database->isError() ) {
+        osC_Cache::clear('configuration');
+
+        return true;
+      }
+
+      return false;
     }
   }
 ?>
