@@ -27,6 +27,7 @@ define('ENTRY_REVIEW_TEXT', '<small><font color="#ff0000"><b>NOTE:</b></font></s
 define('ENTRY_RATING', 'Rating:');
 
 define('TEXT_INFO_DELETE_REVIEW_INTRO', 'Are you sure you want to delete this review?');
+define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following reviews?');
 
 define('TEXT_INFO_DATE_ADDED', 'Date Added:');
 define('TEXT_INFO_LAST_MODIFIED', 'Last Modified:');
