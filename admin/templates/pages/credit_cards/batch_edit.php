@@ -46,7 +46,7 @@
   echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => 'Activate'), array('id' => 'deactivate', 'text' => 'Deactivate')), 'activate') . '</p>';
 ?>
 
-  <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton">'; ?></p>
+  <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

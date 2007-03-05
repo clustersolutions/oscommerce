@@ -38,13 +38,13 @@
   }
 
   if ( !empty($names_string) ) {
-    $names_string = substr($names_string, 0, -2) . osc_draw_hidden_field('subaction', 'confirm');
+    $names_string = substr($names_string, 0, -2);
   }
 
   echo '<p>' . $names_string . '</p>';
 ?>
 
-  <p align="center"><?php echo '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton"> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton">'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>
