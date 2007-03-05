@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -46,39 +46,40 @@
     }
 
     function showAudienceSelectionForm() {
-      global $osC_Database;
+      global $osC_Database, $osC_Template;
 
-      $customers_array = array(array('id' => '***', 'text' => MODULE_NEWSLETTER_EMAIL_TEXT_ALL_CUSTOMERS));
+      $customers_array = array(array('id' => '***',
+                                     'text' => MODULE_NEWSLETTER_EMAIL_TEXT_ALL_CUSTOMERS));
 
       $Qcustomers = $osC_Database->query('select customers_id, customers_firstname, customers_lastname, customers_email_address from :table_customers order by customers_lastname');
       $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
       $Qcustomers->execute();
 
-      while ($Qcustomers->next()) {
+      while ( $Qcustomers->next() ) {
         $customers_array[] = array('id' => $Qcustomers->valueInt('customers_id'),
                                    'text' => $Qcustomers->value('customers_lastname') . ', ' . $Qcustomers->value('customers_firstname') . ' (' . $Qcustomers->value('customers_email_address') . ')');
       }
 
       $Qcustomers->freeResult();
 
-      $audience_form = '<form name="customers" action="' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmConfirm') . '" method="post">' .
+      $audience_form = '<form name="customers" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                        '  <p align="center">' . osc_draw_pull_down_menu('customer', $customers_array, null, 'size="20" style="width: 100%;"') . '</p>' .
-                       '  <p align="right"><input type="submit" value="' . BUTTON_OK . '" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\';" class="operationButton"></p>' .
+                       '  <p align="right">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . BUTTON_OK . '" class="operationButton" />&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>' .
                        '</form>';
 
       return $audience_form;
     }
 
     function showConfirmation() {
-      global $osC_Database;
+      global $osC_Database, $osC_Template;
 
-      if (isset($_POST['customer']) && !empty($_POST['customer'])) {
+      if ( isset($_POST['customer']) && !empty($_POST['customer']) ) {
         $Qcustomers = $osC_Database->query('select count(customers_id) as total from :table_customers c left join :table_newsletters_log nl on (c.customers_email_address = nl.email_address and nl.newsletters_id = :newsletters_id) where nl.email_address is null');
         $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
         $Qcustomers->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
         $Qcustomers->bindInt(':newsletters_id', $this->_newsletter_id);
 
-        if (is_numeric($_POST['customer'])) {
+        if ( is_numeric($_POST['customer']) ) {
           $Qcustomers->appendQuery('and c.customers_id = :customers_id');
           $Qcustomers->bindInt(':customers_id', $_POST['customer']);
         }
@@ -91,15 +92,17 @@
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_EMAIL_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
-                             '<form name="confirm" action="' . osc_href_link(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSendConfirm') . '" method="post">' .
+                             '<form name="confirm" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                              '<p align="right">';
 
-      if ($this->_audience_size > 0) {
+      if ( $this->_audience_size > 0 ) {
         $confirmation_string .= osc_draw_hidden_field('customer', $_POST['customer']) .
-                                '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton">&nbsp;';
+                                osc_draw_hidden_field('subaction', 'execute') .
+                                '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton" />&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID'] . '&action=nmSend') . '\'" class="operationButton">&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $_GET['nmID']) . '\'" class="operationButton"></p>' .
+      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '\'" class="operationButton" />&nbsp;' .
+                              '<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\'" class="operationButton"/></p>' .
                               '</form>';
 
       return $confirmation_string;

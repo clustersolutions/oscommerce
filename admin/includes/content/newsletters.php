@@ -5,10 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
+
+  require('includes/classes/newsletters.php');
 
   class osC_Content_Newsletters extends osC_Template {
 
@@ -16,110 +18,103 @@
 
     var $_module = 'newsletters',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'newsletters.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Newsletters() {
-      if (!isset($_GET['action'])) {
+      global $osC_MessageStack;
+
+      if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
 
-      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+      if ( !isset($_GET['page']) || ( isset($_GET['page']) && !is_numeric($_GET['page']) ) ) {
         $_GET['page'] = 1;
       }
 
-      if (!empty($_GET['action'])) {
-        switch ($_GET['action']) {
-          case 'nmPreview':
-            $this->_page_contents = 'newsletters_preview.php';
-            break;
+      if ( !empty($_GET['action']) ) {
+        switch ( $_GET['action'] ) {
+          case 'preview':
+            $this->_page_contents = 'preview.php';
 
-          case 'nmEdit':
-            $this->_page_contents = 'newsletters_edit.php';
-            break;
-
-          case 'nmSend':
-          case 'nmConfirm':
-          case 'nmSendConfirm':
-            $this->_page_contents = 'newsletters_send.php';
-            break;
-
-          case 'nmLog':
-            $this->_page_contents = 'newsletters_log.php';
             break;
 
           case 'save':
-            $this->_save();
+            if ( isset($_GET['nID']) && is_numeric($_GET['nID']) ) {
+              $this->_page_contents = 'edit.php';
+            } else {
+              $this->_page_contents = 'new.php';
+            }
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $data = array('title' => $_POST['title'],
+                            'content' => $_POST['content'],
+                            'module' => $_POST['module']);
+
+              if ( osC_Newsletters_Admin::save((isset($_GET['nID']) && is_numeric($_GET['nID']) ? $_GET['nID'] : null), $data) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
             break;
 
-          case 'deleteconfirm':
-            $this->_delete();
+          case 'send':
+            $this->_page_contents = 'send.php';
+
+            break;
+
+          case 'log':
+            $this->_page_contents = 'log.php';
+
+            break;
+
+          case 'delete':
+            $this->_page_contents = 'delete.php';
+
+            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              if ( osC_Newsletters_Admin::delete($_GET['nID']) ) {
+                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              } else {
+                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              }
+
+              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+            }
+
+            break;
+
+          case 'batchDelete':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_delete.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $error = false;
+
+                foreach ($_POST['batch'] as $id) {
+                  if ( !osC_Newsletters_Admin::delete($id) ) {
+                    $error = true;
+                    break;
+                  }
+                }
+
+                if ( $error === false ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+              }
+            }
+
             break;
         }
       }
-    }
-
-/* Private methods */
-
-    function _save() {
-      global $osC_Database, $osC_MessageStack;
-
-      $newsletter_error = false;
-
-      if (!isset($_POST['module']) || (isset($_POST['module']) && empty($_POST['module']))) {
-        $newsletter_error = true;
-
-        $osC_MessageStack->add($this->_module, ERROR_NEWSLETTER_MODULE, 'error');
-      }
-
-      if (!isset($_POST['title']) || (isset($_POST['title']) && empty($_POST['title']))) {
-        $newsletter_error = true;
-
-        $osC_MessageStack->add($this->_module, ERROR_NEWSLETTER_TITLE, 'error');
-      }
-
-      if ($newsletter_error === false) {
-        if (isset($_GET['nmID']) && is_numeric($_GET['nmID'])) {
-          $Qemail = $osC_Database->query('update :table_newsletters set title = :title, content = :content, module = :module where newsletters_id = :newsletters_id');
-          $Qemail->bindInt(':newsletters_id', $_GET['nmID']);
-        } else {
-          $Qemail = $osC_Database->query('insert into :table_newsletters (title, content, module, date_added, status) values (:title, :content, :module, now(), 0)');
-        }
-        $Qemail->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-        $Qemail->bindValue(':title', $_POST['title']);
-        $Qemail->bindValue(':content', $_POST['content']);
-        $Qemail->bindValue(':module', $_POST['module']);
-        $Qemail->execute();
-
-        if (isset($_GET['nmID']) && is_numeric($_GET['nmID'])) {
-          $nmID = $_GET['nmID'];
-        } else {
-          $nmID = $osC_Database->nextID();
-        }
-
-        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&nmID=' . $nmID));
-      } else {
-        $this->_page_contents = 'newsletters_edit.php';
-      }
-    }
-
-    function _delete() {
-      global $osC_Database;
-
-      if (isset($_GET['nmID']) && is_numeric($_GET['nmID'])) {
-        $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
-        $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-        $Qdelete->bindInt(':newsletters_id', $_GET['nmID']);
-        $Qdelete->execute();
-
-        $Qdelete = $osC_Database->query('delete from :table_newsletters_log where newsletters_id = :newsletters_id');
-        $Qdelete->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
-        $Qdelete->bindInt(':newsletters_id', $_GET['nmID']);
-        $Qdelete->execute();
-      }
-
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
     }
   }
 ?>

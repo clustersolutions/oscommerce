@@ -20,11 +20,14 @@
   define('TABLE_HEADING_EMAIL_ADDRESS', 'E-Mail Address');
   define('TABLE_HEADING_DATE_SENT', 'Date Sent');
 
+  define('TEXT_HEADING_NEW_EMAIL', 'New E-Mail');
+
   define('TEXT_NEWSLETTER_MODULE', 'Module:');
   define('TEXT_NEWSLETTER_TITLE', 'Newsletter Title:');
   define('TEXT_NEWSLETTER_CONTENT', 'Content:');
 
   define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this newsletter?');
+  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following newsletters?');
 
   define('TEXT_PLEASE_WAIT', 'Please wait .. sending newsletters ..<br /><br />Please do not interrupt this process!');
   define('TEXT_REFRESHING_PAGE', 'Automatically refreshing page to avoid a server timeout ..');
