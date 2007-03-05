@@ -16,13 +16,17 @@
 
     var $_module = 'credit_cards',
         $_page_title = HEADING_TITLE,
-        $_page_contents = 'credit_cards.php';
+        $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Credit_cards() {
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
+      }
+
+      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
+        $_GET['page'] = 1;
       }
 
       if (!empty($_GET['action'])) {
@@ -33,6 +37,32 @@
 
           case 'deleteconfirm':
             $this->_delete();
+            break;
+
+          case 'batchSave':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_edit.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $this->_saveBatch();
+              }
+            } else {
+              $_GET['action'] = '';
+            }
+
+            break;
+
+          case 'batchDelete':
+            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
+              $this->_page_contents = 'batch_delete.php';
+
+              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+                $this->_deleteBatch();
+              }
+            } else {
+              $_GET['action'] = '';
+            }
+
             break;
         }
       }
@@ -72,7 +102,7 @@
           $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
         }
 
-        osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module . '&ccID=' . ((isset($_GET['ccID']) && is_numeric($_GET['ccID'])) ? $_GET['ccID'] : $osC_Database->nextID())));
+        osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&ccID=' . ((isset($_GET['ccID']) && is_numeric($_GET['ccID'])) ? $_GET['ccID'] : $osC_Database->nextID())));
       }
     }
 
@@ -94,7 +124,46 @@
         }
       }
 
-      osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module));
+      osc_redirect(osc_href_link(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+    }
+
+    function _saveBatch() {
+      global $osC_Database, $osC_MessageStack;
+
+      if (isset($_POST['batch']) && is_array($_POST['batch'])) {
+        $osC_Database->startTransaction();
+
+        $Qcc = $osC_Database->query('update :table_credit_cards set credit_card_status = :credit_card_status where id in (":id")');
+        $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+        $Qcc->bindInt(':credit_card_status', ($_POST['type'] == 'activate') ? 1 : 0);
+        $Qcc->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+        $Qcc->execute();
+
+        $osC_Database->commitTransaction();
+
+        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+      }
+
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
+    }
+
+    function _deleteBatch() {
+      global $osC_Database, $osC_MessageStack;
+
+      if (isset($_POST['batch']) && is_array($_POST['batch'])) {
+        $osC_Database->startTransaction();
+
+        $Qdel = $osC_Database->query('delete from :table_credit_cards where id in (":id")');
+        $Qdel->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+        $Qdel->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+        $Qdel->execute();
+
+        $osC_Database->commitTransaction();
+
+        $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+      }
+
+      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
     }
   }
 ?>
