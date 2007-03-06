@@ -542,5 +542,22 @@
 
       return false;
     }
+
+    function getKeywordCount($keyword, $id = null) {
+      global $osC_Database;
+
+      $Qkeywords = $osC_Database->query('select count(*) as total from :table_products_description where products_keyword = :products_keyword');
+
+      if ( is_numeric($id) ) {
+        $Qkeywords->appendQuery('and products_id != :products_id');
+        $Qkeywords->bindInt(':products_id', $id);
+      }
+
+      $Qkeywords->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+      $Qkeywords->bindValue(':products_keyword', $keyword);
+      $Qkeywords->execute();
+
+      return $Qkeywords->valueInt('total');
+    }
   }
 ?>

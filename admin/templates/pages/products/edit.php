@@ -475,6 +475,12 @@
 
 <h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
 
+<?php
+  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
+    echo $osC_MessageStack->output($osC_Template->getModule());
+  }
+?>
+
 <div class="tab-pane" id="mainTabPane">
   <script type="text/javascript"><!--
     var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );

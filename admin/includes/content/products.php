@@ -86,6 +86,8 @@
             }
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
+              $error = false;
+
               $data = array('quantity' => $_POST['products_quantity'],
                             'price' => $_POST['products_price'],
                             'date_available' => $_POST['products_date_available'],
@@ -118,13 +120,33 @@
                 $data['attribute_price'] = $_POST['attribute_price'];
               }
 
-              if ( osC_Products_Admin::save((isset($_GET['pID']) && is_numeric($_GET['pID']) ? $_GET['pID'] : null), $data) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-              } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              foreach ( $data['products_keyword'] as $value ) {
+                if ( empty($value) ) {
+                  $osC_MessageStack->add($this->_module, WARNING_PRODUCT_KEY_EMPTY, 'warning');
+
+                  $error = true;
+                } elseif ( preg_match('/^[a-z0-9_-]+$/iD', $value) !== 1 ) {
+                  $osC_MessageStack->add($this->_module, sprintf(WARNING_PRODUCT_KEY_INVALID, osc_output_string_protected($value)), 'warning');
+
+                  $error = true;
+                }
+
+                if ( osC_Products_Admin::getKeywordCount($value, (isset($_GET['pID']) && is_numeric($_GET['pID']) ? $_GET['pID'] : null)) > 0 ) {
+                  $osC_MessageStack->add($this->_module, sprintf(WARNING_PRODUCT_KEY_IN_USE, osc_output_string_protected($value)), 'warning');
+
+                  $error = true;
+                }
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
+              if ( $error === false ) {
+                if ( osC_Products_Admin::save((isset($_GET['pID']) && is_numeric($_GET['pID']) ? $_GET['pID'] : null), $data) ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
+              }
             }
 
             break;

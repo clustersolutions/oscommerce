@@ -70,6 +70,10 @@
   define('TEXT_COPY_AS_LINK', 'Link product');
   define('TEXT_COPY_AS_DUPLICATE', 'Duplicate product');
 
+  define('WARNING_PRODUCT_KEY_IN_USE', 'Warning: This product key is already in use: %s. Please use another unique keyword for this product.');
+  define('WARNING_PRODUCT_KEY_EMPTY', 'Warning: This product has an empty product key which needs to be defined. Please use a unique keyword to publicly identify this product.');
+  define('WARNING_PRODUCT_KEY_INVALID', 'Warning: This product key is invalid: %s. Product keywords must be one word containing letters and numbers (a-zA-Z0-9), and can be separated by underscores (_) and minus symbols (-).');
+
   define('ERROR_CANNOT_LINK_TO_SAME_CATEGORY', 'Error: Can not link products in the same category.');
   define('ERROR_CATALOG_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Product images directory is not writeable: ' . realpath('../images/products'));
   define('ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Product images directory does not exist: ' . realpath('../images/products'));
