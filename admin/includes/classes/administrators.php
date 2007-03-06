@@ -67,7 +67,7 @@
           $Qadmin = $osC_Database->query('update :table_administrators set user_name = :user_name');
 
           if ( isset($data['password']) && !empty($data['password']) ) {
-            $Qadmin->appendQuery('and user_password = :user_password');
+            $Qadmin->appendQuery(', user_password = :user_password');
             $Qadmin->bindValue(':user_password', osc_encrypt_string(trim($data['password'])));
           }
 
