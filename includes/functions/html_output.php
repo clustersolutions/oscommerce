@@ -237,10 +237,21 @@
     }
 
     if ($override === true) {
-      if (isset($_GET[$name])) {
-        $value = $_GET[$name];
-      } elseif (isset($_POST[$name])) {
-        $value = $_POST[$name];
+      if ( strpos($name, '[') !== false ) {
+        $name_string = substr($name, 0, strpos($name, '['));
+        $name_key = substr($name, strpos($name, '[') + 1, strlen($name) - (strpos($name, '[') + 2));
+
+        if ( isset($_GET[$name_string][$name_key]) ) {
+          $value = $_GET[$name_string][$name_key];
+        } elseif ( isset($_POST[$name_string][$name_key]) ) {
+          $value = $_POST[$name_string][$name_key];
+        }
+      } else {
+        if ( isset($_GET[$name]) ) {
+          $value = $_GET[$name];
+        } elseif ( isset($_POST[$name]) ) {
+          $value = $_POST[$name];
+        }
       }
     }
 
@@ -328,10 +339,20 @@
       $values = array($values);
     }
 
-    if (isset($_GET[$name])) {
-      $default = $_GET[$name];
-    } elseif (isset($_POST[$name])) {
-      $default = $_POST[$name];
+    if ( strpos($name, '[') !== false ) {
+      $name_string = substr($name, 0, strpos($name, '['));
+
+      if ( isset($_GET[$name_string]) ) {
+        $default = $_GET[$name_string];
+      } elseif ( isset($_POST[$name_string]) ) {
+        $default = $_POST[$name_string];
+      }
+    } else {
+      if ( isset($_GET[$name]) ) {
+        $default = $_GET[$name];
+      } elseif ( isset($_POST[$name]) ) {
+        $default = $_POST[$name];
+      }
     }
 
     $field = '';
