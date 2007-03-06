@@ -31,8 +31,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qstatuses->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
-    <td align="right"><?php echo $Qstatuses->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
+    <td><?php echo $Qstatuses->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td align="right"><?php echo $Qstatuses->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
   </tr>
 </table>
 
@@ -88,6 +88,6 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
-    <td align="right"><?php echo $Qstatuses->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
+    <td align="right"><?php echo $Qstatuses->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
   </tr>
 </table>

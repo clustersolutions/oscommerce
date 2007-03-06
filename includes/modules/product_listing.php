@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,9 +32,9 @@
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
-  <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
+  <?php echo $Qlisting->getBatchTotalPages($osC_Language->get('result_set_number_of_products')); ?>
 </div>
 
 <?php
@@ -183,9 +183,9 @@
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->displayBatchLinksPullDown('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
-  <?php echo $Qlisting->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
+  <?php echo $Qlisting->getBatchTotalPages($osC_Language->get('result_set_number_of_products')); ?>
 </div>
 
 <?php

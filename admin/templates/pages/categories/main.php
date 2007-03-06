@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -67,8 +67,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qcategories->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
-    <td align="right"><?php echo $Qcategories->displayBatchLinksPullDown('page', $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']); ?></td>
+    <td><?php echo $Qcategories->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td align="right"><?php echo $Qcategories->getBatchPageLinks('page', $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'], false); ?></td>
   </tr>
 </table>
 
@@ -120,6 +120,6 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT . '&nbsp;&nbsp;' . osc_icon('move.png', IMAGE_MOVE) . '&nbsp;' . IMAGE_MOVE . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
-    <td align="right"><?php echo $Qcategories->displayBatchLinksPullDown('page', $osC_Template->getModule()); ?></td>
+    <td align="right"><?php echo $Qcategories->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
   </tr>
 </table>

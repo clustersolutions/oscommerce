@@ -78,8 +78,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qlog->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
-    <td align="right"><?php echo $Qlog->displayBatchLinksPullDown('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']); ?></td>
+    <td><?php echo $Qlog->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td align="right"><?php echo $Qlog->getBatchPageLinks('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'], false); ?></td>
   </tr>
 </table>
 
@@ -138,6 +138,6 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('info.png', IMAGE_INFO) . '&nbsp;' . IMAGE_INFO . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
-    <td align="right"><?php echo $Qlog->displayBatchLinksPullDown('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']); ?></td>
+    <td align="right"><?php echo $Qlog->getBatchPagesPullDownMenu('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']); ?></td>
   </tr>
 </table>

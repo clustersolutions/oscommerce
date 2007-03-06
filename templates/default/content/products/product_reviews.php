@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -62,9 +62,9 @@
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qreviews->displayBatchLinksPullDown('page', 'reviews'); ?></span>
+  <span style="float: right;"><?php echo $Qreviews->getBatchPageLinks('page', 'reviews'); ?></span>
 
-  <?php echo $Qreviews->displayBatchLinksTotal($osC_Language->get('result_set_number_of_reviews')); ?>
+  <?php echo $Qreviews->getBatchTotalPages($osC_Language->get('result_set_number_of_reviews')); ?>
 </div>
 
 <div class="submitFormButtons">

@@ -35,8 +35,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qlog->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
-    <td align="right"><?php echo $Qlog->displayBatchLinksPullDown('lpage', $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $_GET['nID']); ?></td>
+    <td><?php echo $Qlog->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td align="right"><?php echo $Qlog->getBatchPageLinks('lpage', $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $_GET['nID'], false); ?></td>
   </tr>
 </table>
 
@@ -69,6 +69,6 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td align="right"><?php echo $Qlog->displayBatchLinksPullDown('lpage', $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $_GET['nID']); ?></td>
+    <td align="right"><?php echo $Qlog->getBatchPagesPullDownMenu('lpage', $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $_GET['nID']); ?></td>
   </tr>
 </table>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -65,7 +65,7 @@
 </table>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qproducts->displayBatchLinksPullDown('page', 'new'); ?></span>
+  <span style="float: right;"><?php echo $Qproducts->getBatchPageLinks('page', 'new'); ?></span>
 
-  <?php echo $Qproducts->displayBatchLinksTotal($osC_Language->get('result_set_number_of_products')); ?>
+  <?php echo $Qproducts->getBatchTotalPages($osC_Language->get('result_set_number_of_products')); ?>
 </div>

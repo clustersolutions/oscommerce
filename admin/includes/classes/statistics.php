@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -39,12 +39,16 @@
       $this->_setData();
     }
 
-    function displayBatchLinksTotal($text) {
-      return $this->_resultset->displayBatchLinksTotal($text);
+    function getBatchTotalPages($text) {
+      return $this->_resultset->getBatchTotalPages($text);
     }
 
-    function displayBatchLinksPullDown($batch_keyword = 'page', $parameters = '') {
-      return $this->_resultset->displayBatchLinksPullDown($batch_keyword, $parameters);
+    function getBatchPageLinks($batch_keyword = 'page', $parameters = '', $with_pull_down_menu = true) {
+      return $this->_resultset->getBatchPageLinks($batch_keyword, $parameters, $with_pull_down_menu);
+    }
+
+    function getBatchPagesPullDownMenu($batch_keyword = 'page', $parameters = '') {
+      return $this->_resultset->getBatchPagesPullDownMenu($batch_keyword, $parameters);
     }
 
     function isBatchQuery() {

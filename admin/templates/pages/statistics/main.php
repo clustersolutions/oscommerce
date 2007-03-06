@@ -34,8 +34,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $osC_Statistics->displayBatchLinksTotal(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
-    <td align="right"><?php echo $osC_Statistics->displayBatchLinksPullDown('page', $osC_Template->getModule() . '&module=' . $_GET['module']); ?></td>
+    <td><?php echo $osC_Statistics->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td align="right"><?php echo $osC_Statistics->getBatchPageLinks('page', $osC_Template->getModule() . '&module=' . $_GET['module'], false); ?></td>
   </tr>
 </table>
 
@@ -87,7 +87,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td align="right"><?php echo $osC_Statistics->displayBatchLinksPullDown('page', $osC_Template->getModule() . '&module=' , $_GET['module']); ?></td>
+    <td align="right"><?php echo $osC_Statistics->getBatchPagesPullDownMenu('page', $osC_Template->getModule() . '&module=' , $_GET['module']); ?></td>
   </tr>
 </table>
 
