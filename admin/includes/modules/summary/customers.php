@@ -24,7 +24,7 @@
 
     function osC_Summary_customers() {
       $this->_title = MODULE_SUMMARY_CUSTOMERS_TITLE;
-      $this->_title_link = osc_href_link(FILENAME_DEFAULT, 'customers');
+      $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'customers');
 
       if ( osC_Access::hasAccess('customers') ) {
         $this->_setData();
@@ -52,7 +52,7 @@
 
       while ( $Qcustomers->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'customers&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'customers&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('personal.png', ICON_PREVIEW) . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
                         '      <td>' . $Qcustomers->value('date_account_created') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';

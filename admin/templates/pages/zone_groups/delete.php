@@ -13,7 +13,7 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getData($_GET['zID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -23,7 +23,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_ObjectInfo->get('geo_zone_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="zDelete" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $osC_ObjectInfo->get('geo_zone_id') . '&action=delete'); ?>" method="post">
+  <form name="zDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $osC_ObjectInfo->get('geo_zone_id') . '&action=delete'); ?>" method="post">
 
 <?php
   $Qcheck = $osC_Database->query('select tax_zone_id from :table_tax_rates where tax_zone_id = :tax_zone_id limit 1');

@@ -38,7 +38,7 @@
   }
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -74,7 +74,7 @@
       <td onclick="document.getElementById('batch<?php echo $cache; ?>').checked = !document.getElementById('batch<?php echo $cache; ?>').checked;"><?php echo $cache; ?></td>
       <td align="center"><?php echo $stats['total']; ?></td>
       <td align="right"><?php echo osC_DateTime::getShort(osC_DateTime::fromUnixTimestamp($stats['last_modified']), true); ?></td>
-      <td align="right"><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&block=' . $cache . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE)); ?></td>
+      <td align="right"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&block=' . $cache . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE)); ?></td>
       <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $cache, null, 'id="batch' . $cache . '"'); ?></td>
     </tr>
 

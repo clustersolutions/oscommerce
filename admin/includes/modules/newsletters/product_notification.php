@@ -253,7 +253,7 @@ function selectAll(FormName, SelectBox) {
 
           if ( $timer_total > $max_execution_time ) {
             echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
-                 '<form name="execute" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)) . '" method="post">' .
+                 '<form name="execute" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)) . '" method="post">' .
                  '<p>' . osc_draw_hidden_field('subaction', 'execute') . osc_link_object('javascript:document.execute.submit();', TEXT_CONTINUE_MANUALLY) . '</p>' .
                  '</form>' .
                  '<script language="javascript">' .

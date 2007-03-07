@@ -13,7 +13,7 @@
   $osC_ObjectInfo = new osC_ObjectInfo($osC_Currencies->getData($_GET['cID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -23,7 +23,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('title'); ?></div>
 <div class="infoBoxContent">
-  <form name="cEdit" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
+  <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
 
   <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
 

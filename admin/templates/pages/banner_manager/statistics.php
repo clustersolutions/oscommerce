@@ -43,7 +43,7 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -51,7 +51,7 @@
   }
 ?>
 
-<form name="type" action="<?php echo osc_href_link(FILENAME_DEFAULT); ?>" method="get">
+<form name="type" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get">
   
 <?php
   echo osc_draw_hidden_field($osC_Template->getModule()) .
@@ -82,7 +82,7 @@
       break;
   }
 
-  echo '&nbsp;<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';" />';
+  echo '&nbsp;<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';" />';
 ?>
 
 </p>

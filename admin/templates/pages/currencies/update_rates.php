@@ -16,7 +16,7 @@
                           'text' => 'XE (http://www.xe.com)'));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -26,7 +26,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('reload.png', IMAGE_UPDATE) . ' ' . IMAGE_UPDATE_CURRENCIES; ?></div>
 <div class="infoBoxContent">
-  <form name="cUpdate" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=updateRates'); ?>" method="post">
+  <form name="cUpdate" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=updateRates'); ?>" method="post">
 
   <p><?php echo TEXT_INFO_UPDATE_SERVICE_INTRO; ?></p>
 

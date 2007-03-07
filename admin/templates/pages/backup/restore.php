@@ -28,7 +28,7 @@
   }
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -38,7 +38,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $_GET['file']; ?></div>
 <div class="infoBoxContent">
-  <form name="bRestoreLocal" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $_GET['file'] . '&action=restore'); ?>" method="post" enctype="multipart/form-data">
+  <form name="bRestoreLocal" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $_GET['file'] . '&action=restore'); ?>" method="post" enctype="multipart/form-data">
 
   <p><?php echo sprintf(TEXT_INFO_RESTORE, DIR_FS_BACKUP . (($file_compression != TEXT_NO_EXTENSION) ? substr($_GET['file'], 0, strrpos($_GET['file'], '.')) : $_GET['file']), ($file_compression != TEXT_NO_EXTENSION) ? TEXT_INFO_UNPACK : ''); ?></p>
 

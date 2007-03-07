@@ -24,7 +24,7 @@
 
     function osC_Summary_administrators_log() {
       $this->_title = MODULE_SUMMARY_ADMINISTRATORS_LOG_TITLE;
-      $this->_title_link = osc_href_link(FILENAME_DEFAULT, 'administrators_log');
+      $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'administrators_log');
 
       if ( osC_Access::hasAccess('administrators_log') ) {
         $this->_setData();
@@ -54,7 +54,7 @@
 
       while ( $Qlog->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'administrators_log&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('log.png') . '&nbsp;' . $Qlog->valueProtected('user_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'administrators_log&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('log.png') . '&nbsp;' . $Qlog->valueProtected('user_name')) . '</td>' .
                         '      <td>' . $Qlog->value('module') . ' (' . $Qlog->valueInt('total') . ')</td>' .
                         '      <td>' . $Qlog->value('datestamp') . '</td>' .
                         '    </tr>';

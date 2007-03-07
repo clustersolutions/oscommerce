@@ -35,7 +35,7 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Administrators_Admin::getData($_GET['aID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -45,7 +45,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('user_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="aEdit" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&aID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
+  <form name="aEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&aID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
 
   <p><?php echo TEXT_EDIT_INTRO; ?></p>
 

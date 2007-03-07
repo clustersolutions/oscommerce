@@ -45,12 +45,6 @@
       $use_full_address = true;
     }
 
-    if (defined('OSC_IN_ADMIN') && (OSC_IN_ADMIN == '1')) {
-      $connection = 'SSL';
-      $search_engine_safe = false;
-      $use_full_address = true;
-    }
-
     if ($connection == 'AUTO') {
       if ( ($request_type == 'SSL') && (ENABLE_SSL === true) ) {
         $link = HTTPS_SERVER . DIR_WS_HTTPS_CATALOG;
@@ -69,10 +63,6 @@
       } else {
         $link = HTTP_SERVER . DIR_WS_HTTP_CATALOG;
       }
-    }
-
-    if (defined('OSC_IN_ADMIN') && (OSC_IN_ADMIN == '1')) {
-      $link .= 'admin/';
     }
 
     $link .= $page;

@@ -21,7 +21,7 @@
 <link type="text/css" rel="stylesheet" href="external/tabpane/css/luna/tab.css" />
 <script type="text/javascript" src="external/tabpane/js/tabpane.js"></script>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -183,8 +183,8 @@
         <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=saveAddress'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-         osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=deleteAddress'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=saveAddress'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=deleteAddress'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
 ?>
 
         </td>

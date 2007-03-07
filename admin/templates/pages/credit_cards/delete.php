@@ -13,7 +13,7 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_CreditCards_Admin::getData($_GET['ccID']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -23,7 +23,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_ObjectInfo->get('credit_card_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="aDelete" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&ccID=' . $osC_ObjectInfo->get('id') . '&action=delete'); ?>" method="post">
+  <form name="aDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&ccID=' . $osC_ObjectInfo->get('id') . '&action=delete'); ?>" method="post">
 
   <p><?php echo TEXT_DELETE_INTRO; ?></p>
 

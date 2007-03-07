@@ -14,7 +14,7 @@
   $osC_DirectoryListing->setIncludeDirectories(false);
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -22,7 +22,7 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACKUP . '" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . IMAGE_RESTORE . '" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACKUP . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . IMAGE_RESTORE . '" onclick="document.location.href=osc_href_link_admin(_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
 
 <form name="batch" action="#" method="post">
 
@@ -49,14 +49,14 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=download'), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $file['name']); ?></td>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=download'), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $file['name']); ?></td>
       <td><?php echo osC_DateTime::getShort(osC_DateTime::fromUnixTimestamp(filemtime(DIR_FS_BACKUP . $file['name'])), true); ?></td>
       <td><?php echo number_format(filesize(DIR_FS_BACKUP . $file['name'])); ?> bytes</td>
       <td align="right">
 
 <?php
-      echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('tape.png', IMAGE_RESTORE)) . '&nbsp;' .
-           osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('tape.png', IMAGE_RESTORE)) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE));
 ?>
 
       </td>
@@ -84,7 +84,7 @@
   if ( defined('DB_LAST_RESTORE') ) {
 ?>
 
-<p><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=forget'), TEXT_FORGET); ?></p>
+<p><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=forget'), TEXT_FORGET); ?></p>
 
 <?php
   }

@@ -91,7 +91,7 @@
 
   echo '          </ul>' .
        '        </li>' .
-       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('../', null, 'NONSSL', false, false, true) . '">' . HEADER_TITLE_ONLINE_CATALOG . '</a></li>' .
+       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . HEADER_TITLE_ONLINE_CATALOG . '</a></li>' .
        '      </ul>' .
        '    </li>';
 

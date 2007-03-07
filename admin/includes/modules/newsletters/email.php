@@ -92,7 +92,7 @@
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_EMAIL_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
-                             '<form name="confirm" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
+                             '<form name="confirm" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                              '<p align="right">';
 
       if ( $this->_audience_size > 0 ) {

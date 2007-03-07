@@ -63,7 +63,7 @@
       $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_NEWSLETTER_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
-                             '<form name="execute" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
+                             '<form name="execute" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                              '<p align="right">';
 
       if ($this->_audience_size > 0) {
@@ -111,7 +111,7 @@
 
           if ( $timer_total > $max_execution_time ) {
             echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
-                 '<form name="execute" action="' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
+                 '<form name="execute" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                  '<p>' . osc_draw_hidden_field('subaction', 'execute') . osc_link_object('javascript:document.execute.submit();', TEXT_CONTINUE_MANUALLY) . '</p>' .
                  '</form>' .
                  '<script language="javascript">' .

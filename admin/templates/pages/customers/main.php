@@ -11,7 +11,7 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -25,7 +25,7 @@
 
 <?php
   echo HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') . '<input type="submit" value="GO" class="operationButton" />' .
-       '<input type="button" value="' . IMAGE_INSERT . '" onclick="document.location.href=\'' . osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save') . '\';" class="infoBoxButton" />';
+       '<input type="button" value="' . IMAGE_INSERT . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save') . '\';" class="infoBoxButton" />';
 ?>
 
 </p>
@@ -87,9 +87,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-         osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;' .
-         osc_link_object(osc_href_link(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png', IMAGE_ORDERS));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png', IMAGE_ORDERS));
 ?>
 
       </td>

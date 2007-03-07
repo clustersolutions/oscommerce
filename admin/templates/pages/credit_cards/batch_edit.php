@@ -11,7 +11,7 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
   if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
@@ -21,7 +21,7 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' Batch Edit'; ?></div>
 <div class="infoBoxContent">
-  <form name="ccEditBatch" action="<?php echo osc_href_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave'); ?>" method="post">
+  <form name="ccEditBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave'); ?>" method="post">
 
   <p><?php echo TEXT_EDIT_BATCH_INTRO; ?></p>
 
