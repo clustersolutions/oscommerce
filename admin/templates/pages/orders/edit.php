@@ -32,7 +32,7 @@
 ?>
 
 <p align="right">
-  <?php echo '<input type="button" value="' . IMAGE_ORDERS_INVOICE . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_ORDERS_INVOICE, 'oID=' . $_GET['oID']) . '\');" class="infoBoxButton"/> <input type="button" value="' . IMAGE_ORDERS_PACKINGSLIP . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_ORDERS_PACKINGSLIP, 'oID=' . $_GET['oID']) . '\');" class="infoBoxButton" /> <input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?>
+  <?php echo '<input type="button" value="' . IMAGE_ORDERS_INVOICE . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=invoice') . '\');" class="infoBoxButton"/> <input type="button" value="' . IMAGE_ORDERS_PACKINGSLIP . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=packaging_slip') . '\');" class="infoBoxButton" /> <input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?>
 </p>
 
 <?php

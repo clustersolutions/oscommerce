@@ -5,42 +5,23 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  require('includes/application_top.php');
+  require('includes/classes/tax.php');
+  $osC_Tax = new osC_Tax_Admin();
 
-  require('../includes/classes/currencies.php');
-  $osC_Currencies = new osC_Currencies();
-
-  include('includes/classes/order.php');
   $osC_Order = new osC_Order($_GET['oID']);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $osC_Language->getTextDirection(); ?>" xml:lang="<?php echo $osC_Language->getCode(); ?>" lang="<?php echo $osC_Language->getCode(); ?>">
-
-<head>
-
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
-
-<title><?php echo TITLE; ?></title>
-
-<link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
-
-</head>
-
-<body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
-
-<!-- body_text //-->
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
     <td><table border="0" width="100%" cellspacing="0" cellpadding="0">
       <tr>
         <td class="pageHeading"><?php echo nl2br(STORE_NAME_ADDRESS); ?></td>
-        <td class="pageHeading" align="right"><?php echo osc_image('images/oscommerce.gif', 'osCommerce', '204', '50'); ?></td>
+        <td class="pageHeading" align="right"><?php echo osc_image('../images/store_logo.jpg', STORE_NAME); ?></td>
       </tr>
     </table></td>
   </tr>
@@ -97,6 +78,11 @@
       <tr class="dataTableHeadingRow">
         <td class="dataTableHeadingContent" colspan="2"><?php echo TABLE_HEADING_PRODUCTS; ?></td>
         <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_PRODUCTS_MODEL; ?></td>
+        <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_TAX; ?></td>
+        <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_PRICE_EXCLUDING_TAX; ?></td>
+        <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_PRICE_INCLUDING_TAX; ?></td>
+        <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_TOTAL_EXCLUDING_TAX; ?></td>
+        <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_TOTAL_INCLUDING_TAX; ?></td>
       </tr>
 <?php
     foreach ($osC_Order->getProducts() as $product) {
@@ -114,14 +100,26 @@
 
       echo '        </td>' . "\n" .
            '        <td class="dataTableContent" valign="top">' . $product['model'] . '</td>' . "\n";
-           '      </tr>' . "\n";
+      echo '        <td class="dataTableContent" align="right" valign="top">' . $osC_Tax->displayTaxRateValue($product['tax']) . '</td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format($product['final_price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], 1, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->format($product['final_price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '        <td class="dataTableContent" align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], $product['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
+      echo '      </tr>' . "\n";
     }
 ?>
+      <tr>
+        <td align="right" colspan="8"><table border="0" cellspacing="0" cellpadding="2">
+<?php
+  foreach ($osC_Order->getTotals() as $total) {
+    echo '          <tr>' . "\n" .
+         '            <td align="right" class="smallText">' . $total['title'] . '</td>' . "\n" .
+         '            <td align="right" class="smallText">' . $total['text'] . '</td>' . "\n" .
+         '          </tr>' . "\n";
+  }
+?>
+        </table></td>
+      </tr>
     </table></td>
   </tr>
 </table>
-<!-- body_text_eof //-->
-<br />
-</body>
-</html>
-<?php require('includes/application_bottom.php'); ?>

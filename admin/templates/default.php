@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -39,11 +39,21 @@
 
 <body>
 
-<?php require('templates/default/header.php'); ?>
+<?php
+  if ($osC_Template->hasPageHeader()) {
+    include('templates/default/header.php');
+  }
+?>
 
-<div class="pageContents"><?php require('templates/pages/' . $osC_Template->getModule() . '/' . $osC_Template->getPageContentsFilename()); ?></div>
+<div class="pageContents">
+  <?php require('templates/pages/' . $osC_Template->getModule() . '/' . $osC_Template->getPageContentsFilename()); ?>
+</div>
 
-<?php require('templates/default/footer.php'); ?>
+<?php
+  if ($osC_Template->hasPageFooter()) {
+    include('templates/default/footer.php');
+  }
+?>
 
 </body>
 

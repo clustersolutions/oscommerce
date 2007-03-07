@@ -53,6 +53,20 @@
 
       if ( !empty($_GET['action']) ) {
         switch ( $_GET['action'] ) {
+          case 'invoice':
+            $this->_page_contents = 'invoice.php';
+            $this->_has_header = false;
+            $this->_has_footer = false;
+
+            break;
+
+          case 'packaging_slip':
+            $this->_page_contents = 'packaging_slip.php';
+            $this->_has_header = false;
+            $this->_has_footer = false;
+
+            break;
+
           case 'save':
             $this->_page_contents = 'edit.php';
 
