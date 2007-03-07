@@ -24,7 +24,7 @@
 /* Class constructor */
 
     function osC_Content_Categories() {
-      global $osC_MessageStack, $cPath_array, $current_category_id, $osC_CategoryTree;
+      global $osC_Language, $osC_MessageStack, $cPath_array, $current_category_id, $osC_CategoryTree;
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -82,13 +82,25 @@
                 $data['parent_id'] = $_POST['parent_id'];
               }
 
-              if ( osC_Categories_Admin::save((isset($_GET['cID']) && is_numeric($_GET['cID']) ? $_GET['cID'] : null), $data) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
-              } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              $error = false;
+
+              foreach ( $data['name'] as $key => $value ) {
+                if ( empty($value) ) {
+                  $osC_MessageStack->add($this->_module, sprintf(WARNING_CATEGORY_NAME_EMPTY, $osC_Language->getData($key, 'name')), 'warning');
+
+                  $error = true;
+                }
               }
 
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
+              if ( $error === false ) {
+                if ( osC_Categories_Admin::save((isset($_GET['cID']) && is_numeric($_GET['cID']) ? $_GET['cID'] : null), $data) ) {
+                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                } else {
+                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                }
+
+                osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
+              }
             }
 
             break;
