@@ -22,7 +22,7 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACKUP . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . IMAGE_RESTORE . '" onclick="document.location.href=osc_href_link_admin(_link(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACKUP . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . IMAGE_RESTORE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
 
 <form name="batch" action="#" method="post">
 
