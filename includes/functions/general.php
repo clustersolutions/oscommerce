@@ -20,21 +20,17 @@
   function osc_redirect($url) {
     global $osC_Services;
 
-    if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
-      if (defined('OSC_IN_ADMIN') && (OSC_IN_ADMIN === true)) {
-        $url = osc_href_link_admin(FILENAME_DEFAULT);
-      } else {
-        $url = osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false);
-      }
+    if ( ( strpos($url, "\n") !== false ) || ( strpos($url, "\r") !== false ) ) {
+      $url = osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false);
     }
 
-    if (strpos($url, '&amp;') !== false) {
+    if ( strpos($url, '&amp;') !== false ) {
       $url = str_replace('&amp;', '&', $url);
     }
 
     header('Location: ' . $url);
 
-    if (isset($osC_Services)) {
+    if ( isset($osC_Services) && is_a($osC_Services, 'osC_Services') ) {
       $osC_Services->stopServices();
     }
 

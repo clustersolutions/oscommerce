@@ -130,7 +130,7 @@
                   $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
                 }
 
-                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
+                osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
               }
             }
 
@@ -146,7 +146,7 @@
                 $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
             }
 
             break;
@@ -294,7 +294,7 @@
                   $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
                 }
 
-                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook'));
+                osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook'));
               }
             }
 
@@ -310,7 +310,7 @@
                 $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save&tabIndex=tabAddressBook'));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save&tabIndex=tabAddressBook'));
             }
 
             break;
@@ -335,7 +335,7 @@
                   $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
                 }
 
-                osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&search=' . $_GET['search']));
+                osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&search=' . $_GET['search']));
               }
             }
 

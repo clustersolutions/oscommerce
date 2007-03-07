@@ -49,7 +49,7 @@
 
             osC_Cache::clear($_GET['block']);
 
-            osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
 
             break;
 
@@ -59,7 +59,7 @@
                 osC_Cache::clear($id);
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
             }
 
             break;

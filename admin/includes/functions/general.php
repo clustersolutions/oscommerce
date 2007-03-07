@@ -24,6 +24,31 @@
   }
 
 /**
+ * Redirect to a URL address
+ *
+ * @param string $url The URL address to redirect to
+ * @access public
+ */
+
+  function osc_redirect_admin($url) {
+    global $osC_Session;
+
+    if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
+      $url = osc_href_link_admin(FILENAME_DEFAULT);
+    }
+
+    if (strpos($url, '&amp;') !== false) {
+      $url = str_replace('&amp;', '&', $url);
+    }
+
+    header('Location: ' . $url);
+
+    $osC_Session->close();
+
+    exit;
+  }
+
+/**
  * Retrieve web server and database server information
  *
  * @access public

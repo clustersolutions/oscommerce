@@ -26,7 +26,7 @@
   if ( !osC_Access::hasAccess($_SESSION['module']) ) {
     $osC_MessageStack->add_session('header', 'No access.', 'error');
 
-    osc_redirect( osc_href_link_admin( FILENAME_DEFAULT ) );
+    osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
   }
 
   $osC_Language->loadConstants($_SESSION['module'] . '.php');

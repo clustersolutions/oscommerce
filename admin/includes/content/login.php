@@ -55,7 +55,7 @@
                                        'username' => $Qadmin->value('user_name'),
                                        'access' => osC_Access::getUserLevels($Qadmin->valueInt('id')));
 
-            osc_redirect(osc_href_link_admin(FILENAME_DEFAULT));
+            osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
           }
         }
       }
@@ -66,7 +66,7 @@
     function _logoff() {
       unset($_SESSION['admin']);
 
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT));
+      osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
     }
   }
 ?>

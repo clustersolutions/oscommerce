@@ -43,7 +43,7 @@
                 $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
             }
 
             break;
@@ -55,7 +55,7 @@
               $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
             }
 
-            osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+            osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
 
             break;
 
@@ -69,7 +69,7 @@
                 $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
               }
 
-              osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
             }
 
             break;

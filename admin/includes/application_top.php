@@ -100,10 +100,10 @@
       $_module = osc_sanitize_string(basename(key($first_array)));
 
       if ($_module != 'login') {
-        osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
+        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
       }
     } else {
-      osc_redirect(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
+      osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
     }
   }
 
