@@ -81,7 +81,7 @@
               if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
                 $this->_process($osC_Product->getID());
               }
-            } elseif (osC_Reviews::exists($key, true)) {
+            } else {
               $osC_Product = new osC_Product($key);
 
               $this->_page_title = $osC_Product->getTitle();
@@ -90,8 +90,6 @@
               if ($osC_Services->isStarted('breadcrumb')) {
                 $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
               }
-            } else {
-              $this->_page_contents = 'reviews_not_found.php';
             }
           }
 
