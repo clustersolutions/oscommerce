@@ -41,6 +41,7 @@
 
       include('includes/classes/shopping_cart.php');
       $osC_ShoppingCart = new osC_ShoppingCart();
+      $osC_ShoppingCart->update();
 
       include('includes/classes/navigation_history.php');
       $osC_NavigationHistory = new osC_NavigationHistory(true);

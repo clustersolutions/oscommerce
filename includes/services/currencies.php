@@ -29,6 +29,10 @@
         } else {
           $_SESSION['currency'] = (USE_DEFAULT_LANGUAGE_CURRENCY == '1') ? $osC_Currencies->getCode($osC_Language->getCurrencyID()) : DEFAULT_CURRENCY;
         }
+
+        if ( isset($_SESSION['cartID']) ) {
+          unset($_SESSION['cartID']);
+        }
       }
 
       return true;

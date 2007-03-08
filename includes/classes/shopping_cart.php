@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -17,7 +17,6 @@
         $_weight = 0,
         $_tax = 0,
         $_tax_groups = array(),
-        $_cartID,
         $_content_type,
         $_products_in_stock = true;
 
@@ -31,11 +30,11 @@
                                                    'tax_groups' => array(),
                                                    'shipping_boxes_weight' => 0,
                                                    'shipping_boxes' => 1,
-                                                   'cart_id' => $this->generateCartID(),
                                                    'shipping_address' => array('zone_id' => STORE_ZONE, 'country_id' => STORE_COUNTRY),
                                                    'shipping_method' => array(),
                                                    'billing_address' => array('zone_id' => STORE_ZONE, 'country_id' => STORE_COUNTRY),
                                                    'billing_method' => array(),
+                                                   'shipping_quotes' => array(),
                                                    'order_totals' => array());
 
         $this->resetShippingAddress();
@@ -50,12 +49,18 @@
       $this->_tax_groups =& $_SESSION['osC_ShoppingCart_data']['tax_groups'];
       $this->_shipping_boxes_weight =& $_SESSION['osC_ShoppingCart_data']['shipping_boxes_weight'];
       $this->_shipping_boxes =& $_SESSION['osC_ShoppingCart_data']['shipping_boxes'];
-      $this->_cartID =& $_SESSION['osC_ShoppingCart_data']['cart_id'];
       $this->_shipping_address =& $_SESSION['osC_ShoppingCart_data']['shipping_address'];
       $this->_shipping_method =& $_SESSION['osC_ShoppingCart_data']['shipping_method'];
       $this->_billing_address =& $_SESSION['osC_ShoppingCart_data']['billing_address'];
       $this->_billing_method =& $_SESSION['osC_ShoppingCart_data']['billing_method'];
+      $this->_shipping_quotes =& $_SESSION['osC_ShoppingCart_data']['shipping_quotes'];
       $this->_order_totals =& $_SESSION['osC_ShoppingCart_data']['order_totals'];
+    }
+
+    function update() {
+      if ( !isset($_SESSION['cartID']) ) {
+        $this->_calculate();
+      }
     }
 
     function hasContents() {
@@ -203,13 +208,16 @@
       $this->_weight = 0;
       $this->_tax = 0;
       $this->_tax_groups = array();
-      $this->_cartID = $this->generateCartID();
       $this->_content_type = null;
 
       $this->resetShippingAddress();
       $this->resetShippingMethod();
       $this->resetBillingAddress();
       $this->resetBillingMethod();
+
+      if ( isset($_SESSION['cartID']) ) {
+        unset($_SESSION['cartID']);
+      }
     }
 
     function add($products_id_string, $attributes = null, $quantity = null) {
@@ -390,12 +398,8 @@
       return osc_create_random_string($length, 'digits');
     }
 
-    function hasCartID() {
-      return isset($this->_cartID);
-    }
-
     function getCartID() {
-      return $this->_cartID;
+      return $_SESSION['cartID'];
     }
 
     function getContentType() {
@@ -728,7 +732,12 @@
       $this->_weight = 0;
       $this->_tax = 0;
       $this->_tax_groups = array();
-      $this->_cartID = $this->generateCartID();
+      $this->_shipping_boxes_weight = 0;
+      $this->_shipping_boxes = 0;
+      $this->_shipping_quotes = array();
+      $this->_order_totals = array();
+
+      $_SESSION['cartID'] = $this->generateCartID();
 
       if ($this->hasContents()) {
         foreach ($this->_contents as $data) {
@@ -759,42 +768,42 @@
             $this->_tax_groups[$tax_description] = $tax_amount;
           }
         }
-      }
 
-      $this->_shipping_boxes_weight = $this->_weight;
-      $this->_shipping_boxes = 1;
+        $this->_shipping_boxes_weight = $this->_weight;
+        $this->_shipping_boxes = 1;
 
-      if (SHIPPING_BOX_WEIGHT >= ($this->_shipping_boxes_weight * SHIPPING_BOX_PADDING/100)) {
-        $this->_shipping_boxes_weight = $this->_shipping_boxes_weight + SHIPPING_BOX_WEIGHT;
-      } else {
-        $this->_shipping_boxes_weight = $this->_shipping_boxes_weight + ($this->_shipping_boxes_weight * SHIPPING_BOX_PADDING/100);
-      }
-
-      if ($this->_shipping_boxes_weight > SHIPPING_MAX_WEIGHT) { // Split into many boxes
-        $this->_shipping_boxes = ceil($this->_shipping_boxes_weight / SHIPPING_MAX_WEIGHT);
-        $this->_shipping_boxes_weight = $this->_shipping_boxes_weight / $this->_shipping_boxes;
-      }
-
-      if ($set_shipping === true) {
-        if (!class_exists('osC_Shipping')) {
-          include('includes/classes/shipping.php');
-        }
-
-        if (!$this->hasShippingMethod() || ($this->getShippingMethod('is_cheapest') === true)) {
-          $osC_Shipping = new osC_Shipping();
-          $this->setShippingMethod($osC_Shipping->getCheapestQuote(), false);
+        if (SHIPPING_BOX_WEIGHT >= ($this->_shipping_boxes_weight * SHIPPING_BOX_PADDING/100)) {
+          $this->_shipping_boxes_weight = $this->_shipping_boxes_weight + SHIPPING_BOX_WEIGHT;
         } else {
-          $osC_Shipping = new osC_Shipping($this->getShippingMethod('id'));
-          $this->setShippingMethod($osC_Shipping->getQuote(), false);
+          $this->_shipping_boxes_weight = $this->_shipping_boxes_weight + ($this->_shipping_boxes_weight * SHIPPING_BOX_PADDING/100);
         }
-      }
 
-      if (!class_exists('osC_OrderTotal')) {
-        include('includes/classes/order_total.php');
-      }
+        if ($this->_shipping_boxes_weight > SHIPPING_MAX_WEIGHT) { // Split into many boxes
+          $this->_shipping_boxes = ceil($this->_shipping_boxes_weight / SHIPPING_MAX_WEIGHT);
+          $this->_shipping_boxes_weight = $this->_shipping_boxes_weight / $this->_shipping_boxes;
+        }
 
-      $osC_OrderTotal = new osC_OrderTotal();
-      $this->_order_totals = $osC_OrderTotal->getResult();
+        if ($set_shipping === true) {
+          if (!class_exists('osC_Shipping')) {
+            include('includes/classes/shipping.php');
+          }
+
+          if (!$this->hasShippingMethod() || ($this->getShippingMethod('is_cheapest') === true)) {
+            $osC_Shipping = new osC_Shipping();
+            $this->setShippingMethod($osC_Shipping->getCheapestQuote(), false);
+          } else {
+            $osC_Shipping = new osC_Shipping($this->getShippingMethod('id'));
+            $this->setShippingMethod($osC_Shipping->getQuote(), false);
+          }
+        }
+
+        if (!class_exists('osC_OrderTotal')) {
+          include('includes/classes/order_total.php');
+        }
+
+        $osC_OrderTotal = new osC_OrderTotal();
+        $this->_order_totals = $osC_OrderTotal->getResult();
+      }
     }
 
     function _uasortProductsByDateAdded($a, $b) {

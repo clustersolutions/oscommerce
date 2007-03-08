@@ -20,13 +20,7 @@
     function osC_Shipping($module = '') {
       global $osC_Database, $osC_Language;
 
-      if (isset($_SESSION['osC_Shipping_data']) === false) {
-        $_SESSION['osC_Shipping_data'] = array('quotes' => array(),
-                                               'cartID' => null);
-      }
-
-      $this->_quotes =& $_SESSION['osC_Shipping_data']['quotes'];
-      $this->_cartID =& $_SESSION['osC_Shipping_data']['cartID'];
+      $this->_quotes =& $_SESSION['osC_ShoppingCart_data']['shipping_quotes'];
 
       $Qmodules = $osC_Database->query('select code from :table_templates_boxes where modules_group = "shipping"');
       $Qmodules->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
@@ -61,7 +55,9 @@
         usort($this->_modules, array('osC_Shipping', '_usortModules'));
       }
 
-      $this->_calculate();
+      if ( empty($this->_quotes) ) {
+        $this->_calculate();
+      }
     }
 
 // class methods
@@ -171,32 +167,26 @@
     }
 
     function _calculate() {
-      global $osC_ShoppingCart;
+      $this->_quotes = array();
 
-      if ($this->_cartID != $osC_ShoppingCart->getCartID()) {
-        $this->_cartID = $osC_ShoppingCart->getCartID();
+      if (is_array($this->_modules)) {
+        $include_quotes = array();
 
-        $this->_quotes = array();
-
-        if (is_array($this->_modules)) {
-          $include_quotes = array();
-
-          if (defined('MODULE_SHIPPING_FREE_STATUS') && isset($GLOBALS['osC_Shipping_free']) && $GLOBALS['osC_Shipping_free']->isEnabled()) {
-            $include_quotes[] = 'osC_Shipping_free';
-          } else {
-            foreach ($this->_modules as $module) {
-              if ($GLOBALS['osC_Shipping_' . $module]->isEnabled()) {
-                $include_quotes[] = 'osC_Shipping_' . $module;
-              }
+        if (defined('MODULE_SHIPPING_FREE_STATUS') && isset($GLOBALS['osC_Shipping_free']) && $GLOBALS['osC_Shipping_free']->isEnabled()) {
+          $include_quotes[] = 'osC_Shipping_free';
+        } else {
+          foreach ($this->_modules as $module) {
+            if ($GLOBALS['osC_Shipping_' . $module]->isEnabled()) {
+              $include_quotes[] = 'osC_Shipping_' . $module;
             }
           }
+        }
 
-          foreach ($include_quotes as $module) {
-            $quotes = $GLOBALS[$module]->quote();
+        foreach ($include_quotes as $module) {
+          $quotes = $GLOBALS[$module]->quote();
 
-            if (is_array($quotes)) {
-              $this->_quotes[] = $quotes;
-            }
+          if (is_array($quotes)) {
+            $this->_quotes[] = $quotes;
           }
         }
       }
