@@ -55,17 +55,16 @@
 
     function numberOfEntries() {
       global $osC_Database, $osC_Customer;
+
       static $total_entries;
 
-      if (is_numeric($total_entries) === false) {
+      if ( !is_numeric($total_entries) ) {
         $Qaddresses = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id');
         $Qaddresses->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
         $Qaddresses->bindInt(':customers_id', $osC_Customer->getID());
         $Qaddresses->execute();
 
         $total_entries = $Qaddresses->valueInt('total');
-      } else {
-        $total_entries = 0;
       }
 
       return $total_entries;
