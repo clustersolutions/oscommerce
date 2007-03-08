@@ -241,5 +241,28 @@
 
       return ($counter > 0);
     }
+
+    function show($image, $title, $parameters = '', $group = '') {
+      if (empty($group) || !$this->exists($group)) {
+        $group = $this->getCode(DEFAULT_IMAGE_GROUP_ID);
+      }
+
+      $group_id = $this->getID($group);
+
+      $width = $height = '';
+
+      if ( ($this->_groups[$group_id]['force_size'] == '1') || empty($image) ) {
+        $width = $this->_groups[$group_id]['size_width'];
+        $height = $this->_groups[$group_id]['size_height'];
+      }
+
+      if (empty($image)) {
+        $image = 'pixel_trans.gif';
+      } else {
+        $image = 'products/' . $this->_groups[$group_id]['code'] . '/' . $image;
+      }
+
+      return osc_image('../' . DIR_WS_IMAGES . $image, $title, $width, $height, $parameters);
+    }
   }
 ?>
