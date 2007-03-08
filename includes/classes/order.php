@@ -409,7 +409,8 @@
                            'country_title' => $Qorder->value('delivery_country'),
                            'country_iso2' => $Qorder->value('delivery_country_iso2'),
                            'country_iso3' => $Qorder->value('delivery_country_iso3'),
-                           'postcode' => $Qorder->value('delivery_postcode'));
+                           'postcode' => $Qorder->value('delivery_postcode'),
+                           'format' => $Qorder->value('delivery_address_format'));
 
           $email_order .= "\n" . $osC_Language->get('email_order_delivery_address') . "\n" .
                           $osC_Language->get('email_order_separator') . "\n" .
@@ -428,7 +429,8 @@
                          'country_title' => $Qorder->value('billing_country'),
                          'country_iso2' => $Qorder->value('billing_country_iso2'),
                          'country_iso3' => $Qorder->value('billing_country_iso3'),
-                         'postcode' => $Qorder->value('billing_postcode'));
+                         'postcode' => $Qorder->value('billing_postcode'),
+                         'format' => $Qorder->value('billing_address_format'));
 
         $email_order .= "\n" . $osC_Language->get('email_order_billing_address') . "\n" .
                         $osC_Language->get('email_order_separator') . "\n" .
