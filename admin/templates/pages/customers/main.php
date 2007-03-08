@@ -33,7 +33,7 @@
 </form>
 
 <?php
-  $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.date_account_last_modified, c.date_last_logon, c.number_of_logons, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
+  $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_gender, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.date_account_last_modified, c.date_last_logon, c.number_of_logons, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
   $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
   $Qcustomers->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
 
@@ -61,6 +61,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
+      <th width="20">&nbsp;</th>
       <th><?php echo TABLE_HEADING_LASTNAME; ?></th>
       <th><?php echo TABLE_HEADING_FIRSTNAME; ?></th>
       <th><?php echo TABLE_HEADING_ACCOUNT_CREATED; ?></th>
@@ -70,7 +71,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -78,9 +79,25 @@
 
 <?php
   while ( $Qcustomers->next() ) {
+    $customer_icon = osc_icon('people.png');
+
+    if ( ACCOUNT_GENDER > -1 ) {
+      switch ( $Qcustomers->value('customers_gender') ) {
+        case 'm':
+          $customer_icon = osc_icon('user_male.png', MALE);
+
+          break;
+
+        case 'f':
+          $customer_icon = osc_icon('user_female.png', FEMALE);
+
+          break;
+      }
+    }
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo (($Qcustomers->valueInt('customers_status') !== 1) ? 'class="deactivatedRow"' : '') ?>>
+      <td align="center"><?php echo $customer_icon; ?></td>
       <td onclick="document.getElementById('batch<?php echo $Qcustomers->valueInt('customers_id'); ?>').checked = !document.getElementById('batch<?php echo $Qcustomers->valueInt('customers_id'); ?>').checked;"><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
       <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
       <td><?php echo osC_DateTime::getShort($Qcustomers->value('date_account_created')); ?></td>
