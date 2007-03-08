@@ -34,7 +34,7 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
@@ -56,7 +56,7 @@
       while ( $Qreviews->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
                         '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'reviews&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('write.png', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
-                        '      <td align="center">' . osc_image('../includes/languages/' . $Qreviews->value('languages_code') . '/images/icon.gif', $Qreviews->value('languages_name')) . '</td>' .
+                        '      <td align="center">' . $osC_Language->showImage($Qreviews->value('languages_code')) . '</td>' .
                         '      <td align="center">' . osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .
                         '      <td>' . $Qreviews->value('date_last_modified') . '</td>' .
                         '    </tr>';

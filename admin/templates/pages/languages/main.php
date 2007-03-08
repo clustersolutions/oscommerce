@@ -41,6 +41,7 @@
   <thead>
     <tr>
       <th><?php echo TABLE_HEADING_LANGUAGE_NAME; ?></th>
+      <th width="20">&nbsp;</th>
       <th><?php echo TABLE_HEADING_TOTAL_DEFINITIONS; ?></th>
       <th><?php echo TABLE_HEADING_LANGUAGE_CODE; ?></th>
       <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
@@ -49,7 +50,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -71,6 +72,7 @@
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qlanguages->valueInt('languages_id'); ?>').checked = !document.getElementById('batch<?php echo $Qlanguages->valueInt('languages_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qlanguages->valueInt('languages_id') . '&page=' . $_GET['page']), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $languages_name); ?></td>
+      <td align="center"><?php echo $osC_Language->showImage($Qlanguages->value('code')); ?></td>
       <td><?php echo $Qdef->value('total_definitions'); ?></td>
       <td><?php echo $Qlanguages->value('code'); ?></td>
       <td align="right">

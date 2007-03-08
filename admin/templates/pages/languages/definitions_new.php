@@ -47,7 +47,7 @@
 
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name'], null, null, 'style="vertical-align: top; padding-top: 5px; margin-left: -20px;"') . '&nbsp;' . osc_draw_textarea_field('value[' . $l['id'] . ']', null, 60, 4, 'style="width: 99%;"') . '<br />';
+    echo $osC_Language->showImage($l['code'], null, null, 'style="vertical-align: top; padding-top: 5px; margin-left: -20px;"') . '&nbsp;' . osc_draw_textarea_field('value[' . $l['id'] . ']', null, 60, 4, 'style="width: 99%;"') . '<br />';
   }
 ?>
 

@@ -46,7 +46,7 @@
   }
 
   foreach ( $osC_Language->getAll() as $l ) {
-    echo osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']', $classes_array[$l['id']]['title']) . osc_draw_input_field('key[' . $l['id'] . ']', $classes_array[$l['id']]['key'], 'size="4"') . '<br />';
+    echo $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('name[' . $l['id'] . ']', $classes_array[$l['id']]['title']) . osc_draw_input_field('key[' . $l['id'] . ']', $classes_array[$l['id']]['key'], 'size="4"') . '<br />';
   }
 ?>
 

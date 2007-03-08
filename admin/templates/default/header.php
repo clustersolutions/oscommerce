@@ -86,7 +86,7 @@
        '          <ul>';
 
   foreach ( $osC_Language->getAll() as $l ) {
-    echo '            <li><span>' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '">' . $l['name'] . '</a></li>';
+    echo '            <li><span>' . $osC_Language->showImage($l['code']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '">' . $l['name'] . '</a></li>';
   }
 
   echo '          </ul>' .

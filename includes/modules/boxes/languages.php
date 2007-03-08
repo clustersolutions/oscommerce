@@ -28,8 +28,8 @@
 
       $this->_content = '';
 
-      foreach ($osC_Language->getAll() as $key => $value) {
-        $this->_content .= ' ' . osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('language', 'currency')) . '&language=' . $key, 'AUTO'), osc_image('includes/languages/' .  $key . '/images/' . $value['image'], $value['name'])) . ' ';
+      foreach ($osC_Language->getAll() as $value) {
+        $this->_content .= ' ' . osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('language', 'currency')) . '&language=' . $value['code'], 'AUTO'), $osC_Language->showImage($value['code'])) . ' ';
       }
     }
   }

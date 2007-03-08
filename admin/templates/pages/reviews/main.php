@@ -18,7 +18,7 @@
     echo $osC_MessageStack->output($osC_Template->getModule());
   }
 
-  $Qreviews = $osC_Database->query('select r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, r.languages_id, pd.products_name, l.name as languages_name, l.code as languages_code from :table_reviews r left join :table_products_description pd on (r.products_id = pd.products_id and r.languages_id = pd.language_id), :table_languages l where r.languages_id = l.languages_id order by r.date_added desc');
+  $Qreviews = $osC_Database->query('select r.reviews_id, r.products_id, r.date_added, r.last_modified, r.reviews_rating, r.reviews_status, pd.products_name, l.code as languages_code from :table_reviews r left join :table_products_description pd on (r.products_id = pd.products_id and r.languages_id = pd.language_id), :table_languages l where r.languages_id = l.languages_id order by r.date_added desc');
   $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
   $Qreviews->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qreviews->bindTable(':table_languages', TABLE_LANGUAGES);
@@ -64,7 +64,7 @@
 ?>
 
       <td onclick="document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked = !document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=preview'), osc_image('images/icons/preview.gif', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')); ?></td>
-      <td align="center"><?php echo osc_image('../includes/languages/' . $Qreviews->value('languages_code') . '/images/icon.gif', $Qreviews->value('languages_name')); ?></td>
+      <td align="center"><?php echo $osC_Language->showImage($Qreviews->value('languages_code')); ?></td>
       <td align="center"><?php echo osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf(TEXT_OF_5_STARS, $Qreviews->valueInt('reviews_rating'))); ?></td>
       <td><?php echo osC_DateTime::getShort($Qreviews->value('date_added')); ?></td>
       <td align="right">

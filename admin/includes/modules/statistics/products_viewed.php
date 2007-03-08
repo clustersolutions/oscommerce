@@ -44,7 +44,7 @@
     }
 
     function _setData() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $this->_data = array();
 
@@ -57,7 +57,7 @@
 
       while ( $this->_resultset->next() ) {
         $this->_data[] = array(osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $this->_resultset->valueInt('products_id') . '&action=preview'), $this->_icon . '&nbsp;' . $this->_resultset->value('products_name')),
-                               osc_image('../includes/languages/' . $this->_resultset->value('code') . '/images/icon.gif', $this->_resultset->value('name')),
+                               $osC_Language->showImage($this->_resultset->value('code')),
                                $this->_resultset->valueInt('products_viewed'));
       }
     }

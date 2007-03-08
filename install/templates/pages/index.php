@@ -17,7 +17,7 @@
 <?php
   foreach ($osC_Language->getAll() as $available_language) {
 ?>
-    <li style="display: inline;"><?php echo '<a href="index.php?language=' . $available_language['code'] . '"><img src="../includes/languages/' . $available_language['code'] . '/images/icon.gif" border="0" title="' . $available_language['name'] . '" /></a>'; ?></li>
+    <li style="display: inline;"><?php echo '<a href="index.php?language=' . $available_language['code'] . '">' . $osC_Language->showImage($available_language['code']) . '</a>'; ?></li>
 <?php      
   }
 ?>

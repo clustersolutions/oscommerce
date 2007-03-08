@@ -44,7 +44,7 @@
 
 <?php
   foreach ($osC_Language->getAll() as $l) {
-    echo '<span id="lang_' . $l['code'] . '"' . (($l['code'] == $osC_Language->getCode()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . osc_image('../includes/languages/' . $l['code'] . '/images/' . $l['image'], $l['name']) . '</a></span>&nbsp;&nbsp;';
+    echo '<span id="lang_' . $l['code'] . '"' . (($l['code'] == $osC_Language->getCode()) ? ' class="highlight"' : '') . '><a href="javascript:toggleDivBlocks(\'pName_\', \'pName_' . $l['code'] . '\'); toggleClass(\'lang_\', \'lang_' . $l['code'] . '\', \'highlight\', \'span\');">' . $osC_Language->showImage($l['code']) . '</a></span>&nbsp;&nbsp;';
   }
 ?>
 
