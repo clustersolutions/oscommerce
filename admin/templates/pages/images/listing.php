@@ -30,6 +30,11 @@
       <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="2">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php
@@ -59,4 +64,10 @@
 ?>
 
   </tbody>
+</table>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+  <tr>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('run.png', IMAGE_EXECUTE) . '&nbsp;' . IMAGE_EXECUTE; ?></td>
+  </tr>
 </table>

@@ -13,6 +13,7 @@
 define('HEADING_TITLE', 'Statistics');
 
 define('TABLE_HEADING_MODULES', 'Modules');
+define('TABLE_HEADING_ACTION', 'Action');
 
 define('TEXT_MODULE_DIRECTORY', 'Module Directory:');
 ?>

@@ -27,8 +27,14 @@
   <thead>
     <tr>
       <th><?php echo TABLE_HEADING_MODULES; ?></th>
+      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="2">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php
@@ -45,6 +51,13 @@
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), $module->getIcon() . '&nbsp;' . $module->getTitle()); ?></td>
+      <td align="right">
+
+<?php
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png', IMAGE_EXECUTE));
+?>
+
+      </td>
     </tr>
 
 <?php
@@ -53,6 +66,12 @@
 ?>
 
   </tbody>
+</table>
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+  <tr>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('run.png', IMAGE_EXECUTE) . '&nbsp;' . IMAGE_EXECUTE; ?></td>
+  </tr>
 </table>
 
 <p><?php echo TEXT_MODULE_DIRECTORY . ' ' . realpath(dirname(__FILE__) . '/../../../includes/modules/statistics'); ?></p>

@@ -23,17 +23,19 @@
   }
 ?>
 
-<form name="batch" action="#" method="post">
-
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
       <th><?php echo TABLE_HEADING_MODULES; ?></th>
       <th><?php echo TABLE_HEADING_SORT_ORDER; ?></th>
       <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="3">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php
@@ -67,7 +69,6 @@
 ?>
 
       </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $module->getCode(), null, 'id="batch' . $module->getCode() . '"'); ?></td>
     </tr>
 
 <?php

@@ -30,6 +30,11 @@
       <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="2">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php

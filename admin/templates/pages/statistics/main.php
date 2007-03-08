@@ -55,6 +55,11 @@
 
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="<?php echo sizeof($osC_Statistics->getHeader()); ?>">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php
