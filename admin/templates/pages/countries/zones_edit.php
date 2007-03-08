@@ -11,7 +11,7 @@
 */
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Countries_Admin::getZoneData($_GET['zID']));
-osc_href_link_admin(?>
+?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
