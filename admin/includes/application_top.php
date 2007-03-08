@@ -94,17 +94,30 @@
   $osC_Session = new osC_Session_Admin('osCAdminID');
   $osC_Session->start();
 
-  if (!isset($_SESSION['admin'])) {
-    if (!empty($_GET)) {
+  if ( !isset($_SESSION['admin']) ) {
+    $redirect = false;
+
+    if ( empty($_GET) ) {
+      $redirect = true;
+    } else {
       $first_array = array_slice($_GET, 0, 1);
       $_module = osc_sanitize_string(basename(key($first_array)));
 
-      if ($_module != 'login') {
-        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
+      if ( $_module != 'login' ) {
+        if ( !isset($_SESSION['redirect_origin']) ) {
+          $_SESSION['redirect_origin'] = array('module' => $module,
+                                               'get' => $_GET);
+        }
+
+        $redirect = true;
       }
-    } else {
+    }
+
+    if ( $redirect === true ) {
       osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, 'login'));
     }
+
+    unset($redirect);
   }
 
   require('includes/classes/directory_listing.php');
