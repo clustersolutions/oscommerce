@@ -105,7 +105,7 @@
 
       if ( $_module != 'login' ) {
         if ( !isset($_SESSION['redirect_origin']) ) {
-          $_SESSION['redirect_origin'] = array('module' => $module,
+          $_SESSION['redirect_origin'] = array('module' => $_module,
                                                'get' => $_GET);
         }
 
