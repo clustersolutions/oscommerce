@@ -52,7 +52,7 @@
  * From Pear::PHP_Compat
  */
 
-  if ( !function_exists('http_build_query') ) { exit;
+  if ( !function_exists('http_build_query') ) {
     function http_build_query($formdata, $numeric_prefix = null, $arg_separator = null) {
 // If $formdata is an object, convert it to an array
       if ( is_object($formdata) ) {
