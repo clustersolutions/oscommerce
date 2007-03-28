@@ -41,6 +41,7 @@
   <thead>
     <tr>
       <th><?php echo $osC_Language->get('table_heading_countries'); ?></th>
+      <th width="20">&nbsp;</th>
       <th><?php echo $osC_Language->get('table_heading_code'); ?></th>
       <th><?php echo $osC_Language->get('table_heading_total_zones'); ?></th>
       <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
@@ -49,7 +50,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -65,6 +66,7 @@
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qcountries->valueInt('countries_id'); ?>').checked = !document.getElementById('batch<?php echo $Qcountries->valueInt('countries_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qcountries->valueInt('countries_id') . '&page=' . $_GET['page']), osc_icon('folder.png') . '&nbsp;' . $Qcountries->value('countries_name')); ?></td>
+      <td><?php echo  osc_image('../images/worldflags/' . $Qcountries->value('countries_iso_code_2') . '.png', $Qcountries->value('countries_name')); ?></td>
       <td><?php echo $Qcountries->value('countries_iso_code_2') . '&nbsp;&nbsp;&nbsp;&nbsp;' . $Qcountries->value('countries_iso_code_3'); ?></td>
       <td><?php echo $Qzones->valueInt('total_zones'); ?></td>
       <td align="right">

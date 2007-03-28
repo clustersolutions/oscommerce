@@ -46,7 +46,7 @@
     }
 
     function startService($service) {
-      include('includes/services/' . $service . '.php');
+      include('includes/modules/services/' . $service . '.php');
 
       if (@call_user_func(array('osC_Services_' . $service, 'start'))) {
         $this->started_services[] = $service;

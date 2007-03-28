@@ -65,7 +65,7 @@
 
       <td onclick="document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked = !document.getElementById('batch<?php echo $Qreviews->valueInt('reviews_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $Qreviews->valueInt('reviews_id') . '&action=preview'), osc_icon('reviews.png') . '&nbsp;' . $Qreviews->value('products_name')); ?></td>
       <td align="center"><?php echo $osC_Language->showImage($Qreviews->value('languages_code')); ?></td>
-      <td align="center"><?php echo osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_from_5_stars'), $Qreviews->valueInt('reviews_rating'))); ?></td>
+      <td align="center"><?php echo osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.png', sprintf($osC_Language->get('rating_from_5_stars'), $Qreviews->valueInt('reviews_rating'))); ?></td>
       <td><?php echo osC_DateTime::getShort($Qreviews->value('date_added')); ?></td>
       <td align="right">
 

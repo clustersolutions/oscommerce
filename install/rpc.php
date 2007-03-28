@@ -138,8 +138,8 @@
           $installed = array();
 
           foreach ($services as $service) {
-            include('../includes/services/' . $service . '.php');
-            $class = 'osC_Services_' . $service;
+            include('../admin/includes/modules/services/' . $service . '.php');
+            $class = 'osC_Services_' . $service . '_Admin';
             $module = new $class();
             $module->install();
 

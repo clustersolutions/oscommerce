@@ -27,7 +27,7 @@
 
 <p><?php echo '<b>' . $osC_Language->get('field_review') . '</b><br />' . nl2br(osc_output_string_protected($osC_ObjectInfo->get('reviews_text'))); ?></p>
 
-<p><?php echo '<b>' . $osC_Language->get('field_rating') . '</b>&nbsp;' . osc_image('../images/stars_' . $osC_ObjectInfo->get('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating'))) . '&nbsp;[' . sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating')) . ']'; ?></p>
+<p><?php echo '<b>' . $osC_Language->get('field_rating') . '</b>&nbsp;' . osc_image('../images/stars_' . $osC_ObjectInfo->get('reviews_rating') . '.png', sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating'))) . '&nbsp;[' . sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating')) . ']'; ?></p>
 
 <?php
   if ( defined('SERVICE_REVIEW_ENABLE_MODERATION') && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {

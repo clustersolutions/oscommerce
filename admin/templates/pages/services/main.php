@@ -10,7 +10,7 @@
   Released under the GNU General Public License
 */
 
-  $osC_DirectoryListing = new osC_DirectoryListing('../includes/services');
+  $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/services');
   $osC_DirectoryListing->setIncludeDirectories(false);
   $files = $osC_DirectoryListing->getFiles();
 ?>
@@ -39,11 +39,11 @@
 
 <?php
   foreach ($files as $file) {
-    include('../includes/services/' . $file['name']);
+    include('includes/modules/services/' . $file['name']);
 
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    $module = 'osC_Services_' . $class;
+    $module = 'osC_Services_' . $class . '_Admin';
     $module = new $module();
 ?>
 

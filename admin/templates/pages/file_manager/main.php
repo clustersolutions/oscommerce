@@ -126,4 +126,10 @@
   </tbody>
 </table>
 
+<table border="0" width="100%" cellspacing="0" cellpadding="2">
+  <tr>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('download.png') . '&nbsp;' . $osC_Language->get('icon_download') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
+  </tr>
+</table>
+
 <p><?php echo osc_output_string_protected($_SESSION['fm_directory']); ?></p>

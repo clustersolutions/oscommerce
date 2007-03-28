@@ -118,9 +118,9 @@
     function _install($module_key) {
       global $osC_Database;
 
-      include('../includes/services/' . $module_key . '.php');
+      include('includes/modules/services/' . $module_key . '.php');
 
-      $class = 'osC_Services_' . $module_key;
+      $class = 'osC_Services_' . $module_key . '_Admin';
 
       $module = new $class();
       $module->install();
@@ -191,9 +191,9 @@
     function _uninstall($module_key) {
       global $osC_Database;
 
-      include('../includes/services/' . $module_key . '.php');
+      include('includes/modules/services/' . $module_key . '.php');
 
-      $class = 'osC_Services_' . $module_key;
+      $class = 'osC_Services_' . $module_key . '_Admin';
 
       $module = new $class();
       $module->remove();

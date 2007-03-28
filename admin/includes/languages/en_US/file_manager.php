@@ -44,7 +44,7 @@ introduction_edit_file = Please make the necessary changes for this file.
 introduction_new_directory = Please fill in the following information for the new directory.
 new_directory_error_not_writable = Error: This directory is not writable: %s
 
-introduction_delete_entry = Please verify the removal of the following entry.
+introduction_delete_entry = Please verify the removal of this entry.
 delete_error_not_writable = Error: This entry is not writable and cannot be removed: %s
 
 ms_error_directory_not_writable = Error: This directory is not writable: %s

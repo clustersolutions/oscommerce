@@ -10,9 +10,9 @@
   Released under the GNU General Public License
 */
 
-  include('../includes/services/' . $_GET['module'] . '.php');
+  include('includes/modules/services/' . $_GET['module'] . '.php');
 
-  $module = 'osC_Services_' . $_GET['module'];
+  $module = 'osC_Services_' . $_GET['module'] . '_Admin';
   $module = new $module();
 ?>
 
