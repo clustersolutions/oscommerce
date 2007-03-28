@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -41,11 +41,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' Batch Edit'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_Language->get('action_heading_batch_edit_administrators'); ?></div>
 <div class="infoBoxContent">
   <form name="aEditBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_edit_administrators'); ?></p>
 
 <?php
   $Qadmins = $osC_Database->query('select id, user_name from :table_administrators where id in (":id") order by user_name');
@@ -65,10 +65,10 @@
 
   echo '<p>' . $names_string . '</p>';
 
-  echo '<p>' . osc_draw_radio_field('mode', array(array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_ADD, 'text' => 'Add To'), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_REMOVE, 'text' => 'Remove From'), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_SET, 'text' => 'Set To')), OSC_ADMINISTRATORS_ACCESS_MODE_ADD) . '</p>';
+  echo '<p>' . osc_draw_radio_field('mode', array(array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_ADD, 'text' => $osC_Language->get('add_to')), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_REMOVE, 'text' => $osC_Language->get('remove_from')), array('id' => OSC_ADMINISTRATORS_ACCESS_MODE_SET, 'text' => $osC_Language->get('set_to'))), OSC_ADMINISTRATORS_ACCESS_MODE_ADD) . '</p>';
 
   echo '<ul style="list-style-type: none; padding-left: 0;">' .
-       '  <li>' . osc_draw_checkbox_field('modules[]', '*', null, 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . TEXT_GLOBAL_ACCESS . '</b></label></li>' .
+       '  <li>' . osc_draw_checkbox_field('modules[]', '*', null, 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . $osC_Language->get('global_access') . '</b></label></li>' .
        '</ul>' .
        '<ul style="list-style-type: none; padding-left: 0;">';
 

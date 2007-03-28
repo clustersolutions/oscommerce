@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -47,14 +47,14 @@
 <div class="infoBoxContent">
   <form name="aEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&aID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_administrator'); ?></p>
 
-  <p><?php echo '<b>' . TEXT_ADMINISTRATOR_USERNAME . '</b><br />' . osc_draw_input_field('user_name', $osC_ObjectInfo->get('user_name'), 'style="width: 100%;"'); ?></p>
-  <p><?php echo '<b>' . TEXT_ADMINISTRATOR_PASSWORD . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_username') . '</b><br />' . osc_draw_input_field('user_name', $osC_ObjectInfo->get('user_name'), 'style="width: 100%;"'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_password') . '</b><br />' . osc_draw_password_field('user_password', 'style="width: 100%;"'); ?></p>
 
 <?php
   echo '<ul style="list-style-type: none; padding-left: 0;">' .
-       '  <li>' . osc_draw_checkbox_field('modules[]', '*', in_array('*', $osC_ObjectInfo->get('access_modules')), 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . TEXT_GLOBAL_ACCESS . '</b></label></li>' .
+       '  <li>' . osc_draw_checkbox_field('modules[]', '*', in_array('*', $osC_ObjectInfo->get('access_modules')), 'id="access_globaladmin"') . '&nbsp;<label for="access_globaladmin"><b>' . $osC_Language->get('global_access') . '</b></label></li>' .
        '</ul>' .
        '<ul style="list-style-type: none; padding-left: 0;">';
 

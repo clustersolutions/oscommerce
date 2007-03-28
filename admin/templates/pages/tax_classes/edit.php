@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,20 +25,18 @@
 <div class="infoBoxContent">
   <form name="tcEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&tcID=' . $osC_ObjectInfo->get('tax_class_id') . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_tax_class'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_CLASS_TITLE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_title') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_class_title', $osC_ObjectInfo->get('tax_class_title'), 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_CLASS_DESCRIPTION . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_description') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_class_description', $osC_ObjectInfo->get('tax_class_description'), 'style="width: 100%;"'); ?></td>
     </tr>
   </table>
-
-  <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($osC_ObjectInfo->get('last_modified') > $osC_ObjectInfo->get('date_added')) ? osC_DateTime::getShort($osC_ObjectInfo->get('last_modified')) : osC_DateTime::getShort($osC_ObjectInfo->get('date_added'))); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

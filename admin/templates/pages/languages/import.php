@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,20 +29,20 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_IMPORT_LANGUAGE; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_import_language'); ?></div>
 <div class="infoBoxContent">
   <form name="lImport" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=import'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_IMPORT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_import_language'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SELECT_LANGUAGE . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('language_import', $languages_array, null, 'style="width: 100%"'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_language_selection') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('language_import', $languages_array, null, 'style="width: 100%"'); ?></td>
     </tr>
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_SELECT_IMPORT_TYPE . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_radio_field('import_type', array(array('id' => 'add', 'text' => 'Only Add New Records'), array('id' => 'update', 'text' => 'Only Update Existing Records'), array('id' => 'replace', 'text' => 'Replace Completely')), 'add', null, '<br />'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_import_type') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_radio_field('import_type', array(array('id' => 'add', 'text' => $osC_Language->get('only_add_new_records')), array('id' => 'update', 'text' => $osC_Language->get('only_update_existing_records')), array('id' => 'replace', 'text' => $osC_Language->get('replace_all'))), 'add', null, '<br />'); ?></td>
     </tr>
   </table>
 

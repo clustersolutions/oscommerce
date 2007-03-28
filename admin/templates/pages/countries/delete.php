@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,7 +36,7 @@
   if ( $Qcheck->valueInt('total') > 0 ) {
     $can_be_deleted = false;
 
-    echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_ADDRESS_BOOK, $Qcheck->valueInt('total')) . '</b></p>' . "\n";
+    echo '    <p><b>' . sprintf($osC_Language->get('delete_warning_country_in_use_address_book'), $Qcheck->valueInt('total')) . '</b></p>' . "\n";
   }
 
   $Qcheck = $osC_Database->query('select count(*) as total from :table_zones_to_geo_zones where zone_country_id = :zone_country_id');
@@ -47,18 +47,19 @@
   if ( $Qcheck->valueInt('total') > 0 ) {
     $can_be_deleted = false;
 
-    echo '<p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_TAX_ZONES, $Qcheck->valueInt('total')) . '</b></p>' . "\n";
+    echo '<p><b>' . sprintf($osC_Language->get('delete_warning_country_in_use_tax_zone'), $Qcheck->valueInt('total')) . '</b></p>' . "\n";
   }
 
   if ( $can_be_deleted === true ) {
-    echo '    <p>' . TEXT_INFO_DELETE_INTRO . '</p>' . "\n" .
-         '    <p><b>' . $osC_ObjectInfo->get('countries_name') . '</b></p>' . "\n";
+    $country_name = $osC_ObjectInfo->get('countries_name');
 
     if ( $osC_ObjectInfo->get('total_zones') > 0 ) {
-      echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_COUNTRIES_WARNING, $osC_ObjectInfo->get('total_zones')) . '</b></p>' . "\n";
+      $country_name .= ' (' . sprintf($osC_Language->get('total_zones'), $osC_ObjectInfo->get('total_zones')) . ')';
     }
 
-    echo '  <p align="center">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
+    echo '  <p>' . $osC_Language->get('introduction_delete_country') . '</p>' .
+         '  <p><b>' . $country_name . '</b></p>' .
+         '  <p align="center">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
     echo '  <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   }

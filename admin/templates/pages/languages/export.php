@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,7 +25,7 @@
 <div class="infoBoxContent">
   <form name="lExport" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&lID=' . $osC_ObjectInfo->get('languages_id') . '&action=export'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_EXPORT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_export_language'); ?></p>
 
 <?php
   $Qgroups = $osC_Database->query('select distinct content_group from :table_languages_definitions where languages_id = :languages_id order by content_group');
@@ -41,9 +41,9 @@
   }
 ?>
 
-  <p>(<a href="javascript:selectAllFromPullDownMenu('groups');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('groups');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="groups" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
+  <p>(<a href="javascript:selectAllFromPullDownMenu('groups');"><u><?php echo $osC_Language->get('select_all'); ?></u></a> | <a href="javascript:resetPullDownMenuSelection('groups');"><u><?php echo $osC_Language->get('select_none'); ?></u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="groups" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
-  <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => TEXT_INFO_EXPORT_WITH_DATA)), true); ?></p>
+  <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => $osC_Language->get('field_export_with_data'))), true); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_EXPORT . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -33,9 +33,9 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th width="35%;"><?php echo TABLE_HEADING_CONFIGURATION_TITLE; ?></th>
-      <th><?php echo TABLE_HEADING_CONFIGURATION_VALUE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th width="35%;"><?php echo $osC_Language->get('table_heading_title'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_value'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -46,7 +46,7 @@
   <tbody>
 
 <?php
-  while ($Qcfg->next()) {
+  while ( $Qcfg->next() ) {
     if ( !osc_empty($Qcfg->value('use_function')) ) {
       $cfgValue = osc_call_user_func($Qcfg->value('use_function'), $Qcfg->value('configuration_value'));
     } else {

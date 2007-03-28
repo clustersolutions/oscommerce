@@ -1,33 +1,35 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Administrators
 
-  Copyright (c) 2005 osCommerce
+table_heading_administrators = Administrators
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+action_heading_new_administrator = New Administrator
+action_heading_batch_edit_administrators = Batch Edit Administrators
+action_heading_batch_delete_administrators = Batch Delete Administrators
 
-define('HEADING_TITLE', 'Administrators');
+field_username = Username:
+field_password = Password:
 
-define('TABLE_HEADING_ADMINISTRATORS', 'Administrators');
-define('TABLE_HEADING_ACTION', 'Action');
+add_to = Add To
+remove_from = Remove From
+set_to = Set To
+global_access = Global Access
 
-define('TEXT_HEADING_NEW_ADMINISTRATOR', 'New Administrator');
+introduction_new_administrator = Please fill in the following information for the new administrator.
 
-define('TEXT_NEW_INTRO', 'Please fill out the following information for the new administrator.');
-define('TEXT_EDIT_INTRO', 'Please make any necessary changes.');
-define('TEXT_EDIT_BATCH_INTRO', 'Please make any necessary changes to the following administrators:');
+introduction_edit_administrator = Please make the necessary changes for this administrator.
+introduction_batch_edit_administrators = Please make the necessary changes for the following administrators.
 
-define('TEXT_ADMINISTRATOR_USERNAME', 'Administrator Name:');
-define('TEXT_ADMINISTRATOR_PASSWORD', 'Administrator Password:');
+introduction_delete_administrator = Please verify the removal of this administrator.
+introduction_batch_delete_administrators = Please verify the removal of the following administrators.
 
-define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this administrator?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following administrators?');
-
-define('TEXT_GLOBAL_ACCESS', 'Global Access');
-
-define('ERROR_ADMINISTRATORS_USERNAME_EXISTS', 'Error: Administrator username already exists.');
-?>
+ms_error_username_already_exists = Error: Administrator username already exists. Please use a unique username for this administrator.

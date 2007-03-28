@@ -1,47 +1,52 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Tax Classes
 
-  Copyright (c) 2004 osCommerce
+table_heading_name = Name
+table_heading_total_rates = Total Tax Rates
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+table_heading_tax_rate_priority = Priority
+table_heading_tax_rate_zone = Zone
+table_heading_tax_rate = Tax Rate
 
-define('HEADING_TITLE', 'Tax Classes');
+action_heading_new_tax_class = New Tax Class
+action_heading_batch_delete_tax_classes = Batch Delete Tax Classes
 
-define('TABLE_HEADING_TAX_CLASSES', 'Tax Classes');
-define('TABLE_HEADING_TAX_RATES_TOTAL', 'Defined Tax Rates');
+action_heading_new_tax_rate = New Tax Rate
+action_heading_batch_delete_tax_rates = Batch Delete Tax Rates
 
-define('TABLE_HEADING_TAX_RATE_PRIORITY', 'Priority');
-define('TABLE_HEADING_ZONE', 'Zone');
-define('TABLE_HEADING_TAX_RATE', 'Tax Rate');
+field_title = Title:
+field_description = Description:
 
-define('TABLE_HEADING_ACTION', 'Action');
+field_tax_rate_zone_group = Zone Group:
+field_tax_rate = Tax Rate (%):
+field_tax_rate_description = Description:
+field_tax_rate_priority = Priority:
 
-define('TEXT_INFO_HEADING_NEW_TAX_CLASS', 'New Tax Class');
-define('TEXT_INFO_HEADING_NEW_TAX_RATE', 'New Tax Rate');
+total_entries = %s Entries
 
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new tax class with its related data');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this tax class?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following tax classes?');
-define('TEXT_DELETE_ENTRIES_BATCH_INTRO', 'Are you sure you want to delete the following tax class entries?');
+introduction_new_tax_class = Please fill in the following information for the new tax class.
 
-define('TEXT_INFO_CLASS_TITLE', 'Tax Class Title:');
-define('TEXT_INFO_CLASS_DESCRIPTION', 'Description:');
+introduction_edit_tax_class = Please make the necessary changes to the following tax class.
 
-define('TEXT_INFO_ZONE_NAME', 'Zone:');
-define('TEXT_INFO_TAX_RATE', 'Tax Rate (%):');
-define('TEXT_INFO_TAX_RATE_PRIORITY', 'Priority:');
-define('TEXT_INFO_TAX_RATE_DESCRIPTION', 'Description:');
+introduction_delete_tax_class = Please verify the removal of this tax class and its tax rate entries.
+delete_warning_tax_class_in_use = Warning: This tax class cannot be deleted as it is currently assigned to %s products.
 
-define('TEXT_INFO_DATE_ADDED', 'Date Added:');
-define('TEXT_INFO_LAST_MODIFIED', 'Last Modified:');
+introduction_batch_delete_tax_classes = Please verify the removal of the following tax classes and their tax rate entries.
+batch_delete_warning_tax_class_in_use = Warning: The following tax classes cannot be deleted as they are currently assigned to products.
 
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: This Tax Class cannot be deleted as it is currently assigned to one or more products.');
-define('TEXT_INFO_BATCH_DELETE_PROHIBITED', 'Warning: The following tax classess cannot be deleted as they are currently assigned to one or more products.');
-define('TEXT_INFO_DELETE_TAX_RATES_WARNING', 'Warning: This Tax Class has %s tax rate(s) assigned which would also be deleted.');
-?>
+introduction_new_tax_rate = Please fill in the following information for the new tax rate entry:
+
+introduction_edit_tax_rate = Please make the necessary changes to the following tax rate entry:
+
+introduction_delete_tax_rate = Please verify the removal of this tax rate entry:
+
+introduction_batch_delete_tax_rates = Please verify the removal of the following tax rate entries:

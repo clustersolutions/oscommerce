@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,15 +24,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('reload.png', IMAGE_UPDATE) . ' ' . IMAGE_UPDATE_CURRENCIES; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('reload.png', IMAGE_UPDATE) . ' ' . $osC_Language->get('action_heading_update_rates'); ?></div>
 <div class="infoBoxContent">
   <form name="cUpdate" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=updateRates'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_UPDATE_SERVICE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_update_exchange_rates'); ?></p>
 
   <p><?php echo osc_draw_radio_field('service', $services, null, null, '<br />'); ?></p>
 
-  <p><?php echo TEXT_INFO_SERVICE_TERMS; ?></p>
+  <p><?php echo $osC_Language->get('service_terms_agreement'); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

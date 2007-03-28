@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,7 +25,7 @@
 <div class="infoBoxContent">
   <form name="aDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&ccID=' . $osC_ObjectInfo->get('id') . '&action=delete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_card'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('credit_card_name') . '</b>'; ?></p>
 

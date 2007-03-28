@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,12 +15,16 @@
 /* Private variables */
 
     var $_module = 'login',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Login() {
+      global $osC_Language;
+
+      $this->_page_title = $osC_Language->get('heading_title');
+
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }
@@ -43,7 +47,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_MessageStack;
+      global $osC_Database, $osC_Language, $osC_MessageStack;
 
       if ( !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
         $Qadmin = $osC_Database->query('select id, user_name, user_password from :table_administrators where user_name = :user_name');
@@ -71,11 +75,15 @@
         }
       }
 
-      $osC_MessageStack->add('header', 'Error logging in.', 'error');
+      $osC_MessageStack->add('header', $osC_Language->get('ms_error_login_invalid'), 'error');
     }
 
     function _logoff() {
+      global $osC_Language, $osC_MessageStack;
+
       unset($_SESSION['admin']);
+
+      $osC_MessageStack->add_session('header', $osC_Language->get('ms_success_logged_out'), 'success');
 
       osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
     }

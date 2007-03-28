@@ -23,6 +23,41 @@
       }
     }
 
+    function loadIniFile($filename, $comment = '#') {
+      $filename = basename($filename);
+
+      if ( !file_exists('includes/languages/' . $this->_code . '/' . $filename) ) {
+        return array();
+      }
+
+      $ini_array = array();
+
+      $contents = file('includes/languages/' . $this->_code . '/' . $filename);
+
+      foreach ( $contents as $line ) {
+        $line = trim($line);
+
+        $firstchar = substr($line, 0, 1);
+
+        if ( !empty($line) && ( $firstchar != $comment) ) {
+          $delimiter = strpos($line, '=');
+
+          if ( $delimiter !== false ) {
+            $key = trim(substr($line, 0, $delimiter));
+            $value = trim(substr($line, $delimiter + 1));
+
+            $ini_array[$key] = $value;
+          } elseif ( isset($key) ) {
+            $ini_array[$key] .= trim($line);
+          }
+        }
+      }
+
+      unset($contents);
+
+      $this->_definitions = array_merge($this->_definitions, $ini_array);
+    }
+
     function injectDefinitions($file) {
       foreach ($this->extractDefinitions($this->_code . '/' . $file) as $def) {
         $this->_definitions[$def['key']] = $def['value'];

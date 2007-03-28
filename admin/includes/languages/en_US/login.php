@@ -1,21 +1,20 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Login
 
-  Copyright (c) 2005 osCommerce
+action_heading_login = Log Into The Administration Tool
 
-  Released under the GNU General Public License
-*/
+introduction = Please identify yourself to log into the administration tool.
 
-define('HEADING_TITLE', 'Login');
+field_username = Username:
+field_password = Password:
 
-define('TEXT_INFO_HEADING_LOGIN', 'Log Into The Administration Tool');
-
-define('TEXT_INFO_INTRO', 'Please use the following form to log into the administration tool.');
-
-define('TEXT_INFO_USER_NAME', 'Name:');
-define('TEXT_INFO_USER_PASSWORD', 'Password:');
-?>
+ms_success_logged_out = Success: You have been successfully logged out of this system.
+ms_error_login_invalid = Error: Identification of the store administrator failed. Please try again if you have been authorized to use this system.

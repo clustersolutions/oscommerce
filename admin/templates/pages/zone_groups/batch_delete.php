@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_Language->get('action_heading_batch_delete_zone_groups'); ?></div>
 <div class="infoBoxContent">
   <form name="cDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_zone_groups'); ?></p>
 
 <?php
   $check_tax_zones_flag = array();
@@ -45,7 +45,18 @@
       $check_tax_zones_flag[] = $Qzones->value('geo_zone_name');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $Qzones->value('geo_zone_name') . '</b>, ';
+    $Qentries = $osC_Database->query('select count(*) as total_entries from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id');
+    $Qentries->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
+    $Qentries->bindInt(':geo_zone_id', $Qzones->valueInt('geo_zone_id'));
+    $Qentries->execute();
+
+    $zone_group_name = $Qzones->value('geo_zone_name');
+
+    if ( $Qentries->valueInt('total_entries') > 0 ) {
+      $zone_group_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qentries->valueInt('total_entries')) . ')';
+    }
+
+    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $zone_group_name . '</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -57,7 +68,7 @@
   if ( empty($check_tax_zones_flag) ) {
     echo '<p align="center"><input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
-    echo '<p><b>' . TEXT_INFO_BATCH_DELETE_PROHIBITED_TAX_ZONES . '</b></p>' .
+    echo '<p><b>' . $osC_Language->get('batch_delete_warning_group_in_use_tax_rate') . '</b></p>' .
          '<p>' . implode(', ', $check_tax_zones_flag) . '</p>';
 
     echo '<p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';

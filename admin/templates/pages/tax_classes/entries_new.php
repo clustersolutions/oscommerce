@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -30,27 +30,27 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_TAX_RATE; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_new_tax_rate'); ?></div>
 <div class="infoBoxContent">
   <form name="trNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=entrySave'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_tax_rate'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_ZONE_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_zone_group') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_pull_down_menu('tax_zone_id', $zones_array); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_rate', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_DESCRIPTION . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_description') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_description', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_PRIORITY . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_priority') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_priority', null, 'style="width: 100%;"'); ?></td>
     </tr>
   </table>

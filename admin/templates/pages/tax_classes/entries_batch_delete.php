@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_Language->get('action_heading_batch_delete_tax_rates'); ?></div>
 <div class="infoBoxContent">
   <form name="trDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=batchDeleteEntries'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_ENTRIES_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_tax_rates'); ?></p>
 
 <?php
   $Qentries = $osC_Database->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in (":tax_rates_id") order by tax_description');

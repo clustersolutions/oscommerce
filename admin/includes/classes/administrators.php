@@ -142,14 +142,14 @@
         if ( $error === false ) {
           $osC_Database->commitTransaction();
 
-          return true;
+          return 1;
         } else {
           $osC_Database->rollbackTransaction();
 
-          return false;
+          return -1;
         }
       } else {
-        return -1;
+        return -2;
       }
     }
 

@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: zone_groups_entries.php 1016 2006-10-18 11:38:59Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -41,9 +41,9 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_COUNTRY; ?></th>
-      <th><?php echo TABLE_HEADING_COUNTRY_ZONE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_country'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_zone'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
@@ -60,8 +60,8 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo (($Qentries->valueInt('zone_country_id') > 0) ? $Qentries->value('countries_name') : TEXT_ALL_COUNTRIES); ?></td>
-      <td><?php echo (($Qentries->valueInt('zone_id') > 0) ? $Qentries->value('zone_name') : PLEASE_SELECT); ?></td>
+      <td><?php echo (($Qentries->valueInt('zone_country_id') > 0) ? $Qentries->value('countries_name') : $osC_Language->get('all_countries')); ?></td>
+      <td><?php echo (($Qentries->valueInt('zone_id') > 0) ? $Qentries->value('zone_name') : $osC_Language->get('all_zones')); ?></td>
       <td align="right">
 
 <?php

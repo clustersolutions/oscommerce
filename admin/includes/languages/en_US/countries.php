@@ -1,49 +1,58 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Countries
 
-  Copyright (c) 2004 osCommerce
+table_heading_name = Country
+table_heading_code = ISO Code
+table_heading_total_zones = Total Zones
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+table_heading_zone_name = Zone
+table_heading_zone_code = Code
 
-define('HEADING_TITLE', 'Countries');
+action_heading_new_country = New Country
+action_heading_batch_delete_countries = Batch Delete Countries
 
-define('TABLE_HEADING_COUNTRY_NAME', 'Country');
-define('TABLE_HEADING_COUNTRY_CODES', 'ISO Codes');
-define('TABLE_HEADING_ZONES_TOTAL', 'Defined Zones');
-define('TABLE_HEADING_ACTION', 'Action');
+action_heading_new_zone = New Zone
+action_heading_batch_delete_zones = Batch Delete Zones
 
-define('TABLE_HEADING_ZONE_NAME', 'Zone Name');
-define('TABLE_HEADING_ZONE_CODE', 'Zone Code');
+field_name = Name:
+field_iso_code_2 = ISO Code (2):
+field_iso_code_3 = ISO Code (3):
+field_address_format = Address Format:
 
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_COUNTRY_NAME', 'Name:');
-define('TEXT_INFO_COUNTRY_CODE_2', 'ISO Code (2):');
-define('TEXT_INFO_COUNTRY_CODE_3', 'ISO Code (3):');
-define('TEXT_INFO_ADDRESS_FORMAT', 'Address Format:');
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new country with its related data');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this country?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following countries?');
-define('TEXT_DELETE_BATCH_ZONES_INTRO', 'Are you sure you want to delete the following zones?');
-define('TEXT_INFO_HEADING_NEW_COUNTRY', 'New Country');
-define('TEXT_INFO_HEADING_EDIT_COUNTRY', 'Edit Country');
-define('TEXT_INFO_HEADING_DELETE_COUNTRY', 'Delete Country');
+field_zone_name = Name:
+field_zone_code = Code:
 
-define('TEXT_INFO_INSERT_ZONE_INTRO', 'Please enter the new zone with its related data');
-define('TEXT_INFO_DELETE_ZONE_INTRO', 'Are you sure you want to delete this zone?');
-define('TEXT_INFO_HEADING_NEW_ZONE', 'New Zone');
-define('TEXT_INFO_ZONES_NAME', 'Zones Name:');
-define('TEXT_INFO_ZONES_CODE', 'Zones Code:');
+total_zones = %s Zones
 
-define('TEXT_INFO_DELETE_PROHIBITED_ADDRESS_BOOK', 'Warning: This Country cannot be deleted as it is currently assigned to %s address book entries.');
-define('TEXT_INFO_DELETE_PROHIBITED_TAX_ZONES', 'Warning: This Country cannot be deleted as it is currently assigned to %s tax zone(s).');
-define('TEXT_INFO_BATCH_DELETE_PROHIBITED_ADDRESS_BOOK', 'Warning: The following countries cannot be deleted as they are currently assigned to address book entries.');
-define('TEXT_INFO_BATCH_DELETE_PROHIBITED_TAX_ZONES', 'Warning: The following countries cannot be deleted as they are currently assigned to tax zones.');
-define('TEXT_INFO_BATCH_DELETE_ZONES_PROHIBITED_ADDRESS_BOOK', 'Warning: The following zones cannot be deleted as they are currently assigned to address book entries.');
-define('TEXT_INFO_BATCH_DELETE_ZONES_PROHIBITED_TAX_ZONES', 'Warning: The following zones cannot be deleted as they are currently assigned to tax zones.');
-define('TEXT_INFO_DELETE_COUNTRIES_WARNING', 'Warning: This Country has %s zone(s) assigned which would also be deleted.');
-?>
+introduction_new_country = Please fill in the following information for the new country.
+
+introduction_edit_country = Please make the necessary changes for this country.
+
+introduction_delete_country = Please verify the removal of this country and its zones.
+delete_warning_country_in_use_address_book = Warning: This country cannot be deleted as it is currently assigned to %s address book entries.
+delete_warning_country_in_use_tax_zone = Warning: This country cannot be deleted as it is currently assigned to %s tax zones.
+
+introduction_batch_delete_countries = Please verify the removal of the following countries and their zones.
+batch_delete_warning_country_in_use_address_book = Warning: The following countries cannot be deleted as they are currently assigned to address book entries.
+batch_delete_warning_country_in_use_tax_zone = Warning: The following countries cannot be deleted as they are currently assigned to tax zones.
+
+introduction_new_zone = Please fill in the following information for the new zone.
+
+introduction_edit_zone = Please make the necessary changes for this zone.
+
+introduction_delete_zone = Please verify the removal of this zone.
+delete_warning_zone_in_use_address_book = Warning: This zone cannot be deleted as it is currently assigned to %s address book entries.
+delete_warning_zone_in_use_tax_zone = Warning: This zone cannot be deleted as it is currently assigned to %s tax zones.
+
+introduction_batch_delete_zones = Please verify the removal of the following zones.
+batch_delete_warning_zone_in_use_address_book = Warning: The following zones cannot be deleted as they are currently assigned to address book entries.
+batch_delete_warning_zone_in_use_tax_zone = Warning: The following zones cannot be deleted as they are currently assigned to tax zones.

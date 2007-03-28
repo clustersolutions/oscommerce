@@ -40,11 +40,11 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_LANGUAGE_NAME; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_name'); ?></th>
       <th width="20">&nbsp;</th>
-      <th><?php echo TABLE_HEADING_TOTAL_DEFINITIONS; ?></th>
-      <th><?php echo TABLE_HEADING_LANGUAGE_CODE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_total_definitions'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_code'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>

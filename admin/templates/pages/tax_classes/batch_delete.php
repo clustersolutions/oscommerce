@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_Language->get('action_heading_batch_delete_tax_classes'); ?></div>
 <div class="infoBoxContent">
   <form name="tcDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_tax_classes'); ?></p>
 
 <?php
   $check_tax_classes_flag = array();
@@ -45,7 +45,18 @@
       $check_tax_classes_flag[] = $Qclasses->value('tax_class_title');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $Qclasses->value('tax_class_title') . '</b>, ';
+    $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
+    $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+    $Qrates->bindInt(':tax_class_id', $Qclasses->valueInt('tax_class_id'));
+    $Qrates->execute();
+
+    $tax_class_name = $Qclasses->value('tax_class_title');
+
+    if ( $Qrates->valueInt('total_tax_rates') > 0 ) {
+      $tax_class_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qrates->valueInt('total_tax_rates')) . ')';
+    }
+
+    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $tax_class_name . '</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -57,7 +68,7 @@
   if ( empty($check_tax_classes_flag) ) {
     echo '<p align="center"><input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
-    echo '<p><b>' . TEXT_INFO_BATCH_DELETE_PROHIBITED . '</b></p>' .
+    echo '<p><b>' . $osC_Language->get('batch_delete_warning_tax_class_in_use') . '</b></p>' .
          '<p>' . implode(', ', $check_tax_classes_flag) . '</p>';
 
     echo '<p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';

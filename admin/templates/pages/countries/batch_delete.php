@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_Language->get('action_heading_batch_delete_countries'); ?></div>
 <div class="infoBoxContent">
   <form name="cDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_countries'); ?></p>
 
 <?php
   $check_address_book_flag = array();
@@ -55,7 +55,18 @@
       $check_tax_zones_flag[] = $Qcountries->value('countries_name');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qcountries->valueInt('countries_id')) . '<b>' . $Qcountries->value('countries_name') . '</b>, ';
+    $Qzones = $osC_Database->query('select count(*) as total from :table_zones where zone_country_id = :zone_country_id');
+    $Qzones->bindTable(':table_zones', TABLE_ZONES);
+    $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('countries_id'));
+    $Qzones->execute();
+
+    $country_name = $Qcountries->value('countries_name');
+
+    if ( $Qzones->valueInt('total') > 0 ) {
+      $country_name .= ' (' . sprintf($osC_Language->get('total_zones'), $Qzones->valueInt('total')) . ')';
+    }
+
+    $names_string .= osc_draw_hidden_field('batch[]', $Qcountries->valueInt('countries_id')) . '<b>' . $country_name . '</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -68,12 +79,12 @@
     echo '<p align="center"><input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
     if ( !empty($check_address_book_flag) ) {
-      echo '<p><b>' . TEXT_INFO_BATCH_DELETE_PROHIBITED_ADDRESS_BOOK . '</b></p>' .
+      echo '<p><b>' . $osC_Language->get('batch_delete_warning_country_in_use_address_book') . '</b></p>' .
            '<p>' . implode(', ', $check_address_book_flag) . '</p>';
     }
 
     if ( !empty($check_tax_zones_flag) ) {
-      echo '<p><b>' . TEXT_INFO_BATCH_DELETE_PROHIBITED_TAX_ZONES . '</b></p>' .
+      echo '<p><b>' . $osC_Language->get('batch_delete_warning_country_in_use_tax_zone') . '</b></p>' .
            '<p>' . implode(', ', $check_tax_zones_flag) . '</p>';
     }
 

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -37,9 +37,9 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_DEFINITION_GROUPS; ?></th>
-      <th><?php echo TABLE_HEADING_TOTAL_DEFINITIONS; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_definition_groups'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_total_definitions'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>

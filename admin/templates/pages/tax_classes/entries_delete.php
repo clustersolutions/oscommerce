@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,7 +25,7 @@
 <div class="infoBoxContent">
   <form name="trDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $osC_ObjectInfo->get('tax_rates_id')  .'&action=entryDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_tax_rate'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('tax_class_title') . ': ' . $osC_ObjectInfo->get('geo_zone_name') . '</b>'; ?></p>
 

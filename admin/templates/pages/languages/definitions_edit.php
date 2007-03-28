@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,7 @@
 <div class="infoBoxContent">
   <form name="lDefine" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&group=' . $_GET['group'] . '&action=definitions'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_language_definitions'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 

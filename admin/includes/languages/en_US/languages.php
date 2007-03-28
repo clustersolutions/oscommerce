@@ -1,60 +1,68 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Languages
 
-  Copyright (c) 2006 osCommerce
+table_heading_name = Language
+table_heading_total_definitions = Total Definitions
+table_heading_code = Code
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+table_heading_definition_groups = Definition Groups
+table_heading_total_definitions = Total Definitions
 
-define('HEADING_TITLE', 'Languages');
-define('HEADING_TITLE_DEFINITIONS', 'Language Definitions');
+action_heading_import_language = Import Language
+action_heading_batch_delete_languages = Batch Delete Languages
+action_heading_new_language_definition = New Language Definition
 
-define('TABLE_HEADING_LANGUAGE_NAME', 'Language');
-define('TABLE_HEADING_TOTAL_DEFINITIONS', 'Total Definitions');
-define('TABLE_HEADING_LANGUAGE_CODE', 'Code');
-define('TABLE_HEADING_DEFINITION_GROUPS', 'Definition Groups');
-define('TABLE_HEADING_ACTION', 'Action');
+field_name = Name:
+field_code = Code:
+field_locale = Locale:
+field_character_set = Character Set:
+field_text_direction = Text Direction:
+field_date_format_short = Short Date Format:
+field_date_format_long = Long Date Format:
+field_time_format = Time Format:
+field_currency = Default Currency:
+field_currency_separator_decimal = Currency Decimal Separator:
+field_currency_separator_thousands = Currency Thousands Separator:
+field_sort_order = Sort Order:
+field_set_default = Set as Default?
 
-define('TEXT_INFO_IMPORT_INTRO', 'Please select which language to import and the type of import to perform');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_EXPORT_INTRO', 'Please select which groups to export:');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this language?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following languages?');
+field_language_selection = Select Language:
+field_import_type = Type of Import:
 
-define('TEXT_INFO_LANGUAGE_NAME', 'Name:');
-define('TEXT_INFO_LANGUAGE_CODE', 'Code:');
-define('TEXT_INFO_LANGUAGE_LOCALE', 'Locale:');
-define('TEXT_INFO_LANGUAGE_CHARSET', 'Character Set:');
-define('TEXT_INFO_LANGUAGE_DATE_FORMAT_SHORT', 'Date Format (Short):');
-define('TEXT_INFO_LANGUAGE_DATE_FORMAT_LONG', 'Date Format (Long):');
-define('TEXT_INFO_LANGUAGE_TIME_FORMAT', 'Time Format:');
-define('TEXT_INFO_LANGUAGE_TEXT_DIRECTION', 'Text Direction:');
-define('TEXT_INFO_LANGUAGE_DEFAULT_CURRENCY', 'Default Currency:');
-define('TEXT_INFO_LANGUAGE_NUMERIC_SEPARATOR_DECIMAL', 'Numeric Decimal Separator');
-define('TEXT_INFO_LANGUAGE_NUMERIC_SEPARATOR_THOUSANDS', 'Numeric Thousands Separator');
-define('TEXT_INFO_LANGUAGE_SORT_ORDER', 'Sort Order:');
+field_export_with_data = Export with Language Data?
 
-define('TEXT_INFO_HEADING_IMPORT_LANGUAGE', 'Import Language');
+field_definition_key = Definition Key:
+field_definition_value = Definition Value:
+field_definition_group = Group:
+field_definition_new_group = New Group:
 
-define('TEXT_INFO_SELECT_LANGUAGE', 'Select Language:');
-define('TEXT_INFO_SELECT_IMPORT_TYPE', 'Type of Import:');
-define('TEXT_INFO_EXPORT_WITH_DATA', 'Export with language data');
+only_add_new_records = Only Add New Records
+only_update_existing_records = Only Update Existing Records
+replace_all = Replace All
+select_all = Select All
+select_none = Select None
 
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: The default language can not be removed. Please set another language as the default, and try again.');
+introduction_edit_language = Please make the necessary changes for the selected language.
 
-define('TEXT_INFO_INSERT_DEFINITION_INTRO', 'Please enter the new language definition with its related data');
-define('TEXT_INFO_DELETE_DEFINITION_INTRO', 'Please select which definitions you would like to delete from the following group:');
+introduction_import_language = Please select which language to import from the following list.
 
-define('TEXT_INFO_LANGUAGE_DEFINITION_KEY', 'Definition Key:');
-define('TEXT_INFO_LANGUAGE_DEFINITION_VALUE', 'Definition Value:');
-define('TEXT_INFO_LANGUAGE_DEFINITION_GROUP', 'Group:');
-define('TEXT_INFO_LANGUAGE_DEFINITION_GROUP_NEW', 'New Group:');
+introduction_export_language = Please select which groups to export from the selected language.
 
-define('TEXT_INFO_HEADING_NEW_LANGUAGE_DEFINITION', 'New Language Definition');
+introduction_delete_language = Please verify the removal of this language.
+introduction_delete_language_invalid = The default language cannot be deleted. Please set another language as the default language and try again.
+introduction_batch_delete_languages = Please verify the removal of the following languages.
 
-define('TEXT_BACK_TO_LANGUAGES', 'Back to Languages');
-?>
+introduction_edit_language_definitions = Please make the necessary changes to the following language definitions.
+
+introduction_new_language_definition = Please fill in the following information for the new language definition.
+
+introduction_delete_language_definition = Please select which language definitions to delete from the following list.

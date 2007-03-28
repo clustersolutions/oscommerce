@@ -5,20 +5,12 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntryData($_GET['zeID']));
-
-  if ( $osC_ObjectInfo->get('zone_country_id') < 1 ) {
-    $osC_ObjectInfo->set('countries_name', TEXT_ALL_COUNTRIES);
-  }
-
-  if ( $osC_ObjectInfo->get('zone_id') < 1 ) {
-    $osC_ObjectInfo->set('zone_name', PLEASE_SELECT);
-  }
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -33,7 +25,7 @@
 <div class="infoBoxContent">
   <form name="zeDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&zeID=' . $osC_ObjectInfo->get('association_id') . '&action=entryDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_DELETE_SUB_ZONE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_zone_entry'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('countries_name') . ': ' . $osC_ObjectInfo->get('zone_name') . '</b>'; ?></p>
 

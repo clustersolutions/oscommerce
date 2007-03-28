@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -17,13 +17,15 @@
 /* Private variables */
 
     var $_module = 'currencies',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Currencies() {
-      global $osC_Currencies, $osC_MessageStack;
+      global $osC_Language, $osC_Currencies, $osC_MessageStack;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if (!isset($_GET['action'])) {
         $_GET['action'] = '';
@@ -86,11 +88,11 @@
                 $results = osC_Currencies_Admin::updateRates($_POST['service']);
 
                 foreach ($results[0] as $result) {
-                  $osC_MessageStack->add_session($this->_module, sprintf(ERROR_CURRENCY_INVALID, $result['title'], $result['code'], $_POST['service']), 'error');
+                  $osC_MessageStack->add_session($this->_module, sprintf($osC_Language->get('ms_error_invalid_currency'), $result['title'], $result['code']), 'error');
                 }
 
                 foreach ($results[1] as $result) {
-                  $osC_MessageStack->add_session($this->_module, sprintf(TEXT_INFO_CURRENCY_UPDATED, $result['title'], $result['code'], $_POST['service']), 'success');
+                  $osC_MessageStack->add_session($this->_module, sprintf($osC_Language->get('ms_success_currency_updated'), $result['title'], $result['code']), 'success');
                 }
               }
 

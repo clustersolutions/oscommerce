@@ -1,55 +1,50 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Zone Groups
 
-  Copyright (c) 2004 osCommerce
+table_heading_name = Zone Group
+table_heading_total_entries = Total Entries
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+table_heading_country = Country
+table_heading_zone = Zone
 
-define('HEADING_TITLE', 'Zone Groups');
+action_heading_new_zone_group = New Zone Group
+action_heading_batch_delete_zone_groups = Batch Delete Zone Groups
+action_heading_new_zone_entry = New Zone Entry
+action_heading_batch_delete_zone_entries = Batch Delete Zone Group Entries
 
-define('TABLE_HEADING_TAX_ZONES', 'Tax Zones');
-define('TABLE_HEADING_TOTAL_ENTRIES', 'Entries');
-define('TABLE_HEADING_COUNTRY', 'Country');
-define('TABLE_HEADING_COUNTRY_ZONE', 'Zone');
-define('TABLE_HEADING_ACTION', 'Action');
+field_name = Name:
+field_description = Description:
 
-define('TEXT_INFO_HEADING_NEW_ZONE', 'New Zone');
-define('TEXT_INFO_NEW_ZONE_INTRO', 'Please enter the new zone information');
+field_country = Country:
+field_zone = Zone:
 
-define('TEXT_INFO_HEADING_EDIT_ZONE', 'Edit Zone');
-define('TEXT_INFO_EDIT_ZONE_INTRO', 'Please make any necessary changes');
+total_entries = %s Entries
+all_countries = All Countries
+all_zones = All Zones
 
-define('TEXT_INFO_HEADING_DELETE_ZONE', 'Delete Zone');
-define('TEXT_INFO_DELETE_ZONE_INTRO', 'Are you sure you want to delete this zone?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following zone groups?');
-define('TEXT_DELETE_ENTRIES_BATCH_INTRO', 'Are you sure you want to delete the following zone group entries?');
+introduction_new_zone_group = Please fill in the following information for the new zone group.
 
-define('TEXT_INFO_HEADING_NEW_SUB_ZONE', 'New Sub Zone');
-define('TEXT_INFO_NEW_SUB_ZONE_INTRO', 'Please enter the new sub zone information');
+introduction_edit_zone_group = Please make the necessary changes for this zone goup.
 
-define('TEXT_INFO_HEADING_EDIT_SUB_ZONE', 'Edit Sub Zone');
-define('TEXT_INFO_EDIT_SUB_ZONE_INTRO', 'Please make any necessary changes');
+introduction_delete_zone_group = Please verify the removal of this zone group and its entries.
+delete_warning_group_in_use_tax_rate = Warning: This zone group cannot be deleted as it is currently assigned to %s tax rates.
 
-define('TEXT_INFO_HEADING_DELETE_SUB_ZONE', 'Delete Sub Zone');
-define('TEXT_INFO_DELETE_SUB_ZONE_INTRO', 'Are you sure you want to delete this sub zone?');
+introduction_batch_delete_zone_groups = Please verify the removal of the following zone groups and their entries.
+batch_delete_warning_group_in_use_tax_rate = Warning: The following zone groups cannot be deleted as they are currently assigned to tax rates.
 
-define('TEXT_INFO_DATE_ADDED', 'Date Added:');
-define('TEXT_INFO_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_INFO_ZONE_NAME', 'Zone Name:');
-define('TEXT_INFO_NUMBER_ZONES', 'Number of Zones:');
-define('TEXT_INFO_ZONE_DESCRIPTION', 'Description:');
-define('TEXT_INFO_COUNTRY', 'Country:');
-define('TEXT_INFO_COUNTRY_ZONE', 'Zone:');
-define('TYPE_BELOW', 'All Zones');
-define('PLEASE_SELECT', 'All Zones');
-define('TEXT_ALL_COUNTRIES', 'All Countries');
+introduction_new_zone_entry = Please fill in the following information for the new zone group entry.
 
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: This Tax Zone cannot be deleted as it is currently assigned to one or more tax rates.');
-define('TEXT_INFO_BATCH_DELETE_PROHIBITED_TAX_ZONES', 'Warning: The following zone groups cannot be deleted as they are currently assigned to tax zones.');
-define('TEXT_INFO_DELETE_ZONE_WARNING', 'Warning: This Tax Zone has %s zone(s) assigned which would also be deleted.');
-?>
+introduction_edit_zone_entry = Please make the necessary changes for this zone gorup entry.
+
+introduction_delete_zone_entry = Please verify the removal of the following zone group entry.
+
+introduction_batch_delete_zone_entries = Please verify the removal of the following zone group entries.

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -34,21 +34,25 @@
   if ( $Qcheck->numberOfRows() > 0 ) {
 ?>
 
-  <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
+  <p><?php echo '<b>' . sprintf($osC_Language->get('delete_warning_tax_class_in_use'), $Qcheck->numberOfRows()) . '</b>'; ?></p>
+
   <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   } else {
 ?>
 
-  <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('tax_class_title'); ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_tax_class'); ?></p>
 
 <?php
+    $tax_class_name = $osC_ObjectInfo->get('tax_class_title');
+
     if ($osC_ObjectInfo->get('total_tax_rates') > 0) {
-      echo '    <p><b>' . sprintf(TEXT_INFO_DELETE_TAX_RATES_WARNING, $osC_ObjectInfo->get('total_tax_rates')) . '</b></p>' . "\n";
+      $tax_class_name .= ' (' . sprintf($osC_Language->get('total_entries'), $osC_ObjectInfo->get('total_tax_rates')) . ')';
     }
 ?>
+
+  <p><?php echo '<b>' . $tax_class_name . '</b>'; ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

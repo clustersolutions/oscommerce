@@ -29,7 +29,7 @@
     osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
   }
 
-  $osC_Language->loadConstants($_SESSION['module'] . '.php');
+  $osC_Language->loadIniFile($_SESSION['module'] . '.php');
 
   require('../includes/classes/template.php');
   require('includes/content/' . $_SESSION['module'] . '.php');

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -34,21 +34,22 @@
   if ($Qcheck->numberOfRows() > 0) {
 ?>
 
-  <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
+  <p><?php echo '<b>' . sprintf($osC_Language->get('delete_warning_group_in_use_tax_rate'), $Qcheck->numberOfRows()) . '</b>'; ?></p>
+
   <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   } else {
-?>
+    $zone_group_name = $osC_ObjectInfo->get('geo_zone_name');
 
-  <p><?php echo TEXT_INFO_DELETE_ZONE_INTRO; ?></p>
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('geo_zone_name') . '</b>'; ?></p>
-
-<?php
-    if ($osC_ObjectInfo->get('total_entries') > 0) {
-      echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_ZONE_WARNING, $osC_ObjectInfo->get('total_entries')) . '</b></p>';
+    if ( $osC_ObjectInfo->get('total_entries') > 0 ) {
+      $zone_group_name .= ' (' . sprintf($osC_Language->get('total_entries'), $osC_ObjectInfo->get('total_entries')) . ')';
     }
 ?>
+
+  <p><?php echo $osC_Language->get('introduction_delete_zone_group'); ?></p>
+
+  <p><?php echo '<b>' . $zone_group_name . '</b>'; ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

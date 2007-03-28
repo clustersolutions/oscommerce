@@ -1,46 +1,44 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Currencies
 
-  Copyright (c) 2004 osCommerce
+table_heading_name = Currency
+table_heading_code = Code
+table_heading_value = Value
+table_heading_example = Example
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+action_heading_update_rates = Update Currency Exchange Rates
+action_heading_new_currency = New Currency
+action_heading_batch_delete_currency = Batch Delete Currencies
 
-define('HEADING_TITLE', 'Currencies');
+field_title = Title:
+field_code = Code:
+field_symbol_left = Left Symbol:
+field_symbol_right = Right Symbol:
+field_decimal_places = Decimal Places:
+field_currency_value = Currency Value:
+field_set_default = Set as Default?
 
-define('TABLE_HEADING_CURRENCY_NAME', 'Currency');
-define('TABLE_HEADING_CURRENCY_CODES', 'Code');
-define('TABLE_HEADING_CURRENCY_VALUE', 'Value');
-define('TABLE_HEADING_CURRENCY_EXAMPLE', 'Example');
-define('TABLE_HEADING_ACTION', 'Action');
+service_terms_agreement = By updating the currency exchange rates, you agree to the terms and conditions of the service selected.
 
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new currency with its related data');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this currency?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following currencies?');
-define('TEXT_INFO_UPDATE_SERVICE_INTRO', 'Please select the currency update service to use.');
+introduction_update_exchange_rates = Please select which service to use to update the currency exchange rates.
 
-define('TEXT_INFO_HEADING_NEW_CURRENCY', 'New Currency');
+introduction_new_currency = Please fill in the following information for the new currency.
 
-define('TEXT_INFO_CURRENCY_TITLE', 'Title:');
-define('TEXT_INFO_CURRENCY_CODE', 'Code:');
-define('TEXT_INFO_CURRENCY_SYMBOL_LEFT', 'Symbol Left:');
-define('TEXT_INFO_CURRENCY_SYMBOL_RIGHT', 'Symbol Right:');
-define('TEXT_INFO_CURRENCY_DECIMAL_PLACES', 'Decimal Places:');
-define('TEXT_INFO_CURRENCY_VALUE', 'Value:');
+introduction_edit_currency = Please make the necessary changes for this currency.
 
-define('TEXT_INFO_SET_AS_DEFAULT', TEXT_SET_DEFAULT . '<br /><small>(requires a manual update of currency values)</small>');
-define('TEXT_INFO_SERVICE_TERMS', 'By using the selected currency update service you are agreeing to the terms and conditions of the service involved.');
+introduction_delete_currency = Please verify the removal of this currency.
+introduction_delete_currency_invalid = The default currency cannot be deleted. Please set another currency as the default currency and try again.
+introduction_batch_delete_currencies = Please verify the removal of the following currencies.
 
-define('TEXT_INFO_CURRENCY_UPDATED', 'The exchange rate for %s (%s) was updated successfully via %s.');
+ms_success_currency_updated = Success: The currency exchange rate for %s (%s) has been successfully updated.
 
-define('ERROR_REMOVE_DEFAULT_CURRENCY', 'Warning: The default currency can not be removed. Please set another currency as the default and try again.');
-define('ERROR_CURRENCY_INVALID', 'Error: The exchange rate for %s (%s) was not updated via %s. Is it a valid currency code?');
-define('WARNING_PRIMARY_SERVER_FAILED', 'Warning: The primary exchange rate server (%s) failed for %s (%s) - trying the secondary exchange rate server.');
-
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: The default currency can not be removed. Please set another currency as the default and try again.');
-?>
+ms_error_invalid_currency = Error: The currency exchange rate for %s (%s) was not updated. Please verify the currency code and try again.

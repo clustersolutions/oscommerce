@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,27 +19,27 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_COUNTRY; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_new_country'); ?></div>
 <div class="infoBoxContent">
   <form name="cNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_country'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_name') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('countries_name', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_CODE_2 . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_iso_code_2') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('countries_iso_code_2', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_CODE_3 . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_iso_code_3') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('countries_iso_code_3', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_ADDRESS_FORMAT . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_address_format') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_textarea_field('address_format'); ?></td>
     </tr>
   </table>

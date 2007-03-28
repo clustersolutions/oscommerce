@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,7 +23,8 @@
 <div class="infoBoxContent">
   <form name="lDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&group=' . $_GET['group'] . '&action=deleteDefinitions'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_DELETE_DEFINITION_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_language_definition'); ?></p>
+
   <p><?php echo '<b>' . $_GET['group'] . '</b>'; ?></p>
 
 <?php
@@ -40,7 +41,7 @@
   }
 ?>
 
-  <p>(<a href="javascript:selectAllFromPullDownMenu('defs');"><u>select all</u></a> | <a href="javascript:resetPullDownMenuSelection('defs');"><u>select none</u></a>)<br /><?php echo osc_draw_pull_down_menu('defs[]', $defs_array, null, 'id="defs" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
+  <p>(<a href="javascript:selectAllFromPullDownMenu('defs');"><u><?php echo $osC_Language->get('select_all'); ?></u></a> | <a href="javascript:resetPullDownMenuSelection('defs');"><u><?php echo $osC_Language->get('select_none'); ?></u></a>)<br /><?php echo osc_draw_pull_down_menu('defs[]', $defs_array, null, 'id="defs" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

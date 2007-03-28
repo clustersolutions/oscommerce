@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' Batch Edit'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_Language->get('action_heading_batch_edit_cards'); ?></div>
 <div class="infoBoxContent">
   <form name="ccEditBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchSave'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_edit_cards'); ?></p>
 
 <?php
   $Qcc = $osC_Database->query('select id, credit_card_name from :table_credit_cards where id in (":id") order by credit_card_name');
@@ -43,7 +43,7 @@
 
   echo '<p>' . $names_string . '</p>';
 
-  echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => 'Activate'), array('id' => 'deactivate', 'text' => 'Deactivate')), 'activate') . '</p>';
+  echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => $osC_Language->get('activate')), array('id' => 'deactivate', 'text' => $osC_Language->get('deactivate'))), 'activate') . '</p>';
 ?>
 
   <p align="center"><?php echo '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>

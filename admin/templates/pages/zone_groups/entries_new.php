@@ -5,19 +5,21 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  $countries_array = array(array('id' => '', 'text' => TEXT_ALL_COUNTRIES));
+  $countries_array = array(array('id' => '',
+                                 'text' => $osC_Language->get('all_countries')));
 
   foreach (osC_Address::getCountries() as $country) {
     $countries_array[] = array('id' => $country['id'],
                                'text' => $country['name']);
   }
 
-  $zones_array = array(array('id' => '', 'text' => PLEASE_SELECT));
+  $zones_array = array(array('id' => '',
+                             'text' => $osC_Language->get('all_zones')));
 ?>
 
 <script type="text/javascript"><!--
@@ -45,18 +47,20 @@ function update_zone(theForm) {
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_SUB_ZONE; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_new_zone_entry'); ?></div>
 <div class="infoBoxContent">
   <form name="zeNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=entrySave'); ?>" method="post">
 
+  <p><?php echo $osC_Language->get('introduction_new_zone_entry'); ?></p>
+
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, null, 'onchange="update_zone(this.form);"'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_country') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, null, 'onchange="update_zone(this.form);"'); ?></td>
     </tr>
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_COUNTRY_ZONE . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_pull_down_menu('zone_id', $zones_array); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_zone') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('zone_id', $zones_array); ?></td>
     </tr>
   </table>
 

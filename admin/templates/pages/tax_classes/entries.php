@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: tax_classes_listing.php 1027 2006-10-20 09:41:26Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -42,10 +42,10 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_TAX_RATE_PRIORITY; ?></th>
-      <th><?php echo TABLE_HEADING_ZONE; ?></th>
-      <th><?php echo TABLE_HEADING_TAX_RATE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th width="100"><?php echo $osC_Language->get('table_heading_tax_rate_priority'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_tax_rate_zone'); ?></th>
+      <th width="100"><?php echo $osC_Language->get('table_heading_tax_rate'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>

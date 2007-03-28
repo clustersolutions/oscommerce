@@ -78,7 +78,7 @@
 // javascript to dynamically update the states/provinces list when the country is changed
 // TABLES: zones
   function osc_js_zone_list($country, $form, $field) {
-    global $osC_Database;
+    global $osC_Database, $osC_Language;
 
     $num_country = 1;
     $output_string = '';
@@ -103,7 +103,7 @@
 
       while ($Qzones->next()) {
         if ($num_state == '1') {
-          $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . PLEASE_SELECT . '", "");' . "\n";
+          $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . $osC_Language->get('all_zones') . '", "");' . "\n";
         }
 
         $output_string .= '    ' . $form . '.' . $field . '.options[' . $num_state . '] = new Option("' . $Qzones->value('zone_name') . '", "' . $Qzones->valueInt('zone_id') . '");' . "\n";
@@ -115,7 +115,7 @@
     }
 
     $output_string .= '  } else {' . "\n" .
-                      '    ' . $form . '.' . $field . '.options[0] = new Option("' . TYPE_BELOW . '", "");' . "\n" .
+                      '    ' . $form . '.' . $field . '.options[0] = new Option("' . $osC_Language->get('all_zones') . '", "");' . "\n" .
                       '  }' . "\n";
 
     return $output_string;

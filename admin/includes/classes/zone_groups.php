@@ -98,7 +98,7 @@
     }
 
     function getEntryData($id) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $Qentries = $osC_Database->query('select z2gz.*, c.countries_name, z.zone_name from :table_zones_to_geo_zones z2gz left join :table_countries c on (z2gz.zone_country_id = c.countries_id) left join :table_zones z on (z2gz.zone_id = z.zone_id) where z2gz.association_id = :association_id');
       $Qentries->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
@@ -108,6 +108,14 @@
       $Qentries->execute();
 
       $data = $Qentries->toArray();
+
+      if ( empty($data['countries_name']) ) {
+        $data['countries_name'] = $osC_Language->get('all_countries');
+      }
+
+      if ( empty($data['zone_name']) ) {
+        $data['zone_name'] = $osC_Language->get('all_zones');
+      }
 
       $Qentries->freeResult();
 

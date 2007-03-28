@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,28 +36,26 @@
 <div class="infoBoxContent">
   <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $osC_ObjectInfo->get('tax_rates_id')  .'&action=entrySave'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_tax_rate'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_ZONE_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_zone_group') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_pull_down_menu('tax_zone_id', $zones_array, $osC_ObjectInfo->get('geo_zone_id')); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_rate', $osC_ObjectInfo->get('tax_rate'), 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_DESCRIPTION . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_description') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_description', $osC_ObjectInfo->get('tax_description'), 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_TAX_RATE_PRIORITY . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_tax_rate_priority') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('tax_priority', $osC_ObjectInfo->get('tax_priority'), 'style="width: 100%;"'); ?></td>
     </tr>
   </table>
-
-  <p><?php echo TEXT_INFO_LAST_MODIFIED . ' ' . (($osC_ObjectInfo->get('last_modified') > $osC_ObjectInfo->get('date_added')) ? osC_DateTime::getShort($osC_ObjectInfo->get('last_modified')) : osC_DateTime::getShort($osC_ObjectInfo->get('date_added'))); ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

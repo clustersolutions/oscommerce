@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,20 +19,20 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_ZONE; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_new_zone'); ?></div>
 <div class="infoBoxContent">
   <form name="zNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=zoneSave'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_INSERT_ZONE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_zone'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ZONES_NAME . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_input_field('zone_name'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_zone_name') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('zone_name'); ?></td>
     </tr>
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . TEXT_INFO_ZONES_CODE . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_input_field('zone_code'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_zone_code') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('zone_code'); ?></td>
     </tr>
   </table>
 

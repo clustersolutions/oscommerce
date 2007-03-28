@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,7 +36,7 @@
   if ( $Qcheck->valueInt('total') > 0 ) {
     $can_be_deleted = false;
 
-    echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_ADDRESS_BOOK, $Qcheck->valueInt('total')) . '</b></p>';
+    echo '  <p><b>' . sprintf($osC_Language->get('delete_warning_zone_in_use_address_book'), $Qcheck->valueInt('total')) . '</b></p>';
   }
 
   $Qcheck = $osC_Database->query('select count(*) as total from :table_zones_to_geo_zones where zone_id = :zone_id');
@@ -47,11 +47,11 @@
   if ( $Qcheck->valueInt('total') > 0 ) {
     $can_be_deleted = false;
 
-    echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_TAX_ZONES, $Qcheck->valueInt('total')) . '</b></p>';
+    echo '  <p><b>' . sprintf($osC_Language->get('delete_warning_zone_in_use_tax_zone'), $Qcheck->valueInt('total')) . '</b></p>';
   }
 
   if ( $can_be_deleted === true ) {
-    echo '  <p>' . TEXT_INFO_DELETE_ZONE_INTRO . '</p>' .
+    echo '  <p>' . $osC_Language->get('introduction_delete_zone') . '</p>' .
          '  <p><b>' . $osC_ObjectInfo->get('zone_name') . '</b></p>' .
          '  <p align="center">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {

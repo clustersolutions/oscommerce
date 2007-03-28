@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -28,7 +28,7 @@
   if ($osC_ObjectInfo->get('code') == DEFAULT_LANGUAGE) {
 ?>
 
-  <p><?php echo '<b>' . TEXT_INFO_DELETE_PROHIBITED . '</b>'; ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('introduction_delete_language_invalid') . '</b>'; ?></p>
 
   <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
@@ -38,7 +38,7 @@
 
   <form name="lDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&lID=' . $osC_ObjectInfo->get('languages_id') . '&action=delete'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_language'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('name') . '</b>'; ?></p>
 
