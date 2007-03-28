@@ -32,9 +32,9 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('tax_class_title') . ': ' . $osC_ObjectInfo->get('geo_zone_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('tax_class_title') . ': ' . $osC_ObjectInfo->get('geo_zone_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $osC_ObjectInfo->get('tax_rates_id')  .'&action=entrySave'); ?>" method="post">
+  <form name="trEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $osC_ObjectInfo->get('tax_rates_id') . '&action=entrySave'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_edit_tax_rate'); ?></p>
 
@@ -57,7 +57,7 @@
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

@@ -1,84 +1,78 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Orders
 
-  Copyright (c) 2004 osCommerce
+operation_heading_order_id = Order ID:
+operation_heading_customer_id = Customer ID:
+operation_heading_filter_status = Status:
 
-  Released under the GNU General Public License
-*/
+action_heading_batch_delete_orders = Batch Delete Orders
 
-define('HEADING_TITLE', 'Orders');
+table_heading_customers = Customers
+table_heading_order_total = Order Total
+table_heading_date_purchased = Date Purchased
+table_heading_status = Status
+table_heading_action = Action
+table_heading_products = Products
+table_heading_product_model = Model
+table_heading_tax = Tax
+table_heading_price_net = Price (Net)
+table_heading_price_gross = Price (Gross)
+table_heading_total_net = Total (Net)
+table_heading_total_gross = Total (Gross)
+table_heading_date_added = Date Added
+table_heading_comments = Comments
+table_heading_customer_notified = Customer Notified
 
-define('SEARCH_ORDER_ID', 'Order ID:');
-define('SEARCH_CUSTOMER_ID', 'Customer ID:');
-define('SEARCH_STATUS', 'Status:');
+section_summary = Summary
+section_products = Products
+section_transaction_history = Transaction History
+section_status_history = Status History
 
-define('TABLE_HEADING_COMMENTS', 'Comments');
-define('TABLE_HEADING_CUSTOMERS', 'Customers');
-define('TABLE_HEADING_ORDER_TOTAL', 'Order Total');
-define('TABLE_HEADING_DATE_PURCHASED', 'Date Purchased');
-define('TABLE_HEADING_STATUS', 'Status');
-define('TABLE_HEADING_ACTION', 'Action');
-define('TABLE_HEADING_QUANTITY', 'Qty.');
-define('TABLE_HEADING_PRODUCTS_MODEL', 'Model');
-define('TABLE_HEADING_PRODUCTS', 'Products');
-define('TABLE_HEADING_TAX', 'Tax');
-define('TABLE_HEADING_TOTAL', 'Total');
-define('TABLE_HEADING_PRICE_EXCLUDING_TAX', 'Price (ex)');
-define('TABLE_HEADING_PRICE_INCLUDING_TAX', 'Price (inc)');
-define('TABLE_HEADING_TOTAL_EXCLUDING_TAX', 'Total (ex)');
-define('TABLE_HEADING_TOTAL_INCLUDING_TAX', 'Total (inc)');
+subsection_customer = Customer
+subsection_shipping_address = Shipping Address
+subsection_billing_address = Billing Address
+subsection_payment_method = Payment Method
+subsection_status = Status
+subsection_total = Total
 
-define('TABLE_HEADING_CUSTOMER_NOTIFIED', 'Customer Notified');
-define('TABLE_HEADING_DATE_ADDED', 'Date Added');
+field_post_transaction_actions = Post Transaction Actions:
+field_status = Status:
+field_add_comment = Add Comment:
+field_notify_customer = Notify Customer?
+field_notify_customer_with_comments = Notify Customer With Comments?
+field_restock_product_quantity = Restock Product Quantity?
 
-define('ENTRY_CUSTOMER', 'Customer:');
-define('ENTRY_SOLD_TO', 'SOLD TO:');
-define('ENTRY_DELIVERY_TO', 'Delivery To:');
-define('ENTRY_SHIP_TO', 'SHIP TO:');
-define('ENTRY_SHIPPING_ADDRESS', 'Shipping Address:');
-define('ENTRY_BILLING_ADDRESS', 'Billing Address:');
-define('ENTRY_PAYMENT_METHOD', 'Payment Method:');
-define('ENTRY_CREDIT_CARD_TYPE', 'Credit Card Type:');
-define('ENTRY_CREDIT_CARD_OWNER', 'Credit Card Owner:');
-define('ENTRY_CREDIT_CARD_NUMBER', 'Credit Card Number:');
-define('ENTRY_CREDIT_CARD_EXPIRES', 'Credit Card Expires:');
-define('ENTRY_SUB_TOTAL', 'Sub-Total:');
-define('ENTRY_TAX', 'Tax:');
-define('ENTRY_SHIPPING', 'Shipping:');
-define('ENTRY_TOTAL', 'Total:');
-define('ENTRY_DATE_PURCHASED', 'Date Purchased:');
-define('ENTRY_STATUS', 'Status:');
-define('ENTRY_POST_TRANSACTION_ACTIONS', 'Post Transaction Actions:');
-define('ENTRY_DATE_LAST_UPDATED', 'Date Last Updated:');
-define('ENTRY_NOTIFY_CUSTOMER', 'Notify Customer:');
-define('ENTRY_NOTIFY_COMMENTS', 'Append Comments:');
-define('ENTRY_NEW_COMMENT', 'New Comment:');
-define('ENTRY_PRINTABLE', 'Print Invoice');
+all_statuses = -- All Statuses --
+credit_card_type = Credit Card Type:
+credit_card_owner_name = Credit Card Owner:
+credit_card_number = Credit Card Number:
+credit_card_expiry_date = Credit Card Expiry Date:
+number_of_comments = Comments:
+number_of_products = Products:
+number_of_items = Items:
 
-define('TEXT_INFO_HEADING_DELETE_ORDER', 'Delete Order');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this order?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following orders?');
-define('TEXT_INFO_RESTOCK_PRODUCT_QUANTITY', 'Restock product quantity');
-define('TEXT_DATE_ORDER_CREATED', 'Date Created:');
-define('TEXT_DATE_ORDER_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_INFO_PAYMENT_METHOD', 'Payment Method:');
+introduction_delete_order = Please verify the removal of this order.
 
-define('TEXT_ALL_ORDERS', 'All Orders');
-define('TEXT_NO_ORDER_HISTORY', 'No Order History Available');
+introduction_batch_delete_orders = Please verify the removal of the following orders.
 
-define('EMAIL_SEPARATOR', '------------------------------------------------------');
-define('EMAIL_TEXT_SUBJECT', 'Order Update');
-define('EMAIL_TEXT_ORDER_NUMBER', 'Order Number:');
-define('EMAIL_TEXT_INVOICE_URL', 'Detailed Invoice:');
-define('EMAIL_TEXT_DATE_ORDERED', 'Date Ordered:');
-define('EMAIL_TEXT_STATUS_UPDATE', 'Your order has been updated to the following status.' . "\n\n" . 'New status: %s' . "\n\n" . 'Please reply to this email if you have any questions.' . "\n");
-define('EMAIL_TEXT_COMMENTS_UPDATE', 'The comments for your order are' . "\n\n%s\n\n");
-
-define('ERROR_ORDER_DOES_NOT_EXIST', 'Error: Order does not exist.');
-define('SUCCESS_ORDER_UPDATED', 'Success: Order has been successfully updated.');
-define('WARNING_ORDER_NOT_UPDATED', 'Warning: Nothing to change. The order was not updated.');
-?>
+email_subject = Order Update (%s)
+email_body = %s
+------------------------------------------------------
+Order Number: %s
+Detailed Invoice: %s
+Date Ordered: %s
+email_body_comment = Order Comment
+------------------------------------------------------
+%s
+email_body_status = Order Status
+------------------------------------------------------
+New Status: %s
+email_body_contact = Please reply to this e-mail if you have any questions regarding this order.

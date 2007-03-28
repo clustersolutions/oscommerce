@@ -1,46 +1,34 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Specials
 
-  Copyright (c) 2007 osCommerce
+action_heading_new_special = New Special
 
-  Released under the GNU General Public License
-*/
+table_heading_products = Products
+table_heading_price = Price
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Specials');
+action_heading_batch_delete_specials = Batch Delete Specials
 
-define('TABLE_HEADING_PRODUCTS', 'Products');
-define('TABLE_HEADING_PRODUCTS_PRICE', 'Products Price');
-define('TABLE_HEADING_ACTION', 'Action');
+field_product = Product:
+field_price_net = Special Price (Net):
+field_price_net_percentage = Special Price (Net) / Percentage:
+field_price_gross = Special Price (Gross):
+field_status = Status:
+field_date_start = Start Date:
+field_date_expires = Expires On:
 
-define('TEXT_HEADING_NEW_SPECIAL', 'New Product On Special');
+introduction_new_special = Please fill in the following information for the new special.
 
-define('TEXT_NEW_INTRO', 'Please fill out the following information for the new product on special');
-define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
+introduction_edit_special = Please make the necessary changes for this special.
 
-define('TEXT_SPECIALS_PRODUCT', 'Product:');
-define('TEXT_SPECIALS_SPECIAL_PRICE_NET', 'Special Price (Net):');
-define('TEXT_SPECIALS_SPECIAL_PRICE_GROSS', 'Special Price (Gross):');
-define('TEXT_SPECIALS_STATUS', 'Status:');
-define('TEXT_SPECIALS_START_DATE', 'Start Date:');
-define('TEXT_SPECIALS_EXPIRES_DATE', 'Expiry Date:');
-define('TEXT_SPECIALS_PRICE_TIP', '<b>Specials Notes:</b><ul><li>You can enter a percentage to deduct in the Specials Price field, for example: <b>20%</b></li><li>If you enter a new price, the decimal separator must be a \'.\' (decimal-point), example: <b>49.99</b></li><li>Leave the expiry date empty for no expiration</li></ul>');
+introduction_delete_special = Please verify the removal of this special.
 
-define('TEXT_INFO_DATE_ADDED', 'Date Added:');
-define('TEXT_INFO_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_INFO_NEW_PRICE', 'New Price:');
-define('TEXT_INFO_ORIGINAL_PRICE', 'Original Price:');
-define('TEXT_INFO_PERCENTAGE', 'Percentage:');
-define('TEXT_INFO_EXPIRES_DATE', 'Expires At:');
-define('TEXT_INFO_STATUS_CHANGE', 'Status Change:');
-
-define('TEXT_INFO_HEADING_DELETE_SPECIALS', 'Delete Special');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete the special products price?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete these products on special?');
-
-define('ERROR_SPECIALS_PRICE', 'Specials price cannot be negative or greater than original price');
-define('ERROR_SPECIALS_DATE', 'The expiry date is before the start date');
-?>
+introduction_batch_delete_specials = Please verify the removal of the following specials.

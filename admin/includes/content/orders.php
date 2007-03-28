@@ -17,13 +17,15 @@
 /* Private variables */
 
     var $_module = 'orders',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Orders() {
       global $osC_Database, $osC_Language, $osC_MessageStack, $osC_Currencies, $orders_statuses, $orders_status_array;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -75,9 +77,9 @@
           case 'updateTransaction':
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( $this->_updateTransaction($_GET['oID'], $_POST['transaction']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&oID=' . $_GET['oID'] . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&action=save&tabIndex=tabTransactionHistory'));
@@ -93,9 +95,9 @@
                             'append_comment' => ( isset($_POST['append_comment']) && ( $_POST['append_comment'] == 'on' ) ? true : false ));
 
               if ( $this->_updateStatus($_GET['oID'], $data) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&oID=' . $_GET['oID'] . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&action=save&tabIndex=tabStatusHistory'));
@@ -108,9 +110,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Order::delete($_GET['oID'], (isset($_POST['restock']) && ($_POST['restock'] == 'on') ? true : false)) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
@@ -133,9 +135,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']));
@@ -178,7 +180,7 @@
     }
 
     function _updateStatus($id, $data) {
-      global $osC_Database, $orders_status_array;
+      global $osC_Database, $osC_Language, $orders_status_array;
 
       $error = false;
 
@@ -198,15 +200,16 @@
 
       if ( !$osC_Database->isError() ) {
         if ( $data['notify_customer'] === true ) {
-          $email_body = STORE_NAME . "\n" . EMAIL_SEPARATOR . "\n" . EMAIL_TEXT_ORDER_NUMBER . ' ' . $id . "\n" . EMAIL_TEXT_INVOICE_URL . ' ' . osc_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $id, 'SSL', false, false, true) . "\n" . EMAIL_TEXT_DATE_ORDERED . ' ' . osC_DateTime::getLong($Qorder->value('date_purchased')) . "\n\n";
+          $email_body = sprintf($osC_Language->get('email_body'), STORE_NAME, $id, osc_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $id, 'SSL', false, false, true), osC_DateTime::getLong($Qorder->value('date_purchased'))) . "\n\n";
 
           if ( $data['append_comment'] === true ) {
-            $email_body .= sprintf(EMAIL_TEXT_COMMENTS_UPDATE, $data['comment']) . "\n\n";
+            $email_body .= sprintf($osC_Language->get('email_body_comment'), $data['comment']) . "\n\n";
           }
 
-          $email_body .= sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$data['status_id']]);
+          $email_body .= sprintf($osC_Language->get('email_body_status'), $orders_status_array[$data['status_id']]) . "\n\n" .
+                         $osC_Language->get('email_body_contact');
 
-          osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), EMAIL_TEXT_SUBJECT, $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), sprintf($osC_Language->get('email_subject'), STORE_NAME), $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
         }
 
         $Qupdate = $osC_Database->query('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');

@@ -21,21 +21,33 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . osc_output_string_protected($osC_ObjectInfo->get('customers_full_name')); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . osc_output_string_protected($osC_ObjectInfo->get('customers_full_name')); ?></div>
 <div class="infoBoxContent">
   <form name="cDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $osC_ObjectInfo->get('customers_id') . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=delete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_customer'); ?></p>
 
-  <p><?php echo '<b>' . osc_output_string_protected($osC_ObjectInfo->get('customers_full_name')) . '</b>'; ?></p>
+  <p>
+
+<?php
+  $customer_name = osc_output_string_protected($osC_ObjectInfo->get('customers_full_name'));
+
+  if ( $osC_ObjectInfo->get('total_reviews') > 0 ) {
+    $customer_name .= ' (' . sprintf($osC_Language->get('total_reviews'), $osC_ObjectInfo->get('total_reviews')) . ')';
+  }
+
+  echo '<b>' . $customer_name . '</b>';
+?>
+
+  </p>
 
 <?php
   if ( $osC_ObjectInfo->get('total_reviews') > 0 ) {
-    echo '  <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . sprintf(TEXT_DELETE_REVIEWS, $osC_ObjectInfo->get('total_reviews')) . '</p>';
+    echo '  <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . $osC_Language->get('field_delete_reviews') . '</p>';
   }
 ?>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

@@ -1,32 +1,33 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Image Groups
 
-  Copyright (c) 2007 osCommerce
+action_heading_new_image_group = New Image Group
+action_heading_batch_delete_image_groups = Batch Delete Image Groups
 
-  Released under the GNU General Public License
-*/
+table_heading_image_groups = Image Groups
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Image Groups');
+field_title = Title:
+field_code = Code:
+field_width = Width:
+field_height = Height:
+field_force_size = Force Image Size:
+field_set_as_default = Set as Default?
 
-define('TABLE_HEADING_IMAGE_GROUPS', 'Image Groups');
-define('TABLE_HEADING_ACTION', 'Action');
+introduction_new_image_group = Please fill in the following information for the new image group.
 
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new image group with its related data');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this image group? (Images must be manually removed)');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following image groups?');
+introduction_edit_image_group = Please make the necessary changes for this image group.
 
-define('TEXT_IMAGE_GROUP_TITLE', 'Title:');
-define('TEXT_IMAGE_GROUP_CODE', 'Code:');
-define('TEXT_IMAGE_GROUP_WIDTH', 'Width:');
-define('TEXT_IMAGE_GROUP_HEIGHT', 'Height:');
-define('TEXT_IMAGE_GROUP_FORCE_SIZE', 'Force Size:');
+introduction_delete_image_group = Please verify the removal of this image group.
+delete_error_image_group_prohibited = Error: The default image group cannot be removed. Please set another image group as the default group and try again.
 
-define('TEXT_INFO_HEADING_NEW_IMAGE_GROUP', 'New Image Group');
-
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: The default image group can not be removed. Please set another group as the default, and try again.');
-?>
+introduction_batch_delete_image_groups = Please verify the removal of the following image groups.
+batch_delete_error_image_group_prohibited = Error: The default image group cannot be removed. Please set another image group as the default group and try again.

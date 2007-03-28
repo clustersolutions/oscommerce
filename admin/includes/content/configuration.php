@@ -44,9 +44,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Configuration_Admin::save($_GET['cID'], $_POST['configuration_value']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&gID=' . $_GET['gID']));

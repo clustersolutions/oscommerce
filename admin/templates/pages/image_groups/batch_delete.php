@@ -19,11 +19,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_Language->get('action_heading_batch_delete_image_groups'); ?></div>
 <div class="infoBoxContent">
   <form name="gDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_image_groups'); ?></p>
 
 <?php
   $check_default_flag = false;
@@ -51,11 +51,11 @@
   echo '<p>' . $names_string . '</p>';
 
   if ( $check_default_flag === true ) {
-    echo '  <p><b>' . TEXT_INFO_DELETE_PROHIBITED . '</b></p>';
+    echo '  <p><b>' . $osC_Language->get('batch_delete_error_image_group_prohibited') . '</b></p>';
 
-    echo '  <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
+    echo '  <p align="center"><input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
-    echo '  <p align="center"><input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
+    echo '  <p align="center"><input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   }
 ?>
 

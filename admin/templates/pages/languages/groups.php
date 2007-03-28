@@ -19,7 +19,7 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&lID=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="infoBoxButton" /> <input type="button" value="' . IMAGE_INSERT . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=insertDefinition') . '\';" class="infoBoxButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&lID=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="infoBoxButton" /> <input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=insertDefinition') . '\';" class="infoBoxButton" />'; ?></p>
 
 <?php
   $Qgroups = $osC_Database->query('select distinct content_group, count(*) as total_entries from :table_languages_definitions where languages_id = :languages_id group by content_group order by content_group');
@@ -30,7 +30,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo sprintf(TEXT_DISPLAY_NUMBER_OF_ENTRIES, ($Qgroups->numberOfRows() > 0 ? 1 : 0), $Qgroups->numberOfRows(), $Qgroups->numberOfRows()); ?></td>
+    <td><?php echo sprintf($osC_Language->get('batch_results_number_of_entries'), ($Qgroups->numberOfRows() > 0 ? 1 : 0), $Qgroups->numberOfRows(), $Qgroups->numberOfRows()); ?></td>
   </tr>
 </table>
 
@@ -54,12 +54,12 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&group=' . $Qgroups->value('content_group') . '&action=definitions'), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qgroups->value('content_group')); ?></td>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&group=' . $Qgroups->value('content_group') . '&action=definitions'), osc_icon('folder.png') . '&nbsp;' . $Qgroups->value('content_group')); ?></td>
       <td align="right"><?php echo $Qgroups->value('total_entries'); ?></td>
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&group=' . $Qgroups->value('content_group') . '&action=deleteDefinitions'), osc_icon('trash.png', IMAGE_DELETE));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&group=' . $Qgroups->value('content_group') . '&action=deleteDefinitions'), osc_icon('trash.png'));
 ?>
 
       </td>
@@ -74,6 +74,6 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
   </tr>
 </table>

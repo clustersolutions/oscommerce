@@ -137,7 +137,7 @@
  */
 
   function osc_remove($source) {
-    global $osC_MessageStack;
+    global $osC_Language, $osC_MessageStack;
 
     if (is_dir($source)) {
       $dir = dir($source);
@@ -147,7 +147,7 @@
           if (is_writeable($source . '/' . $file)) {
             osc_remove($source . '/' . $file);
           } else {
-            $osC_MessageStack->add('header', sprintf(ERROR_FILE_NOT_REMOVEABLE, $source . '/' . $file), 'error');
+            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_file_not_removable'), $source . '/' . $file), 'error');
           }
         }
       }
@@ -157,13 +157,13 @@
       if (is_writeable($source)) {
         return rmdir($source);
       } else {
-        $osC_MessageStack->add('header', sprintf(ERROR_DIRECTORY_NOT_REMOVEABLE, $source), 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_directory_not_removable'), $source), 'error');
       }
     } else {
       if (is_writeable($source)) {
         return unlink($source);
       } else {
-        $osC_MessageStack->add('header', sprintf(ERROR_FILE_NOT_REMOVEABLE, $source), 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_file_not_removable'), $source), 'error');
       }
     }
   }

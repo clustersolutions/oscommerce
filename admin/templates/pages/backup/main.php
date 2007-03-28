@@ -22,23 +22,23 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACKUP . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . IMAGE_RESTORE . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_backup') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=backup') . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_restore') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=restoreLocal') . '\';" class="infoBoxButton" />'; ?></p>
 
 <form name="batch" action="#" method="post">
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_TITLE; ?></th>
-      <th><?php echo TABLE_HEADING_FILE_DATE; ?></th>
-      <th><?php echo TABLE_HEADING_FILE_SIZE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_backups'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_date'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_file_size'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -49,14 +49,14 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=download'), osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . $file['name']); ?></td>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=download'), osc_icon('download.png') . '&nbsp;' . $file['name']); ?></td>
       <td><?php echo osC_DateTime::getShort(osC_DateTime::fromUnixTimestamp(filemtime(DIR_FS_BACKUP . $file['name'])), true); ?></td>
       <td><?php echo number_format(filesize(DIR_FS_BACKUP . $file['name'])); ?> bytes</td>
       <td align="right">
 
 <?php
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('tape.png', IMAGE_RESTORE)) . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=restore'), osc_icon('restore.png')) . '&nbsp;' .
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&file=' . $file['name'] . '&action=delete'), osc_icon('trash.png'));
 ?>
 
       </td>
@@ -74,17 +74,17 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('save.png', ICON_FILE_DOWNLOAD) . '&nbsp;' . ICON_FILE_DOWNLOAD . '&nbsp;&nbsp;' . osc_icon('tape.png', IMAGE_RESTORE) . '&nbsp;' . IMAGE_RESTORE .  '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('download.png') . '&nbsp;' . $osC_Language->get('icon_download') . '&nbsp;&nbsp;' . osc_icon('restore.png') . '&nbsp;' . $osC_Language->get('icon_restore') .  '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
   </tr>
 </table>
 
-<p><?php echo TEXT_BACKUP_DIRECTORY . ' ' . DIR_FS_BACKUP; ?></p>
+<p><?php echo $osC_Language->get('backup_location') . ' ' . DIR_FS_BACKUP; ?></p>
 
 <?php
   if ( defined('DB_LAST_RESTORE') ) {
 ?>
 
-<p><?php echo TEXT_LAST_RESTORATION . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=forget'), TEXT_FORGET); ?></p>
+<p><?php echo $osC_Language->get('last_restoration_date') . ' ' . DB_LAST_RESTORE . ' ' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=forget'), $osC_Language->get('forget_restoration_date')); ?></p>
 
 <?php
   }

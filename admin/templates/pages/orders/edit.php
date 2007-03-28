@@ -32,7 +32,7 @@
 ?>
 
 <p align="right">
-  <?php echo '<input type="button" value="' . IMAGE_ORDERS_INVOICE . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=invoice') . '\');" class="infoBoxButton"/> <input type="button" value="' . IMAGE_ORDERS_PACKINGSLIP . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=packaging_slip') . '\');" class="infoBoxButton" /> <input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?>
+  <?php echo '<input type="button" value="' . $osC_Language->get('button_orders_invoice') . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=invoice') . '\');" class="infoBoxButton"/> <input type="button" value="' . $osC_Language->get('button_orders_packaging_slip') . '" onclick="window.open(\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&oID=' . $_GET['oID'] . '&action=packaging_slip') . '\');" class="infoBoxButton" /> <input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page']) . '\';" class="operationButton" />'; ?>
 </p>
 
 <?php
@@ -45,7 +45,7 @@
   //--></script>
 
   <div class="tab-page" id="tabSummary">
-    <h2 class="tab">Summary</h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_summary'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabSummary" ) );
@@ -55,22 +55,22 @@
       <tr>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('personal.png', ENTRY_CUSTOMER) . ' ' . ENTRY_CUSTOMER; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('personal.png') . ' ' . $osC_Language->get('subsection_customer'); ?></legend>
 
             <p><?php echo osC_Address::format($osC_Order->getCustomer(), '<br />'); ?></p>
-            <p><?php echo osc_icon('telephone.png', ENTRY_TELEPHONE_NUMBER) . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . osc_icon('write.png', ENTRY_EMAIL_ADDRESS) . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
+            <p><?php echo osc_icon('telephone.png') . ' ' . $osC_Order->getCustomer('telephone') . '<br />' . osc_icon('write.png') . ' ' . $osC_Order->getCustomer('email_address'); ?></p>
           </fieldset>
         </td>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('home.png', ENTRY_SHIPPING_ADDRESS) . ' ' . ENTRY_SHIPPING_ADDRESS; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('home.png') . ' ' . $osC_Language->get('subsection_shipping_address'); ?></legend>
 
             <p><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></p>
           </fieldset>
         </td>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('bill.png', ENTRY_BILLING_ADDRESS) . ' ' . ENTRY_BILLING_ADDRESS; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('bill.png') . ' ' . $osC_Language->get('subsection_billing_address'); ?></legend>
 
             <p><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></p>
           </fieldset>
@@ -79,7 +79,7 @@
       <tr>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('payment.png', ENTRY_PAYMENT_METHOD) . ' ' . ENTRY_PAYMENT_METHOD; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('payment.png') . ' ' . $osC_Language->get('subsection_payment_method'); ?></legend>
 
             <p><?php echo $osC_Order->getPaymentMethod(); ?></p>
 
@@ -89,19 +89,19 @@
 
             <table border="0" cellspacing="0" cellpadding="0">
               <tr>
-                <td><?php echo ENTRY_CREDIT_CARD_TYPE; ?></td>
+                <td><?php echo $osC_Language->get('credit_card_type'); ?></td>
                 <td><?php echo $osC_Order->getCreditCardDetails('type'); ?></td>
               </tr>
               <tr>
-                <td><?php echo ENTRY_CREDIT_CARD_OWNER; ?></td>
+                <td><?php echo $osC_Language->get('credit_card_owner_name'); ?></td>
                 <td><?php echo $osC_Order->getCreditCardDetails('owner'); ?></td>
               </tr>
               <tr>
-                <td><?php echo ENTRY_CREDIT_CARD_NUMBER; ?></td>
+                <td><?php echo $osC_Language->get('credit_card_number'); ?></td>
                 <td><?php echo $osC_Order->getCreditCardDetails('number'); ?></td>
               </tr>
               <tr>
-                <td><?php echo ENTRY_CREDIT_CARD_EXPIRES; ?></td>
+                <td><?php echo $osC_Language->get('credit_card_expiry_date'); ?></td>
                 <td><?php echo $osC_Order->getCreditCardDetails('expires'); ?></td>
               </tr>
             </table>
@@ -113,18 +113,18 @@
         </td>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('history.png', ENTRY_STATUS) . ' ' . ENTRY_STATUS; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('history.png') . ' ' . $osC_Language->get('subsection_status'); ?></legend>
 
             <p><?php echo $osC_Order->getStatus() . '<br />' . ($osC_Order->getDateLastModified() > $osC_Order->getDateCreated() ? osC_DateTime::getShort($osC_Order->getDateLastModified(), true) : osC_DateTime::getShort($osC_Order->getDateCreated(), true)); ?></p>
-            <p><?php echo 'Comments: ' . $osC_Order->getNumberOfComments(); ?></p>
+            <p><?php echo $osC_Language->get('number_of_comments') . ' ' . $osC_Order->getNumberOfComments(); ?></p>
           </fieldset>
         </td>
         <td width="33%" valign="top">
           <fieldset style="border: 0; height: 100%;">
-            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('calculator.png', ENTRY_TOTAL) . ' ' . ENTRY_TOTAL; ?></legend>
+            <legend style="margin-left: -20px; font-weight: bold;"><?php echo osc_icon('calculator.png') . ' ' . $osC_Language->get('subsection_total'); ?></legend>
 
             <p><?php echo $osC_Order->getTotal(); ?></p>
-            <p><?php echo 'Products: ' . $osC_Order->getNumberOfProducts() . '<br />Items: ' . $osC_Order->getNumberOfItems(); ?></p>
+            <p><?php echo $osC_Language->get('number_of_products') . ' ' . $osC_Order->getNumberOfProducts() . '<br />' . $osC_Language->get('number_of_items') . ' ' . $osC_Order->getNumberOfItems(); ?></p>
           </fieldset>
         </td>
       </tr>
@@ -132,7 +132,7 @@
   </div>
 
   <div class="tab-page" id="tabProducts">
-    <h2 class="tab">Products</h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_products'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabProducts" ) );
@@ -147,13 +147,13 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
-          <th colspan="2"><?php echo TABLE_HEADING_PRODUCTS; ?></th>
-          <th><?php echo TABLE_HEADING_PRODUCTS_MODEL; ?></th>
-          <th><?php echo TABLE_HEADING_TAX; ?></th>
-          <th><?php echo TABLE_HEADING_PRICE_EXCLUDING_TAX; ?></th>
-          <th><?php echo TABLE_HEADING_PRICE_INCLUDING_TAX; ?></th>
-          <th><?php echo TABLE_HEADING_TOTAL_EXCLUDING_TAX; ?></th>
-          <th><?php echo TABLE_HEADING_TOTAL_INCLUDING_TAX; ?></th>
+          <th colspan="2"><?php echo $osC_Language->get('table_heading_products'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_product_model'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_tax'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_price_net'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_price_gross'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_total_net'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_total_gross'); ?></th>
         </tr>
       </thead>
       <tbody>
@@ -171,13 +171,7 @@
 
       if ( isset($products['attributes']) && is_array($products['attributes']) && ( sizeof($products['attributes']) > 0 ) ) {
         foreach ( $products['attributes'] as $attributes ) {
-          echo '<br /><nobr><small>&nbsp;<i> - ' . $attributes['option'] . ': ' . $attributes['value'];
-
-          if ( $attributes['price'] != '0' ) {
-            echo ' (' . $attributes['prefix'] . $osC_Currencies->format($attributes['price'] * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . ')';
-          }
-
-          echo '</i></small></nobr>';
+          echo '<br /><nobr>&nbsp;&nbsp;&nbsp;<i>' . $attributes['option'] . ': ' . $attributes['value'] . '</i></nobr>';
         }
       }
 ?>
@@ -219,7 +213,7 @@
   </div>
 
   <div class="tab-page" id="tabTransactionHistory">
-    <h2 class="tab">Transaction History</h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_transaction_history'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabTransactionHistory" ) );
@@ -234,10 +228,10 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
-          <th width="130"><?php echo TABLE_HEADING_DATE_ADDED; ?></th>
-          <th width="50"><?php echo TABLE_HEADING_STATUS; ?></th>
+          <th width="130"><?php echo $osC_Language->get('table_heading_date_added'); ?></th>
+          <th width="50"><?php echo $osC_Language->get('table_heading_status'); ?></th>
           <th width="20">&nbsp;</th>
-          <th><?php echo TABLE_HEADING_COMMENTS; ?></th>
+          <th><?php echo $osC_Language->get('table_heading_comments'); ?></th>
         </tr>
       </thead>
       <tbody>
@@ -268,7 +262,7 @@
 
     <form name="transaction" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&' . (isset($_GET['search']) ? 'search=' . $_GET['search'] . '&' : '') . (isset($_GET['status']) ? 'status=' . $_GET['status'] . '&' : '') . (isset($_GET['cID']) ? 'cID=' . $_GET['cID'] . '&' : '') . 'page=' . $_GET['page'] . '&oID=' . $_GET['oID'] . '&action=updateTransaction'); ?>" method="post">
 
-    <p><?php echo ENTRY_POST_TRANSACTION_ACTIONS . ' '. osc_draw_pull_down_menu('transaction', $osC_Order->getPostTransactionActions()) . ' ' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_EXECUTE . '" class="operationButton" />'; ?></p>
+    <p><?php echo $osC_Language->get('field_post_transaction_actions') . ' '. osc_draw_pull_down_menu('transaction', $osC_Order->getPostTransactionActions()) . ' ' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_execute') . '" class="operationButton" />'; ?></p>
 
     </form>
 
@@ -279,7 +273,7 @@
   </div>
 
   <div class="tab-page" id="tabStatusHistory">
-    <h2 class="tab">Status History</h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_status_history'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabStatusHistory" ) );
@@ -294,10 +288,10 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
-          <th><?php echo TABLE_HEADING_DATE_ADDED; ?></th>
-          <th><?php echo TABLE_HEADING_STATUS; ?></th>
-          <th><?php echo TABLE_HEADING_COMMENTS; ?></th>
-          <th align="right"><?php echo TABLE_HEADING_CUSTOMER_NOTIFIED; ?></th>
+          <th><?php echo $osC_Language->get('table_heading_date_added'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_status'); ?></th>
+          <th><?php echo $osC_Language->get('table_heading_comments'); ?></th>
+          <th align="right"><?php echo $osC_Language->get('table_heading_customer_notified'); ?></th>
         </tr>
       </thead>
       <tbody>
@@ -325,22 +319,22 @@
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td><?php echo ENTRY_STATUS; ?></td>
+        <td><?php echo $osC_Language->get('field_status'); ?></td>
         <td><?php echo osc_draw_pull_down_menu('status', $orders_statuses, $osC_Order->getStatusID()); ?></td>
       </tr>
       <tr>
-        <td valign="top"><?php echo ENTRY_NEW_COMMENT; ?></td>
+        <td valign="top"><?php echo $osC_Language->get('field_add_comment'); ?></td>
         <td><?php echo osc_draw_textarea_field('comment', null, null, null, 'style="width: 100%"'); ?></td>
       </tr>
       <tr>
-        <td><?php echo ENTRY_NOTIFY_CUSTOMER; ?></td>
+        <td><?php echo $osC_Language->get('field_notify_customer'); ?></td>
         <td><?php echo osc_draw_checkbox_field('notify_customer', null, true); ?></td>
       </tr>
-        <td><?php echo ENTRY_NOTIFY_COMMENTS; ?></td>
+        <td><?php echo $osC_Language->get('field_notify_customer_with_comments'); ?></td>
         <td><?php echo osc_draw_checkbox_field('append_comment', null, true); ?></td>
       </tr>
       <tr>
-        <td colspan="2" align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton" />'; ?></td>
+        <td colspan="2" align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_update') . '" class="operationButton" />'; ?></td>
       </tr>
     </table>
 

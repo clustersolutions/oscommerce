@@ -1,35 +1,34 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Who's Online
 
-  Copyright (c) 2007 osCommerce
+action_heading_batch_delete_customer_sessions = Batch Delete Customer Sessions
 
-  Released under the GNU General Public License
-*/
+table_heading_online = Online
+table_heading_customers = Customers
+table_heading_date_last_click = Last Click
+table_heading_last_page_url = Last URL
+table_heading_shopping_cart_total = Total
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Who\'s Online');
+field_session_id = Session ID:
+field_time_online = Time Online:
+field_customer_id = Customer ID:
+field_customer_name = Customer Name:
+field_ip_address = IP Address:
+field_entry_time = Entry Time:
+field_last_click = Last Click:
+field_last_page_url = Last Page URL:
+field_shopping_cart_contents = Shopping Cart Contents:
+field_shopping_cart_total = Shopping Cart Total:
 
-define('TABLE_HEADING_ONLINE', 'Online');
-define('TABLE_HEADING_FULL_NAME', 'Full Name');
-define('TABLE_HEADING_LAST_CLICK', 'Last Click');
-define('TABLE_HEADING_LAST_PAGE_URL', 'Last URL');
-define('TABLE_HEADING_SHOPPING_CART_TOTAL', 'Total');
-define('TABLE_HEADING_ACTION', 'Action');
+introduction_delete_customer_session = Please verify the removal of this customer session.
 
-define('TEXT_SESSION_ID', 'Session ID:');
-define('TEXT_TIME_ONLINE', 'Time Online:');
-define('TEXT_CUSTOMER_ID', 'Customer ID:');
-define('TEXT_CUSTOMER_NAME', 'Customer Name:');
-define('TEXT_IP_ADDRESS', 'IP Address:');
-define('TEXT_ENTRY_TIME', 'Entry Time:');
-define('TEXT_LAST_CLICK', 'Last Click:');
-define('TEXT_LAST_PAGE_URL', 'Last Page URL:');
-define('TEXT_SHOPPING_CART_PRODUCTS', 'Products In Shopping Cart:');
-define('TEXT_SHOPPING_CART_TOTAL', 'Shopping Cart Total:');
-
-define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this customers session?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following customer sessions?');
-?>
+introduction_batch_delete_customer_sessions = Please verify the removal of the following customer sessions.

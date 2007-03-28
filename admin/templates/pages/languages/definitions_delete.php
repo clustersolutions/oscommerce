@@ -19,7 +19,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $_GET['group']; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $_GET['group']; ?></div>
 <div class="infoBoxContent">
   <form name="lDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&group=' . $_GET['group'] . '&action=deleteDefinitions'); ?>" method="post">
 
@@ -43,7 +43,7 @@
 
   <p>(<a href="javascript:selectAllFromPullDownMenu('defs');"><u><?php echo $osC_Language->get('select_all'); ?></u></a> | <a href="javascript:resetPullDownMenuSelection('defs');"><u><?php echo $osC_Language->get('select_none'); ?></u></a>)<br /><?php echo osc_draw_pull_down_menu('defs[]', $defs_array, null, 'id="defs" size="10" multiple="multiple" style="width: 100%;"'); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

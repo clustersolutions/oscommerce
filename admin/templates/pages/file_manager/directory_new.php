@@ -19,7 +19,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_NEW_FOLDER; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_directory'); ?></div>
 <div class="infoBoxContent">
 
 <?php
@@ -28,16 +28,18 @@
 
   <form name="fmNewDirectory" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=saveDirectory'); ?>" method="post">
 
-  <p><?php echo TEXT_NEW_FOLDER_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_directory'); ?></p>
+
+  <p><?php echo '<b>' . osc_output_string_protected($_SESSION['fm_directory']) . '</b>'; ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_FILE_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_directory_name') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('directory_name', null, 'style="width: 100%;"'); ?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 
@@ -45,9 +47,9 @@
   } else {
 ?>
 
-  <p><?php echo sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $_SESSION['fm_directory']); ?></p>
+  <p><?php echo sprintf($osC_Language->get('new_directory_error_not_writable'), $_SESSION['fm_directory']); ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="Retry" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=saveDirectory') . '\';" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_retry') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=saveDirectory') . '\';" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

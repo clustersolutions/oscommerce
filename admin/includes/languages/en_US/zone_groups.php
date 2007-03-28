@@ -9,7 +9,7 @@
 
 heading_title = Zone Groups
 
-table_heading_name = Zone Group
+table_heading_zone_groups = Zone Groups
 table_heading_total_entries = Total Entries
 table_heading_action = Action
 

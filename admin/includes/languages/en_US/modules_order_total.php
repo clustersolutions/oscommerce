@@ -1,21 +1,18 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Order Total Modules
 
-  Copyright (c) 2006 osCommerce
+table_heading_order_total_modules = Order Total Modules
+table_heading_sort_order = Sort Order
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+introduction_edit_order_total_module = Please make the necessary changes for this order total module.
 
-define('HEADING_TITLE', 'Order Total Modules');
-
-define('TABLE_HEADING_MODULES', 'Modules');
-define('TABLE_HEADING_SORT_ORDER', 'Sort Order');
-define('TABLE_HEADING_STATUS', 'Status');
-define('TABLE_HEADING_ACTION', 'Action');
-
-define('INFO_MODULE_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br /><br />(All module parameters would then be removed)');
-?>
+introduction_uninstall_order_total_module = Please verify the uninstallation of this order total module.

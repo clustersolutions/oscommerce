@@ -9,7 +9,7 @@
 
 heading_title = Tax Classes
 
-table_heading_name = Name
+table_heading_tax_classes = Tax Classes
 table_heading_total_rates = Total Tax Rates
 table_heading_action = Action
 

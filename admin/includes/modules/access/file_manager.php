@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'file_manager',
         $_group = 'tools',
         $_icon = 'file_manager.png',
-        $_title = ACCESS_FILE_MANAGER_TITLE,
+        $_title,
         $_sort_order = 400;
+
+    function osC_Access_File_manager() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_file_manager_title');
+    }
   }
 ?>

@@ -23,42 +23,42 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="3">
   <tr>
-    <td><b><?php echo TITLE_SERVER_HOST; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_server_host'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('host') . ' (' . $osC_ObjectInfo->get('ip') . ')'; ?></td>
-    <td><b><?php echo TITLE_DATABASE_HOST; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_database_host'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('db_server') . ' (' . $osC_ObjectInfo->get('db_ip') . ')'; ?></td>
   </tr>
   <tr>
-    <td><b><?php echo TITLE_SERVER_OS; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_server_operating_system'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('system') . ' ' . $osC_ObjectInfo->get('kernel'); ?></td>
-    <td><b><?php echo TITLE_DATABASE; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_database_version'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('db_version'); ?></td>
   </tr>
   <tr>
-    <td><b><?php echo TITLE_SERVER_DATE; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_server_date'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('date'); ?></td>
-    <td><b><?php echo TITLE_DATABASE_DATE; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_database_date'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('db_date'); ?></td>
   </tr>
   <tr>
     <td colspan="4">&nbsp;</td>
   </tr>
   <tr>
-    <td><b><?php echo TITLE_SERVER_UP_TIME; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_server_up_time'); ?></b></td>
     <td colspan="3"><?php echo $osC_ObjectInfo->get('uptime'); ?></td>
   </tr>
   <tr>
-    <td><b><?php echo TITLE_DATABASE_UP_TIME; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_database_up_time'); ?></b></td>
     <td colspan="3"><?php echo $osC_ObjectInfo->get('db_uptime'); ?></td>
   </tr>
   <tr>
     <td colspan="4">&nbsp;</td>
   </tr>
   <tr>
-    <td><b><?php echo TITLE_HTTP_SERVER; ?></b></td>
+    <td><b><?php echo $osC_Language->get('field_http_server'); ?></b></td>
     <td><?php echo $osC_ObjectInfo->get('http_server'); ?></td>
-    <td><b><?php echo TITLE_PHP_VERSION; ?></b></td>
-    <td><?php echo 'PHP: ' . $osC_ObjectInfo->get('php') . ' / ' . TITLE_ZEND_VERSION . ' ' . $osC_ObjectInfo->get('zend') . ' (' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=phpInfo'), TEXT_MORE_INFORMATION, 'target="_blank"') . ')'; ?></td>
+    <td><b><?php echo $osC_Language->get('field_php_version'); ?></b></td>
+    <td><?php echo 'PHP: ' . $osC_ObjectInfo->get('php') . ' / Zend: ' . $osC_ObjectInfo->get('zend') . ' (' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=phpInfo'), $osC_Language->get('more_information'), 'target="_blank"') . ')'; ?></td>
   </tr>
 </table>
 

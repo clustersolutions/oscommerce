@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -23,16 +23,18 @@
 
       parent::osC_Image_Admin();
 
-      $osC_Language->loadConstants('modules/image/check.php');
+      $osC_Language->loadIniFile('modules/image/check.php');
 
-      $this->_title = MODULE_IMAGE_CHECK;
+      $this->_title = $osC_Language->get('images_check_title');
     }
 
 // Private methods
 
     function _setHeader() {
-      $this->_header = array(MODULE_IMAGE_CHECK_GROUPS,
-                             MODULE_IMAGE_CHECK_RESULTS);
+      global $osC_Language;
+
+      $this->_header = array($osC_Language->get('images_check_table_heading_groups'),
+                             $osC_Language->get('images_check_table_heading_results'));
     }
 
     function _setData() {

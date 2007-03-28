@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,7 +15,8 @@
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . ']';
 
-    $statuses_array = array(array('id' => '0', 'text' => TEXT_DEFAULT));
+    $statuses_array = array(array('id' => '0',
+                                  'text' => $osC_Language->get('default_entry')));
 
     $Qstatuses = $osC_Database->query('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id order by orders_status_name');
     $Qstatuses->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);

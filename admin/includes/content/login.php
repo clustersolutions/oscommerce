@@ -62,12 +62,11 @@
                                        'access' => osC_Access::getUserLevels($Qadmin->valueInt('id')));
 
             if ( isset($_SESSION['redirect_origin']) ) {
-              $goto_module = $_SESSION['redirect_origin']['module'];
               $get_string = http_build_query($_SESSION['redirect_origin']['get']);
 
               unset($_SESSION['redirect_origin']);
 
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $goto_module . '&' . $get_string));
+              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $get_string));
             } else {
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT));
             }

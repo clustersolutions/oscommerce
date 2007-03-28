@@ -21,7 +21,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('windows.png', IMAGE_PREVIEW) . ' ' . $osC_ObjectInfo->get('banners_title'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('banner_preview.png') . ' ' . $osC_ObjectInfo->get('banners_title'); ?></div>
 <div class="infoBoxContent">
 
 <?php
@@ -32,5 +32,5 @@
   }
 ?>
 
-  <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 </div>

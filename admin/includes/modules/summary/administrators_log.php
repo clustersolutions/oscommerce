@@ -14,16 +14,16 @@
     include('includes/classes/summary.php');
   }
 
-  if ( !defined('MODULE_SUMMARY_ADMINISTRATORS_LOG_TITLE') ) {
-    $osC_Language->loadConstants('modules/summary/administrators_log.php');
-  }
-
   class osC_Summary_administrators_log extends osC_Summary {
 
 /* Class constructor */
 
     function osC_Summary_administrators_log() {
-      $this->_title = MODULE_SUMMARY_ADMINISTRATORS_LOG_TITLE;
+      global $osC_Language;
+
+      $osC_Language->loadIniFile('modules/summary/administrators_log.php');
+
+      $this->_title = $osC_Language->get('summary_administrators_log_title');
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'administrators_log');
 
       if ( osC_Access::hasAccess('administrators_log') ) {
@@ -34,14 +34,14 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
                      '    <tr>' .
-                     '      <th>' . MODULE_SUMMARY_ADMINISTRATORS_LOG_USER . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_ADMINISTRATORS_LOG_MODULE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_ADMINISTRATORS_LOG_DATE . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_administrators_log_table_heading_users') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_administrators_log_table_heading_module') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_administrators_log_table_heading_date') . '</th>' .
                      '    </tr>' .
                      '  </thead>' .
                      '  <tbody>';

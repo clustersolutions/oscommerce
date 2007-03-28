@@ -14,7 +14,13 @@
     var $_module = 'product_attributes',
         $_group = 'content',
         $_icon = 'run.png',
-        $_title = ACCESS_PRODUCT_ATTRIBUTES_TITLE,
+        $_title,
         $_sort_order = 300;
+
+    function osC_Access_Product_attributes() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_product_attributes_title');
+    }
   }
 ?>

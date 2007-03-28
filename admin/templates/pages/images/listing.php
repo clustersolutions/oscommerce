@@ -26,8 +26,8 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_MODULES; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_modules'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -52,7 +52,7 @@
       <td align="right">
 
 <?php
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png', IMAGE_EXECUTE));
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . substr($file['name'], 0, strrpos($file['name'], '.'))), osc_icon('run.png'));
 ?>
 
       </td>
@@ -68,6 +68,6 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('run.png', IMAGE_EXECUTE) . '&nbsp;' . IMAGE_EXECUTE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('run.png') . '&nbsp;' . $osC_Language->get('icon_run'); ?></td>
   </tr>
 </table>

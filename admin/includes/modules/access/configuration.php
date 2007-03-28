@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,11 +14,13 @@
     var $_module = 'configuration',
         $_group = 'configuration',
         $_icon = 'configure.png',
-        $_title = ACCESS_CONFIGURATION_TITLE,
+        $_title,
         $_sort_order = 200;
 
     function osC_Access_Configuration() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
+
+      $this->_title = $osC_Language->get('access_configuration_title');
 
       $this->_subgroups = array();
 

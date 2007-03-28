@@ -14,16 +14,16 @@
     include('includes/classes/summary.php');
   }
 
-  if ( !defined('MODULE_SUMMARY_REVIEWS_TITLE') ) {
-    $osC_Language->loadConstants('modules/summary/reviews.php');
-  }
-
   class osC_Summary_reviews extends osC_Summary {
 
 /* Class constructor */
 
     function osC_Summary_reviews() {
-      $this->_title = MODULE_SUMMARY_REVIEWS_TITLE;
+      global $osC_Language;
+
+      $osC_Language->loadIniFile('modules/summary/reviews.php');
+
+      $this->_title = $osC_Language->get('summary_reviews_title');
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'reviews');
 
       if ( osC_Access::hasAccess('reviews') ) {
@@ -39,10 +39,10 @@
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
                      '    <tr>' .
-                     '      <th>' . MODULE_SUMMARY_REVIEWS_HEADING_PRODUCTS . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_REVIEWS_HEADING_LANGUAGE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_REVIEWS_HEADING_RATING . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_REVIEWS_HEADING_DATE . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_reviews_table_heading_products') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_reviews_table_heading_language') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_reviews_table_heading_rating') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_reviews_table_heading_date') . '</th>' .
                      '    </tr>' .
                      '  </thead>' .
                      '  <tbody>';
@@ -55,7 +55,7 @@
 
       while ( $Qreviews->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'reviews&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('write.png', ICON_PREVIEW) . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'reviews&rID=' . $Qreviews->valueInt('reviews_id') . '&action=save'), osc_icon('reviews.png') . '&nbsp;' . $Qreviews->value('products_name')) . '</td>' .
                         '      <td align="center">' . $osC_Language->showImage($Qreviews->value('languages_code')) . '</td>' .
                         '      <td align="center">' . osc_image('../images/stars_' . $Qreviews->valueInt('reviews_rating') . '.gif', $Qreviews->valueInt('reviews_rating') . '/5') . '</td>' .
                         '      <td>' . $Qreviews->value('date_last_modified') . '</td>' .

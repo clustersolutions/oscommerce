@@ -21,7 +21,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_ADDRESS_BOOK_ENTRY; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_address_book_entry'); ?></div>
 <div class="infoBoxContent">
   <form name="customers" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=saveAddress'); ?>" method="post">
 
@@ -29,12 +29,12 @@
 
 <?php
   if ( ACCOUNT_GENDER > -1 ) {
-    $gender_array = array(array('id' => 'm', 'text' => MALE),
-                          array('id' => 'f', 'text' => FEMALE));
+    $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
+                          array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_GENDER; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_gender'); ?></td>
       <td width="70%"><?php echo osc_draw_radio_field('ab_gender', $gender_array, $osC_ObjectInfo->get('customers_gender')); ?></td>
     </tr>
 
@@ -43,11 +43,11 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_FIRST_NAME; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_first_name'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_firstname', $osC_ObjectInfo->get('customers_firstname')); ?></td>
     </tr>
     <tr>
-      <td width="30%"><?php echo ENTRY_LAST_NAME; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_last_name'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_lastname', $osC_ObjectInfo->get('customers_lastname')); ?></td>
     </tr>
 
@@ -56,7 +56,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_COMPANY; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_company'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_company'); ?></td>
     </tr>
 
@@ -65,7 +65,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_STREET_ADDRESS; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_street_address'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_street_address'); ?></td>
     </tr>
 
@@ -74,7 +74,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_SUBURB; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_suburb'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_suburb'); ?></td>
     </tr>
 
@@ -83,11 +83,11 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_POST_CODE; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_post_code'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_postcode'); ?></td>
     </tr>
     <tr>
-      <td width="30%"><?php echo ENTRY_CITY; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_city'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_city'); ?></td>
     </tr>
 
@@ -96,7 +96,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_STATE; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_state'); ?></td>
       <td width="70%">
 
 <?php
@@ -127,7 +127,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_COUNTRY; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_country'); ?></td>
       <td width="70%">
 
 <?php
@@ -149,7 +149,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_TELEPHONE_NUMBER; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_telephone_number'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_telephone'); ?></td>
     </tr>
 
@@ -160,7 +160,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_FAX_NUMBER; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_fax_number'); ?></td>
       <td width="70%"><?php echo osc_draw_input_field('ab_fax'); ?></td>
     </tr>
 
@@ -171,7 +171,7 @@
 ?>
 
     <tr>
-      <td width="30%"><?php echo ENTRY_SET_AS_PRIMARY; ?></td>
+      <td width="30%"><?php echo $osC_Language->get('field_set_as_primary'); ?></td>
       <td width="70%"><?php echo osc_draw_checkbox_field('ab_primary'); ?></td>
     </tr>
 
@@ -181,7 +181,7 @@
 
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" />'; ?></p>
 
   </form>
 </div>

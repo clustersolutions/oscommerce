@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'statistics',
         $_group = 'tools',
         $_icon = 'statistics.png',
-        $_title = ACCESS_STATISTICS_TITLE,
+        $_title,
         $_sort_order = 700;
+
+    function osC_Access_Statistics() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_statistics_title');
+    }
   }
 ?>

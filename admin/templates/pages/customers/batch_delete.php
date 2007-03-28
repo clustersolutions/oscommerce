@@ -19,13 +19,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Delete'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_Language->get('action_heading_batch_delete_customers'); ?></div>
 <div class="infoBoxContent">
   <form name="cDeleteBatch" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=batchDelete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_delete_customers'); ?></p>
 
 <?php
+  $check_reviews_flag = false;
+
   $Qcustomers = $osC_Database->query('select customers_id, customers_firstname, customers_lastname from :table_customers where customers_id in (":customers_id") order by customers_firstname, customers_lastname');
   $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
   $Qcustomers->bindRaw(':customers_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
@@ -34,7 +36,22 @@
   $names_string = '';
 
   while ( $Qcustomers->next() ) {
-    $names_string .= osc_draw_hidden_field('batch[]', $Qcustomers->valueInt('customers_id')) . '<b>' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname') . '</b>, ';
+    $Qreviews = $osC_Database->query('select count(*) as total from :table_reviews where customers_id = :customers_id');
+    $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
+    $Qreviews->bindInt(':customers_id', $Qcustomers->valueInt('customers_id'));
+    $Qreviews->execute();
+
+    $customer_name = $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname');
+
+    if ( $Qreviews->valueInt('total') > 0 ) {
+      if ( $check_reviews_flag === false ) {
+        $check_reviews_flag = true;
+      }
+
+      $customer_name .= ' (' . sprintf($osC_Language->get('total_reviews'), $Qreviews->valueInt('total')) . ')';
+    }
+
+    $names_string .= osc_draw_hidden_field('batch[]', $Qcustomers->valueInt('customers_id')) . '<b>' . $customer_name . '</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -43,11 +60,12 @@
 
   echo '  <p>' . $names_string . '</p>';
 
-  echo '  <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . TEXT_BATCH_DELETE_REVIEWS . '</p>';
-
+  if ( $check_reviews_flag === true ) {
+    echo '  <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . $osC_Language->get('field_delete_reviews') . '</p>';
+  }
 ?>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

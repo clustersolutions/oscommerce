@@ -26,7 +26,7 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton">'; ?></p>
 
 <?php
   if ( $osC_Statistics->isBatchQuery() ) {
@@ -34,7 +34,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $osC_Statistics->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td><?php echo $osC_Statistics->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
     <td align="right"><?php echo $osC_Statistics->getBatchPageLinks('page', $osC_Template->getModule() . '&module=' . $_GET['module'], false); ?></td>
   </tr>
 </table>

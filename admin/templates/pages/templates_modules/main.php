@@ -25,8 +25,8 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_MODULES; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_modules'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -58,18 +58,18 @@
 <?php
     if ( $module->isInstalled() && $module->isActive() ) {
       if ( $module->hasKeys() ) {
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=save'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;';
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=save'), osc_icon('edit.png')) . '&nbsp;';
       } else {
         echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
       }
 
-      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=uninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE)) . '&nbsp;';
+      echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=uninstall'), osc_icon('uninstall.png')) . '&nbsp;';
     } else {
       echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
-           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL)) . '&nbsp;';
+           osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=install'), osc_icon('install.png')) . '&nbsp;';
     }
 
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=info'), osc_icon('info.png', IMAGE_INFO));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&module=' . $code . '&action=info'), osc_icon('info.png'));
 ?>
 
       </td>
@@ -85,8 +85,8 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT . '&nbsp;&nbsp;' . osc_icon('play.png', IMAGE_MODULE_INSTALL) . '&nbsp;' . IMAGE_MODULE_INSTALL .  '&nbsp;&nbsp;' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '&nbsp;' . IMAGE_MODULE_REMOVE . '&nbsp;&nbsp;' . osc_icon('info.png', IMAGE_INFO) . '&nbsp;' . IMAGE_INFO; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('install.png') . '&nbsp;' . $osC_Language->get('icon_install') .  '&nbsp;&nbsp;' . osc_icon('uninstall.png') . '&nbsp;' . $osC_Language->get('button_uninstall') . '&nbsp;&nbsp;' . osc_icon('info.png') . '&nbsp;' . $osC_Language->get('icon_info'); ?></td>
   </tr>
 </table>
 
-<p><?php echo TEXT_DIRECTORY . ' ' . $osC_DirectoryListing->getDirectory(); ?></p>
+<p><?php echo $osC_Language->get('modules_location') . ' ' . $osC_DirectoryListing->getDirectory(); ?></p>

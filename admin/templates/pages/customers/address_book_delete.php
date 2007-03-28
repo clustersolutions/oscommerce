@@ -22,7 +22,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . osc_output_string_protected($osC_ObjectInfo_Customer->get('customers_firstname')) . ' ' . osc_output_string_protected($osC_ObjectInfo_Customer->get('customers_lastname')); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . osc_output_string_protected($osC_ObjectInfo_Customer->get('customers_firstname')) . ' ' . osc_output_string_protected($osC_ObjectInfo_Customer->get('customers_lastname')); ?></div>
 <div class="infoBoxContent">
   <form name="abDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $osC_ObjectInfo_AddressBook->get('address_book_id') . '&action=deleteAddress'); ?>" method="post">
 
@@ -30,21 +30,21 @@
   if ( $osC_ObjectInfo_Customer->get('customers_default_address_id') == $osC_ObjectInfo_AddressBook->get('address_book_id') ) {
 ?>
 
-  <p><?php echo '<b>' . TEXT_INFO_DELETE_ADDRESS_BOOK_PROHIBITED . '</b>'; ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('delete_warning_primary_address_book_entry') . '</b>'; ?></p>
 
   <p><?php echo osC_Address::format($osC_ObjectInfo_AddressBook->getAll(), ', '); ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" class="operationButton" />'; ?></p>
 
 <?php
   } else {
 ?>
 
-  <p><?php echo TEXT_DELETE_ADDRESS_BOOK_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_address_book_entry'); ?></p>
 
   <p><?php echo '<b>' . osC_Address::format($osC_ObjectInfo_AddressBook->getAll(), ', ') . '</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook') . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

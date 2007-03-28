@@ -1,50 +1,42 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Database Backup Manager
 
-  Copyright (c) 2002 osCommerce
+action_heading_new_backup = New Database Backup
+action_heading_restore_local_file = Restore From Local Backup
+action_heading_batch_delete_backup_files = Batch Delete Backup Files
 
-  Released under the GNU General Public License
-*/
+table_heading_backups = Backups
+table_heading_date = Date
+table_heading_file_size = File Size
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Database Backup Manager');
+field_compression_none = No Compression
+field_compression_gzip = GZIP Compression
+field_compression_zip = ZIP Compression
+field_download_only = Download Without Saving
 
-define('TABLE_HEADING_TITLE', 'Title');
-define('TABLE_HEADING_FILE_DATE', 'Date');
-define('TABLE_HEADING_FILE_SIZE', 'Size');
-define('TABLE_HEADING_ACTION', 'Action');
+backup_location = Backup Directory:
+last_restoration_date = Last Restoration Date:
+forget_restoration_date = Forget Restoration Date
 
-define('TEXT_INFO_HEADING_NEW_BACKUP', 'New Backup');
-define('TEXT_INFO_HEADING_RESTORE_LOCAL', 'Restore Local');
-define('TEXT_INFO_NEW_BACKUP', 'Do not interrupt the backup process which might take a couple of minutes.');
-define('TEXT_INFO_UNPACK', '<br /><br />(after unpacking the file from the archive)');
-define('TEXT_INFO_RESTORE', 'Do not interrupt the restoration process.<br /><br />The larger the backup, the longer this process takes!<br /><br />If possible, use the mysql client.<br /><br />For example:<br /><br /><b>mysql -h' . DB_SERVER . ' -u' . DB_SERVER_USERNAME . ' -p ' . DB_DATABASE . ' < %s </b> %s');
-define('TEXT_INFO_RESTORE_LOCAL', 'Do not interrupt the restoration process.<br /><br />The larger the backup, the longer this process takes!');
-define('TEXT_INFO_RESTORE_LOCAL_RAW_FILE', 'The file uploaded must be a raw sql (text) file.');
-define('TEXT_INFO_DATE', 'Date:');
-define('TEXT_INFO_SIZE', 'Size:');
-define('TEXT_INFO_COMPRESSION', 'Compression:');
-define('TEXT_INFO_USE_GZIP', 'Use GZIP');
-define('TEXT_INFO_USE_ZIP', 'Use ZIP');
-define('TEXT_INFO_USE_NO_COMPRESSION', 'No Compression (Pure SQL)');
-define('TEXT_INFO_DOWNLOAD_ONLY', 'Download only (do not store server side)');
-define('TEXT_INFO_BEST_THROUGH_HTTPS', 'Best through a HTTPS connection');
-define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this backup?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following backup dumps?');
-define('TEXT_NO_EXTENSION', 'None');
-define('TEXT_BACKUP_DIRECTORY', 'Backup Directory:');
-define('TEXT_LAST_RESTORATION', 'Last Restoration:');
-define('TEXT_FORGET', '(<u>forget</u>)');
+introduction_new_backup = Please fill in the following information for the new database backup.
 
-define('ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST', 'Error: Backup directory does not exist. Please set this in configure.php.');
-define('ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE', 'Error: Backup directory is not writeable.');
-define('ERROR_DOWNLOAD_LINK_NOT_ACCEPTABLE', 'Error: Download link not acceptable.');
+introduction_restore_file = Please verify the restoration of the following database backup file.
 
-define('SUCCESS_LAST_RESTORE_CLEARED', 'Success: The last restoration date has been cleared.');
-define('SUCCESS_DATABASE_SAVED', 'Success: The database has been saved.');
-define('SUCCESS_DATABASE_RESTORED', 'Success: The database has been restored.');
-define('SUCCESS_BACKUP_DELETED', 'Success: The backup has been removed.');
-?>
+introduction_restore_local_file = Please select the database backup file to restore from.
+
+introduction_delete_backup_file = Please verify the removal of this database backup file.
+
+introduction_batch_delete_backup_files = Please verify the removal of the following database backup files.
+
+ms_error_backup_directory_not_writable = Error: The database backup directory is not writable: %s
+ms_error_backup_directory_non_existant = Error: The database backup directory does not exist: %s
+ms_error_download_link_not_acceptable = Error: The download link is not acceptable.

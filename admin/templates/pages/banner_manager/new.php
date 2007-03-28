@@ -35,54 +35,58 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_BANNER; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_banner'); ?></div>
 <div class="infoBoxContent">
   <form name="bNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_banner'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_TITLE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_title') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('title', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_URL . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_url') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('url', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_GROUP . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_pull_down_menu('group', $groups_array) . TEXT_BANNERS_NEW_GROUP . '<br />' . osc_draw_input_field('group_new', null, 'style="width: 100%;"'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_group') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('group', $groups_array) . $osC_Language->get('field_group_new') . '<br />' . osc_draw_input_field('group_new', null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_file_field('image', true) . ' ' . TEXT_BANNERS_IMAGE_LOCAL . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('image_local'); ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_image') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_file_field('image', true) . ' ' . $osC_Language->get('field_image_local') . '<br />' . realpath('../images/') . '/' . osc_draw_input_field('image_local'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_IMAGE_TARGET . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_image_target') . '</b>'; ?></td>
       <td width="60%"><?php echo realpath('../images') . '/' . osc_draw_input_field('image_target'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_HTML_TEXT . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_html_text') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_textarea_field('html_text'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_SCHEDULED_AT . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_scheduled_date') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('date_scheduled'); ?><input type="button" value="..." id="calendarTriggerDS" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_scheduled", ifFormat: "%Y-%m-%d", button: "calendarTriggerDS" } );</script></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_EXPIRES_ON . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('date_expires'); ?><input type="button" value="..." id="calendarTriggerDE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_expires", ifFormat: "%Y-%m-%d", button: "calendarTriggerDE" } );</script><?php echo TEXT_BANNERS_OR_AT . '<br />' . osc_draw_input_field('expires_impressions', null, 'maxlength="7" size="7"') . ' ' . TEXT_BANNERS_IMPRESSIONS; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_expiry_date') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('date_expires'); ?><input type="button" value="..." id="calendarTriggerDE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_expires", ifFormat: "%Y-%m-%d", button: "calendarTriggerDE" } );</script></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_BANNERS_STATUS . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_maximum_impressions') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('expires_impressions', null, 'maxlength="7" size="7"'); ?></td>
+    </tr>
+    <tr>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_status') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_checkbox_field('status'); ?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>
 
-<p><?php echo TEXT_BANNERS_BANNER_NOTE . '<br />' . TEXT_BANNERS_INSERT_NOTE . '<br />' . TEXT_BANNERS_EXPIRCY_NOTE . '<br />' . TEXT_BANNERS_SCHEDULE_NOTE; ?></p>
+<p><?php echo $osC_Language->get('info_banner_fields'); ?></p>

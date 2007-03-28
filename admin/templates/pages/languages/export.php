@@ -21,7 +21,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('export.png', IMAGE_EXPORT) . ' ' . $osC_ObjectInfo->get('name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('export.png') . ' ' . $osC_ObjectInfo->get('name'); ?></div>
 <div class="infoBoxContent">
   <form name="lExport" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&lID=' . $osC_ObjectInfo->get('languages_id') . '&action=export'); ?>" method="post">
 
@@ -45,7 +45,7 @@
 
   <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => $osC_Language->get('field_export_with_data'))), true); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_EXPORT . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_export') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

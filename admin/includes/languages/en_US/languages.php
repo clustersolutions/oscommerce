@@ -9,7 +9,7 @@
 
 heading_title = Languages
 
-table_heading_name = Language
+table_heading_languages = Languages
 table_heading_total_definitions = Total Definitions
 table_heading_code = Code
 table_heading_action = Action

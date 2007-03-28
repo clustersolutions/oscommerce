@@ -9,12 +9,12 @@
 
 heading_title = Countries
 
-table_heading_name = Country
+table_heading_countries = Countries
 table_heading_code = ISO Code
 table_heading_total_zones = Total Zones
 table_heading_action = Action
 
-table_heading_zone_name = Zone
+table_heading_zones = Zones
 table_heading_zone_code = Code
 
 action_heading_new_country = New Country

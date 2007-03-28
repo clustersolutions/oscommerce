@@ -11,8 +11,8 @@
 */
 
   if ( ACCOUNT_GENDER > -1 ) {
-    $gender_array = array(array('id' => 'm', 'text' => MALE),
-                          array('id' => 'f', 'text' => FEMALE));
+    $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
+                          array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
   }
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Customers_Admin::getData($_GET['cID']));
@@ -35,7 +35,7 @@
   //--></script>
 
   <div class="tab-page" id="tabData">
-    <h2 class="tab"><?php echo CATEGORY_PERSONAL; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_personal'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabData" ) );
@@ -50,7 +50,7 @@
 ?>
 
       <tr>
-        <td width="30%"><?php echo ENTRY_GENDER; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_gender'); ?></td>
         <td width="70%"><?php echo osc_draw_radio_field('gender', $gender_array, $osC_ObjectInfo->get('customers_gender')); ?></td>
       </tr>
 
@@ -59,11 +59,11 @@
 ?>
 
       <tr>
-        <td width="30%"><?php echo ENTRY_FIRST_NAME; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_first_name'); ?></td>
         <td width="70%"><?php echo osc_draw_input_field('firstname', $osC_ObjectInfo->get('customers_firstname')); ?></td>
       </tr>
       <tr>
-        <td width="30%"><?php echo ENTRY_LAST_NAME; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_last_name'); ?></td>
         <td width="70%"><?php echo osc_draw_input_field('lastname', $osC_ObjectInfo->get('customers_lastname')); ?></td>
       </tr>
 
@@ -72,7 +72,7 @@
 ?>
 
       <tr>
-        <td width="30%"><?php echo ENTRY_DATE_OF_BIRTH; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_date_of_birth'); ?></td>
         <td width="70%"><?php echo osc_draw_date_pull_down_menu('dob', array('year' => $osC_ObjectInfo->get('customers_dob_year'), 'month' => $osC_ObjectInfo->get('customers_dob_month'), 'date' => $osC_ObjectInfo->get('customers_dob_date')), false, null, null, date('Y')-1901, -5); ?></td>
       </tr>
 
@@ -84,7 +84,7 @@
         <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td width="30%"><?php echo ENTRY_EMAIL_ADDRESS; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_email_address'); ?></td>
         <td width="70%"><?php echo osc_draw_input_field('email_address', $osC_ObjectInfo->get('customers_email_address')); ?></td>
       </tr>
 
@@ -93,7 +93,7 @@
 ?>
 
       <tr>
-        <td width="30%"><?php echo ENTRY_NEWSLETTER; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_newsletter_subscription'); ?></td>
         <td width="70%"><?php echo osc_draw_checkbox_field('newsletter', null, ($osC_ObjectInfo->get('customers_newsletter') == '1')); ?></td>
       </tr>
 
@@ -105,29 +105,29 @@
         <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td width="30%"><?php echo ENTRY_PASSWORD; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_new_password'); ?></td>
         <td width="70%"><?php echo osc_draw_password_field('password'); ?></td>
       </tr>
       <tr>
-        <td width="30%"><?php echo ENTRY_PASSWORD_CONFIRMATION; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_new_password_confirmation'); ?></td>
         <td width="70%"><?php echo osc_draw_password_field('confirmation'); ?></td>
       </tr>
       <tr>
         <td colspan="2">&nbsp;</td>
       </tr>
       <tr>
-        <td width="30%"><?php echo ENTRY_STATUS; ?></td>
+        <td width="30%"><?php echo $osC_Language->get('field_status'); ?></td>
         <td width="70%"><?php echo osc_draw_checkbox_field('status', null, ($osC_ObjectInfo->get('customers_status') == '1')); ?></td>
       </tr>
     </table>
 
-    <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" />'; ?></p>
+    <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" />'; ?></p>
 
     </form>
   </div>
 
   <div class="tab-page" id="tabAddressBook">
-    <h2 class="tab"><?php echo CATEGORY_ADDRESS_BOOK; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_address_book'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabAddressBook" ) );
@@ -140,7 +140,7 @@
 
     //--></script>
 
-    <p><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=saveAddress'), osc_icon('new.png') . ' New Address Book Entry'); ?></p>
+    <p><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=saveAddress'), osc_icon('new.png') . ' ' . $osC_Language->get('operation_new_address_book_entry')); ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
@@ -157,11 +157,11 @@
     if ( ACCOUNT_GENDER > -1 ) {
       switch ( $Qaddresses->value('gender') ) {
         case 'm':
-          echo osc_icon('user_male.png', MALE) . '&nbsp;';
+          echo osc_icon('user_male.png') . '&nbsp;';
           break;
 
         case 'f':
-          echo osc_icon('user_female.png', FEMALE) . '&nbsp;';
+          echo osc_icon('user_female.png') . '&nbsp;';
           break;
 
         default:
@@ -175,7 +175,7 @@
     echo osC_Address::format($Qaddresses->toArray(), ', ');
 
     if ( $osC_ObjectInfo->get('customers_default_address_id') == $Qaddresses->valueInt('address_book_id') ) {
-      echo '&nbsp;<i>(primary)</i>';
+      echo '&nbsp;<i>(' . $osC_Language->get('primary_address') . ')</i>';
     }
 ?>
 
@@ -183,8 +183,8 @@
         <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=saveAddress'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=deleteAddress'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;';
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=saveAddress'), osc_icon('edit.png')) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&abID=' . $Qaddresses->valueInt('address_book_id') . '&action=deleteAddress'), osc_icon('trash.png')) . '&nbsp;';
 ?>
 
         </td>
@@ -198,7 +198,7 @@
     if ( !osc_empty($Qaddresses->valueProtected('telephone_number')) ) {
       echo $Qaddresses->valueProtected('telephone_number');
     } else {
-      echo '<small><i>(no telephone number)</i></small>';
+      echo '<small><i>(' . $osC_Language->get('no_telephone_number') . ')</i></small>';
     }
 
     echo osc_icon('print.png', null, '16x16', 'style="margin-left: 16px;"') . '&nbsp;';
@@ -206,7 +206,7 @@
     if ( !osc_empty($Qaddresses->valueProtected('fax_number')) ) {
       echo $Qaddresses->valueProtected('fax_number');
     } else {
-      echo '<small><i>(no fax number)</i></small>';
+      echo '<small><i>(' . $osC_Language->get('no_fax_number') . ')</i></small>';
     }
 ?>
 
@@ -221,4 +221,4 @@
   </div>
 </div>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" />'; ?></p>

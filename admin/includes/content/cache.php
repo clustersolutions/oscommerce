@@ -15,13 +15,15 @@
 /* Private variables */
 
     var $_module = 'cache',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Cache() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -30,10 +32,10 @@
 // check if the cache directory exists
       if ( is_dir(DIR_FS_WORK) ) {
         if ( !is_writeable(DIR_FS_WORK) ) {
-          $osC_MessageStack->add('header', ERROR_CACHE_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_cache_directory_not_writable'), DIR_FS_WORK), 'error');
         }
       } else {
-        $osC_MessageStack->add('header', ERROR_CACHE_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_cache_directory_non_existant'), DIR_FS_WORK), 'error');
       }
 
       if ( !empty($_GET['action']) ) {
@@ -41,9 +43,9 @@
           case 'delete':
 /*HPDL
             if ( osC_Cache::clear($_GET['block']) ) {
-              $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
             } else {
-              $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+              $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
             }
 */
 

@@ -55,7 +55,7 @@
           $module_class = 'osC_Access_' . ucfirst($module);
 
           if ( !class_exists( $module_class ) ) {
-            $osC_Language->loadConstants('modules/access/' . $module . '.php');
+            $osC_Language->loadIniFile('modules/access/' . $module . '.php');
             include('includes/modules/access/' . $module . '.php');
           }
 
@@ -88,15 +88,11 @@
     function getGroupTitle($group) {
       global $osC_Language;
 
-      if ( !defined('ACCESS_GROUP_' . strtoupper( $group ) . '_TITLE') ) {
-        $osC_Language->loadConstants( 'modules/access/groups/' . $group . '.php' );
+      if ( !$osC_Language->isDefined('access_group_' . $group . '_title') ) {
+        $osC_Language->loadIniFile( 'modules/access/groups/' . $group . '.php' );
       }
 
-      if ( defined('ACCESS_GROUP_' . strtoupper( $group ) . '_TITLE') ) {
-        return constant('ACCESS_GROUP_' . strtoupper( $group ) . '_TITLE');
-      }
-
-      return $group;
+      return $osC_Language->get('access_group_' . $group . '_title');
     }
 
     function getIcon() {

@@ -24,8 +24,8 @@
 <p align="right">
 
 <?php
-  echo HEADING_TITLE_SEARCH . ' ' . osc_draw_input_field('search') . '<input type="submit" value="GO" class="operationButton" />' .
-       '<input type="button" value="' . IMAGE_INSERT . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save') . '\';" class="infoBoxButton" />';
+  echo $osC_Language->get('operation_title_search') . ' ' . osc_draw_input_field('search') . '<input type="submit" value="GO" class="operationButton" />' .
+       '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save') . '\';" class="infoBoxButton" />';
 ?>
 
 </p>
@@ -51,7 +51,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qcustomers->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td><?php echo $Qcustomers->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
     <td align="right"><?php echo $Qcustomers->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
   </tr>
 </table>
@@ -62,16 +62,16 @@
   <thead>
     <tr>
       <th width="20">&nbsp;</th>
-      <th><?php echo TABLE_HEADING_LASTNAME; ?></th>
-      <th><?php echo TABLE_HEADING_FIRSTNAME; ?></th>
-      <th><?php echo TABLE_HEADING_ACCOUNT_CREATED; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_last_name'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_first_name'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_date_created'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -84,12 +84,12 @@
     if ( ACCOUNT_GENDER > -1 ) {
       switch ( $Qcustomers->value('customers_gender') ) {
         case 'm':
-          $customer_icon = osc_icon('user_male.png', MALE);
+          $customer_icon = osc_icon('user_male.png');
 
           break;
 
         case 'f':
-          $customer_icon = osc_icon('user_female.png', FEMALE);
+          $customer_icon = osc_icon('user_female.png');
 
           break;
       }
@@ -104,9 +104,9 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE)) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png', IMAGE_ORDERS));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=delete'), osc_icon('trash.png')) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png'));
 ?>
 
       </td>
@@ -122,7 +122,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE . '&nbsp;&nbsp;' . osc_icon('orders.png', IMAGE_ORDERS) . '&nbsp;' . IMAGE_ORDERS; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash') . '&nbsp;&nbsp;' . osc_icon('orders.png') . '&nbsp;' . $osC_Language->get('icon_orders'); ?></td>
     <td align="right"><?php echo $Qcustomers->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
   </tr>
 </table>

@@ -26,7 +26,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo sprintf(TEXT_DISPLAY_NUMBER_OF_ENTRIES, ($Qcfg->numberOfRows() > 0 ? 1 : 0), $Qcfg->numberOfRows(), $Qcfg->numberOfRows()); ?></td>
+    <td><?php echo sprintf($osC_Language->get('batch_results_number_of_entries'), ($Qcfg->numberOfRows() > 0 ? 1 : 0), $Qcfg->numberOfRows(), $Qcfg->numberOfRows()); ?></td>
   </tr>
 </table>
 
@@ -60,7 +60,7 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=save'), osc_icon('configure.png', IMAGE_EDIT));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&gID=' . $_GET['gID'] . '&cID=' . $Qcfg->valueInt('configuration_id') . '&action=save'), osc_icon('edit.png'));
 ?>
 
       </td>
@@ -75,6 +75,6 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit'); ?></td>
   </tr>
 </table>

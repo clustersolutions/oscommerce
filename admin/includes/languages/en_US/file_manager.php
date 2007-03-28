@@ -1,39 +1,52 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = File Manager
 
-  Copyright (c) 2004 osCommerce
+action_heading_upload_file = Upload File
+action_heading_new_file = New File
+action_heading_edit_file = Edit File
+action_heading_new_directory = New Directory
+action_heading_delete_entry = Delete Entry
 
-  Released under the GNU General Public License
-*/
+operation_heading_directory = Directory:
 
-  define('HEADING_TITLE', 'File Manager');
+table_heading_files = Files
+table_heading_size = Size
+table_heading_permissions = Permissions
+table_heading_user = User
+table_heading_group = Group
+table_heading_writable = Writable
+table_heading_date_last_modified = Last Modified
+table_heading_action = Action
 
-  define('TABLE_HEADING_FILENAME', 'Name');
-  define('TABLE_HEADING_SIZE', 'Size');
-  define('TABLE_HEADING_PERMISSIONS', 'Permissions');
-  define('TABLE_HEADING_USER', 'User');
-  define('TABLE_HEADING_GROUP', 'Group');
-  define('TABLE_HEADING_WRITEABLE', 'Writeable');
-  define('TABLE_HEADING_LAST_MODIFIED', 'Last Modified');
-  define('TABLE_HEADING_ACTION', 'Action');
+field_file = File:
+field_file_name = File Name:
+field_file_contents = File Contents:
+field_directory_name = Directory Name:
 
-  define('TEXT_INFO_HEADING_UPLOAD', 'Upload');
-  define('TEXT_FILE_NAME', 'Filename:');
-  define('TEXT_FILE_SIZE', 'Size:');
-  define('TEXT_FILE_CONTENTS', 'Contents:');
-  define('TEXT_LAST_MODIFIED', 'Last Modified:');
-  define('TEXT_NEW_FOLDER', 'New Folder');
-  define('TEXT_NEW_FOLDER_INTRO', 'Enter the name for the new folder:');
-  define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this file?');
-  define('TEXT_UPLOAD_INTRO', 'Please select the files to upload.');
+top_level = -- Top --
+parent_level = -- Parent --
 
-  define('ERROR_DIRECTORY_NOT_WRITEABLE', 'Error: I can not write to this directory. Please set the right user permissions on: %s');
-  define('ERROR_FILE_NOT_WRITEABLE', 'Error: I can not write to this file. Please set the right user permissions on: %s');
-  define('ERROR_DIRECTORY_NOT_REMOVEABLE', 'Error: I can not remove this directory. Please set the right user permissions on: %s');
-  define('ERROR_DIRECTORY_DOES_NOT_EXIST', 'Error: Directory does not exist: %s');
-  define('ERROR_DIRECTORY_EXISTS', 'Error: Directory already exists: %s');
-?>
+introduction_upload_file = Please select the files to upload to this directory.
+upload_error_directory_not_writable = Error: Files cannot be uploaded as this directory is not writable: %s
+
+introduction_new_file = Please fill in the following information for the new file.
+
+introduction_edit_file = Please make the necessary changes for this file.
+
+introduction_new_directory = Please fill in the following information for the new directory.
+new_directory_error_not_writable = Error: This directory is not writable: %s
+
+introduction_delete_entry = Please verify the removal of the following entry.
+delete_error_not_writable = Error: This entry is not writable and cannot be removed: %s
+
+ms_error_directory_not_writable = Error: This directory is not writable: %s
+ms_error_file_not_writable = Error: This file is not writable: %s
+ms_error_download_link_invalid = Error: This file cannot be downloaded.

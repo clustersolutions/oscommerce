@@ -19,13 +19,15 @@
 /* Private variables */
 
     var $_module = 'manufacturers',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Manufacturers() {
-      global $osC_MessageStack, $osC_Image;
+      global $osC_Language, $osC_MessageStack, $osC_Image;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -38,10 +40,10 @@
 // check if the manufacturers image directory exists
       if ( is_dir(realpath('../images/manufacturers')) ) {
         if ( !is_writeable(realpath('../images/manufacturers')) ) {
-          $osC_MessageStack->add('header', ERROR_MANUFACTURERS_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_not_writable'), realpath('../images/manufacturers')), 'error');
         }
       } else {
-        $osC_MessageStack->add('header', ERROR_MANUFACTURERS_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_non_existant'), realpath('../images/manufacturers')), 'error');
       }
 
       $osC_Image = new osC_Image_Admin();
@@ -60,9 +62,9 @@
                             'url' => $_POST['manufacturers_url']);
 
               if ( osC_Manufacturers_Admin::save((isset($_GET['mID']) && is_numeric($_GET['mID']) ? $_GET['mID'] : null), $data) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
@@ -75,9 +77,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Manufacturers_Admin::delete($_GET['mID'], (isset($_POST['delete_image']) && ($_POST['delete_image'] == 'on') ? true : false), (isset($_POST['delete_products']) && ($_POST['delete_products'] == 'on') ? true : false)) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
@@ -100,9 +102,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));

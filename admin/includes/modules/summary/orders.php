@@ -14,16 +14,16 @@
     include('includes/classes/summary.php');
   }
 
-  if ( !defined('MODULE_SUMMARY_ORDERS_TITLE') ) {
-    $osC_Language->loadConstants('modules/summary/orders.php');
-  }
-
   class osC_Summary_orders extends osC_Summary {
 
 /* Class constructor */
 
     function osC_Summary_orders() {
-      $this->_title = MODULE_SUMMARY_ORDERS_TITLE;
+      global $osC_Language;
+
+      $osC_Language->loadIniFile('modules/summary/orders.php');
+
+      $this->_title = $osC_Language->get('summary_orders_title');
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'orders');
 
       if ( osC_Access::hasAccess('orders') ) {
@@ -39,10 +39,10 @@
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
                      '    <tr>' .
-                     '      <th>' . MODULE_SUMMARY_ORDERS_HEADING_ORDERS . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_ORDERS_HEADING_TOTAL . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_ORDERS_HEADING_DATE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_ORDERS_HEADING_STATUS . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_orders_table_heading_orders') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_orders_table_heading_total') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_orders_table_heading_date') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_orders_table_heading_status') . '</th>' .
                      '    </tr>' .
                      '  </thead>' .
                      '  <tbody>';
@@ -56,7 +56,7 @@
 
       while ( $Qorders->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=save'), osc_icon('orders.png', ICON_PREVIEW) . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=save'), osc_icon('orders.png') . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .
                         '      <td>' . $Qorders->value('orders_status_name') . '</td>' .

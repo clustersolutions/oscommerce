@@ -14,16 +14,16 @@
     include('includes/classes/summary.php');
   }
 
-  if ( !defined('MODULE_SUMMARY_CUSTOMERS_TITLE') ) {
-    $osC_Language->loadConstants('modules/summary/customers.php');
-  }
-
   class osC_Summary_customers extends osC_Summary {
 
 /* Class constructor */
 
     function osC_Summary_customers() {
-      $this->_title = MODULE_SUMMARY_CUSTOMERS_TITLE;
+      global $osC_Language;
+
+      $osC_Language->loadIniFile('modules/summary/customers.php');
+
+      $this->_title = $osC_Language->get('summary_customers_title');
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'customers');
 
       if ( osC_Access::hasAccess('customers') ) {
@@ -34,14 +34,14 @@
 /* Private methods */
 
     function _setData() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
                      '    <tr>' .
-                     '      <th>' . MODULE_SUMMARY_CUSTOMERS_HEADING_CUSTOMERS . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_CUSTOMERS_HEADING_DATE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_CUSTOMERS_HEADING_STATUS . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_customers_table_heading_customers') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_customers_table_heading_date') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_customers_table_heading_status') . '</th>' .
                      '    </tr>' .
                      '  </thead>' .
                      '  <tbody>';
@@ -56,12 +56,12 @@
         if ( ACCOUNT_GENDER > -1 ) {
           switch ( $Qcustomers->value('customers_gender') ) {
             case 'm':
-              $customer_icon = osc_icon('user_male.png', MALE);
+              $customer_icon = osc_icon('user_male.png');
 
               break;
 
             case 'f':
-              $customer_icon = osc_icon('user_female.png', FEMALE);
+              $customer_icon = osc_icon('user_female.png');
 
               break;
           }

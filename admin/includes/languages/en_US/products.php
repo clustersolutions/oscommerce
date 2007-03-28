@@ -1,81 +1,92 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Products
+heading_title_new_product = New Product
 
-  Copyright (c) 2004 osCommerce
+operation_title_search = Search:
 
-  Released under the GNU General Public License
-*/
+table_heading_products = Products
+table_heading_price = Price
+table_heading_quantity = Quantity
+table_heading_action = Action
+table_heading_categories = Categories
 
-  define('HEADING_TITLE', 'Products');
-  define('HEADING_TITLE_SEARCH', 'Search:');
-  define('HEADING_TITLE_GOTO', 'Go To:');
+action_heading_delete_image = Delete Image
+action_heading_batch_copy_products = Batch Copy Products
+action_heading_batch_delete_products = Batch Delete Products
 
-  define('TAB_GENERAL', 'General');
-  define('TAB_DATA', 'Data');
-  define('TAB_IMAGES', 'Images');
-  define('TAB_ATTRIBUTES', 'Attributes');
-  define('TAB_CATEGORIES', 'Categories');
+section_general = General
+section_data = Data
+section_images = Images
+section_attributes = Attributes
+section_categories = Categories
 
-  define('FIELDSET_ASSIGNED_ATTRIBUTES', 'Assigned Attributes');
+subsection_price = Price
+subsection_data = Data
+subsection_status = Status
+subsection_information = Information
+subsection_new_image = New Image
+subsection_original_images = Original Images
+subsection_images = Images
+subsection_assigned_attributes = Assigned Attributes
 
-  define('TABLE_HEADING_PRODUCTS', 'Products');
-  define('TABLE_HEADING_PRICE', 'Price');
-  define('TABLE_HEADING_QUANTITY', 'Quantity');
-  define('TABLE_HEADING_STATUS', 'Status');
-  define('TABLE_HEADING_ACTION', 'Action');
+field_name = Name:
+field_description = Description:
+field_model = Model:
+field_keyword = Keyword:
+field_tags = Tags:
+field_url = URL:
+field_tax_class = Tax Class:
+field_price_net = Net Price:
+field_price_gross = Gross Price:
+field_manufacturer = Manufacturer:
+field_quantity = Quantity:
+field_weight = Weight:
+field_date_available = Date Available:
 
-  define('TEXT_NEW_PRODUCT', 'New Product');
-  define('TEXT_CATEGORIES', 'Categories:');
+field_current_categories = Current Categories:
+field_categories = Categories:
+field_copy_method = Copy Method:
 
-  define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
+none = -- None --
+top_category = -- Top Category --
+more_product_information = For more information please visit this products <a href="http://%s" target="_blank">website</a>.
+product_date_added = This product was added to our catalog on %s.
+product_date_available = This product will be available for order on %s.
+status_enabled = Enabled
+status_disabled = Disabled
+image_remote_upload = Remote File Upload
+image_local_files = Local Files
+image_upload_progress = Uploading image to server..
+image_retrieving_local_files = Retrieving local images..
+image_multiple_upload_progress = Uploading images to server..
+images_loading_from_server = Loading images from server..
+copy_method_link = Link Product
+copy_method_duplicate = Duplicate Product
 
-  define('TEXT_INFO_COPY_TO_INTRO', 'Please choose a new category you wish to copy this product to');
-  define('TEXT_INFO_COPY_TO_BATCH_INTRO', 'Please choose a new category you wish to copy these products to');
-  define('TEXT_INFO_CURRENT_CATEGORIES', 'Current Categories:');
+introduction_select_local_images = The following images are available on the server where additional images can be uploaded via FTP. The listing can be refreshed by clicking on the Local Files link.<br /><br />Please select from the following listing which images to assign to this product.
 
-  define('TEXT_DELETE_PRODUCT_INTRO', 'Are you sure you want to permanently delete this product?');
-  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to permanently delete these products?');
+introduction_delete_image = Please verify the removal of the product image.
 
-  define('TEXT_MOVE_PRODUCTS_INTRO', 'Please select which category you wish <b>%s</b> to reside in');
-  define('TEXT_MOVE', 'Move <b>%s</b> to:');
+introduction_copy_product = Please select a category this product should be copied to.
 
-  define('TEXT_PRODUCTS_STATUS', 'Products Status:');
-  define('TEXT_PRODUCTS_DATE_AVAILABLE', 'Date Available:');
-  define('TEXT_PRODUCT_AVAILABLE', 'In Stock');
-  define('TEXT_PRODUCT_NOT_AVAILABLE', 'Out of Stock');
-  define('TEXT_PRODUCTS_MANUFACTURER', 'Products Manufacturer:');
-  define('TEXT_PRODUCTS_NAME', 'Products Name:');
-  define('TEXT_PRODUCTS_DESCRIPTION', 'Products Description:');
-  define('TEXT_PRODUCTS_QUANTITY', 'Products Quantity:');
-  define('TEXT_PRODUCTS_MODEL', 'Products Model:');
-  define('TEXT_PRODUCTS_KEYWORD', 'Products Keyword:');
-  define('TEXT_PRODUCTS_TAGS', 'Products Tags:');
-  define('TEXT_PRODUCTS_IMAGE', 'Products Image:');
-  define('TEXT_PRODUCTS_URL', 'Products URL:');
-  define('TEXT_PRODUCTS_URL_WITHOUT_HTTP', '<small>(without http://)</small>');
-  define('TEXT_PRODUCTS_TAX_CLASS', 'Tax Class:');
-  define('TEXT_PRODUCTS_PRICE_NET', 'Products Price (Net):');
-  define('TEXT_PRODUCTS_PRICE_GROSS', 'Products Price (Gross):');
-  define('TEXT_PRODUCTS_WEIGHT', 'Products Weight:');
+introduction_delete_product = Please verify the removal of this product.
 
-  define('TEXT_PRODUCT_DATE_ADDED', 'This product was added to our catalog on %s.');
-  define('TEXT_PRODUCT_DATE_AVAILABLE', 'This product will be in stock on %s.');
-  define('TEXT_PRODUCT_MORE_INFORMATION', 'For more information, please visit this products <a href="http://%s" target="blank"><u>webpage</u></a>.');
+introduction_batch_copy_products = Please select a category the following products should be copied to.
 
-  define('TEXT_HOW_TO_COPY', 'Copy Method:');
-  define('TEXT_COPY_AS_LINK', 'Link product');
-  define('TEXT_COPY_AS_DUPLICATE', 'Duplicate product');
+introduction_batch_delete_products = Please verify the removal of the following products.
 
-  define('WARNING_PRODUCT_KEY_IN_USE', 'Warning: This product key is already in use: %s. Please use another unique keyword for this product.');
-  define('WARNING_PRODUCT_KEY_EMPTY', 'Warning: This product has an empty product key which needs to be defined. Please use a unique keyword to publicly identify this product.');
-  define('WARNING_PRODUCT_KEY_INVALID', 'Warning: This product key is invalid: %s. Product keywords must be one word containing letters and numbers (a-zA-Z0-9), and can be separated by underscores (_) and minus symbols (-).');
+ms_warning_image_processor_not_available = Warning: An image processor is not available. Please install and check the location of ImageMagicks "convert" program in the Configuration -> Configuration -> Program Locations section.
 
-  define('ERROR_CANNOT_LINK_TO_SAME_CATEGORY', 'Error: Can not link products in the same category.');
-  define('ERROR_CATALOG_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Product images directory is not writeable: ' . realpath('../images/products'));
-  define('ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Product images directory does not exist: ' . realpath('../images/products'));
-  define('ERROR_IMAGE_PROCESSOR_NOT_AVAILABLE', 'Error: Cannot process product images as ImageMagicks "convert" program is not available. This can be defined in Configuration -> Program Locations.');
-?>
+ms_error_image_directory_not_writable = Error: The product images directory is not writable: %s
+ms_error_image_directory_non_existant = Error: The product images directory does not exist: %s
+ms_error_product_keyword_empty = Error: This product has an empty product key which needs to be defined. Please use a unique keyword to publicly identify this product.
+ms_error_product_keyword_exists = Error: This product keyword is already in use: %s. Please use another unique keyword for this product.
+ms_error_product_keyword_invalid = Error: This product keyword is invalid: %s. Product keywords must be one word containing letters and numers (a-zA-Z0-9), and can be separated by underscores (_) and minus symbols (-) only.

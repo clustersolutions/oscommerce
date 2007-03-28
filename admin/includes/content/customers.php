@@ -17,13 +17,15 @@
 /* Private variables */
 
     var $_module = 'customers',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Customers() {
-      global $osC_Database, $osC_MessageStack, $entry_state_has_zones;
+      global $osC_Database, $osC_Language, $osC_MessageStack, $entry_state_has_zones;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -66,33 +68,33 @@
 
               if ( ACCOUNT_GENDER > 0 ) {
                 if ( ($data['gender'] != 'm') && ($data['gender'] != 'f') ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_GENDER_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_gender'), 'error');
                   $error = true;
                 }
               }
 
               if ( strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME ) {
-                $osC_MessageStack->add($this->_module, ENTRY_FIRST_NAME_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_first_name'), ACCOUNT_FIRST_NAME), 'error');
                 $error = true;
               }
 
               if ( strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME ) {
-                $osC_MessageStack->add($this->_module, ENTRY_LAST_NAME_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_last_name'), ACCOUNT_LAST_NAME), 'error');
                 $error = true;
               }
 
               if ( ACCOUNT_DATE_OF_BIRTH == '1' ) {
                 if ( !checkdate($data['dob_month'], $data['dob_day'], $data['dob_year']) ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_DATE_OF_BIRTH_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_date_of_birth'), 'error');
                   $error = true;
                 }
               }
 
               if ( strlen(trim($data['email_address'])) < ACCOUNT_EMAIL_ADDRESS ) {
-                $osC_MessageStack->add($this->_module, ENTRY_EMAIL_ADDRESS_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_email_address'), ACCOUNT_EMAIL_ADDRESS), 'error');
                 $error = true;
               } elseif ( !osc_validate_email_address($data['email_address']) ) {
-                $osC_MessageStack->add($this->_module, ENTRY_EMAIL_ADDRESS_CHECK_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_email_address_invalid'), 'error');
                 $error = true;
               } else {
                 $Qcheck = $osC_Database->query('select customers_id from :table_customers where customers_email_address = :customers_email_address');
@@ -108,7 +110,7 @@
                 $Qcheck->execute();
 
                 if ( $Qcheck->numberOfRows() > 0 ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_EMAIL_ADDRESS_ERROR_EXISTS, 'error');
+                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_email_address_exists'), 'error');
                   $error = true;
                 }
 
@@ -116,18 +118,18 @@
               }
 
               if ( ( !isset($_GET['cID']) || !empty($data['password']) ) && (strlen(trim($data['password'])) < ACCOUNT_PASSWORD) ) {
-                $osC_MessageStack->add($this->_module, ENTRY_PASSWORD_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_password'), ACCOUNT_PASSWORD), 'error');
                 $error = true;
               } elseif ( !empty($_POST['confirmation']) && (trim($data['password']) != trim($_POST['confirmation'])) ) {
-                $osC_MessageStack->add($this->_module, ENTRY_PASSWORD_ERROR_NOT_MATCHING, 'error');
+                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_password_confirmation_invalid'), 'error');
                 $error = true;
               }
 
               if ( $error === false ) {
                 if ( osC_Customers_Admin::save((isset($_GET['cID']) && is_numeric($_GET['cID']) ? $_GET['cID'] : null), $data) ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
@@ -141,9 +143,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Customers_Admin::delete($_GET['cID'], (isset($_POST['delete_reviews']) && ($_POST['delete_reviews'] == 'on') ? true : false)) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&search=' . $_GET['search'] . '&page=' . $_GET['page']));
@@ -179,49 +181,49 @@
 
               if ( ACCOUNT_GENDER > 0 ) {
                 if ( ($data['gender'] != 'm') && ($data['gender'] != 'f') ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_GENDER_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_gender'), 'error');
                   $error = true;
                 }
               }
 
               if ( strlen(trim($data['firstname'])) < ACCOUNT_FIRST_NAME ) {
-                $osC_MessageStack->add($this->_module, ENTRY_FIRST_NAME_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_first_name'), ACCOUNT_FIRST_NAME), 'error');
                 $error = true;
               }
 
               if ( strlen(trim($data['lastname'])) < ACCOUNT_LAST_NAME ) {
-                $osC_MessageStack->add($this->_module, ENTRY_LAST_NAME_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_last_name'), ACCOUNT_LAST_NAME), 'error');
                 $error = true;
               }
 
               if ( ACCOUNT_COMPANY > 0 ) {
                 if ( strlen(trim($data['company'])) < ACCOUNT_COMPANY ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_COMPANY_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_company'), ACCOUNT_COMPANY), 'error');
                   $error = true;
                 }
               }
 
               if ( strlen(trim($data['street_address'])) < ACCOUNT_STREET_ADDRESS ) {
-                $osC_MessageStack->add($this->_module, ENTRY_STREET_ADDRESS_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_street_address'), ACCOUNT_STREET_ADDRESS), 'error');
                 $error = true;
               }
 
               if ( ACCOUNT_SUBURB > 0 ) {
                 if ( strlen(trim($data['suburb'])) < ACCOUNT_SUBURB ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_SUBURB_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_suburb'), ACCOUNT_SUBURB), 'error');
                   $error = true;
                 }
               }
 
               if ( ACCOUNT_POST_CODE > 0 ) {
                 if ( strlen(trim($data['postcode'])) < ACCOUNT_POST_CODE ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_POST_CODE_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('entry_post_code'), ACCOUNT_POST_CODE), 'error');
                   $error = true;
                 }
               }
 
               if ( strlen(trim($data['city'])) < ACCOUNT_CITY ) {
-                $osC_MessageStack->add($this->_module, ENTRY_CITY_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_city'), ACCOUNT_CITY), 'error');
                 $error = true;
               }
 
@@ -254,7 +256,7 @@
                     if ( $Qzone->numberOfRows() === 1 ) {
                       $data['zone_id'] = $Qzone->valueInt('zone_id');
                     } else {
-                      $osC_MessageStack->add($this->_module, ENTRY_STATE_ERROR_SELECT, 'error');
+                      $osC_MessageStack->add($this->_module, $osC_Language->get('ms_warning_state_select_from_list'), 'warning');
                       $error = true;
                     }
                   }
@@ -262,36 +264,36 @@
                   $Qzone->freeResult();
                 } else {
                   if ( strlen(trim($data['state'])) < ACCOUNT_STATE ) {
-                    $osC_MessageStack->add($this->_module, ENTRY_STATE_ERROR, 'error');
+                    $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_state'), ACCOUNT_STATE), 'error');
                     $error = true;
                   }
                 }
               }
 
               if ( !is_numeric($data['country_id']) || ($data['country_id'] < 1) ) {
-                $osC_MessageStack->add($this->_module, ENTRY_COUNTRY_ERROR, 'error');
+                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_country'), 'error');
                 $error = true;
               }
 
               if ( ACCOUNT_TELEPHONE > 0 ) {
                 if ( strlen(trim($data['telephone'])) < ACCOUNT_TELEPHONE ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_TELEPHONE_NUMBER_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_telephone_number'), ACCOUNT_TELEPHONE), 'error');
                   $error = true;
                 }
               }
 
               if ( ACCOUNT_FAX > 0 ) {
                 if ( strlen(trim($data['fax'])) < ACCOUNT_FAX ) {
-                  $osC_MessageStack->add($this->_module, ENTRY_FAX_NUMBER_ERROR, 'error');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_error_fax_number'), ACCOUNT_FAX), 'error');
                   $error = true;
                 }
               }
 
               if ( $error === false ) {
                 if ( osC_Customers_Admin::saveAddress((isset($_GET['abID']) && is_numeric($_GET['abID']) ? $_GET['abID'] : null), $data) ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save&tabIndex=tabAddressBook'));
@@ -305,9 +307,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Customers_Admin::deleteAddress($_GET['abID'], $_GET['cID']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&cID=' . $_GET['cID'] . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save&tabIndex=tabAddressBook'));
@@ -330,9 +332,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&search=' . $_GET['search']));

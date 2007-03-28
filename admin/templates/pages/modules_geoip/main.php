@@ -26,8 +26,8 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_MODULES; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_geoip_modules'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -44,7 +44,7 @@
     $class = substr($file['name'], 0, strrpos($file['name'], '.'));
 
     if (class_exists('osC_GeoIP_' . $class)) {
-      $osC_Language->loadConstants('modules/geoip/' . $class . '.php');
+      $osC_Language->loadIniFile('modules/geoip/' . $class . '.php');
 
       $module = 'osC_GeoIP_' . $class;
       $module = new $module();
@@ -57,17 +57,17 @@
 <?php
       if ( $module->isInstalled() ) {
         if ( sizeof($module->getKeys()) > 0 ) {
-          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=save'), osc_icon('configure.png', IMAGE_EDIT)) . '&nbsp;';
+          echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=save'), osc_icon('edit.png')) . '&nbsp;';
         } else {
           echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;';
         }
 
-        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=info'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=uninstall'), osc_icon('stop.png', IMAGE_MODULE_REMOVE));
+        echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
+             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=uninstall'), osc_icon('uninstall.png'));
       } else {
         echo osc_image('images/pixel_trans.gif', '', '16', '16') . '&nbsp;' .
-             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=info'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=install'), osc_icon('play.png', IMAGE_MODULE_INSTALL));
+             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
+             osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $class . '&action=install'), osc_icon('install.png'));
       }
 ?>
 
@@ -84,6 +84,6 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('info.png', IMAGE_INFO) . '&nbsp;' . IMAGE_INFO . '&nbsp;&nbsp;' . osc_icon('configure.png', IMAGE_EDIT) . '&nbsp;' . IMAGE_EDIT . '&nbsp;&nbsp;' . osc_icon('play.png', IMAGE_MODULE_INSTALL) . '&nbsp;' . IMAGE_MODULE_INSTALL .  '&nbsp;&nbsp;' . osc_icon('stop.png', IMAGE_MODULE_REMOVE) . '&nbsp;' . IMAGE_MODULE_REMOVE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('info.png') . '&nbsp;' . $osC_Language->get('icon_info') . '&nbsp;&nbsp;' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('install.png') . '&nbsp;' . $osC_Language->get('icon_install') .  '&nbsp;&nbsp;' . osc_icon('uninstall.png') . '&nbsp;' . $osC_Language->get('icon_uninstall'); ?></td>
   </tr>
 </table>

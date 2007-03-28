@@ -23,7 +23,7 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   $Qlog = $osC_Database->query('select email_address, date_sent from :table_newsletters_log where newsletters_id = :newsletters_id order by date_sent desc');
@@ -35,7 +35,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qlog->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td><?php echo $Qlog->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
     <td align="right"><?php echo $Qlog->getBatchPageLinks('lpage', $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $_GET['nID'], false); ?></td>
   </tr>
 </table>
@@ -43,11 +43,16 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_EMAIL_ADDRESS; ?></th>
-      <th><?php echo TABLE_HEADING_SENT; ?></th>
-      <th><?php echo TABLE_HEADING_DATE_SENT; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_email_addresses'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_sent'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_date_sent'); ?></th>
     </tr>
   </thead>
+  <tfoot>
+    <tr>
+      <th colspan="3">&nbsp;</th>
+    </tr>
+  </tfoot>
   <tbody>
 
 <?php

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'server_info',
         $_group = 'tools',
         $_icon = 'server_info.png',
-        $_title = ACCESS_SERVER_INFO_TITLE,
+        $_title,
         $_sort_order = 900;
+
+    function osC_Access_Server_info() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_server_info_title');
+    }
   }
 ?>

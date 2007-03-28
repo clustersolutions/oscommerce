@@ -21,7 +21,7 @@
     function osC_Statistics_Orders() {
       global $osC_Language, $osC_Currencies;
 
-      $osC_Language->loadConstants('modules/statistics/orders.php');
+      $osC_Language->loadIniFile('modules/statistics/orders.php');
 
       if ( !isset($osC_Currencies) ) {
         if ( !class_exists('osC_Currencies') ) {
@@ -38,16 +38,20 @@
 // Private methods
 
     function _setIcon() {
-      $this->_icon = osc_icon('orders.png', ICON_ORDERS);
+      $this->_icon = osc_icon('orders.png');
     }
 
     function _setTitle() {
-      $this->_title = MODULE_STATISTICS_ORDERS_TITLE;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('statistics_orders_title');
     }
 
     function _setHeader() {
-      $this->_header = array(MODULE_STATISTICS_ORDERS_TABLE_HEADING_CUSTOMER,
-                             MODULE_STATISTICS_ORDERS_TABLE_HEADING_TOTAL);
+      global $osC_Language;
+
+      $this->_header = array($osC_Language->get('statistics_orders_table_heading_customers'),
+                             $osC_Language->get('statistics_orders_table_heading_total'));
     }
 
     function _setData() {

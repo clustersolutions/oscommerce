@@ -24,7 +24,9 @@
 /* Class constructor */
 
     function osC_Newsletter_email($title = '', $content = '', $newsletter_id = '') {
-      $this->_title = MODULE_NEWSLETTER_EMAIL_TITLE;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('newsletter_email_title');
 
       $this->_newsletter_title = $title;
       $this->_newsletter_content = $content;
@@ -46,10 +48,10 @@
     }
 
     function showAudienceSelectionForm() {
-      global $osC_Database, $osC_Template;
+      global $osC_Database, $osC_Language, $osC_Template;
 
       $customers_array = array(array('id' => '***',
-                                     'text' => MODULE_NEWSLETTER_EMAIL_TEXT_ALL_CUSTOMERS));
+                                     'text' => $osC_Language->get('newsletter_email_all_customers')));
 
       $Qcustomers = $osC_Database->query('select customers_id, customers_firstname, customers_lastname, customers_email_address from :table_customers order by customers_lastname');
       $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
@@ -64,14 +66,14 @@
 
       $audience_form = '<form name="customers" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
                        '  <p align="center">' . osc_draw_pull_down_menu('customer', $customers_array, null, 'size="20" style="width: 100%;"') . '</p>' .
-                       '  <p align="right">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . BUTTON_OK . '" class="operationButton" />&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>' .
+                       '  <p align="right">' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_ok') . '" class="operationButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>' .
                        '</form>';
 
       return $audience_form;
     }
 
     function showConfirmation() {
-      global $osC_Database, $osC_Template;
+      global $osC_Database, $osC_Language, $osC_Template;
 
       if ( isset($_POST['customer']) && !empty($_POST['customer']) ) {
         $Qcustomers = $osC_Database->query('select count(customers_id) as total from :table_customers c left join :table_newsletters_log nl on (c.customers_email_address = nl.email_address and nl.newsletters_id = :newsletters_id) where nl.email_address is null');
@@ -89,7 +91,7 @@
         $this->_audience_size += $Qcustomers->valueInt('total');
       }
 
-      $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_EMAIL_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
+      $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf($osC_Language->get('newsletter_email_total_recipients'), $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
                              '<form name="confirm" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
@@ -98,18 +100,18 @@
       if ( $this->_audience_size > 0 ) {
         $confirmation_string .= osc_draw_hidden_field('customer', $_POST['customer']) .
                                 osc_draw_hidden_field('subaction', 'execute') .
-                                '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton" />&nbsp;';
+                                '<input type="submit" value="' . $osC_Language->get('button_send') . '" class="operationButton" />&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '\'" class="operationButton" />&nbsp;' .
-                              '<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\'" class="operationButton"/></p>' .
+      $confirmation_string .= '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '\'" class="operationButton" />&nbsp;' .
+                              '<input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\'" class="operationButton"/></p>' .
                               '</form>';
 
       return $confirmation_string;
     }
 
     function sendEmail() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $max_execution_time = 0.8 * (int)ini_get('max_execution_time');
       $time_start = explode(' ', PAGE_PARSE_START_TIME);
@@ -164,8 +166,7 @@
             $timer_total = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
 
             if ($timer_total > $max_execution_time) {
-              echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
-                   '<p>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&customer=' . $customer), TEXT_CONTINUE_MANUALLY) . '</p>' .
+              echo '<p><font color="#38BB68"><b>' . $osC_Language->get('sending_refreshing_page') . '</b></font></p>' .
                    '<META HTTP-EQUIV="refresh" content="2; URL=' . osc_href_link_admin(FILENAME_DEFAULT, 'newsletters&page=' . $_GET['page'] . '&nmID=' . $this->_newsletter_id . '&action=nmSendConfirm&customer=' . $customer) . '">';
               exit;
             }

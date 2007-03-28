@@ -23,16 +23,22 @@
       }
     }
 
-    function loadIniFile($filename, $comment = '#') {
-      $filename = basename($filename);
+    function loadIniFile($filename = null, $comment = '#') {
+      if ( is_null($filename) ) {
+        $contents = file('includes/languages/' . $this->_code . '.php');
+      } else {
+        if ( substr(realpath('includes/languages/' . $this->_code . '/' . $filename), 0, strlen(realpath('includes/languages/' . $this->_code))) != realpath('includes/languages/' . $this->_code) ) {
+          return array();
+        }
 
-      if ( !file_exists('includes/languages/' . $this->_code . '/' . $filename) ) {
-        return array();
+        if ( !file_exists('includes/languages/' . $this->_code . '/' . $filename) ) {
+          return array();
+        }
+
+        $contents = file('includes/languages/' . $this->_code . '/' . $filename);
       }
 
       $ini_array = array();
-
-      $contents = file('includes/languages/' . $this->_code . '/' . $filename);
 
       foreach ( $contents as $line ) {
         $line = trim($line);
@@ -782,6 +788,10 @@
       }
 
       return osc_image('../images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
+    }
+
+    function isDefined($key) {
+      return isset($this->_definitions[$key]);
     }
   }
 ?>

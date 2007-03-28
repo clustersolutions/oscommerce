@@ -21,26 +21,37 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_ObjectInfo->get('manufacturers_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('manufacturers_name'); ?></div>
 <div class="infoBoxContent">
   <form name="mDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&mID=' . $osC_ObjectInfo->get('manufacturers_id') . '&action=delete'); ?>" method="post">
 
-  <p><?php echo TEXT_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_manufacturer'); ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('manufacturers_name') . '</b>'; ?></p>
+  <p>
+
+<?php
+  $manufacturer_name = $osC_ObjectInfo->get('manufacturers_name');
+
+  if ( $osC_ObjectInfo->get('products_count') > 0 ) {
+    $manufacturer_name .= ' (' . sprintf($osC_Language->get('total_entries'), $osC_ObjectInfo->get('products_count')) . ')';
+  }
+
+  echo '<b>' . $manufacturer_name . '</b>';
+?>
+
+  </p>
 
 <?php
   if ( !osc_empty($osC_ObjectInfo->get('manufacturers_image')) ) {
-    echo '  <p>' . osc_draw_checkbox_field('delete_image', null, true) . ' ' . TEXT_DELETE_IMAGE . '</p>';
+    echo '  <p>' . osc_draw_checkbox_field('delete_image', null, true) . ' ' . $osC_Language->get('field_delete_image') . '</p>';
   }
 
   if ( $osC_ObjectInfo->get('products_count') > 0 ) {
-    echo '  <p>' . osc_draw_checkbox_field('delete_products') . ' ' . TEXT_DELETE_PRODUCTS . '</p>' .
-         '  <p>' . sprintf(TEXT_DELETE_WARNING_PRODUCTS, $osC_ObjectInfo->get('products_count')) . '</p>';
+    echo '  <p>' . osc_draw_checkbox_field('delete_products') . ' ' . $osC_Language->get('field_delete_products') . '</p>';
   }
 ?>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

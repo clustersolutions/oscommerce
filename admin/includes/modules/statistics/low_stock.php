@@ -21,7 +21,7 @@
     function osC_Statistics_Low_Stock() {
       global $osC_Language;
 
-      $osC_Language->loadConstants('modules/statistics/low_stock.php');
+      $osC_Language->loadIniFile('modules/statistics/low_stock.php');
 
       $this->_setIcon();
       $this->_setTitle();
@@ -30,16 +30,20 @@
 // Private methods
 
     function _setIcon() {
-      $this->_icon = osc_icon('products.png', ICON_PRODUCTS);
+      $this->_icon = osc_icon('products.png');
     }
 
     function _setTitle() {
-      $this->_title = MODULE_STATISTICS_LOW_STOCK_TITLE;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('statistics_low_stock_title');
     }
 
     function _setHeader() {
-      $this->_header = array(MODULE_STATISTICS_LOW_STOCK_TABLE_HEADING_PRODUCTS,
-                             MODULE_STATISTICS_LOW_STOCK_TABLE_HEADING_LEVEL);
+      global $osC_Language;
+
+      $this->_header = array($osC_Language->get('statistics_low_stock_table_heading_products'),
+                             $osC_Language->get('statistics_low_stock_table_heading_level'));
     }
 
     function _setData() {

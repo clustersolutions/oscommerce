@@ -1,45 +1,32 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Reviews
 
-  Copyright (c) 2004 osCommerce
+table_heading_products = Products
+table_heading_language = Language
+table_heading_rating = Rating
+table_heading_date_added = Date Added
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+action_heading_batch_delete_reviews = Batch Delete Reviews
 
-define('HEADING_TITLE', 'Reviews');
+field_product = Product:
+field_author = Author:
+field_date_added = Date Added:
+field_review = Review:
+field_rating = Rating:
 
-define('TABLE_HEADING_PRODUCTS', 'Products');
-define('TABLE_HEADING_LANGUAGE', 'Language');
-define('TABLE_HEADING_RATING', 'Rating');
-define('TABLE_HEADING_DATE_ADDED', 'Date Added');
-define('TABLE_HEADING_STATUS', 'Status');
-define('TABLE_HEADING_ACTION', 'Action');
+rating_from_5_stars = %s of 5 Stars!
+rating_bad = Bad
+rating_good = Good
 
-define('ENTRY_PRODUCT', 'Product:');
-define('ENTRY_FROM', 'From:');
-define('ENTRY_DATE', 'Date:');
-define('ENTRY_REVIEW', 'Review:');
-define('ENTRY_REVIEW_TEXT', '<small><font color="#ff0000"><b>NOTE:</b></font></small>&nbsp;HTML is not translated!&nbsp;');
-define('ENTRY_RATING', 'Rating:');
+introduction_delete_review = Please verify the removal of this product review.
 
-define('TEXT_INFO_DELETE_REVIEW_INTRO', 'Are you sure you want to delete this review?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following reviews?');
-
-define('TEXT_INFO_DATE_ADDED', 'Date Added:');
-define('TEXT_INFO_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_INFO_IMAGE_NONEXISTENT', 'IMAGE DOES NOT EXIST');
-define('TEXT_INFO_REVIEW_AUTHOR', 'Author:');
-define('TEXT_INFO_REVIEW_RATING', 'Rating:');
-define('TEXT_INFO_REVIEW_READ', 'Read:');
-define('TEXT_INFO_REVIEW_SIZE', 'Size:');
-define('TEXT_INFO_PRODUCTS_AVERAGE_RATING', 'Average Rating:');
-
-define('TEXT_OF_5_STARS', '%s of 5 Stars!');
-define('TEXT_GOOD', '<small><font color="#ff0000"><b>GOOD</b></font></small>');
-define('TEXT_BAD', '<small><font color="#ff0000"><b>BAD</b></font></small>');
-define('TEXT_INFO_HEADING_DELETE_REVIEW', 'Delete Review');
-?>
+introduction_batch_delete_reviews = Please verify the removal of the following product reviews.

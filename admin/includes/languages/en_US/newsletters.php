@@ -1,39 +1,38 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Newsletter Manager
 
-  Copyright (c) 2004 osCommerce
+action_heading_new_newsletter = New Newsletter
+action_heading_batch_delete_newsletters = Batch Delete Newsletters
 
-  Released under the GNU General Public License
-*/
+table_heading_newsletters = Newsletters
+table_heading_size = Size
+table_heading_module = Module
+table_heading_sent = Sent
+table_heading_action = Action
+table_heading_email_addresses = E-Mail Addresses
+table_heading_sent = Sent
+table_heading_date_sent = Date Sent
 
-  define('HEADING_TITLE', 'Newsletter Manager');
+field_module = Module:
+field_title = Title:
+field_content = Content:
 
-  define('TABLE_HEADING_NEWSLETTERS', 'Newsletters');
-  define('TABLE_HEADING_SIZE', 'Size');
-  define('TABLE_HEADING_MODULE', 'Module');
-  define('TABLE_HEADING_SENT', 'Sent');
-  define('TABLE_HEADING_ACTION', 'Action');
-  define('TABLE_HEADING_EMAIL_ADDRESS', 'E-Mail Address');
-  define('TABLE_HEADING_DATE_SENT', 'Date Sent');
+sending_please_wait = Please wait.. sending newsletters. Please do not interrupt this process.
+sending_refreshing_page = Automatically refreshing page to avoid server timeout..
+sending_finalized = Finished. All newsletters have been sent!
 
-  define('TEXT_HEADING_NEW_EMAIL', 'New E-Mail');
+introduction_new_newsletter = Please fill in the following information for the new newsletter.
 
-  define('TEXT_NEWSLETTER_MODULE', 'Module:');
-  define('TEXT_NEWSLETTER_TITLE', 'Newsletter Title:');
-  define('TEXT_NEWSLETTER_CONTENT', 'Content:');
+introduction_edit_newsletter = Please make the necessary changes for this newsletter.
 
-  define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this newsletter?');
-  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following newsletters?');
+introduction_delete_newsletter = Please verify the removal of this newsletter.
 
-  define('TEXT_PLEASE_WAIT', 'Please wait .. sending newsletters ..<br /><br />Please do not interrupt this process!');
-  define('TEXT_REFRESHING_PAGE', 'Automatically refreshing page to avoid a server timeout ..');
-  define('TEXT_CONTINUE_MANUALLY', '.. or click here to continue if no redirection within 2 seconds occurs ..');
-  define('TEXT_FINISHED_SENDING_NEWSLETTERS', 'Finished sending newsletters!');
-
-  define('ERROR_NEWSLETTER_TITLE', 'Error: Newsletter title required');
-  define('ERROR_NEWSLETTER_MODULE', 'Error: Newsletter module required');
-?>
+introduction_batch_delete_newsletters = Please verify the removal of the following newsletters.

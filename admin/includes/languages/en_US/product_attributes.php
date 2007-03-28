@@ -1,38 +1,46 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Product Attributes
 
-  Copyright (c) 2004 osCommerce
+action_heading_new_attribute_group = New Attribute Group
+action_heading_batch_delete_attribute_groups = Batch Delete Attribute Groups
+action_heading_new_group_entry = New Group Entry
+action_heading_batch_delete_group_entries = Batch Delete Group Entries
 
-  Released under the GNU General Public License
-*/
+table_heading_attribute_groups = Attribute Groups
+table_heading_total_entries = Total Entries
+table_heading_action = Action
 
-  define('HEADING_TITLE', 'Product Attributes');
+table_heading_entries = Entries
 
-  define('TABLE_HEADING_ATTRIBUTE_GROUPS', 'Attribute Groups');
-  define('TABLE_HEADING_TOTAL_ENTRIES', 'Total Entries');
-  define('TABLE_HEADING_ACTION', 'Action');
-  define('TABLE_HEADING_ENTRIES', 'Entries');
+field_group_name = Name:
+field_group_entry_name = Name:
 
-  define('TEXT_INFO_HEADING_NEW_ATTRIBUTE_GROUP', 'New Attribute Group');
-  define('TEXT_INFO_HEADING_NEW_ATTRIBUTE_ENTRY', 'New Attribute Entry');
+total_entries = %s Entries
 
-  define('TEXT_INFO_ATTRIBUTE_GROUP_NAME', 'Attribute Group Name:');
-  define('TEXT_INFO_ATTRIBUTE_ENTRY_NAME', 'Attribute Entry Name:');
+introduction_new_attribute_group = Please fill in the following information for the new attribute group.
 
-  define('TEXT_INFO_INSERT_ATTRIBUTE_INTRO', 'Please enter the new Attribute Group information');
-  define('TEXT_INFO_DELETE_ATTRIBUTE_INTRO', 'Are you sure you want to delete this Attribute Group?');
-  define('TEXT_INFO_DELETE_ATTRIBUTE_BATCH_INTRO', 'Are you sure you want to delete these Attribute Groups?');
-  define('TEXT_INFO_INSERT_ATTRIBUTE_ENTRY_INTRO', 'Please enter the new Attribute Entry information');
-  define('TEXT_INFO_DELETE_ATTRIBUTE_ENTRY_INTRO', 'Are you sure you want to delete this Attribute Entry?');
-  define('TEXT_INFO_DELETE_ATTRIBUTE_ENTRY_BATCH_INTRO', 'Are you sure you want to delete these Attribute Entries?');
-  define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
+introduction_edit_attribute_group = Please make the necessary changes for this attribute group.
 
-  define('TEXT_INFO_DELETE_ATTRIBUTE_GROUP_PROHIBITED', 'Warning: This Attribute Group cannot be deleted as it is currently assigned to %s products.');
-  define('TEXT_INFO_DELETE_ATTRIBUTE_GROUP_WARNING', 'Warning: This Attribute Group has %s entries assigned which would also be deleted.');
+introduction_delete_attribute_group = Please verify the removal of this attribute group and its entries.
+delete_error_attribute_group_in_use = Error: This attribute group cannot be removed as it is currently assigned to %s products.
 
-  define('TEXT_INFO_DELETE_ATTRIBUTE_ENTRY_PROHIBITED', 'Warning: This Attribute Entry cannot be deleted as it is currently assigned to %s products.');
-?>
+introduction_batch_delete_attribute_groups = Please verify the removal of the following attribute groups and their entries.
+batch_delete_error_attribute_groups_in_use = Error: The following attribute groups cannot be removed as they are currently assigned to products.
+
+introduction_new_group_entry = Please fill in the following information for the new attribute group entry.
+
+introduction_edit_group_entry = Please make the necessary changes for this attribute group entry.
+
+introduction_delete_group_entry = Please verify the removal of this attribute group entry.
+delete_error_group_entry_in_use = Error: This attribute group entry cannot be removed as it is currently assigned to %s products.
+
+introduction_batch_delete_group_entries = Please verify the removal of the following attribute group entries.
+batch_delete_error_group_entries_in_use = Error: The following attribute group entries cannot be removed as they are currently assigned to products.

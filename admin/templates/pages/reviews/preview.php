@@ -21,16 +21,16 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';">'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';">'; ?></p>
 
-<p><?php echo '<b>' . ENTRY_PRODUCT . '</b> ' . $osC_ObjectInfo->get('products_name') . '<br /><b>' . ENTRY_FROM . '</b> ' . osc_output_string_protected($osC_ObjectInfo->get('customers_name')) . '<br /><br /><b>' . ENTRY_DATE . '</b> ' . osC_DateTime::getShort($osC_ObjectInfo->get('date_added')); ?></p>
+<p><?php echo '<b>' . $osC_Language->get('field_product') . '</b> ' . $osC_ObjectInfo->get('products_name') . '<br /><b>' . $osC_Language->get('field_author') . '</b> ' . osc_output_string_protected($osC_ObjectInfo->get('customers_name')) . '<br /><br /><b>' . $osC_Language->get('field_date_added') . '</b> ' . osC_DateTime::getShort($osC_ObjectInfo->get('date_added')); ?></p>
 
-<p><?php echo '<b>' . ENTRY_REVIEW . '</b><br />' . nl2br(osc_output_string_protected($osC_ObjectInfo->get('reviews_text'))); ?></p>
+<p><?php echo '<b>' . $osC_Language->get('field_review') . '</b><br />' . nl2br(osc_output_string_protected($osC_ObjectInfo->get('reviews_text'))); ?></p>
 
-<p><?php echo '<b>' . ENTRY_RATING . '</b>&nbsp;' . osc_image('../images/stars_' . $osC_ObjectInfo->get('reviews_rating') . '.gif', sprintf(TEXT_OF_5_STARS, $osC_ObjectInfo->get('reviews_rating'))) . '&nbsp;[' . sprintf(TEXT_OF_5_STARS, $osC_ObjectInfo->get('reviews_rating')) . ']'; ?></p>
+<p><?php echo '<b>' . $osC_Language->get('field_rating') . '</b>&nbsp;' . osc_image('../images/stars_' . $osC_ObjectInfo->get('reviews_rating') . '.gif', sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating'))) . '&nbsp;[' . sprintf($osC_Language->get('rating_from_5_stars'), $osC_ObjectInfo->get('reviews_rating')) . ']'; ?></p>
 
 <?php
   if ( defined('SERVICE_REVIEW_ENABLE_MODERATION') && (SERVICE_REVIEW_ENABLE_MODERATION != -1) ) {
-    echo '<p align="right"><input type="button" value="' . IMAGE_APPROVE . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . IMAGE_REJECT . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
+    echo '<p align="right"><input type="button" value="' . $osC_Language->get('button_approve') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rApprove') . '\';"> <input type="button" value="' . $osC_Language->get('button_reject') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&rID=' . $_GET['rID'] . '&action=rReject') . '\';"></p>';
   }
 ?>

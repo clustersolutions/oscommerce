@@ -21,7 +21,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_ObjectInfo->get('weight_class_title'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('weight_class_title'); ?></div>
 <div class="infoBoxContent">
   <form name="wcDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&wcID=' . $osC_ObjectInfo->get('weight_class_id') . '&action=delete'); ?>" method="post">
 
@@ -33,22 +33,22 @@
 
   if ( ( $osC_ObjectInfo->get('weight_class_id') == SHIPPING_WEIGHT_UNIT ) || ( $Qcheck->valueInt('total') > 0 ) ) {
     if ( $osC_ObjectInfo->get('weight_class_id') == SHIPPING_WEIGHT_UNIT ) {
-      echo '  <p><b>' . TEXT_INFO_DELETE_PROHIBITED . '</b></p>';
+      echo '  <p><b>' . $osC_Language->get('delete_error_weight_class_prohibited') . '</b></p>';
     }
 
     if ( $Qcheck->valueInt('total') > 0 ) {
-      echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_PRODUCTS, $Qcheck->valueInt('total')) . '</b></p>';
+      echo '  <p><b>' . sprintf($osC_Language->get('delete_error_weight_class_in_use'), $Qcheck->valueInt('total')) . '</b></p>';
     }
 
-    echo '  <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
+    echo '  <p align="center"><input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
 ?>
 
-  <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_weight_class'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('weight_class_title') . '</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

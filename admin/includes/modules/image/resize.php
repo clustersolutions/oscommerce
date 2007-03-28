@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,14 +24,16 @@
 
       parent::osC_Image_Admin();
 
-      $osC_Language->loadConstants('modules/image/resize.php');
+      $osC_Language->loadIniFile('modules/image/resize.php');
 
-      $this->_title = MODULE_IMAGE_RESIZE;
+      $this->_title = $osC_Language->get('images_resize_title');
     }
 
 // Public methods
 
     function getParameters() {
+      global $osC_Language;
+
       $groups = array();
       $groups_ids = array();
 
@@ -44,17 +46,19 @@
         }
       }
 
-      return array(array('key' => MODULE_IMAGE_RESIZE_PROCESS_GROUPS,
+      return array(array('key' => $osC_Language->get('images_resize_field_groups'),
                          'field' => osc_draw_pull_down_menu('groups[]', $groups, $groups_ids, 'multiple="multiple" size="5"')),
-                   array('key' => MODULE_IMAGE_RESIZE_OVERWRITE_IMAGES,
+                   array('key' => $osC_Language->get('images_resize_field_overwrite_images'),
                          'field' => osc_draw_checkbox_field('overwrite', '1')));
     }
 
 // Private methods
 
     function _setHeader() {
-      $this->_header = array(MODULE_IMAGE_RESIZE_GROUPS,
-                             MODULE_IMAGE_RESIZE_NUMBER_OF_IMAGES);
+      global $osC_Language;
+
+      $this->_header = array($osC_Language->get('images_resize_table_heading_groups'),
+                             $osC_Language->get('images_resize_table_heading_total_resized'));
     }
 
     function _setData() {

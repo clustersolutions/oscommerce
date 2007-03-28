@@ -21,7 +21,7 @@
     function osC_Statistics_Products_Purchased() {
       global $osC_Language;
 
-      $osC_Language->loadConstants('modules/statistics/products_purchased.php');
+      $osC_Language->loadIniFile('modules/statistics/products_purchased.php');
 
       $this->_setIcon();
       $this->_setTitle();
@@ -30,16 +30,20 @@
 // Private methods
 
     function _setIcon() {
-      $this->_icon = osc_icon('products.png', ICON_PRODUCTS);
+      $this->_icon = osc_icon('products.png');
     }
 
     function _setTitle() {
-      $this->_title = MODULE_STATISTICS_PRODUCTS_PURCHASED_TITLE;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('statistics_products_purchased_title');
     }
 
     function _setHeader() {
-      $this->_header = array(MODULE_STATISTICS_PRODUCTS_PURCHASED_TABLE_HEADING_PRODUCTS,
-                             MODULE_STATISTICS_PRODUCTS_PURCHASED_TABLE_HEADING_PURCHASED);
+      global $osC_Language;
+
+      $this->_header = array($osC_Language->get('statistics_products_purchased_table_heading_products'),
+                             $osC_Language->get('statistics_products_purchased_table_heading_total'));
     }
 
     function _setData() {

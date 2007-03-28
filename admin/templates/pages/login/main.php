@@ -13,7 +13,7 @@
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . $osC_Language->get('action_heading_login'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('people.png') . ' ' . $osC_Language->get('action_heading_login'); ?></div>
 <div class="infoBoxContent">
   <form name="login" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=process'); ?>" method="post">
 
@@ -30,7 +30,7 @@
     </tr>
   </table>
 
-  <p align="center"><?php echo '<input type="submit" value="' . IMAGE_LOGIN . '" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="submit" value="' . $osC_Language->get('button_login') . '" class="operationButton" />'; ?></p>
 
   </form>
 </div>

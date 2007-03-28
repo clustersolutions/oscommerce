@@ -9,7 +9,7 @@
 
 heading_title = Credit Card Types
 
-table_heading_name = Name
+table_heading_credit_cards = Credit Cards
 table_heading_sort_order = Sort Order
 table_heading_action = Action
 

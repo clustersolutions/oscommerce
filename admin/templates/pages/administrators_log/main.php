@@ -11,7 +11,7 @@
 */
 
   $modules_array = array(array('id' => '',
-                               'text' => '-- All --'));
+                               'text' => $osC_Language->get('filter_all')));
 
   foreach ( $_SESSION['admin']['access'] as $module ) {
     $modules_array[] = array('id' => $module,
@@ -20,7 +20,7 @@
   }
 
   $admins_array = array(array('id' => '',
-                              'text' => '-- All --'));
+                              'text' => $osC_Language->get('filter_all')));
 
   $Qadmins = $osC_Database->query('select id, user_name from :table_administrators order by user_name');
   $Qadmins->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
@@ -43,8 +43,8 @@
 <div align="right">
   <form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?>
 
-  <?php echo TEXT_MODULES . ' ' . osc_draw_pull_down_menu('fm', $modules_array); ?>
-  <?php echo TEXT_USERS . ' ' . osc_draw_pull_down_menu('fu', $admins_array); ?>
+  <?php echo $osC_Language->get('operation_title_filter_modules') . ' ' . osc_draw_pull_down_menu('fm', $modules_array); ?>
+  <?php echo $osC_Language->get('operation_title_filter_users') . ' ' . osc_draw_pull_down_menu('fu', $admins_array); ?>
 
   <input type="submit" value="GO" class="operationButton" />
 
@@ -78,7 +78,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qlog->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td><?php echo $Qlog->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
     <td align="right"><?php echo $Qlog->getBatchPageLinks('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'], false); ?></td>
   </tr>
 </table>
@@ -88,18 +88,18 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_MODULE; ?></th>
-      <th><?php echo TABLE_HEADING_ID; ?></th>
-      <th><?php echo TABLE_HEADING_TYPE; ?></th>
-      <th><?php echo TABLE_HEADING_USER; ?></th>
-      <th><?php echo TABLE_HEADING_DATE; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_module'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_id'); ?></th>
+      <th><?php echo $osC_Language->get('table_headng_type'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_user'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_date'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="6"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="6"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -110,7 +110,7 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td onclick="document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_image('images/icons/folder.gif', ICON_FOLDER) . '&nbsp;' . $Qlog->value('module') . ' (' . $Qlog->valueInt('total') . ')'); ?></td>
+      <td onclick="document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qlog->valueInt('id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('folder.png') . '&nbsp;' . $Qlog->value('module') . ' (' . $Qlog->valueInt('total') . ')'); ?></td>
       <td align="center"><?php echo $Qlog->valueInt('module_id'); ?></td>
       <td align="center"><?php echo $Qlog->valueProtected('module_action'); ?></td>
       <td align="right"><?php echo $Qlog->valueProtected('user_name'); ?></td>
@@ -118,8 +118,8 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu'] . '&lID=' . $Qlog->valueInt('id') . '&action=delete'), osc_icon('trash.png'));
 ?>
 
       </td>
@@ -137,7 +137,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('info.png', IMAGE_INFO) . '&nbsp;' . IMAGE_INFO . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('info.png') . '&nbsp;' . $osC_Language->get('icon_info') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash') ; ?></td>
     <td align="right"><?php echo $Qlog->getBatchPagesPullDownMenu('page', $osC_Template->getModule() . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']); ?></td>
   </tr>
 </table>

@@ -14,16 +14,16 @@
     include('includes/classes/summary.php');
   }
 
-  if ( !defined('MODULE_SUMMARY_PRODUCTS_TITLE') ) {
-    $osC_Language->loadConstants('modules/summary/products.php');
-  }
-
   class osC_Summary_products extends osC_Summary {
 
 /* Class constructor */
 
     function osC_Summary_products() {
-      $this->_title = MODULE_SUMMARY_PRODUCTS_TITLE;
+      global $osC_Language;
+
+      $osC_Language->loadIniFile('modules/summary/products.php');
+
+      $this->_title = $osC_Language->get('summary_products_title');
       $this->_title_link = osc_href_link_admin(FILENAME_DEFAULT, 'products');
 
       if ( osC_Access::hasAccess('products') ) {
@@ -47,10 +47,10 @@
       $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                      '  <thead>' .
                      '    <tr>' .
-                     '      <th>' . MODULE_SUMMARY_PRODUCTS_HEADING_PRODUCTS . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_PRODUCTS_HEADING_PRICE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_PRODUCTS_HEADING_DATE . '</th>' .
-                     '      <th>' . MODULE_SUMMARY_PRODUCTS_HEADING_STATUS . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_products_table_heading_products') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_products_table_heading_price') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_products_table_heading_date') . '</th>' .
+                     '      <th>' . $osC_Language->get('summary_products_table_heading_status') . '</th>' .
                      '    </tr>' .
                      '  </thead>' .
                      '  <tbody>';
@@ -63,7 +63,7 @@
 
       while ( $Qproducts->next() ) {
         $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
-                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $Qproducts->valueInt('products_id') . '&action=save'), osc_icon('products.png', ICON_PREVIEW) . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
+                        '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products&pID=' . $Qproducts->valueInt('products_id') . '&action=save'), osc_icon('products.png') . '&nbsp;' . $Qproducts->value('products_name')) . '</td>' .
                         '      <td>' . $osC_Currencies->format($Qproducts->value('products_price')) . '</td>' .
                         '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .
                         '      <td align="center">' . osc_icon(($Qproducts->valueInt('products_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .

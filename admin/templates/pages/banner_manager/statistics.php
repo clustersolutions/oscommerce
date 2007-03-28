@@ -34,11 +34,11 @@
   }
 
   $type_array = array(array('id' => 'daily',
-                            'text' => STATISTICS_TYPE_DAILY),
+                            'text' => $osC_Language->get('section_daily')),
                       array('id' => 'monthly',
-                            'text' => STATISTICS_TYPE_MONTHLY),
+                            'text' => $osC_Language->get('section_monthly')),
                       array('id' => 'yearly',
-                            'text' => STATISTICS_TYPE_YEARLY));
+                            'text' => $osC_Language->get('section_yearly')));
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
@@ -63,26 +63,26 @@
 <p align="right">
 
 <?php
-  echo TITLE_TYPE . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onchange="this.form.submit();"') . ' ';
+  echo $osC_Language->get('operation_heading_type') . ' ' . osc_draw_pull_down_menu('type', $type_array, 'daily', 'onchange="this.form.submit();"') . ' ';
 
   switch ( $type ) {
     case 'yearly':
       break;
 
     case 'monthly':
-      echo TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
+      echo $osC_Language->get('operation_heading_year') . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
 
       break;
 
     case 'daily':
     default:
-      echo TITLE_MONTH . ' ' . osc_draw_pull_down_menu('month', $months_array, date('n'), 'onchange="this.form.submit();"') . ' ' .
-           TITLE_YEAR . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
+      echo $osC_Language->get('operation_heading_month') . ' ' . osc_draw_pull_down_menu('month', $months_array, date('n'), 'onchange="this.form.submit();"') . ' ' .
+           $osC_Language->get('operation_heading_year') . ' ' . osc_draw_pull_down_menu('year', $years_array, date('Y'), 'onchange="this.form.submit();"');
 
       break;
   }
 
-  echo '&nbsp;<input type="button" value="' . IMAGE_BACK . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';" />';
+  echo '&nbsp;<input type="button" value="' . $osC_Language->get('button_back') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&bID=' . $_GET['bID']) . '\';" />';
 ?>
 
 </p>
@@ -120,9 +120,9 @@
 <table border="0" width="600" cellspacing="0" cellpadding="2" class="dataTable" align="center">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_SOURCE; ?></th>
-      <th><?php echo TABLE_HEADING_VIEWS; ?></th>
-      <th><?php echo TABLE_HEADING_CLICKS; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_source'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_views'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_clicks'); ?></th>
     </tr>
   </thead>
   <tbody>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'image_groups',
         $_group = 'definitions',
         $_icon = 'status.png',
-        $_title = ACCESS_IMAGE_GROUPS_TITLE,
+        $_title,
         $_sort_order = 300;
+
+    function osC_Access_Image_groups() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_image_groups_title');
+    }
   }
 ?>

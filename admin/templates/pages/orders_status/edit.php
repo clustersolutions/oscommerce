@@ -21,15 +21,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('orders_status_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('orders_status_name'); ?></div>
 <div class="infoBoxContent">
   <form name="osEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $osC_ObjectInfo->get('orders_status_id') . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_order_status'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_ORDERS_STATUS_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_name') . '</b>'; ?></td>
       <td width="60%">
 
 <?php
@@ -57,7 +57,7 @@
 ?>
 
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_SET_DEFAULT . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_set_as_default') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_checkbox_field('default'); ?></td>
     </tr>
 
@@ -67,7 +67,7 @@
 
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

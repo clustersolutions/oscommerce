@@ -19,15 +19,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_WEIGHT_CLASS; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_weight_class'); ?></div>
 <div class="infoBoxContent">
   <form name="wcNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_weight_class'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_WEIGHT_CLASS_TITLE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_title_and_code') . '</b>'; ?></td>
       <td width="60%">
 
 <?php
@@ -39,7 +39,7 @@
       </td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_HEADING_EDIT_WEIGHT_RULES . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_rules') . '</b>'; ?></td>
       <td width="60%">
         <table border="0" cellspacing="0" cellpadding="2">
 
@@ -65,12 +65,12 @@
       </td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_SET_DEFAULT . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_set_as_default') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_checkbox_field('default'); ?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

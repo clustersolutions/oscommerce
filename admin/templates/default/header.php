@@ -22,9 +22,9 @@
 
 <?php
   if ( $request_type == 'SSL' ) {
-    echo sprintf(BOX_CONNECTION_PROTECTED, (isset($_SERVER['SSL_CIPHER_ALGKEYSIZE']) ? $_SERVER['SSL_CIPHER_ALGKEYSIZE'] . '-bit' : '<i>' . BOX_CONNECTION_UNKNOWN . '</i>')) . osc_icon('locked.png', ICON_LOCKED);
+    echo sprintf($osC_Language->get('ssl_protection'), (isset($_SERVER['SSL_CIPHER_ALGKEYSIZE']) ? $_SERVER['SSL_CIPHER_ALGKEYSIZE'] . '-bit' : '<i>n/a</i>')) . osc_icon('locked.png');
   } else {
-    echo BOX_CONNECTION_UNPROTECTED . ' ' . osc_icon('unlocked.png', ICON_UNLOCKED);
+    echo $osC_Language->get('ssl_unprotected') . ' ' . osc_icon('unlocked.png');
   }
 ?>
 
@@ -51,7 +51,7 @@
     ksort($links);
 
     foreach ( $links as $link ) {
-      echo '        <li><span>' . osc_icon($link['icon']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a>';
+      echo '        <li><span>' . osc_icon($link['icon'], $link['title']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a>';
 
       if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
         echo '          <ul>';
@@ -71,9 +71,9 @@
          '    <li></li>';
   }
 
-  echo '    <li><span></span><span>' . HEADER_TITLE_HELP . '</span>' .
+  echo '    <li><span></span><span>' . $osC_Language->get('header_title_help') . '</span>' .
        '      <ul>' .
-       '        <li><span>' . osc_icon('oscommerce.png') . '</span><span>' . HEADER_TITLE_OSCOMMERCE_SUPPORT_SITE . '</span>' .
+       '        <li><span>' . osc_icon('oscommerce.png') . '</span><span>' . $osC_Language->get('header_title_oscommerce_support_site') . '</span>' .
        '          <ul>' .
        '            <li><span>' . osc_icon('oscommerce.png') . '</span><a href="http://www.oscommerce.com" target="_blank">Support Site</a></li>' .
        '            <li><span>' . osc_icon('log.png') . '</span><a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a></li>' .
@@ -82,7 +82,7 @@
        '            <li><span>' . osc_icon('configure.png') . '</span><a href="http://www.oscommerce.com/community/bugs" target="_blank">Bug Reporter</a></li>' .
        '          </ul>' .
        '        </li>' .
-       '        <li><span>' . osc_icon('locale.png') . '</span><span>' . HEADER_TITLE_LANGUAGES . '</span>' .
+       '        <li><span>' . osc_icon('locale.png') . '</span><span>' . $osC_Language->get('header_title_languages') . '</span>' .
        '          <ul>';
 
   foreach ( $osC_Language->getAll() as $l ) {
@@ -91,13 +91,13 @@
 
   echo '          </ul>' .
        '        </li>' .
-       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . HEADER_TITLE_ONLINE_CATALOG . '</a></li>' .
+       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . $osC_Language->get('header_title_online_catalog') . '</a></li>' .
        '      </ul>' .
        '    </li>';
 
   if ( isset($_SESSION['admin']) ) {
     echo '    <li></li>' .
-         '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . HEADER_TITLE_LOGOFF . '</a></li>';
+         '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . $osC_Language->get('header_title_logoff') . '</a></li>';
   }
 ?>
 

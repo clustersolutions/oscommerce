@@ -21,7 +21,7 @@
 /* Class constructor */
 
     function osC_Content_Templates_modules_layout() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
 
       if ( !isset($_GET['set']) ) {
         $_GET['set'] = '';
@@ -37,14 +37,14 @@
 
       switch ( $_GET['set'] ) {
         case 'content':
-          $this->_page_title = HEADING_TITLE_CONTENT_LAYOUT;
+          $this->_page_title = $osC_Language->get('heading_title_content');
 
           break;
 
         case 'boxes':
         default:
           $_GET['set'] = 'boxes';
-          $this->_page_title = HEADING_TITLE_BOXES_LAYOUT;
+          $this->_page_title = $osC_Language->get('heading_title_boxes');
 
           break;
       }
@@ -66,9 +66,9 @@
                             'sort_order' => $_POST['sort_order']);
 
               if ( $this->_save((isset($_GET['lID']) && is_numeric($_GET['lID']) ? $_GET['lID'] : null), $data, $_GET['set']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter']));
@@ -81,9 +81,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( $this->_delete($_GET['lID'], $_GET['set']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter']));
@@ -106,9 +106,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter']));

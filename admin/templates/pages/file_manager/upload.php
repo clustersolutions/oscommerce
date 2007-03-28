@@ -19,7 +19,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_UPLOAD . ': ' . osc_output_string_protected($_SESSION['fm_directory']); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_upload_file'); ?></div>
 <div class="infoBoxContent">
 
 <?php
@@ -28,7 +28,9 @@
 
   <form name="fmUpload" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=upload'); ?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo TEXT_UPLOAD_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_upload_file'); ?></p>
+
+  <p><?php echo '<b>' . osc_output_string_protected($_SESSION['fm_directory']) . '</b>'; ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
@@ -37,7 +39,7 @@
 ?>
 
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_FILE_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_file') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_file_field('file_' . $i, true); ?></td>
     </tr>
 
@@ -47,7 +49,7 @@
 
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_UPLOAD . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_upload') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 
@@ -55,9 +57,9 @@
   } else {
 ?>
 
-  <p><?php echo sprintf(ERROR_DIRECTORY_NOT_WRITEABLE, $_SESSION['fm_directory']); ?></p>
+  <p><?php echo sprintf($osC_Language->get('upload_error_directory_not_writable'), $_SESSION['fm_directory']); ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

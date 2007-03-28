@@ -1,28 +1,23 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Server Information
 
-  Copyright (c) 2004 osCommerce
+field_server_host = Server Host:
+field_server_operating_system = Server OS:
+field_server_date = Server Date:
+field_server_up_time = Server Up Time:
+field_http_server = HTTP Server:
+field_php_version = PHP Version:
+field_database_host = Database Host:
+field_database_version = Database:
+field_database_date = Database Date:
+field_database_up_time = Database Up Time:
 
-  Released under the GNU General Public License
-*/
-
-  define('HEADING_TITLE', 'Server Information');
-
-  define('TITLE_SERVER_HOST', 'Server Host:');
-  define('TITLE_SERVER_OS', 'Server OS:');
-  define('TITLE_SERVER_DATE', 'Server Date:');
-  define('TITLE_SERVER_UP_TIME', 'Server Up Time:');
-  define('TITLE_HTTP_SERVER', 'HTTP Server:');
-  define('TITLE_PHP_VERSION', 'PHP Version:');
-  define('TITLE_ZEND_VERSION', 'Zend:');
-  define('TITLE_DATABASE_HOST', 'Database Host:');
-  define('TITLE_DATABASE', 'Database:');
-  define('TITLE_DATABASE_DATE', 'Datebase Date:');
-  define('TITLE_DATABASE_UP_TIME', 'Database Up Time:');
-
-  define('TEXT_MORE_INFORMATION', 'more info');
-?>
+more_information = more info

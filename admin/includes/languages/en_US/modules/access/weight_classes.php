@@ -1,14 +1,10 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
-
-  Released under the GNU General Public License
-*/
-
-define('ACCESS_WEIGHT_CLASSES_TITLE', 'Weight Classes');
-?>
+access_weight_classes_title = Weight Classes

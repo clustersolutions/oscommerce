@@ -1,22 +1,17 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Services
 
-  Copyright (c) 2004 osCommerce
+table_heading_service_modules = Service Modules
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+introduction_edit_service_module = Please make the necessary changes for this service module.
 
-define('HEADING_TITLE', 'Services');
-
-define('TABLE_HEADING_SERVICES', 'Services');
-define('TABLE_HEADING_STATUS', 'Status');
-define('TABLE_HEADING_ACTION', 'Action');
-
-define('TEXT_MODULE_DIRECTORY', 'Module Directory:');
-
-define('TEXT_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br /><br />(All module parameters would then be removed)');
-?>
+introduction_uninstall_service_module = Please verify the uninstallation of this service module.

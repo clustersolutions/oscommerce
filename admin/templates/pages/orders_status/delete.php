@@ -21,7 +21,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' ' . $osC_ObjectInfo->get('orders_status_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('orders_status_name'); ?></div>
 <div class="infoBoxContent">
   <form name="osDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&osID=' . $osC_ObjectInfo->get('orders_status_id') . '&action=delete'); ?>" method="post">
 
@@ -38,26 +38,26 @@
 
   if ( ( $osC_ObjectInfo->get('orders_status_id') == DEFAULT_ORDERS_STATUS_ID ) || ( $Qorders->valueInt('total') > 0)  || ( $Qhistory->valueInt('total') > 0 ) ) {
     if ( $osC_ObjectInfo->get('orders_status_id') == DEFAULT_ORDERS_STATUS_ID ) {
-      echo '  <p><b>' . TEXT_INFO_DELETE_PROHIBITED . '</b></p>';
+      echo '  <p><b>' . $osC_Language->get('delete_error_order_status_prohibited') . '</b></p>';
     }
 
     if ( $Qorders->valueInt('total') > 0 ) {
-      echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_ORDERS, $Qorders->valueInt('total')) . '</b></p>';
+      echo '  <p><b>' . sprintf($osC_Language->get('delete_error_order_status_in_use'), $Qorders->valueInt('total')) . '</b></p>';
     }
 
     if ( $Qhistory->valueInt('total') > 0 ) {
-      echo '  <p><b>' . sprintf(TEXT_INFO_DELETE_PROHIBITED_HISTORY, $Qhistory->valueInt('total')) . '</b></p>';
+      echo '  <p><b>' . sprintf($osC_Language->get('delete_error_order_status_used'), $Qhistory->valueInt('total')) . '</b></p>';
     }
 
-    echo '  <p align="center"><input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
+    echo '  <p align="center"><input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" /></p>';
   } else {
 ?>
 
-  <p><?php echo TEXT_INFO_DELETE_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_delete_order_status'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('orders_status_name') . '</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_DELETE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

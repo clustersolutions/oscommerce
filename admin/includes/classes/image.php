@@ -46,6 +46,14 @@
       @chmod(DIR_FS_CATALOG . DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image, 0777);
     }
 
+    function hasGDSupport() {
+      if ( imagetypes() & ( IMG_JPG || IMG_GIF || IMG_PNG ) ) {
+        return true;
+      }
+
+      return false;
+    }
+
     function resizeWithGD($image, $group_id) {
       $img_type = false;
 

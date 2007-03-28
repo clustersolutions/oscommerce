@@ -10,10 +10,12 @@
   Released under the GNU General Public License
 */
 
-  $categories_array = array(array('id' => '0', 'text' => TEXT_TOP));
+  $categories_array = array(array('id' => '0',
+                                  'text' => $osC_Language->get('top_category')));
 
   foreach ($osC_CategoryTree->getTree() as $value) {
-    $categories_array[] = array('id' => $value['id'], 'text' => $value['title']);
+    $categories_array[] = array('id' => $value['id'],
+                                'text' => $value['title']);
   }
 ?>
 
@@ -25,11 +27,11 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Batch Copy'; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('copy.png') . ' ' . $osC_Language->get('action_heading_batch_copy_products'); ?></div>
 <div class="infoBoxContent">
   <form name="pDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . '&action=batchCopy'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_COPY_TO_BATCH_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_batch_copy_products'); ?></p>
 
 <?php
   $Qproducts = $osC_Database->query('select products_id, products_name from :table_products_description where products_id in (":products_id") and language_id = :language_id order by products_name');
@@ -51,11 +53,11 @@
   echo '<p>' . $names_string . '</p>';
 ?>
 
-  <p><?php echo TEXT_CATEGORIES . '<br />' . osc_draw_pull_down_menu('new_category_id', $categories_array); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_categories') . '</b><br />' . osc_draw_pull_down_menu('new_category_id', $categories_array); ?></p>
 
-  <p><?php echo TEXT_HOW_TO_COPY . '<br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => TEXT_COPY_AS_LINK), array('id' => 'duplicate', 'text' => TEXT_COPY_AS_DUPLICATE)), 'link', null, '<br />'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_copy_method') . '</b><br />' . osc_draw_radio_field('copy_as', array(array('id' => 'link', 'text' => $osC_Language->get('copy_method_link')), array('id' => 'duplicate', 'text' => $osC_Language->get('copy_method_duplicate'))), 'link', null, '<br />'); ?></p>
 
-  <p align="center"><?php echo '<input type="submit" value="' . IMAGE_COPY . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="submit" value="' . $osC_Language->get('button_copy') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

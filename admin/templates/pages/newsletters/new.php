@@ -18,7 +18,7 @@
   foreach ( $osC_DirectoryListing->getFiles() as $file ) {
     $module = substr($file['name'], 0, strrpos($file['name'], '.'));
 
-    $osC_Language->loadConstants('modules/newsletters/' . $file['name']);
+    $osC_Language->loadIniFile('modules/newsletters/' . $file['name']);
     include('includes/modules/newsletters/' . $file['name']);
 
     $newsletter_module_class = 'osC_Newsletter_' . $module;
@@ -37,29 +37,31 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_HEADING_NEW_EMAIL; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_newsletter'); ?></div>
 <div class="infoBoxContent">
   <form name="newsletter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=save'); ?>" method="post">
 
+  <p><?php echo $osC_Language->get('introduction_new_newsletter'); ?></p>
+
   <table border="0" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_NEWSLETTER_MODULE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_module') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_pull_down_menu('module', $modules_array); ?></td>
     </tr>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_NEWSLETTER_TITLE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_title') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('title'); ?></td>
     </tr>
     <tr>
-      <td width="40%" valign="top"><?php echo '<b>' . TEXT_NEWSLETTER_CONTENT . '</b>'; ?></td>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_content') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_textarea_field('content', null, 60, 20, 'style="width: 100%;"'); ?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

@@ -9,7 +9,7 @@
 
 heading_title = Currencies
 
-table_heading_name = Currency
+table_heading_currencies = Currencies
 table_heading_code = Code
 table_heading_value = Value
 table_heading_example = Example

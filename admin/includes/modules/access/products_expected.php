@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'products_expected',
         $_group = 'content',
         $_icon = 'date.png',
-        $_title = ACCESS_PRODUCTS_EXPECTED_TITLE,
+        $_title,
         $_sort_order = 700;
+
+    function osC_Access_Products_expected() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_products_expected_title');
+    }
   }
 ?>

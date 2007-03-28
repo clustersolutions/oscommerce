@@ -1,214 +1,113 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+administration_title = osCommerce Administration Tool
 
-  Copyright (c) 2007 osCommerce
+header_title_help = Help
+header_title_oscommerce_support_site = osCommerce Support Site
+header_title_online_catalog = Online Catalog
+header_title_languages = Languages
+header_title_logoff = Logoff
 
-  Released under the GNU General Public License
-*/
+ssl_protection = You are protected by a %s secure SSL connection.
+ssl_unprotected = You are not protected by a secure SSL connection.
 
-// page title
-define('TITLE', 'osCommerce Administration Tool');
+gender_male = Male
+gender_female = Female
 
-// header text in includes/header.php
-define('HEADER_TITLE_HELP', 'Help');
-define('HEADER_TITLE_OSCOMMERCE_SUPPORT_SITE', 'osCommerce Support Site');
-define('HEADER_TITLE_ONLINE_CATALOG', 'Online Catalog');
-define('HEADER_TITLE_LANGUAGES', 'Languages');
-define('HEADER_TITLE_LOGOFF', 'Logoff');
+default_entry = default
 
-define('BOX_CONNECTION_PROTECTED', 'You are protected by a %s secure SSL connection.');
-define('BOX_CONNECTION_UNPROTECTED', 'You are <font color="#ff0000">not</font> protected by a secure SSL connection.');
-define('BOX_CONNECTION_UNKNOWN', 'unknown');
+parameter_true = True
+parameter_false = False
+parameter_optional = Optional
+parameter_none = -- None --
 
-// text for gender
-define('MALE', 'Male');
-define('FEMALE', 'Female');
+table_action_legend = Legend
+batch_results_number_of_entries = Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> entries)
 
-// text for date of birth example
-define('DOB_FORMAT_STRING', 'mm/dd/yyyy');
+button_approve = Approve
+button_back = Back
+button_backup = Backup
+button_cancel = Cancel
+button_copy = Copy
+button_delete = Delete
+button_execute = Execute
+button_export = Export
+button_import = Import
+button_insert = Insert
+button_login = Login
+button_move = Move
+button_new_file = New File
+button_new_folder = New Folder
+button_ok = OK
+button_orders_invoice = Invoice
+button_orders_packaging_slip = Packaging Slip
+button_reject = Reject
+button_restore = Restore
+button_retry = Retry
+button_save = Save
+button_send = Send
+button_send_to_server = Send to Server
+button_uninstall = Uninstall
+button_update = Update
+button_update_currency_exchange_rates = Update Currency Exchange Rates
+button_upload = Upload
 
-// javascript messages
-define('JS_ERROR', 'Errors have occured during the process of your form!\nPlease make the following corrections:\n\n');
-define('JS_OPTIONS_VALUE_PRICE', '* The new product atribute needs a price value\n');
-define('JS_OPTIONS_VALUE_PRICE_PREFIX', '* The new product atribute needs a price prefix\n');
-define('JS_PRODUCTS_NAME', '* The new product needs a name\n');
-define('JS_PRODUCTS_DESCRIPTION', '* The new product needs a description\n');
-define('JS_PRODUCTS_PRICE', '* The new product needs a price value\n');
-define('JS_PRODUCTS_WEIGHT', '* The new product needs a weight value\n');
-define('JS_PRODUCTS_QUANTITY', '* The new product needs a quantity value\n');
-define('JS_PRODUCTS_MODEL', '* The new product needs a model value\n');
-define('JS_PRODUCTS_IMAGE', '* The new product needs an image value\n');
-define('JS_SPECIALS_PRODUCTS_PRICE', '* A new price for this product needs to be set\n');
-define('JS_ORDER_DOES_NOT_EXIST', 'Order Number %s does not exist!');
+icon_banner_preview = Preview
+icon_checkbox_ticked =
+icon_checkbox_crossed =
+icon_copy = Copy
+icon_default = Default
+icon_default_grey = Default
+icon_download = Download
+icon_edit = Edit
+icon_email_send = Send E-Mail
+icon_export = Export
+icon_file = File
+icon_folder = Folder
+icon_info = Information
+icon_install = Install
+icon_locked = Locked
+icon_log = Log
+icon_move = Move
+icon_nav_back = Previous
+icon_nav_back_grey =
+icon_nav_forward = Next
+icon_nav_forward_grey =
+icon_new = New
+icon_newsletters = Newsletters
+icon_orders = Orders
+icon_people = People
+icon_products = Products
+icon_restore = Restore
+icon_reviews = Reviews
+icon_run = Execute
+icon_save = Save
+icon_statistics = Statistics
+icon_trash = Delete
+icon_uninstall = Uninstall
+icon_unlocked = Unlocked
+icon_update = Update
+icon_user_female = Female
+icon_user_male = Male
 
-define('ENTRY_GENDER', 'Gender:');
-define('ENTRY_GENDER_ERROR', 'Please select your Gender.');
-define('ENTRY_FIRST_NAME', 'First Name:');
-define('ENTRY_FIRST_NAME_ERROR', 'Your First Name must contain a minimum of ' . ACCOUNT_FIRST_NAME . ' characters.');
-define('ENTRY_LAST_NAME', 'Last Name:');
-define('ENTRY_LAST_NAME_ERROR', 'Your Last Name must contain a minimum of ' . ACCOUNT_LAST_NAME . ' characters.');
-define('ENTRY_DATE_OF_BIRTH', 'Date of Birth:');
-define('ENTRY_DATE_OF_BIRTH_ERROR', 'Your Date of Birth must be set correctly.');
-define('ENTRY_EMAIL_ADDRESS', 'E-Mail Address:');
-define('ENTRY_EMAIL_ADDRESS_ERROR', 'Your E-Mail Address must contain a minimum of ' . ACCOUNT_EMAIL_ADDRESS . ' characters.');
-define('ENTRY_EMAIL_ADDRESS_CHECK_ERROR', 'Your E-Mail Address does not appear to be valid - please make any necessary corrections.');
-define('ENTRY_EMAIL_ADDRESS_ERROR_EXISTS', 'Your E-Mail Address already exists in our records - please log in with the e-mail address or create an account with a different address.');
-define('ENTRY_COMPANY', 'Company Name:');
-define('ENTRY_COMPANY_ERROR', 'Your Company Name must contain a minimum of ' . ACCOUNT_COMPANY . ' characters.');
-define('ENTRY_STREET_ADDRESS', 'Street Address:');
-define('ENTRY_STREET_ADDRESS_ERROR', 'Your Street Address must contain a minimum of ' . ACCOUNT_STREET_ADDRESS . ' characters.');
-define('ENTRY_SUBURB', 'Suburb:');
-define('ENTRY_SUBURB_ERROR', 'Your Suburb must contain a minimum of ' . ACCOUNT_SUBURB . ' characters.');
-define('ENTRY_POST_CODE', 'Post Code:');
-define('ENTRY_POST_CODE_ERROR', 'Your Post Code must contain a minimum of ' . ACCOUNT_POST_CODE . ' characters.');
-define('ENTRY_CITY', 'City:');
-define('ENTRY_CITY_ERROR', 'Your City must contain a minimum of ' . ACCOUNT_CITY . ' characters.');
-define('ENTRY_STATE', 'State/Province:');
-define('ENTRY_STATE_ERROR', 'Your State must contain a minimum of ' . ACCOUNT_STATE . ' characters.');
-define('ENTRY_STATE_ERROR_SELECT', 'Please select a state from the States pull down menu.');
-define('ENTRY_COUNTRY', 'Country:');
-define('ENTRY_COUNTRY_ERROR', 'You must select a country from the Countries pull down menu.');
-define('ENTRY_TELEPHONE_NUMBER', 'Telephone Number:');
-define('ENTRY_TELEPHONE_NUMBER_ERROR', 'Your Telephone Number must contain a minimum of ' . ACCOUNT_TELEPHONE . ' characters.');
-define('ENTRY_FAX_NUMBER', 'Fax Number:');
-define('ENTRY_FAX_NUMBER_ERROR', 'Your Fax Number must contain a minium of ' . ACCOUNT_FAX . ' characters.');
-define('ENTRY_NEWSLETTER', 'Newsletter:');
-define('ENTRY_NEWSLETTER_YES', 'Subscribed');
-define('ENTRY_NEWSLETTER_NO', 'Unsubscribed');
-define('ENTRY_PASSWORD', 'Password:');
-define('ENTRY_PASSWORD_ERROR', 'Your Password must contain a minimum of ' . ACCOUNT_PASSWORD . ' characters.');
-define('ENTRY_PASSWORD_ERROR_NOT_MATCHING', 'The Password Confirmation must match your Password.');
-define('ENTRY_PASSWORD_CONFIRMATION', 'Password Confirmation:');
+ms_success_action_performed = Success: The action was successfully performed.
+ms_success_upload_file_saved = Success: The file uploaded has been saved successfully.
 
-// images
-define('IMAGE_ANI_SEND_EMAIL', 'Sending E-Mail');
-define('IMAGE_APPROVE', 'Approve');
-define('IMAGE_BACK', 'Back');
-define('IMAGE_BACKUP', 'Backup');
-define('IMAGE_BOX_REMOVE', 'Remove Box');
-define('IMAGE_CANCEL', 'Cancel');
-define('IMAGE_CONFIGURE', 'Configure');
-define('IMAGE_CONFIRM', 'Confirm');
-define('IMAGE_COPY', 'Copy');
-define('IMAGE_COPY_TO', 'Copy To');
-define('IMAGE_DEFAULT', 'Default');
-define('IMAGE_DETAILS', 'Details');
-define('IMAGE_DELETE', 'Delete');
-define('IMAGE_EDIT', 'Edit');
-define('IMAGE_EDIT_DEFINITIONS', 'Edit Definitions');
-define('IMAGE_EMAIL', 'Email');
-define('IMAGE_EXECUTE', 'Execute');
-define('IMAGE_EXPORT', 'Export');
-define('IMAGE_FILE_MANAGER', 'File Manager');
-define('IMAGE_ICON_STATUS_GREEN', 'Active');
-define('IMAGE_ICON_STATUS_GREEN_LIGHT', 'Set Active');
-define('IMAGE_ICON_STATUS_RED', 'Inactive');
-define('IMAGE_ICON_STATUS_RED_LIGHT', 'Set Inactive');
-define('IMAGE_IMPORT', 'Import');
-define('IMAGE_INFO', 'Info');
-define('IMAGE_INSERT', 'Insert');
-define('IMAGE_LOCK', 'Lock');
-define('IMAGE_LOG', 'Log');
-define('IMAGE_LOGIN', 'Login');
-define('IMAGE_MODULE_INSTALL', 'Install Module');
-define('IMAGE_MODULE_REMOVE', 'Remove Module');
-define('IMAGE_MOVE', 'Move');
-define('IMAGE_NEW_BANNER', 'New Banner');
-define('IMAGE_NEW_CATEGORY', 'New Category');
-define('IMAGE_NEW_COUNTRY', 'New Country');
-define('IMAGE_NEW_CURRENCY', 'New Currency');
-define('IMAGE_NEW_FILE', 'New File');
-define('IMAGE_NEW_FOLDER', 'New Folder');
-define('IMAGE_NEW_LANGUAGE', 'New Language');
-define('IMAGE_NEW_NEWSLETTER', 'New Newsletter');
-define('IMAGE_NEW_PRODUCT', 'New Product');
-define('IMAGE_NEW_TAX_CLASS', 'New Tax Class');
-define('IMAGE_NEW_TAX_RATE', 'New Tax Rate');
-define('IMAGE_NEW_TAX_ZONE', 'New Tax Zone');
-define('IMAGE_NEW_ZONE', 'New Zone');
-define('IMAGE_ORDERS', 'Orders');
-define('IMAGE_ORDERS_INVOICE', 'Invoice');
-define('IMAGE_ORDERS_PACKINGSLIP', 'Packing Slip');
-define('IMAGE_PREVIEW', 'Preview');
-define('IMAGE_REJECT', 'Reject');
-define('IMAGE_RESTORE', 'Restore');
-define('IMAGE_RESET', 'Reset');
-define('IMAGE_SAVE', 'Save');
-define('IMAGE_SEARCH', 'Search');
-define('IMAGE_SELECT', 'Select');
-define('IMAGE_SEND', 'Send');
-define('IMAGE_SEND_EMAIL', 'Send Email');
-define('IMAGE_UNLOCK', 'Unlock');
-define('IMAGE_UPDATE', 'Update');
-define('IMAGE_UPDATE_CURRENCIES', 'Update Exchange Rate');
-define('IMAGE_UPLOAD', 'Upload');
+ms_warning_upload_no_file = Warning: No file uploaded.
+ms_warning_uploads_disabled = Warning: File uploads are disabled in the php.ini configuration file.
 
-define('ICON_CROSS', 'False');
-define('ICON_CURRENT_FOLDER', 'Current Folder');
-define('ICON_DELETE', 'Delete');
-define('ICON_ERROR', 'Error');
-define('ICON_FILE', 'File');
-define('ICON_FILE_DOWNLOAD', 'Download');
-define('ICON_FOLDER', 'Folder');
-define('ICON_LOCKED', 'Locked');
-define('ICON_PREVIOUS_LEVEL', 'Previous Level');
-define('ICON_PREVIEW', 'Preview');
-define('ICON_STATISTICS', 'Statistics');
-define('ICON_SUCCESS', 'Success');
-define('ICON_TICK', 'True');
-define('ICON_UNLOCKED', 'Unlocked');
-define('ICON_WARNING', 'Warning');
-
-define('BUTTON_CANCEL', 'Cancel');
-define('BUTTON_BACK', 'Back');
-define('BUTTON_DELETE', 'Delete');
-define('BUTTON_INSERT', 'Insert');
-define('BUTTON_OK', 'OK');
-define('BUTTON_SAVE', 'Save');
-define('BUTTON_SEND', 'Send');
-
-define('ICON_FILES', 'Files');
-define('ICON_ORDERS', 'Orders');
-define('ICON_PRODUCTS', 'Products');
-
-define('TEXT_RESULT_PAGE', 'Page&nbsp;%s&nbsp;of&nbsp;%d');
-define('TEXT_DISPLAY_NUMBER_OF_ENTRIES', 'Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> entries)');
-
-define('PREVNEXT_BUTTON_PREV', '&lt;&lt;');
-define('PREVNEXT_BUTTON_NEXT', '&gt;&gt;');
-
-define('TEXT_DEFAULT', 'default');
-define('TEXT_SET_DEFAULT', 'Set as default');
-define('TEXT_FIELD_REQUIRED', '&nbsp;<span class="fieldRequired">* Required</span>');
-define('TEXT_IMAGE_NONEXISTENT', 'IMAGE DOES NOT EXIST');
-
-define('ERROR_NO_DEFAULT_CURRENCY_DEFINED', 'Error: There is currently no default currency set. Please set one at: Administration Tool->Localization->Currencies');
-
-define('TEXT_CACHE_CATEGORIES', 'Categories Box');
-define('TEXT_CACHE_MANUFACTURERS', 'Manufacturers Box');
-define('TEXT_CACHE_ALSO_PURCHASED', 'Also Purchased Module');
-
-define('TEXT_NONE', '--none--');
-define('TEXT_TOP', 'Top');
-define('TEXT_TRUE', 'True');
-define('TEXT_FALSE', 'False');
-define('TEXT_OPTIONAL', 'Voluntary');
-define('TEXT_LEGEND', 'Legend');
-
-define('ERROR_DESTINATION_DOES_NOT_EXIST', 'Error: Destination does not exist.');
-define('ERROR_DESTINATION_NOT_WRITEABLE', 'Error: Destination not writeable.');
-define('ERROR_FILE_NOT_REMOVEABLE', 'Error: I can not remove this file. Please set the right user permissions on: %s');
-define('ERROR_FILE_NOT_SAVED', 'Error: File upload not saved.');
-define('ERROR_FILETYPE_NOT_ALLOWED', 'Error: File upload type not allowed.');
-define('SUCCESS_FILE_SAVED_SUCCESSFULLY', 'Success: File upload saved successfully.');
-define('WARNING_NO_FILE_UPLOADED', 'Warning: No file uploaded.');
-define('WARNING_FILE_UPLOADS_DISABLED', 'Warning: File uploads are disabled in the php.ini configuration file.');
-
-define('SUCCESS_DB_ROWS_UPDATED', 'Success: Entry successfully updated!');
-define('WARNING_DB_ROWS_NOT_UPDATED', 'Warning: Entry not updated due to the data content being the same.');
-define('ERROR_DB_ROWS_NOT_UPDATED', 'Error: Entry not updated due to an error.');
-?>
+ms_error_action_not_performed = Error: There was a problem performing the action.
+ms_error_no_default_currency = Error: There is currently no default currency defined.
+ms_error_upload_destination_non_existant = Error: The destination directory does not exist: %s
+ms_error_upload_destination_not_writable = Error: The destination directory is not writable: %s
+ms_error_upload_file_not_saved = Error: The file upload was not saved.
+ms_error_upload_file_type_prohibited = Error: The type of file uploaded is not allowed.
+ms_error_file_not_removable = Error: This file cannot be removed: %s
+ms_error_directory_not_removable = Error: This directory cannot be removed: %s

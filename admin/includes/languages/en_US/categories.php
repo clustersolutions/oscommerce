@@ -1,50 +1,45 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Categories
 
-  Copyright (c) 2004 osCommerce
+operation_title_search = Search:
 
-  Released under the GNU General Public License
-*/
+table_heading_categories = Categories
+table_heading_action = Action
 
-  define('HEADING_TITLE', 'Categories');
-  define('HEADING_TITLE_SEARCH', 'Search:');
-  define('HEADING_TITLE_GOTO', 'Go To:');
+action_heading_new_category = New Category
+action_heading_batch_delete_categories = Batch Delete Categories
+action_heading_batch_move_categories = Batch Move Categories
 
-  define('TABLE_HEADING_CATEGORIES', 'Categories');
-  define('TABLE_HEADING_ACTION', 'Action');
-  define('TABLE_HEADING_STATUS', 'Status');
+field_parent_category = Parent Category:
+field_name = Name:
+field_image = Image:
+field_sort_order = Sort Order:
 
-  define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
-  define('TEXT_EDIT_PARENT_CATEGORY', 'Parent Category:');
-  define('TEXT_EDIT_CATEGORIES_NAME', 'Category Name:');
-  define('TEXT_EDIT_CATEGORIES_IMAGE', 'Category Image:');
-  define('TEXT_EDIT_SORT_ORDER', 'Sort Order:');
+top_category = -- Top --
 
-  define('TEXT_INFO_HEADING_NEW_CATEGORY', 'New Category');
+introduction_new_category = Please fill in the following information for the new category.
 
-  define('TEXT_DELETE_CATEGORY_INTRO', 'Are you sure you want to delete this category?');
-  define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following categories?');
-  define('TEXT_DELETE_WARNING_CHILDS', '<b>WARNING:</b> There are %s (child-)categories still linked to this category!');
-  define('TEXT_DELETE_WARNING_PRODUCTS', '<b>WARNING:</b> There are %s products still linked to this category!');
+introduction_edit_category = Please make the necessary changes for this category.
 
-  define('TEXT_MOVE_CATEGORIES_INTRO', 'Please select which category you wish <b>%s</b> to reside in');
-  define('TEXT_MOVE_BATCH_INTRO', 'Please select which category you wish to move the following categories to');
-  define('TEXT_MOVE', 'Move <b>%s</b> to:');
+introduction_move_category = Please select which parent this category should be moved to.
 
-  define('TEXT_NEW_CATEGORY_INTRO', 'Please fill out the following information for the new category');
-  define('TEXT_CATEGORIES_NAME', 'Category Name:');
-  define('TEXT_CATEGORIES_IMAGE', 'Category Image:');
-  define('TEXT_SORT_ORDER', 'Sort Order:');
+introduction_delete_category = Please verify the removal of this category and its sub-categories.
+delete_warning_category_in_use_children = Warning: There are %s sub-categories assigned to this category that will also be removed.
+delete_warning_category_in_use_products = Warning: There are %s products assigned to this category that will have this category relationship removed.
 
-  define('EMPTY_CATEGORY', 'Empty Category');
+introduction_batch_delete_categories = Please verify the removal of the following categories and their sub-categories.
 
-  define('WARNING_CATEGORY_NAME_EMPTY', 'Warning: The category name for %s is empty. Please define a name for this language.');
+introduction_batch_move_categories = Please select which parent the following categories should be moved to.
 
-  define('ERROR_CANNOT_MOVE_CATEGORY_TO_PARENT', 'Error: Category cannot be moved into child category.');
-  define('ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Category images directory is not writeable: ' . realpath('../images/categories'));
-  define('ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Category images directory does not exist: ' . realpath('../images/categories'));
-?>
+ms_warning_category_name_empty = Warning: The category name for %s is empty. Please fill in a name for this language.
+
+ms_error_image_directory_not_writable = Error: The directory containing the category images is not writable: %s
+ms_error_image_directory_non_existant = Error: The directory to store the category images does not exist: %s

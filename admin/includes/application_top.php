@@ -136,7 +136,7 @@
     $osC_Language->set($_GET['language']);
   }
 
-  $osC_Language->loadConstants();
+  $osC_Language->loadIniFile();
 
   header('Content-Type: text/html; charset=' . $osC_Language->getCharacterSet());
 
@@ -166,7 +166,7 @@
 
 // check if a default currency is set
   if (!defined('DEFAULT_CURRENCY')) {
-    $osC_MessageStack->add('header', ERROR_NO_DEFAULT_CURRENCY_DEFINED, 'error');
+    $osC_MessageStack->add('header', $osC_Language->get('ms_error_no_default_currency'), 'error');
   }
 
 // check if a default language is set
@@ -175,6 +175,6 @@
   }
 
   if (function_exists('ini_get') && ((bool)ini_get('file_uploads') == false) ) {
-    $osC_MessageStack->add('header', WARNING_FILE_UPLOADS_DISABLED, 'warning');
+    $osC_MessageStack->add('header', $osC_Language->get('ms_warning_uploads_disabled'), 'warning');
   }
 ?>

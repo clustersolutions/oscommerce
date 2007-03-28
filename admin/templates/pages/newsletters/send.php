@@ -12,7 +12,7 @@
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Newsletters_Admin::getData($_GET['nID']));
 
-  $osC_Language->loadConstants('modules/newsletters/' . $osC_ObjectInfo->get('module') . '.php');
+  $osC_Language->loadIniFile('modules/newsletters/' . $osC_ObjectInfo->get('module') . '.php');
   include('includes/modules/newsletters/' . $osC_ObjectInfo->get('module') . '.php');
 
   $module_name = 'osC_Newsletter_' . $osC_ObjectInfo->get('module');
@@ -39,9 +39,9 @@
   } elseif ( $_POST['subaction'] == 'execute' ) {
 ?>
 
-<p><?php echo osc_image('images/ani_send_email.gif', IMAGE_ANI_SEND_EMAIL); ?></p>
+<p><?php echo osc_image('images/ani_send_email.gif'); ?></p>
 
-<p><?php echo '<b>' . TEXT_PLEASE_WAIT . '</b>'; ?></p>
+<p><?php echo '<b>' . $osC_Language->get('sending_please_wait') . '</b>'; ?></p>
 
 <?php
     flush();
@@ -49,9 +49,9 @@
     $module->sendEmail();
 ?>
 
-<p><font color="#ff0000"><b><?php echo TEXT_FINISHED_SENDING_NEWSLETTERS; ?></b></font></p>
+<p><font color="#ff0000"><b><?php echo $osC_Language->get('sending_finalized'); ?></b></font></p>
 
-<p align="right"><?php echo '<input type="button" value="' . BUTTON_OK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_ok') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
 <?php
   }

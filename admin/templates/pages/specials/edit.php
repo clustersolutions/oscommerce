@@ -123,26 +123,24 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $Qspecial->value('products_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $Qspecial->value('products_name'); ?></div>
 <div class="infoBoxContent">
   <form name="special" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&sID=' . $_GET['sID'] . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_special'); ?></p>
 
   <p><?php echo '<b>' . $Qspecial->value('products_name') . ' (' . $osC_Currencies->format($Qspecial->valueDecimal('products_price')) . ')</b>' . osc_draw_hidden_field('products_id', $Qspecial->valueInt('products_id')); ?></p>
-  <p><?php echo TEXT_SPECIALS_SPECIAL_PRICE_NET . '<br />' . osc_draw_input_field('specials_price', $Qspecial->valueDecimal('specials_new_products_price'), 'onkeyup="updateGross(\'specials_price\', event)"'); ?></p>
-  <p><?php echo TEXT_SPECIALS_SPECIAL_PRICE_GROSS . '<br />' . osc_draw_input_field('specials_price_gross', $Qspecial->valueDecimal('specials_new_products_price'), 'onkeyup="updateNet(\'specials_price\', event)"'); ?></p>
-  <p><?php echo TEXT_SPECIALS_STATUS . '<br />' . osc_draw_checkbox_field('specials_status', '1', $Qspecial->value('status')); ?></p>
-  <p><?php echo TEXT_SPECIALS_START_DATE . '<br />' . osc_draw_input_field('specials_start_date', $Qspecial->value('start_date')) . '<input type="button" value="..." id="calendarTriggerStartDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_start_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerStartDate" } );</script>'; ?></p>
-  <p><?php echo TEXT_SPECIALS_EXPIRES_DATE . '<br />' . osc_draw_input_field('specials_expires_date', $Qspecial->value('expires_date')) . '<input type="button" value="..." id="calendarTriggerEndDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_expires_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerEndDate" } );</script>'; ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_price_net') . '</b><br />' . osc_draw_input_field('specials_price', $Qspecial->valueDecimal('specials_new_products_price'), 'onkeyup="updateGross(\'specials_price\', event)"'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_price_gross') . '</b><br />' . osc_draw_input_field('specials_price_gross', $Qspecial->valueDecimal('specials_new_products_price'), 'onkeyup="updateNet(\'specials_price\', event)"'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_status') . '</b><br />' . osc_draw_checkbox_field('specials_status', '1', $Qspecial->value('status')); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_date_start') . '</b><br />' . osc_draw_input_field('specials_start_date', $Qspecial->value('start_date')) . '<input type="button" value="..." id="calendarTriggerStartDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_start_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerStartDate" } );</script>'; ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_date_expires') . '</b><br />' . osc_draw_input_field('specials_expires_date', $Qspecial->value('expires_date')) . '<input type="button" value="..." id="calendarTriggerEndDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_expires_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerEndDate" } );</script>'; ?></p>
 
 <script type="text/javascript"><!--
   updateGross('specials_price', false);
 //--></script>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>
-
-<p><?php echo TEXT_SPECIALS_PRICE_TIP; ?></p>

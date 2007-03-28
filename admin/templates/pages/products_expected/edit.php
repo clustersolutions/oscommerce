@@ -26,15 +26,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('products_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('products_name'); ?></div>
 <div class="infoBoxContent">
   <form name="pEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&pID=' . $osC_ObjectInfo->get('products_id') . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_product_expected'); ?></p>
 
-  <p><?php echo TEXT_INFO_DATE_EXPECTED . '<br />' . osc_draw_input_field('products_date_available', $osC_ObjectInfo->get('products_date_available')); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script></p>
+  <p><?php echo $osC_Language->get('field_date_expected') . '<br />' . osc_draw_input_field('products_date_available', $osC_ObjectInfo->get('products_date_available')); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

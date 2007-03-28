@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -17,13 +17,15 @@
 /* Private variables */
 
     var $_module = 'backup',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Backup() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -32,10 +34,10 @@
 // check if the backup directory exists
       if ( !osc_empty(DIR_FS_BACKUP) && is_dir(DIR_FS_BACKUP) ) {
         if ( !is_writeable(DIR_FS_BACKUP) ) {
-          $osC_MessageStack->add('header', ERROR_BACKUP_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_backup_directory_not_writable'), DIR_FS_BACKUP), 'error');
         }
       } else {
-        $osC_MessageStack->add('header', ERROR_BACKUP_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_backup_directory_non_existant'), DIR_FS_BACKUP), 'error');
       }
 
       if ( !empty($_GET['action']) ) {
@@ -45,9 +47,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Backup_Admin::backup($_POST['compression'], (isset($_POST['download_only']) && ($_POST['download_only'] == 'yes') ? true : false)) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
@@ -60,9 +62,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Backup_Admin::restore() ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
@@ -75,9 +77,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Backup_Admin::restore($_GET['file']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
@@ -106,15 +108,15 @@
               }
             }
 
-            $osC_MessageStack->add($this->_module, ERROR_DOWNLOAD_LINK_NOT_ACCEPTABLE, 'error');
+            $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_download_link_not_acceptable'), 'error');
 
             break;
 
           case 'forget':
             if ( osC_Backup_Admin::forget() ) {
-              $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+              $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
             } else {
-              $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+              $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
             }
 
             osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
@@ -126,9 +128,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Backup_Admin::delete($_GET['file']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, WARNING_DB_ROWS_NOT_UPDATED, 'warning');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
@@ -151,9 +153,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));

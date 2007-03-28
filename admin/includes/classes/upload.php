@@ -42,7 +42,7 @@
     }
 
     function parse() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $file = array();
 
@@ -59,9 +59,9 @@
         if (sizeof($this->extensions) > 0) {
           if (!in_array(strtolower(substr($file['name'], strrpos($file['name'], '.')+1)), $this->extensions)) {
             if ($this->message_location == 'direct') {
-              $osC_MessageStack->add('header', ERROR_FILETYPE_NOT_ALLOWED, 'error');
+              $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
             } else {
-              $osC_MessageStack->add_session('header', ERROR_FILETYPE_NOT_ALLOWED, 'error');
+              $osC_MessageStack->add_session('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
             }
 
             return false;
@@ -79,9 +79,9 @@
         }
       } else {
         if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', WARNING_NO_FILE_UPLOADED, 'warning');
+          $osC_MessageStack->add('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
         } else {
-          $osC_MessageStack->add_session('header', WARNING_NO_FILE_UPLOADED, 'warning');
+          $osC_MessageStack->add_session('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
         }
 
         return false;
@@ -89,7 +89,7 @@
     }
 
     function save() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
 
       if (substr($this->destination, -1) != '/') $this->destination .= '/';
 
@@ -97,17 +97,17 @@
         chmod($this->destination . $this->filename, $this->permissions);
 
         if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', SUCCESS_FILE_SAVED_SUCCESSFULLY, 'success');
+          $osC_MessageStack->add('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
         } else {
-          $osC_MessageStack->add_session('header', SUCCESS_FILE_SAVED_SUCCESSFULLY, 'success');
+          $osC_MessageStack->add_session('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
         }
 
         return true;
       } else {
         if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', ERROR_FILE_NOT_SAVED, 'error');
+          $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
         } else {
-          $osC_MessageStack->add_session('header', ERROR_FILE_NOT_SAVED, 'error');
+          $osC_MessageStack->add_session('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
         }
 
         return false;
@@ -147,20 +147,20 @@
     }
 
     function check_destination() {
-      global $osC_MessageStack;
+      global $osC_Language, $osC_MessageStack;
 
       if (!is_writeable($this->destination)) {
         if (is_dir($this->destination)) {
           if ($this->message_location == 'direct') {
-            $osC_MessageStack->add('header', sprintf(ERROR_DESTINATION_NOT_WRITEABLE, $this->destination), 'error');
+            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
           } else {
-            $osC_MessageStack->add_session('header', sprintf(ERROR_DESTINATION_NOT_WRITEABLE, $this->destination), 'error');
+            $osC_MessageStack->add_session('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
           }
         } else {
           if ($this->message_location == 'direct') {
-            $osC_MessageStack->add('header', sprintf(ERROR_DESTINATION_DOES_NOT_EXIST, $this->destination), 'error');
+            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
           } else {
-            $osC_MessageStack->add_session('header', sprintf(ERROR_DESTINATION_DOES_NOT_EXIST, $this->destination), 'error');
+            $osC_MessageStack->add_session('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
           }
         }
 

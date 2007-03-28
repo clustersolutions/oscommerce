@@ -46,7 +46,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td><?php echo $Qwho->getBatchTotalPages(TEXT_DISPLAY_NUMBER_OF_ENTRIES); ?></td>
+    <td><?php echo $Qwho->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
     <td align="right"><?php echo $Qwho->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
   </tr>
 </table>
@@ -57,18 +57,18 @@
   <thead>
     <tr>
       <th width="22">&nbsp;</th>
-      <th><?php echo TABLE_HEADING_ONLINE; ?></th>
-      <th><?php echo TABLE_HEADING_FULL_NAME; ?></th>
-      <th><?php echo TABLE_HEADING_LAST_CLICK; ?></th>
-      <th><?php echo TABLE_HEADING_LAST_PAGE_URL; ?></th>
-      <th><?php echo TABLE_HEADING_SHOPPING_CART_TOTAL; ?></th>
-      <th width="150"><?php echo TABLE_HEADING_ACTION; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_online'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_customers'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_date_last_click'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_last_page_url'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_shopping_cart_total'); ?></th>
+      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="7"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . IMAGE_DELETE . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="7"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -117,8 +117,8 @@
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&info=' . $Qwho->value('session_id') . '&action=info'), osc_icon('info.png', IMAGE_INFO)) . '&nbsp;' .
-        osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&info=' . $Qwho->value('session_id') . '&action=delete'), osc_icon('trash.png', IMAGE_DELETE));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&info=' . $Qwho->value('session_id') . '&action=info'), osc_icon('info.png')) . '&nbsp;' .
+        osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&info=' . $Qwho->value('session_id') . '&action=delete'), osc_icon('trash.png'));
 ?>
 
       </td>
@@ -136,7 +136,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
   <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . TEXT_LEGEND . '</b> ' . osc_icon('info.png', IMAGE_INFO) . '&nbsp;' . IMAGE_INFO . '&nbsp;&nbsp;' . osc_icon('trash.png', IMAGE_DELETE) . '&nbsp;' . IMAGE_DELETE; ?></td>
+    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('info.png') . '&nbsp;' . $osC_Language->get('icon_info') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
     <td align="right"><?php echo $Qwho->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
   </tr>
 </table>

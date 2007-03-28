@@ -20,11 +20,11 @@
     echo $osC_MessageStack->output($osC_Template->getModule());
   }
 ?>
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']) . '\';" class="operationButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&fm=' . $_GET['fm'] . '&fu=' . $_GET['fu']) . '\';" class="operationButton" />'; ?></p>
 
-<div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $osC_ObjectInfo->get('user_name') . ' &raquo; ' . $osC_ObjectInfo->get('module_action') . ' &raquo; ' . $osC_ObjectInfo->get('module') . ' &raquo; ' . $osC_ObjectInfo->get('module_id'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('info.png') . ' ' . $osC_ObjectInfo->get('user_name') . ' &raquo; ' . $osC_ObjectInfo->get('module_action') . ' &raquo; ' . $osC_ObjectInfo->get('module') . ' &raquo; ' . $osC_ObjectInfo->get('module_id'); ?></div>
 <div class="infoBoxContent">
-  <p><?php echo '<b>' . TEXT_DATE . '</b> ' . date('d M Y H:i:s', $osC_ObjectInfo->get('datestamp')); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_date') . '</b> ' . date('d M Y H:i:s', $osC_ObjectInfo->get('datestamp')); ?></p>
 </div>
 
 <br />
@@ -32,9 +32,9 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
   <thead>
     <tr>
-      <th><?php echo TABLE_HEADING_FIELD; ?></th>
-      <th><?php echo TABLE_HEADING_OLD_VALUE; ?></th>
-      <th><?php echo TABLE_HEADING_NEW_VALUE; ?></th>
+      <th><?php echo $osC_Language->get('table_heading_fields'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_value_old'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_value_new'); ?></th>
     </tr>
   </thead>
   <tbody>

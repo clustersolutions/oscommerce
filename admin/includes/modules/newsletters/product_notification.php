@@ -24,7 +24,9 @@
 /* Class constructor */
 
     function osC_Newsletter_product_notification($title = '', $content = '', $newsletter_id = '') {
-      $this->_title = MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TITLE;
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('newsletter_product_notifications_title');
 
       $this->_newsletter_title = $title;
       $this->_newsletter_content = $content;
@@ -99,7 +101,7 @@ function selectAll(FormName, SelectBox) {
   }
 
   if (x<1) {
-    alert(\'' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_JS_PLEASE_SELECT_PRODUCTS . '\');
+    alert(\'' . addslashes($osC_Language->get('newsletter_product_notifications_warning_no_products_selected')) . '\');
     return false;
   } else {
     return true;
@@ -110,15 +112,15 @@ function selectAll(FormName, SelectBox) {
       $audience_form .= '<form name="notifications" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post" onsubmit="return selectAll(\'notifications\', \'chosen[]\');">' .
                         '  <table border="0" width="100%" cellspacing="0" cellpadding="2">' .
                         '    <tr>' .
-                        '      <td align="center"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('products', $products_array, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
+                        '      <td align="center"><b>' . $osC_Language->get('newsletter_product_notifications_table_heading_products') . '</b><br />' . osc_draw_pull_down_menu('products', $products_array, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
                         '      <td align="center">&nbsp;<br />' .
-                        '        <input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_GLOBAL . '" style="width: 90px;" onclick="document.notifications.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send&global=true') . '\'; document.notifications.submit();" class="operationButton" /><br /><br /><br />' .
-                        '        <input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_SELECT . '" style="width: 90px;" onclick="mover(\'remove\');" class="infoBoxButton" /><br /><br />' .
-                        '        <input type="button" value="' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_BUTTON_UNSELECT . '" style="width: 90px;" onclick="mover(\'add\');" class="infoBoxButton" /><br /><br /><br />' .
-                        '        ' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . BUTTON_OK . '" style="width: 90px;" class="operationButton" /><br /><br />' .
-                        '        <input type="button" value="' . BUTTON_CANCEL . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . 'page=' . $_GET['page']) . '\';" class="operationButton" />' .
+                        '        <input type="button" value="' . $osC_Language->get('newsletter_product_notifications_button_global') . '" style="width: 90px;" onclick="document.notifications.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send&global=true') . '\'; document.notifications.submit();" class="operationButton" /><br /><br /><br />' .
+                        '        <input type="button" value="' . $osC_Language->get('newsletter_product_notifications_button_select') . '" style="width: 90px;" onclick="mover(\'remove\');" class="infoBoxButton" /><br /><br />' .
+                        '        <input type="button" value="' . $osC_Language->get('newsletter_product_notifications_button_deselect') . '" style="width: 90px;" onclick="mover(\'add\');" class="infoBoxButton" /><br /><br /><br />' .
+                        '        ' . osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_ok') . '" style="width: 90px;" class="operationButton" /><br /><br />' .
+                        '        <input type="button" value="' . $osC_Language->get('button_cancel') . '" style="width: 90px;" onclick="document.location=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . 'page=' . $_GET['page']) . '\';" class="operationButton" />' .
                         '      </td>' .
-                        '      <td align="center"><b>' . MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TABLE_HEADING_SELECTED_PRODUCTS . '</b><br />' . osc_draw_pull_down_menu('chosen[]', null, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
+                        '      <td align="center"><b>' . $osC_Language->get('newsletter_product_notifications_table_heading_selected_products') . '</b><br />' . osc_draw_pull_down_menu('chosen[]', null, null, 'size="20" style="width: 20em;" multiple') . '</td>' .
                         '    </tr>' .
                         '  </table>' .
                         '</form>';
@@ -127,7 +129,7 @@ function selectAll(FormName, SelectBox) {
     }
 
     function showConfirmation() {
-      global $osC_Database, $osC_Template;
+      global $osC_Database, $osC_Language, $osC_Template;
 
       if ( (isset($_POST['chosen']) && !empty($_POST['chosen'])) || (isset($_GET['global']) && ($_GET['global'] == 'true')) ) {
         $Qcustomers = $osC_Database->query('select count(customers_id) as total from :table_customers where global_product_notifications = 1');
@@ -152,7 +154,7 @@ function selectAll(FormName, SelectBox) {
         $this->_audience_size += $Qcustomers->valueInt('total');
       }
 
-      $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf(MODULE_NEWSLETTER_PRODUCT_NOTIFICATION_TEXT_TOTAL_RECIPIENTS, $this->_audience_size) . '</b></font></p>' .
+      $confirmation_string = '<p><font color="#ff0000"><b>' . sprintf($osC_Language->get('newsletter_product_notifications_total_recipients'), $this->_audience_size) . '</b></font></p>' .
                              '<p><b>' . $this->_newsletter_title . '</b></p>' .
                              '<p>' . nl2br(osc_output_string_protected($this->_newsletter_content)) . '</p>' .
                              '<form name="execute" action="'. osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '" method="post">' .
@@ -167,17 +169,17 @@ function selectAll(FormName, SelectBox) {
           }
         }
 
-        $confirmation_string .= osc_draw_hidden_field('subaction', 'execute') . '<input type="submit" value="' . BUTTON_SEND . '" class="operationButton" />&nbsp;';
+        $confirmation_string .= osc_draw_hidden_field('subaction', 'execute') . '<input type="submit" value="' . $osC_Language->get('button_send') . '" class="operationButton" />&nbsp;';
       }
 
-      $confirmation_string .= '<input type="button" value="' . BUTTON_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '\'" class="operationButton" />&nbsp;<input type="button" value="' . BUTTON_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\'" class="operationButton" /></p>' .
+      $confirmation_string .= '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send') . '\'" class="operationButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\'" class="operationButton" /></p>' .
                               '</form>';
 
       return $confirmation_string;
     }
 
     function sendEmail() {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $max_execution_time = 0.8 * (int)ini_get('max_execution_time');
       $time_start = explode(' ', PAGE_PARSE_START_TIME);
@@ -252,9 +254,9 @@ function selectAll(FormName, SelectBox) {
           $timer_total = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
 
           if ( $timer_total > $max_execution_time ) {
-            echo '<p><font color="#38BB68"><b>' . TEXT_REFRESHING_PAGE . '</b></font></p>' .
+            echo '<p><font color="#38BB68"><b>' . $osC_Language->get('sending_refreshing_page') . '</b></font></p>' .
                  '<form name="execute" action="' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&nID=' . $this->_newsletter_id . '&action=send&' . ((isset($global) && ($global == 'true')) ? 'global=true' : $chosen_get_string)) . '" method="post">' .
-                 '<p>' . osc_draw_hidden_field('subaction', 'execute') . osc_link_object('javascript:document.execute.submit();', TEXT_CONTINUE_MANUALLY) . '</p>' .
+                 '<p>' . osc_draw_hidden_field('subaction', 'execute') . '</p>' .
                  '</form>' .
                  '<script language="javascript">' .
                  'var counter = 3;' .

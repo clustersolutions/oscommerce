@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,8 +13,14 @@
   class osC_Access_Modules_shipping extends osC_Access {
     var $_module = 'modules_shipping',
         $_group = 'modules',
-        $_icon = 'install.png',
-        $_title = ACCESS_MODULES_SHIPPING_TITLE,
+        $_icon = 'shipping.png',
+        $_title,
         $_sort_order = 200;
+
+    function osC_Access_Modules_shipping() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_modules_shipping_title');
+    }
   }
 ?>

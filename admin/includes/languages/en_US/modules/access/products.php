@@ -1,15 +1,11 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
-
-  Released under the GNU General Public License
-*/
-
-define('ACCESS_PRODUCTS_TITLE', 'Products');
-define('ACCESS_PRODUCTS_NEW_TITLE', 'New Product');
-?>
+access_products_title = Products
+access_products_new_title = New Product

@@ -18,7 +18,7 @@
   if ( !is_writeable($target) ) {
     $writeable = false;
 
-    $osC_MessageStack->add($osC_Template->getModule(), sprintf(ERROR_FILE_NOT_WRITEABLE, $target), 'warning');
+    $osC_MessageStack->add($osC_Template->getModule(), sprintf($osC_Language->get('ms_error_file_not_writable'), $target), 'warning');
   }
 
   $contents = file_get_contents($target);
@@ -32,17 +32,21 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . osc_output_string_protected($_SESSION['fm_directory']); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_Language->get('action_heading_edit_file'); ?></div>
 <div class="infoBoxContent">
   <form name="file_manager" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'); ?>" method="post">
 
+  <p><?php echo $osC_Language->get('introduction_edit_file'); ?></p>
+
+  <p><?php echo '<b>' . osc_output_string_protected($_SESSION['fm_directory']) . '</b>'; ?></p>
+
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_FILE_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_file_name') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_output_string_protected($_GET['entry']) . osc_draw_hidden_field('filename', $_GET['entry']); ?></td>
     </tr>
     <tr>
-      <td width="40%" valign="top"><?php echo '<b>' . TEXT_FILE_CONTENTS . '</b>'; ?></td>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_file_contents') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_textarea_field('contents', $contents, 80, 20, 'style="width: 100%;"' . (($writeable === true) ? '' : ' readonly="readonly"')); ?></td>
     </tr>
   </table>
@@ -51,9 +55,9 @@
 
 <?php
   if ( $writeable === true ) {
-    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+    echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   } else {
-    echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
+    echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />';
   }
 ?>
 

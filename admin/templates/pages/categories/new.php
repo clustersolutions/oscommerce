@@ -5,12 +5,13 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
-  $categories_array = array(array('id' => '0', 'text' => TEXT_TOP));
+  $categories_array = array(array('id' => '0',
+                                  'text' => $osC_Language->get('top_category')));
 
   foreach ($osC_CategoryTree->getTree() as $value) {
     $categories_array[] = array('id' => $value['id'],
@@ -26,18 +27,18 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_CATEGORY; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_category'); ?></div>
 <div class="infoBoxContent">
   <form name="cNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo TEXT_NEW_CATEGORY_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_category'); ?></p>
 
-  <p><?php echo TEXT_EDIT_PARENT_CATEGORY . '<br />' . osc_draw_pull_down_menu('parent_id', $categories_array, $current_category_id); ?></p>
+  <p><?php echo $osC_Language->get('field_parent_category') . '<br />' . osc_draw_pull_down_menu('parent_id', $categories_array, $current_category_id); ?></p>
 
   <p>
 
 <?php
-  echo TEXT_CATEGORIES_NAME;
+  echo $osC_Language->get('field_name');
 
   foreach ($osC_Language->getAll() as $l) {
     echo '<br />' . $osC_Language->showImage($l['code']) . '&nbsp;' . osc_draw_input_field('categories_name[' . $l['id'] . ']');
@@ -46,10 +47,10 @@
 
   </p>
 
-  <p><?php echo TEXT_CATEGORIES_IMAGE . '<br />' . osc_draw_file_field('categories_image', true); ?></p>
-  <p><?php echo TEXT_EDIT_SORT_ORDER . '<br />' . osc_draw_input_field('sort_order'); ?></p>
+  <p><?php echo $osC_Language->get('field_image') . '<br />' . osc_draw_file_field('categories_image', true); ?></p>
+  <p><?php echo $osC_Language->get('field_sort_order') . '<br />' . osc_draw_input_field('sort_order'); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

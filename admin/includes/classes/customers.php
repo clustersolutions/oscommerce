@@ -70,7 +70,7 @@
     }
 
     function save($id = null, $data, $send_email = true) {
-      global $osC_Database;
+      global $osC_Database, $osC_Language;
 
       $error = false;
 
@@ -119,23 +119,23 @@
 
         if ( $send_email === true ) {
           if ( empty($id) ) {
-            $full_name = trim($data['firstname']) . ' ' . trim($data['lastname']);
+            $full_name = trim($data['firstname'] . ' ' . $data['lastname']);
 
             $email_text = '';
 
             if ( ACCOUNT_GENDER > -1 ) {
               if ( $data['gender'] == 'm' ) {
-                $email_text .= sprintf(EMAIL_GREET_MR, trim($data['lastname']));
+                $email_text .= sprintf($osC_Language->get('email_greet_mr'), trim($data['lastname'])) . "\n\n";
               } else {
-                $email_text .= sprintf(EMAIL_GREET_MS, trim($data['lastname']));
+                $email_text .= sprintf($osC_Language->get('email_greet_ms'), trim($data['lastname'])) . "\n\n";
               }
             } else {
-              $email_text .= sprintf(EMAIL_GREET_NONE, $full_name);
+              $email_text .= sprintf($osC_Language->get('email_greet_general'), $full_name) . "\n\n";
             }
 
-            $email_text .= EMAIL_WELCOME . EMAIL_TEXT . EMAIL_CONTACT;
+            $email_text .= sprintf($osC_Language->get('email_text'), STORE_NAME, STORE_OWNER_EMAIL_ADDRESS, trim($data['password']));
 
-            osc_email($full_name, $data['email_address'], EMAIL_SUBJECT, $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+            osc_email($full_name, $data['email_address'], $osC_Language->get('email_subject'), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
           }
         }
 

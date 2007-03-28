@@ -63,36 +63,36 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $osC_ObjectInfo->get('full_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('info.png') . ' ' . $osC_ObjectInfo->get('full_name'); ?></div>
 <div class="infoBoxContent">
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_SESSION_ID . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_session_id') . '</b>'; ?></td>
       <td width="60%"><?php echo $osC_ObjectInfo->get('session_id'); ?></td>
     </tr>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_TIME_ONLINE . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_time_online') . '</b>'; ?></td>
       <td width="60%"><?php echo gmdate('H:i:s', time() - $osC_ObjectInfo->get('time_entry')); ?></td>
     </tr>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_CUSTOMER_ID . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_customer_id') . '</b>'; ?></td>
       <td width="60%"><?php echo $osC_ObjectInfo->get('customer_id'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_CUSTOMER_NAME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_customer_name') . '</b>'; ?></td>
       <td width="60%"><?php echo $osC_ObjectInfo->get('full_name'); ?></td>
     </tr>
     <tr>
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_IP_ADDRESS . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_ip_address') . '</b>'; ?></td>
       <td width="60%">
 
 <?php
@@ -109,15 +109,15 @@
       <td colspan="2">&nbsp;</td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_ENTRY_TIME . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_entry_time') . '</b>'; ?></td>
       <td width="60%"><?php echo date('H:i:s', $osC_ObjectInfo->get('time_entry')); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_LAST_CLICK . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_last_click') . '</b>'; ?></td>
       <td width="60%"><?php echo date('H:i:s', $osC_ObjectInfo->get('time_last_click')); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_LAST_PAGE_URL . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_last_page_url') . '</b>'; ?></td>
       <td width="60%"><?php echo $last_page_url; ?></td>
     </tr>
 
@@ -127,7 +127,7 @@
          '      <td colspan="2">&nbsp;</td>' . "\n" .
          '    </tr>' . "\n" .
          '    <tr>' . "\n" .
-         '      <td width="40%" valign="top"><b>' . TEXT_SHOPPING_CART_PRODUCTS . '</b></td>' . "\n" .
+         '      <td width="40%" valign="top"><b>' . $osC_Language->get('field_shopping_cart_contents') . '</b></td>' . "\n" .
          '      <td width="60%"><table border="0" cellspacing="0" cellpadding="2">' . "\n";
 
     foreach ($cart['contents'] as $product) {
@@ -140,7 +140,7 @@
     echo '      </table></td>' . "\n" .
          '    </tr>' . "\n" .
          '    <tr>' . "\n" .
-         '      <td width="40%"><b>' . TEXT_SHOPPING_CART_TOTAL . '</b></td>' . "\n" .
+         '      <td width="40%"><b>' . $osC_Language->get('field_shopping_cart_total') . '</b></td>' . "\n" .
          '      <td width="60%">' . $osC_Currencies->format($cart['total_cost'], true, $currency) . '</td>' . "\n" .
          '    </tr>' . "\n";
   }
@@ -148,7 +148,7 @@
 
   </table>
 
-  <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 </div>
 
 <?php

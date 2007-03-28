@@ -111,7 +111,7 @@
   }
 
   if ( !empty($groups_array) ) {
-    array_unshift($groups_array, array('id' => null, 'text' => TEXT_PLEASE_SELECT));
+    array_unshift($groups_array, array('id' => null, 'text' => $osC_Language->get('please_select')));
   }
 ?>
 
@@ -123,32 +123,32 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png', IMAGE_INSERT) . ' ' . TEXT_INFO_HEADING_NEW_BOX_LAYOUT; ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_template_layout_module'); ?></div>
 <div class="infoBoxContent">
   <form name="lNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter'] . '&action=save'); ?>" method="post">
 
-  <p><?php echo TEXT_INFO_INSERT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_new_template_layout_module'); ?></p>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_BOXES . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_modules') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_pull_down_menu('box', $boxes_array, null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_PAGES . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_pages') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_pull_down_menu('content_page', $pages_array, null, 'style="width: 100%;"'); ?></td>
     </tr>
     <tr>
       <td width="40%">&nbsp;</td>
-      <td width="60%"><?php echo osc_draw_checkbox_field('page_specific') . '&nbsp;<b>' . TEXT_INFO_PAGE_SPECIFIC . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_checkbox_field('page_specific') . '&nbsp;<b>' . $osC_Language->get('field_page_specific') . '</b>'; ?></td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_GROUP . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_group') . '</b>'; ?></td>
       <td width="60%">
 
 <?php
   if ( !empty($groups_array) ) {
-    echo osc_draw_pull_down_menu('group', $groups_array, null, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . TEXT_INFO_GROUP_NEW . '</b>&nbsp;';
+    echo osc_draw_pull_down_menu('group', $groups_array, null, 'style="width: 30%;"') . '&nbsp;&nbsp;<b>' . $osC_Language->get('field_group_new') . '</b>&nbsp;';
   }
 
   echo osc_draw_input_field('group_new', null, 'style="width: ' . (empty($groups_array) ? '100%' : '40%') . ';"');
@@ -157,12 +157,12 @@
       </td>
     </tr>
     <tr>
-      <td width="40%"><?php echo '<b>' . TEXT_INFO_SORT_ORDER . '</b>'; ?></td>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('sort_order', null, 'style="width: 100%;"'); ?></td>
     </tr>
   </table>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set'] . '&filter=' . $_GET['filter']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

@@ -1,22 +1,18 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Products Expected
 
-  Copyright (c) 2004 osCommerce
+table_heading_products = Products
+table_heading_date_expected = Date Expected
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+field_date_expected = Date Expected:
 
-define('HEADING_TITLE', 'Products Expected');
-
-define('TABLE_HEADING_PRODUCTS', 'Products');
-define('TABLE_HEADING_DATE_EXPECTED', 'Date Expected');
-define('TABLE_HEADING_ACTION', 'Action');
-
-define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
-
-define('TEXT_INFO_DATE_EXPECTED', 'Date Expected:');
-?>
+introduction_edit_product_expected = Please make the necessary changes for this product.

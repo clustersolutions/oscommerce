@@ -1,46 +1,37 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Manufacturers
 
-  Copyright (c) 2004 osCommerce
+table_heading_manufacturers = Manufacturers
+table_heading_url_clicks = URL Clicks
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+action_heading_new_manufacturer = New Manufacturer
+action_heading_batch_delete_manufacturers = Batch Delete Manufacturers
 
-define('HEADING_TITLE', 'Manufacturers');
+field_name = Name:
+field_image = Image:
+field_url = URL Address:
+field_delete_image = Delete image?
+field_delete_products = Delete products?
+field_batch_delete_images = Delete images?
 
-define('TABLE_HEADING_MANUFACTURERS', 'Manufacturers');
-define('TABLE_HEADING_URL_CLICKS', 'URL Clicks');
-define('TABLE_HEADING_ACTION', 'Action');
+total_entries = %s Products
 
-define('TEXT_HEADING_NEW_MANUFACTURER', 'New Manufacturer');
-define('TEXT_HEADING_EDIT_MANUFACTURER', 'Edit Manufacturer');
-define('TEXT_HEADING_DELETE_MANUFACTURER', 'Delete Manufacturer');
+introduction_new_manufacturer = Please fill in the following information for the new manufacturer.
 
-define('TEXT_MANUFACTURERS', 'Manufacturers:');
-define('TEXT_DATE_ADDED', 'Date Added:');
-define('TEXT_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_PRODUCTS', 'Products:');
+introduction_edit_manufacturer = Please make the necessary changes for this manufacturer.
 
-define('TEXT_NEW_INTRO', 'Please fill out the following information for the new manufacturer');
-define('TEXT_EDIT_INTRO', 'Please make any necessary changes');
+introduction_delete_manufacturer = Please verify the removal of this manufacturer.
 
-define('TEXT_MANUFACTURERS_NAME', 'Manufacturers Name:');
-define('TEXT_MANUFACTURERS_IMAGE', 'Manufacturers Image:');
-define('TEXT_MANUFACTURERS_URL', 'Manufacturers URL:');
+introduction_batch_delete_manufacturers = Please verify the removal of the following manufacturers.
 
-define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this manufacturer?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete these manufacturers?');
-define('TEXT_DELETE_IMAGE', 'Delete manufacturers image?');
-define('TEXT_DELETE_BATCH_IMAGES', 'Delete these manufacturers images?');
-define('TEXT_DELETE_PRODUCTS', 'Delete products from this manufacturer? (including product reviews, products on special, upcoming products, ..)');
-define('TEXT_DELETE_BATCH_PRODUCTS', 'Delete products from these manufacturers? (including product reviews, products on special, upcoming products, ..)');
-define('TEXT_DELETE_WARNING_PRODUCTS', '<b>WARNING:</b> There are %s products still linked to this manufacturer!');
-
-define('ERROR_MANUFACTURER_NAME', 'Error: Manufacturers name cannot be blank');
-define('ERROR_MANUFACTURERS_IMAGE_DIRECTORY_NOT_WRITEABLE', 'Error: Manufacturer images directory is not writeable: ' . realpath('../images/manufacturers'));
-define('ERROR_MANUFACTURERS_IMAGE_DIRECTORY_DOES_NOT_EXIST', 'Error: Manufacturer images directory does not exist: ' . realpath('../images/manufacturers'));
-?>
+ms_error_image_directory_not_writable = Error: The manufacturer images directory is not writable: %s
+ms_error_image_directory_non_existant = Error: The manufacturer images directory does not exist: %s

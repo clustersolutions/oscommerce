@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -20,7 +20,7 @@
       global $osC_Language;
 
       if (defined('MODULE_DEFAULT_GEOIP') && !osc_empty(MODULE_DEFAULT_GEOIP) && file_exists('includes/modules/geoip/' . MODULE_DEFAULT_GEOIP . '.php')) {
-        $osC_Language->loadConstants('modules/geoip/' . MODULE_DEFAULT_GEOIP . '.php');
+        $osC_Language->loadIniFile('modules/geoip/' . MODULE_DEFAULT_GEOIP . '.php');
         include('includes/modules/geoip/' . MODULE_DEFAULT_GEOIP . '.php');
         $module = 'osC_GeoIP_' . MODULE_DEFAULT_GEOIP;
         return new $module();

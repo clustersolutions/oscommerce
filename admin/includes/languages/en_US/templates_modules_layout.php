@@ -1,41 +1,39 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title_boxes = Template Modules Layout: Boxes
+heading_title_content = Template Modules Layout: Content
 
-  Copyright (c) 2005 osCommerce
+action_heading_new_template_layout_module = New Template Layout Module
+action_heading_batch_delete_template_layout_modules = Batch Delete Template Layout Modules
 
-  Released under the GNU General Public License
-*/
+table_heading_modules = Modules
+table_heading_pages = Pages
+table_heading_page_specific = Page Specific
+table_heading_group = Group
+table_heading_sort_order = Sort Order
+table_heading_action = Action
 
-define('HEADING_TITLE_BOXES_LAYOUT', 'Template Boxes Layout');
-define('HEADING_TITLE_CONTENT_LAYOUT', 'Template Content Layout');
+field_module = Module:
+field_modules = Modules:
+field_pages = Pages:
+field_page_specific = Page Specific?
+field_group = Group
+field_group_new = New Group:
+field_sort_order = Sort Order
 
-define('TABLE_HEADING_BOXES', 'Boxes');
-define('TABLE_HEADING_TEMPLATES', 'Templates');
-define('TABLE_HEADING_PAGES', 'Content Pages');
-define('TABLE_HEADING_PAGE_SPECIFIC', 'Page Specific');
-define('TABLE_HEADING_GROUP', 'Group');
-define('TABLE_HEADING_SORT_ORDER', 'Sort Order');
-define('TABLE_HEADING_ACTION', 'Action');
+please_select = -- Please Select --
 
-define('TEXT_INFO_HEADING_NEW_BOX_LAYOUT', 'New Box Layout');
+introduction_new_template_layout_module = Please fill in the following information for the new template layout module.
 
-define('TEXT_INFO_BOXES', 'Boxes:');
-define('TEXT_INFO_PAGES', 'Content Pages:');
-define('TEXT_INFO_PAGE_SPECIFIC', 'Page Specific');
-define('TEXT_INFO_GROUP', 'Group:');
-define('TEXT_INFO_GROUP_NEW', 'New Group:');
-define('TEXT_INFO_SORT_ORDER', 'Sort Order:');
+introduction_edit_template_layout_module = Please make the necessary changes for this template layout module.
 
-define('TEXT_PLEASE_SELECT', '--Please Select--');
+introduction_delete_template_layout_module = Please verify the removal of this template layout module.
 
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new box layout with its related data');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to remove this box layout from the template?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following box layouts from the template?');
-
-define('INFO_BOX_REMOVETEXT_INFO_DELETE_PROHIBITED', 'Warning: The default template can not be removed. Please set another template as the default, and try again.');
-?>
+introduction_batch_delete_template_layout_modules = Please verify the removal of the following template layout modules.

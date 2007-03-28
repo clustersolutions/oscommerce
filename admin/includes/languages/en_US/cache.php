@@ -1,25 +1,20 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Cache Control
 
-  Copyright (c) 2004 osCommerce
+table_heading_cache_blocks = Cache Blocks
+table_heading_total = Total
+table_heading_date_last_modified = Last Modified
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+cache_location = Cache Directory:
 
-  define('HEADING_TITLE', 'Cache Control');
-
-  define('TABLE_HEADING_CACHE', 'Cache Blocks');
-  define('TABLE_HEADING_TOTAL', 'Total');
-  define('TABLE_HEADING_LAST_MODIFIED', 'Last Modified');
-  define('TABLE_HEADING_ACTION', 'Action');
-
-  define('TEXT_FILE_DOES_NOT_EXIST', 'File does not exist');
-  define('TEXT_CACHE_DIRECTORY', 'Cache Directory:');
-
-  define('ERROR_CACHE_DIRECTORY_DOES_NOT_EXIST', 'Error: Cache directory does not exist. Please set this Configuration->Cache.');
-  define('ERROR_CACHE_DIRECTORY_NOT_WRITEABLE', 'Error: Cache directory is not writeable.');
-?>
+ms_error_cache_directory_non_existant = Error: The cache directory does not exist: %s
+ms_error_cache_directory_not_writable = Error: The cache directory is not writable: %s

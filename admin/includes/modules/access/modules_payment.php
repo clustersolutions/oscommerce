@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'modules_payment',
         $_group = 'modules',
         $_icon = 'payment.png',
-        $_title = ACCESS_MODULES_PAYMENT_TITLE,
+        $_title,
         $_sort_order = 100;
+
+    function osC_Access_Modules_payment() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_modules_payment_title');
+    }
   }
 ?>

@@ -1,54 +1,98 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Customers
 
-  Copyright (c) 2004 osCommerce
+operation_title_search = Search:
+operation_new_address_book_entry = New Address Book Entry
 
-  Released under the GNU General Public License
-*/
+table_heading_last_name = Last Name
+table_heading_first_name = First Name
+table_heading_date_created = Date Created
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Customers');
-define('HEADING_TITLE_SEARCH', 'Search:');
+action_heading_new_customer = New Customer
+action_heading_new_address_book_entry = New Address Book Entry
+action_heading_batch_delete_customers = Batch Delete Customers
 
-define('TABLE_HEADING_FIRSTNAME', 'First Name');
-define('TABLE_HEADING_LASTNAME', 'Last Name');
-define('TABLE_HEADING_ACCOUNT_CREATED', 'Account Created');
-define('TABLE_HEADING_ACTION', 'Action');
-define('TABLE_HEADING_STATUS', 'Status');
+section_personal = Personal
+section_address_book = Address Book
 
-define('CATEGORY_PERSONAL', 'Personal');
-define('CATEGORY_ADDRESS_BOOK', 'Address Book');
+field_gender = Gender:
+field_first_name = First Name:
+field_last_name = Last Name:
+field_date_of_birth = Date of Birth:
+field_email_address = E-Mail Address:
+field_newsletter_subscription = Newsletter Subscription:
+field_password = Password:
+field_password_confirmation = Password Confirmation:
+field_new_password = New Password:
+field_new_password_confirmation = New Password Confirmation:
+field_status = Status:
+field_company = Company:
+field_street_address = Street Address:
+field_suburb = Suburb:
+field_post_code = Post Code:
+field_city = City:
+field_state = State:
+field_country = Country:
+field_telephone_number = Telephone Number:
+field_fax_number = Fax Number:
+field_set_as_primary = Set as Primary Address:
+field_delete_reviews = Delete Reviews?
 
-define('TEXT_DATE_ACCOUNT_CREATED', 'Account Created:');
-define('TEXT_DATE_ACCOUNT_LAST_MODIFIED', 'Last Modified:');
-define('TEXT_INFO_DATE_LAST_LOGON', 'Last Logon:');
-define('TEXT_INFO_NUMBER_OF_LOGONS', 'Number of Logons:');
-define('TEXT_INFO_COUNTRY', 'Country:');
-define('TEXT_INFO_NUMBER_OF_REVIEWS', 'Number of Reviews:');
-define('TEXT_DELETE_INTRO', 'Are you sure you want to delete this customer?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following customers?');
-define('TEXT_DELETE_ADDRESS_BOOK_INTRO', 'Are you sure you want to delete this customers address book entry?');
-define('TEXT_DELETE_REVIEWS', 'Delete %s review(s)');
-define('TEXT_INFO_HEADING_DELETE_CUSTOMER', 'Delete Customer');
-define('TEXT_INFO_HEADING_NEW_CUSTOMER', 'New Customer');
-define('TEXT_INFO_HEADING_NEW_ADDRESS_BOOK_ENTRY', 'New Address Book Entry');
-define('TEXT_BATCH_DELETE_REVIEWS', 'Delete customer reviews?');
-define('TYPE_BELOW', 'Type below');
-define('PLEASE_SELECT', 'Select One');
-define('EMAIL_SUBJECT', 'Welcome to ' . STORE_NAME);
-define('EMAIL_GREET_MR', 'Dear Mr. %s,' . "\n\n");
-define('EMAIL_GREET_MS', 'Dear Ms. %s,' . "\n\n");
-define('EMAIL_GREET_NONE', 'Dear %s' . "\n\n");
-define('EMAIL_WELCOME', 'We welcome you to <b>' . STORE_NAME . '</b>.' . "\n\n");
-define('EMAIL_TEXT', 'You can now take part in the <b>various services</b> we have to offer you. Some of these services include:' . "\n\n" . '<li><b>Permanent Cart</b> - Any products added to your online cart remain there until you remove them, or check them out.' . "\n" . '<li><b>Address Book</b> - We can now deliver your products to another address other than yours! This is perfect to send birthday gifts direct to the birthday-person themselves.' . "\n" . '<li><b>Order History</b> - View your history of purchases that you have made with us.' . "\n" . '<li><b>Products Reviews</b> - Share your opinions on products with our other customers.' . "\n\n");
-define('EMAIL_CONTACT', 'For help with any of our online services, please email the store-owner: ' . STORE_OWNER_EMAIL_ADDRESS . '.' . "\n\n");
-define('EMAIL_PASSWORD', '<b>Note:</b> This account has been created for you by the store owner. The password to access this account is %s.' . "\n");
+total_reviews = %s Reviews
+primary_address = primary
+no_telephone_number = no telephone number
+no_fax_number = no fax number
 
-define('ENTRY_STATUS', 'Status:');
-define('ENTRY_SET_AS_PRIMARY', 'Set As Primary Address:');
+introduction_delete_customer = Please verify the removal of this customer.
 
-define('TEXT_INFO_DELETE_ADDRESS_BOOK_PROHIBITED', 'Warning: The customers primary address can not be removed. Please assign another address as the primary address and try again.');
-?>
+introduction_batch_delete_customers = Please verify the removal of the following customers.
+
+introduction_delete_address_book_entry = Please verify the removal of this address book entry.
+delete_warning_primary_address_book_entry = Warning: The primary address of this customer cannot be removed. Please assign another address as the primary address and try again.
+
+ms_error_gender = Please select the customers gender.
+ms_error_first_name = The customers first name must contain a minimum of %s characters.
+ms_error_last_name = The customers last name must contain a minimum of %s characters.
+ms_error_date_of_birth = The customers date of birth must be set correctly.
+ms_error_email_address = The customers e-mail address must contain a minimum of %s characters.
+ms_error_email_address_invalid = The customers e-mail address must be set correctly.
+ms_error_email_address_exists = The customers e-mail address already exists. Please use a unique e-mail address for this customer.
+ms_error_password = The customers password must contain a minimum of %s characters.
+ms_error_password_confirmation_invalid = The confirmation password does not match the customers password. Please try again.
+ms_error_company = The customers company must contain a minimum of %s characters.
+ms_error_street_address = The customers street address must contain a minimum of %s characters.
+ms_error_suburb = The customers suburb must contain a minimum of %s characters.
+ms_error_post_code = The customer post code must contain a minimum of %s characters.
+ms_error_city = The customers city must contain a minimum of %s characters.
+ms_error_state = The customers state must contain a minimum of %s characters.
+ms_error_country = Please select the correct country from the Countries pull down menu.
+ms_error_telephoné_number = The customers telephone number must contain a minimum of %s characters.
+ms_error_fax_number = The customers fax number must contain a minimum of %s characters.
+
+ms_warning_state_select_from_list = Please select the correct state from the States pull down menu.
+
+email_subject = Welcome to %s
+email_greet_general = Dear %s,
+email_greet_mr = Dear Mr. %s,
+email_greet_ms = Dear Ms. %s,
+email_text = We welcome you to %s.
+
+You can now take part in the various services we have to offer you. Some of these services include:
+
+* Permanent Shopping Cart - Any products added to your online shopping cart remain there until you purchase or remove them
+* Address Book - Products can be delivered to any addresses you define in your addres book! This is perfect for sending gifts direct to the person themself.
+* Order History - The previous orders you have made can be viewed online.
+* Product Reviews - Share your opinions on products with other customers.
+
+For help with any of our online services please e-mail us at: %s
+
+Please note: This account has been created for you by the store owner. Please use your e-mail address with the following password as your login account: %s

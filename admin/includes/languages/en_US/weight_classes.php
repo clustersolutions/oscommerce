@@ -1,32 +1,33 @@
-<?php
-/*
-  $Id$
+# $Id$
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title = Weight Classes
 
-  Copyright (c) 2004 osCommerce
+action_heading_new_weight_class = New Weight Class
+action_heading_batch_delete_weight_classes = Batch Delete Weight Classes
 
-  Released under the GNU General Public License
-*/
+table_heading_weight_classes = Weight Classes
+table_heading_unit = Unit
+table_heading_action = Action
 
-define('HEADING_TITLE', 'Weight Classes');
+field_title_and_code = Title / Code:
+field_rules = Rules:
+field_set_as_default = Set as Default?
 
-define('TABLE_HEADING_WEIGHT_CLASSES_TITLE', 'Description');
-define('TABLE_HEADING_WEIGHT_CLASSES_UNIT', 'Unit');
-define('TABLE_HEADING_ACTION', 'Action');
+introduction_new_weight_class = Please fill in the following information for the new weight class.
 
-define('TEXT_INFO_INSERT_INTRO', 'Please enter the new weight class with its related data');
-define('TEXT_INFO_EDIT_INTRO', 'Please make any necessary changes');
-define('TEXT_INFO_DELETE_INTRO', 'Are you sure you want to delete this weight class?');
-define('TEXT_DELETE_BATCH_INTRO', 'Are you sure you want to delete the following weight classes?');
+introduction_edit_weight_class = Please make the necessary changes for this weight class.
 
-define('TEXT_INFO_WEIGHT_CLASS_TITLE', 'Weight Class Title / Unit:');
-define('TEXT_INFO_CLASS_DESCRIPTION', 'Title:');
+introduction_delete_weight_class = Please verify the removal of this weight class.
+delete_error_weight_class_prohibited = Error: The default weight class cannot be removed. Please set another weight class as the default class and try again.
+delete_error_weight_class_in_use = Error: This weight class is currently assigned to %s products and cannot be removed.
 
-define('TEXT_INFO_HEADING_NEW_WEIGHT_CLASS', 'New Weight Class');
-define('TEXT_INFO_HEADING_EDIT_WEIGHT_RULES', 'Conversion Rules');
-
-define('TEXT_INFO_DELETE_PROHIBITED', 'Warning: The default weight class can not be removed. Please set another weight class as the default, and try again.');
-define('TEXT_INFO_DELETE_PROHIBITED_PRODUCTS', 'Warning: This weight class is currently used in %s products and cannot be removed.');
-?>
+introduction_batch_delete_weight_classes = Please verify the removal of the following weight classes.
+batch_delete_error_weight_class_prohibited = Error: The default weight class cannot be removed. Please set another weight class as the default class and try again.
+batch_delete_error_weight_class_in_use = Error: One or more weight classes are currently assigned to products and cannot be removed.

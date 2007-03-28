@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -18,13 +18,15 @@
 /* Private variables */
 
     var $_module = 'categories',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Categories() {
       global $osC_Language, $osC_MessageStack, $cPath_array, $current_category_id, $osC_CategoryTree;
+
+      $this->_page_title = $osC_Language->get('heading_title');
 
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
@@ -45,10 +47,10 @@
 // check if the categories image directory exists
       if ( is_dir(realpath('../images/categories')) ) {
         if ( !is_writeable(realpath('../images/categories')) ) {
-          $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_NOT_WRITEABLE, 'error');
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_not_writable'), realpath('../images/categories')), 'error');
         }
       } else {
-        $osC_MessageStack->add('header', ERROR_CATEGORIES_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_image_directory_non_existant'), realpath('../images/categories')), 'error');
       }
 
 // calculate category path
@@ -86,7 +88,7 @@
 
               foreach ( $data['name'] as $key => $value ) {
                 if ( empty($value) ) {
-                  $osC_MessageStack->add($this->_module, sprintf(WARNING_CATEGORY_NAME_EMPTY, $osC_Language->getData($key, 'name')), 'warning');
+                  $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('ms_warning_category_name_empty'), $osC_Language->getData($key, 'name')), 'warning');
 
                   $error = true;
                 }
@@ -94,9 +96,9 @@
 
               if ( $error === false ) {
                 if ( osC_Categories_Admin::save((isset($_GET['cID']) && is_numeric($_GET['cID']) ? $_GET['cID'] : null), $data) ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
@@ -110,9 +112,9 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Categories_Admin::delete($_GET['cID']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
-                $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
@@ -125,7 +127,7 @@
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
               if ( osC_Categories_Admin::move($_GET['cID'], $_POST['new_category_id']) ) {
-                $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
                 $osC_MessageStack->add_session($this->_module, ERROR_CANNOT_MOVE_CATEGORY_TO_PARENT, 'error');
               }
@@ -150,9 +152,9 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
-                  $osC_MessageStack->add_session($this->_module, ERROR_DB_ROWS_NOT_UPDATED, 'error');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
                 }
 
                 osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']));
@@ -176,7 +178,7 @@
                 }
 
                 if ( $error === false ) {
-                  $osC_MessageStack->add_session($this->_module, SUCCESS_DB_ROWS_UPDATED, 'success');
+                  $osC_MessageStack->add_session($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
                 } else {
                   $osC_MessageStack->add_session($this->_module, ERROR_CANNOT_MOVE_CATEGORY_TO_PARENT, 'error');
                 }

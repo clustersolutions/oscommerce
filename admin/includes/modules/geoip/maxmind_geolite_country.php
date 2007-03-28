@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,8 +22,8 @@
     function osC_GeoIP_maxmind_geolite_country() {
       global $osC_Language;
 
-      $this->_title = MODULE_GEOIP_MAXMIND_GEOLITE_COUNTRY_TITLE;
-      $this->_description = MODULE_GEOIP_MAXMIND_GEOLITE_COUNTRY_DESCRIPTION;
+      $this->_title = $osC_Language->get('geoip_maxmind_geolite_country_title');
+      $this->_description = $osC_Language->get('geoip_maxmind_geolite_country_description');
       $this->_status = (defined('MODULE_DEFAULT_GEOIP') && (MODULE_DEFAULT_GEOIP == $this->_code));
     }
 

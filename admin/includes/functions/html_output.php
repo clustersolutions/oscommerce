@@ -55,7 +55,11 @@
  */
 
   function osc_icon($image, $title = null, $group = '16x16', $parameters = null) {
-    global $osC_Template;
+    global $osC_Language, $osC_Template;
+
+    if ( is_null($title) ) {
+      $title = $osC_Language->get('icon_' . substr($image, 0, strpos($image, '.')));
+    }
 
     return osc_image('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image, $title, null, null, $parameters);
   }

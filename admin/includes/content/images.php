@@ -17,12 +17,16 @@
 /* Private variables */
 
     var $_module = 'images',
-        $_page_title = HEADING_TITLE,
+        $_page_title,
         $_page_contents = 'main.php';
 
 /* Class constructor */
 
     function osC_Content_Images() {
+      global $osC_Language;
+
+      $this->_page_title = $osC_Language->get('heading_title');
+
       if ( !isset($_GET['action']) ) {
         $_GET['action'] = '';
       }

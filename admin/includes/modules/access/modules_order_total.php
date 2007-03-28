@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,7 +14,13 @@
     var $_module = 'modules_order_total',
         $_group = 'modules',
         $_icon = 'calculator.png',
-        $_title = ACCESS_MODULES_ORDER_TOTAL_TITLE,
+        $_title,
         $_sort_order = 300;
+
+    function osC_Access_Modules_order_total() {
+      global $osC_Language;
+
+      $this->_title = $osC_Language->get('access_modules_order_total_title');
+    }
   }
 ?>

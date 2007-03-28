@@ -26,13 +26,15 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('stop.png', IMAGE_MODULE_REMOVE) . ' ' . $module->getTitle(); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('uninstall.png') . ' ' . $module->getTitle(); ?></div>
 <div class="infoBoxContent">
   <form name="mUninstall" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=uninstall'); ?>" method="post">
 
-  <p><?php echo INFO_MODULE_UNINSTALL_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_uninstall_order_total_module'); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_MODULE_REMOVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo '<b>' . $module->getTitle() . '</b>'; ?></p>
+
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('icon_uninstall') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

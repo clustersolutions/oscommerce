@@ -21,9 +21,9 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
-<div class="infoBoxHeading"><?php echo osc_icon('file.png', IMAGE_PREVIEW) . ' ' . $osC_ObjectInfo->get('title'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('file.png') . ' ' . $osC_ObjectInfo->get('title'); ?></div>
 <div class="infoBoxContent">
   <p><?php echo nl2br(osc_output_string_protected($osC_ObjectInfo->get('content'))); ?></p>
 </div>

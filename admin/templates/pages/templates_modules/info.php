@@ -29,18 +29,18 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('info.png', IMAGE_INFO) . ' ' . $module->getTitle(); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('info.png') . ' ' . $module->getTitle(); ?></div>
 <div class="infoBoxContent">
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td>Title:</td>
+      <td><?php echo $osC_Language->get('field_title'); ?></td>
       <td><?php echo $module->getTitle(); ?></td>
     </tr>
     <tr>
-      <td>Author:</td>
+      <td><?php echo $osC_Language->get('field_author'); ?></td>
       <td><?php echo $module->getAuthorName(); ?> (<?php echo $module->getAuthorAddress(); ?>)</td>
     </tr>
   </table>
 
-  <p align="center"><?php echo '<input type="button" value="' . IMAGE_BACK . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&set=' . $_GET['set']) . '\';" class="operationButton" />'; ?></p>
 </div>

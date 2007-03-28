@@ -27,7 +27,7 @@
   }
 ?>
 
-<title><?php echo TITLE; ?></title>
+<title><?php echo $osC_Language->get('administration_title'); ?></title>
 
 <link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css">
 

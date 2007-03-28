@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
@@ -39,7 +39,8 @@
   $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
   $Qmanufacturers->execute();
 
-  $manufacturers_array = array(array('id' => '', 'text' => TEXT_NONE));
+  $manufacturers_array = array(array('id' => '',
+                                     'text' => $osC_Language->get('none')));
 
   while ($Qmanufacturers->next()) {
     $manufacturers_array[] = array('id' => $Qmanufacturers->valueInt('manufacturers_id'),
@@ -50,7 +51,8 @@
   $Qtc->bindTable(':table_tax_class', TABLE_TAX_CLASS);
   $Qtc->execute();
 
-  $tax_class_array = array(array('id' => '0', 'text' => TEXT_NONE));
+  $tax_class_array = array(array('id' => '0',
+                                 'text' => $osC_Language->get('none')));
 
   while ($Qtc->next()) {
     $tax_class_array[] = array('id' => $Qtc->valueInt('tax_class_id'),
@@ -324,12 +326,12 @@
 
         if (str_ele[1] == '1') {
           if (str_ele[6] == '1') {
-            newdiv += '<?php echo osc_icon('default.png', IMAGE_DEFAULT); ?>&nbsp;';
+            newdiv += '<?php echo osc_icon('default.png'); ?>&nbsp;';
           } else {
-            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('default_grey.png', IMAGE_DEFAULT); ?></a>&nbsp;';
+            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('default_grey.png'); ?></a>&nbsp;';
           }
 
-          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('trash.png', IMAGE_DELETE); ?></a>';
+          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('trash.png'); ?></a>';
         }
 
         newdiv += '</span>';
@@ -363,7 +365,7 @@
   }
 
   function getImagesOriginals(makeCall) {
-    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Loading images from server...'; ?></div>';
+    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>';
 
     if (makeCall != false) {
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=originals", {onSuccess: handleHttpResponseGetImages});
@@ -371,7 +373,7 @@
   }
 
   function getImagesOthers(makeCall) {
-    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Loading images from server...'; ?></div>';
+    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>';
 
     if (makeCall != false) {
       new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others", {onSuccess: handleHttpResponseGetImages});
@@ -465,15 +467,15 @@
 <div id="overlay" style="display: none; position: absolute; top: 0; left: 0; z-index: 90; width: 100%;"></div>
 
 <div id="actionLayer" style="display: none; position: absolute; z-index: 100; width: 400px; height: 200px;">
-  <div class="infoBoxHeading"><?php echo osc_icon('trash.png', IMAGE_DELETE) . ' Delete Image'; ?></div>
+  <div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_Language->get('action_heading_delete_image'); ?></div>
   <div class="infoBoxContent">
-    <p>Are you sure you want to delete this product image?</p>
+    <p><?php echo $osC_Language->get('introduction_delete_image'); ?></p>
 
-    <p align="center"><?php echo '<button onclick="removeImageConfirmation(\'\')" class="operationButton">' . IMAGE_DELETE . '</button> <button onclick="cancelRemoveImage(\'\')" class="operationButton">' . IMAGE_CANCEL . '</button>'; ?></p>
+    <p align="center"><?php echo '<button onclick="removeImageConfirmation(\'\')" class="operationButton">' . $osC_Language->get('button_delete') . '</button> <button onclick="cancelRemoveImage(\'\')" class="operationButton">' . $osC_Language->get('button_cancel') . '</button>'; ?></p>
   </div>
 </div>
 
-<h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : TEXT_NEW_PRODUCT; ?></h1>
+<h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : $osC_Language->get('heading_title_new_product'); ?></h1>
 
 <?php
   if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
@@ -489,7 +491,7 @@
   <form name="product" action="#" method="post" enctype="multipart/form-data">
 
   <div class="tab-page" id="tabDescription">
-    <h2 class="tab"><?php echo TAB_GENERAL; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_general'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabDescription" ) );
@@ -513,28 +515,28 @@
 
         <table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="smallText"><?php echo TEXT_PRODUCTS_NAME; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></td>
+            <td><?php echo $osC_Language->get('field_name'); ?></td>
+            <td><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></td>
           </tr>
           <tr>
-            <td class="smallText" valign="top"><?php echo TEXT_PRODUCTS_DESCRIPTION; ?></td>
-            <td class="smallText"><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
+            <td valign="top"><?php echo $osC_Language->get('field_description'); ?></td>
+            <td><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
           </tr>
           <tr>
-            <td class="smallText"><?php echo TEXT_PRODUCTS_MODEL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_model[$l['id']]) ? $products_model[$l['id']] : null)); ?></td>
+            <td><?php echo $osC_Language->get('field_model'); ?></td>
+            <td><?php echo osc_draw_input_field('products_model[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_model[$l['id']]) ? $products_model[$l['id']] : null)); ?></td>
           </tr>
           <tr>
-            <td class="smallText"><?php echo TEXT_PRODUCTS_KEYWORD; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></td>
+            <td><?php echo $osC_Language->get('field_keyword'); ?></td>
+            <td><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></td>
           </tr>
           <tr>
-            <td class="smallText"><?php echo TEXT_PRODUCTS_TAGS; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></td>
+            <td><?php echo $osC_Language->get('field_tags'); ?></td>
+            <td><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></td>
           </tr>
           <tr>
-            <td class="smallText"><?php echo TEXT_PRODUCTS_URL; ?></td>
-            <td class="smallText"><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></td>
+            <td><?php echo $osC_Language->get('field_url'); ?></td>
+            <td><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></td>
           </tr>
         </table>
       </div>
@@ -547,7 +549,7 @@
   </div>
 
   <div class="tab-page" id="tabData">
-    <h2 class="tab"><?php echo TAB_DATA; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_data'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabData" ) );
@@ -555,22 +557,22 @@
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="smallText" width="50%" height="100%" valign="top">
+        <td width="50%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>Price</legend>
+            <legend><?php echo $osC_Language->get('subsection_price'); ?></legend>
 
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_TAX_CLASS; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_tax_class_id') : null), 'onchange="updateGross(\'products_price\');"'); ?></td>
+                <td><?php echo $osC_Language->get('field_tax_class'); ?></td>
+                <td><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_tax_class_id') : null), 'onchange="updateGross(\'products_price\');"'); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_NET; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateGross(\'products_price\')"'); ?></td>
+                <td><?php echo $osC_Language->get('field_price_net'); ?></td>
+                <td><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateGross(\'products_price\')"'); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_PRICE_GROSS; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateNet(\'products_price\')"'); ?></td>
+                <td><?php echo $osC_Language->get('field_price_gross'); ?></td>
+                <td><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'onkeyup="updateNet(\'products_price\')"'); ?></td>
               </tr>
             </table>
 
@@ -579,43 +581,43 @@
             //--></script>
           </fieldset>
         </td>
-        <td class="smallText" width="50%" height="100%" valign="top">
+        <td width="50%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>Data</legend>
+            <legend><?php echo $osC_Language->get('subsection_data'); ?></legend>
 
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_MANUFACTURER; ?></td>
-                <td class="smallText"><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('manufacturers_id') : null)); ?></td>
+                <td><?php echo $osC_Language->get('field_manufacturer'); ?></td>
+                <td><?php echo osc_draw_pull_down_menu('manufacturers_id', $manufacturers_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('manufacturers_id') : null)); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_QUANTITY; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></td>
+                <td><?php echo $osC_Language->get('field_quantity'); ?></td>
+                <td><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></td>
               </tr>
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_WEIGHT; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></td>
+                <td><?php echo $osC_Language->get('field_weight'); ?></td>
+                <td><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></td>
               </tr>
             </table>
           </fieldset>
         </td>
       </tr>
       <tr>
-        <td class="smallText" width="50%" height="100%" valign="top">
+        <td width="50%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend><?php echo TEXT_PRODUCTS_STATUS; ?></legend>
+            <legend><?php echo $osC_Language->get('subsection_status'); ?></legend>
 
-            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => TEXT_PRODUCT_AVAILABLE), array('id' => '0', 'text' => TEXT_PRODUCT_NOT_AVAILABLE)), (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0'), null, '<br />'); ?>
+            <?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => $osC_Language->get('status_enabled')), array('id' => '0', 'text' => $osC_Language->get('status_disabled'))), (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0'), null, '<br />'); ?>
           </fieldset>
         </td>
-        <td class="smallText" width="50%" height="100%" valign="top">
+        <td width="50%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>Information</legend>
+            <legend><?php echo $osC_Language->get('subsection_information'); ?></legend>
 
             <table border="0" width="100%" cellspacing="0" cellpadding="2">
               <tr>
-                <td class="smallText"><?php echo TEXT_PRODUCTS_DATE_AVAILABLE; ?></td>
-                <td class="smallText"><?php echo osc_draw_input_field('products_date_available', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_date_available') : null)); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
+                <td><?php echo $osC_Language->get('field_date_available'); ?></td>
+                <td><?php echo osc_draw_input_field('products_date_available', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_date_available') : null)); ?><input type="button" value="..." id="calendarTrigger" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "products_date_available", ifFormat: "%Y-%m-%d", button: "calendarTrigger" } );</script><small>(YYYY-MM-DD)</small></td>
               </tr>
             </table>
           </fieldset>
@@ -625,7 +627,7 @@
   </div>
 
   <div class="tab-page" id="tabImages">
-    <h2 class="tab"><?php echo TAB_IMAGES; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_images'); ?></h2>
 
     <script type="text/javascript"><!--
       mainTabPane.addTabPage( document.getElementById( "tabImages" ) );
@@ -633,12 +635,12 @@
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="smallText" width="100%" height="100%" valign="top">
+        <td width="100%" height="100%" valign="top">
           <fieldset style="height: 100%;">
-            <legend>New Image</legend>
+            <legend><?php echo $osC_Language->get('subsection_new_image'); ?></legend>
 
             <div style="float: right;">
-              <a href="#" id="remoteFilesLink" onclick="switchImageFilesView('remote');" style="background-color: #E5EFE5;">Remote File Upload</a> | <a href="#" id="localFilesLink" onclick="switchImageFilesView('local');">Local Files</a>
+              <a href="#" id="remoteFilesLink" onclick="switchImageFilesView('remote');" style="background-color: #E5EFE5;"><?php echo $osC_Language->get('image_remote_upload'); ?></a> | <a href="#" id="localFilesLink" onclick="switchImageFilesView('local');"><?php echo $osC_Language->get('image_local_files'); ?></a>
             </div>
 
             <div id="remoteFiles">
@@ -646,7 +648,7 @@
 
 <?php
     if ( isset($osC_ObjectInfo) ) {
-      echo '<input type="submit" value="Send To Server" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image to server...</div>';
+      echo '<input type="submit" value="' . $osC_Language->get('button_send_to_server') . '" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_upload_progress') . '</div>';
     }
 ?>
             </div>
@@ -656,15 +658,17 @@
 //--></script>
 
             <div id="localFiles" style="display: none;">
-              <p><?php echo 'Product images can be uploaded via FTP to the following directory:<br /><br />' . realpath('../images/products/_upload'); ?></p>
+              <p><?php echo $osC_Language->get('introduction_select_local_images'); ?></p>
 
               <select id="localImagesSelection" name="localimages[]" size="5" multiple="multiple" style="width: 100%;"></select>
 
-              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;Retrieving local images..'; ?></div>
+              <div id="showProgressGetLocalImages" style="display: none; float: right; padding-right: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_retrieving_local_files'); ?></div>
+
+              <p><?php echo realpath('../images/products/_upload'); ?></p>
 
 <?php
     if ( isset($osC_ObjectInfo) ) {
-      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;Uploading image(s) to server...</div>';
+      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_multiple_upload_progress') . '</div>';
     }
 ?>
 
@@ -682,13 +686,13 @@
 ?>
 
           <fieldset style="height: 100%;">
-            <legend>Original Images</legend>
+            <legend><?php echo $osC_Language->get('subsection_original_images'); ?></legend>
 
             <div id="imagesOriginal" style="overflow: auto;"></div>
           </fieldset>
 
           <fieldset style="height: 100%;">
-            <legend>Images</legend>
+            <legend><?php echo $osC_Language->get('subsection_images'); ?></legend>
 
             <div id="imagesOther" style="overflow: auto;"></div>
           </fieldset>
@@ -707,13 +711,14 @@
   </div>
 
   <div class="tab-page" id="tabAttributes">
-    <h2 class="tab"><?php echo TAB_ATTRIBUTES; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_attributes'); ?></h2>
 
 <script type="text/javascript">mainTabPane.addTabPage( document.getElementById( "tabAttributes" ) );</script>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td width="30%" valign="top"><select name="attributes" size="20" style="width: 100%;">
+
 <?php
   $Qoptions = $osC_Database->query('select products_options_id, products_options_name from :table_products_options where language_id = :language_id order by products_options_name');
   $Qoptions->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
@@ -738,12 +743,12 @@
   }
 ?>
         </select></td>
-        <td align="center" width="10%" class="smallText">
+        <td align="center" width="10%">
           <input type="button" value=">>" onclick="moreFields()" class="infoBoxButton">
         </td>
-        <td width="60%" valign="top" class="smallText">
+        <td width="60%" valign="top"">
           <fieldset>
-            <legend><?php echo FIELDSET_ASSIGNED_ATTRIBUTES; ?></legend>
+            <legend><?php echo $osC_Language->get('subsection_assigned_attributes'); ?></legend>
 
 <?php
   if (isset($_GET['pID'])) {
@@ -763,16 +768,16 @@
     while ($Qattributes->next()) {
       if ($Qattributes->value('products_options_name') != $current_attribute_group) {
         echo '              <tr>' . "\n" .
-             '                <td class="smallText" colspan="3"><b>' . $Qattributes->value('products_options_name') . '</b></td>' . "\n" .
+             '                <td colspan="3"><b>' . $Qattributes->value('products_options_name') . '</b></td>' . "\n" .
              '              </tr>' . "\n";
 
         $current_attribute_group = $Qattributes->value('products_options_name');
       }
 
       echo '              <tr id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '">' . "\n" .
-           '                <td class="smallText" width="50%">' . $Qattributes->value('products_options_values_name') . '</td>' . "\n" .
-           '                <td class="smallText">' . osc_draw_pull_down_menu('attribute_prefix[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), $Qattributes->value('price_prefix')) . '&nbsp;' . osc_draw_input_field('attribute_price[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', $Qattributes->value('options_values_price')) . '</td>' . "\n" .
-           '                <td class="smallText" align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onclick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
+           '                <td width="50%">' . $Qattributes->value('products_options_values_name') . '</td>' . "\n" .
+           '                <td>' . osc_draw_pull_down_menu('attribute_prefix[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), $Qattributes->value('price_prefix')) . '&nbsp;' . osc_draw_input_field('attribute_price[' . $Qattributes->valueInt('products_options_id') . '][' . $Qattributes->valueInt('products_options_values_id') . ']', $Qattributes->value('options_values_price')) . '</td>' . "\n" .
+           '                <td align="right"><input type="button" value="-" id="attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '-button" onclick="toggleAttributeStatus(\'attribute-' . $Qattributes->valueInt('products_options_id') . '_' . $Qattributes->valueInt('products_options_values_id') . '\');" class="infoBoxButton"></td>' . "\n" .
            '              </tr>' . "\n";
     }
 
@@ -785,12 +790,12 @@
             <div id="readroot" style="display: none">
               <table border="0" width="100%" cellspacing="0" cellpadding="2">
                 <tr>
-                  <td class="smallText" colspan="3"><b><span id="attribteGroupName">&nbsp;</span></b></td>
+                  <td colspan="3"><b><span id="attribteGroupName">&nbsp;</span></b></td>
                 </tr>
                 <tr class="attributeAdd">
-                  <td class="smallText" width="50%"><span id="attributeKey">&nbsp;</span></td>
-                  <td class="smallText"><?php echo osc_draw_pull_down_menu('new_attribute_prefix', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), '+', 'disabled="disabled"') . '&nbsp;' . osc_draw_input_field('new_attribute_price', null, 'disabled="disabled"'); ?></td>
-                  <td class="smallText" align="right"><input type="button" value="-" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);" class="infoBoxButton"></td>
+                  <td width="50%"><span id="attributeKey">&nbsp;</span></td>
+                  <td><?php echo osc_draw_pull_down_menu('new_attribute_prefix', array(array('id' => '+', 'text' => '+'), array('id' => '-', 'text' => '-')), '+', 'disabled="disabled"') . '&nbsp;' . osc_draw_input_field('new_attribute_price', null, 'disabled="disabled"'); ?></td>
+                  <td align="right"><input type="button" value="-" onclick="this.parentNode.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode.parentNode);" class="infoBoxButton"></td>
                 </tr>
               </table>
             </div>
@@ -801,17 +806,17 @@
   </div>
 
   <div class="tab-page" id="tabCategories">
-    <h2 class="tab"><?php echo TAB_CATEGORIES; ?></h2>
+    <h2 class="tab"><?php echo $osC_Language->get('section_categories'); ?></h2>
 
 <script type="text/javascript">mainTabPane.addTabPage( document.getElementById( "tabCategories" ) );</script>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="smallText"><table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
+        <td><table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
           <thead>
             <tr>
-              <th>Categories</th>
-              <th>Selected</th>
+              <th width="20">&nbsp;</th>
+              <th><?php echo $osC_Language->get('table_heading_categories'); ?></th>
             </tr>
           </thead>
           <tbody>
@@ -835,8 +840,8 @@
 
   foreach ($assignedCategoryTree->getTree() as $value) {
     echo '          <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' . "\n" .
-         '            <td class="smallText"><a href="#" onclick="document.product.categories_' . $value['id'] . '.checked=!document.product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
-         '            <td class="smallText" align="right">' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" .
+         '            <td>' . osc_draw_checkbox_field('categories[]', $value['id'], in_array($value['id'], $product_categories_array), 'id="categories_' . $value['id'] . '"') . '</td>' . "\n" .
+         '            <td><a href="#" onclick="document.product.categories_' . $value['id'] . '.checked=!document.product.categories_' . $value['id'] . '.checked;">' . $value['title'] . '</a></td>' . "\n" .
          '          </tr>' . "\n";
   }
 ?>
@@ -845,7 +850,7 @@
     </table>
   </div>
 
-  <p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" onclick="' . (isset($osC_ObjectInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save') . '\';" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton" />'; ?></p>
+  <p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" onclick="' . (isset($osC_ObjectInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save') . '\';" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

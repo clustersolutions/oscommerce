@@ -5,14 +5,15 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   Released under the GNU General Public License
 */
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Categories_Admin::getData($_GET['cID']));
 
-  $categories_array = array(array('id' => '0', 'text' => TEXT_TOP));
+  $categories_array = array(array('id' => '0',
+                                  'text' => $osC_Language->get('top_category')));
 
   foreach ($osC_CategoryTree->getTree() as $value) {
     $categories_array[] = array('id' => $value['id'],
@@ -28,16 +29,16 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('configure.png', IMAGE_EDIT) . ' ' . $osC_ObjectInfo->get('categories_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('categories_name'); ?></div>
 <div class="infoBoxContent">
   <form name="cEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . '&cID=' . $osC_ObjectInfo->get('categories_id') . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo TEXT_EDIT_INTRO; ?></p>
+  <p><?php echo $osC_Language->get('introduction_edit_category'); ?></p>
 
   <p>
 
 <?php
-  echo TEXT_EDIT_CATEGORIES_NAME;
+  echo $osC_Language->get('field_name');
 
   $Qcd = $osC_Database->query('select language_id, categories_name from :table_categories_description where categories_id = :categories_id');
   $Qcd->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
@@ -56,10 +57,10 @@
 
   </p>
   <p><?php echo osc_image('../' . DIR_WS_IMAGES . 'categories/' . $osC_ObjectInfo->get('categories_image'), $osC_ObjectInfo->get('categories_name'), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT) . '<br />' . DIR_WS_CATALOG . 'images/categories/<br /><b>' . $osC_ObjectInfo->get('categories_image') . '</b>'; ?></p>
-  <p><?php echo TEXT_EDIT_CATEGORIES_IMAGE . '<br />' . osc_draw_file_field('categories_image', true); ?></p>
-  <p><?php echo TEXT_EDIT_SORT_ORDER . '<br />' . osc_draw_input_field('sort_order', $osC_ObjectInfo->get('sort_order')); ?></p>
+  <p><?php echo $osC_Language->get('field_image') . '<br />' . osc_draw_file_field('categories_image', true); ?></p>
+  <p><?php echo $osC_Language->get('field_sort_order') . '<br />' . osc_draw_input_field('sort_order', $osC_ObjectInfo->get('sort_order')); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_SAVE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

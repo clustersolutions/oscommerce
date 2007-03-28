@@ -51,7 +51,7 @@
   }
 
   $ochart = new chart(600,350, 5, '#eeeeee');
-  $ochart->setTitle(sprintf(TEXT_BANNERS_MONTHLY_STATISTICS, $osC_ObjectInfo->get('banners_title'), $year), '#000000', 2);
+  $ochart->setTitle(sprintf($osC_Language->get('subsection_heading_statistics_monthly'), $osC_ObjectInfo->get('banners_title'), $year), '#000000', 2);
   $ochart->setPlotArea(SOLID, '#444444', '#dddddd');
   $ochart->setFormat(0, ',', '.');
   $ochart->setXAxis('#000000', SOLID, 1, $year);

@@ -1,20 +1,14 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
-
-  Released under the GNU General Public License
-*/
-
-define('MODULE_IMAGE_RESIZE', 'Resize Images');
-
-define('MODULE_IMAGE_RESIZE_GROUPS', 'Groups');
-define('MODULE_IMAGE_RESIZE_NUMBER_OF_IMAGES', 'Number of Images Resized');
-
-define('MODULE_IMAGE_RESIZE_PROCESS_GROUPS', 'Groups');
-define('MODULE_IMAGE_RESIZE_OVERWRITE_IMAGES', 'Overwrite Existing Images');
-?>
+images_resize_title = Resize Images
+images_resize_table_heading_groups = Groups
+images_resize_table_heading_total_resized = Total Resized
+images_resize_field_groups = Groups:
+images_resize_field_overwrite_images = Overwrite Existing Images?

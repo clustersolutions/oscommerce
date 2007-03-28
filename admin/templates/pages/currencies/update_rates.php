@@ -24,7 +24,7 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('reload.png', IMAGE_UPDATE) . ' ' . $osC_Language->get('action_heading_update_rates'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('update.png') . ' ' . $osC_Language->get('action_heading_update_rates'); ?></div>
 <div class="infoBoxContent">
   <form name="cUpdate" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=updateRates'); ?>" method="post">
 
@@ -34,7 +34,7 @@
 
   <p><?php echo $osC_Language->get('service_terms_agreement'); ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . IMAGE_UPDATE . '" class="operationButton" /> <input type="button" value="' . IMAGE_CANCEL . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_update') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

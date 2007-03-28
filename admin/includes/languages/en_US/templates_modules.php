@@ -1,23 +1,23 @@
-<?php
-/*
-  $Id: $
+# $Id: $
+#
+# osCommerce, Open Source E-Commerce Solutions
+# http://www.oscommerce.com
+#
+# Copyright (c) 2007 osCommerce
+#
+# Released under the GNU General Public License
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+heading_title_boxes = Templates Modules: Boxes
+heading_title_content = Templates Modules: Content
 
-  Copyright (c) 2005 osCommerce
+table_heading_modules = Modules
+table_heading_action = Action
 
-  Released under the GNU General Public License
-*/
+field_title = Title:
+field_author = Author:
 
-define('HEADING_TITLE_MODULES_BOXES', 'Templates Modules Boxes');
-define('HEADING_TITLE_MODULES_CONTENT', 'Templates Modules Content');
+modules_location = Modules Directory:
 
-define('TABLE_HEADING_MODULES', 'Modules');
-define('TABLE_HEADING_STATUS', 'Status');
-define('TABLE_HEADING_ACTION', 'Action');
+introduction_edit_module = Please make the necessary changes for this module.
 
-define('TEXT_DIRECTORY', 'Directory:');
-
-define('INFO_UNINSTALL_INTRO', 'Are you sure you want to uninstall this module?<br /><br />(All module parameters would then be removed)');
-?>
+introduction_uninstall_module = Please verify the uninstallation of this module.
