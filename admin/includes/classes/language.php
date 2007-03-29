@@ -17,27 +17,31 @@
   class osC_Language_Admin extends osC_Language {
 
 /* Public methods */
-    function loadConstants($definition = false) {
-      if (is_string($definition) && file_exists('includes/languages/' . $this->getCode() . '/' . $definition)) {
-        include('includes/languages/' . $this->getCode() . '/' . $definition);
-      } elseif ($definition === false) {
-        include('includes/languages/' . $this->getCode() . '.php');
+    function loadIniFile($filename = null, $comment = '#', $language_code = null) {
+      if ( is_null($language_code) ) {
+        $language_code = $this->_code;
       }
-    }
 
-    function loadIniFile($filename = null, $comment = '#') {
+      if ( $this->_languages[$language_code]['parent_id'] > 0 ) {
+        $this->loadIniFile($filename, $comment, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
+      }
+
       if ( is_null($filename) ) {
-        $contents = file('includes/languages/' . $this->_code . '.php');
+        if ( file_exists('includes/languages/' . $language_code . '.php') ) {
+          $contents = file('includes/languages/' . $language_code . '.php');
+        } else {
+          return array();
+        }
       } else {
-        if ( substr(realpath('includes/languages/' . $this->_code . '/' . $filename), 0, strlen(realpath('includes/languages/' . $this->_code))) != realpath('includes/languages/' . $this->_code) ) {
+        if ( substr(realpath('includes/languages/' . $language_code . '/' . $filename), 0, strlen(realpath('includes/languages/' . $language_code))) != realpath('includes/languages/' . $language_code) ) {
           return array();
         }
 
-        if ( !file_exists('includes/languages/' . $this->_code . '/' . $filename) ) {
+        if ( !file_exists('includes/languages/' . $language_code . '/' . $filename) ) {
           return array();
         }
 
-        $contents = file('includes/languages/' . $this->_code . '/' . $filename);
+        $contents = file('includes/languages/' . $language_code . '/' . $filename);
       }
 
       $ini_array = array();
@@ -66,22 +70,36 @@
       $this->_definitions = array_merge($this->_definitions, $ini_array);
     }
 
-    function injectDefinitions($file) {
-      foreach ($this->extractDefinitions($this->_code . '/' . $file) as $def) {
+    function injectDefinitions($file, $language_code = null) {
+      if ( is_null($language_code) ) {
+        $language_code = $this->_code;
+      }
+
+      if ( $this->_languages[$language_code]['parent_id'] > 0 ) {
+        $this->injectDefinitions($file, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
+      }
+
+      foreach ($this->extractDefinitions($language_code . '/' . $file) as $def) {
         $this->_definitions[$def['key']] = $def['value'];
       }
     }
 
     function &extractDefinitions($xml) {
-      $osC_XML = new osC_XML(file_get_contents(dirname(__FILE__) . '/../../../includes/languages/' . $xml));
+      $definitions = array();
 
-      $definitions = $osC_XML->toArray();
+      if ( file_exists(dirname(__FILE__) . '/../../../includes/languages/' . $xml) ) {
+        $osC_XML = new osC_XML(file_get_contents(dirname(__FILE__) . '/../../../includes/languages/' . $xml));
 
-      if (isset($definitions['language']['definitions']['definition'][0]) === false) {
-        $definitions['language']['definitions']['definition'] = array($definitions['language']['definitions']['definition']);
+        $definitions = $osC_XML->toArray();
+
+        if (isset($definitions['language']['definitions']['definition'][0]) === false) {
+          $definitions['language']['definitions']['definition'] = array($definitions['language']['definitions']['definition']);
+        }
+
+        $definitions = $definitions['language']['definitions']['definition'];
       }
 
-      return $definitions['language']['definitions']['definition'];
+      return $definitions;
     }
 
     function export($id, $groups, $include_language_data = true) {
@@ -103,6 +121,10 @@
                                                   'default_currency-CDATA' => $osC_Currencies->getCode($language['currencies_id']),
                                                   'numerical_decimal_separator-CDATA' => $language['numeric_separator_decimal'],
                                                   'numerical_thousands_separator-CDATA' => $language['numeric_separator_thousands']);
+
+        if ( $language['parent_id'] > 0 ) {
+          $export_array['language']['data']['parent_language_code'] = osC_Language_Admin::getCode($language['parent_id']);
+        }
       }
 
       $Qdefs = $osC_Database->query('select content_group, definition_key, definition_value from :table_languages_definitions where languages_id = :languages_id and content_group in (":content_group") order by content_group, definition_key');
@@ -149,14 +171,33 @@
                           'text_direction' => $source['language']['data']['text_direction'],
                           'currency' => $source['language']['data']['default_currency'],
                           'numeric_separator_decimal' => $source['language']['data']['numerical_decimal_separator'],
-                          'numeric_separator_thousands' => $source['language']['data']['numerical_thousands_separator']
+                          'numeric_separator_thousands' => $source['language']['data']['numerical_thousands_separator'],
+                          'parent_language_code' => $source['language']['data']['parent_language_code'],
+                          'parent_id' => 0
                          );
 
         if (!$osC_Currencies->exists($language['currency'])) {
           $language['currency'] = DEFAULT_CURRENCY;
         }
 
+        if ( !empty($language['parent_language_code']) ) {
+          $Qlanguage = $osC_Database->query('select languages_id from :table_languages where code = :code');
+          $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+          $Qlanguage->bindValue(':code', $language['parent_language_code']);
+          $Qlanguage->execute();
+
+          if ( $Qlanguage->numberOfRows() === 1 ) {
+            $language['parent_id'] = $Qlanguage->valueInt('languages_id');
+          }
+        }
+
         $definitions = $source['language']['definitions']['definition'];
+
+        if ( isset($definitions['key']) && isset($definitions['value']) && isset($definitions['group']) ) {
+          $definitions = array(array('key' => $definitions['key'],
+                                     'value' => $definitions['value'],
+                                     'group' => $definitions['group']));
+        }
 
         unset($source);
 
@@ -175,10 +216,10 @@
 
           $language_id = $Qcheck->valueInt('languages_id');
 
-          $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands where languages_id = :languages_id');
+          $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, parent_id = :parent_id where languages_id = :languages_id');
           $Qlanguage->bindInt(':languages_id', $language_id);
         } else {
-          $Qlanguage = $osC_Database->query('insert into :table_languages (name, code, locale, charset, date_format_short, date_format_long, time_format, text_direction, currencies_id, numeric_separator_decimal, numeric_separator_thousands) values (:name, :code, :locale, :charset, :date_format_short, :date_format_long, :time_format, :text_direction, :currencies_id, :numeric_separator_decimal, :numeric_separator_thousands)');
+          $Qlanguage = $osC_Database->query('insert into :table_languages (name, code, locale, charset, date_format_short, date_format_long, time_format, text_direction, currencies_id, numeric_separator_decimal, numeric_separator_thousands, parent_id) values (:name, :code, :locale, :charset, :date_format_short, :date_format_long, :time_format, :text_direction, :currencies_id, :numeric_separator_decimal, :numeric_separator_thousands, :parent_id)');
         }
         $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
         $Qlanguage->bindValue(':name', $language['name']);
@@ -192,6 +233,7 @@
         $Qlanguage->bindInt(':currencies_id', $osC_Currencies->getID($language['currency']));
         $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
         $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
+        $Qlanguage->bindInt(':parent_id', $language['parent_id']);
         $Qlanguage->setLogging($_SESSION['module'], ($Qcheck->numberOfRows() === 1 ? $language_id : null));
         $Qlanguage->execute();
 
@@ -483,6 +525,25 @@
       return $result['languages_id'];
     }
 
+    function getCode($id = null) {
+      global $osC_Database;
+
+      if ( empty($id) ) {
+        return $this->_code;
+      }
+
+      $Qlanguage = $osC_Database->query('select code from :table_languages where languages_id = :languages_id');
+      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage->bindValue(':languages_id', $id);
+      $Qlanguage->execute();
+
+      $result = $Qlanguage->toArray();
+
+      $Qlanguage->freeResult();
+
+      return $result['code'];
+    }
+
     function update($id, $language, $default = false) {
       global $osC_Database;
 
@@ -490,7 +551,7 @@
 
       $osC_Database->startTransaction();
 
-      $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, sort_order = :sort_order where languages_id = :languages_id');
+      $Qlanguage = $osC_Database->query('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, parent_id = :parent_id, sort_order = :sort_order where languages_id = :languages_id');
       $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
       $Qlanguage->bindValue(':name', $language['name']);
       $Qlanguage->bindValue(':code', $language['code']);
@@ -503,6 +564,7 @@
       $Qlanguage->bindInt(':currencies_id', $language['currencies_id']);
       $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
       $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
+      $Qlanguage->bindInt(':parent_id', $language['parent_id']);
       $Qlanguage->bindInt(':sort_order', $language['sort_order']);
       $Qlanguage->bindInt(':languages_id', $id);
       $Qlanguage->setLogging($_SESSION['module'], $id);

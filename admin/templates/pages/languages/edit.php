@@ -12,6 +12,16 @@
   as published by the Free Software Foundation.
 */
 
+  $languages_array = array(array('id' => '0',
+                                 'text' => $osC_Language->get('none')));
+
+  foreach ( $osC_Language->getAll() as $l ) {
+    if ( $l['id'] != $_GET['lID'] ) {
+      $languages_array[] = array('id' => $l['id'],
+                                 'text' => $l['name']);
+    }
+  }
+
   $currencies_array = array();
 
   foreach ($osC_Currencies->getData() as $currency) {
@@ -80,6 +90,10 @@
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_currency_separator_thousands') . '</b>'; ?></td>
       <td width="60%"><?php echo osc_draw_input_field('numeric_separator_thousands', $osC_ObjectInfo->get('numeric_separator_thousands'), 'style="width: 100%"'); ?></td>
+    </tr>
+    <tr>
+      <td width="40%"><?php echo '<b>' . $osC_Language->get('field_parent_language') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('parent_id', $languages_array, $osC_ObjectInfo->get('parent_id'), 'style="width: 100%"'); ?></td>
     </tr>
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>

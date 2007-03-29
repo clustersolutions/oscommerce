@@ -34,6 +34,7 @@ field_time_format = Time Format:
 field_currency = Default Currency:
 field_currency_separator_decimal = Currency Decimal Separator:
 field_currency_separator_thousands = Currency Thousands Separator:
+field_parent_language = Parent Language:
 field_sort_order = Sort Order:
 field_set_default = Set as Default?
 
@@ -52,6 +53,7 @@ only_update_existing_records = Only Update Existing Records
 replace_all = Replace All
 select_all = Select All
 select_none = Select None
+none = -- None --
 
 introduction_edit_language = Please make the necessary changes for the selected language.
 

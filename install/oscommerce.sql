@@ -8,18 +8,6 @@
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
-#
-# NOTE: * Please make any modifications to this file by hand!
-#       * DO NOT use a mysqldump created file for new changes!
-#       * Please take note of the table structure, and use this
-#         structure as a standard for future modifications!
-#       * Any tables you add here should be added in admin/backup.php
-#         and in catalog/install/includes/functions/database.php
-#       * To see the 'diff'erence between MySQL databases, use
-#         the mysqldiff perl script located in the extras
-#         directory of the 'catalog' module.
-#       * Comments should be like these, full line comments.
-#         (don't use inline comments)
 
 DROP TABLE IF EXISTS osc_address_book;
 CREATE TABLE osc_address_book (
@@ -234,6 +222,7 @@ CREATE TABLE osc_languages (
   currencies_id int NOT NULL,
   numeric_separator_decimal varchar(12) NOT NULL,
   numeric_separator_thousands varchar(12) NOT NULL,
+  parent_id int DEFAULT 0,
   sort_order int(3),
   PRIMARY KEY (languages_id)
 );
@@ -1079,7 +1068,7 @@ INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$','','2','1.0000', now(
 INSERT INTO osc_currencies VALUES (2,'Euro','EUR','€','','2','1.2076', now());
 INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','£','','2','1.7587', now());
 
-INSERT INTO osc_languages VALUES (1,'English','en_US','en_US.UTF-8,en_US,english','utf-8','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr',1,'.',',',1);
+INSERT INTO osc_languages VALUES (1,'English','en_US','en_US.UTF-8,en_US,english','utf-8','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr',1,'.',',',0,1);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
 INSERT INTO osc_orders_status VALUES ( '2', '1', 'Processing');

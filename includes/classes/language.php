@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -41,7 +41,8 @@
                                                               'text_direction' => $Qlanguages->value('text_direction'),
                                                               'currencies_id' => $Qlanguages->valueInt('currencies_id'),
                                                               'numeric_separator_decimal' => $Qlanguages->value('numeric_separator_decimal'),
-                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'));
+                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'),
+                                                              'parent_id' => $Qlanguages->valueInt('parent_id'));
       }
 
       $Qlanguages->freeResult();
@@ -51,14 +52,22 @@
 
 /* Public methods */
 
-    function load($key) {
+    function load($key, $language_code = null) {
       global $osC_Database;
+
+      if ( is_null($language_code) ) {
+        $language_code = $this->_code;
+      }
+
+      if ( $this->_languages[$language_code]['parent_id'] > 0 ) {
+        $this->load($key, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
+      }
 
       $Qdef = $osC_Database->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group');
       $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-      $Qdef->bindInt(':languages_id', $this->getID());
+      $Qdef->bindInt(':languages_id', $this->getData('id', $language_code));
       $Qdef->bindValue(':content_group', $key);
-      $Qdef->setCache('languages-' . $this->_code . '-' . $key);
+      $Qdef->setCache('languages-' . $language_code . '-' . $key);
       $Qdef->execute();
 
       while ($Qdef->next()) {

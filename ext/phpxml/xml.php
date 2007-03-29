@@ -26,7 +26,7 @@ function & XML_unserialize(&$xml){
 # XML_serialize: serializes any PHP data structure into XML
 # Takes one parameter: the data to serialize. Must be an array.
 ###################################################################################
-function & XML_serialize(&$data, $encoding, $level = 0, $prior_key = NULL){
+function XML_serialize(&$data, $encoding, $level = 0, $prior_key = NULL){
 	if ($level == 0) {
 	  ob_start();
 	  echo '<?xml version="1.0"';

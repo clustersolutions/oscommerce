@@ -32,6 +32,7 @@ parameter_none = -- None --
 
 table_action_legend = Legend
 batch_results_number_of_entries = Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b> entries)
+result_set_current_page = Page %s of %d
 
 button_approve = Approve
 button_back = Back

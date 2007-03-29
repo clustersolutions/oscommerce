@@ -138,6 +138,7 @@
                             'currencies_id' => $_POST['currencies_id'],
                             'numeric_separator_decimal' => $_POST['numeric_separator_decimal'],
                             'numeric_separator_thousands' => $_POST['numeric_separator_thousands'],
+                            'parent_id' => $_POST['parent_id'],
                             'sort_order' => $_POST['sort_order']);
 
               if ( osC_Language_Admin::update($_GET['lID'], $data, (isset($_POST['default']) && ($_POST['default'] == 'on'))) ) {

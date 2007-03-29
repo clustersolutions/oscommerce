@@ -144,10 +144,6 @@
 
   osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
 
-// load general definitions due to the split page results language definitions the database class uses
-//HPDL (quick fix; will be properly fixed in a later alpha release)
-  $osC_Language->load('general');
-
 // define our localization functions
   require('includes/functions/localization.php');
 
