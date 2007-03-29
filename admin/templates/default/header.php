@@ -7,7 +7,9 @@
 
   Copyright (c) 2007 osCommerce
 
-  Released under the GNU General Public License
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
 */
 ?>
 
@@ -79,7 +81,7 @@
        '            <li><span>' . osc_icon('log.png') . '</span><a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a></li>' .
        '            <li><span>' . osc_icon('people.png') . '</span><a href="http://forums.oscommerce.com" target="_blank">Community Forums</a></li>' .
        '            <li><span>' . osc_icon('run.png') . '</span><a href="http://www.oscommerce.com/community/contributions" target="_blank">Contributions</a></li>' .
-       '            <li><span>' . osc_icon('configure.png') . '</span><a href="http://www.oscommerce.com/community/bugs" target="_blank">Bug Reporter</a></li>' .
+       '            <li><span>' . osc_icon('configure.png') . '</span><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li>' .
        '          </ul>' .
        '        </li>' .
        '        <li><span>' . osc_icon('locale.png') . '</span><span>' . $osC_Language->get('header_title_languages') . '</span>' .

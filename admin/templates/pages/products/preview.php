@@ -7,7 +7,9 @@
 
   Copyright (c) 2007 osCommerce
 
-  Released under the GNU General Public License
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
 */
 
   $Qp = $osC_Database->query('select p.products_id, p.products_quantity, p.products_price, p.products_weight, p.products_weight_class, p.products_date_added, p.products_last_modified, date_format(p.products_date_available, "%Y-%m-%d") as products_date_available, p.products_status, p.products_tax_class_id, p.manufacturers_id, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and default_flag = :default_flag) where p.products_id = :products_id');

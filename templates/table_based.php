@@ -7,16 +7,9 @@
 
   Copyright (c) 2006 osCommerce
 
-  Released under the GNU General Public License
-
-  osCommerce Copyright Policy:
-  http://www.oscommerce.com/about/copyright
-
-  osCommerce Trademark Policy:
-  http://www.oscommerce.com/about/trademark
-
-  GNU General Public License:
-  http://www.gnu.org/licenses/gpl.html
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
 */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

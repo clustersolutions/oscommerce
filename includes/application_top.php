@@ -7,7 +7,9 @@
 
   Copyright (c) 2007 osCommerce
 
-  Released under the GNU General Public License
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
 */
 
 // start the timer for the page parse time log
@@ -35,7 +37,7 @@
   }
 
 // define the project version
-  define('PROJECT_VERSION', 'osCommerce 3.0a4pre');
+  define('PROJECT_VERSION', 'osCommerce 3.0a4');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';

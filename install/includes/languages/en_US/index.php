@@ -3,11 +3,13 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2006 osCommerce
+# Copyright (c) 2007 osCommerce
 #
-# Released under the GNU General Public License
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2 (1991)
+# as published by the Free Software Foundation.
 
-page_title_welcome = Welcome to osCommerce 3.0a4pre!
+page_title_welcome = Welcome to osCommerce 3.0 Alpha 4!
 
 page_heading_installation_type = Installation Type
 

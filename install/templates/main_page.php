@@ -5,9 +5,11 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
-  Released under the GNU General Public License
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
 */
 
   $template = 'main_page';
@@ -20,9 +22,9 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
 
-<title>osCommerce :// Open Source E-Commerce Solutions</title>
+<title>osCommerce, Open Source E-Commerce Solutions</title>
 
-<meta name="ROBOTS" content="NOFOLLOW">
+<meta name="robots" content="noindex,nofollow">
 
 <link rel="stylesheet" type="text/css" href="templates/main_page/stylesheet.css">
 
@@ -37,7 +39,7 @@
   <div>
     <div style="float: right; padding-top: 40px; padding-right: 15px; color: #000000; font-weight: bold;"><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a> &nbsp;|&nbsp; <a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a> &nbsp;|&nbsp; <a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></div>
 
-    <a href="index.php"><img src="images/oscommerce_logo-silver.jpg" border="0" width="250" height="50" title="osCommerce, 3.0 Alpha 3 &quot;Spekulatius&quot;" style="margin: 10px 10px 0px 10px;" /></a>
+    <a href="index.php"><img src="images/oscommerce_logo-silver.jpg" border="0" width="250" height="50" title="osCommerce 3.0 Alpha 4 &quot;Lebkuchen&quot;" style="margin: 10px 10px 0px 10px;" /></a>
   </div>
 </div>
 
@@ -54,7 +56,7 @@
 </div>
 
 <div id="pageFooter">
-  Copyright &copy; 2000-2006 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License</a>
+  Copyright &copy; 2000-2007 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty and is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License v2 (1991)</a>
 </div>
 
 </body>
