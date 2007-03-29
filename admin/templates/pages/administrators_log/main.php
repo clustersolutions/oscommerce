@@ -92,7 +92,7 @@
     <tr>
       <th><?php echo $osC_Language->get('table_heading_module'); ?></th>
       <th><?php echo $osC_Language->get('table_heading_id'); ?></th>
-      <th><?php echo $osC_Language->get('table_headng_type'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_type'); ?></th>
       <th><?php echo $osC_Language->get('table_heading_user'); ?></th>
       <th><?php echo $osC_Language->get('table_heading_date'); ?></th>
       <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
