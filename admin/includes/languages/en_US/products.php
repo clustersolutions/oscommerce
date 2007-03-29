@@ -91,4 +91,4 @@ ms_error_image_directory_not_writable = Error: The product images directory is n
 ms_error_image_directory_non_existant = Error: The product images directory does not exist: %s
 ms_error_product_keyword_empty = Error: This product has an empty product key which needs to be defined. Please use a unique keyword to publicly identify this product.
 ms_error_product_keyword_exists = Error: This product keyword is already in use: %s. Please use another unique keyword for this product.
-ms_error_product_keyword_invalid = Error: This product keyword is invalid: %s. Product keywords must be one word containing letters and numers (a-zA-Z0-9), and can be separated by underscores (_) and minus symbols (-) only.
+ms_error_product_keyword_invalid = Error: This product keyword is invalid: %s. Product keywords must be one word containing letters and numbers (a-zA-Z0-9), and can be separated by underscores (_) and minus symbols (-) only.
