@@ -11,7 +11,41 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+?>
 
+<script language="javascript" type="text/javascript" src="external/tiny_mce/tiny_mce_gzip.js"></script>
+<script language="javascript" type="text/javascript">
+tinyMCE_GZ.init({
+  plugins : 'style,layer,table,advimage,advlink,preview,contextmenu,paste,fullscreen,visualchars',
+  themes : 'advanced',
+  languages : '<?php echo substr($osC_Language->getCode(), 0, 2); ?>',
+  disk_cache : true,
+  debug : false
+});
+</script>
+<script language="javascript" type="text/javascript">
+tinyMCE.init({
+  mode : "textareas",
+  editor_selector : "mceEditor",
+  theme : "advanced",
+  language : "<?php echo substr($osC_Language->getCode(), 0, 2); ?>",
+  height : "400",
+  theme_advanced_resizing : false,
+  theme_advanced_resize_horizontal : false,
+  theme_advanced_resizing_use_cookie : false,
+  theme_advanced_toolbar_align : "left",
+  theme_advanced_toolbar_location : "top",
+  theme_advanced_statusbar_location : "bottom",
+  cleanup : false,
+  plugins : "style,layer,table,advimage,advlink,preview,contextmenu,paste,fullscreen,visualchars",
+  theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,formatselect,fontselect,fontsizeselect,bullist,numlist,separator,outdent,indent,separator",
+  theme_advanced_buttons2 : "undo,redo,separator,link,unlink,anchor,image,code,separator,preview,separator,forecolor,backcolor,tablecontrols,separator,hr,removeformat,visualaid",
+  theme_advanced_buttons3 : "sub,sup,separator,charmap,fullscreen,separator,insertlayer,moveforward,movebackward,absolute,|,styleprops,|,visualchars,help",
+  content_css : "styles/word.css",
+  extended_valid_elements : "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"})
+</script>
+
+<?php
   if ( isset($_GET['pID']) ) {
     $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::getData($_GET['pID']));
 
@@ -522,7 +556,7 @@
           </tr>
           <tr>
             <td valign="top"><?php echo $osC_Language->get('field_description'); ?></td>
-            <td><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;"'); ?></td>
+            <td><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;" class="mceEditor"'); ?></td>
           </tr>
           <tr>
             <td><?php echo $osC_Language->get('field_model'); ?></td>

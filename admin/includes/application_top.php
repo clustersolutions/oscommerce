@@ -161,6 +161,9 @@
 // file uploading class
   require('includes/classes/upload.php');
 
+// TinyMCE editor themes class
+  require('../includes/classes/tinymce.php');
+
 // check if a default currency is set
   if (!defined('DEFAULT_CURRENCY')) {
     $osC_MessageStack->add('header', $osC_Language->get('ms_error_no_default_currency'), 'error');
