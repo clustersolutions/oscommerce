@@ -191,12 +191,16 @@
           }
         }
 
-        $definitions = $source['language']['definitions']['definition'];
+        $definitions = array();
 
-        if ( isset($definitions['key']) && isset($definitions['value']) && isset($definitions['group']) ) {
-          $definitions = array(array('key' => $definitions['key'],
-                                     'value' => $definitions['value'],
-                                     'group' => $definitions['group']));
+        if ( isset($source['language']['definitions']['definition']) ) {
+          $definitions = $source['language']['definitions']['definition'];
+
+          if ( isset($definitions['key']) && isset($definitions['value']) && isset($definitions['group']) ) {
+            $definitions = array(array('key' => $definitions['key'],
+                                       'value' => $definitions['value'],
+                                       'group' => $definitions['group']));
+          }
         }
 
         unset($source);
