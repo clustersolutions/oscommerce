@@ -22,8 +22,7 @@
       include('includes/classes/product.php');
       include('includes/classes/datetime.php');
       include('includes/classes/xml.php');
-      include('includes/classes/mime.php');
-      include('includes/classes/email.php');
+      include('includes/classes/mail.php');
       include('includes/classes/address.php');
 
       include('includes/classes/customer.php');

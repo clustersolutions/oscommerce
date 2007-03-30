@@ -230,33 +230,21 @@
  *
  * @param string $to_name The name of the recipient
  * @param string $to_email_address The email address of the recipient
- * @param string $email_subject The subject of the email
- * @param string $email_text The body text of the email
+ * @param string $subject The subject of the email
+ * @param string $body The body text of the email
  * @param string $from_name The name of the sender
  * @param string $from_email_address The email address of the sender
  * @access public
  */
 
-  function osc_email($to_name, $to_email_address, $email_subject, $email_text, $from_name, $from_email_address) {
+  function osc_email($to_name, $to_email_address, $subject, $body, $from_name, $from_email_address) {
     if (SEND_EMAILS == '-1') {
       return false;
     }
 
-// Instantiate a new mail object
-    $message = new email(array('X-Mailer: osCommerce Mailer'));
-
-// Build the text version
-    $text = strip_tags($email_text);
-
-    if (EMAIL_USE_HTML == '1') {
-      $message->add_html($email_text, $text);
-    } else {
-      $message->add_text($text);
-    }
-
-// Send message
-    $message->build_message();
-    $message->send($to_name, $to_email_address, $from_name, $from_email_address, $email_subject);
+    $osC_Mail = new osC_Mail($to_name, $to_email_address, $from_name, $from_email_address, $subject);
+    $osC_Mail->setBodyPlain($body);
+    $osC_Mail->send();
   }
 
 /**

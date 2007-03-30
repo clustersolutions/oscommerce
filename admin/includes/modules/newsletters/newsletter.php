@@ -97,12 +97,13 @@
       $Qrecipients->execute();
 
       if ( $Qrecipients->numberOfRows() > 0 ) {
-        $mimemessage = new email(array(base64_decode('WC1NYWlsZXI6IG9zQ29tbWVyY2UgKGh0dHA6Ly93d3cub3Njb21tZXJjZS5jb20p')));
-        $mimemessage->add_text($this->_newsletter_content);
-        $mimemessage->build_message();
+        $osC_Mail = new osC_Mail(null, null, null, EMAIL_FROM, $this->_newsletter_title);
+        $osC_Mail->setBodyPlain($this->_newsletter_content);
 
         while ( $Qrecipients->next() ) {
-          $mimemessage->send($Qrecipients->value('customers_firstname') . ' ' . $Qrecipients->value('customers_lastname'), $Qrecipients->value('customers_email_address'), '', EMAIL_FROM, $this->_newsletter_title);
+          $osC_Mail->clearTo();
+          $osC_Mail->addTo($Qrecipients->value('customers_firstname') . ' ' . $Qrecipients->value('customers_lastname'), $Qrecipients->value('customers_email_address'));
+          $osC_Mail->send();
 
           $Qlog = $osC_Database->query('insert into :table_newsletters_log (newsletters_id, email_address, date_sent) values (:newsletters_id, :email_address, now())');
           $Qlog->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
