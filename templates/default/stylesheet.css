@@ -329,12 +329,6 @@ A.pageResults:hover {
   background: #FFFF33;
 }
 
-TD.main, P.main {
-  font-family: Verdana, Arial, sans-serif;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
 TD.smallText, SPAN.smallText, P.smallText {
   font-family: Verdana, Arial, sans-serif;
   font-size: 10px;

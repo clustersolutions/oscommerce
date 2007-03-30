@@ -40,7 +40,7 @@
         <td width="10">&nbsp;</td>
       </tr>
       <tr>
-        <td class="main"><b><?php echo $osC_Language->get('download_heading'); ?></b></td>
+        <td><b><?php echo $osC_Language->get('download_heading'); ?></b></td>
       </tr>
       <tr>
         <td width="10">&nbsp;</td>
@@ -64,15 +64,15 @@
 // - No expiry date is enforced (maxdays == 0), OR
 // - The expiry date is not reached
       if ( ($Qdownloads->valueInt('download_count') > 0) && (file_exists(DIR_FS_DOWNLOAD . $Qdownloads->value('orders_products_filename'))) && ( ($Qdownloads->value('download_maxdays') == 0) || ($download_timestamp > time())) ) {
-        echo '            <td class="main">' . osc_link_object(osc_href_link(FILENAME_DOWNLOAD, 'order=' . $last_order . '&id=' . $Qdownloads->valueInt('orders_products_download_id')), $Qdownloads->value('products_name')) . '</td>' . "\n";
+        echo '            <td>' . osc_link_object(osc_href_link(FILENAME_DOWNLOAD, 'order=' . $last_order . '&id=' . $Qdownloads->valueInt('orders_products_download_id')), $Qdownloads->value('products_name')) . '</td>' . "\n";
       } else {
-        echo '            <td class="main">' . $Qdownloads->value('products_name') . '</td>' . "\n";
+        echo '            <td>' . $Qdownloads->value('products_name') . '</td>' . "\n";
       }
 ?>
 <!-- right box -->
 <?php
-      echo '            <td class="main">' . sprintf($osC_Language->get('download_link_expires'), osC_DateTime::getLong($download_expiry)) . '</td>' . "\n" .
-           '            <td class="main" align="right">' . sprintf($osC_Language->get('download_counter_remaining'), $Qdownloads->valueInt('download_count')) . '</td>' . "\n" .
+      echo '            <td>' . sprintf($osC_Language->get('download_link_expires'), osC_DateTime::getLong($download_expiry)) . '</td>' . "\n" .
+           '            <td align="right">' . sprintf($osC_Language->get('download_counter_remaining'), $Qdownloads->valueInt('download_count')) . '</td>' . "\n" .
            '          </tr>' . "\n";
     }
 ?>

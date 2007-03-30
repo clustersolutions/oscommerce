@@ -40,8 +40,8 @@
 ?>
 
     <tr>
-      <td class="smallText" width="40%"><?php echo '<b>' . $Qdefs->value('definition_key') . '</b>'; ?></td>
-      <td class="smallText" width="60%"><?php echo osc_draw_textarea_field('def[' . $Qdefs->value('definition_key') . ']', $Qdefs->value('definition_value'), 60, 4, 'style="width: 100%"'); ?></td>
+      <td width="40%"><?php echo '<b>' . $Qdefs->value('definition_key') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_textarea_field('def[' . $Qdefs->value('definition_key') . ']', $Qdefs->value('definition_value'), 60, 4, 'style="width: 100%"'); ?></td>
     </tr>
 
 <?php

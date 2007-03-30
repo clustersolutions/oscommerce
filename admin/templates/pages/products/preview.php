@@ -61,24 +61,24 @@
 <div id="pName_<?php echo $l['code']; ?>" <?php echo (($l['code'] != $osC_Language->getCode()) ? ' style="display: none;"' : ''); ?>>
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
-      <td><h1><?php echo $products_name[$l['id']] . (!empty($products_model[$l['id']]) ? '<br /><span class="smallText">' . $products_model[$l['id']] . '</span>': ''); ?></h1></td>
+      <td><h1><?php echo $products_name[$l['id']] . (!empty($products_model[$l['id']]) ? '<br /><span>' . $products_model[$l['id']] . '</span>': ''); ?></h1></td>
       <td align="right"><h1><?php echo $osC_Currencies->format($osC_ObjectInfo->get('products_price')); ?></h1></td>
     </tr>
   </table>
 
-  <p class="main"><?php echo $osC_Image->show($osC_ObjectInfo->get('image'), $products_name[$l['id']], 'align="right" hspace="5" vspace="5"', 'product_info') . $products_description[$l['id']]; ?></p>
+  <p><?php echo $osC_Image->show($osC_ObjectInfo->get('image'), $products_name[$l['id']], 'align="right" hspace="5" vspace="5"', 'product_info') . $products_description[$l['id']]; ?></p>
 
 <?php
     if (!empty($products_url[$l['id']])) {
-      echo '<p class="main">' . sprintf($osC_Language->get('more_product_information'), $products_url[$l['id']]) . '</p>';
+      echo '<p>' . sprintf($osC_Language->get('more_product_information'), $products_url[$l['id']]) . '</p>';
     }
 ?>
 
 <?php
     if ($osC_ObjectInfo->get('products_date_available') > date('Y-m-d')) {
-      echo '<p class="smallText" align="center">' . sprintf($osC_Language->get('product_date_available'), osC_DateTime::getLong($osC_ObjectInfo->get('products_date_available'))) . '</p>';
+      echo '<p align="center">' . sprintf($osC_Language->get('product_date_available'), osC_DateTime::getLong($osC_ObjectInfo->get('products_date_available'))) . '</p>';
     } else {
-      echo '<p class="smallText" align="center">' . sprintf($osC_Language->get('product_date_added'), osC_DateTime::getLong($osC_ObjectInfo->get('products_date_added'))) . '</p>';
+      echo '<p align="center">' . sprintf($osC_Language->get('product_date_added'), osC_DateTime::getLong($osC_ObjectInfo->get('products_date_added'))) . '</p>';
     }
 ?>
 

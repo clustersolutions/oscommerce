@@ -32,27 +32,27 @@
       <tr>
         <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="main"><b><?php echo $osC_Language->get('subsection_billing_address'); ?></b></td>
+            <td><b><?php echo $osC_Language->get('subsection_billing_address'); ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></td>
+            <td><?php echo osC_Address::format($osC_Order->getBilling(), '<br />'); ?></td>
           </tr>
           <tr>
             <td>&nbsp;</td>
           </tr>
           <tr>
-            <td class="main"><?php echo $osC_Order->getCustomer('telephone'); ?></td>
+            <td><?php echo $osC_Order->getCustomer('telephone'); ?></td>
           </tr>
           <tr>
-            <td class="main"><?php echo '<a href="mailto:' . $osC_Order->getCustomer('email_address') . '"><u>' . $osC_Order->getCustomer('email_address') . '</u></a>'; ?></td>
+            <td><?php echo '<a href="mailto:' . $osC_Order->getCustomer('email_address') . '"><u>' . $osC_Order->getCustomer('email_address') . '</u></a>'; ?></td>
           </tr>
         </table></td>
         <td valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="2">
           <tr>
-            <td class="main"><b><?php echo $osC_Language->get('subsection_shipping_address'); ?></b></td>
+            <td><b><?php echo $osC_Language->get('subsection_shipping_address'); ?></b></td>
           </tr>
           <tr>
-            <td class="main"><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></td>
+            <td><?php echo osC_Address::format($osC_Order->getDelivery(), '<br />'); ?></td>
           </tr>
         </table></td>
       </tr>
@@ -64,8 +64,8 @@
   <tr>
     <td><table border="0" cellspacing="0" cellpadding="2">
       <tr>
-        <td class="main"><b><?php echo $osC_Language->get('subsection_payment_method'); ?></b></td>
-        <td class="main"><?php echo $osC_Order->getPaymentMethod(); ?></td>
+        <td><b><?php echo $osC_Language->get('subsection_payment_method'); ?></b></td>
+        <td><?php echo $osC_Order->getPaymentMethod(); ?></td>
       </tr>
     </table></td>
   </tr>
