@@ -77,7 +77,7 @@ ms_error_post_code = The customer post code must contain a minimum of %s charact
 ms_error_city = The customers city must contain a minimum of %s characters.
 ms_error_state = The customers state must contain a minimum of %s characters.
 ms_error_country = Please select the correct country from the Countries pull down menu.
-ms_error_telephoné_number = The customers telephone number must contain a minimum of %s characters.
+ms_error_telephone_number = The customers telephone number must contain a minimum of %s characters.
 ms_error_fax_number = The customers fax number must contain a minimum of %s characters.
 
 ms_warning_state_select_from_list = Please select the correct state from the States pull down menu.
