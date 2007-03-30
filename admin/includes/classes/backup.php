@@ -152,14 +152,14 @@
 
       switch ( $compression ) {
         case 'gzip':
-          exec(LOCAL_EXE_GZIP . ' ' . DIR_FS_BACKUP . $backup_file);
+          exec(CFG_APP_GZIP . ' ' . DIR_FS_BACKUP . $backup_file);
 
           $backup_file .= '.gz';
 
           break;
 
         case 'zip':
-          exec(LOCAL_EXE_ZIP . ' -j ' . DIR_FS_BACKUP . $backup_file . '.zip ' . DIR_FS_BACKUP . $backup_file);
+          exec(CFG_APP_ZIP . ' -j ' . DIR_FS_BACKUP . $backup_file . '.zip ' . DIR_FS_BACKUP . $backup_file);
           unlink(DIR_FS_BACKUP . $backup_file);
 
           $backup_file .= '.zip';
@@ -206,7 +206,7 @@
 
               case '.gz':
                 $restore_from = substr($restore_file, 0, -3);
-                exec(LOCAL_EXE_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_from);
+                exec(CFG_APP_GUNZIP . ' ' . $restore_file . ' -c > ' . $restore_from);
 
                 $remove_raw = true;
 
@@ -214,7 +214,7 @@
 
               case 'zip':
                 $restore_from = substr($restore_file, 0, -4);
-                exec(LOCAL_EXE_UNZIP . ' ' . $restore_file . ' -d ' . DIR_FS_BACKUP);
+                exec(CFG_APP_UNZIP . ' ' . $restore_file . ' -d ' . DIR_FS_BACKUP);
 
                 $remove_raw = true;
 

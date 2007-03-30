@@ -15,12 +15,12 @@
   $compression_array = array(array('id' => 'none',
                                    'text' => $osC_Language->get('field_compression_none')));
 
-  if ( !osc_empty(LOCAL_EXE_GZIP) && file_exists(LOCAL_EXE_GZIP) ) {
+  if ( !osc_empty(CFG_APP_GZIP) && file_exists(CFG_APP_GZIP) ) {
     $compression_array[] = array('id' => 'gzip',
                                  'text' => $osC_Language->get('field_compression_gzip'));
   }
 
-  if ( !osc_empty(LOCAL_EXE_ZIP) && file_exists(LOCAL_EXE_ZIP) ) {
+  if ( !osc_empty(CFG_APP_ZIP) && file_exists(CFG_APP_ZIP) ) {
     $compression_array[] = array('id' => 'zip',
                                  'text' => $osC_Language->get('field_compression_zip'));
   }

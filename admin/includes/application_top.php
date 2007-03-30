@@ -43,12 +43,6 @@
     define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
   }
 
-// Used in the "Backup Manager" to compress backups
-  define('LOCAL_EXE_GZIP', '/usr/bin/gzip');
-  define('LOCAL_EXE_GUNZIP', '/usr/bin/gunzip');
-  define('LOCAL_EXE_ZIP', '/usr/local/bin/zip');
-  define('LOCAL_EXE_UNZIP', '/usr/local/bin/unzip');
-
 // compatibility work-around logic for PHP4
   require('../includes/functions/compatibility.php');
   require('includes/functions/compatibility.php');
