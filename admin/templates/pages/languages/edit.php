@@ -18,7 +18,7 @@
   foreach ( $osC_Language->getAll() as $l ) {
     if ( $l['id'] != $_GET['lID'] ) {
       $languages_array[] = array('id' => $l['id'],
-                                 'text' => $l['name']);
+                                 'text' => $l['name'] . ' (' . $l['code'] . ')');
     }
   }
 
