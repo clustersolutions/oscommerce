@@ -25,8 +25,7 @@ tinyMCE_GZ.init({
 </script>
 <script language="javascript" type="text/javascript">
 tinyMCE.init({
-  mode : "textareas",
-  editor_selector : "mceEditor",
+  mode : "none",
   theme : "advanced",
   language : "<?php echo substr($osC_Language->getCode(), 0, 2); ?>",
   height : "400",
@@ -42,7 +41,18 @@ tinyMCE.init({
   theme_advanced_buttons2 : "undo,redo,separator,link,unlink,anchor,image,code,separator,preview,separator,forecolor,backcolor,tablecontrols,separator,hr,removeformat,visualaid",
   theme_advanced_buttons3 : "sub,sup,separator,charmap,fullscreen,separator,insertlayer,moveforward,movebackward,absolute,|,styleprops,|,visualchars,help",
   content_css : "styles/word.css",
-  extended_valid_elements : "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"})
+  extended_valid_elements : "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"
+});
+
+function toggleHTMLEditor(id) {
+  var elm = document.getElementById(id);
+
+  if (tinyMCE.getInstanceById(id) == null) {
+    tinyMCE.execCommand('mceAddControl', false, id);
+  } else {
+    tinyMCE.execCommand('mceRemoveControl', false, id);
+  }
+}
 </script>
 
 <?php
@@ -556,7 +566,10 @@ tinyMCE.init({
           </tr>
           <tr>
             <td valign="top"><?php echo $osC_Language->get('field_description'); ?></td>
-            <td><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;" class="mceEditor"'); ?></td>
+            <td>
+              <?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;" id="pd' . $l['id'] . '"'); ?>
+              <div style="text-align: right;"><?php echo '<a href="javascript:toggleHTMLEditor(\'pd' . $l['id'] . '\');">' . $osC_Language->get('toggle_html_editor') . '</a>'; ?></div>
+            </td>
           </tr>
           <tr>
             <td><?php echo $osC_Language->get('field_model'); ?></td>
