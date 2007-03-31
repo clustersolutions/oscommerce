@@ -68,7 +68,7 @@
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
       <td onclick="document.getElementById('batch<?php echo $Qcountries->valueInt('countries_id'); ?>').checked = !document.getElementById('batch<?php echo $Qcountries->valueInt('countries_id'); ?>').checked;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qcountries->valueInt('countries_id') . '&page=' . $_GET['page']), osc_icon('folder.png') . '&nbsp;' . $Qcountries->value('countries_name')); ?></td>
-      <td><?php echo  osc_image('../images/worldflags/' . $Qcountries->value('countries_iso_code_2') . '.png', $Qcountries->value('countries_name')); ?></td>
+      <td><?php echo  osc_image('../images/worldflags/' . strtolower($Qcountries->value('countries_iso_code_2')) . '.png', $Qcountries->value('countries_name')); ?></td>
       <td><?php echo $Qcountries->value('countries_iso_code_2') . '&nbsp;&nbsp;&nbsp;&nbsp;' . $Qcountries->value('countries_iso_code_3'); ?></td>
       <td><?php echo $Qzones->valueInt('total_zones'); ?></td>
       <td align="right">
