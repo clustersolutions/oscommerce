@@ -84,7 +84,7 @@
             $Qimage->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
             $Qimage->bindValue(':manufacturers_image', $image->filename);
             $Qimage->bindInt(':manufacturers_id', $manufacturers_id);
-            $Qimage->setLogging($_SESSION['module'], $manufaacturers_id);
+            $Qimage->setLogging($_SESSION['module'], $manufacturers_id);
             $Qimage->execute();
 
             if ( $osC_Database->isError() ) {
