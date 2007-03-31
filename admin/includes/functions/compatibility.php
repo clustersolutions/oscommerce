@@ -122,4 +122,14 @@
       return implode($arg_separator, $tmp);
     }
   }
+
+/*
+ * imagetypes() is only available when GD is configured with PHP
+ */
+
+  if ( !function_exists('imagetypes') ) {
+    function imagetypes() {
+      return false;
+    }
+  }
 ?>
