@@ -128,6 +128,10 @@
  */
 
   if ( !function_exists('imagetypes') ) {
+    define('IMG_JPG', false);
+    define('IMG_GIF', false);
+    define('IMG_PNG', false);
+
     function imagetypes() {
       return false;
     }
