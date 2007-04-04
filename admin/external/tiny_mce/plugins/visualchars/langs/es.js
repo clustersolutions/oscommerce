@@ -1,5 +1,5 @@
 // ES lang variables
 
 tinyMCE.addToLang('visualchars',{
-desc : 'Carácteres de control visuales on/off.'
+desc : 'Car&aacute;cteres de control visuales on/off.'
 });
