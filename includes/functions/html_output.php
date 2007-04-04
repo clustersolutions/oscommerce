@@ -555,7 +555,7 @@
 
       $field .= '<option value="' . osc_output_string($values[$i]['id']) . '"';
 
-      if ( (!is_null($default) && ($default == $values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
+      if ( (!is_null($default) && !is_array($default) && ((string)$default == (string)$values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
         $field .= ' selected="selected"';
       }
 

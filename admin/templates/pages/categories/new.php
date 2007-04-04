@@ -16,7 +16,10 @@
                                   'text' => $osC_Language->get('top_category')));
 
   foreach ($osC_CategoryTree->getTree() as $value) {
-    $categories_array[] = array('id' => $value['id'],
+    $id = explode('_', $value['id']);
+    $id = end($id);
+
+    $categories_array[] = array('id' => $id,
                                 'text' => $value['title']);
   }
 ?>
