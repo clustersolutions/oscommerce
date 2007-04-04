@@ -187,7 +187,7 @@
         if (isset($data['attribute_prefix']) && !empty($data['attribute_prefix']) && isset($data['attribute_price']) && !empty($data['attribute_price'])) {
           foreach ($data['attribute_prefix'] as $groups => $attributes) {
             foreach ($data['attribute_prefix'][$groups] as $key => $value) {
-              if ( isset($data['attribute_price'][$groups][$key]) && !empty($data['attribute_price'][$groups][$key]) ) {
+              if ( isset($data['attribute_price'][$groups][$key]) ) {
                 $attributes_array[] = $groups . '-' . $key;
 
                 $Qcheck = $osC_Database->query('select products_attributes_id from :table_products_attributes where products_id = :products_id and options_id = :options_id and options_values_id = :options_values_id');
