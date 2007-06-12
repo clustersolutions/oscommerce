@@ -14,6 +14,7 @@
 
   $osC_DirectoryListing = new osC_DirectoryListing('includes/modules/access');
   $osC_DirectoryListing->setIncludeDirectories(false);
+  $osC_DirectoryListing->setCheckExtension('php');
 
   $access_modules_array = array();
 
