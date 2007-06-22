@@ -59,16 +59,22 @@
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_CURRENCY');
           $Qupdate->setLogging($_SESSION['module'], $id);
           $Qupdate->execute();
-
-          if ( $Qupdate->affectedRows() ) {
-            osC_Cache::clear('configuration');
-          }
         }
 
-        osC_Cache::clear('currencies');
+        if ( !$osC_Database->isError() ) {
+          $osC_Database->commitTransaction();
 
-        return true;
+          osC_Cache::clear('currencies');
+
+          if ( ( $set_default === true ) && $Qupdate->affectedRows() ) {
+            osC_Cache::clear('configuration');
+          }
+
+          return true;
+        }
       }
+
+      $osC_Database->rollbackTransaction();
 
       return false;
     }
