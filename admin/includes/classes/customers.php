@@ -150,7 +150,7 @@
     }
 
     function delete($id, $delete_reviews = true) {
-      global $osC_Database;
+      global $osC_Database, $osC_Session;
 
       $error = false;
 
@@ -227,7 +227,7 @@
         $Qcheck->execute();
 
         if ( $Qcheck->numberOfRows() > 0 ) {
-          osC_Session_Admin::delete($Qcheck->value('session_id'));
+          $osC_Session->delete($Qcheck->value('session_id'));
 
           $Qwho = $osC_Database->query('delete from :table_whos_online where customer_id = :customer_id');
           $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);

@@ -168,7 +168,7 @@
                    '  define(\'DB_DATABASE_CLASS\', \'' . $_POST['DB_DATABASE_CLASS'] . '\');' . "\n" .
                    '  define(\'DB_TABLE_PREFIX\', \'' . $_POST['DB_TABLE_PREFIX']. '\');' . "\n" .
                    '  define(\'USE_PCONNECT\', \'false\');' . "\n" .
-                   '  define(\'STORE_SESSIONS\', \'mysql\');' . "\n" .
+                   '  define(\'STORE_SESSIONS\', \'database\');' . "\n" .
                    '?>';
 
   if (file_exists($dir_fs_document_root . 'includes/configure.php') && !is_writeable($dir_fs_document_root . 'includes/configure.php')) {

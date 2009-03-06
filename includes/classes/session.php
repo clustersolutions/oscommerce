@@ -5,61 +5,136 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+/**
+ * The osC_Session class manages the session data and custom storage handlers
+ */
+
   class osC_Session {
 
-/* Private variables */
-    var $_cookie_parameters,
-        $_is_started = false,
-        $_id,
-        $_name,
-        $_save_path;
+/**
+ * Holds the session cookie parameters (lifetime, path, domain, secure, httponly)
+ *
+ * @var array
+ * @access protected
+ */
 
-// class constructor
-    function osC_Session($name = 'sid') {
+    protected $_cookie_parameters = array();
+
+/**
+ * Defines if the session has been started or not
+ *
+ * @var boolean
+ * @access protected
+ */
+
+    protected $_is_started = false;
+
+/**
+ * Holds the name of the session
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_name = 'osCsid';
+
+/**
+ * Holds the session id
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_id = null;
+
+/**
+ * Holds the file system save path for file based session storage
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_save_path = DIR_FS_WORK;
+
+/**
+ * Constructor, loads custom session handle module if defined
+ *
+ * @param string $name The name of the session
+ * @access public
+ */
+
+    public function __construct($name = null) {
       $this->setName($name);
-      $this->setSavePath(DIR_FS_WORK);
       $this->setCookieParameters();
 
-      if (STORE_SESSIONS == 'mysql') {
-        session_set_save_handler(array(&$this, '_open'),
-                                 array(&$this, '_close'),
-                                 array(&$this, '_read'),
-                                 array(&$this, '_write'),
-                                 array(&$this, '_destroy'),
-                                 array(&$this, '_gc'));
-
-        register_shutdown_function('session_write_close');
+      if ( SERVICE_SESSION_EXPIRATION_TIME > 0 ) {
+        ini_set('session.gc_maxlifetime', SERVICE_SESSION_EXPIRATION_TIME * 60);
       }
     }
 
-// class methods
-    function start() {
+/**
+ * Destructor, closes the session
+ *
+ * @access public
+ */
+
+    public function __destruct() {
+      $this->close();
+    }
+
+/**
+ * Loads the session storage handler
+ *
+ * @param string $name The name of the session
+ * @access public
+ */
+
+    public static function load($name = null) {
+      $class_name = 'osC_Session';
+
+      if ( !osc_empty(basename(STORE_SESSIONS)) && file_exists(dirname(__FILE__) . '/session/' . basename(STORE_SESSIONS) . '.php') ) {
+        include(dirname(__FILE__) . '/session/' . basename(STORE_SESSIONS) . '.php');
+
+        $class_name = 'osC_Session_' . basename(STORE_SESSIONS);
+      }
+
+      return new $class_name($name);
+    }
+
+/**
+ * Verify an existing session ID and create or resume the session if the existing session ID is valid
+ *
+ * @access public
+ * @return boolean
+ */
+
+    public function start() {
       $sane_session_id = true;
 
-      if (isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || (ctype_alnum($_GET[$this->_name]) === false))) {
+      if ( isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || (ctype_alnum($_GET[$this->_name]) === false)) ) {
         $sane_session_id = false;
-      } elseif (isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || (ctype_alnum($_POST[$this->_name]) === false))) {
+      } elseif ( isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || (ctype_alnum($_POST[$this->_name]) === false)) ) {
         $sane_session_id = false;
-      } elseif (isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || (ctype_alnum($_COOKIE[$this->_name]) === false))) {
+      } elseif ( isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || (ctype_alnum($_COOKIE[$this->_name]) === false)) ) {
         $sane_session_id = false;
       }
 
-      if ($sane_session_id === false) {
-        if (isset($_COOKIE[$this->_name])) {
-          setcookie($this->getName(), '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
+      if ( $sane_session_id === false ) {
+        if ( isset($_COOKIE[$this->_name]) ) {
+          setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
         }
 
         osc_redirect(osc_href_link(FILENAME_DEFAULT, null, 'NONSSL', false));
-      } elseif (session_start()) {
-        $this->setStarted(true);
-        $this->setID();
+      } elseif ( session_start() ) {
+        $this->_is_started = true;
+        $this->_id = session_id();
 
         return true;
       }
@@ -67,66 +142,137 @@
       return false;
     }
 
-    function hasStarted() {
+/**
+ * Checks if the session has been started or not
+ *
+ * @access public
+ * @return boolean
+ */
+
+    public function hasStarted() {
       return $this->_is_started;
     }
 
-    function close() {
-      return session_write_close();
+/**
+ * Closes the session and writes the session data to the storage handler
+ *
+ * @access public
+ */
+
+    public function close() {
+      if ( $this->_is_started === true ) {
+        $this->_is_started = false;
+
+        return session_write_close();
+      }
     }
 
-    function destroy() {
-      if (isset($_COOKIE[$this->_name])) {
-        unset($_COOKIE[$this->_name]);
-      }
+/**
+ * Deletes an existing session
+ *
+ * @access public
+ */
 
-      if (STORE_SESSIONS == '') {
-        if (file_exists($this->_save_path . $this->_id)) {
-          @unlink($this->_save_path . $this->_id);
+    public function destroy() {
+      if ( $this->_is_started === true ) {
+        if ( isset($_COOKIE[$this->_name]) ) {
+          setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
         }
+
+        $this->delete();
+
+        return session_destroy();
+      }
+    }
+
+/**
+ * Deletes an existing session from the storage handler
+ *
+ * @param string $id The ID of the session
+ * @access public
+ */
+
+    public function delete($id = null) {
+      if ( empty($id) ) {
+        $id = $this->_id;
       }
 
-      return session_destroy();
+      if ( file_exists($this->_save_path . '/' . $id) ) {
+        @unlink($this->_save_path . '/' . $id);
+      }
     }
 
-    function recreate() {
-      $session_backup = $_SESSION;
+/**
+ * Delete an existing session and move the session data to a new session with a new session ID
+ *
+ * @access public
+ */
 
-      $this->destroy();
-
-      $this->osC_Session();
-
-      $this->start();
-
-      $_SESSION = $session_backup;
-
-      unset($session_backup);
+    public function recreate() {
+      if ( $this->_is_started === true ) {
+        return session_regenerate_id(true);
+      }
     }
 
-    function getSavePath() {
+/**
+ * Return the session file based storage location
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getSavePath() {
       return $this->_save_path;
     }
 
-    function getID() {
+/**
+ * Return the session ID
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getID() {
       return $this->_id;
     }
 
-    function getName() {
+/**
+ * Return the name of the session
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getName() {
       return $this->_name;
     }
 
-    function setName($name) {
+/**
+ * Sets the name of the session
+ *
+ * @param string $name The name of the session
+ * @access public
+ */
+
+    public function setName($name) {
+      if ( empty($name) ) {
+        $name = 'osCsid';
+      }
+
       session_name($name);
 
       $this->_name = session_name();
     }
 
-    function setID() {
-      $this->_id = session_id();
-    }
+/**
+ * Sets the storage location for the file based storage handler
+ *
+ * @param string $path The file path to store the session data in
+ * @access public
+ */
 
-    function setSavePath($path) {
-      if (substr($path, -1) == '/') {
+    public function setSavePath($path) {
+      if ( substr($path, -1) == '/' ) {
         $path = substr($path, 0, -1);
       }
 
@@ -135,123 +281,52 @@
       $this->_save_path = session_save_path();
     }
 
-    function setStarted($state) {
-      if ($state === true) {
-        $this->_is_started = true;
-      } else {
-        $this->_is_started = false;
-      }
-    }
+/**
+ * Sets the cookie parameters for the session (lifetime, path, domain, secure, httponly)
+ *
+ * @param integer $lifetime The amount of minutes to keep a cookie active for
+ * @param string $path The web path of the online store to limit cookies to
+ * @param string $domain The domain of the online store to limit cookies to
+ * @param boolean $secure Only access cookies over a secure HTTPS connection
+ * @param boolean $httponly Only access cookies over a HTTP protocol (disallows javascript access to cookies)
+ * @access public
+ */
 
-    function setCookieParameters($lifetime = 0, $path = false, $domain = false, $secure = false) {
+    public function setCookieParameters($lifetime = null, $path = null, $domain = null, $secure = false, $httponly = false) {
       global $request_type;
 
-      if ($path === false) {
+      if ( !is_numeric($lifetime) ) {
+        $lifetime = SERVICE_SESSION_EXPIRATION_TIME * 60;
+      }
+
+      if ( empty($path) ) {
         $path = (($request_type == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH);
       }
 
-      if ($domain === false) {
+      if ( empty($domain) ) {
         $domain = (($request_type == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN);
       }
 
-      return session_set_cookie_params($lifetime, $path, $domain, $secure);
+      return session_set_cookie_params($lifetime, $path, $domain, $secure, $httponly);
     }
 
-    function getCookieParameters($key = '') {
-      if (isset($this->_cookie_parameters) === false) {
+/**
+ * Returns the cookie parameters for the session (lifetime, path, domain, secure, httponly)
+ *
+ * @param string $key If specified, return only the value of this cookie parameter setting
+ * @access public
+ */
+
+    public function getCookieParameters($key = null) {
+      if ( empty($this->_cookie_parameters) ) {
         $this->_cookie_parameters = session_get_cookie_params();
       }
 
-      if (isset($this->_cookie_parameters[$key])) {
+      if ( !empty($key) ) {
         return $this->_cookie_parameters[$key];
       }
 
       return $this->_cookie_parameters;
-    }
-
-    function _open() {
-      return true;
-    }
-
-    function _close() {
-      return true;
-    }
-
-    function _read($key) {
-      global $osC_Database;
-
-      $Qsession = $osC_Database->query('select value from :table_sessions where sesskey = :sesskey and expiry > :expiry');
-      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $key);
-      $Qsession->bindRaw(':expiry', time());
-      $Qsession->execute();
-
-      if ($Qsession->numberOfRows() > 0) {
-        $value = $Qsession->value('value');
-
-        $Qsession->freeResult();
-
-        return $value;
-      }
-
-      return false;
-    }
-
-    function _write($key, $value) {
-      global $osC_Database;
-
-      if (!$SESS_LIFE = get_cfg_var('session.gc_maxlifetime')) {
-        $SESS_LIFE = 1440;
-      }
-
-      $expiry = time() + $SESS_LIFE;
-
-      $Qsession = $osC_Database->query('select count(*) as total from :table_sessions where sesskey = :sesskey');
-      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $key);
-      $Qsession->execute();
-
-      if ($Qsession->valueInt('total') > 0) {
-        $Qsession = $osC_Database->query('update :table_sessions set expiry = :expiry, value = :value where sesskey = :sesskey');
-      } else {
-        $Qsession = $osC_Database->query('insert into :table_sessions values (:sesskey, :expiry, :value)');
-      }
-      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $key);
-      $Qsession->bindValue(':expiry', $expiry);
-      $Qsession->bindValue(':value', $value);
-
-      if ($Qsession->execute()) {
-        $write = true;
-      } else {
-        $write = false;
-      }
-
-      $Qsession->freeResult();
-
-      return $write;
-    }
-
-    function _destroy($key) {
-      global $osC_Database;
-
-      $Qsession = $osC_Database->query('delete from :table_sessions where sesskey = :sesskey');
-      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $key);
-      $Qsession->execute();
-
-      $Qsession->freeResult();
-    }
-
-    function _gc($maxlifetime) {
-      global $osC_Database;
-
-      $Qsession = $osC_Database->query('delete from :table_sessions where expiry < :expiry');
-      $Qsession->bindRaw(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':expiry', time());
-      $Qsession->execute();
-
-      $Qsession->freeResult();
     }
   }
 ?>

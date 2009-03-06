@@ -17,7 +17,7 @@
       global $request_type, $osC_Session, $messageStack;
 
       include('includes/classes/session.php');
-      $osC_Session = new osC_Session();
+      $osC_Session = osC_Session::load();
 
       if (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') {
         osc_setcookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);

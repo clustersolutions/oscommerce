@@ -86,8 +86,8 @@
   require('includes/functions/html_output.php');
 
 // include session class
-  include('includes/classes/session.php');
-  $osC_Session = new osC_Session_Admin('osCAdminID');
+  require('../includes/classes/session.php');
+  $osC_Session = osC_Session::load('osCAdminID');
   $osC_Session->start();
 
   if ( !isset($_SESSION['admin']) ) {

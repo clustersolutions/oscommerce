@@ -31,7 +31,7 @@
     function delete($id) {
       global $osC_Session, $osC_Database;
 
-      osC_Session_Admin::delete($id);
+      $osC_Session->delete($id);
 
       $Qwho = $osC_Database->query('delete from :table_whos_online where session_id = :session_id');
       $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);

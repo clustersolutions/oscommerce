@@ -26,7 +26,7 @@
 
   $osC_ObjectInfo = new osC_ObjectInfo(osC_WhosOnline_Admin::getData($_GET['info']));
 
-  if ( STORE_SESSIONS == 'mysql' ) {
+  if ( STORE_SESSIONS == 'database' ) {
     $Qsession = $osC_Database->query('select value from :table_sessions where sesskey = :sesskey');
     $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
     $Qsession->bindValue(':sesskey', $osC_ObjectInfo->get('session_id'));
