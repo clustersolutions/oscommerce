@@ -25,12 +25,12 @@
 /* Class constructor */
 
     function osC_Checkout_Cart() {
-      global $osC_Services, $osC_Language, $breadcrumb;
+      global $osC_Services, $osC_Language, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('shopping_cart_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_shopping_cart'), osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_shopping_cart'), osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
 //      if ($_GET[$this->_module] == 'update') {

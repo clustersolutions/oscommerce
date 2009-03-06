@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Checkout_Confirmation() {
-      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack, $osC_NavigationHistory, $breadcrumb, $osC_Payment;
+      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -49,7 +49,7 @@
       $osC_Language->load('order');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {

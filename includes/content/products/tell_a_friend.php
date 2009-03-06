@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Products_Tell_a_friend() {
-      global $osC_Services, $osC_Session, $osC_Language, $breadcrumb, $osC_Customer, $osC_NavigationHistory, $osC_Product;
+      global $osC_Services, $osC_Session, $osC_Language, $osC_Breadcrumb, $osC_Customer, $osC_NavigationHistory, $osC_Product;
 
       if ((ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($osC_Customer->isLoggedOn() === false)) {
         $osC_NavigationHistory->setSnapshot();
@@ -51,8 +51,8 @@
             $this->_page_title = $osC_Product->getTitle();
 
             if ($osC_Services->isStarted('breadcrumb')) {
-              $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
-              $breadcrumb->add($osC_Language->get('breadcrumb_tell_a_friend'), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
+              $osC_Breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
+              $osC_Breadcrumb->add($osC_Language->get('breadcrumb_tell_a_friend'), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
             }
 
             if (isset($_GET['action']) && ($_GET['action'] == 'process')) {

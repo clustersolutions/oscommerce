@@ -302,7 +302,7 @@
         $logging_fields = array(),
         $logging_changed = array();
 
-    function osC_Database_Result(&$db_class) {
+    function __construct(&$db_class) {
       $this->db_class =& $db_class;
     }
 
@@ -445,7 +445,7 @@
         }
 
         if (isset($this->cache_key)) {
-          $osC_Cache->write($this->cache_key, $this->cache_data);
+          $osC_Cache->write($this->cache_data, $this->cache_key);
         }
       }
 
@@ -485,7 +485,7 @@
 
       if (isset($this->cache_key)) {
         if ($osC_Cache->read($this->cache_key, $this->cache_expire)) {
-          $this->cache_data = $osC_Cache->cached_data;
+          $this->cache_data = $osC_Cache->getCache();
 
           $this->cache_read = true;
         }

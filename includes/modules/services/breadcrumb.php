@@ -14,13 +14,13 @@
 
   class osC_Services_breadcrumb {
     function start() {
-      global $breadcrumb, $osC_Database, $osC_Language, $cPath, $cPath_array;
+      global $osC_Breadcrumb, $osC_Language;
 
       include('includes/classes/breadcrumb.php');
-      $breadcrumb = new breadcrumb;
+      $osC_Breadcrumb = new osC_Breadcrumb();
 
-      $breadcrumb->add($osC_Language->get('breadcrumb_top'), HTTP_SERVER);
-      $breadcrumb->add($osC_Language->get('breadcrumb_shop'), osc_href_link(FILENAME_DEFAULT));
+      $osC_Breadcrumb->add($osC_Language->get('breadcrumb_top'), HTTP_SERVER);
+      $osC_Breadcrumb->add($osC_Language->get('breadcrumb_shop'), osc_href_link(FILENAME_DEFAULT));
 
       return true;
     }

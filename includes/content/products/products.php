@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Products_Products() {
-      global $osC_Database, $osC_Services, $osC_Session, $osC_Language, $breadcrumb, $osC_Product;
+      global $osC_Database, $osC_Services, $osC_Session, $osC_Language, $osC_Breadcrumb, $osC_Product;
 
       if (empty($_GET) === false) {
         $id = false;
@@ -53,7 +53,7 @@
           osC_Services_category_path::process($osC_Product->getCategoryID());
 
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
+            $osC_Breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()));
           }
 
           $this->_page_title = $osC_Product->getTitle();

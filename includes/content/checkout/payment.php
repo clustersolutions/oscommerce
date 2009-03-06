@@ -27,7 +27,7 @@
 /* Class constructor */
 
     function osC_Checkout_Payment() {
-      global $osC_Database, $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb, $osC_Payment;
+      global $osC_Database, $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -57,7 +57,7 @@
       $this->_page_title = $osC_Language->get('payment_method_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
 // redirect to the billing address page when no default address exists

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -36,7 +36,7 @@
         $category_product_count_start_string = '&nbsp;(',
         $category_product_count_end_string = ')';
 
-    function osC_CategoryTree($load_from_database = true) {
+    function __construct($load_from_database = true) {
       global $osC_Database, $osC_Cache, $osC_Language;
 
       if (SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1') {
@@ -65,7 +65,7 @@
             $this->calculateCategoryProductCount();
           }
 
-          $osC_Cache->writeBuffer($this->data);
+          $osC_Cache->write($this->data);
         }
       }
     }

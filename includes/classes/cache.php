@@ -5,103 +5,129 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
-
-  Class usage examples:
-
-  - Caching HTML:
-    if ($osC_Cache->read('key', 60) === false) {
-      $osC_Cache->startBuffer();
-      ------ PHP/HTML LOGIC HERE ------
-      $osC_Cache->stopBuffer();
-    }
-
-    echo $osC_Cache->getCache();
-
-  - Caching data (in memory):
-    if ($osC_Cache->read('key', 60) {
-      $variable = $osC_Cache->getCache();
-    } else {
-      $variable = array('some', 'data');
-
-      $osC_Cache->writeBuffer($variable);
-    }
 */
 
+/**
+ * The osC_Cache class handles the caching of dynamically generated data
+ */
+
   class osC_Cache {
-    var $cached_data,
-        $cache_key;
 
-    function write($key, &$data) {
-      $filename = DIR_FS_WORK . $key . '.cache';
+/**
+ * The cached data
+ *
+ * @var mixed
+ * @access private
+ */
 
-      if ($fp = @fopen($filename, 'w')) {
-        flock($fp, 2); // LOCK_EX
-        fputs($fp, serialize($data));
-        flock($fp, 3); // LOCK_UN
-        fclose($fp);
+    private $_data;
 
-        return true;
+/**
+ * The key ID for the cached data
+ *
+ * @var string
+ * @access private
+ */
+
+    private $_key;
+
+/**
+ * Write the data to a cache file
+ *
+ * @param string mixed $data The data to cache
+ * @param string $key The key ID to save the cached data with
+ * @access public
+ */
+
+    public function write($data, $key = null) {
+      if ( empty($key) ) {
+        $key = $this->_key;
       }
 
-      return false;
+      return ( file_put_contents(DIR_FS_WORK . $key . '.cache', serialize($data), LOCK_EX) !== false );
     }
 
-    function read($key, $expire = 0) {
-      $this->cache_key = $key;
+/**
+ * Read data from a cache file if it has not yet expired
+ *
+ * @param string $key The key ID to read the data from the cached file
+ * @param int $expire The amount of minutes the cached data is active for
+ * @access public
+ * @return boolean
+ */
+
+    public function read($key, $expire = null) {
+      $this->_key = $key;
 
       $filename = DIR_FS_WORK . $key . '.cache';
 
-      if (file_exists($filename)) {
+      if ( file_exists($filename) ) {
         $difference = floor((time() - filemtime($filename)) / 60);
 
-        if ( ($expire == '0') || ($difference < $expire) ) {
-          if ($fp = @fopen($filename, 'r')) {
-            $this->cached_data = unserialize(fread($fp, filesize($filename)));
+        if ( empty($expire) || ( is_numeric($expire) && ($difference < $expire)) ) {
+          $this->_data = unserialize(file_get_contents($filename));
 
-            fclose($fp);
-
-            return true;
-          }
+          return true;
         }
       }
 
       return false;
     }
 
-    function &getCache() {
-      return $this->cached_data;
+/**
+ * Return the cached data
+ *
+ * @access public
+ * @return mixed
+ */
+
+    public function getCache() {
+      return $this->_data;
     }
 
-    function startBuffer() {
+/**
+ * Start the buffer to cache its contents
+ *
+ * @access public
+ */
+
+    public function startBuffer() {
       ob_start();
     }
 
-    function stopBuffer() {
-      $this->cached_data = ob_get_contents();
+/**
+ * Stop the buffer and cache its contents
+ *
+ * @access public
+ */
+
+    public function stopBuffer() {
+      $this->_data = ob_get_contents();
 
       ob_end_clean();
 
-      $this->write($this->cache_key, $this->cached_data);
+      $this->write($this->_data);
     }
 
-    function writeBuffer(&$data) {
-      $this->cached_data = $data;
+/**
+ * Delete cached files by their key ID
+ *
+ * @param string $key The key ID of the cached files to delete
+ * @access public
+ */
 
-      $this->write($this->cache_key, $this->cached_data);
-    }
-
-    function clear($key) {
+    public static function clear($key) {
       $key_length = strlen($key);
 
       $d = dir(DIR_FS_WORK);
 
-      while ($entry = $d->read()) {
-        if ((strlen($entry) >= $key_length) && (substr($entry, 0, $key_length) == $key)) {
+      while ( ($entry = $d->read()) !== false ) {
+        if ( (strlen($entry) >= $key_length) && (substr($entry, 0, $key_length) == $key) ) {
           @unlink(DIR_FS_WORK . $entry);
         }
       }

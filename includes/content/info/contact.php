@@ -25,12 +25,12 @@
 /* Class constructor */
 
     function osC_Info_Contact() {
-      global $osC_Services, $osC_Language, $breadcrumb;
+      global $osC_Services, $osC_Language, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('info_contact_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_contact'), osc_href_link(FILENAME_INFO, $this->_module));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_contact'), osc_href_link(FILENAME_INFO, $this->_module));
       }
 
       if ($_GET[$this->_module] == 'process') {

@@ -5,20 +5,34 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+/**
+ * The osC_Address class handles address related functions such as the format and country and zone information
+ */
+
   class osC_Address {
-    function format($address, $new_line = "\n") {
+
+/**
+ * Correctly format an address to the address format rule assigned to its country
+ *
+ * @param array $address An array (or address_book ID) containing the address information
+ * @param string $new_line The string to break new lines with
+ * @access public
+ * @return string
+ */
+
+    public static function format($address, $new_line = null) {
       global $osC_Database;
 
       $address_format = '';
 
-      if (is_numeric($address)) {
+      if ( is_numeric($address) ) {
         $Qaddress = $osC_Database->query('select ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.address_book_id = :address_book_id and ab.entry_country_id = c.countries_id');
         $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
         $Qaddress->bindTable(':table_zones', TABLE_ZONES);
@@ -31,34 +45,34 @@
 
       $firstname = $lastname = '';
 
-      if (isset($address['firstname']) && !empty($address['firstname'])) {
+      if ( isset($address['firstname']) && !empty($address['firstname']) ) {
         $firstname = $address['firstname'];
         $lastname = $address['lastname'];
-      } elseif (isset($address['name']) && !empty($address['name'])) {
+      } elseif ( isset($address['name']) && !empty($address['name']) ) {
         $firstname = $address['name'];
       }
 
       $state = $address['state'];
       $state_code = $address['zone_code'];
 
-      if (isset($address['zone_id']) && is_numeric($address['zone_id']) && ($address['zone_id'] > 0)) {
+      if ( isset($address['zone_id']) && is_numeric($address['zone_id']) && ($address['zone_id'] > 0) ) {
         $state = osC_Address::getZoneName($address['zone_id']);
         $state_code = osC_Address::getZoneCode($address['zone_id']);
       }
 
       $country = $address['country_title'];
 
-      if (empty($country) && isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0)) {
+      if ( empty($country) && isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0) ) {
         $country = osC_Address::getCountryName($address['country_id']);
       }
 
-      if (isset($address['format'])) {
+      if ( isset($address['format']) ) {
         $address_format = $address['format'];
-      } elseif (isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0)) {
+      } elseif ( isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0) ) {
         $address_format = osC_Address::getFormat($address['country_id']);
       }
 
-      if (empty($address_format)) {
+      if ( empty($address_format) ) {
         $address_format = ":name\n:street_address\n:postcode :city\n:country";
       }
 
@@ -83,45 +97,58 @@
       $formated = preg_replace($find_array, $replace_array, $address_format);
 
       if ( (ACCOUNT_COMPANY > -1) && !empty($address['company']) ) {
-        $company = osc_output_string_protected($address['company']);
-
-        $formated = $company . $new_line . $formated;
+        $formated = osc_output_string_protected($address['company']) . "\n" . $formated;
       }
 
-      if ($new_line != "\n") {
+      if ( !empty($new_line) ) {
         $formated = str_replace("\n", $new_line, $formated);
       }
 
       return $formated;
     }
 
-    function getCountries() {
+/**
+ * Return all countries in an array
+ *
+ * @access public
+ * @return array
+ */
+
+    public static function getCountries() {
       global $osC_Database;
 
-      static $_countries;
+      static $countries;
 
-      if (!isset($_countries)) {
-        $_countries = array();
+      if ( !isset($countries) ) {
+        $countries = array();
 
         $Qcountries = $osC_Database->query('select * from :table_countries order by countries_name');
         $Qcountries->bindTable(':table_countries', TABLE_COUNTRIES);
         $Qcountries->execute();
 
-        while ($Qcountries->next()) {
-          $_countries[] = array('id' => $Qcountries->valueInt('countries_id'),
-                                'name' => $Qcountries->value('countries_name'),
-                                'iso_2' => $Qcountries->value('countries_iso_code_2'),
-                                'iso_3' => $Qcountries->value('countries_iso_code_3'),
-                                'format' => $Qcountries->value('address_format'));
+        while ( $Qcountries->next() ) {
+          $countries[] = array('id' => $Qcountries->valueInt('countries_id'),
+                               'name' => $Qcountries->value('countries_name'),
+                               'iso_2' => $Qcountries->value('countries_iso_code_2'),
+                               'iso_3' => $Qcountries->value('countries_iso_code_3'),
+                               'format' => $Qcountries->value('address_format'));
         }
 
         $Qcountries->freeResult();
       }
 
-      return $_countries;
+      return $countries;
     }
 
-    function getCountryName($id) {
+/**
+ * Return the country name
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return string
+ */
+
+    public static function getCountryName($id) {
       global $osC_Database;
 
       $Qcountry = $osC_Database->query('select countries_name from :table_countries where countries_id = :countries_id');
@@ -132,7 +159,15 @@
       return $Qcountry->value('countries_name');
     }
 
-    function getCountryIsoCode2($id) {
+/**
+ * Return the country 2 character ISO code
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return string
+ */
+
+    public static function getCountryIsoCode2($id) {
       global $osC_Database;
 
       $Qcountry = $osC_Database->query('select countries_iso_code_2 from :table_countries where countries_id = :countries_id');
@@ -143,7 +178,15 @@
       return $Qcountry->value('countries_iso_code_2');
     }
 
-    function getCountryIsoCode3($id) {
+/**
+ * Return the country 3 character ISO code
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return string
+ */
+
+    public static function getCountryIsoCode3($id) {
       global $osC_Database;
 
       $Qcountry = $osC_Database->query('select countries_iso_code_3 from :table_countries where countries_id = :countries_id');
@@ -154,7 +197,15 @@
       return $Qcountry->value('countries_iso_code_3');
     }
 
-    function getFormat($id) {
+/**
+ * Return the address format rule for the country
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return string
+ */
+
+    public static function getFormat($id) {
       global $osC_Database;
 
       $Qcountry = $osC_Database->query('select address_format from :table_countries where countries_id = :countries_id');
@@ -165,7 +216,15 @@
       return $Qcountry->value('address_format');
     }
 
-    function getZoneName($id) {
+/**
+ * Return the zone name
+ *
+ * @param int $id The ID of the zone
+ * @access public
+ * @return string
+ */
+
+    public static function getZoneName($id) {
       global $osC_Database;
 
       $Qzone = $osC_Database->query('select zone_name from :table_zones where zone_id = :zone_id');
@@ -176,7 +235,15 @@
       return $Qzone->value('zone_name');
     }
 
-    function getZoneCode($id) {
+/**
+ * Return the zone code
+ *
+ * @param int $id The ID of the zone
+ * @access public
+ * @return string
+ */
+
+    public static function getZoneCode($id) {
       global $osC_Database;
 
       $Qzone = $osC_Database->query('select zone_code from :table_zones where zone_id = :zone_id');
@@ -187,14 +254,22 @@
       return $Qzone->value('zone_code');
     }
 
-    function getZones($id = null) {
+/**
+ * Return the zones belonging to a country, or all zones
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return array
+ */
+
+    public static function getZones($id = null) {
       global $osC_Database;
 
       $zones_array = array();
 
       $Qzones = $osC_Database->query('select z.zone_id, z.zone_country_id, z.zone_name, c.countries_name from :table_zones z, :table_countries c where');
 
-      if (!empty($id)) {
+      if ( !empty($id) ) {
         $Qzones->appendQuery('z.zone_country_id = :zone_country_id and');
         $Qzones->bindInt(':zone_country_id', $id);
       }
@@ -204,7 +279,7 @@
       $Qzones->bindTable(':table_zones', TABLE_ZONES);
       $Qzones->execute();
 
-      while ($Qzones->next()) {
+      while ( $Qzones->next() ) {
         $zones_array[] = array('id' => $Qzones->valueInt('zone_id'),
                                'name' => $Qzones->value('zone_name'),
                                'country_id' => $Qzones->valueInt('zone_country_id'),

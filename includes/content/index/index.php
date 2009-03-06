@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Index_Index() {
-      global $osC_Database, $osC_Services, $osC_Language, $breadcrumb, $cPath, $cPath_array, $current_category_id, $osC_Category;
+      global $osC_Database, $osC_Services, $osC_Language, $osC_Breadcrumb, $cPath, $cPath_array, $current_category_id, $osC_Category;
 
       $this->_page_title = sprintf($osC_Language->get('index_heading'), STORE_NAME);
 
@@ -45,7 +45,7 @@
           $Qcategories->freeResult();
 
           for ($i=0, $n=sizeof($cPath_array); $i<$n; $i++) {
-            $breadcrumb->add($categories[$cPath_array[$i]], osc_href_link(FILENAME_DEFAULT, 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
+            $osC_Breadcrumb->add($categories[$cPath_array[$i]], osc_href_link(FILENAME_DEFAULT, 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
           }
         }
 

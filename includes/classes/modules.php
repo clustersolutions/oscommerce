@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -23,7 +23,7 @@
         $_keys,
         $_group;
 
-    function osC_Modules($group) {
+    function __construct($group) {
       global $osC_Database, $osC_Template, $osC_Cache;
 
       $this->_group = $group;
@@ -86,7 +86,7 @@
           }
         }
 
-        $osC_Cache->writeBuffer($data);
+        $osC_Cache->write($data);
       }
 
       $this->_modules = $data;

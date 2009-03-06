@@ -31,7 +31,7 @@
   $osC_Language->load('account');
 
   if ($osC_Services->isStarted('breadcrumb')) {
-    $breadcrumb->add($osC_Language->get('breadcrumb_my_account'), osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
+    $osC_Breadcrumb->add($osC_Language->get('breadcrumb_my_account'), osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
   }
 
   $osC_Template = osC_Template::setup('account');

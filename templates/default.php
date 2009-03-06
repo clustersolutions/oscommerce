@@ -281,7 +281,7 @@
     <div id="breadcrumbPath">
 
 <?php
-      echo $breadcrumb->trail(' &raquo; ');
+      echo $osC_Breadcrumb->getPath(' &raquo; ');
 ?>
 
     </div>

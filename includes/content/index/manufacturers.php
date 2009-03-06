@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Index_Manufacturers() {
-      global $osC_Services, $osC_Language, $breadcrumb, $osC_Manufacturer;
+      global $osC_Services, $osC_Language, $osC_Breadcrumb, $osC_Manufacturer;
 
       $this->_page_title = sprintf($osC_Language->get('index_heading'), STORE_NAME);
 
@@ -34,7 +34,7 @@
         $osC_Manufacturer = new osC_Manufacturer($_GET[$this->_module]);
 
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Manufacturer->getTitle(), osc_href_link(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module]));
+          $osC_Breadcrumb->add($osC_Manufacturer->getTitle(), osc_href_link(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module]));
         }
 
         $this->_page_title = $osC_Manufacturer->getTitle();

@@ -27,7 +27,7 @@
 /* Class constructor */
 
     function osC_Search_Search() {
-      global $osC_Services, $osC_Language, $breadcrumb, $osC_Search;
+      global $osC_Services, $osC_Language, $osC_Breadcrumb, $osC_Search;
 
       $this->_page_title = $osC_Language->get('search_heading');
 
@@ -38,7 +38,7 @@
         $this->_page_contents = 'results.php';
 
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_search_results'), osc_href_link(FILENAME_SEARCH, osc_get_all_get_params()));
+          $osC_Breadcrumb->add($osC_Language->get('breadcrumb_search_results'), osc_href_link(FILENAME_SEARCH, osc_get_all_get_params()));
         }
 
         $this->_process();

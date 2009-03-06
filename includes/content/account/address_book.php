@@ -27,12 +27,12 @@
 /* Class constructor */
 
     function osC_Account_Address_book() {
-      global $osC_Language, $osC_Services, $breadcrumb, $osC_Customer, $messageStack;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb, $osC_Customer, $messageStack;
 
       $this->_page_title = $osC_Language->get('address_book_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_address_book'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_address_book'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($osC_Customer->hasDefaultAddress() === false) {
@@ -42,7 +42,7 @@
         $this->addJavascriptPhpFilename('includes/form_check.js.php');
       } elseif (isset($_GET['new'])) {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_address_book_add_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
+          $osC_Breadcrumb->add($osC_Language->get('breadcrumb_address_book_add_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '&new', 'SSL'));
         }
 
         $this->_page_title = $osC_Language->get('address_book_add_entry_heading');
@@ -56,7 +56,7 @@
 
         if ($messageStack->size('address_book') == 0) {
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
+            $osC_Breadcrumb->add($osC_Language->get('breadcrumb_address_book_edit_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&edit', 'SSL'));
           }
 
           $this->_page_title = $osC_Language->get('address_book_edit_entry_heading');
@@ -75,7 +75,7 @@
 
         if ($messageStack->size('address_book') == 0) {
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
+            $osC_Breadcrumb->add($osC_Language->get('breadcrumb_address_book_delete_entry'), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module] . '&delete', 'SSL'));
           }
 
           $this->_page_title = $osC_Language->get('address_book_delete_entry_heading');

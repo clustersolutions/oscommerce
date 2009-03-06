@@ -27,17 +27,17 @@
 /* Class constructor */
 
     function osC_Account_Orders() {
-      global $osC_Services, $osC_Language, $osC_Customer, $breadcrumb;
+      global $osC_Services, $osC_Language, $osC_Customer, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('orders_heading');
 
       $osC_Language->load('order');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_my_orders'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_my_orders'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
 
         if (is_numeric($_GET[$this->_module])) {
-          $breadcrumb->add(sprintf($osC_Language->get('breadcrumb_order_information'), $_GET[$this->_module]), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module], 'SSL'));
+          $osC_Breadcrumb->add(sprintf($osC_Language->get('breadcrumb_order_information'), $_GET[$this->_module]), osc_href_link(FILENAME_ACCOUNT, $this->_module . '=' . $_GET[$this->_module], 'SSL'));
         }
       }
 

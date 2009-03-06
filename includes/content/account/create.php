@@ -27,20 +27,20 @@
 /* Class constructor */
 
     function osC_Account_Create() {
-      global $osC_Language, $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('create_account_heading');
 
       if ($_GET[$this->_module] == 'success') {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_create_account'));
+          $osC_Breadcrumb->add($osC_Language->get('breadcrumb_create_account'));
         }
 
         $this->_page_title = $osC_Language->get('create_account_success_heading');
         $this->_page_contents = 'create_success.php';
       } else {
         if ($osC_Services->isStarted('breadcrumb')) {
-          $breadcrumb->add($osC_Language->get('breadcrumb_create_account'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+          $osC_Breadcrumb->add($osC_Language->get('breadcrumb_create_account'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
         }
 
         $this->addJavascriptPhpFilename('includes/form_check.js.php');

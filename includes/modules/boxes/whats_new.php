@@ -56,7 +56,7 @@
           $data['products_price'] = $products_price;
         }
 
-        $osC_Cache->writeBuffer($data);
+        $osC_Cache->write($data);
       }
 
       if (empty($data) === false) {

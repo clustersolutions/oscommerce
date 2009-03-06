@@ -67,7 +67,7 @@
             $Qreview->freeResult();
           }
 
-          $osC_Cache->writeBuffer($data);
+          $osC_Cache->write($data);
         }
 
         $this->_content = '';

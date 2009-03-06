@@ -27,14 +27,14 @@
 /* Class constructor */
 
     function osC_Account_Password_forgotten() {
-      global $osC_Language, $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('password_forgotten_heading');
 
       $this->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_password_forgotten'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_password_forgotten'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {

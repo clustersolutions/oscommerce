@@ -24,12 +24,12 @@
 /* Class constructor */
 
     function osC_Account_Logoff() {
-      global $osC_Language, $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb;
 
       $this->_page_title = $osC_Language->get('sign_out_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_sign_out'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_sign_out'));
       }
 
       $this->_process();

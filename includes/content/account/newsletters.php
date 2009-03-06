@@ -25,12 +25,12 @@
 /* Class constructor */
 
     function osC_Account_Newsletters() {
-      global $osC_Language, $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qnewsletter;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb, $osC_Database, $osC_Customer, $Qnewsletter;
 
       $this->_page_title = $osC_Language->get('newsletters_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_newsletters'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_newsletters'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!

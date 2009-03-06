@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Products_Reviews() {
-      global $osC_Services, $osC_Session, $osC_Language, $breadcrumb, $osC_Product, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Services, $osC_Session, $osC_Language, $osC_Breadcrumb, $osC_Product, $osC_Customer, $osC_NavigationHistory;
 
       if ($osC_Services->isStarted('reviews') === false) {
         osc_redirect(osc_href_link(FILENAME_DEFAULT));
@@ -34,7 +34,7 @@
       $this->_page_title = $osC_Language->get('reviews_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_reviews'), osc_href_link(FILENAME_PRODUCTS, $this->_module));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_reviews'), osc_href_link(FILENAME_PRODUCTS, $this->_module));
       }
 
       if (is_numeric($_GET[$this->_module])) {
@@ -45,7 +45,7 @@
           $this->_page_contents = 'reviews_info.php';
 
           if ($osC_Services->isStarted('breadcrumb')) {
-            $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '=' . $_GET[$this->_module]));
+            $osC_Breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '=' . $_GET[$this->_module]));
           }
         } else {
           $this->_page_contents = 'reviews_not_found.php';
@@ -76,8 +76,8 @@
               $this->addJavascriptPhpFilename('templates/' . $this->getCode() . '/javascript/products/reviews_new.php');
 
               if ($osC_Services->isStarted('breadcrumb')) {
-                $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
-                $breadcrumb->add($osC_Language->get('breadcrumb_reviews_new'), osc_href_link(FILENAME_PRODUCTS, $this->_module . '=new&' . $osC_Product->getKeyword()));
+                $osC_Breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
+                $osC_Breadcrumb->add($osC_Language->get('breadcrumb_reviews_new'), osc_href_link(FILENAME_PRODUCTS, $this->_module . '=new&' . $osC_Product->getKeyword()));
               }
 
               if (isset($_GET['action']) && ($_GET['action'] == 'process')) {
@@ -90,7 +90,7 @@
               $this->_page_contents = 'product_reviews.php';
 
               if ($osC_Services->isStarted('breadcrumb')) {
-                $breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
+                $osC_Breadcrumb->add($osC_Product->getTitle(), osc_href_link(FILENAME_PRODUCTS, $this->_module . '&' . $osC_Product->getKeyword()));
               }
             }
           }

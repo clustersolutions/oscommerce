@@ -70,7 +70,7 @@
 
 <?php
     if ($osC_Services->isStarted('breadcrumb')) {
-      echo $breadcrumb->trail(' &raquo; ');
+      echo $osC_Breadcrumb->getPath(' &raquo; ');
     }
 ?>
 

@@ -27,7 +27,7 @@
 /* Class constructor */
 
     function osC_Checkout_Payment_address() {
-      global $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $breadcrumb;
+      global $osC_Session, $osC_ShoppingCart, $osC_Customer, $osC_Services, $osC_Language, $osC_NavigationHistory, $osC_Breadcrumb;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -50,8 +50,8 @@
       }
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
-        $breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment'), osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_payment_address'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {

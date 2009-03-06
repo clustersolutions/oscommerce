@@ -16,7 +16,7 @@
     function start() {
       global $osC_Banner;
 
-      require('includes/classes/banner.php');
+      include('includes/classes/banner.php');
       $osC_Banner = new osC_Banner();
 
       $osC_Banner->activateAll();

@@ -25,12 +25,12 @@
 /* Class constructor */
 
     function osC_Account_Notifications() {
-      global $osC_Language, $osC_Services, $breadcrumb, $osC_Database, $osC_Customer, $Qglobal;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb, $osC_Database, $osC_Customer, $Qglobal;
 
       $this->_page_title = $osC_Language->get('notifications_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_notifications'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_notifications'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
 /////////////////////// HPDL /////// Should be moved to the customers class!

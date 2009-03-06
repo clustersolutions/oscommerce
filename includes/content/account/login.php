@@ -27,7 +27,7 @@
 /* Class constructor */
 
     function osC_Account_Login() {
-      global $osC_Language, $osC_Services, $breadcrumb;
+      global $osC_Language, $osC_Services, $osC_Breadcrumb;
 
 // redirect the customer to a friendly cookie-must-be-enabled page if cookies are disabled (or the session has not started)
       if (osc_empty(session_id())) {
@@ -37,7 +37,7 @@
       $this->_page_title = $osC_Language->get('sign_in_heading');
 
       if ($osC_Services->isStarted('breadcrumb')) {
-        $breadcrumb->add($osC_Language->get('breadcrumb_sign_in'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
+        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_sign_in'), osc_href_link(FILENAME_ACCOUNT, $this->_module, 'SSL'));
       }
 
       if ($_GET[$this->_module] == 'process') {

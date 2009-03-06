@@ -51,7 +51,7 @@
 
             $data['products_price'] = '<s>' . $osC_Currencies->displayPrice($Qspecials->valueDecimal('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s>&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qspecials->valueDecimal('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span>';
 
-            $osC_Cache->writeBuffer($data);
+            $osC_Cache->write($data);
           }
         }
 
