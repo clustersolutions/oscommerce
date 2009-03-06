@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: password.php 64 2005-03-12 16:36:16Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -49,6 +49,8 @@
           if ($osC_Product->hasTags()) {
             $this->addPageTags('keywords', $osC_Product->getTags());
           }
+
+          $this->addJavascriptFilename('templates/' . $this->getCode() . '/javascript/' . $this->_group . '/info.js');
 
           osC_Services_category_path::process($osC_Product->getCategoryID());
 

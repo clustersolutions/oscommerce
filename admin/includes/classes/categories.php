@@ -120,7 +120,7 @@
       if ( is_numeric($id) ) {
         $osC_CategoryTree->setBreadcrumbUsage(false);
 
-        $categories = array_merge(array(array('id' => $id, 'text' => '')), $osC_CategoryTree->getTree($id));
+        $categories = array_merge(array(array('id' => $id, 'text' => '')), $osC_CategoryTree->getArray($id));
         $products = array();
         $products_delete = array();
 

@@ -19,6 +19,7 @@
       include('includes/classes/template.php');
       include('includes/classes/modules.php');
       include('includes/classes/category.php');
+      include('includes/classes/variants.php');
       include('includes/classes/product.php');
       include('includes/classes/datetime.php');
       include('includes/classes/xml.php');
@@ -36,7 +37,7 @@
 
       include('includes/classes/shopping_cart.php');
       $osC_ShoppingCart = new osC_ShoppingCart();
-      $osC_ShoppingCart->update();
+      $osC_ShoppingCart->refresh();
 
       include('includes/classes/navigation_history.php');
       $osC_NavigationHistory = new osC_NavigationHistory(true);

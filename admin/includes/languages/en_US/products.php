@@ -27,17 +27,16 @@ action_heading_batch_delete_products = Batch Delete Products
 section_general = General
 section_data = Data
 section_images = Images
-section_attributes = Attributes
+section_variants = Variants
 section_categories = Categories
 
 subsection_price = Price
 subsection_data = Data
-subsection_status = Status
 subsection_information = Information
 subsection_new_image = New Image
 subsection_original_images = Original Images
 subsection_images = Images
-subsection_assigned_attributes = Assigned Attributes
+subsection_assigned_variants = Assigned Variants
 
 field_name = Name:
 field_description = Description:
@@ -48,10 +47,9 @@ field_url = URL:
 field_tax_class = Tax Class:
 field_price_net = Net Price:
 field_price_gross = Gross Price:
-field_manufacturer = Manufacturer:
 field_quantity = Quantity:
 field_weight = Weight:
-field_date_available = Date Available:
+field_status = Status:
 
 field_current_categories = Current Categories:
 field_categories = Categories:

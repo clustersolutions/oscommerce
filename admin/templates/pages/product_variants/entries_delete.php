@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductAttributes_Admin::getEntryData($_GET['paeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getEntryData($_GET['paeID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>

@@ -13,9 +13,27 @@
 */
 
   class osC_CategoryTree {
+
+/**
+ * Flag to control if the total number of products in a category should be calculated
+ *
+ * @var boolean
+ * @access protected
+ */
+
+    protected $_show_total_products = false;
+
+/**
+ * Array containing the category structure relationship data
+ *
+ * @var array
+ * @access protected
+ */
+
+    protected $_data = array();
+
     var $root_category_id = 0,
         $max_level = 0,
-        $data = array(),
         $root_start_string = '',
         $root_end_string = '',
         $parent_start_string = '',
@@ -32,51 +50,42 @@
         $cpath_array = array(),
         $cpath_start_string = '',
         $cpath_end_string = '',
-        $show_category_product_count = false,
         $category_product_count_start_string = '&nbsp;(',
         $category_product_count_end_string = ')';
 
-    function __construct($load_from_database = true) {
+/**
+ * Constructor; load the category structure relationship data from the database
+ *
+ * @access public
+ */
+
+    public function __construct() {
       global $osC_Database, $osC_Cache, $osC_Language;
 
-      if (SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1') {
-        $this->show_category_product_count = true;
+      if ( SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1' ) {
+        $this->_show_total_products = true;
       }
 
-      if ($load_from_database === true) {
-        if ($osC_Cache->read('category_tree-' . $osC_Language->getCode(), 720)) {
-          $this->data = $osC_Cache->getCache();
-        } else {
-          $Qcategories = $osC_Database->query('select c.categories_id, c.parent_id, c.categories_image, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id order by c.parent_id, c.sort_order, cd.categories_name');
-          $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
-          $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
-          $Qcategories->bindInt(':language_id', $osC_Language->getID());
-          $Qcategories->execute();
+      if ( $osC_Cache->read('category_tree-' . $osC_Language->getCode(), 720) ) {
+        $this->_data = $osC_Cache->getCache();
+      } else {
+        $Qcategories = $osC_Database->query('select c.categories_id, c.parent_id, c.categories_image, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id order by c.parent_id, c.sort_order, cd.categories_name');
+        $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
+        $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
+        $Qcategories->bindInt(':language_id', $osC_Language->getID());
+        $Qcategories->execute();
 
-          $this->data = array();
-
-          while ($Qcategories->next()) {
-            $this->data[$Qcategories->valueInt('parent_id')][$Qcategories->valueInt('categories_id')] = array('name' => $Qcategories->value('categories_name'), 'image' => $Qcategories->value('categories_image'), 'count' => 0);
-          }
-
-          $Qcategories->freeResult();
-
-          if ($this->show_category_product_count === true) {
-            $this->calculateCategoryProductCount();
-          }
-
-          $osC_Cache->write($this->data);
+        while ( $Qcategories->next() ) {
+          $this->_data[$Qcategories->valueInt('parent_id')][$Qcategories->valueInt('categories_id')] = array('name' => $Qcategories->value('categories_name'),
+                                                                                                             'image' => $Qcategories->value('categories_image'),
+                                                                                                             'count' => 0);
         }
-      }
-    }
 
-    function setData(&$data_array) {
-      if (is_array($data_array)) {
-        $this->data = array();
-
-        for ($i=0, $n=sizeof($data_array); $i<$n; $i++) {
-          $this->data[$data_array[$i]['parent_id']][$data_array[$i]['categories_id']] = array('name' => $data_array[$i]['categories_name'], 'count' => $data_array[$i]['categories_count']);
+        if ( $this->_show_total_products === true ) {
+          $this->_calculateProductTotals();
         }
+
+        $osC_Cache->write($this->_data);
       }
     }
 
@@ -99,17 +108,26 @@
       $this->cpath_array = array();
       $this->cpath_start_string = '';
       $this->cpath_end_string = '';
-      $this->show_category_product_count = (SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1') ? true : false;
+      $this->_show_total_products = (SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1') ? true : false;
       $this->category_product_count_start_string = '&nbsp;(';
       $this->category_product_count_end_string = ')';
     }
 
-    function buildBranch($parent_id, $level = 0) {
+/**
+ * Return a formated string representation of a category and its subcategories
+ *
+ * @param int $parent_id The parent ID of the category to build from
+ * @param int $level Internal flag to note the depth of the category structure
+ * @access protected
+ * @return string
+ */
+
+    protected function _buildBranch($parent_id, $level = 0) {
       $result = $this->parent_group_start_string;
 
-      if (isset($this->data[$parent_id])) {
-        foreach ($this->data[$parent_id] as $category_id => $category) {
-          if ($this->breadcrumb_usage == true) {
+      if ( isset($this->_data[$parent_id]) ) {
+        foreach ( $this->_data[$parent_id] as $category_id => $category ) {
+          if ( $this->breadcrumb_usage === true ) {
             $category_link = $this->buildBreadcrumb($category_id);
           } else {
             $category_link = $category_id;
@@ -117,11 +135,11 @@
 
           $result .= $this->child_start_string;
 
-          if (isset($this->data[$category_id])) {
+          if ( isset($this->_data[$category_id]) ) {
             $result .= $this->parent_start_string;
           }
 
-          if ($level == 0) {
+          if ( $level === 0 ) {
             $result .= $this->root_start_string;
           }
 
@@ -133,27 +151,27 @@
 
           $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'cPath=' . $category_link), $link_title);
 
-          if ($this->show_category_product_count === true) {
+          if ( $this->_show_total_products === true ) {
             $result .= $this->category_product_count_start_string . $category['count'] . $this->category_product_count_end_string;
           }
 
-          if ($level == 0) {
+          if ( $level === 0 ) {
             $result .= $this->root_end_string;
           }
 
-          if (isset($this->data[$category_id])) {
+          if ( isset($this->_data[$category_id]) ) {
             $result .= $this->parent_end_string;
           }
 
           $result .= $this->child_end_string;
 
-          if (isset($this->data[$category_id]) && (($this->max_level == '0') || ($this->max_level > $level+1))) {
-            if ($this->follow_cpath === true) {
-              if (in_array($category_id, $this->cpath_array)) {
-                $result .= $this->buildBranch($category_id, $level+1);
+          if ( isset($this->_data[$category_id]) && (($this->max_level == '0') || ($this->max_level > $level+1)) ) {
+            if ( $this->follow_cpath === true ) {
+              if ( in_array($category_id, $this->cpath_array) ) {
+                $result .= $this->_buildBranch($category_id, $level+1);
               }
             } else {
-              $result .= $this->buildBranch($category_id, $level+1);
+              $result .= $this->_buildBranch($category_id, $level+1);
             }
           }
         }
@@ -169,8 +187,8 @@
         $result = array();
       }
 
-      if (isset($this->data[$parent_id])) {
-        foreach ($this->data[$parent_id] as $category_id => $category) {
+      if (isset($this->_data[$parent_id])) {
+        foreach ($this->_data[$parent_id] as $category_id => $category) {
           if ($this->breadcrumb_usage == true) {
             $category_link = $this->buildBreadcrumb($category_id);
           } else {
@@ -180,7 +198,7 @@
           $result[] = array('id' => $category_link,
                             'title' => str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . $category['name']);
 
-          if (isset($this->data[$category_id]) && (($this->max_level == '0') || ($this->max_level > $level+1))) {
+          if (isset($this->_data[$category_id]) && (($this->max_level == '0') || ($this->max_level > $level+1))) {
             if ($this->follow_cpath === true) {
               if (in_array($category_id, $this->cpath_array)) {
                 $result = $this->buildBranchArray($category_id, $level+1, $result);
@@ -198,7 +216,7 @@
     function buildBreadcrumb($category_id, $level = 0) {
       $breadcrumb = '';
 
-      foreach ($this->data as $parent => $categories) {
+      foreach ($this->_data as $parent => $categories) {
         foreach ($categories as $id => $info) {
           if ($id == $category_id) {
             if ($level < 1) {
@@ -217,16 +235,38 @@
       return $breadcrumb;
     }
 
-    function buildTree() {
-      return $this->buildBranch($this->root_category_id);
+/**
+ * Return a formated string representation of the category structure relationship data
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getTree() {
+      return $this->_buildBranch($this->root_category_id);
     }
 
-    function getTree($parent_id = '') {
+/**
+ * Magic function; return a formated string representation of the category structure relationship data
+ *
+ * This is used when echoing the class object, eg:
+ *
+ * echo $osC_CategoryTree;
+ *
+ * @access public
+ * @return string
+ */
+
+    public function __toString() {
+      return $this->getTree();
+    }
+
+    function getArray($parent_id = '') {
       return $this->buildBranchArray((empty($parent_id) ? $this->root_category_id : $parent_id));
     }
 
     function exists($id) {
-      foreach ($this->data as $parent => $categories) {
+      foreach ($this->_data as $parent => $categories) {
         foreach ($categories as $category_id => $info) {
           if ($id == $category_id) {
             return true;
@@ -238,7 +278,7 @@
     }
 
     function getChildren($category_id, &$array) {
-      foreach ($this->data as $parent => $categories) {
+      foreach ($this->_data as $parent => $categories) {
         if ($parent == $category_id) {
           foreach ($categories as $id => $info) {
             $array[] = $id;
@@ -251,7 +291,7 @@
     }
 
     function getData($id) {
-      foreach ($this->data as $parent => $categories) {
+      foreach ($this->_data as $parent => $categories) {
         foreach ($categories as $category_id => $info) {
           if ($id == $category_id) {
             return array('id' => $id,
@@ -267,36 +307,48 @@
       return false;
     }
 
-    function calculateCategoryProductCount() {
+/**
+ * Calculate the number of products in each category
+ *
+ * @access protected
+ */
+
+    protected function _calculateProductTotals($filter_active = true) {
       global $osC_Database;
 
       $totals = array();
 
-      $Qtotals = $osC_Database->query('select p2c.categories_id, count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.products_id = p.products_id and p.products_status = :products_status group by p2c.categories_id');
+      $Qtotals = $osC_Database->query('select p2c.categories_id, count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.products_id = p.products_id');
+
+      if ( $filter_active === true ) {
+        $Qtotals->appendQuery('and p.products_status = :products_status');
+        $Qtotals->bindInt(':products_status', 1);
+      }
+
+      $Qtotals->appendQuery('group by p2c.categories_id');
       $Qtotals->bindTable(':table_products', TABLE_PRODUCTS);
       $Qtotals->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-      $Qtotals->bindInt(':products_status', 1);
       $Qtotals->execute();
 
-      while ($Qtotals->next()) {
+      while ( $Qtotals->next() ) {
         $totals[$Qtotals->valueInt('categories_id')] = $Qtotals->valueInt('total');
       }
 
-      $Qtotals->freeResult();
-
-      foreach ($this->data as $parent => $categories) {
-        foreach ($categories as $id => $info) {
-          if (isset($totals[$id]) && ($totals[$id] > 0)) {
-            $this->data[$parent][$id]['count'] = $totals[$id];
+      foreach ( $this->_data as $parent => $categories ) {
+        foreach ( $categories as $id => $info ) {
+          if ( isset($totals[$id]) && ($totals[$id] > 0) ) {
+            $this->_data[$parent][$id]['count'] = $totals[$id];
 
             $parent_category = $parent;
-            while ($parent_category != $this->root_category_id) {
-              foreach ($this->data as $parent_parent => $parent_categories) {
-                foreach ($parent_categories as $parent_category_id => $parent_category_info) {
-                  if ($parent_category_id == $parent_category) {
-                    $this->data[$parent_parent][$parent_category_id]['count'] += $this->data[$parent][$id]['count'];
+
+            while ( $parent_category != $this->root_category_id ) {
+              foreach ( $this->_data as $parent_parent => $parent_categories ) {
+                foreach ( $parent_categories as $parent_category_id => $parent_category_info ) {
+                  if ( $parent_category_id == $parent_category ) {
+                    $this->_data[$parent_parent][$parent_category_id]['count'] += $this->_data[$parent][$id]['count'];
 
                     $parent_category = $parent_parent;
+
                     break 2;
                   }
                 }
@@ -305,12 +357,10 @@
           }
         }
       }
-
-      unset($totals);
     }
 
     function getNumberOfProducts($id) {
-      foreach ($this->data as $parent => $categories) {
+      foreach ($this->_data as $parent => $categories) {
         foreach ($categories as $category_id => $info) {
           if ($id == $category_id) {
             return $info['count'];
@@ -388,9 +438,9 @@
 
     function setShowCategoryProductCount($show_category_product_count) {
       if ($show_category_product_count === true) {
-        $this->show_category_product_count = true;
+        $this->_show_total_products = true;
       } else {
-        $this->show_category_product_count = false;
+        $this->_show_total_products = false;
       }
     }
 

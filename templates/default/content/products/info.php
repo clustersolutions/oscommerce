@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,55 +13,124 @@
 */
 ?>
 
-<h1 style="float: right;"><?php echo $osC_Product->getPriceFormated(true); ?></h1>
+<h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
-<h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
+<div>
 
 <?php
   if ($osC_Product->hasImage()) {
 ?>
 
-<div style="float: right; text-align: center;">
-  <?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), 'hspace="5" vspace="5"', 'product_info') . '<br />' . $osC_Language->get('enlarge_image'), 'target="_blank" onclick="window.open(\'' . osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
-</div>
+  <div style="float: left; text-align: center; padding: 0 10px 10px 0; width: <?php echo $osC_Image->getWidth('product_info'); ?>px;">
+    <?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle(), null, 'product_info'), 'target="_blank" onclick="window.open(\'' . osc_href_link(FILENAME_PRODUCTS, 'images&' . $osC_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($osC_Product->numberOfImages() > 1) ? $osC_Image->getWidth('large') + ($osC_Image->getWidth('thumbnails') * 2) + 70 : $osC_Image->getWidth('large') + 20) . ',height=' . ($osC_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
+  </div>
 
 <?php
   }
 ?>
 
-<form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, osc_get_all_get_params(array('action')) . '&action=cart_add'); ?>" method="post">
+  <div style="<?php if ( $osC_Product->hasImage() ) { echo 'margin-left: ' . ($osC_Image->getWidth('product_info') + 20) . 'px; '; } ?>min-height: <?php echo $osC_Image->getHeight('product_info'); ?>px;">
+    <form name="cart_quantity" action="<?php echo osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&action=cart_add'); ?>" method="post">
 
-<div><?php echo $osC_Product->getDescription(); ?></div>
+    <div style="float: right;">
+      <?php echo osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
+    </div>
+
+    <table border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="productInfoKey">Price:</td>
+        <td class="productInfoValue"><span id="productInfoPrice"><?php echo $osC_Product->getPriceFormated(true); ?></span> (plus <?php echo osc_link_object(osc_href_link(FILENAME_INFO, 'shipping'), 'shipping'); ?>)</td>
+      </tr>
+      <tr>
+        <td class="productInfoKey">Availability:</td>
+        <td class="productInfoValue" id="productInfoAvailability"><?php echo $osC_Product->getAttribute('shipping_availability'); ?></td>
+      </tr>
+    </table>
 
 <?php
-  if ($osC_Product->hasAttributes()) {
+  if ( $osC_Product->hasVariants() ) {
 ?>
 
-<table border="0" cellspacing="0" cellpadding="2">
-  <tr>
-    <td colspan="2"><?php echo $osC_Language->get('product_attributes'); ?></td>
-  </tr>
+    <div id="variantsBlock">
+      <div id="variantsBlockTitle"><?php echo $osC_Language->get('product_attributes'); ?></div>
+
+      <div id="variantsBlockData">
 
 <?php
-    foreach ($osC_Product->getAttributes() as $options => $values) {
-?>
-
-  <tr>
-    <td><?php echo $values['options_name'] . ':'; ?></td>
-    <td><?php echo osc_draw_pull_down_menu('attributes[' . $options . ']', $values['data']); ?></td>
-  </tr>
-
-<?php
+    foreach ( $osC_Product->getVariants() as $group_id => $value ) {
+      echo osC_Variants::parse($value['module'], $value);
     }
+
+    echo osC_Variants::defineJavascript($osC_Product->getVariants(false));
+?>
+
+      </div>
+    </div>
+
+<?php
+  }
+?>
+
+    </form>
+  </div>
+</div>
+
+<div style="clear: both;"></div>
+
+<table border="0" cellspacing="0" cellpadding="0">
+
+<?php
+  if ( $osC_Product->hasAttribute('manufacturers') ) {
+?>
+
+  <tr>
+    <td class="productInfoKey">Manufacturer:</td>
+    <td class="productInfoValue"><?php echo $osC_Product->getAttribute('manufacturers'); ?></td>
+  </tr>
+
+<?php
+  }
+?>
+
+  <tr>
+    <td class="productInfoKey">Model:</td>
+    <td class="productInfoValue"><span id="productInfoModel"><?php echo $osC_Product->getModel(); ?></span></td>
+  </tr>
+
+<?php
+  if ( $osC_Product->hasAttribute('date_available') ) {
+?>
+
+  <tr>
+    <td class="productInfoKey">Date Available:</td>
+    <td class="productInfoValue"><?php echo osC_DateTime::getShort($osC_Product->getAttribute('date_available')); ?></td>
+  </tr>
+
+<?php
+  }
 ?>
 
 </table>
 
 <?php
+  if ( $osC_Product->hasVariants() ) {
+?>
+
+<script language="javascript" type="text/javascript">
+  var originalPrice = '<?php echo $osC_Product->getPriceFormated(true); ?>';
+  var productInfoNotAvailable = '<span id="productVariantCombinationNotAvailable">Not available in this combination. Please select another combination for your order.</span>';
+  var productInfoAvailability = '<?php echo addslashes($osC_Product->getAttribute('shipping_availability')); ?>';
+
+  refreshVariants();
+</script>
+
+<?php
   }
 ?>
 
-<div style="clear: both;"></div>
+<div>
+  <?php echo $osC_Product->getDescription(); ?>
+</div>
 
 <?php
   if ($osC_Services->isStarted('reviews') && osC_Reviews::exists(osc_get_product_id($osC_Product->getID()))) {
@@ -79,24 +148,18 @@
 
 <?php
   }
-
-  if ($osC_Product->getDateAvailable() > osC_DateTime::getNow()) {
-?>
-
-<p align="center"><?php echo sprintf($osC_Language->get('date_availability'), osC_DateTime::getLong($osC_Product->getDateAvailable())); ?></p>
-
-<?php
-  }
 ?>
 
 <div class="submitFormButtons" style="text-align: right;">
 
 <?php
+/*
   if ($osC_Services->isStarted('reviews')) {
-    echo '<span style="float: left;">' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews'))) . '</span>';
+    echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews')));
   }
+*/
 ?>
-  <?php echo osc_draw_image_submit_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart')); ?>
+
 </div>
 
 </form>

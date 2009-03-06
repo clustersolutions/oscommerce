@@ -36,7 +36,7 @@
       $osC_CategoryTree->setSpacerString('&nbsp;', 2);
       $osC_CategoryTree->setShowCategoryProductCount((BOX_CATEGORIES_SHOW_PRODUCT_COUNT == '1') ? true : false);
 
-      $this->_content = $osC_CategoryTree->buildTree();
+      $this->_content = $osC_CategoryTree->getTree();
     }
 
     function install() {

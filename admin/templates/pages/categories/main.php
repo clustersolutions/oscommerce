@@ -22,7 +22,7 @@
 
   $categories_array = array();
 
-  foreach ($osC_CategoryTree->getTree() as $value) {
+  foreach ($osC_CategoryTree->getArray() as $value) {
     $categories_array[] = array('id' => $value['id'],
                                 'text' => $value['title']);
   }

@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductAttributes_Admin::getEntryData($_GET['paeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getEntryData($_GET['paeID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -23,9 +23,9 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('products_options_values_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('title'); ?></div>
 <div class="infoBoxContent">
-  <form name="paeEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $osC_ObjectInfo->get('products_options_values_id') . '&action=saveEntry'); ?>" method="post">
+  <form name="paeEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $osC_ObjectInfo->get('id') . '&action=saveEntry'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_edit_group_entry'); ?></p>
 
@@ -35,15 +35,15 @@
       <td width="60%">
 
 <?php
-  $Qed = $osC_Database->query('select language_id, products_options_values_name from :table_products_options_values where products_options_values_id = :products_options_values_id');
-  $Qed->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-  $Qed->bindInt(':products_options_values_id', $osC_ObjectInfo->get('products_options_values_id'));
+  $Qed = $osC_Database->query('select languages_id, title from :table_products_variants_values where id = :id');
+  $Qed->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+  $Qed->bindInt(':id', $osC_ObjectInfo->get('id'));
   $Qed->execute();
 
   $entry_names = array();
 
   while ( $Qed->next() ) {
-    $entry_names[$Qed->valueInt('language_id')] = $Qed->value('products_options_values_name');
+    $entry_names[$Qed->valueInt('languages_id')] = $Qed->value('title');
   }
 
   foreach ( $osC_Language->getAll() as $l ) {
@@ -52,6 +52,10 @@
 ?>
 
       </td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('sort_order', $osC_ObjectInfo->get('sort_order')); ?></td>
     </tr>
   </table>
 

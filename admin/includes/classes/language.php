@@ -342,19 +342,18 @@
           }
 
           if ($error === false) {
-            $Qproducts = $osC_Database->query('select products_id, products_name, products_description, products_model, products_keyword, products_tags, products_url from :table_products_description where language_id = :language_id');
+            $Qproducts = $osC_Database->query('select products_id, products_name, products_description, products_keyword, products_tags, products_url from :table_products_description where language_id = :language_id');
             $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
             $Qproducts->bindInt(':language_id', $default_language_id);
             $Qproducts->execute();
 
             while ($Qproducts->next()) {
-              $Qinsert = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_model, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_model, :products_keyword, :products_tags, :products_url)');
+              $Qinsert = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_keyword, :products_tags, :products_url)');
               $Qinsert->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
               $Qinsert->bindInt(':products_id', $Qproducts->valueInt('products_id'));
               $Qinsert->bindInt(':language_id', $language_id);
               $Qinsert->bindValue(':products_name', $Qproducts->value('products_name'));
               $Qinsert->bindValue(':products_description', $Qproducts->value('products_description'));
-              $Qinsert->bindValue(':products_model', $Qproducts->value('products_model'));
               $Qinsert->bindValue(':products_keyword', $Qproducts->value('products_keyword'));
               $Qinsert->bindValue(':products_tags', $Qproducts->value('products_tags'));
               $Qinsert->bindValue(':products_url', $Qproducts->value('products_url'));

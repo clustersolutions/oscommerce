@@ -204,7 +204,7 @@
       $products_array = array();
       $key = 0;
 
-      $Qproducts = $osC_Database->query('select orders_products_id, products_name, products_model, products_price, products_tax, products_quantity, final_price from :table_orders_products where orders_id = :orders_id');
+      $Qproducts = $osC_Database->query('select orders_products_id, products_name, products_model, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id');
       $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
       $Qproducts->bindInt(':orders_id', $this->_order_id);
       $Qproducts->execute();
@@ -214,21 +214,18 @@
                                       'name' => $Qproducts->value('products_name'),
                                       'model' => $Qproducts->value('products_model'),
                                       'tax' => $Qproducts->value('products_tax'),
-                                      'price' => $Qproducts->value('products_price'),
-                                      'final_price' => $Qproducts->value('final_price'));
+                                      'price' => $Qproducts->value('products_price'));
 
-        $Qattributes = $osC_Database->query('select products_options, products_options_values, options_values_price, price_prefix from :table_orders_products_attributes where orders_id = :orders_id and orders_products_id = :orders_products_id');
-        $Qattributes->bindTable(':table_orders_products_attributes', TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
-        $Qattributes->bindInt(':orders_id', $this->_order_id);
-        $Qattributes->bindInt(':orders_products_id', $Qproducts->valueInt('orders_products_id'));
-        $Qattributes->execute();
+        $Qvariants = $osC_Database->query('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
+        $Qvariants->bindTable(':table_orders_products_variants', TABLE_ORDERS_PRODUCTS_VARIANTS);
+        $Qvariants->bindInt(':orders_id', $this->_order_id);
+        $Qvariants->bindInt(':orders_products_id', $Qproducts->valueInt('orders_products_id'));
+        $Qvariants->execute();
 
-        if ($Qattributes->numberOfRows() > 0) {
-          while ($Qattributes->next()) {
-            $products_array[$key]['attributes'][] = array('option' => $Qattributes->value('products_options'),
-                                                          'value' => $Qattributes->value('products_options_values'),
-                                                          'prefix' => $Qattributes->value('price_prefix'),
-                                                          'price' => $Qattributes->value('options_values_price'));
+        if ( $Qvariants->numberOfRows() > 0 ) {
+          while ( $Qvariants->next() ) {
+            $products_array[$key]['attributes'][] = array('option' => $Qvariants->value('group_title'),
+                                                          'value' => $Qvariants->value('value_title'));
           }
         }
 
@@ -507,11 +504,11 @@
       }
 
       if ($error === false) {
-        $Qopa = $osC_Database->query('delete from :table_orders_products_attributes where orders_id = :orders_id');
-        $Qopa->bindTable(':table_orders_products_attributes', TABLE_ORDERS_PRODUCTS_ATTRIBUTES);
-        $Qopa->bindInt(':orders_id', $id);
-        $Qopa->setLogging($_SESSION['module'], $id);
-        $Qopa->execute();
+        $Qvariants = $osC_Database->query('delete from :table_orders_products_variants where orders_id = :orders_id');
+        $Qvariants->bindTable(':table_orders_products_variants', TABLE_ORDERS_PRODUCTS_VARIANTS);
+        $Qvariants->bindInt(':orders_id', $id);
+        $Qvariants->setLogging($_SESSION['module'], $id);
+        $Qvariants->execute();
 
         if ($osC_Database->isError() === true) {
           $error = true;

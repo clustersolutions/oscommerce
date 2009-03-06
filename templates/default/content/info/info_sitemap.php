@@ -49,6 +49,6 @@
   </div>
 
   <div style="width: 49%;">
-    <?php echo $osC_CategoryTree->buildTree(); ?>
+    <?php echo $osC_CategoryTree->getTree(); ?>
   </div>
 </div>

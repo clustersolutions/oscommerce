@@ -13,6 +13,8 @@
 */
 
   require('includes/classes/products.php');
+  require('includes/classes/product_attributes.php');
+  require('../includes/classes/variants.php');
 
   class osC_Content_Products extends osC_Template {
 
@@ -94,19 +96,20 @@
 
               $data = array('quantity' => $_POST['products_quantity'],
                             'price' => $_POST['products_price'],
-                            'date_available' => $_POST['products_date_available'],
                             'weight' => $_POST['products_weight'],
                             'weight_class' => $_POST['products_weight_class'],
                             'status' => $_POST['products_status'],
+                            'model' => $_POST['products_model'],
                             'tax_class_id' => $_POST['products_tax_class_id'],
-                            'manufacturers_id' => $_POST['manufacturers_id'],
-                            'date_available' => $_POST['products_date_available'],
                             'products_name' => $_POST['products_name'],
                             'products_description' => $_POST['products_description'],
-                            'products_model' => $_POST['products_model'],
                             'products_keyword' => $_POST['products_keyword'],
                             'products_tags' => $_POST['products_tags'],
                             'products_url' => $_POST['products_url']);
+
+              if ( isset($_POST['attributes']) ) {
+                $data['attributes'] = $_POST['attributes'];
+              }
 
               if ( isset($_POST['categories']) ) {
                 $data['categories'] = $_POST['categories'];
@@ -116,12 +119,44 @@
                 $data['localimages'] = $_POST['localimages'];
               }
 
-              if ( isset($_POST['attribute_prefix']) ) {
-                $data['attribute_prefix'] = $_POST['attribute_prefix'];
+              if ( isset($_POST['variants_tax_class_id']) ) {
+                $data['variants_tax_class_id'] = $_POST['variants_tax_class_id'];
               }
 
-              if ( isset($_POST['attribute_price']) ) {
-                $data['attribute_price'] = $_POST['attribute_price'];
+              if ( isset($_POST['variants_price']) ) {
+                $data['variants_price'] = $_POST['variants_price'];
+              }
+
+              if ( isset($_POST['variants_model']) ) {
+                $data['variants_model'] = $_POST['variants_model'];
+              }
+
+              if ( isset($_POST['variants_quantity']) ) {
+                $data['variants_quantity'] = $_POST['variants_quantity'];
+              }
+
+              if ( isset($_POST['variants_combo']) ) {
+                $data['variants_combo'] = $_POST['variants_combo'];
+              }
+
+              if ( isset($_POST['variants_combo_db']) ) {
+                $data['variants_combo_db'] = $_POST['variants_combo_db'];
+              }
+
+              if ( isset($_POST['variants_weight']) ) {
+                $data['variants_weight'] = $_POST['variants_weight'];
+              }
+
+              if ( isset($_POST['variants_weight_class']) ) {
+                $data['variants_weight_class'] = $_POST['variants_weight_class'];
+              }
+
+              if ( isset($_POST['variants_status']) ) {
+                $data['variants_status'] = $_POST['variants_status'];
+              }
+
+              if ( isset($_POST['variants_default_combo']) ) {
+                $data['variants_default_combo'] = $_POST['variants_default_combo'];
               }
 
               foreach ( $data['products_keyword'] as $value ) {

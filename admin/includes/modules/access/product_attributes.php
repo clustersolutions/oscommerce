@@ -14,12 +14,12 @@
 
   class osC_Access_Product_attributes extends osC_Access {
     var $_module = 'product_attributes',
-        $_group = 'content',
+        $_group = 'modules',
         $_icon = 'run.png',
         $_title,
-        $_sort_order = 300;
+        $_sort_order = 600;
 
-    function osC_Access_Product_attributes() {
+    function __construct() {
       global $osC_Language;
 
       $this->_title = $osC_Language->get('access_product_attributes_title');

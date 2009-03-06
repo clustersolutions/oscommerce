@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id: products_attributes_listing.php 1016 2006-10-18 11:38:59Z hpdl $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -24,11 +24,10 @@
 <p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="infoBoxButton" />&nbsp;<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=saveEntry') . '\';" class="infoBoxButton" />'; ?></p>
 
 <?php
-  $Qentries = $osC_Database->query('select pov.products_options_values_id, pov.products_options_values_name from :table_products_options_values pov, :table_products_options_values_to_products_options pov2po where pov2po.products_options_id = :products_options_id and pov2po.products_options_values_id = pov.products_options_values_id and pov.language_id = :language_id order by pov.products_options_values_name');
-  $Qentries->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-  $Qentries->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
-  $Qentries->bindInt(':products_options_id', $_GET[$osC_Template->getModule()]);
-  $Qentries->bindInt(':language_id', $osC_Language->getID());
+  $Qentries = $osC_Database->query('select id, title, sort_order from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id and languages_id = :languages_id order by sort_order, title');
+  $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+  $Qentries->bindInt(':products_variants_groups_id', $_GET[$osC_Template->getModule()]);
+  $Qentries->bindInt(':languages_id', $osC_Language->getID());
   $Qentries->execute();
 ?>
 
@@ -44,13 +43,14 @@
   <thead>
     <tr>
       <th><?php echo $osC_Language->get('table_heading_entries'); ?></th>
+      <th><?php echo $osC_Language->get('table_heading_sort_order'); ?></th>
       <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=batchDeleteEntries') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=batchDeleteEntries') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -61,16 +61,17 @@
 ?>
 
     <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
-      <td onclick="document.getElementById('batch<?php echo $Qentries->valueInt('products_options_values_id'); ?>').checked = !document.getElementById('batch<?php echo $Qentries->valueInt('products_options_values_id'); ?>').checked;"><?php echo $Qentries->value('products_options_values_name'); ?></td>
+      <td onclick="document.getElementById('batch<?php echo $Qentries->valueInt('id'); ?>').checked = !document.getElementById('batch<?php echo $Qentries->valueInt('id'); ?>').checked;"><?php echo $Qentries->value('title'); ?></td>
+      <td><?php echo $Qentries->valueInt('sort_order'); ?></td>
       <td align="right">
 
 <?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('products_options_values_id') . '&action=saveEntry'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('products_options_values_id') . '&action=deleteEntry'), osc_icon('trash.png'));
+    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=saveEntry'), osc_icon('edit.png')) . '&nbsp;' .
+         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $Qentries->valueInt('id') . '&action=deleteEntry'), osc_icon('trash.png'));
 ?>
 
       </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qentries->valueInt('products_options_values_id'), null, 'id="batch' . $Qentries->valueInt('products_options_values_id') . '"'); ?></td>
+      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qentries->valueInt('id'), null, 'id="batch' . $Qentries->valueInt('id') . '"'); ?></td>
     </tr>
 
 <?php

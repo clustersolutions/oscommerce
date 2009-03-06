@@ -46,46 +46,28 @@
 ?>
 
       <tr>
-        <td valign="top" width="60">
-
-<?php
-      $attributes_array = array();
-
-      if ($osC_ShoppingCart->hasAttributes($products['id'])) {
-        foreach ($osC_ShoppingCart->getAttributes($products['id']) as $attributes) {
-          $attributes_array[] = $attributes['options_id'] . ':' . $attributes['options_values_id'];
-        }
-      }
-
-      echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, $products['keyword'] . (!empty($attributes_array) ? '&attributes=' . implode(';', $attributes_array) : '') . '&action=cart_remove', 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete')));
-?>
-
-        </td>
+        <td valign="top" width="60"><?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'action=cart_remove&item=' . $products['item_id'], 'SSL'), osc_draw_image_button('small_delete.gif', $osC_Language->get('button_delete'))); ?></td>
         <td valign="top">
 
 <?php
       echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $products['keyword']), '<b>' . $products['name'] . '</b>');
 
-      if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->isInStock($products['id']) === false) ) {
+      if ( (STOCK_CHECK == '1') && ($osC_ShoppingCart->isInStock($products['item_id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
       }
 
-      echo '&nbsp;(Top Category)';
+// HPDL      echo '&nbsp;(Top Category)';
 
-      $atttributes_array = array();
-
-      if ($osC_ShoppingCart->hasAttributes($products['id'])) {
-        foreach ($osC_ShoppingCart->getAttributes($products['id']) as $attributes) {
-          $atttributes_array[$attributes['options_id']] = $attributes['options_values_id'];
-
-          echo '<br />- ' . $attributes['products_options_name'] . ': ' . $attributes['products_options_values_name'];
+      if ( $osC_ShoppingCart->isVariant($products['item_id']) ) {
+        foreach ( $osC_ShoppingCart->getVariant($products['item_id']) as $variant) {
+          echo '<br />- ' . $variant['group_title'] . ': ' . $variant['value_title'];
         }
       }
 ?>
 
         </td>
-        <td valign="top"><?php echo osc_draw_input_field('products[' . osc_get_product_id_string($products['id'], $atttributes_array) . ']', $products['quantity'], 'size="4"'); ?></td>
-        <td valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity']) . '</b>'; ?></td>
+        <td valign="top"><?php echo osc_draw_input_field('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?></td>
+        <td valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPrice($products['price'], $products['tax_class_id'], $products['quantity']) . '</b>'; ?></td>
       </tr>
 
 <?php

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -25,9 +25,20 @@
       $Qproducts->bindInt(':language_id', $osC_Language->getID());
       $Qproducts->execute();
 
-      $data = $Qproducts->toArray();
+      $Qattributes = $osC_Database->query('select id, value from :table_product_attributes where products_id = :products_id and languages_id in (0, :languages_id)');
+      $Qattributes->bindTable(':table_product_attributes');
+      $Qattributes->bindInt(':products_id', $id);
+      $Qattributes->bindInt(':languages_id', $osC_Language->getID());
+      $Qattributes->execute();
 
-      $Qproducts->freeResult();
+      $attributes_array = array();
+
+      while ( $Qattributes->next() ) {
+        $attributes_array[$Qattributes->valueInt('id')] = $Qattributes->value('value');
+      }
+
+      $data = $Qproducts->toArray();
+      $data['attributes'] = $attributes_array;
 
       return $data;
     }
@@ -40,29 +51,22 @@
       $osC_Database->startTransaction();
 
       if ( is_numeric($id) ) {
-        $Qproduct = $osC_Database->query('update :table_products set products_quantity = :products_quantity, products_price = :products_price, products_date_available = :products_date_available, products_weight = :products_weight, products_weight_class = :products_weight_class, products_status = :products_status, products_tax_class_id = :products_tax_class_id, manufacturers_id = :manufacturers_id, products_last_modified = now() where products_id = :products_id');
+        $Qproduct = $osC_Database->query('update :table_products set products_quantity = :products_quantity, products_price = :products_price, products_model = :products_model, products_weight = :products_weight, products_weight_class = :products_weight_class, products_status = :products_status, products_tax_class_id = :products_tax_class_id, products_last_modified = now() where products_id = :products_id');
         $Qproduct->bindInt(':products_id', $id);
       } else {
-        $Qproduct = $osC_Database->query('insert into :table_products (products_quantity, products_price, products_date_available, products_weight, products_weight_class, products_status, products_tax_class_id, manufacturers_id, products_date_added) values (:products_quantity, :products_price, :products_date_available, :products_weight, :products_weight_class, :products_status, :products_tax_class_id, :manufacturers_id, :products_date_added)');
+        $Qproduct = $osC_Database->query('insert into :table_products (products_quantity, products_price, products_model, products_weight, products_weight_class, products_status, products_tax_class_id, products_date_added) values (:products_quantity, :products_price, :products_model, :products_weight, :products_weight_class, :products_status, :products_tax_class_id, :products_date_added)');
         $Qproduct->bindRaw(':products_date_added', 'now()');
       }
 
       $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproduct->bindInt(':products_quantity', $data['quantity']);
       $Qproduct->bindValue(':products_price', $data['price']);
-
-      if ( date('Y-m-d') < $data['date_available'] ) {
-        $Qproduct->bindValue(':products_date_available', $data['date_available']);
-      } else {
-        $Qproduct->bindRaw(':products_date_available', 'null');
-      }
-
+      $Qproduct->bindValue(':products_model', $data['model']);
       $Qproduct->bindValue(':products_weight', $data['weight']);
       $Qproduct->bindInt(':products_weight_class', $data['weight_class']);
       $Qproduct->bindInt(':products_status', $data['status']);
       $Qproduct->bindInt(':products_tax_class_id', $data['tax_class_id']);
-      $Qproduct->bindInt(':manufacturers_id', $data['manufacturers_id']);
-      $Qproduct->setLogging($_SESSION['module'], $id);
+//      $Qproduct->setLogging($_SESSION['module'], $id);
       $Qproduct->execute();
 
       if ( $osC_Database->isError() ) {
@@ -77,19 +81,19 @@
         $Qcategories = $osC_Database->query('delete from :table_products_to_categories where products_id = :products_id');
         $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
         $Qcategories->bindInt(':products_id', $products_id);
-        $Qcategories->setLogging($_SESSION['module'], $products_id);
+//        $Qcategories->setLogging($_SESSION['module'], $products_id);
         $Qcategories->execute();
 
         if ( $osC_Database->isError() ) {
           $error = true;
         } else {
           if ( isset($data['categories']) && !empty($data['categories']) ) {
-            foreach ($_POST['categories'] as $category_id) {
+            foreach ($data['categories'] as $category_id) {
               $Qp2c = $osC_Database->query('insert into :table_products_to_categories (products_id, categories_id) values (:products_id, :categories_id)');
               $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
               $Qp2c->bindInt(':products_id', $products_id);
               $Qp2c->bindInt(':categories_id', $category_id);
-              $Qp2c->setLogging($_SESSION['module'], $products_id);
+//              $Qp2c->setLogging($_SESSION['module'], $products_id);
               $Qp2c->execute();
 
               if ( $osC_Database->isError() ) {
@@ -137,7 +141,7 @@
           $Qimage->bindInt(':default_flag', $default_flag);
           $Qimage->bindInt(':sort_order', 0);
           $Qimage->bindRaw(':date_added', 'now()');
-          $Qimage->setLogging($_SESSION['module'], $products_id);
+//          $Qimage->setLogging($_SESSION['module'], $products_id);
           $Qimage->execute();
 
           if ( $osC_Database->isError() ) {
@@ -157,9 +161,9 @@
       if ( $error === false ) {
         foreach ($osC_Language->getAll() as $l) {
           if ( is_numeric($id) ) {
-            $Qpd = $osC_Database->query('update :table_products_description set products_name = :products_name, products_description = :products_description, products_model = :products_model, products_keyword = :products_keyword, products_tags = :products_tags, products_url = :products_url where products_id = :products_id and language_id = :language_id');
+            $Qpd = $osC_Database->query('update :table_products_description set products_name = :products_name, products_description = :products_description, products_keyword = :products_keyword, products_tags = :products_tags, products_url = :products_url where products_id = :products_id and language_id = :language_id');
           } else {
-            $Qpd = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_model, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_model, :products_keyword, :products_tags, :products_url)');
+            $Qpd = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_keyword, :products_tags, :products_url)');
           }
 
           $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
@@ -167,11 +171,10 @@
           $Qpd->bindInt(':language_id', $l['id']);
           $Qpd->bindValue(':products_name', $data['products_name'][$l['id']]);
           $Qpd->bindValue(':products_description', $data['products_description'][$l['id']]);
-          $Qpd->bindValue(':products_model', $data['products_model'][$l['id']]);
           $Qpd->bindValue(':products_keyword', $data['products_keyword'][$l['id']]);
           $Qpd->bindValue(':products_tags', $data['products_tags'][$l['id']]);
           $Qpd->bindValue(':products_url', $data['products_url'][$l['id']]);
-          $Qpd->setLogging($_SESSION['module'], $products_id);
+//          $Qpd->setLogging($_SESSION['module'], $products_id);
           $Qpd->execute();
 
           if ( $osC_Database->isError() ) {
@@ -182,75 +185,183 @@
       }
 
       if ( $error === false ) {
-        $attributes_array = array();
+        if ( isset($data['attributes']) && !empty($data['attributes']) ) {
+          foreach ( $data['attributes'] as $attributes_id => $value ) {
+            if ( is_array($value) ) {
+            } elseif ( !empty($value) ) {
+              $Qcheck = $osC_Database->query('select id from :table_product_attributes where products_id = :products_id and id = :id limit 1');
+              $Qcheck->bindTable(':table_product_attributes');
+              $Qcheck->bindInt(':products_id', $products_id);
+              $Qcheck->bindInt(':id', $attributes_id);
+              $Qcheck->execute();
 
-        if (isset($data['attribute_prefix']) && !empty($data['attribute_prefix']) && isset($data['attribute_price']) && !empty($data['attribute_price'])) {
-          foreach ($data['attribute_prefix'] as $groups => $attributes) {
-            foreach ($data['attribute_prefix'][$groups] as $key => $value) {
-              if ( isset($data['attribute_price'][$groups][$key]) ) {
-                $attributes_array[] = $groups . '-' . $key;
+              if ( $Qcheck->numberOfRows() === 1 ) {
+                $Qattribute = $osC_Database->query('update :table_product_attributes set value = :value where products_id = :products_id and id = :id');
+              } else {
+                $Qattribute = $osC_Database->query('insert into :table_product_attributes (id, products_id, languages_id, value) values (:id, :products_id, :languages_id, :value)');
+                $Qattribute->bindInt(':languages_id', 0);
+              }
 
-                $Qcheck = $osC_Database->query('select products_attributes_id from :table_products_attributes where products_id = :products_id and options_id = :options_id and options_values_id = :options_values_id');
-                $Qcheck->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-                $Qcheck->bindInt(':products_id', $products_id);
-                $Qcheck->bindInt(':options_id', $groups);
-                $Qcheck->bindInt(':options_values_id', $key);
-                $Qcheck->execute();
+              $Qattribute->bindTable(':table_product_attributes');
+              $Qattribute->bindValue(':value', $value);
+              $Qattribute->bindInt(':products_id', $products_id);
+              $Qattribute->bindInt(':id', $attributes_id);
+              $Qattribute->execute();
 
-                if ( $Qcheck->numberOfRows() ) {
-                  $Qattribute = $osC_Database->query('update :table_products_attributes set options_values_price = :options_values_price, price_prefix = :price_prefix where products_id = :products_id and options_id = :options_id and options_values_id = :options_values_id');
-                } else {
-                  $Qattribute = $osC_Database->query('insert into :table_products_attributes (products_id, options_id, options_values_id, options_values_price, price_prefix) values (:products_id, :options_id, :options_values_id, :options_values_price, :price_prefix)');
-                }
+              if ( $osC_Database->isError() ) {
+                $error = true;
+                break;
+              }
+            }
+          }
+        }
+      }
 
-                $Qattribute->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-                $Qattribute->bindInt(':products_id', $products_id);
-                $Qattribute->bindInt(':options_id', $groups);
-                $Qattribute->bindInt(':options_values_id', $key);
-                $Qattribute->bindValue(':options_values_price', $data['attribute_price'][$groups][$key]);
-                $Qattribute->bindValue(':price_prefix', $value);
-                $Qattribute->setLogging($_SESSION['module'], $products_id);
-                $Qattribute->execute();
+      if ( $error === false ) {
+        $variants_array = array();
+        $default_variant_combo = null;
+
+        if ( isset($data['variants_combo']) && !empty($data['variants_combo']) ) {
+          foreach ( $data['variants_combo'] as $key => $combos ) {
+            if ( isset($data['variants_combo_db'][$key]) ) {
+              $Qsubproduct = $osC_Database->query('update :table_products set products_quantity = :products_quantity, products_price = :products_price, products_model = :products_model, products_weight = :products_weight, products_weight_class = :products_weight_class, products_status = :products_status, products_tax_class_id = :products_tax_class_id where products_id = :products_id');
+              $Qsubproduct->bindInt(':products_id', $data['variants_combo_db'][$key]);
+            } else {
+              $Qsubproduct = $osC_Database->query('insert into :table_products (parent_id, products_quantity, products_price, products_model, products_weight, products_weight_class, products_status, products_tax_class_id, products_date_added) values (:parent_id, :products_quantity, :products_price, :products_model, :products_weight, :products_weight_class, :products_status, :products_tax_class_id, :products_date_added)');
+              $Qsubproduct->bindInt(':parent_id', $products_id);
+              $Qsubproduct->bindRaw(':products_date_added', 'now()');
+            }
+
+            $Qsubproduct->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qsubproduct->bindInt(':products_quantity', $data['variants_quantity'][$key]);
+            $Qsubproduct->bindValue(':products_price', $data['variants_price'][$key]);
+            $Qsubproduct->bindValue(':products_model', $data['variants_model'][$key]);
+            $Qsubproduct->bindValue(':products_weight', $data['variants_weight'][$key]);
+            $Qsubproduct->bindInt(':products_weight_class', $data['variants_weight_class'][$key]);
+            $Qsubproduct->bindInt(':products_status', $data['variants_status'][$key]);
+            $Qsubproduct->bindInt(':products_tax_class_id', $data['variants_tax_class_id'][$key]);
+//            $Qsubproduct->setLogging($_SESSION['module'], $id);
+            $Qsubproduct->execute();
+
+            if ( isset($data['variants_combo_db'][$key]) ) {
+              $subproduct_id = $data['variants_combo_db'][$key];
+            } else {
+              $subproduct_id = $osC_Database->nextID();
+            }
+
+            if ( $data['variants_default_combo'] == $key ) {
+              $default_variant_combo = $subproduct_id;
+            }
+
+/*
+            if ( $osC_Database->isError() ) {
+              $error = true;
+              break;
+            }
+*/
+
+            $combos_array = explode(';', $combos);
+
+            foreach ( $combos_array as $combo ) {
+              list($vgroup, $vvalue) = explode('_', $combo);
+
+              $variants_array[$subproduct_id][] = $vvalue;
+
+              $check_combos_array[] = $vvalue;
+
+              $Qcheck = $osC_Database->query('select products_id from :table_products_variants where products_id = :products_id and products_variants_values_id = :products_variants_values_id');
+              $Qcheck->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+              $Qcheck->bindInt(':products_id', $subproduct_id);
+              $Qcheck->bindInt(':products_variants_values_id', $vvalue);
+              $Qcheck->execute();
+
+              if ( $Qcheck->numberOfRows() < 1 ) {
+                $Qvcombo = $osC_Database->query('insert into :table_products_variants (products_id, products_variants_values_id) values (:products_id, :products_variants_values_id)');
+                $Qvcombo->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+                $Qvcombo->bindInt(':products_id', $subproduct_id);
+                $Qvcombo->bindInt(':products_variants_values_id', $vvalue);
+//                $Qvcombo->setLogging($_SESSION['module'], $products_id);
+                $Qvcombo->execute();
 
                 if ( $osC_Database->isError() ) {
                   $error = true;
-                  break;
+                  break 2;
                 }
               }
             }
           }
         }
 
-        $Qcheck = $osC_Database->query('select products_attributes_id from :table_products_attributes where products_id = :products_id and concat(options_id, "-", options_values_id) not in (":attributes")');
-        $Qcheck->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-        $Qcheck->bindInt(':products_id', $products_id);
-        $Qcheck->bindRaw(':attributes', implode('", "', $attributes_array));
-        $Qcheck->execute();
+        if ( $error === false ) {
+          if ( empty($variants_array) ) {
+            $Qcheck = $osC_Database->query('select pv.* from :table_products p, :table_products_variants pv where p.parent_id = :parent_id and p.products_id = pv.products_id');
+            $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qcheck->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+            $Qcheck->bindInt(':parent_id', $products_id);
+            $Qcheck->execute();
 
-        if ( $Qcheck->numberOfRows() ) {
-          while ($Qcheck->next()) {
-            $Qdelete = $osC_Database->query('delete from :table_products_attributes where products_attributes_id = :products_attributes_id');
-            $Qdelete->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-            $Qdelete->bindInt(':products_attributes_id', $Qcheck->valueInt('products_attributes_id'));
-            $Qdelete->setLogging($_SESSION['module'], $products_id);
-            $Qdelete->execute();
+            while ( $Qcheck->next() ) {
+              $Qdel = $osC_Database->query('delete from :table_products_variants where products_id = :products_id');
+              $Qdel->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+              $Qdel->bindInt(':products_id', $Qcheck->valueInt('products_id'));
+              $Qdel->execute();
 
-            if ( !$osC_Database->isError() ) {
-              $Qdelete = $osC_Database->query('delete from :table_products_attributes_download where products_attributes_id = :products_attributes_id');
-              $Qdelete->bindTable(':table_products_attributes_download', TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD);
-              $Qdelete->bindInt(':products_attributes_id', $Qcheck->valueInt('products_attributes_id'));
-              $Qdelete->setLogging($_SESSION['module'], $products_id);
-              $Qdelete->execute();
+              $Qdel = $osC_Database->query('delete from :table_products where products_id = :products_id');
+              $Qdel->bindTable(':table_products', TABLE_PRODUCTS);
+              $Qdel->bindInt(':products_id', $Qcheck->valueInt('products_id'));
+              $Qdel->execute();
+            }
+          } else {
+            $Qcheck = $osC_Database->query('select pv.* from :table_products p, :table_products_variants pv where p.parent_id = :parent_id and p.products_id = pv.products_id and pv.products_id not in (":products_id")');
+            $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qcheck->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+            $Qcheck->bindInt(':parent_id', $products_id);
+            $Qcheck->bindRaw(':products_id', implode('", "', array_keys($variants_array)));
+            $Qcheck->execute();
 
-              if ( $osC_Database->isError() ) {
-                $error = true;
-                break;
-              }
-            } else {
-              $error = true;
-              break;
+            while ( $Qcheck->next() ) {
+              $Qdel = $osC_Database->query('delete from :table_products_variants where products_id = :products_id and products_variants_values_id = :products_variants_values_id');
+              $Qdel->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+              $Qdel->bindInt(':products_id', $Qcheck->valueInt('products_id'));
+              $Qdel->bindInt(':products_variants_values_id', $Qcheck->valueInt('products_variants_values_id'));
+              $Qdel->execute();
+
+              $Qdel = $osC_Database->query('delete from :table_products where products_id = :products_id');
+              $Qdel->bindTable(':table_products', TABLE_PRODUCTS);
+              $Qdel->bindInt(':products_id', $Qcheck->valueInt('products_id'));
+              $Qdel->execute();
+            }
+
+            foreach ( $variants_array as $key => $values ) {
+              $Qdel = $osC_Database->query('delete from :table_products_variants where products_id = :products_id and products_variants_values_id not in (":products_variants_values_id")');
+              $Qdel->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+              $Qdel->bindInt(':products_id', $key);
+              $Qdel->bindRaw(':products_variants_values_id', implode('", "', $values));
+              $Qdel->execute();
             }
           }
+        }
+
+        $Qupdate = $osC_Database->query('update :table_products set has_children = :has_children where products_id = :products_id');
+        $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qupdate->bindInt(':has_children', (empty($variants_array)) ? 0 : 1);
+        $Qupdate->bindInt(':products_id', $products_id);
+        $Qupdate->execute();
+      }
+
+      if ( $error === false ) {
+        $Qupdate = $osC_Database->query('update :table_products_variants set default_combo = :default_combo where products_id in (":products_id")');
+        $Qupdate->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+        $Qupdate->bindInt(':default_combo', 0);
+        $Qupdate->bindRaw(':products_id', implode('", "', array_keys($variants_array)));
+        $Qupdate->execute();
+
+        if ( is_numeric($default_variant_combo) ) {
+          $Qupdate = $osC_Database->query('update :table_products_variants set default_combo = :default_combo where products_id = :products_id');
+          $Qupdate->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+          $Qupdate->bindInt(':default_combo', 1);
+          $Qupdate->bindInt(':products_id', $default_variant_combo);
+          $Qupdate->execute();
         }
       }
 
@@ -294,7 +405,7 @@
           }
         }
       } elseif ( $type == 'duplicate' ) {
-        $Qproduct = $osC_Database->query('select products_quantity, products_price, products_date_available, products_weight, products_weight_class, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+        $Qproduct = $osC_Database->query('select products_quantity, products_price, products_model, products_weight, products_weight_class, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
         $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproduct->bindInt(':products_id', $id);
         $Qproduct->execute();
@@ -304,17 +415,11 @@
 
           $osC_Database->startTransaction();
 
-          $Qnew = $osC_Database->query('insert into :table_products (products_quantity, products_price, products_date_added, products_date_available, products_weight, products_weight_class, products_status, products_tax_class_id, manufacturers_id) values (:products_quantity, :products_price, now(), :products_date_available, :products_weight, :products_weight_class, 0, :products_tax_class_id, :manufacturers_id)');
+          $Qnew = $osC_Database->query('insert into :table_products (products_quantity, products_price, products_model, products_date_added, products_weight, products_weight_class, products_status, products_tax_class_id, manufacturers_id) values (:products_quantity, :products_price, :products_model, now(), :products_weight, :products_weight_class, 0, :products_tax_class_id, :manufacturers_id)');
           $Qnew->bindTable(':table_products', TABLE_PRODUCTS);
           $Qnew->bindInt(':products_quantity', $Qproduct->valueInt('products_quantity'));
           $Qnew->bindValue(':products_price', $Qproduct->value('products_price'));
-
-          if ( !osc_empty($Qproduct->value('products_date_available')) ) {
-            $Qnew->bindValue(':products_date_available', $Qproduct->value('products_date_available'));
-          } else {
-            $Qnew->bindRaw(':products_date_available', 'null');
-          }
-
+          $Qnew->bindValue(':products_model', $Qproduct->value('products_model'));
           $Qnew->bindValue(':products_weight', $Qproduct->value('products_weight'));
           $Qnew->bindInt(':products_weight_class', $Qproduct->valueInt('products_weight_class'));
           $Qnew->bindInt(':products_tax_class_id', $Qproduct->valueInt('products_tax_class_id'));
@@ -325,18 +430,17 @@
           if ( $Qnew->affectedRows() ) {
             $new_product_id = $osC_Database->nextID();
 
-            $Qdesc = $osC_Database->query('select language_id, products_name, products_description, products_model, products_tags, products_url from :table_products_description where products_id = :products_id');
+            $Qdesc = $osC_Database->query('select language_id, products_name, products_description, products_tags, products_url from :table_products_description where products_id = :products_id');
             $Qdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
             $Qdesc->bindInt(':products_id', $id);
             $Qdesc->execute();
 
             while ($Qdesc->next()) {
-              $Qnewdesc = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_model, products_tags, products_url, products_viewed) values (:products_id, :language_id, :products_name, :products_description, :products_model, :products_tags, :products_url, 0)');
+              $Qnewdesc = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_tags, products_url, products_viewed) values (:products_id, :language_id, :products_name, :products_description, :products_tags, :products_url, 0)');
               $Qnewdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
               $Qnewdesc->bindInt(':products_id', $new_product_id);
               $Qnewdesc->bindInt(':language_id', $Qdesc->valueInt('language_id'));
               $Qnewdesc->bindValue(':products_name', $Qdesc->value('products_name'));
-              $Qnewdesc->bindValue(':products_model', $Qdesc->value('products_model'));
               $Qnewdesc->bindValue(':products_tags', $Qdesc->value('products_tags'));
               $Qnewdesc->bindValue(':products_description', $Qdesc->value('products_description'));
               $Qnewdesc->bindValue(':products_url', $Qdesc->value('products_url'));
@@ -424,11 +528,21 @@
         }
 
         if ( $error === false ) {
-          $Qcb = $osC_Database->query('delete from :table_customers_basket where products_id = :products_id or products_id like :products_id');
-          $Qcb->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-          $Qcb->bindInt(':products_id', $id);
-          $Qcb->bindValue(':products_id', (int)$id . '#%');
-          $Qcb->execute();
+          $Qsc = $osC_Database->query('delete from :table_shopping_carts where products_id = :products_id');
+          $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+          $Qsc->bindInt(':products_id', $id);
+          $Qsc->execute();
+
+          if ( $osC_Database->isError() ) {
+            $error = true;
+          }
+        }
+
+        if ( $error === false ) {
+          $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where products_id = :products_id');
+          $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
+          $Qsccvv->bindInt(':products_id', $id);
+          $Qsccvv->execute();
 
           if ( $osC_Database->isError() ) {
             $error = true;
@@ -460,8 +574,8 @@
         }
 
         if ( $error === false ) {
-          $Qpa = $osC_Database->query('delete from :table_products_attributes where products_id = :products_id');
-          $Qpa->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
+          $Qpa = $osC_Database->query('delete from :table_products_variants where products_id = :products_id');
+          $Qpa->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
           $Qpa->bindInt(':products_id', $id);
           $Qpa->setLogging($_SESSION['module'], $id);
           $Qpa->execute();
@@ -525,6 +639,7 @@
     function setDateAvailable($id, $data) {
       global $osC_Database;
 
+/* HPDL
       $Qproduct = $osC_Database->query('update :table_products set products_date_available = :products_date_available, products_last_modified = now() where products_id = :products_id');
       $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
 
@@ -541,6 +656,7 @@
       if ( !$osC_Database->isError() ) {
         return true;
       }
+*/
 
       return false;
     }

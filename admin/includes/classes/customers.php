@@ -198,10 +198,21 @@
       }
 
       if ( $error === false ) {
-        $Qcb = $osC_Database->query('delete from :table_customers_basket where customers_id = :customers_id');
-        $Qcb->bindTable(':table_customers_basket', TABLE_CUSTOMERS_BASKET);
-        $Qcb->bindInt(':customers_id', $id);
-        $Qcb->execute();
+        $Qsc = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id');
+        $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+        $Qsc->bindInt(':customers_id', $id);
+        $Qsc->execute();
+
+        if ( $osC_Database->isError() ) {
+          $error = true;
+        }
+      }
+
+      if ( $error === false ) {
+        $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
+        $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
+        $Qsccvv->bindInt(':customers_id', $id);
+        $Qsccvv->execute();
 
         if ( $osC_Database->isError() ) {
           $error = true;

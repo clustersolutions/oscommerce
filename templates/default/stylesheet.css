@@ -4,7 +4,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -411,4 +411,39 @@ SPAN.errorText {
   font-family: Verdana, Arial, sans-serif;
   font-size: 10px;
   padding: 3px;
+}
+
+#variantsBlock {
+}
+
+#variantsBlockTitle {
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+#variantsBlockData {
+}
+
+#productVariantCombinationNotAvailable {
+  color: #ff0000;
+}
+
+.productInfoKey {
+  font-weight: bold;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  vertical-align: top;
+}
+
+.productInfoValue {
+  padding-bottom: 10px;
+  vertical-align: top;
+}
+
+#productInfoPrice {
+  font-weight: bold;
+}
+
+.ships24hours {
+  color: #45B04C;
 }

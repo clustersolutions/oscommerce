@@ -14,7 +14,7 @@
 
   $categories_array = array();
 
-  foreach ($osC_CategoryTree->getTree() as $value) {
+  foreach ($osC_CategoryTree->getArray() as $value) {
     $categories_array[] = array('id' => $value['id'],
                                 'text' => $value['title']);
   }
@@ -47,15 +47,15 @@
 
     $in_categories = array($current_category_id);
 
-    foreach($osC_CategoryTree->getTree($current_category_id) as $category) {
+    foreach($osC_CategoryTree->getArray($current_category_id) as $category) {
       $in_categories[] = $category['id'];
     }
 
-    $Qproducts = $osC_Database->query('select distinct p.products_id, pd.products_name, p.products_quantity, p.products_price, p.products_date_added, p.products_last_modified, p.products_date_available, p.products_status from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
+    $Qproducts = $osC_Database->query('select distinct p.products_id, pd.products_name, p.products_quantity, p.products_price, p.products_date_added, p.products_last_modified, p.products_status, p.has_children from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
     $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
     $Qproducts->bindRaw(':categories_id', implode(',', $in_categories));
   } else {
-    $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_quantity, p.products_price, p.products_date_added, p.products_last_modified, p.products_date_available, p.products_status from :table_products p, :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id');
+    $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, p.products_quantity, p.products_price, p.products_date_added, p.products_last_modified, p.products_status, p.has_children from :table_products p, :table_products_description pd where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id');
   }
 
   if ( !empty($_GET['search']) ) {
@@ -63,10 +63,11 @@
     $Qproducts->bindValue(':products_name', '%' . $_GET['search'] . '%');
   }
 
-  $Qproducts->appendQuery('order by pd.products_name');
+  $Qproducts->appendQuery('and p.parent_id = :parent_id order by pd.products_name');
   $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
   $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qproducts->bindInt(':language_id', $osC_Language->getID());
+  $Qproducts->bindInt(':parent_id', 0);
   $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, (!empty($_GET['search']) ? 'distinct p.products_id' : ''));
   $Qproducts->execute();
 ?>
@@ -100,12 +101,32 @@
 
 <?php
   while ($Qproducts->next()) {
+    $price = $osC_Currencies->format($Qproducts->value('products_price'));
+
+    if ( $Qproducts->valueInt('has_children') === 1 ) {
+      $Qvariants = $osC_Database->query('select min(products_price) as min_price, max(products_price) as max_price, sum(products_quantity) as total_quantity, min(products_status) as products_status from :table_products where parent_id = :parent_id');
+      $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qvariants->bindInt(':parent_id', $Qproducts->valueInt('products_id'));
+      $Qvariants->execute();
+
+      $product_active = ($Qvariants->valueInt('products_status') === 1);
+      $quantity = '(' . $Qvariants->valueInt('total_quantity') . ')';
+
+      $price = $osC_Currencies->format($Qvariants->value('min_price'));
+
+      if ( $Qvariants->value('min_price') != $Qvariants->value('max_price') ) {
+        $price .= '&nbsp;-&nbsp;' . $osC_Currencies->format($Qvariants->value('max_price'));
+      }
+    } else {
+      $product_active = ($Qproducts->valueInt('products_status') === 1);
+      $quantity = $Qproducts->valueInt('products_quantity');
+    }
 ?>
 
-    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo (($Qproducts->valueInt('products_status') !== 1) ? 'class="deactivatedRow"' : '') ?>>
-      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=preview'), osc_icon('products.png') . '&nbsp;' . $Qproducts->value('products_name')); ?></td>
-      <td align="right"><?php echo $osC_Currencies->format($Qproducts->value('products_price')); ?></td>
-      <td align="right"><?php echo $Qproducts->valueInt('products_quantity'); ?></td>
+    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo (($product_active !== true) ? 'class="deactivatedRow"' : '') ?>>
+      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . '&pID=' . $Qproducts->valueInt('products_id') . '&action=preview'), (($Qproducts->valueInt('has_children') === 1) ? osc_icon('attach.png') : osc_icon('products.png')) . '&nbsp;' . $Qproducts->value('products_name')); ?></td>
+      <td align="right"><?php echo $price; ?></td>
+      <td align="right"><?php echo $quantity; ?></td>
       <td align="right">
 
 <?php

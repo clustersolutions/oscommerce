@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -22,7 +22,7 @@
 
 /* Class constructor */
 
-    function osC_Products($id = null) {
+    function __construct($id = null) {
       if (is_numeric($id)) {
         $this->_category = $id;
       }
@@ -57,7 +57,7 @@
     function setSortBy($field, $direction = '+') {
       switch ($field) {
         case 'model':
-          $this->_sort_by = 'pd.products_model';
+          $this->_sort_by = 'p.products_model';
           break;
         case 'manufacturer':
           $this->_sort_by = 'm.manufacturers_name';

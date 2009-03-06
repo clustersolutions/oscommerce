@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2006 osCommerce
+# Copyright (c) 2007 osCommerce
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -31,9 +31,9 @@ INSERT INTO osc_manufacturers VALUES (1, 'Apress', 'apress.gif', now(), null);
 
 INSERT INTO osc_manufacturers_info VALUES (1, 1, 'http://www.apress.com', 0, null);
 
-INSERT INTO osc_products VALUES (1, 10, 44.99, now(), now(), null, 1.8, 4, 1, 1, 1, 0);
+INSERT INTO osc_products VALUES (1, 0, 10, 44.99, '1590595084', now(), now(), 1.8, 4, 1, 1, 1, 0, 0);
 
-INSERT INTO osc_products_description VALUES (1, 1, 'Pro PHP Security', '<p><i>Pro PHP Security</i> is one of the first books devoted solely to PHP security. It will serve as your complete guide for taking defensive and proactive security measures within your PHP applications. (And the methods discussed are compatible with PHP versions 3, 4, and 5.)</p><p>The knowledge you\'ll gain from this comprehensive guide will help you prevent attackers from potentially disrupting site operation or destroying data. And you\'ll learn about various security measures, for example, creating and deploying "captchas," validating e-mail, fending off SQL injection attacks, and preventing cross-site scripting attempts.</p><h3>Author Information</h3><p align="justify"><h4>Chris Snyder</h4><p>Chris Snyder is a software engineer at Fund for the City of New York, where he helps develop next-generation websites and services for nonprofit organizations. He is a member of the Executive Board of New York PHP, and has been looking for new ways to build scriptable, linked, multimedia content since he saw his first Hypercard stack in 1988.</p></p><p align="justify"><h4>Michael Southwell</h4><p>Michael Southwell is a retired English professor who has been developing websites for more than 10 years in the small business, nonprofit, and educational areas, with special interest in problems of accessibility. He has authored and co-authored 8 books and numerous articles about writing, writing and computers, and writing education. He is a member of the Executive Board of New York PHP, and a Zend Certified Engineer.</p></p>', '1590595084', 'pro_php_security', 'pro php security book apress', '', 0);
+INSERT INTO osc_products_description VALUES (1, 1, 'Pro PHP Security', '<p><i>Pro PHP Security</i> is one of the first books devoted solely to PHP security. It will serve as your complete guide for taking defensive and proactive security measures within your PHP applications. (And the methods discussed are compatible with PHP versions 3, 4, and 5.)</p><p>The knowledge you\'ll gain from this comprehensive guide will help you prevent attackers from potentially disrupting site operation or destroying data. And you\'ll learn about various security measures, for example, creating and deploying "captchas," validating e-mail, fending off SQL injection attacks, and preventing cross-site scripting attempts.</p><h3>Author Information</h3><p align="justify"><h4>Chris Snyder</h4><p>Chris Snyder is a software engineer at Fund for the City of New York, where he helps develop next-generation websites and services for nonprofit organizations. He is a member of the Executive Board of New York PHP, and has been looking for new ways to build scriptable, linked, multimedia content since he saw his first Hypercard stack in 1988.</p></p><p align="justify"><h4>Michael Southwell</h4><p>Michael Southwell is a retired English professor who has been developing websites for more than 10 years in the small business, nonprofit, and educational areas, with special interest in problems of accessibility. He has authored and co-authored 8 books and numerous articles about writing, writing and computers, and writing education. He is a member of the Executive Board of New York PHP, and a Zend Certified Engineer.</p></p>', 'pro_php_security', 'pro php security book apress', '', 0);
 
 #INSERT INTO osc_products_attributes VALUES (1,1,4,1,0.00,'+');
 #INSERT INTO osc_products_attributes VALUES (2,1,4,2,50.00,'+');
@@ -86,6 +86,8 @@ INSERT INTO osc_products_to_categories VALUES (1, 2);
 INSERT INTO osc_products_images VALUES (1, 1, 'pro_php_security.jpg', 1, 0, now());
 
 #INSERT INTO osc_reviews VALUES (1,19,0,'John doe',5,1,'this has to be one of the funniest movies released for 1999!',now(),null,0,1);
+
+INSERT INTO osc_shipping_availability values (1, 1, 'Ships within 24 hours.', 'ships24hours');
 
 #INSERT INTO osc_specials VALUES (1,3, 39.99, now(), null, null, null, null, '1');
 #INSERT INTO osc_specials VALUES (2,5, 30.00, now(), null, null, null, null, '1');

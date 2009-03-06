@@ -1,11 +1,11 @@
 <?php
 /*
-  $Id: account.php 207 2005-09-26 01:29:31 +0200 (Mo, 26 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -15,34 +15,71 @@
   class osC_Product {
     var $_data = array();
 
-    function osC_Product($id) {
+    function __construct($id) {
       global $osC_Database, $osC_Services, $osC_Language, $osC_Image;
 
-      if (!empty($id)) {
-        $Qproduct = $osC_Database->query('select p.products_id as id, p.products_quantity as quantity, p.products_price as price, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.products_date_available as date_available, p.manufacturers_id, pd.products_name as name, pd.products_description as description, pd.products_model as model, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where');
-        $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+      if ( !empty($id) ) {
+        if ( is_numeric($id) ) {
+          $Qproduct = $osC_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+          $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+          $Qproduct->bindInt(':products_id', $id);
+          $Qproduct->bindInt(':products_status', 1);
+          $Qproduct->execute();
 
-        if (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $id)) {
-          $Qproduct->appendQuery('p.products_id = :products_id');
-          $Qproduct->bindInt(':products_id', osc_get_product_id($id));
+          if ( $Qproduct->numberOfRows() === 1 ) {
+            $this->_data = $Qproduct->toArray();
+
+            $this->_data['master_id'] = $Qproduct->valueInt('id');
+            $this->_data['has_children'] = $Qproduct->valueInt('has_children');
+
+            if ( $Qproduct->valueInt('parent_id') > 0 ) {
+              $Qmaster = $osC_Database->query('select products_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+              $Qmaster->bindTable(':table_products', TABLE_PRODUCTS);
+              $Qmaster->bindInt(':products_id', $Qproduct->valueInt('parent_id'));
+              $Qmaster->bindInt(':products_status', 1);
+              $Qmaster->execute();
+
+              if ( $Qmaster->numberOfRows() === 1 ) {
+                $this->_data['master_id'] = $Qmaster->valueInt('products_id');
+                $this->_data['has_children'] = $Qmaster->valueInt('has_children');
+              } else { // master product is disabled so invalidate the product variant
+                $this->_data = array();
+              }
+            }
+
+            if ( !empty($this->_data) ) {
+              $Qdesc = $osC_Database->query('select products_name as name, products_description as description, products_keyword as keyword, products_tags as tags, products_url as url from :table_products_description where products_id = :products_id and language_id = :language_id');
+              $Qdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+              $Qdesc->bindInt(':products_id', $this->_data['master_id']);
+              $Qdesc->bindInt(':language_id', $osC_Language->getID());
+              $Qdesc->execute();
+
+              $this->_data = array_merge($this->_data, $Qdesc->toArray());
+            }
+          }
         } else {
-          $Qproduct->appendQuery('pd.products_keyword = :products_keyword');
+          $Qproduct = $osC_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
+          $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+          $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qproduct->bindValue(':products_keyword', $id);
+          $Qproduct->bindInt(':language_id', $osC_Language->getID());
+          $Qproduct->bindInt(':products_status', 1);
+          $Qproduct->execute();
+
+          if ($Qproduct->numberOfRows() === 1) {
+            $this->_data = $Qproduct->toArray();
+
+            $this->_data['master_id'] = $Qproduct->valueInt('id');
+            $this->_data['has_children'] = $Qproduct->valueInt('has_children');
+          }
         }
 
-        $Qproduct->appendQuery('and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id');
-        $Qproduct->bindInt(':language_id', $osC_Language->getID());
-        $Qproduct->execute();
-
-        if ($Qproduct->numberOfRows() === 1) {
-          $this->_data = $Qproduct->toArray();
-
+        if ( !empty($this->_data) ) {
           $this->_data['images'] = array();
 
           $Qimages = $osC_Database->query('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
           $Qimages->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-          $Qimages->bindInt(':products_id', $this->_data['id']);
+          $Qimages->bindInt(':products_id', $this->_data['master_id']);
           $Qimages->execute();
 
           while ($Qimages->next()) {
@@ -51,42 +88,66 @@
 
           $Qcategory = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id limit 1');
           $Qcategory->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-          $Qcategory->bindInt(':products_id', $this->_data['id']);
+          $Qcategory->bindInt(':products_id', $this->_data['master_id']);
           $Qcategory->execute();
 
           $this->_data['category_id'] = $Qcategory->valueInt('categories_id');
 
-          $Qcheck = $osC_Database->query('select products_attributes_id from :table_products_attributes patrib where products_id = :products_id limit 1');
-          $Qcheck->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-          $Qcheck->bindInt(':products_id', $this->_data['id']);
-          $Qcheck->execute();
+          if ( $this->_data['has_children'] === 1 ) {
+            $this->_data['variants'] = array();
 
-          if ($Qcheck->numberOfRows() === 1) {
-            $this->_data['attributes'] = array();
+            $Qsubproducts = $osC_Database->query('select * from :table_products where parent_id = :parent_id and products_status = :products_status');
+            $Qsubproducts->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qsubproducts->bindInt(':parent_id', $this->_data['master_id']);
+            $Qsubproducts->bindInt(':products_status', 1);
+            $Qsubproducts->execute();
 
-            $Qattributes = $osC_Database->query('select pa.*, po.*, pov.* from :table_products_attributes pa, :table_products_options po, :table_products_options_values pov where pa.products_id = :products_id and pa.options_id = po.products_options_id and po.language_id = :language_id and pa.options_values_id = pov.products_options_values_id and pov.language_id = :language_id order by po.products_options_name, pov.products_options_values_name');
-            $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-            $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-            $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-            $Qattributes->bindInt(':products_id', $this->_data['id']);
-            $Qattributes->bindInt(':language_id', $osC_Language->getID());
-            $Qattributes->bindInt(':language_id', $osC_Language->getID());
-            $Qattributes->execute();
+            while ( $Qsubproducts->next() ) {
+              $this->_data['variants'][$Qsubproducts->valueInt('products_id')]['data'] = array('price' => $Qsubproducts->value('products_price'),
+                                                                                               'tax_class_id' => $Qsubproducts->valueInt('products_tax_class_id'),
+                                                                                               'model' => $Qsubproducts->value('products_model'),
+                                                                                               'quantity' => $Qsubproducts->value('products_quantity'),
+                                                                                               'weight' => $Qsubproducts->value('products_weight'),
+                                                                                               'weight_class_id' => $Qsubproducts->valueInt('products_weight_class'),
+                                                                                               'availability_shipping' => 1);
 
-            while ($Qattributes->next()) {
-              $this->_data['attributes'][] = array('options_id' => $Qattributes->valueInt('options_id'),
-                                                   'options_name' => $Qattributes->value('products_options_name'),
-                                                   'options_values_id' => $Qattributes->valueInt('options_values_id'),
-                                                   'options_values_name' => $Qattributes->value('products_options_values_name'),
-                                                   'options_values_price' => $Qattributes->value('options_values_price'),
-                                                   'price_prefix' => $Qattributes->value('price_prefix'));
+              $Qvariants = $osC_Database->query('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title, pvv.sort_order as value_sort_order from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
+              $Qvariants->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+              $Qvariants->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+              $Qvariants->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+              $Qvariants->bindInt(':products_id', $Qsubproducts->valueInt('products_id'));
+              $Qvariants->bindInt(':languages_id', $osC_Language->getID());
+              $Qvariants->bindInt(':languages_id', $osC_Language->getID());
+              $Qvariants->execute();
+
+              while ( $Qvariants->next() ) {
+                $this->_data['variants'][$Qsubproducts->valueInt('products_id')]['values'][$Qvariants->valueInt('group_id')][$Qvariants->valueInt('value_id')] = array('value_id' => $Qvariants->valueInt('value_id'),
+                                                                                                                                                                       'group_title' => $Qvariants->value('group_title'),
+                                                                                                                                                                       'value_title' => $Qvariants->value('value_title'),
+                                                                                                                                                                       'sort_order' => $Qvariants->value('value_sort_order'),
+                                                                                                                                                                       'default' => (bool)$Qvariants->valueInt('default_combo'),
+                                                                                                                                                                       'module' => $Qvariants->value('module'));
+              }
             }
           }
 
-          if ($osC_Services->isStarted('reviews')) {
+          $this->_data['attributes'] = array();
+
+          $Qattributes = $osC_Database->query('select tb.code, pa.value from :table_product_attributes pa, :table_templates_boxes tb where pa.products_id = :products_id and pa.languages_id in (0, :languages_id) and pa.id = tb.id');
+          $Qattributes->bindTable(':table_product_attributes');
+          $Qattributes->bindTable(':table_templates_boxes');
+          $Qattributes->bindInt(':products_id', $this->_data['master_id']);
+          $Qattributes->bindInt(':languages_id', $osC_Language->getID());
+          $Qattributes->execute();
+
+          while ( $Qattributes->next() ) {
+            $this->_data['attributes'][$Qattributes->value('code')] = $Qattributes->value('value');
+          }
+
+          if ( $osC_Services->isStarted('reviews') ) {
             $Qavg = $osC_Database->query('select avg(reviews_rating) as rating from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1');
             $Qavg->bindTable(':table_reviews', TABLE_REVIEWS);
-            $Qavg->bindInt(':products_id', $this->_data['id']);
+            $Qavg->bindInt(':products_id', $this->_data['master_id']);
             $Qavg->bindInt(':languages_id', $osC_Language->getID());
             $Qavg->execute();
 
@@ -97,23 +158,23 @@
     }
 
     function isValid() {
-      if (empty($this->_data)) {
-        return false;
-      }
-
-      return true;
+      return !empty($this->_data);
     }
 
-    function getData($key) {
-      if (isset($this->_data[$key])) {
+    function getData($key = null) {
+      if ( isset($this->_data[$key]) ) {
         return $this->_data[$key];
       }
 
-      return false;
+      return $this->_data;
     }
 
     function getID() {
       return $this->_data['id'];
+    }
+
+    function getMasterID() {
+      return $this->_data['master_id'];
     }
 
     function getTitle() {
@@ -157,7 +218,35 @@
       if (($with_special === true) && $osC_Services->isStarted('specials') && ($new_price = $osC_Specials->getPrice($this->_data['id']))) {
         $price = '<s>' . $osC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $this->_data['tax_class_id']) . '</span>';
       } else {
-        $price = $osC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']);
+        if ( $this->hasVariants() ) {
+          $price = 'from&nbsp;' . $osC_Currencies->displayPrice($this->getVariantMinPrice(), $this->_data['tax_class_id']);
+        } else {
+          $price = $osC_Currencies->displayPrice($this->_data['price'], $this->_data['tax_class_id']);
+        }
+      }
+
+      return $price;
+    }
+
+    function getVariantMinPrice() {
+      $price = null;
+
+      foreach ( $this->_data['variants'] as $variant ) {
+        if ( ($price === null) || ($variant['data']['price'] < $price) ) {
+          $price = $variant['data']['price'];
+        }
+      }
+
+      return ( $price !== null ) ? $price : 0;
+    }
+
+    function getVariantMaxPrice() {
+      $price = 0;
+
+      foreach ( $this->_data['variants'] as $variant ) {
+        if ( $variant['data']['price'] > $price ) {
+          $price = $variant['data']['price'];
+        }
       }
 
       return $price;
@@ -196,64 +285,173 @@
     }
 
     function getDateAvailable() {
-      return $this->_data['date_available'];
+// HPDL
+      return false; //$this->_data['date_available'];
     }
 
     function getDateAdded() {
       return $this->_data['date_added'];
     }
 
-    function hasAttributes() {
-      return (isset($this->_data['attributes']) && !empty($this->_data['attributes']));
+    function hasVariants() {
+      return (isset($this->_data['variants']) && !empty($this->_data['variants']));
     }
 
-    function &getAttributes() {
-      global $osC_Currencies;
+    function getVariants($filter_duplicates = true) {
+      if ( $filter_duplicates === true ) {
+        $values_array = array();
 
-      $array = array();
+        foreach ( $this->_data['variants'] as $product_id => $variants ) {
+          foreach ( $variants['values'] as $group_id => $values ) {
+            foreach ( $values as $value_id => $value ) {
+              if ( !isset($values_array[$group_id]) ) {
+                $values_array[$group_id]['group_id'] = $group_id;
+                $values_array[$group_id]['title'] = $value['group_title'];
+                $values_array[$group_id]['module'] = $value['module'];
+              }
 
-      foreach ($this->_data['attributes'] as $attribute) {
-        if (!isset($array[$attribute['options_id']])) {
-          $array[$attribute['options_id']] = array('options_name' => $attribute['options_name'],
-                                                   'values' => array(),
-                                                   'data' => array());
+              $value_exists = false;
+
+              if ( isset($values_array[$group_id]['data']) ) {
+                foreach ( $values_array[$group_id]['data'] as $data ) {
+                  if ( $data['id'] == $value_id ) {
+                    $value_exists = true;
+
+                    break;
+                  }
+                }
+              }
+
+              if ( $value_exists === false ) {
+                $values_array[$group_id]['data'][] = array('id' => $value_id,
+                                                           'text' => $value['value_title'],
+                                                           'default' => $value['default'],
+                                                           'sort_order' => $value['sort_order']);
+              } elseif ( $value['default'] === true ) {
+                foreach ( $values_array[$group_id]['data'] as &$existing_data ) {
+                  if ( $existing_data['id'] == $value_id ) {
+                    $existing_data['default'] = true;
+
+                    break;
+                  }
+                }
+              }
+            }
+          }
         }
 
-        $array[$attribute['options_id']]['values'][] = array('options_values_id' => $attribute['options_values_id'],
-                                                             'options_values_name' => $attribute['options_values_name'],
-                                                             'options_values_price' => $attribute['options_values_price'],
-                                                             'price_prefix' => $attribute['price_prefix']);
+        foreach ( $values_array as $group_id => &$value ) {
+          usort($value['data'], array('osC_Product', '_usortVariantValues'));
+        }
 
-        $array[$attribute['options_id']]['data'][] = array('id' => $attribute['options_values_id'],
-                                                           'text' => $attribute['options_values_name'] . ($attribute['options_values_price'] != '0' ? ' (' . $attribute['price_prefix'] . $osC_Currencies->displayPrice($attribute['options_values_price'], $this->_data['tax_class_id']) . ')' : ''));
+        return $values_array;
       }
 
-      return $array;
+      return $this->_data['variants'];
+    }
+
+    function variantExists($variant) {
+      return is_numeric($this->getProductVariantID($variant));
+    }
+
+    function getProductVariantID($variant) {
+      $_product_id = false;
+
+      $_size = sizeof($variant);
+
+      foreach ( $this->_data['variants'] as $product_id => $variants ) {
+        if ( sizeof($variants['values']) === $_size ) {
+          $_array = array();
+
+          foreach ( $variants['values'] as $group_id => $value ) {
+            $n = sizeof($value);
+
+            foreach ( $value as $value_id => $value_data ) {
+              if ( $n > 1 ) {
+                $_array[$group_id][$value_id] = $variant[$group_id][$value_id];
+              } else {
+                $_array[$group_id] = $value_id;
+              }
+            }
+          }
+
+          if ( sizeof(array_diff_assoc($_array, $variant)) === 0 ) {
+            $_product_id = $product_id;
+
+            break;
+          }
+        }
+      }
+
+      return $_product_id;
+
+/*HPDL; Useful for static version
+
+        $Qcheck = $osC_Database->query('select products_id from :table_products where parent_id = :parent_id limit 1');
+        $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qcheck->bindInt(':parent_id', $Qproduct->valueInt('products_id'));
+        $Qcheck->execute();
+
+        if ( $Qcheck->numberOfRows() < 1 ) {
+          return true;
+        } else {
+          $Qvariants = $osC_Database->query('select p.products_id from :table_products p, :table_products_variants pv where p.parent_id = :parent_id and p.products_id = pv.products_id and pv.products_variants_values_id in (":products_variants_values_id") group by pv.products_id');
+          $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
+          $Qvariants->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+          $Qvariants->bindInt(':parent_id', $Qproduct->valueInt('products_id'));
+          $Qvariants->bindRaw(':products_variants_values_id', implode('", "', $variants));
+          $Qvariants->execute();
+
+          while ( $Qvariants->next() ) {
+            $Qvcheck = $osC_Database->query('select count(*) as total from :table_products_variants where products_id = :products_id');
+            $Qvcheck->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+            $Qvcheck->bindInt(':products_id', $Qvariants->valueInt('products_id'));
+            $Qvcheck->execute();
+
+            if ( $Qvcheck->valueInt('total') === sizeof($variants) ) {
+              return true;
+            }
+          }
+        }
+*/
+
+    }
+
+    function hasAttribute($code) {
+      return isset($this->_data['attributes'][$code]);
+    }
+
+    function getAttribute($code) {
+      if ( !class_exists('osC_ProductAttributes_' . $code) ) {
+        if ( file_exists(DIR_FS_CATALOG . 'includes/modules/product_attributes/' . basename($code) . '.php') ) {
+          include(DIR_FS_CATALOG . 'includes/modules/product_attributes/' . basename($code) . '.php');
+        }
+      }
+
+      if ( class_exists('osC_ProductAttributes_' . $code) ) {
+        return call_user_func(array('osC_ProductAttributes_' . $code, 'getValue'), $this->_data['attributes'][$code]);
+      }
     }
 
     function checkEntry($id) {
       global $osC_Database;
 
-      $Qcheck = $osC_Database->query('select p.products_id from :table_products p');
-      $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qproduct = $osC_Database->query('select p.products_id from :table_products p');
+      $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
 
-      if (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $id)) {
-        $Qcheck->appendQuery('where p.products_id = :products_id');
-        $Qcheck->bindInt(':products_id', osc_get_product_id($id));
+      if ( is_numeric($id) ) {
+        $Qproduct->appendQuery('where p.products_id = :products_id');
+        $Qproduct->bindInt(':products_id', $id);
       } else {
-        $Qcheck->appendQuery(', :table_products_description pd where pd.products_keyword = :products_keyword and pd.products_id = p.products_id');
-        $Qcheck->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-        $Qcheck->bindValue(':products_keyword', $id);
+        $Qproduct->appendQuery(', :table_products_description pd where pd.products_keyword = :products_keyword and pd.products_id = p.products_id');
+        $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+        $Qproduct->bindValue(':products_keyword', $id);
       }
 
-      $Qcheck->appendQuery('and p.products_status = 1 limit 1');
-      $Qcheck->execute();
+      $Qproduct->appendQuery('and p.products_status = 1 limit 1');
+      $Qproduct->execute();
 
-      if ($Qcheck->numberOfRows() === 1) {
-        return true;
-      }
-
-      return false;
+      return ( $Qproduct->numberOfRows() === 1 );
     }
 
     function incrementCounter() {
@@ -284,6 +482,14 @@
       $Qproducts->execute();
 
       return $Qproducts;
+    }
+
+    protected static function _usortVariantValues($a, $b) {
+      if ( $a['sort_order'] == $b['sort_order'] ) {
+        return strnatcasecmp($a['text'], $b['text']);
+      }
+
+      return ( $a['sort_order'] < $b['sort_order'] ) ? -1 : 1;
     }
   }
 ?>

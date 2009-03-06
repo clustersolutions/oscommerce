@@ -1,56 +1,124 @@
 <?php
 /*
-  $Id: account.php 207 2005-09-26 01:29:31 +0200 (Mo, 26 Sep 2005) hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Category {
-    var $_data = array();
+/**
+ * The osC_Category class manages category information
+ */
 
-    function osC_Category($id) {
+  class osC_Category {
+
+/**
+ * An array containing the category information
+ *
+ * @var array
+ * @access private
+ */
+
+    private $_data = array();
+
+/**
+ * Constructor
+ *
+ * @param int $id The ID of the category to retrieve information from
+ * @access public
+ */
+
+    public function __construct($id) {
       global $osC_CategoryTree;
 
-      if ($osC_CategoryTree->exists($id)) {
+      if ( $osC_CategoryTree->exists($id) ) {
         $this->_data = $osC_CategoryTree->getData($id);
       }
     }
 
-    function getID() {
+/**
+ * Return the ID of the assigned category
+ *
+ * @access public
+ * @return integer
+ */
+
+    public function getID() {
       return $this->_data['id'];
     }
 
-    function getTitle() {
+/**
+ * Return the title of the assigned category
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getTitle() {
       return $this->_data['name'];
     }
 
-    function getImage() {
+/**
+ * Return the image of the assigned category
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getImage() {
       return $this->_data['image'];
     }
 
-    function hasParent() {
-      if ($this->_data['parent_id'] > 0) {
-        return true;
-      }
+/**
+ * Check if the assigned category has a parent category
+ *
+ * @access public
+ * @return boolean
+ */
 
-      return false;
+    public function hasParent() {
+      return ( $this->_data['parent_id'] > 0 );
     }
 
-    function getParent() {
+/**
+ * Return the parent ID of the assigned category
+ *
+ * @access public
+ * @return integer
+ */
+
+    public function getParent() {
       return $this->_data['parent_id'];
     }
 
-    function getPath() {
+/**
+ * Return the breadcrumb path of the assigned category
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getPath() {
       global $osC_CategoryTree;
 
       return $osC_CategoryTree->buildBreadcrumb($this->_data['id']);
+    }
+
+/**
+ * Return specific information from the assigned category
+ *
+ * @access public
+ * @return mixed
+ */
+
+    public function getData($keyword) {
+      return $this->_data[$keyword];
     }
   }
 ?>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2007 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -17,7 +17,7 @@
 
 /* Class constructor */
 
-    function osC_RecentlyVisited() {
+    function __construct() {
       if (isset($_SESSION['osC_RecentlyVisited_data']) === false) {
         $_SESSION['osC_RecentlyVisited_data'] = array();
       }
@@ -30,7 +30,7 @@
 
       if (SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1') {
         if (isset($osC_Product) && is_a($osC_Product, 'osC_Product')) {
-          $this->setProduct($osC_Product->getID());
+          $this->setProduct($osC_Product->getMasterID());
         }
       }
 

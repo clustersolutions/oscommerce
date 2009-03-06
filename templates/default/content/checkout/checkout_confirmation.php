@@ -81,9 +81,9 @@
       echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
     }
 
-    if ( (isset($products['attributes'])) && (sizeof($products['attributes']) > 0) ) {
-      foreach ($products['attributes'] as $attributes) {
-        echo '<br /><nobr><small>&nbsp;<i> - ' . $attributes['products_options_name'] . ': ' . $attributes['products_options_values_name'] . '</i></small></nobr>';
+    if ( $osC_ShoppingCart->isVariant($products['id']) ) {
+      foreach ( $osC_ShoppingCart->getVariant($products['id']) as $variant) {
+        echo '<br />- ' . $variant['group_title'] . ': ' . $variant['value_title'];
       }
     }
 
@@ -93,7 +93,7 @@
       echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue($products['tax']) . '</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPrice($products['final_price'], $products['tax_class_id'], $products['quantity']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPrice($products['price'], $products['tax_class_id'], $products['quantity']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>

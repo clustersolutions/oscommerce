@@ -197,17 +197,6 @@ CREATE TABLE osc_customers (
   PRIMARY KEY (customers_id)
 );
 
-DROP TABLE IF EXISTS osc_customers_basket;
-CREATE TABLE osc_customers_basket (
-  customers_basket_id int NOT NULL auto_increment,
-  customers_id int NOT NULL,
-  products_id tinytext NOT NULL,
-  customers_basket_quantity int NOT NULL,
-  final_price decimal(15,4) NOT NULL,
-  customers_basket_date_added datetime,
-  PRIMARY KEY (customers_basket_id)
-);
-
 DROP TABLE IF EXISTS osc_languages;
 CREATE TABLE osc_languages (
   languages_id int NOT NULL auto_increment,
@@ -345,7 +334,6 @@ CREATE TABLE osc_orders_products (
   products_model varchar(12),
   products_name varchar(64) NOT NULL,
   products_price decimal(15,4) NOT NULL,
-  final_price decimal(15,4) NOT NULL,
   products_tax decimal(7,4) NOT NULL,
   products_quantity int(2) NOT NULL,
   PRIMARY KEY (orders_products_id)
@@ -371,16 +359,15 @@ CREATE TABLE osc_orders_status_history (
    PRIMARY KEY (orders_status_history_id)
 );
 
-DROP TABLE IF EXISTS osc_orders_products_attributes;
-CREATE TABLE osc_orders_products_attributes (
-  orders_products_attributes_id int NOT NULL auto_increment,
+DROP TABLE IF EXISTS osc_orders_products_variants;
+CREATE TABLE osc_orders_products_variants (
+  id int NOT NULL auto_increment,
   orders_id int NOT NULL,
   orders_products_id int NOT NULL,
-  products_options varchar(32) NOT NULL,
-  products_options_values varchar(32) NOT NULL,
-  options_values_price decimal(15,4) NOT NULL,
-  price_prefix char(1) NOT NULL,
-  PRIMARY KEY (orders_products_attributes_id)
+  group_title varchar(255) NOT NULL,
+  value_title text NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_orders_products_variants_orders_products_ids (orders_id, orders_products_id)
 );
 
 DROP TABLE IF EXISTS osc_orders_products_download;
@@ -428,42 +415,34 @@ CREATE TABLE osc_orders_transactions_status (
    KEY idx_orders_transactions_status_name (status_name)
 );
 
+DROP TABLE IF EXISTS osc_product_attributes;
+CREATE TABLE osc_product_attributes (
+  id INT UNSIGNED NOT NULL,
+  products_id INT UNSIGNED NOT NULL,
+  languages_id INT UNSIGNED NOT NULL,
+  value TEXT NOT NULL,
+  KEY idx_pa_id_products_id (id, products_id),
+  KEY idx_pa_languages_id (languages_id)
+);
+
 DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
   products_id int NOT NULL auto_increment,
-  products_quantity int(4) NOT NULL,
+  parent_id int NOT NULL DEFAULT 0,
+  products_quantity int NOT NULL,
   products_price decimal(15,4) NOT NULL,
+  products_model varchar(255) NOT NULL,
   products_date_added datetime NOT NULL,
   products_last_modified datetime,
-  products_date_available datetime,
   products_weight decimal(5,2) NOT NULL,
   products_weight_class int NOT NULL,
   products_status tinyint(1) NOT NULL,
   products_tax_class_id int NOT NULL,
   manufacturers_id int NULL,
   products_ordered int NOT NULL default '0',
+  has_children int default 0,
   PRIMARY KEY (products_id),
   KEY idx_products_date_added (products_date_added)
-);
-
-DROP TABLE IF EXISTS osc_products_attributes;
-CREATE TABLE osc_products_attributes (
-  products_attributes_id int NOT NULL auto_increment,
-  products_id int NOT NULL,
-  options_id int NOT NULL,
-  options_values_id int NOT NULL,
-  options_values_price decimal(15,4) NOT NULL,
-  price_prefix char(1) NOT NULL,
-  PRIMARY KEY (products_attributes_id)
-);
-
-DROP TABLE IF EXISTS osc_products_attributes_download;
-CREATE TABLE osc_products_attributes_download (
-  products_attributes_id int NOT NULL,
-  products_attributes_filename varchar(255) NOT NULL default '',
-  products_attributes_maxdays int(2) default '0',
-  products_attributes_maxcount int(2) default '0',
-  PRIMARY KEY  (products_attributes_id)
 );
 
 DROP TABLE IF EXISTS osc_products_description;
@@ -472,7 +451,6 @@ CREATE TABLE osc_products_description (
   language_id int NOT NULL default '1',
   products_name varchar(64) NOT NULL default '',
   products_description text,
-  products_model varchar(16),
   products_keyword varchar(64),
   products_tags varchar(255),
   products_url varchar(255),
@@ -514,35 +492,40 @@ CREATE TABLE osc_products_notifications (
   PRIMARY KEY (products_id, customers_id)
 );
 
-DROP TABLE IF EXISTS osc_products_options;
-CREATE TABLE osc_products_options (
-  products_options_id int NOT NULL default '0',
-  language_id int NOT NULL default '1',
-  products_options_name varchar(32) NOT NULL default '',
-  PRIMARY KEY  (products_options_id,language_id)
-);
-
-DROP TABLE IF EXISTS osc_products_options_values;
-CREATE TABLE osc_products_options_values (
-  products_options_values_id int NOT NULL default '0',
-  language_id int NOT NULL default '1',
-  products_options_values_name varchar(64) NOT NULL default '',
-  PRIMARY KEY  (products_options_values_id,language_id)
-);
-
-DROP TABLE IF EXISTS osc_products_options_values_to_products_options;
-CREATE TABLE osc_products_options_values_to_products_options (
-  products_options_values_to_products_options_id int NOT NULL auto_increment,
-  products_options_id int NOT NULL,
-  products_options_values_id int NOT NULL,
-  PRIMARY KEY (products_options_values_to_products_options_id)
-);
-
 DROP TABLE IF EXISTS osc_products_to_categories;
 CREATE TABLE osc_products_to_categories (
   products_id int NOT NULL,
   categories_id int NOT NULL,
   PRIMARY KEY (products_id,categories_id)
+);
+
+DROP TABLE IF EXISTS osc_products_variants;
+CREATE TABLE osc_products_variants (
+  products_id INT UNSIGNED NOT NULL,
+  products_variants_values_id INT UNSIGNED NOT NULL,
+  default_combo TINYINT UNSIGNED DEFAULT 0,
+  PRIMARY KEY (products_id, products_variants_values_id)
+);
+
+DROP TABLE IF EXISTS osc_products_variants_groups;
+CREATE TABLE osc_products_variants_groups (
+  id int NOT NULL auto_increment,
+  languages_id int NOT NULL,
+  title varchar(255) NOT NULL,
+  sort_order int NOT NULL,
+  module varchar(255) NOT NULL,
+  PRIMARY KEY (id, languages_id)
+);
+
+DROP TABLE IF EXISTS osc_products_variants_values;
+CREATE TABLE osc_products_variants_values (
+  id int NOT NULL auto_increment,
+  languages_id int NOT NULL,
+  products_variants_groups_id int NOT NULL,
+  title varchar(255) NOT NULL,
+  sort_order int NOT NULL,
+  PRIMARY KEY (id, languages_id),
+  KEY idx_products_variants_values_groups_id (products_variants_groups_id)
 );
 
 DROP TABLE IF EXISTS osc_reviews;
@@ -567,6 +550,36 @@ CREATE TABLE osc_sessions (
   expiry int(11) unsigned NOT NULL,
   value text NOT NULL,
   PRIMARY KEY (sesskey)
+);
+
+DROP TABLE IF EXISTS osc_shipping_availability;
+CREATE TABLE osc_shipping_availability (
+  id INT UNSIGNED NOT NULL,
+  languages_id INT UNSIGNED NOT NULL,
+  title varchar(255) NOT NULL,
+  css_key varchar(255),
+  PRIMARY KEY (id, languages_id)
+);
+
+DROP TABLE IF EXISTS osc_shopping_carts;
+CREATE TABLE osc_shopping_carts (
+  customers_id INT UNSIGNED NOT NULL,
+  item_id SMALLINT UNSIGNED NOT NULL,
+  products_id INT UNSIGNED NOT NULL,
+  quantity SMALLINT UNSIGNED NOT NULL,
+  date_added DATETIME,
+  KEY idx_sc_customers_id (customers_id),
+  KEY idx_sc_customers_id_products_id (customers_id, products_id)
+);
+
+DROP TABLE IF EXISTS osc_shopping_carts_custom_variants_values;
+CREATE TABLE osc_shopping_carts_custom_variants_values (
+  shopping_carts_item_id SMALLINT UNSIGNED NOT NULL,
+  customers_id INT UNSIGNED NOT NULL,
+  products_id INT UNSIGNED NOT NULL,
+  products_variants_values_id INT UNSIGNED NOT NULL,
+  products_variants_values_text TEXT NOT NULL,
+  KEY idx_sccvv_customers_id_products_id (customers_id, products_id)
 );
 
 DROP TABLE IF EXISTS osc_specials;
@@ -704,7 +717,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail Address', 'STORE_OWNER_EMAIL_ADDRESS', 'root@localhost', 'The e-mail address of my store owner', '1', '3', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('E-Mail From', 'EMAIL_FROM', '"Store Owner" <root@localhost>', 'The e-mail address used in (sent) e-mails', '1', '4', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country', 'STORE_COUNTRY', '223', 'The country my store is located in <br><br><b>Note: Please remember to update the store zone.</b>', '1', '6', 'osC_Address::getCountryName', 'osc_cfg_set_countries_pulldown_menu', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Zone', 'STORE_ZONE', '', 'The zone my store is located in', '1', '7', 'osC_Address::getZoneName', 'osc_cfg_set_zones_pulldown_menu', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Zone', 'STORE_ZONE', '4031', 'The zone my store is located in', '1', '7', 'osC_Address::getZoneName', 'osc_cfg_set_zones_pulldown_menu', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Send Extra Order Emails To', 'SEND_EXTRA_ORDER_EMAILS_TO', '', 'Send extra order emails to the following email addresses, in this format: Name 1 &lt;email@address1&gt;, Name 2 &lt;email@address2&gt;', '1', '11', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Allow Guest To Tell A Friend', 'ALLOW_GUEST_TO_TELL_A_FRIEND', '-1', 'Allow guests to tell a friend about a product', '1', '15', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) VALUES ('Store Address and Phone', 'STORE_NAME_ADDRESS', 'Store Name\nAddress\nCountry\nPhone', 'This is the Store Name, Address and Phone used on printable documents and displayed online', '1', '18', 'osc_cfg_set_textarea_field', now());
@@ -5782,7 +5795,7 @@ INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of pr
 # USA/Florida
 INSERT INTO osc_tax_rates VALUES (1, 1, 1, 1, 7.0, 'FL TAX 7.0%', now(), now());
 INSERT INTO osc_geo_zones (geo_zone_id,geo_zone_name,geo_zone_description,date_added) VALUES (1,"Florida","Florida local sales tax zone",now());
-INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_zone_id,date_added) VALUES (1,223,176,1,now());
+INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_zone_id,date_added) VALUES (1,223,4031,1,now());
 
 # Templates
 

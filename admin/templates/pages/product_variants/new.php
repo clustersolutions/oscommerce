@@ -11,6 +11,19 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  $modules_array = array();
+
+  $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/variants');
+  $osC_DirectoryListing->setIncludeDirectories(false);
+  $osC_DirectoryListing->setCheckExtension('php');
+
+  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
+
+    $modules_array[] = array('id' => $module,
+                             'text' => $module);
+  }
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -39,6 +52,14 @@
 ?>
 
       </td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_display_module') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('module', $modules_array); ?></td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('sort_order'); ?></td>
     </tr>
   </table>
 

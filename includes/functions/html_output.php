@@ -365,7 +365,10 @@
       $field .= '<input type="' . osc_output_string($type) . '" name="' . osc_output_string($name) . '"';
 
       if (strpos($parameters, 'id=') === false) {
-        $field .= ' id="' . osc_output_string($name) . (sizeof($values) > 1 ? $counter : '') . '"';
+        $field .= ' id="' . osc_output_string($name) . (sizeof($values) > 1 ? '_' . $counter : '') . '"';
+      } elseif (sizeof($values) > 1) {
+        $offset = strpos($parameters, 'id="');
+        $field .= ' id="' . osc_output_string(substr($parameters, $offset+4, strpos($parameters, '"', $offset+4)-($offset+4))) . '_' . $counter . '"';
       }
 
       if (trim($selection_value) != '') {

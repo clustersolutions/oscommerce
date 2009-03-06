@@ -12,7 +12,20 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductAttributes_Admin::getData($_GET['paID']));
+  $modules_array = array();
+
+  $osC_DirectoryListing = new osC_DirectoryListing('../includes/modules/variants');
+  $osC_DirectoryListing->setIncludeDirectories(false);
+  $osC_DirectoryListing->setCheckExtension('php');
+
+  foreach ( $osC_DirectoryListing->getFiles() as $file ) {
+    $module = substr($file['name'], 0, strrpos($file['name'], '.'));
+
+    $modules_array[] = array('id' => $module,
+                             'text' => $module);
+  }
+
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getData($_GET['paID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -23,9 +36,9 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('products_options_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('title'); ?></div>
 <div class="infoBoxContent">
-  <form name="paEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $osC_ObjectInfo->get('products_options_id') . '&action=save'); ?>" method="post">
+  <form name="paEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $osC_ObjectInfo->get('id') . '&action=save'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_edit_attribute_group'); ?></p>
 
@@ -35,15 +48,15 @@
       <td width="60%">
 
 <?php
-  $Qgd = $osC_Database->query('select language_id, products_options_name from :table_products_options where products_options_id = :products_options_id');
-  $Qgd->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-  $Qgd->bindInt(':products_options_id', $osC_ObjectInfo->get('products_options_id'));
+  $Qgd = $osC_Database->query('select languages_id, title from :table_products_variants_groups where id = :id');
+  $Qgd->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+  $Qgd->bindInt(':id', $osC_ObjectInfo->get('id'));
   $Qgd->execute();
 
   $group_names = array();
 
   while ($Qgd->next()) {
-    $group_names[$Qgd->valueInt('language_id')] = $Qgd->value('products_options_name');
+    $group_names[$Qgd->valueInt('languages_id')] = $Qgd->value('title');
   }
 
   foreach ($osC_Language->getAll() as $l) {
@@ -52,6 +65,14 @@
 ?>
 
       </td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_display_module') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_pull_down_menu('module', $modules_array, $osC_ObjectInfo->get('module')); ?></td>
+    </tr>
+    <tr>
+      <td width="40%" valign="top"><?php echo '<b>' . $osC_Language->get('field_sort_order') . '</b>'; ?></td>
+      <td width="60%"><?php echo osc_draw_input_field('sort_order', $osC_ObjectInfo->get('sort_order')); ?></td>
     </tr>
   </table>
 

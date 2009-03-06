@@ -100,7 +100,7 @@
       echo '                <td valign="top" align="right">' . osC_Tax::displayTaxRateValue($product['tax']) . '</td>' . "\n";
     }
 
-    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPriceWithTaxRate($product['final_price'], $product['tax'], $product['qty'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
+    echo '                <td align="right" valign="top">' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], $product['qty'], $order->info['currency'], $order->info['currency_value']) . '</td>' . "\n" .
          '              </tr>' . "\n";
   }
 ?>

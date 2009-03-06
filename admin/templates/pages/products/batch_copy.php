@@ -15,7 +15,7 @@
   $categories_array = array(array('id' => '0',
                                   'text' => $osC_Language->get('top_category')));
 
-  foreach ($osC_CategoryTree->getTree() as $value) {
+  foreach ($osC_CategoryTree->getArray() as $value) {
     $categories_array[] = array('id' => $value['id'],
                                 'text' => $value['title']);
   }

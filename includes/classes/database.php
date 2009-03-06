@@ -300,7 +300,8 @@
         $logging_module,
         $logging_module_id,
         $logging_fields = array(),
-        $logging_changed = array();
+        $logging_changed = array(),
+        $_db_tables = array();
 
     function __construct(&$db_class) {
       $this->db_class =& $db_class;
@@ -414,7 +415,15 @@
       $this->bindValueMixed($place_holder, $value, 'raw');
     }
 
-    function bindTable($place_holder, $value) {
+    function bindTable($place_holder, $value = null) {
+      if ( empty($value) ) { // remove :table_ from $place_holder and prefix it with the database name prefix value
+        if ( !isset($this->_db_tables[$place_holder]) ) {
+          $this->_db_tables[$place_holder] = DB_TABLE_PREFIX . substr($place_holder, 7);
+        }
+
+        $value = $this->_db_tables[$place_holder];
+      }
+
       $this->bindValueMixed($place_holder, $value, 'raw', false);
     }
 
