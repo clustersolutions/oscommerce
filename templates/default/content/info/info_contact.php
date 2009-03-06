@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('contact') > 0) {
-    echo $messageStack->output('contact');
+  if ($osC_MessageStack->size('contact') > 0) {
+    echo $osC_MessageStack->get('contact');
   }
 
   if (isset($_GET['contact']) && ($_GET['contact'] == 'success')) {

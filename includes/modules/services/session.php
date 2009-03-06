@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -14,7 +14,7 @@
 
   class osC_Services_session {
     function start() {
-      global $request_type, $osC_Session, $messageStack;
+      global $request_type, $osC_Session;
 
       include('includes/classes/session.php');
       $osC_Session = osC_Session::load();
@@ -91,9 +91,6 @@
           osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
-
-// add messages in the session to the message stack
-      $messageStack->loadFromSession();
 
       return true;
     }

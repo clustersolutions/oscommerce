@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -58,7 +58,9 @@
   $osC_Cache = new osC_Cache();
 
 // include the administrators log class
-  require('includes/classes/administrators_log.php');
+  if ( file_exists('includes/applications/administrators_log/classes/administrators_log.php') ) {
+    include('includes/applications/administrators_log/classes/administrators_log.php');
+  }
 
 // include the database class
   require('../includes/classes/database.php');
@@ -90,7 +92,7 @@
   $osC_Session = osC_Session::load('osCAdminID');
   $osC_Session->start();
 
-  if ( !isset($_SESSION['admin']) ) {
+  if ( !isset($_SESSION['admin']) && (basename($_SERVER['PHP_SELF']) != FILENAME_RPC) ) {
     $redirect = false;
 
     if ( empty($_GET) ) {
@@ -143,8 +145,7 @@
 
 // initialize the message stack for output messages
   require('../includes/classes/message_stack.php');
-  $osC_MessageStack = new messageStack();
-  $osC_MessageStack->loadFromSession();
+  $osC_MessageStack = new osC_MessageStack();
 
 // entry/item info classes
   require('includes/classes/object_info.php');

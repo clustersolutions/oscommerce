@@ -150,8 +150,8 @@
     <td id="pageContent" valign="top">
 
 <?php
-  if ($messageStack->size('header') > 0) {
-    echo $messageStack->output('header');
+  if ($osC_MessageStack->size('header') > 0) {
+    echo $osC_MessageStack->get('header');
   }
 
   if ($osC_Template->hasPageContentModules()) {

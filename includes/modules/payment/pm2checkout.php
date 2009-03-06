@@ -131,7 +131,7 @@
     }
 
     function pre_confirmation_check() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $this->_verifyData();
 
@@ -194,10 +194,10 @@
     }
 
     function before_process() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       if ($_POST['x_response_code'] != '1') {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_2checkout_error_message'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_2checkout_error_message'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
@@ -248,13 +248,13 @@
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $osC_CreditCard = new osC_CreditCard($_POST['pm_2checkout_cc_number'], $_POST['pm_2checkout_cc_expires_month'], $_POST['pm_2checkout_cc_expires_year']);
       $osC_CreditCard->setOwner($_POST['pm_2checkout_cc_owner']);
 
       if ($result = $osC_CreditCard->isValid() !== true) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&pm_2checkout_cc_owner=' . $osC_CreditCard->getOwner() . '&pm_2checkout_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&pm_2checkout_cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
       }

@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('login') > 0) {
-    echo $messageStack->output('login');
+  if ($osC_MessageStack->size('login') > 0) {
+    echo $osC_MessageStack->get('login');
   }
 ?>
 

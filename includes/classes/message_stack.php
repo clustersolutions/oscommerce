@@ -5,105 +5,181 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class messageStack {
-    var $messages;
+/**
+ * The osC_MessageStack class manages information messages to be displayed.
+ * Messages that are shown are automatically removed from the stack.
+ */
 
-// class constructor
-    function messageStack() {
-      $this->messages = array();
-    }
+  class osC_MessageStack {
 
-// class methods
-    function add($class, $message, $type = 'error') {
-      $this->messages[] = array('class' => $class, 'type' => $type, 'message' => $message);
-    }
+/**
+ * A reference to the messages stored in the session messageToStack variable
+ *
+ * @var array
+ * @access private
+ */
 
-    function add_session($class, $message, $type = 'error') {
-      if (isset($_SESSION['messageToStack'])) {
-        $messageToStack = $_SESSION['messageToStack'];
-      } else {
-        $messageToStack = array();
+    private $_data = array();
+
+/**
+ * Constructor, references the session data to the private $_data variable
+ *
+ * @access public
+ */
+
+    public function __construct() {
+      if ( !isset($_SESSION['messageToStack']) ) {
+        $_SESSION['messageToStack'] = array();
       }
 
-      $messageToStack[] = array('class' => $class, 'text' => $message, 'type' => $type);
-
-      $_SESSION['messageToStack'] = $messageToStack;
-
-      $this->add($class, $message, $type);
+      $this->_data =& $_SESSION['messageToStack'];
     }
 
-    function reset() {
-      $this->messages = array();
+/**
+ * Add a message to the stack
+ *
+ * @param string $group The group the message belongs to
+ * @param string $message The message information text
+ * @param string $type The type of message: error, warning, success
+ * @access public
+ */
+
+    public function add($group, $message, $type = 'error') {
+      $this->_data[$group][] = array('text' => $message,
+                                     'type' => $type);
     }
 
-    function output($class) {
-      $messages = '<ul>';
-      for ($i=0, $n=sizeof($this->messages); $i<$n; $i++) {
-        if ($this->messages[$i]['class'] == $class) {
-          switch ($this->messages[$i]['type']) {
+/**
+ * Reset the message stack
+ *
+ * @access public
+ */
+
+    public function reset() {
+      $this->_data = array();
+    }
+
+/**
+ * Checks to see if a group in the stack contains messages
+ *
+ * @param string $group The name of the group to check
+ * @access public
+ */
+
+    public function exists($group) {
+      return ( isset($this->_data[$group]) && !empty($this->_data[$group]) );
+    }
+
+/**
+ * Checks to see if the message stack contains messages
+ *
+ * @access public
+ */
+
+    public function hasContent() {
+      return !empty($this->_data);
+    }
+
+/**
+ * Get the messages belonging to a group. The messages are placed into an
+ * unsorted list wrapped in a DIV element with the "messageStack" style sheet
+ * class.
+ *
+ * @param string $group The name of the group to get the messages from
+ * @access public
+ */
+
+    public function get($group) {
+      $result = false;
+
+      if ( $this->exists($group) ) {
+        $result = '<div class="messageStack"><ul>';
+
+        foreach ( $this->_data[$group] as $message ) {
+          switch ( $message['type'] ) {
             case 'error':
-              $bullet_image = DIR_WS_IMAGES . 'icons/error.gif';
+              $bullet_image = 'error.gif';
               break;
+
             case 'warning':
-              $bullet_image = DIR_WS_IMAGES . 'icons/warning.gif';
+              $bullet_image = 'warning.gif';
               break;
+
             case 'success':
-              $bullet_image = DIR_WS_IMAGES . 'icons/success.gif';
+              $bullet_image = 'success.gif';
               break;
+
             default:
-              $bullet_image = DIR_WS_IMAGES . 'icons/bullet_default.gif';
+              $bullet_image = 'bullet_default.gif';
           }
 
-          $messages .= '<li style="list-style-image: url(\'' . $bullet_image . '\')">' . osc_output_string($this->messages[$i]['message']) . '</li>';
+          $result .= '<li style="list-style-image: url(\'' . DIR_WS_IMAGES . 'icons/' . $bullet_image . '\')">' . osc_output_string($message['text']) . '</li>';
         }
-      }
-      $messages .= '</ul>';
 
-      return '<div class="messageStack">' . $messages . '</div>';
+        $result .= '</ul></div>';
+
+        unset($this->_data[$group]);
+      }
+
+      return $result;
     }
 
-    function outputPlain($class) {
-      $message = false;
+/**
+ * Get the messages belonging to a group. The messages are separated by a new
+ * line character.
+ *
+ * @param string $group The name of the group to get the messages from
+ * @access public
+ */
 
-      for ($i=0, $n=sizeof($this->messages); $i<$n; $i++) {
-        if ($this->messages[$i]['class'] == $class) {
-          $message = osc_output_string($this->messages[$i]['message']);
-          break;
+    public function getRaw($group) {
+      $result = false;
+
+      if ( $this->exists($group) ) {
+        $result = '';
+
+        foreach ( $this->_data[$group] as $message ) {
+          $result .= osc_output_string($message['text']) . "\n";
         }
+
+        unset($this->_data[$group]);
       }
 
-      return $message;
+      return $result;
     }
 
-    function size($class) {
-      $class_size = 0;
+/**
+ * Get the message stack array data set
+ *
+ * @access public
+ */
 
-      for ($i=0, $n=sizeof($this->messages); $i<$n; $i++) {
-        if ($this->messages[$i]['class'] == $class) {
-          $class_size++;
-        }
-      }
-
-      return $class_size;
+    public function getAll() {
+      return $this->_data;
     }
 
-    function loadFromSession() {
-      if (isset($_SESSION['messageToStack'])) {
-        $messageToStack = $_SESSION['messageToStack'];
+/**
+ * Get the number of messages belonging to a group
+ *
+ * @param string $group The name of the group to check
+ * @access public
+ */
 
-        for ($i=0, $n=sizeof($messageToStack); $i<$n; $i++) {
-          $this->add($messageToStack[$i]['class'], $messageToStack[$i]['text'], $messageToStack[$i]['type']);
-        }
+    public function size($group) {
+      $size = 0;
 
-        unset($_SESSION['messageToStack']);
+      if ( $this->exists($group) ) {
+        $size = sizeof($this->_data[$group]);
       }
+
+      return $size;
     }
   }
 ?>

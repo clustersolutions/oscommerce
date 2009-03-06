@@ -87,7 +87,7 @@
     }
 
     function simpleQuery($query, $debug = false) {
-      global $messageStack, $osC_Services;
+      global $osC_MessageStack, $osC_Services;
 
       if ($this->isConnected()) {
         $this->number_of_queries++;
@@ -125,7 +125,7 @@
 
           echo '<div style="font-family: Verdana, Arial, sans-serif; font-size: 7px; font-weight: bold;">[<a href="#query' . $this->number_of_queries . '">#' . $this->number_of_queries . '</a>]</div>';
 
-          $messageStack->add('debug', '<a name=\'query' . $this->number_of_queries . '\'></a>[#' . $this->number_of_queries . ' - ' . $query_time . 's] ' . $query, 'warning');
+          $osC_MessageStack->add('debug', '<a name=\'query' . $this->number_of_queries . '\'></a>[#' . $this->number_of_queries . ' - ' . $query_time . 's] ' . $query, 'warning');
         }
 
         if ($resource !== false) {

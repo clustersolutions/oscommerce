@@ -120,7 +120,7 @@
     }
 
     function process() {
-      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $messageStack;
+      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $osC_MessageStack;
 
       $this->_verifyData();
 
@@ -177,21 +177,21 @@
       } else {
         osC_Order::remove($this->_order_id);
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
       }
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $_POST['saferpay_elv_owner'] = trim($_POST['saferpay_elv_owner']);
       $_POST['saferpay_elv_account'] = trim($_POST['saferpay_elv_account']);
       $_POST['saferpay_elv_bank'] = trim($_POST['saferpay_elv_bank']);
 
       if (empty($_POST['saferpay_elv_owner']) || empty($_POST['saferpay_elv_account']) || (strlen($_POST['saferpay_elv_account']) < 3) || empty($_POST['saferpay_elv_bank']) || (strlen($_POST['saferpay_elv_bank']) !== 8)) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_elv_error_general'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_saferpay_elv_error_general'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&saferpay_elv_owner=' . $_POST['saferpay_elv_owner'] . '&saferpay_elv_bank=' . $_POST['saferpay_elv_bank'], 'SSL'));
       }

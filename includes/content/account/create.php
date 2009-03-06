@@ -54,13 +54,13 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Language, $osC_Customer;
+      global $osC_MessageStack, $osC_Database, $osC_Language, $osC_Customer;
 
       $data = array();
 
       if (DISPLAY_PRIVACY_CONDITIONS == '1') {
         if ( (isset($_POST['privacy_conditions']) === false) || (isset($_POST['privacy_conditions']) && ($_POST['privacy_conditions'] != '1')) ) {
-          $messageStack->add($this->_module, $osC_Language->get('error_privacy_statement_not_accepted'));
+          $osC_MessageStack->add($this->_module, $osC_Language->get('error_privacy_statement_not_accepted'));
         }
       }
 
@@ -68,27 +68,27 @@
         if (isset($_POST['gender']) && (($_POST['gender'] == 'm') || ($_POST['gender'] == 'f'))) {
           $data['gender'] = $_POST['gender'];
         } else {
-          $messageStack->add($this->_module, $osC_Language->get('field_customer_gender_error'));
+          $osC_MessageStack->add($this->_module, $osC_Language->get('field_customer_gender_error'));
         }
       }
 
       if (isset($_POST['firstname']) && (strlen(trim($_POST['firstname'])) >= ACCOUNT_FIRST_NAME)) {
         $data['firstname'] = $_POST['firstname'];
       } else {
-        $messageStack->add($this->_module, sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
+        $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
       }
 
       if (isset($_POST['lastname']) && (strlen(trim($_POST['lastname'])) >= ACCOUNT_LAST_NAME)) {
         $data['lastname'] = $_POST['lastname'];
       } else {
-        $messageStack->add($this->_module, sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
+        $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
       }
 
       if (ACCOUNT_DATE_OF_BIRTH == '1') {
         if (isset($_POST['dob_days']) && isset($_POST['dob_months']) && isset($_POST['dob_years']) && checkdate($_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years'])) {
           $data['dob'] = mktime(0, 0, 0, $_POST['dob_months'], $_POST['dob_days'], $_POST['dob_years']);
         } else {
-          $messageStack->add($this->_module, $osC_Language->get('field_customer_date_of_birth_error'));
+          $osC_MessageStack->add($this->_module, $osC_Language->get('field_customer_date_of_birth_error'));
         }
       }
 
@@ -97,26 +97,26 @@
           if (osC_Account::checkDuplicateEntry($_POST['email_address']) === false) {
             $data['email_address'] = $_POST['email_address'];
           } else {
-            $messageStack->add($this->_module, $osC_Language->get('field_customer_email_address_exists_error'));
+            $osC_MessageStack->add($this->_module, $osC_Language->get('field_customer_email_address_exists_error'));
           }
         } else {
-          $messageStack->add($this->_module, $osC_Language->get('field_customer_email_address_check_error'));
+          $osC_MessageStack->add($this->_module, $osC_Language->get('field_customer_email_address_check_error'));
         }
       } else {
-        $messageStack->add($this->_module, sprintf($osC_Language->get('field_customer_email_address_error'), ACCOUNT_EMAIL_ADDRESS));
+        $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('field_customer_email_address_error'), ACCOUNT_EMAIL_ADDRESS));
       }
 
       if ( (isset($_POST['password']) === false) || (isset($_POST['password']) && (strlen(trim($_POST['password'])) < ACCOUNT_PASSWORD)) ) {
-        $messageStack->add($this->_module, sprintf($osC_Language->get('field_customer_password_error'), ACCOUNT_PASSWORD));
+        $osC_MessageStack->add($this->_module, sprintf($osC_Language->get('field_customer_password_error'), ACCOUNT_PASSWORD));
       } elseif ( (isset($_POST['confirmation']) === false) || (isset($_POST['confirmation']) && (trim($_POST['password']) != trim($_POST['confirmation']))) ) {
-        $messageStack->add($this->_module, $osC_Language->get('field_customer_password_mismatch_with_confirmation'));
+        $osC_MessageStack->add($this->_module, $osC_Language->get('field_customer_password_mismatch_with_confirmation'));
       } else {
         $data['password'] = $_POST['password'];
       }
 
-      if ($messageStack->size($this->_module) === 0) {
+      if ($osC_MessageStack->size($this->_module) === 0) {
         if (osC_Account::createEntry($data)) {
-          $messageStack->add_session('create', $osC_Language->get('success_account_updated'), 'success');
+          $osC_MessageStack->add('create', $osC_Language->get('success_account_updated'), 'success');
         }
 
         osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'create=success', 'SSL'));

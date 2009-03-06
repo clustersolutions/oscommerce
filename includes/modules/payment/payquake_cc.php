@@ -188,7 +188,7 @@
     }
 
     function process() {
-      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $this->_verifyData();
 
@@ -288,14 +288,14 @@
       } else {
         osC_Order::remove($this->_order_id);
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $osC_CreditCard = new osC_CreditCard($_POST['payquake_cc_number'], $_POST['payquake_cc_expires_month'], $_POST['payquake_cc_expires_year']);
       $osC_CreditCard->setOwner($_POST['payquake_cc_owner']);
@@ -325,7 +325,7 @@
             break;
         }
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&payquake_cc_owner=' . $osC_CreditCard->getOwner() . '&payquake_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&payquake_cc_expires_year=' . $osC_CreditCard->getExpiryYear() . (MODULE_PAYMENT_PAYQUAKE_CC_VERIFY_WITH_CVC == '1' ? '&payquake_cc_cvc=' . $osC_CreditCard->getCVC() : ''), 'SSL'));
       }

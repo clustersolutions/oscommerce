@@ -16,7 +16,7 @@
     $Qentry = osC_AddressBook::getEntry($_GET['address_book']);
   } else {
     if (osC_AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES) {
-      $messageStack->add('address_book', $osC_Language->get('error_address_book_full'));
+      $osC_MessageStack->add('address_book', $osC_Language->get('error_address_book_full'));
     }
   }
 ?>
@@ -26,8 +26,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('address_book') > 0) {
-    echo $messageStack->output('address_book');
+  if ($osC_MessageStack->size('address_book') > 0) {
+    echo $osC_MessageStack->get('address_book');
   }
 
   if ( ($osC_Customer->hasDefaultAddress() === false) || (isset($_GET['new']) && (osC_AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry->numberOfRows() === 1)) ) {

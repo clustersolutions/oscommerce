@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
 
 <?php
-  if ($messageStack->size('reviews') > 0) {
-    echo $messageStack->output('reviews');
+  if ($osC_MessageStack->size('reviews') > 0) {
+    echo $osC_MessageStack->get('reviews');
   }
 
   if ($osC_Product->hasImage()) {

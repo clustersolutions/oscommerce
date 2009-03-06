@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('checkout_address') > 0) {
-    echo $messageStack->output('checkout_address');
+  if ($osC_MessageStack->size('checkout_address') > 0) {
+    echo $osC_MessageStack->get('checkout_address');
   }
 ?>
 

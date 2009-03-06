@@ -41,7 +41,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $name = osc_sanitize_string($_POST['name']);
       $email_address = osc_sanitize_string($_POST['email']);
@@ -52,7 +52,7 @@
 
         osc_redirect(osc_href_link(FILENAME_INFO, 'contact=success', 'AUTO'));
       } else {
-        $messageStack->add('contact', $osC_Language->get('field_customer_email_address_check_error'));
+        $osC_MessageStack->add('contact', $osC_Language->get('field_customer_email_address_check_error'));
       }
     }
   }

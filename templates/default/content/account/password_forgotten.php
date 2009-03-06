@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('password_forgotten') > 0) {
-    echo $messageStack->output('password_forgotten');
+  if ($osC_MessageStack->size('password_forgotten') > 0) {
+    echo $osC_MessageStack->get('password_forgotten');
   }
 ?>
 

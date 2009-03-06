@@ -112,6 +112,6 @@
 
 <?php
   if ( $osC_MessageStack->size('header') > 0 ) {
-    echo $osC_MessageStack->output('header');
+    echo $osC_MessageStack->get('header');
   }
 ?>

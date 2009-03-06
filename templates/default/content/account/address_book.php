@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('address_book') > 0) {
-    echo $messageStack->output('address_book');
+  if ($osC_MessageStack->size('address_book') > 0) {
+    echo $osC_MessageStack->get('address_book');
   }
 ?>
 

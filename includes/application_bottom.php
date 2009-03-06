@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  $messageStack->add('debug', 'Number of queries: ' . $osC_Database->numberOfQueries() . ' [' . $osC_Database->timeOfQueries() . 's]', 'warning');
+  $osC_MessageStack->add('debug', 'Number of queries: ' . $osC_Database->numberOfQueries() . ' [' . $osC_Database->timeOfQueries() . 's]', 'warning');
 
   $osC_Services->stopServices();
 ?>

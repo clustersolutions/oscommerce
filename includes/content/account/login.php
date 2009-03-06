@@ -48,7 +48,7 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $messageStack, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_MessageStack, $osC_Customer, $osC_NavigationHistory;
 
       if (osC_Account::checkEntry($_POST['email_address'])) {
         if (osC_Account::checkPassword($_POST['password'], $_POST['email_address'])) {
@@ -74,10 +74,10 @@
             osc_redirect(osc_href_link(FILENAME_DEFAULT, null, 'AUTO'));
           }
         } else {
-          $messageStack->add('login', $osC_Language->get('error_login_no_match'));
+          $osC_MessageStack->add('login', $osC_Language->get('error_login_no_match'));
         }
       } else {
-        $messageStack->add('login', $osC_Language->get('error_login_no_match'));
+        $osC_MessageStack->add('login', $osC_Language->get('error_login_no_match'));
       }
     }
   }

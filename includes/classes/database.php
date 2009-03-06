@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -62,15 +62,15 @@
     }
 
     function setError($error, $error_number = '', $query = '') {
-      global $messageStack;
+      global $osC_MessageStack;
 
       if ($this->error_reporting === true) {
         $this->error = $error;
         $this->error_number = $error_number;
         $this->error_query = $query;
 
-        if (isset($messageStack)) {
-          $messageStack->add('debug', $this->getError());
+        if (isset($osC_MessageStack)) {
+          $osC_MessageStack->add('debug', $this->getError());
         }
       }
     }
@@ -551,8 +551,8 @@
                 $this->setNextID($this->logging_module_id);
               }
 
-              if ( class_exists('osC_AdministratorsLog') ) {
-                osC_AdministratorsLog::insert($this->logging_module, $this->db_class->logging_transaction_action, $this->logging_module_id, $this->logging_action, $this->logging_changed, $this->db_class->logging_transaction);
+              if ( class_exists('osC_AdministratorsLog_Admin') ) {
+                osC_AdministratorsLog_Admin::insert($this->logging_module, $this->db_class->logging_transaction_action, $this->logging_module_id, $this->logging_action, $this->logging_changed, $this->db_class->logging_transaction);
               }
             }
           }

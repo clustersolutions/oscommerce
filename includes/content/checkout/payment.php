@@ -95,7 +95,7 @@
       }
 
       if (isset($_GET['payment_error']) && is_object(${$_GET['payment_error']}) && ($error = ${$_GET['payment_error']}->get_error())) {
-        $messageStack->add('checkout_payment', $error['error'], 'error');
+        $osC_MessageStack->add('checkout_payment', $error['error'], 'error');
       }
     }
   }

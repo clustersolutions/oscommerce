@@ -134,7 +134,7 @@
     }
 
     function pre_confirmation_check() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $this->_verifyData();
 
@@ -283,13 +283,13 @@
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $osC_CreditCard = new osC_CreditCard($_POST['ipayment_cc_number'], $_POST['ipayment_cc_expires_month'], $_POST['ipayment_cc_expires_year']);
       $osC_CreditCard->setOwner($_POST['ipayment_cc_owner']);
 
       if ($result = $osC_CreditCard->isValid() !== true) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('credit_card_number_error'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&ipayment_cc_owner=' . $osC_CreditCard->getOwner() . '&ipayment_cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&ipayment_cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
       }

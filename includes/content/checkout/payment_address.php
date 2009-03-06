@@ -75,48 +75,48 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack;
+      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_MessageStack;
 
 // process a new billing address
       if (($osC_Customer->hasDefaultAddress() === false) || (!empty($_POST['firstname']) && !empty($_POST['lastname']) && !empty($_POST['street_address'])) ) {
         if (ACCOUNT_GENDER > 0) {
           if (!isset($_POST['gender']) || (($_POST['gender'] != 'm') && ($_POST['gender'] != 'f'))) {
-            $messageStack->add('checkout_address', $osC_Language->get('field_customer_gender_error'));
+            $osC_MessageStack->add('checkout_address', $osC_Language->get('field_customer_gender_error'));
           }
         }
 
         if (!isset($_POST['firstname']) || (strlen(trim($_POST['firstname'])) < ACCOUNT_FIRST_NAME)) {
-          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
+          $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_first_name_error'), ACCOUNT_FIRST_NAME));
         }
 
         if (!isset($_POST['lastname']) || (strlen(trim($_POST['lastname'])) < ACCOUNT_LAST_NAME)) {
-          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
+          $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_last_name_error'), ACCOUNT_LAST_NAME));
         }
 
         if (ACCOUNT_COMPANY > 0) {
           if (!isset($_POST['company']) || (strlen(trim($_POST['company'])) < ACCOUNT_COMPANY)) {
-            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_company_error'), ACCOUNT_COMPANY));
+            $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_company_error'), ACCOUNT_COMPANY));
           }
         }
 
         if (!isset($_POST['street_address']) || (strlen(trim($_POST['street_address'])) < ACCOUNT_STREET_ADDRESS)) {
-          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_street_address_error'), ACCOUNT_STREET_ADDRESS));
+          $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_street_address_error'), ACCOUNT_STREET_ADDRESS));
         }
 
         if (ACCOUNT_SUBURB > 0) {
           if (!isset($_POST['suburb']) || (strlen(trim($_POST['suburb'])) < ACCOUNT_SUBURB)) {
-            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_suburb_error'), ACCOUNT_SUBURB));
+            $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_suburb_error'), ACCOUNT_SUBURB));
           }
         }
 
         if (ACCOUNT_POST_CODE > 0) {
           if (!isset($_POST['postcode']) || (strlen(trim($_POST['postcode'])) < ACCOUNT_POST_CODE)) {
-            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
+            $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_post_code_error'), ACCOUNT_POST_CODE));
           }
         }
 
         if (!isset($_POST['city']) || (strlen(trim($_POST['city'])) < ACCOUNT_CITY)) {
-          $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_city_error'), ACCOUNT_CITY));
+          $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_city_error'), ACCOUNT_CITY));
         }
 
         if (ACCOUNT_STATE > 0) {
@@ -150,35 +150,35 @@
               if ($Qzone->numberOfRows() === 1) {
                 $zone_id = $Qzone->valueInt('zone_id');
               } else {
-                $messageStack->add('checkout_address', $osC_Language->get('field_customer_state_select_pull_down_error'));
+                $osC_MessageStack->add('checkout_address', $osC_Language->get('field_customer_state_select_pull_down_error'));
               }
             }
 
             $Qzone->freeResult();
           } else {
             if (strlen(trim($_POST['state'])) < ACCOUNT_STATE) {
-              $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_state_error'), ACCOUNT_STATE));
+              $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_state_error'), ACCOUNT_STATE));
             }
           }
         }
 
         if ( (is_numeric($_POST['country']) === false) || ($_POST['country'] < 1) ) {
-          $messageStack->add('checkout_address', $osC_Language->get('field_customer_country_error'));
+          $osC_MessageStack->add('checkout_address', $osC_Language->get('field_customer_country_error'));
         }
 
         if (ACCOUNT_TELEPHONE > 0) {
           if (!isset($_POST['telephone']) || (strlen(trim($_POST['telephone'])) < ACCOUNT_TELEPHONE)) {
-            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE));
+            $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_telephone_number_error'), ACCOUNT_TELEPHONE));
           }
         }
 
         if (ACCOUNT_FAX > 0) {
           if (!isset($_POST['fax']) || (strlen(trim($_POST['fax'])) < ACCOUNT_FAX)) {
-            $messageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_fax_number_error'), ACCOUNT_FAX));
+            $osC_MessageStack->add('checkout_address', sprintf($osC_Language->get('field_customer_fax_number_error'), ACCOUNT_FAX));
           }
         }
 
-        if ($messageStack->size('checkout_address') === 0) {
+        if ($osC_MessageStack->size('checkout_address') === 0) {
           $Qab = $osC_Database->query('insert into :table_address_book (customers_id, entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:customers_id, :entry_gender, :entry_company, :entry_firstname, :entry_lastname, :entry_street_address, :entry_suburb, :entry_postcode, :entry_city, :entry_state, :entry_country_id, :entry_zone_id, :entry_telephone, :entry_fax)');
           $Qab->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
           $Qab->bindInt(':customers_id', $osC_Customer->getID());
@@ -217,7 +217,7 @@
 
             osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
           } else {
-            $messageStack->add('checkout_address', 'Error inserting into address book table.');
+            $osC_MessageStack->add('checkout_address', 'Error inserting into address book table.');
           }
         }
 // process the selected billing destination

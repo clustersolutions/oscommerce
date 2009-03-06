@@ -163,7 +163,7 @@
     }
 
     function process() {
-      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Database, $osC_Customer, $osC_Currencies, $osC_ShoppingCart, $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $this->_verifyData();
 
@@ -256,14 +256,14 @@
       } else {
         osC_Order::remove($this->_order_id);
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
       }
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack, $osC_ShoppingCart;
+      global $osC_Language, $osC_MessageStack, $osC_ShoppingCart;
 
       $_POST['wirecard_eft_owner_first'] = trim($_POST['wirecard_eft_owner_first']);
       $_POST['wirecard_eft_owner_last'] = trim($_POST['wirecard_eft_owner_last']);
@@ -276,7 +276,7 @@
       }
 
       if (empty($_POST['wirecard_eft_owner_first']) || empty($_POST['wirecard_eft_owner_last']) || empty($_POST['wirecard_eft_account']) || (strlen($_POST['wirecard_eft_account']) < 3) || empty($_POST['wirecard_eft_bank']) || (strlen($_POST['wirecard_eft_bank']) !== 8) || (in_array($_POST['wirecard_eft_account_type'], array('C', 'S')) === false)) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_wirecard_eft_error_general'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_wirecard_eft_error_general'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&wirecard_eft_owner_first=' . $_POST['wirecard_eft_owner_first'] . '&wirecard_eft_owner_last=' . $_POST['wirecard_eft_owner_last'] . '&wirecard_eft_account_type=' . $_POST['wirecard_eft_account_type'] . '&wirecard_eft_bank=' . $_POST['wirecard_eft_bank'] . '&wirecard_eft_check_number=' . $_POST['wirecard_eft_check_number'] . (($osC_ShoppingCart->getBillingAddress('country_iso_code_2') == 'IT') ? '&wirecard_eft_id_number=' . $_POST['wirecard_eft_id_number'] : ''), 'SSL'));
       }

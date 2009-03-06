@@ -14,7 +14,7 @@
 
   class osC_Services_simple_counter {
     function start() {
-      global $osC_Database, $messageStack;
+      global $osC_Database, $osC_MessageStack;
 
       $Qcounter = $osC_Database->query('select startdate, counter from :table_counter');
       $Qcounter->bindTable(':table_counter', TABLE_COUNTER);

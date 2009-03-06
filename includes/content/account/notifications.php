@@ -73,7 +73,7 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Language, $osC_Customer, $Qglobal;
+      global $osC_MessageStack, $osC_Database, $osC_Language, $osC_Customer, $Qglobal;
 
       $updated = false;
 
@@ -142,7 +142,7 @@
       }
 
       if ($updated === true) {
-        $messageStack->add_session('account', $osC_Language->get('success_notifications_updated'), 'success');
+        $osC_MessageStack->add('account', $osC_Language->get('success_notifications_updated'), 'success');
       }
 
       osc_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));

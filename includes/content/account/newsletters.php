@@ -47,7 +47,7 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Language, $osC_Customer, $Qnewsletter;
+      global $osC_MessageStack, $osC_Database, $osC_Language, $osC_Customer, $Qnewsletter;
 
       if (isset($_POST['newsletter_general']) && is_numeric($_POST['newsletter_general'])) {
         $newsletter_general = $_POST['newsletter_general'];
@@ -65,7 +65,7 @@
         $Qupdate->execute();
 
         if ($Qupdate->affectedRows() === 1) {
-          $messageStack->add_session('account', $osC_Language->get('success_newsletter_updated'), 'success');
+          $osC_MessageStack->add('account', $osC_Language->get('success_newsletter_updated'), 'success');
         }
       }
 

@@ -73,25 +73,25 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Language, $messageStack, $osC_Product;
+      global $osC_Language, $osC_MessageStack, $osC_Product;
 
       if (empty($_POST['from_name'])) {
-        $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_customers_name_empty'));
+        $osC_MessageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_customers_name_empty'));
       }
 
       if (!osc_validate_email_address($_POST['from_email_address'])) {
-        $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_customers_email_address'));
+        $osC_MessageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_customers_email_address'));
       }
 
       if (empty($_POST['to_name'])) {
-        $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_friends_name_empty'));
+        $osC_MessageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_friends_name_empty'));
       }
 
       if (!osc_validate_email_address($_POST['to_email_address'])) {
-        $messageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_friends_email_address'));
+        $osC_MessageStack->add('tell_a_friend', $osC_Language->get('error_tell_a_friend_invalid_friends_email_address'));
       }
 
-      if ($messageStack->size('tell_a_friend') < 1) {
+      if ($osC_MessageStack->size('tell_a_friend') < 1) {
         $email_subject = sprintf($osC_Language->get('email_tell_a_friend_subject'), osc_sanitize_string($_POST['from_name']), STORE_NAME);
         $email_body = sprintf($osC_Language->get('email_tell_a_friend_intro'), osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['from_name']), $osC_Product->getTitle(), STORE_NAME) . "\n\n";
 
@@ -104,7 +104,7 @@
 
         osc_email(osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, osc_sanitize_string($_POST['from_name']), osc_sanitize_string($_POST['from_email_address']));
 
-        $messageStack->add_session('header', sprintf($osC_Language->get('success_tell_a_friend_email_sent'), $osC_Product->getTitle(), osc_output_string_protected($_POST['to_name'])), 'success');
+        $osC_MessageStack->add('header', sprintf($osC_Language->get('success_tell_a_friend_email_sent'), $osC_Product->getTitle(), osc_output_string_protected($_POST['to_name'])), 'success');
 
         osc_redirect(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getID()));
       }

@@ -20,8 +20,8 @@
 <div style="clear: both;"></div>
 
 <?php
-  if ($messageStack->size('reviews') > 0) {
-    echo $messageStack->output('reviews');
+  if ($osC_MessageStack->size('reviews') > 0) {
+    echo $osC_MessageStack->get('reviews');
   }
 ?>
 

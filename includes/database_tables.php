@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -44,6 +44,7 @@
   define('TABLE_ORDERS_TOTAL', DB_TABLE_PREFIX . 'orders_total');
   define('TABLE_ORDERS_TRANSACTIONS_HISTORY', DB_TABLE_PREFIX . 'orders_transactions_history');
   define('TABLE_ORDERS_TRANSACTIONS_STATUS', DB_TABLE_PREFIX . 'orders_transactions_status');
+  define('TABLE_PRODUCT_ATTRIBUTES', DB_TABLE_PREFIX . 'product_attributes');
   define('TABLE_PRODUCTS', DB_TABLE_PREFIX . 'products');
   define('TABLE_PRODUCTS_DESCRIPTION', DB_TABLE_PREFIX . 'products_description');
   define('TABLE_PRODUCTS_IMAGES', DB_TABLE_PREFIX . 'products_images');
@@ -55,6 +56,7 @@
   define('TABLE_PRODUCTS_VARIANTS_VALUES', DB_TABLE_PREFIX . 'products_variants_values');
   define('TABLE_REVIEWS', DB_TABLE_PREFIX . 'reviews');
   define('TABLE_SESSIONS', DB_TABLE_PREFIX . 'sessions');
+  define('TABLE_SHIPPING_AVAILABILITY', DB_TABLE_PREFIX . 'shipping_availability');
   define('TABLE_SHOPPING_CARTS', DB_TABLE_PREFIX . 'shopping_carts');
   define('TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES', DB_TABLE_PREFIX . 'shopping_carts_custom_variants_values');
   define('TABLE_SPECIALS', DB_TABLE_PREFIX . 'specials');

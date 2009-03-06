@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -22,73 +22,73 @@
  * Holds the template name value
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_template;
+    protected $_template;
 
 /**
  * Holds the template ID value
  *
  * @var int
- * @access private
+ * @access protected
  */
 
-    var $_template_id;
+    protected $_template_id;
 
 /**
  * Holds the title of the page module
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_module;
+    protected $_module;
 
 /**
  * Holds the group name of the page
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_group;
+    protected $_group;
 
 /**
  * Holds the title of the page
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_page_title;
+    protected $_page_title;
 
 /**
  * Holds the image of the page
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_page_image;
+    protected $_page_image;
 
 /**
  * Holds the filename of the content to be added to the page
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_page_contents;
+    protected $_page_contents;
 
 /**
  * Holds the meta tags of the page
  *
  * @var array
- * @access private
+ * @access protected
  */
 
-    var $_page_tags = array('generator' => array('osCommerce, Open Source E-Commerce Solutions'));
+    protected $_page_tags = array('generator' => array('osCommerce, Open Source E-Commerce Solutions'));
 
 /**
  * Holds javascript filenames to be included in the page
@@ -96,10 +96,10 @@
  * The javascript files must be plain javascript files without any PHP logic, and are linked to from the page
  *
  * @var array
- * @access private
+ * @access protected
  */
 
-    var $_javascript_filenames = array('includes/general.js');
+    protected $_javascript_filenames = array('includes/general.js');
 
 /**
  * Holds javascript PHP filenames to be included in the page
@@ -107,10 +107,10 @@
  * The javascript PHP filenames can consist of PHP logic to produce valid javascript syntax, and is embedded in the page
  *
  * @var array
- * @access private
+ * @access protected
  */
 
-    var $_javascript_php_filenames = array();
+    protected $_javascript_php_filenames = array();
 
 /**
  * Holds blocks of javascript syntax to embedd into the page
@@ -118,55 +118,55 @@
  * Each block must contain its relevant <script> and </script> tags
  *
  * @var array
- * @access private
+ * @access protected
  */
 
-    var $_javascript_blocks = array();
+    protected $_javascript_blocks = array();
 
 /**
  * Defines if the requested page has a header
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_has_header = true;
+    protected $_has_header = true;
 
 /**
  * Defines if the requested page has a footer
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_has_footer = true;
+    protected $_has_footer = true;
 
 /**
  * Defines if the requested page has box modules
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_has_box_modules = true;
+    protected $_has_box_modules = true;
 
 /**
  * Defines if the requested page has content modules
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_has_content_modules = true;
+    protected $_has_content_modules = true;
 
 /**
  * Defines if the requested page should display any debug messages
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_show_debug_messages = true;
+    protected $_show_debug_messages = true;
 
 /**
  * Setup the template class with the requested page module
@@ -273,7 +273,7 @@
  */
 
     function getPageTitle() {
-      return $this->_page_title;
+      return osc_output_string_protected($this->_page_title);
     }
 
 /**

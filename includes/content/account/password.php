@@ -45,27 +45,27 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Language;
+      global $osC_MessageStack, $osC_Database, $osC_Language;
 
       if (!isset($_POST['password_current']) || (strlen(trim($_POST['password_current'])) < ACCOUNT_PASSWORD)) {
-        $messageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_current_error'), ACCOUNT_PASSWORD));
+        $osC_MessageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_current_error'), ACCOUNT_PASSWORD));
       } elseif (!isset($_POST['password_new']) || (strlen(trim($_POST['password_new'])) < ACCOUNT_PASSWORD)) {
-        $messageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
+        $osC_MessageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
       } elseif (!isset($_POST['password_confirmation']) || (trim($_POST['password_new']) != trim($_POST['password_confirmation']))) {
-        $messageStack->add('account_password', $osC_Language->get('field_customer_password_new_mismatch_with_confirmation_error'));
+        $osC_MessageStack->add('account_password', $osC_Language->get('field_customer_password_new_mismatch_with_confirmation_error'));
       }
 
-      if ($messageStack->size('account_password') === 0) {
+      if ($osC_MessageStack->size('account_password') === 0) {
         if (osC_Account::checkPassword(trim($_POST['password_current']))) {
           if (osC_Account::savePassword(trim($_POST['password_new']))) {
-            $messageStack->add_session('account', $osC_Language->get('success_password_updated'), 'success');
+            $osC_MessageStack->add('account', $osC_Language->get('success_password_updated'), 'success');
 
             osc_redirect(osc_href_link(FILENAME_ACCOUNT, null, 'SSL'));
           } else {
-            $messageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
+            $osC_MessageStack->add('account_password', sprintf($osC_Language->get('field_customer_password_new_error'), ACCOUNT_PASSWORD));
           }
         } else {
-          $messageStack->add('account_password', $osC_Language->get('error_current_password_not_matching'));
+          $osC_MessageStack->add('account_password', $osC_Language->get('error_current_password_not_matching'));
         }
       }
     }

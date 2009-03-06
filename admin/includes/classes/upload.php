@@ -62,8 +62,8 @@
           if (!in_array(strtolower(substr($file['name'], strrpos($file['name'], '.')+1)), $this->extensions)) {
             if ($this->message_location == 'direct') {
               $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
-            } else {
-              $osC_MessageStack->add_session('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
+            } else { // HPDL
+              $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
             }
 
             return false;
@@ -82,8 +82,8 @@
       } else {
         if ($this->message_location == 'direct') {
           $osC_MessageStack->add('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
-        } else {
-          $osC_MessageStack->add_session('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
+        } else { // HPDL
+          $osC_MessageStack->add('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
         }
 
         return false;
@@ -100,16 +100,16 @@
 
         if ($this->message_location == 'direct') {
           $osC_MessageStack->add('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
-        } else {
-          $osC_MessageStack->add_session('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
+        } else { // HPDL
+          $osC_MessageStack->add('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
         }
 
         return true;
       } else {
         if ($this->message_location == 'direct') {
           $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
-        } else {
-          $osC_MessageStack->add_session('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
+        } else { // HPDL
+          $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
         }
 
         return false;
@@ -155,14 +155,14 @@
         if (is_dir($this->destination)) {
           if ($this->message_location == 'direct') {
             $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
-          } else {
-            $osC_MessageStack->add_session('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
+          } else { // HPDL
+            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
           }
         } else {
           if ($this->message_location == 'direct') {
             $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
-          } else {
-            $osC_MessageStack->add_session('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
+          } else { // HPDL
+            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
           }
         }
 

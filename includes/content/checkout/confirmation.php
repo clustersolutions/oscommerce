@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Checkout_Confirmation() {
-      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $messageStack, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
+      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_MessageStack, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
 
       if ($osC_Customer->isLoggedOn() === false) {
         $osC_NavigationHistory->setSnapshot();
@@ -60,7 +60,7 @@
 
       if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
         if (!isset($_POST['conditions']) || ($_POST['conditions'] != '1')) {
-          $messageStack->add_session('checkout_payment', $osC_Language->get('error_conditions_not_accepted'), 'error');
+          $osC_MessageStack->add('checkout_payment', $osC_Language->get('error_conditions_not_accepted'), 'error');
         }
       }
 
@@ -73,10 +73,10 @@
       }
 
       if ( $osC_Payment->hasActive() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->isEnabled() === false))) ) {
-        $messageStack->add_session('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
       }
 
-      if ($messageStack->size('checkout_payment') > 0) {
+      if ($osC_MessageStack->size('checkout_payment') > 0) {
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 

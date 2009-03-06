@@ -1,3 +1,16 @@
+/*
+  $Id$
+
+  osCommerce, Open Source E-Commerce Solutions
+  http://www.oscommerce.com
+
+  Copyright (c) 2009 osCommerce
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
 function rowOverEffect(object) {
   if (object.className == 'deactivatedRow') {
     object.className = 'mouseOverDeactivatedRow';
@@ -227,3 +240,26 @@ function getPageSize() {
 
   return arrayPageSize;
 }
+
+
+$(document).ready(function() {
+  $('.fieldTitleAsDefault').focus(function(srcc) {
+    if ( $(this).val() == $(this)[0].title ) {
+      $(this).removeClass('fieldDefaultText');
+      $(this).val('');
+    }
+  });
+
+  $('.fieldTitleAsDefault').blur(function() {
+    if ( $(this).val() == '') {
+      $(this).addClass('fieldDefaultText');
+      $(this).val($(this)[0].title);
+    }
+  });
+
+  $('.fieldTitleAsDefault').blur();        
+});
+
+function htmlSpecialChars(string) {
+  return $('<span>').text(string).html();
+};

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -77,16 +77,8 @@
       if ( SERVICE_SESSION_EXPIRATION_TIME > 0 ) {
         ini_set('session.gc_maxlifetime', SERVICE_SESSION_EXPIRATION_TIME * 60);
       }
-    }
 
-/**
- * Destructor, closes the session
- *
- * @access public
- */
-
-    public function __destruct() {
-      $this->close();
+      register_shutdown_function(array($this, 'close'));
     }
 
 /**

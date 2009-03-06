@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('search') > 0) {
-    echo $messageStack->output('search');
+  if ($osC_MessageStack->size('search') > 0) {
+    echo $osC_MessageStack->get('search');
   }
 ?>
 

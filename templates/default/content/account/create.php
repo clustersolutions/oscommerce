@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($messageStack->size('create') > 0) {
-    echo $messageStack->output('create');
+  if ($osC_MessageStack->size('create') > 0) {
+    echo $osC_MessageStack->get('create');
   }
 ?>
 

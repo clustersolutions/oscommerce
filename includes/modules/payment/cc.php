@@ -162,7 +162,7 @@
     }
 
     function process() {
-      global $osC_Database, $messageStack, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart, $osC_CreditCard;
+      global $osC_Database, $osC_MessageStack, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart, $osC_CreditCard;
 
       $this->_verifyData();
 
@@ -200,7 +200,7 @@
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack, $osC_CreditCard;
+      global $osC_Language, $osC_MessageStack, $osC_CreditCard;
 
       $osC_CreditCard = new osC_CreditCard($_POST['cc_number'], $_POST['cc_expires_month'], $_POST['cc_expires_year']);
       $osC_CreditCard->setOwner($_POST['cc_owner']);
@@ -226,7 +226,7 @@
             break;
         }
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&cc_owner=' . $osC_CreditCard->getOwner() . '&cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
       }

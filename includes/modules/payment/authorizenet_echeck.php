@@ -204,7 +204,7 @@
     }
 
     function process() {
-      global $osC_Database, $messageStack, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart;
+      global $osC_Database, $osC_MessageStack, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart;
 
       $this->_verifyData();
 
@@ -322,14 +322,14 @@
       } else {
         osC_Order::remove($this->_order_id);
 
-        $messageStack->add_session('checkout_payment', $error, 'error');
+        $osC_MessageStack->add('checkout_payment', $error, 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&authorizenet_echeck_owner=' . $_POST['authorizenet_echeck_owner'] . '&authorizenet_echeck_account_type=' . $_POST['authorizenet_echeck_account_type'] . '&authorizenet_echeck_bank_name=' . $_POST['authorizenet_echeck_bank_name'] . '&authorizenet_echeck_routing_code=' . $_POST['authorizenet_echeck_routing_code'], 'SSL'));
       }
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       $error = false;
 
@@ -341,11 +341,11 @@
       if (empty($_POST['authorizenet_echeck_owner']) || empty($_POST['authorizenet_echeck_account_number']) || empty($_POST['authorizenet_echeck_bank_name']) || (in_array($_POST['authorizenet_echeck_account_type'], array('CHECKING', 'BUSINESSCHECKING', 'SAVINGS')) === false)) {
         $error = true;
 
-        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_authorizenet_echeck_error_general'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_authorizenet_echeck_error_general'), 'error');
       } elseif (strlen($_POST['authorizenet_echeck_routing_code']) !== 9) {
         $error = true;
 
-        $messageStack->add_session('checkout_payment', sprintf($osC_Language->get('payment_authorizenet_echeck_error_routing_code'), 9), 'error');
+        $osC_MessageStack->add('checkout_payment', sprintf($osC_Language->get('payment_authorizenet_echeck_error_routing_code'), 9), 'error');
       }
 
       if (($error === false) && (MODULE_PAYMENT_AUTHORIZENET_ECHECK_VERIFY_WITH_WF_SS == '1')) {
@@ -354,11 +354,11 @@
         if (in_array($_POST['authorizenet_echeck_org_type'], array('I', 'B')) === false) {
           $error = true;
 
-          $messageStack->add_session('checkout_payment', $osC_Language->get('payment_authorizenet_echeck_error_general'), 'error');
+          $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_authorizenet_echeck_error_general'), 'error');
         } elseif (strlen($_POST['authorizenet_echeck_tax_id']) !== 9) {
           $error = true;
 
-          $messageStack->add_session('checkout_payment', sprintf($osC_Language->get('payment_authorizenet_echeck_error_tax_id'), 9), 'error');
+          $osC_MessageStack->add('checkout_payment', sprintf($osC_Language->get('payment_authorizenet_echeck_error_tax_id'), 9), 'error');
         }
       }
 

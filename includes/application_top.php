@@ -59,7 +59,7 @@
 
 // initialize the message stack for output messages
   require('includes/classes/message_stack.php');
-  $messageStack = new messageStack();
+  $osC_MessageStack = new osC_MessageStack();
 
 // initialize the cache class
   require('includes/classes/cache.php');

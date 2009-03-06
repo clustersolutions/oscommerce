@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -29,13 +29,38 @@
   }
 ?>
 
-<title><?php echo $osC_Language->get('administration_title'); ?></title>
-
-<link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css">
+<title><?php echo $osC_Language->get('administration_title') . ': ' . $osC_Template->getPageTitle(); ?></title>
 
 <meta name="Generator" value="osCommerce" />
 
+<script language="javascript" src="../ext/jquery/jquery-1.3.2.min.js"></script>
+<script language="javascript" src="../ext/jquery/jquery.cookie.js"></script>
+<script language="javascript" src="../ext/jquery/jquery.json-1.3.min.js"></script>
+<script language="javascript" src="../ext/jquery/jquery.tinysort.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="../ext/jquery/ui/themes/base/ui.all.css" />
+<script language="javascript" src="../ext/jquery/ui/minified/ui.core.min.js"></script>
+
+<script language="javascript" src="../ext/alexei/sprintf.js"></script>
+
 <script language="javascript" src="includes/general.js"></script>
+<script language="javascript" src="js/datatable.js"></script>
+
+<link rel="stylesheet" type="text/css" href="templates/default/stylesheet.css" />
+
+<script language="javascript"><!--
+  var pageURL = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()); ?>';
+  var pageModule = '<?php echo $osC_Template->getModule(); ?>';
+
+  var batchSize = parseInt('<?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>');
+  var batchTotalPagesText = '<?php echo addslashes($osC_Language->get('batch_results_number_of_entries')); ?>';
+  var batchCurrentPageset = '<?php echo addslashes($osC_Language->get('result_set_current_page')); ?>';
+  var batchIconNavigationBack = '<?php echo osc_icon('nav_back.png'); ?>';
+  var batchIconNavigationBackGrey = '<?php echo osc_icon('nav_back_grey.png'); ?>';
+  var batchIconNavigationForward = '<?php echo osc_icon('nav_forward.png'); ?>';
+  var batchIconNavigationForwardGrey = '<?php echo osc_icon('nav_forward_grey.png'); ?>';
+  var batchIconProgress = '<?php echo osc_icon('progress_ani.gif'); ?>';
+//--></script>
 
 </head>
 
@@ -48,7 +73,7 @@
 ?>
 
 <div class="pageContents">
-  <?php require('templates/pages/' . $osC_Template->getModule() . '/' . $osC_Template->getPageContentsFilename()); ?>
+  <?php require('includes/applications/' . $osC_Template->getModule() . '/pages/' . $osC_Template->getPageContentsFilename()); ?>
 </div>
 
 <?php

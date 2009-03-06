@@ -109,7 +109,7 @@
 /* Private methods */
 
     function _process($id) {
-      global $osC_Language, $messageStack, $osC_Customer;
+      global $osC_Language, $osC_MessageStack, $osC_Customer;
 
       $data = array('products_id' => $id);
 
@@ -122,26 +122,26 @@
       }
 
       if (strlen(trim($_POST['review'])) < REVIEW_TEXT_MIN_LENGTH) {
-        $messageStack->add('reviews', sprintf($osC_Language->get('js_review_text'), REVIEW_TEXT_MIN_LENGTH));
+        $osC_MessageStack->add('reviews', sprintf($osC_Language->get('js_review_text'), REVIEW_TEXT_MIN_LENGTH));
       } else {
         $data['review'] = $_POST['review'];
       }
 
       if (($_POST['rating'] < 1) || ($_POST['rating'] > 5)) {
-        $messageStack->add('reviews', $osC_Language->get('js_review_rating'));
+        $osC_MessageStack->add('reviews', $osC_Language->get('js_review_rating'));
       } else {
         $data['rating'] = $_POST['rating'];
       }
 
-      if ($messageStack->size('reviews') < 1) {
+      if ($osC_MessageStack->size('reviews') < 1) {
         if ($osC_Reviews->is_moderated === true) {
           $data['status'] = '0';
 
-          $messageStack->add_session('reviews', $osC_Language->get('success_review_moderation'), 'success');
+          $osC_MessageStack->add('reviews', $osC_Language->get('success_review_moderation'), 'success');
         } else {
           $data['status'] = '1';
 
-          $messageStack->add_session('reviews', $osC_Language->get('success_review_new'), 'success');
+          $osC_MessageStack->add('reviews', $osC_Language->get('success_review_new'), 'success');
         }
 
         osC_Reviews::saveEntry($data);

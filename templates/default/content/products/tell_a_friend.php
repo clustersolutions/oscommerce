@@ -18,8 +18,8 @@
 <h1><?php echo $osC_Template->getPageTitle() . ($osC_Product->hasModel() ? '<br /><span class="smallText">' . $osC_Product->getModel() . '</span>' : ''); ?></h1>
 
 <?php
-  if ($messageStack->size('tell_a_friend') > 0) {
-    echo $messageStack->output('tell_a_friend');
+  if ($osC_MessageStack->size('tell_a_friend') > 0) {
+    echo $osC_MessageStack->get('tell_a_friend');
   }
 ?>
 

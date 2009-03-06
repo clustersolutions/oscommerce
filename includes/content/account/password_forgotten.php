@@ -45,7 +45,7 @@
 /* Private methods */
 
     function _process() {
-      global $messageStack, $osC_Database, $osC_Language;
+      global $osC_MessageStack, $osC_Database, $osC_Language;
 
       $Qcheck = $osC_Database->query('select customers_id, customers_firstname, customers_lastname, customers_gender, customers_email_address, customers_password from :table_customers where customers_email_address = :customers_email_address limit 1');
       $Qcheck->bindTable(':table_customers', TABLE_CUSTOMERS);
@@ -70,12 +70,12 @@
 
           osc_email($Qcheck->valueProtected('customers_firstname') . ' ' . $Qcheck->valueProtected('customers_lastname'), $Qcheck->valueProtected('customers_email_address'), sprintf($osC_Language->get('email_password_reminder_subject'), STORE_NAME), $email_text, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
-          $messageStack->add_session('login', $osC_Language->get('success_password_forgotten_sent'), 'success');
+          $osC_MessageStack->add('login', $osC_Language->get('success_password_forgotten_sent'), 'success');
         }
 
         osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
       } else {
-        $messageStack->add('password_forgotten', $osC_Language->get('error_password_forgotten_no_email_address_found'));
+        $osC_MessageStack->add('password_forgotten', $osC_Language->get('error_password_forgotten_no_email_address_found'));
       }
     }
   }

@@ -94,7 +94,7 @@
     }
 
     function process() {
-      global $osC_Database, $osC_Language, $messageStack;
+      global $osC_Database, $osC_Language, $osC_MessageStack;
 
       $this->_verifyData();
 
@@ -162,14 +162,14 @@
       } else {
         osC_Order::remove($this->_order_id);
 
-        $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
+        $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
     }
 
     function _verifyData() {
-      global $osC_Language, $messageStack;
+      global $osC_Language, $osC_MessageStack;
 
       if (isset($_GET['DATA']) && (empty($_GET['DATA']) === false) && isset($_GET['SIGNATURE']) && (empty($_GET['SIGNATURE']) === false)) {
         if (ereg("^[a-zA-Z0-9]+$", $_GET['SIGNATURE']) && preg_match('/^<IDP\s+([a-zA-Z0-9]+="[a-zA-Z0-9().\s-]*"\s*)*\/>$/', $_GET['DATA'])) {
@@ -177,7 +177,7 @@
         }
       }
 
-      $messageStack->add_session('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
+      $osC_MessageStack->add('checkout_payment', $osC_Language->get('payment_saferpay_vt_error_general'), 'error');
 
       osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
     }
