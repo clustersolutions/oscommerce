@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -28,6 +28,9 @@
 
 // set the level of error reporting
   error_reporting(E_ALL);
+
+  ini_set('log_errors', true);
+  ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
 
 // redirect to the installation module if DB_SERVER is empty
   if (strlen(DB_SERVER) < 1) {

@@ -31,6 +31,10 @@
       if ($this->link = @mysqli_connect($this->server, $this->username, $this->password)) {
         $this->setConnected(true);
 
+        if ( version_compare(mysqli_get_server_info($this->link), '5.0.2') >= 0 ) {
+          $this->simpleQuery('set session sql_mode="STRICT_ALL_TABLES"');
+        }
+
         return true;
       } else {
         $this->setError(mysqli_connect_error(), mysqli_connect_errno());
@@ -115,6 +119,14 @@
           $this->error = false;
           $this->error_number = null;
           $this->error_query = null;
+
+          if ( mysqli_warning_count($this->link) > 0 ) {
+            $warning_query = @mysqli_query($this->link, 'show warnings');
+            while ( $warning = mysqli_fetch_row($warning_query) ) {
+              trigger_error(sprintf('[MYSQL] %s (%d): %s [QUERY] ' . $query, $warning[0], $warning[1], $warning[2]), E_USER_WARNING);
+            }
+            mysqli_free_result($warning_query);
+          }
 
           return $resource;
         } else {

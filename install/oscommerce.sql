@@ -697,7 +697,7 @@ CREATE TABLE osc_zones (
   zone_id int NOT NULL auto_increment,
   zone_country_id int NOT NULL,
   zone_code varchar(32) NOT NULL,
-  zone_name varchar(64) NOT NULL,
+  zone_name varchar(255) NOT NULL,
   PRIMARY KEY (zone_id)
 );
 

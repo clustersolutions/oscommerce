@@ -31,6 +31,9 @@
 // set the level of error reporting to E_ALL
   error_reporting(E_ALL);
 
+  ini_set('log_errors', true);
+  ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
+
 // Define the project version
   define('PROJECT_VERSION', 'osCommerce 3.0a4');
 
