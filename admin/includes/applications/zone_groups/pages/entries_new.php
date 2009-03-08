@@ -15,7 +15,7 @@
   $countries_array = array(array('id' => '',
                                  'text' => $osC_Language->get('all_countries')));
 
-  foreach (osC_Address::getCountries() as $country) {
+  foreach ( osC_Address::getCountries() as $country ) {
     $countries_array[] = array('id' => $country['id'],
                                'text' => $country['name']);
   }
@@ -51,7 +51,7 @@ function update_zone(theForm) {
 
 <div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_zone_entry'); ?></div>
 <div class="infoBoxContent">
-  <form name="zeNew" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=entrySave'); ?>" method="post">
+  <form name="zeNew" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=entry_save'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_new_zone_entry'); ?></p>
 
@@ -60,7 +60,7 @@ function update_zone(theForm) {
     <div><label for="zone_id"><?php echo $osC_Language->get('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array); ?></div>
   </fieldset>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>

@@ -30,58 +30,13 @@
 
       $this->_page_title = $osC_Language->get('heading_title');
 
-      if (!isset($_GET['action'])) {
-        $_GET['action'] = '';
-      }
-
-      if (!isset($_GET['page']) || (isset($_GET['page']) && !is_numeric($_GET['page']))) {
-        $_GET['page'] = 1;
-      }
-
       if (!empty($_GET[$this->_module]) && is_numeric($_GET[$this->_module])) {
         $this->_page_contents = 'entries.php';
-        $this->_page_title .= ': ' . osC_TaxClasses_Admin::getData($_GET[$this->_module], 'tax_class_title');
+        $this->_page_title .= ': ' . osC_TaxClasses_Admin::get($_GET[$this->_module], 'tax_class_title');
       }
 
       if (!empty($_GET['action'])) {
         switch ($_GET['action']) {
-          case 'save':
-            if ( isset($_GET['tcID']) && is_numeric($_GET['tcID']) ) {
-              $this->_page_contents = 'edit.php';
-            } else {
-              $this->_page_contents = 'new.php';
-            }
-
-            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              $data = array('title' => $_POST['tax_class_title'],
-                            'description' => $_POST['tax_class_description']);
-
-              if ( osC_TaxClasses_Admin::save((isset($_GET['tcID']) && is_numeric($_GET['tcID']) ? $_GET['tcID'] : null), $data) ) {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-              } else {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-              }
-
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
-            }
-
-            break;
-
-          case 'delete':
-            $this->_page_contents = 'delete.php';
-
-            if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              if ( osC_TaxClasses_Admin::delete($_GET['tcID']) ) {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-              } else {
-                $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-              }
-
-              osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
-            }
-
-            break;
-
           case 'entrySave':
             if ( isset($_GET['trID']) && is_numeric($_GET['trID']) ) {
               $this->_page_contents = 'entries_edit.php';
@@ -119,32 +74,6 @@
               }
 
               osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module] . '&page=' . $_GET['page']));
-            }
-
-            break;
-
-          case 'batchDelete':
-            if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
-              $this->_page_contents = 'batch_delete.php';
-
-              if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-                $error = false;
-
-                foreach ($_POST['batch'] as $id) {
-                  if ( !osC_TaxClasses_Admin::delete($id) ) {
-                    $error = true;
-                    break;
-                  }
-                }
-
-                if ( $error === false ) {
-                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
-                } else {
-                  $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
-                }
-
-                osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '&page=' . $_GET['page']));
-              }
             }
 
             break;

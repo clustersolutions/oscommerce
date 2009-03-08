@@ -21,25 +21,19 @@
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=save') . '\';" class="infoBoxButton" />'; ?></p>
+<div style="padding-bottom: 10px;">
+  <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
+  <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save') . '\';" class="infoBoxButton" />'; ?></span>
+</div>
 
-<?php
-  $Qzones = $osC_Database->query('select * from :table_geo_zones order by geo_zone_name');
-  $Qzones->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
-  $Qzones->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qzones->execute();
-?>
-
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td><?php echo $Qzones->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
-    <td align="right"><?php echo $Qzones->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
-  </tr>
-</table>
+<div style="clear: both; padding: 2px; height: 16px;">
+  <span id="batchTotalPages"></span>
+  <span id="batchPageLinks"></span>
+</div>
 
 <form name="batch" action="#" method="post">
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
+<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="zoneGroupsDataTable">
   <thead>
     <tr>
       <th><?php echo $osC_Language->get('table_heading_zone_groups'); ?></th>
@@ -50,46 +44,79 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=batch_delete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
   <tbody>
-
-<?php
-  while ($Qzones->next()) {
-    $Qentries = $osC_Database->query('select count(*) as total_entries from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id');
-    $Qentries->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
-    $Qentries->bindInt(':geo_zone_id', $Qzones->valueInt('geo_zone_id'));
-    $Qentries->execute();
-?>
-
-    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" title="<?php echo $Qzones->valueProtected('geo_zone_description'); ?>">
-      <td><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $Qzones->valueInt('geo_zone_id') . '&page=' . $_GET['page']), osc_icon('folder.png') . '&nbsp;' . $Qzones->value('geo_zone_name')); ?></td>
-      <td><?php echo $Qentries->valueInt('total_entries'); ?></td>
-      <td align="right">
-
-<?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&zID=' . $Qzones->valueInt('geo_zone_id') . '&action=delete'), osc_icon('trash.png'));
-?>
-
-      </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qzones->valueInt('geo_zone_id'), null, 'id="batch' . $Qzones->valueInt('geo_zone_id') . '"'); ?></td>
-    </tr>
-
-<?php
-  }
-?>
-
   </tbody>
 </table>
 
 </form>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
-    <td align="right"><?php echo $Qzones->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
-  </tr>
-</table>
+<div style="padding: 2px;">
+  <span id="dataTableLegend"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></span>
+  <span id="batchPullDownMenu"></span>
+</div>
+
+<script type="text/javascript"><!--
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+
+  var moduleParams = new Object();
+  moduleParams.page = 1;
+  moduleParams.search = '';
+
+  if ( $.cookie(moduleParamsCookieName) != null ) {
+    var p = $.secureEvalJSON($.cookie(moduleParamsCookieName));
+    moduleParams.page = parseInt(p.page);
+    moduleParams.search = String(p.search);
+  }
+
+  var dataTableName = 'zoneGroupsDataTable';
+  var dataTableDataURL = '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&action=getAll'); ?>';
+
+  var groupLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=GROUPID'); ?>';
+  var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
+
+  var groupEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&zID=GROUPID&action=save'); ?>';
+  var groupEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+
+  var groupDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&zID=GROUPID&action=delete'); ?>';
+  var groupDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+
+  var osC_DataTable = new osC_DataTable();
+  osC_DataTable.load();
+
+  function feedDataTable(data) {
+    var rowCounter = 0;
+
+    for ( var r in data.entries ) {
+      var record = data.entries[r];
+
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row' + parseInt(record.geo_zone_id);
+
+      $('#row' + parseInt(record.geo_zone_id)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); }).click(function(event) {
+        if (event.target.type !== 'checkbox') {
+          $(':checkbox', this).trigger('click');
+        }
+      }).css('cursor', 'pointer');
+
+      var newCell = newRow.insertCell(0);
+      newCell.innerHTML = '<a href="' + groupLink.replace('GROUPID', parseInt(record.geo_zone_id)) + '">' + groupLinkIcon + '&nbsp;' + htmlSpecialChars(record.geo_zone_name) + '</a>';
+
+      newCell = newRow.insertCell(1);
+      newCell.innerHTML = parseInt(record.total_entries);
+
+      newCell = newRow.insertCell(2);
+      newCell.innerHTML = '<a href="' + groupEditLink.replace('GROUPID', parseInt(record.geo_zone_id)) + '">' + groupEditLinkIcon + '</a>&nbsp;<a href="' + groupDeleteLink.replace('GROUPID', parseInt(record.geo_zone_id)) + '">' + groupDeleteLinkIcon + '</a>';
+      newCell.align = 'right';
+
+      newCell = newRow.insertCell(3);
+      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.geo_zone_id) + '" id="batch' + parseInt(record.geo_zone_id) + '" />';
+      newCell.align = 'center';
+
+      rowCounter++;
+    }
+  }
+//--></script>

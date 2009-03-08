@@ -13,7 +13,7 @@
 */
 
   class osC_TaxClasses_Admin {
-    public static function getData($id, $key = null) {
+    public static function get($id, $key = null) {
       global $osC_Database;
 
       $Qclasses = $osC_Database->query('select * from :table_tax_class where tax_class_id = :tax_class_id');
@@ -36,6 +36,40 @@
       } else {
         return $data[$key];
       }
+    }
+
+    public static function getAll($pageset = 1) {
+      global $osC_Database;
+
+      if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
+        $pageset = 1;
+      }
+
+      $result = array('entries' => array());
+
+      $Qclasses = $osC_Database->query('select SQL_CALC_FOUND_ROWS * from :table_tax_class order by tax_class_title');
+      $Qclasses->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+
+      if ( $pageset !== -1 ) {
+        $Qclasses->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
+      }
+
+      $Qclasses->execute();
+
+      while ( $Qclasses->next() ) {
+        $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
+        $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+        $Qrates->bindInt(':tax_class_id', $Qclasses->valueInt('tax_class_id'));
+        $Qrates->execute();
+
+        $result['entries'][] = array_merge($Qclasses->toArray(), $Qrates->toArray());
+      }
+
+      $result['total'] = $Qclasses->getBatchSize();
+
+      $Qclasses->freeResult();
+
+      return $result;
     }
 
     public static function getEntryData($id) {
@@ -156,6 +190,28 @@
       }
 
       return false;
+    }
+
+    function hasProducts($id) {
+      global $osC_Database;
+
+      $Qcheck = $osC_Database->query('select products_id from :table_products where products_tax_class_id = :products_tax_class_id limit 1');
+      $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qcheck->bindInt(':products_tax_class_id', $id);
+      $Qcheck->execute();
+
+      return ( $Qcheck->numberOfRows() === 1 );
+    }
+
+    function getNumberOFProducts($id) {
+      global $osC_Database;
+
+      $Qtotal = $osC_Database->query('select count(*) as total from :table_products where products_tax_class_id = :products_tax_class_id');
+      $Qtotal->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qtotal->bindInt(':products_tax_class_id', $id);
+      $Qtotal->execute();
+
+      return $Qtotal->valueInt('total');
     }
   }
 ?>

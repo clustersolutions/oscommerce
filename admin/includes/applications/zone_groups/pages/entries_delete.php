@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntryData($_GET['zeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntry($_GET['zeID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
@@ -25,13 +25,13 @@
 
 <div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('countries_name') . ': ' . $osC_ObjectInfo->getProtected('zone_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="zeDelete" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&zeID=' . $osC_ObjectInfo->get('association_id') . '&action=entryDelete'); ?>" method="post">
+  <form name="zeDelete" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&zeID=' . $osC_ObjectInfo->getInt('association_id') . '&action=entry_delete'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_delete_zone_entry'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->getProtected('countries_name') . ': ' . $osC_ObjectInfo->getProtected('zone_name') . '</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>
