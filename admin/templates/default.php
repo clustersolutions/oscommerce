@@ -1,6 +1,6 @@
 <?php
 /*
-  $Id$
+  $Id: default.php 1497 2007-03-29 13:40:05Z hpdl $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -60,6 +60,8 @@
   var batchIconNavigationForward = '<?php echo osc_icon('nav_forward.png'); ?>';
   var batchIconNavigationForwardGrey = '<?php echo osc_icon('nav_forward_grey.png'); ?>';
   var batchIconProgress = '<?php echo osc_icon('progress_ani.gif'); ?>';
+
+  var taxDecimalPlaces = parseInt('<?php echo TAX_DECIMAL_PLACES; ?>');
 //--></script>
 
 </head>
