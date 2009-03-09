@@ -18,7 +18,7 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) ) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>

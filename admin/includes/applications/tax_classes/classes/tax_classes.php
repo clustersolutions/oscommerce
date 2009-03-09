@@ -21,14 +21,8 @@
       $Qclasses->bindInt(':tax_class_id', $id);
       $Qclasses->execute();
 
-      $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
-      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
-      $Qrates->bindInt(':tax_class_id', $id);
-      $Qrates->execute();
+      $data = array_merge($Qclasses->toArray(), array('total_tax_rates' => self::getNumberOfTaxRates($id)));
 
-      $data = array_merge($Qclasses->toArray(), $Qrates->toArray());
-
-      $Qrates->freeResult();
       $Qclasses->freeResult();
 
       if ( empty($key) ) {
@@ -72,7 +66,7 @@
       return $result;
     }
 
-    public static function getEntryData($id) {
+    public static function getEntry($id, $key = null) {
       global $osC_Database;
 
       $Qrates = $osC_Database->query('select r.*, tc.tax_class_title, z.geo_zone_id, z.geo_zone_name from :table_tax_rates r, :table_tax_class tc, :table_geo_zones z where r.tax_rates_id = :tax_rates_id and r.tax_class_id = tc.tax_class_id and r.tax_zone_id = z.geo_zone_id');
@@ -86,7 +80,11 @@
 
       $Qrates->freeResult();
 
-      return $data;
+      if ( empty($key) ) {
+        return $data;
+      } else {
+        return $data[$key];
+      }
     }
 
     public static function save($id = null, $data) {
@@ -150,6 +148,28 @@
       return false;
     }
 
+    public static function getAllEntries($tax_class_id) {
+      global $osC_Database;
+
+      $result = array('entries' => array());
+
+      $Qrates = $osC_Database->query('select r.*, z.geo_zone_id, z.geo_zone_name from :table_tax_rates r, :table_geo_zones z where r.tax_class_id = :tax_class_id and r.tax_zone_id = z.geo_zone_id order by r.tax_priority, z.geo_zone_name');
+      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrates->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+      $Qrates->bindInt(':tax_class_id', $tax_class_id);
+      $Qrates->execute();
+
+      while ( $Qrates->next() ) {
+        $result['entries'][] = $Qrates->toArray();
+      }
+
+      $result['total'] = $Qrates->numberOfRows();
+
+      $Qrates->freeResult();
+
+      return $result;
+    }
+
     public static function saveEntry($id = null, $data) {
       global $osC_Database;
 
@@ -192,7 +212,18 @@
       return false;
     }
 
-    function hasProducts($id) {
+    public static function getNumberOfTaxRates($id) {
+      global $osC_Database;
+
+      $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
+      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
+      $Qrates->bindInt(':tax_class_id', $id);
+      $Qrates->execute();
+
+      return $Qrates->valueInt('total_tax_rates');
+    }
+
+    public static function hasProducts($id) {
       global $osC_Database;
 
       $Qcheck = $osC_Database->query('select products_id from :table_products where products_tax_class_id = :products_tax_class_id limit 1');
@@ -203,7 +234,7 @@
       return ( $Qcheck->numberOfRows() === 1 );
     }
 
-    function getNumberOFProducts($id) {
+    public static function getNumberOfProducts($id) {
       global $osC_Database;
 
       $Qtotal = $osC_Database->query('select count(*) as total from :table_products where products_tax_class_id = :products_tax_class_id');

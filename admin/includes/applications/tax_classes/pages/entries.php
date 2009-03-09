@@ -5,43 +5,35 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
-
-  $osC_Tax = new osC_Tax_Admin();
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
-<p align="right"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="infoBoxButton" /> <input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=entrySave') . '\';" class="infoBoxButton" />'; ?></p>
+<div style="padding-bottom: 10px;">
+  <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
+  <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="infoBoxButton" /> <input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=entry_save') . '\';" class="infoBoxButton" />'; ?></span>
+</div>
 
-<?php
-  $Qrates = $osC_Database->query('select r.tax_rates_id, r.tax_priority, r.tax_rate, r.tax_description, r.date_added, r.last_modified, z.geo_zone_id, z.geo_zone_name from :table_tax_rates r, :table_geo_zones z where r.tax_class_id = :tax_class_id and r.tax_zone_id = z.geo_zone_id order by r.tax_priority, z.geo_zone_name');
-  $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
-  $Qrates->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
-  $Qrates->bindInt(':tax_class_id', $_GET[$osC_Template->getModule()]);
-  $Qrates->execute();
-?>
-
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td><?php echo sprintf($osC_Language->get('batch_results_number_of_entries'), ($Qrates->numberOfRows() > 0 ? 1 : 0), $Qrates->numberOfRows(), $Qrates->numberOfRows()); ?></td>
-  </tr>
-</table>
+<div style="clear: both; padding: 2px; height: 16px;">
+  <span id="batchTotalPages"></span>
+  <span id="batchPageLinks"></span>
+</div>
 
 <form name="batch" action="#" method="post">
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
+<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="taxClassEntriesDataTable">
   <thead>
     <tr>
       <th width="100"><?php echo $osC_Language->get('table_heading_tax_rate_priority'); ?></th>
@@ -53,42 +45,79 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&action=batchDeleteEntries') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=batch_delete_entries') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
   <tbody>
-
-<?php
-  while ($Qrates->next()) {
-?>
-
-    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" title="<?php echo $Qrates->valueProtected('tax_description'); ?>">
-      <td><?php echo $Qrates->valueInt('tax_priority'); ?></td>
-      <td><?php echo $Qrates->value('geo_zone_name'); ?></td>
-      <td><?php echo $osC_Tax->displayTaxRateValue($Qrates->valueDecimal('tax_rate')); ?></td>
-      <td align="right">
-
-<?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&action=entrySave'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&trID=' . $Qrates->valueInt('tax_rates_id') . '&action=entryDelete'), osc_icon('trash.png'));
-?>
-
-      </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qrates->valueInt('tax_rates_id'), null, 'id="batch' . $Qrates->valueInt('tax_rates_id') . '"'); ?></td>
-    </tr>
-
-<?php
-  }
-?>
-
   </tbody>
 </table>
 
 </form>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></td>
-  </tr>
-</table>
+<div style="padding: 2px;">
+  <span id="dataTableLegend"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></span>
+  <span id="batchPullDownMenu"></span>
+</div>
+
+<script type="text/javascript"><!--
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+
+  var moduleParams = new Object();
+  moduleParams.page = 1;
+  moduleParams.search = '';
+
+  if ( $.cookie(moduleParamsCookieName) != null ) {
+    var p = $.secureEvalJSON($.cookie(moduleParamsCookieName));
+    moduleParams.page = parseInt(p.page);
+    moduleParams.search = String(p.search);
+  }
+
+  var dataTableName = 'taxClassEntriesDataTable';
+  var dataTableDataURL = '<?php echo osc_href_link_admin(FILENAME_RPC, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=getAllEntries'); ?>';
+
+  var entryEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&trID=ENTRYID&action=entry_save'); ?>';
+  var entryEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+
+  var entryDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&trID=ENTRYID&action=entry_delete'); ?>';
+  var entryDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+
+  var osC_DataTable = new osC_DataTable();
+  osC_DataTable.load();
+
+  function feedDataTable(data) {
+    var rowCounter = 0;
+
+    for ( var r in data.entries ) {
+      var record = data.entries[r];
+
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row' + parseInt(record.tax_rates_id);
+
+      $('#row' + parseInt(record.tax_rates_id)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); }).click(function(event) {
+        if (event.target.type !== 'checkbox') {
+          $(':checkbox', this).trigger('click');
+        }
+      }).css('cursor', 'pointer');
+
+      var newCell = newRow.insertCell(0);
+      newCell.innerHTML = parseInt(record.tax_priority);
+
+      newCell = newRow.insertCell(1);
+      newCell.innerHTML = htmlSpecialChars(record.geo_zone_name);
+
+      newCell = newRow.insertCell(2);
+      newCell.innerHTML = displayTaxRateValue(record.tax_rate);
+
+      newCell = newRow.insertCell(3);
+      newCell.innerHTML = '<a href="' + entryEditLink.replace('ENTRYID', parseInt(record.tax_rates_id)) + '">' + entryEditLinkIcon + '</a>&nbsp;<a href="' + entryDeleteLink.replace('ENTRYID', parseInt(record.tax_rates_id)) + '">' + entryDeleteLinkIcon + '</a>';
+      newCell.align = 'right';
+
+      newCell = newRow.insertCell(4);
+      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.tax_rates_id) + '" id="batch' + parseInt(record.tax_rates_id) + '" />';
+      newCell.align = 'center';
+
+      rowCounter++;
+    }
+  }
+//--></script>

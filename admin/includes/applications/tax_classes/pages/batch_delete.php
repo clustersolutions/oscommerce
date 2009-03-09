@@ -42,12 +42,7 @@
       $check_tax_classes_flag[] = $Qclasses->value('tax_class_title');
     }
 
-    $Qrates = $osC_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
-    $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
-    $Qrates->bindInt(':tax_class_id', $Qclasses->valueInt('tax_class_id'));
-    $Qrates->execute();
-
-    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $Qclasses->value('tax_class_title') . ' (' . sprintf($osC_Language->get('total_entries'), $Qrates->valueInt('total_tax_rates')) . ')</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $Qclasses->value('tax_class_title') . ' (' . sprintf($osC_Language->get('total_entries'), osC_TaxClasses_Admin::getNumberOfTaxRates($Qclasses->valueInt('tax_class_id'))) . ')</b>, ';
   }
 
   if ( !empty($names_string) ) {

@@ -1,5 +1,5 @@
 /*
-  $Id$
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -263,3 +263,45 @@ $(document).ready(function() {
 function htmlSpecialChars(string) {
   return $('<span>').text(string).html();
 };
+
+/* Javascript version of osC_Tax::displayTaxRateValue() */
+
+function displayTaxRateValue(value, padding) {
+  if ( padding == null ) {
+    padding = taxDecimalPlaces;
+  }
+
+  if ( value.indexOf('.') != -1 ) {
+    while ( true ) {
+      if ( value.substr(-1) == '0' ) {
+        value = value.substr(0, value.length - 1);
+      } else {
+        if ( value.substr(-1) == '.' ) {
+          value = value.substr(0, value.length - 1);
+        }
+
+        break;
+      }
+    }
+  }
+
+  if ( padding > 0 ) {
+    var decimal_pos = value.indexOf('.');
+
+    if ( decimal_pos != -1 ) {
+      var decimals = value.substr(decimal_pos + 1).length;
+
+      for ( var i = decimals; i < padding; i++ ) {
+        value += '0';
+      }
+    } else {
+      value += '.';
+
+      for ( var i = 0; i < padding; i++ ) {
+        value += '0';
+      }
+    }
+  }
+
+  return value + '%';
+}
