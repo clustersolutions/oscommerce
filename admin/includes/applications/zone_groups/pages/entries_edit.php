@@ -12,12 +12,12 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntryData($_GET['zeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntry($_GET['zeID']));
 
   $countries_array = array(array('id' => '',
                                  'text' => $osC_Language->get('all_countries')));
 
-  foreach (osC_Address::getCountries() as $country) {
+  foreach ( osC_Address::getCountries() as $country ) {
     $countries_array[] = array('id' => $country['id'],
                                'text' => $country['name']);
   }
@@ -26,7 +26,7 @@
                              'text' => $osC_Language->get('all_zones')));
 
   if ( $osC_ObjectInfo->get('zone_country_id') > 0 ) {
-    foreach (osC_Address::getZones($osC_ObjectInfo->get('zone_country_id')) as $zone) {
+    foreach ( osC_Address::getZones($osC_ObjectInfo->get('zone_country_id')) as $zone ) {
       $zones_array[] = array('id' => $zone['id'],
                              'text' => $zone['name']);
     }
@@ -58,9 +58,9 @@ function update_zone(theForm) {
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('countries_name') . ': ' . $osC_ObjectInfo->get('zone_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('countries_name') . ': ' . $osC_ObjectInfo->getProtected('zone_name'); ?></div>
 <div class="infoBoxContent">
-  <form name="zeEdit" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&zeID=' . $osC_ObjectInfo->get('association_id') . '&action=entrySave'); ?>" method="post">
+  <form name="zeEdit" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&zeID=' . $osC_ObjectInfo->getInt('association_id') . '&action=entry_save'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_edit_zone_entry'); ?></p>
 
@@ -69,7 +69,7 @@ function update_zone(theForm) {
     <div><label for="zone_id"><?php echo $osC_Language->get('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array, $osC_ObjectInfo->get('zone_id')); ?></div>
   </fieldset>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
+  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
 
   </form>
 </div>
