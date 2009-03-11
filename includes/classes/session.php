@@ -64,6 +64,15 @@
     protected $_save_path = DIR_FS_WORK;
 
 /**
+ * Holds the life time in seconds of the session
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_life_time = SERVICE_SESSION_EXPIRATION_TIME;
+
+/**
  * Constructor, loads custom session handle module if defined
  *
  * @param string $name The name of the session
@@ -71,12 +80,19 @@
  */
 
     public function __construct($name = null) {
-      $this->setName($name);
-      $this->setCookieParameters();
+      global $request_type;
 
-      if ( SERVICE_SESSION_EXPIRATION_TIME > 0 ) {
-        ini_set('session.gc_maxlifetime', SERVICE_SESSION_EXPIRATION_TIME * 60);
+      $this->setName($name);
+
+      if ( $this->_life_time > 0 ) {
+        $this->_life_time = $this->_life_time * 60;
+
+        ini_set('session.gc_maxlifetime', $this->_life_time);
+      } else {
+        $this->_life_time = ini_get('session.gc_maxlifetime');
       }
+
+      session_set_cookie_params($this->_life_time, (($request_type == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH), (($request_type == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN));
 
       register_shutdown_function(array($this, 'close'));
     }
@@ -271,35 +287,6 @@
       session_save_path($path);
 
       $this->_save_path = session_save_path();
-    }
-
-/**
- * Sets the cookie parameters for the session (lifetime, path, domain, secure, httponly)
- *
- * @param integer $lifetime The amount of minutes to keep a cookie active for
- * @param string $path The web path of the online store to limit cookies to
- * @param string $domain The domain of the online store to limit cookies to
- * @param boolean $secure Only access cookies over a secure HTTPS connection
- * @param boolean $httponly Only access cookies over a HTTP protocol (disallows javascript access to cookies)
- * @access public
- */
-
-    public function setCookieParameters($lifetime = null, $path = null, $domain = null, $secure = false, $httponly = false) {
-      global $request_type;
-
-      if ( !is_numeric($lifetime) ) {
-        $lifetime = SERVICE_SESSION_EXPIRATION_TIME * 60;
-      }
-
-      if ( empty($path) ) {
-        $path = (($request_type == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH);
-      }
-
-      if ( empty($domain) ) {
-        $domain = (($request_type == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN);
-      }
-
-      return session_set_cookie_params($lifetime, $path, $domain, $secure, $httponly);
     }
 
 /**

@@ -60,5 +60,24 @@
 
       return $path;
     }
+
+    function getPathArray($category_id) {
+      static $path = array();
+
+      foreach ( $this->_data as $parent => $categories ) {
+        foreach ( $categories as $id => $info ) {
+          if ( $id == $category_id ) {
+            $path[] = array('id' => $id,
+                            'name' => $info['name']);
+
+            if ( $parent != $this->root_category_id ) {
+              $this->getPathArray($parent);
+            }
+          }
+        }
+      }
+
+      return array_reverse($path);
+    }
   }
 ?>

@@ -546,10 +546,10 @@ CREATE TABLE osc_reviews (
 
 DROP TABLE IF EXISTS osc_sessions;
 CREATE TABLE osc_sessions (
-  sesskey varchar(32) NOT NULL,
-  expiry int(11) unsigned NOT NULL,
+  id char(32) NOT NULL,
+  expiry int unsigned NOT NULL,
   value text NOT NULL,
-  PRIMARY KEY (sesskey)
+  PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS osc_shipping_availability;

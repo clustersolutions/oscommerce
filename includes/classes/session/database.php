@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -66,15 +66,15 @@
     protected function _custom_read($id) {
       global $osC_Database;
 
-      $Qsession = $osC_Database->query('select value from :table_sessions where sesskey = :sesskey');
+      $Qsession = $osC_Database->query('select value from :table_sessions where id = :id');
 
-      if ( SERVICE_SESSION_EXPIRATION_TIME > 0 ) {
-        $Qsession->appendQuery('and expiry > :expiry');
+      if ( $this->_life_time > 0 ) {
+        $Qsession->appendQuery('and expiry >= :expiry');
         $Qsession->bindInt(':expiry', time());
       }
 
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $id);
+      $Qsession->bindValue(':id', $id);
       $Qsession->execute();
 
       if ( $Qsession->numberOfRows() === 1 ) {
@@ -95,20 +95,11 @@
     protected function _custom_write($id, $value) {
       global $osC_Database;
 
-      $Qsession = $osC_Database->query('select sesskey from :table_sessions where sesskey = :sesskey');
+      $Qsession = $osC_Database->query('replace into :table_sessions values (:id, :expiry, :value)');
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $id);
-      $Qsession->execute();
-
-      if ( $Qsession->numberOfRows() === 1 ) {
-        $Qsession = $osC_Database->query('update :table_sessions set expiry = :expiry, value = :value where sesskey = :sesskey');
-      } else {
-        $Qsession = $osC_Database->query('insert into :table_sessions values (:sesskey, :expiry, :value)');
-      }
-      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindInt(':expiry', time() + (SERVICE_SESSION_EXPIRATION_TIME * 60));
+      $Qsession->bindValue(':id', $id);
+      $Qsession->bindInt(':expiry', time() + $this->_life_time);
       $Qsession->bindValue(':value', $value);
-      $Qsession->bindValue(':sesskey', $id);
       $Qsession->execute();
 
       return ( $Qsession->affectedRows() === 1 );
@@ -139,7 +130,7 @@
 
       $Qsession = $osC_Database->query('delete from :table_sessions where expiry < :expiry');
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':expiry', time());
+      $Qsession->bindInt(':expiry', time());
       $Qsession->execute();
 
       return ( $Qsession->affectedRows() > 0 );
@@ -159,9 +150,9 @@
         $id = $this->_id;
       }
 
-      $Qsession = $osC_Database->query('delete from :table_sessions where sesskey = :sesskey');
+      $Qsession = $osC_Database->query('delete from :table_sessions where id = :id');
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $id);
+      $Qsession->bindValue(':id', $id);
       $Qsession->execute();
 
       return ( $Qsession->affectedRows() === 1 );
