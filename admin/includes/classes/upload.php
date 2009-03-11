@@ -20,8 +20,6 @@
       $this->set_destination($destination);
       $this->set_permissions($permissions);
       $this->set_extensions($extensions);
-
-      $this->set_output_messages('direct');
     }
 
     function exists() {
@@ -169,18 +167,6 @@
         return false;
       } else {
         return true;
-      }
-    }
-
-    function set_output_messages($location) {
-      switch ($location) {
-        case 'session':
-          $this->message_location = 'session';
-          break;
-        case 'direct':
-        default:
-          $this->message_location = 'direct';
-          break;
       }
     }
   }
