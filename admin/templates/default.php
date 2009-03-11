@@ -38,8 +38,8 @@
 <script language="javascript" src="../ext/jquery/jquery.json-1.3.min.js"></script>
 <script language="javascript" src="../ext/jquery/jquery.tinysort.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../ext/jquery/ui/themes/base/ui.all.css" />
-<script language="javascript" src="../ext/jquery/ui/minified/ui.core.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../ext/jquery/ui/themes/smoothness/jquery-ui-1.7.custom.css" />
+<script language="javascript" src="../ext/jquery/ui/jquery-ui-1.7.custom.min.js"></script>
 
 <script language="javascript" src="../ext/alexei/sprintf.js"></script>
 
