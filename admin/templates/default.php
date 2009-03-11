@@ -37,6 +37,7 @@
 <script language="javascript" src="../ext/jquery/jquery.cookie.js"></script>
 <script language="javascript" src="../ext/jquery/jquery.json-1.3.min.js"></script>
 <script language="javascript" src="../ext/jquery/jquery.tinysort.min.js"></script>
+<script language="javascript" src="../ext/jquery/jquery.ocupload-1.1.2.packed.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../ext/jquery/ui/themes/smoothness/jquery-ui-1.7.custom.css" />
 <script language="javascript" src="../ext/jquery/ui/jquery-ui-1.7.custom.min.js"></script>
