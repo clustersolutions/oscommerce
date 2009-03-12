@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -59,9 +59,6 @@
           if ($osC_Product->hasTags()) {
             $this->addPageTags('keywords', $osC_Product->getTags());
           }
-
-          $this->addJavascriptFilename('ext/prototype/prototype.js');
-          $this->addJavascriptFilename('ext/scriptaculous/scriptaculous.js');
 
           $this->_page_title = $osC_Product->getTitle();
         } else {
