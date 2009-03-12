@@ -29,12 +29,16 @@
         $_GET['search'] = '';
       }
 
+      if ( !isset($_GET['page']) || !is_numeric($_GET['page']) ) {
+        $_GET['page'] = 1;
+      }
+
       $osC_Currencies = new osC_Currencies();
 
       if ( !empty($_GET['search']) ) {
-        $result = osC_Products_Admin::find($_GET['search'], $_GET['cID']);
+        $result = osC_Products_Admin::find($_GET['search'], $_GET['cID'], $_GET['page']);
       } else {
-        $result = osC_Products_Admin::getAll($_GET['cID']);
+        $result = osC_Products_Admin::getAll($_GET['cID'], $_GET['page']);
       }
 
       $result['rpcStatus'] = RPC_STATUS_SUCCESS;
