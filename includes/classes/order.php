@@ -104,7 +104,7 @@
     }
 
     function insert() {
-      global $osC_Database, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart;
+      global $osC_Database, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart, $osC_Tax;
 
       if (isset($_SESSION['prepOrderID'])) {
         $_prep = explode('-', $_SESSION['prepOrderID']);
@@ -197,7 +197,7 @@
         $Qproducts->bindValue(':products_model', '' /*$products['model']*/);
         $Qproducts->bindValue(':products_name', $products['name']);
         $Qproducts->bindValue(':products_price', $products['price']);
-        $Qproducts->bindValue(':products_tax', '0' /*$products['tax']*/);
+        $Qproducts->bindValue(':products_tax', $osC_Tax->getTaxRate($products['tax_class_id']));
         $Qproducts->bindInt(':products_quantity', $products['quantity']);
         $Qproducts->execute();
 
@@ -364,7 +364,7 @@
         $Qproducts->execute();
 
         while ($Qproducts->next()) {
-          $email_order .= $Qproducts->valueInt('products_quantity') . ' x ' . $Qproducts->value('products_name') . ' (' . $Qproducts->value('products_model') . ') = ' . $osC_Currencies->displayPriceWithTaxRate($Qproducts->value('products_price'), $Qproducts->value('products_tax'), $Qproducts->valueInt('products_quantity'), $Qorder->value('currency'), $Qorder->value('currency_value')) . "\n";
+          $email_order .= $Qproducts->valueInt('products_quantity') . ' x ' . $Qproducts->value('products_name') . ' (' . $Qproducts->value('products_model') . ') = ' . $osC_Currencies->displayPriceWithTaxRate($Qproducts->value('products_price'), $Qproducts->value('products_tax'), $Qproducts->valueInt('products_quantity'), false, $Qorder->value('currency'), $Qorder->value('currency_value')) . "\n";
 
           $Qvariants = $osC_Database->query('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
           $Qvariants->bindTable(':table_orders_products_variants', TABLE_ORDERS_PRODUCTS_VARIANTS);

@@ -79,9 +79,9 @@
 <?php
   while ( $Qwho->next() ) {
     if (STORE_SESSIONS == 'database') {
-      $Qsession = $osC_Database->query('select value from :table_sessions where sesskey = :sesskey');
+      $Qsession = $osC_Database->query('select value from :table_sessions where id = :id');
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
-      $Qsession->bindValue(':sesskey', $Qwho->value('session_id'));
+      $Qsession->bindValue(':id', $Qwho->value('session_id'));
       $Qsession->execute();
 
       $session_data = trim($Qsession->value('value'));

@@ -16,10 +16,6 @@
     function start() {
       global $osC_MessageStack, $osC_Language;
 
-      if (SERVICE_DEBUG_SHOW_DEVELOPMENT_WARNING == '1') {
-        $osC_MessageStack->add('debug', 'This is a development version of osCommerce (' . PROJECT_VERSION . ') - please use it for testing purposes only! [' . __CLASS__ . ']');
-      }
-
       if (SERVICE_DEBUG_CHECK_LOCALE == '1') {
         $setlocale = osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
 

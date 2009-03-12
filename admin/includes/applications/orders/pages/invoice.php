@@ -104,10 +104,10 @@
       echo '          </td>' . "\n" .
            '          <td valign="top">' . $product['model'] . '</td>' . "\n";
       echo '          <td align="right" valign="top">' . $osC_Tax->displayTaxRateValue($product['tax']) . '</td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['products_price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['products_price'], $product['tax'], 1, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['products_price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
-           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['products_price'], $product['tax'], $product['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
+           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], 1, true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '          <td align="right" valign="top"><b>' . $osC_Currencies->format($product['price'] * $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n" .
+           '          <td align="right" valign="top"><b>' . $osC_Currencies->displayPriceWithTaxRate($product['price'], $product['tax'], $product['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()) . '</b></td>' . "\n";
       echo '        </tr>' . "\n";
     }
 ?>
