@@ -212,9 +212,9 @@
 
       $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproduct->bindInt(':products_quantity', $data['quantity']);
-      $Qproduct->bindValue(':products_price', $data['price']);
+      $Qproduct->bindFloat(':products_price', $data['price']);
       $Qproduct->bindValue(':products_model', $data['model']);
-      $Qproduct->bindValue(':products_weight', $data['weight']);
+      $Qproduct->bindFloat(':products_weight', $data['weight']);
       $Qproduct->bindInt(':products_weight_class', $data['weight_class']);
       $Qproduct->bindInt(':products_status', $data['status']);
       $Qproduct->bindInt(':products_tax_class_id', $data['tax_class_id']);
@@ -387,9 +387,9 @@
 
             $Qsubproduct->bindTable(':table_products', TABLE_PRODUCTS);
             $Qsubproduct->bindInt(':products_quantity', $data['variants_quantity'][$key]);
-            $Qsubproduct->bindValue(':products_price', $data['variants_price'][$key]);
+            $Qsubproduct->bindFloat(':products_price', $data['variants_price'][$key]);
             $Qsubproduct->bindValue(':products_model', $data['variants_model'][$key]);
-            $Qsubproduct->bindValue(':products_weight', $data['variants_weight'][$key]);
+            $Qsubproduct->bindFloat(':products_weight', $data['variants_weight'][$key]);
             $Qsubproduct->bindInt(':products_weight_class', $data['variants_weight_class'][$key]);
             $Qsubproduct->bindInt(':products_status', $data['variants_status'][$key]);
             $Qsubproduct->bindInt(':products_tax_class_id', $data['variants_tax_class_id'][$key]);
