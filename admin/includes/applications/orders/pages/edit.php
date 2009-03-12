@@ -182,9 +182,9 @@
           <td valign="top"><?php echo $products['model']; ?></td>
           <td valign="top" align="right"><?php echo $osC_Tax->displayTaxRateValue($products['tax']); ?></td>
           <td valign="top" align="right"><?php echo $osC_Currencies->format($products['price'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
-          <td valign="top" align="right"><?php echo $osC_Currencies->displayPriceWithTaxRate($products['price'], $products['tax'], 1, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
+          <td valign="top" align="right"><?php echo $osC_Currencies->displayPriceWithTaxRate($products['price'], $products['tax'], 1, true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
           <td valign="top" align="right"><?php echo $osC_Currencies->format($products['price'] * $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
-          <td valign="top" align="right"><?php echo $osC_Currencies->displayPriceWithTaxRate($products['price'], $products['tax'], $products['quantity'], $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
+          <td valign="top" align="right"><?php echo $osC_Currencies->displayPriceWithTaxRate($products['price'], $products['tax'], $products['quantity'], true, $osC_Order->getCurrency(), $osC_Order->getCurrencyValue()); ?></td>
         </tr>
 
 <?php
