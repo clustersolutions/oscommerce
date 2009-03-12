@@ -86,8 +86,8 @@
           <td align="right" width="25"></td>
         </tr>
         <tr>
-          <td><?php echo $osC_Language->get('box_server_mysql'); ?></td>
-          <td align="right"><img src="images/<?php echo (extension_loaded('mysql') ? 'tick.gif' : 'cross.gif'); ?>" border="0" width="16" height="16"></td>
+          <td><?php echo $osC_Language->get('box_server_mysqli'); ?></td>
+          <td align="right"><img src="images/<?php echo (extension_loaded('mysqli') ? 'tick.gif' : 'cross.gif'); ?>" border="0" width="16" height="16"></td>
         </tr>
         <tr>
           <td><?php echo $osC_Language->get('box_server_gd'); ?></td>
