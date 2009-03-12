@@ -116,7 +116,7 @@
     array_unshift($groups_array, array('id' => null, 'text' => $osC_Language->get('please_select')));
   }
 
-  $Qlayout = $osC_Database->query('select b2p.*, b.title as box_title from :table_templates_boxes_to_pages b2p, :table_templates_boxes b where b2p.id = :id and b2p.templates_boxes_id = b.id');
+  $Qlayout = $osC_Database->query('select b2p.*, b.title as box_title, b.code as box_code from :table_templates_boxes_to_pages b2p, :table_templates_boxes b where b2p.id = :id and b2p.templates_boxes_id = b.id');
   $Qlayout->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
   $Qlayout->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
   $Qlayout->bindInt(':id', $_GET['lID']);
@@ -140,7 +140,7 @@
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_module') . '</b>'; ?></td>
-      <td width="60%"><?php echo $Qlayout->value('box_title'); ?></td>
+      <td width="60%"><?php echo $Qlayout->value('box_title') . osc_draw_hidden_field('box', $Qlayout->value('box_code')); ?></td>
     </tr>
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_pages') . '</b>'; ?></td>
