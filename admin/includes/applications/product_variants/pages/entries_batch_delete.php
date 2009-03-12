@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -16,7 +16,7 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
@@ -30,25 +30,25 @@
 <?php
   $check_products_array = array();
 
-  $Qentries = $osC_Database->query('select products_options_values_id, products_options_values_name from :table_products_options_values where products_options_values_id in (":products_options_values_id") and language_id = :language_id order by products_options_values_name');
-  $Qentries->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-  $Qentries->bindRaw(':products_options_values_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qentries->bindInt(':language_id', $osC_Language->getID());
+  $Qentries = $osC_Database->query('select id, title from :table_products_variants_values where id in (":id") and languages_id = :languages_id order by title');
+  $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+  $Qentries->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+  $Qentries->bindInt(':languages_id', $osC_Language->getID());
   $Qentries->execute();
 
   $names_string = '';
 
   while ( $Qentries->next() ) {
-    $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_attributes where options_values_id = :options_values_id');
-    $Qproducts->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-    $Qproducts->bindInt(':options_values_id', $Qentries->valueInt('products_options_values_id'));
+    $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_variants where products_variants_values_id = :products_variants_values_id');
+    $Qproducts->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+    $Qproducts->bindInt(':products_variants_values_id', $Qentries->valueInt('id'));
     $Qproducts->execute();
 
     if ( $Qproducts->valueInt('total_products') > 0 ) {
-      $check_products_array[] = $Qentries->value('products_options_values_name');
+      $check_products_array[] = $Qentries->value('title');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qentries->valueInt('products_options_values_id')) . '<b>' . $Qentries->value('products_options_values_name') . '</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qentries->valueInt('id')) . '<b>' . $Qentries->value('title') . '</b>, ';
   }
 
   if ( !empty($names_string) ) {

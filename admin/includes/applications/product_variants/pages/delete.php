@@ -23,9 +23,9 @@
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('products_options_name'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->get('title'); ?></div>
 <div class="infoBoxContent">
-  <form name="paDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $osC_ObjectInfo->get('products_options_id') . '&action=delete'); ?>" method="post">
+  <form name="paDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&paID=' . $osC_ObjectInfo->get('id') . '&action=delete'); ?>" method="post">
 
 <?php
   if ( $osC_ObjectInfo->get('total_products') > 0 ) {
@@ -37,7 +37,7 @@
 
 <?php
   } else {
-    $group_name = $osC_ObjectInfo->get('products_options_name');
+    $group_name = $osC_ObjectInfo->get('title');
 
     if ( $osC_ObjectInfo->get('total_entries') > 0 ) {
       $group_name .= ' (' . sprintf($osC_Language->get('total_entries'), $osC_ObjectInfo->get('total_entries')) . ')';

@@ -5,27 +5,27 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getEntryData($_GET['paeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(osC_ProductVariants_Admin::getEntry($_GET['paeID']));
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ($osC_MessageStack->size($osC_Template->getModule()) > 0) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->get('title'); ?></div>
+<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('title'); ?></div>
 <div class="infoBoxContent">
-  <form name="paeEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $osC_ObjectInfo->get('id') . '&action=saveEntry'); ?>" method="post">
+  <form name="paeEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&page=' . $_GET['page'] . '&paeID=' . $osC_ObjectInfo->getInt('id') . '&action=saveEntry'); ?>" method="post">
 
   <p><?php echo $osC_Language->get('introduction_edit_group_entry'); ?></p>
 
@@ -37,7 +37,7 @@
 <?php
   $Qed = $osC_Database->query('select languages_id, title from :table_products_variants_values where id = :id');
   $Qed->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-  $Qed->bindInt(':id', $osC_ObjectInfo->get('id'));
+  $Qed->bindInt(':id', $osC_ObjectInfo->getInt('id'));
   $Qed->execute();
 
   $entry_names = array();

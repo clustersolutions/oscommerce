@@ -230,7 +230,6 @@
         }
       } else {
         $sql_file = new upload('sql_file');
-        $sql_file->set_output_messages('session');
 
         if ( $sql_file->parse() ) {
           $restore_query = fread(fopen($sql_file->tmp_filename, 'r'), filesize($sql_file->tmp_filename));
