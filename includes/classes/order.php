@@ -197,14 +197,14 @@
         $Qproducts->bindValue(':products_model', '' /*$products['model']*/);
         $Qproducts->bindValue(':products_name', $products['name']);
         $Qproducts->bindValue(':products_price', $products['price']);
-        $Qproducts->bindValue(':products_tax', '' /*$products['tax']*/);
+        $Qproducts->bindValue(':products_tax', '0' /*$products['tax']*/);
         $Qproducts->bindInt(':products_quantity', $products['quantity']);
         $Qproducts->execute();
 
         $order_products_id = $osC_Database->nextID();
 
-        if ( $osC_ShoppingCart->isVariant($products['id']) ) {
-          foreach ( $osC_ShoppingCart->getVariant($products['id']) as $variant ) {
+        if ( $osC_ShoppingCart->isVariant($products['item_id']) ) {
+          foreach ( $osC_ShoppingCart->getVariant($products['item_id']) as $variant ) {
 /* HPDL
             if (DOWNLOAD_ENABLED == '1') {
               $Qattributes = $osC_Database->query('select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount, pad.products_attributes_filename from :table_products_options popt, :table_products_options_values poval, :table_products_attributes pa left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_id = popt.products_options_id and pa.options_values_id = :options_values_id and pa.options_values_id = poval.products_options_values_id and popt.language_id = :popt_language_id and poval.language_id = :poval_language_id');
@@ -393,7 +393,7 @@
 
         unset($Qtotals);
 
-        if ( (osc_empty($Qorder->value('delivery_name') === false)) && (osc_empty($Qorder->value('street_address') === false)) ) {
+        if ( (osc_empty($Qorder->value('delivery_name')) === false) && (osc_empty($Qorder->value('delivery_street_address')) === false) ) {
           $address = array('name' => $Qorder->value('delivery_name'),
                            'company' => $Qorder->value('delivery_company'),
                            'street_address' => $Qorder->value('delivery_street_address'),

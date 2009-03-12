@@ -77,12 +77,12 @@
          '                <td align="right" valign="top" width="30">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' . "\n" .
          '                <td valign="top">' . $products['name'];
 
-    if ( (STOCK_CHECK == '1') && !$osC_ShoppingCart->isInStock($products['id']) ) {
+    if ( (STOCK_CHECK == '1') && !$osC_ShoppingCart->isInStock($products['item_id']) ) {
       echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
     }
 
-    if ( $osC_ShoppingCart->isVariant($products['id']) ) {
-      foreach ( $osC_ShoppingCart->getVariant($products['id']) as $variant) {
+    if ( $osC_ShoppingCart->isVariant($products['item_id']) ) {
+      foreach ( $osC_ShoppingCart->getVariant($products['item_id']) as $variant) {
         echo '<br />- ' . $variant['group_title'] . ': ' . $variant['value_title'];
       }
     }

@@ -18,7 +18,8 @@
     var $selected_module;
 
     var $_modules = array(),
-        $_group = 'payment';
+        $_group = 'payment',
+        $order_status = DEFAULT_ORDERS_STATUS_ID;
 
 // class constructor
     function osC_Payment($module = '') {

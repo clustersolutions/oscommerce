@@ -163,7 +163,7 @@
           $Qdesc->bindInt(':language_id', $osC_Language->getID());
           $Qdesc->execute();
 
-          $Qimage = $osC_Database->query('select image from :table_products_images where products_id = :products_id and i.default_flag = :default_flag');
+          $Qimage = $osC_Database->query('select image from :table_products_images where products_id = :products_id and default_flag = :default_flag');
           $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
           $Qimage->bindInt(':products_id', ($Qproducts->valueInt('parent_id') > 0) ? $Qproducts->valueInt('parent_id') : $Qproducts->valueInt('products_id'));
           $Qimage->bindInt(':default_flag', 1);
@@ -359,7 +359,11 @@
 
             $item_id = $Qid->valueInt('item_id') + 1;
           } else {
-            $item_id = max(array_keys($this->_contents)) + 1;
+            if ( empty($this->_contents) ) {
+              $item_id = 1;
+            } else {
+              $item_id = max(array_keys($this->_contents)) + 1;
+            }
           }
 
           $this->_contents[$item_id] = array('item_id' => $item_id,
