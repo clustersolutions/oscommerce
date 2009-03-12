@@ -15,7 +15,7 @@
   $categories_array = array();
 
   foreach ( $osC_CategoryTree->getArray() as $value ) {
-    $categories_array[] = array('id' => $value['id'],
+    $categories_array[] = array('id' => end(explode('_', $value['id'])),
                                 'text' => $value['title']);
   }
 ?>
@@ -28,18 +28,11 @@
   }
 ?>
 
-<form name="search" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?>
-
-<p align="right">
-
-<?php
-  echo $osC_Language->get('operation_title_search') . ' ' . osc_draw_input_field('search') . osc_draw_pull_down_menu('cPath', array_merge(array(array('id' => '', 'text' => $osC_Language->get('top_category'))), $categories_array)) . '<input type="submit" value="GO" class="operationButton" />' .
-       '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=save') . '\';" class="infoBoxButton" />';
-?>
-
-</p>
-
-</form>
+<div style="padding-bottom: 10px;">
+  <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
+  <span><form name="filter" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?><?php echo osc_draw_pull_down_menu('cID', array_merge(array(array('id' => '', 'text' => $osC_Language->get('top_category'))), $categories_array)); ?><input type="submit" value="Filter" class="operationButton" /></form></span>
+  <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $current_category_id . '&action=save') . '\';" class="infoBoxButton" />'; ?></span>
+</div>
 
 <div style="clear: both; padding: 2px; height: 16px;">
   <span id="batchTotalPages"></span>
