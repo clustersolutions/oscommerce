@@ -43,7 +43,7 @@
 
       $wo_session_id = session_id();
       $wo_ip_address = osc_get_ip_address();
-      $wo_last_page_url = $_SERVER['REQUEST_URI'];
+      $wo_last_page_url = osc_output_string_protected(substr($_SERVER['REQUEST_URI'], 0, 255));
 
       $current_time = time();
       $xx_mins_ago = ($current_time - 900);
