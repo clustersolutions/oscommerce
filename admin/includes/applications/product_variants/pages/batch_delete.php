@@ -30,36 +30,37 @@
 <?php
   $check_products_flag = array();
 
-  $Qgroups = $osC_Database->query('select products_options_id, products_options_name from :table_products_options where language_id = :language_id and products_options_id in (":products_options_id") order by products_options_name');
-  $Qgroups->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-  $Qgroups->bindInt(':language_id', $osC_Language->getID());
-  $Qgroups->bindRaw(':products_options_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+  $Qgroups = $osC_Database->query('select id, title from :table_products_variants_groups where languages_id = :languages_id and id in (":id") order by title');
+  $Qgroups->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+  $Qgroups->bindInt(':languages_id', $osC_Language->getID());
+  $Qgroups->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qgroups->execute();
 
   $names_string = '';
 
   while ( $Qgroups->next() ) {
-    $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_attributes where options_id = :options_id');
-    $Qproducts->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-    $Qproducts->bindInt(':options_id', $Qgroups->valueInt('products_options_id'));
+    $Qproducts = $osC_Database->query('select count(*) as total_products from :table_products_variants pv, :table_products_variants_values pvv where pvv.products_variants_groups_id = :products_variants_groups_id and pvv.id = pv.products_variants_values_id');
+    $Qproducts->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+    $Qproducts->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+    $Qproducts->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
     $Qproducts->execute();
 
     if ( $Qproducts->valueInt('total_products') > 0 ) {
       $check_products_flag[] = $Qgroups->value('products_options_name');
     }
 
-    $Qentries = $osC_Database->query('select count(*) as total_entries from :table_products_options_values_to_products_options where products_options_id = :products_options_id');
-    $Qentries->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
-    $Qentries->bindInt(':products_options_id', $Qgroups->valueInt('products_options_id'));
+    $Qentries = $osC_Database->query('select count(*) as total_entries from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
+    $Qentries->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+    $Qentries->bindInt(':products_variants_groups_id', $Qgroups->valueInt('id'));
     $Qentries->execute();
 
-    $group_name = $Qgroups->value('products_options_name');
+    $group_name = $Qgroups->value('title');
 
     if ( $Qentries->valueInt('total_entries') > 0 ) {
       $group_name .= ' (' . sprintf($osC_Language->get('total_entries'), $Qentries->valueInt('total_entries')) . ')';
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qgroups->valueInt('products_options_id')) . '<b>' . $group_name . '</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qgroups->valueInt('id')) . '<b>' . $group_name . '</b>, ';
   }
 
   if ( !empty($names_string) ) {

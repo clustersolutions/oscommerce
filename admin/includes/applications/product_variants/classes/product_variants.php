@@ -107,47 +107,25 @@
 
       $osC_Database->startTransaction();
 
-      $Qentries = $osC_Database->query('select products_options_values_id from :table_products_options_values_to_products_options where products_options_id = :products_options_id');
-      $Qentries->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
-      $Qentries->bindInt(':products_options_id', $id);
-      $Qentries->execute();
+      $Qdelete = $osC_Database->query('delete from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
+      $Qdelete->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+      $Qdelete->bindInt(':products_variants_groups_id', $id);
+      $Qdelete->setLogging($_SESSION['module'], $id);
+      $Qdelete->execute();
 
-      while ( $Qentries->next() ) {
-        $Qdelete = $osC_Database->query('delete from :table_products_options_values where products_options_values_id = :products_options_values_id');
-        $Qdelete->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-        $Qdelete->bindInt(':products_options_values_id', $Qentries->valueInt('products_options_values_id'));
-        $Qdelete->setLogging($_SESSION['module'], $id);
-        $Qdelete->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-          break;
-        }
+      if ( $osC_Database->isError() ) {
+        $error = true;
       }
 
       if ( $error === false ) {
-        $Qdelete = $osC_Database->query('delete from :table_products_options_values_to_products_options where products_options_id = :products_options_id');
-        $Qdelete->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
-        $Qdelete->bindInt(':products_options_id', $id);
+        $Qdelete = $osC_Database->query('delete from :table_products_variants_groups where id = :id');
+        $Qdelete->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+        $Qdelete->bindInt(':id', $id);
         $Qdelete->setLogging($_SESSION['module'], $id);
         $Qdelete->execute();
 
         if ( $osC_Database->isError() ) {
           $error = true;
-          break;
-        }
-      }
-
-      if ( $error === false ) {
-        $Qdelete = $osC_Database->query('delete from :table_products_options where products_options_id = :products_options_id');
-        $Qdelete->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-        $Qdelete->bindInt(':products_options_id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
-        $Qdelete->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-          break;
         }
       }
 
@@ -162,7 +140,7 @@
       return false;
     }
 
-    public static function getEntryData($id, $language_id = null) {
+    public static function getEntry($id, $language_id = null) {
       global $osC_Database, $osC_Language;
 
       if ( empty($language_id) ) {
@@ -243,40 +221,16 @@
     public static function deleteEntry($id, $group_id) {
       global $osC_Database;
 
-      $error = false;
-
-      $osC_Database->startTransaction();
-
-      $Qentry = $osC_Database->query('delete from :table_products_options_values where products_options_values_id = :products_options_values_id');
-      $Qentry->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-      $Qentry->bindInt(':products_options_values_id', $id);
+      $Qentry = $osC_Database->query('delete from :table_products_variants_values where id = :id and products_variants_groups_id = :products_variants_groups_id');
+      $Qentry->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
+      $Qentry->bindInt(':id', $id);
+      $Qentry->bindInt(':products_variants_groups_id', $group_id);
       $Qentry->setLogging($_SESSION['module'], $id);
       $Qentry->execute();
 
-      if ( $osC_Database->isError() ) {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $Qlink = $osC_Database->query('delete from :table_products_options_values_to_products_options where products_options_id = :products_options_id and products_options_values_id = :products_options_values_id');
-        $Qlink->bindTable(':table_products_options_values_to_products_options', TABLE_PRODUCTS_OPTIONS_VALUES_TO_PRODUCTS_OPTIONS);
-        $Qlink->bindInt(':products_options_id', $group_id);
-        $Qlink->bindInt(':products_options_values_id', $id);
-        $Qlink->setLogging($_SESSION['module'], $id);
-        $Qlink->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
+      if ( !$osC_Database->isError() ) {
         return true;
       }
-
-      $osC_Database->rollbackTransaction();
 
       return false;
     }
