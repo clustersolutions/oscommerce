@@ -5,22 +5,22 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2004 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  require('mysql.php');
+  require('mysqli.php');
 
-  class osC_Database_mysql_innodb extends osC_Database_mysql {
+  class osC_Database_mysqli_innodb extends osC_Database_mysqli {
     var $use_transactions = true,
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 
-    function osC_Database_mysql_innodb($server, $username, $password) {
-      $this->osC_Database_mysql($server, $username, $password);
+    function __construct($server, $username, $password) {
+      parent::__construct($server, $username, $password);
     }
 
     function prepareSearch($columns) {

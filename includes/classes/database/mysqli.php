@@ -1,23 +1,23 @@
 <?php
 /*
-  $Id: $
+  $Id$
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  require('mysql.php');
+  class osC_Database_mysqli extends osC_Database {
+    var $use_transactions = false,
+        $use_fulltext = false,
+        $use_fulltext_boolean = false;
 
-  class osC_Database_mysqli extends osC_Database_mysql {
-    var $use_transactions = true;
-
-    function osC_Database_mysqli($server, $username, $password) {
+    function __construct($server, $username, $password) {
       $this->server = $server;
       $this->username = $username;
       $this->password = $password;
@@ -28,7 +28,13 @@
     }
 
     function connect() {
-      if ($this->link = @mysqli_connect($this->server, $this->username, $this->password)) {
+      if (defined('USE_PCONNECT') && (USE_PCONNECT == 'true')) {
+        $connect_function = 'mysqli_pconnect';
+      } else {
+        $connect_function = 'mysqli_connect';
+      }
+
+      if ($this->link = @$connect_function($this->server, $this->username, $this->password)) {
         $this->setConnected(true);
 
         if ( version_compare(mysqli_get_server_info($this->link), '5.0.2') >= 0 ) {
@@ -143,6 +149,28 @@
       return @mysqli_data_seek($resource, $row_number);
     }
 
+    function randomQuery($query) {
+      $query .= ' order by rand() limit 1';
+
+      return $this->simpleQuery($query);
+    }
+
+    function randomQueryMulti($query) {
+      $resource = $this->simpleQuery($query);
+
+      $num_rows = $this->numberOfRows($resource);
+
+      if ($num_rows > 0) {
+        $random_row = osc_rand(0, ($num_rows - 1));
+
+        $this->dataSeek($random_row, $resource);
+
+        return $resource;
+      } else {
+        return false;
+      }
+    }
+
     function next($resource) {
       return @mysqli_fetch_assoc($resource);
     }
@@ -216,6 +244,59 @@
       }
 
       return false;
+    }
+
+    function setBatchLimit($sql_query, $from, $maximum_rows) {
+      return $sql_query . ' limit ' . $from . ', ' . $maximum_rows;
+    }
+
+    function getBatchSize($sql_query, $select_field = '*') {
+      if (strpos($sql_query, 'SQL_CALC_FOUND_ROWS') !== false) {
+        $bb = $this->query('select found_rows() as total');
+      } else {
+        $total_query = substr($sql_query, 0, strpos($sql_query, ' limit '));
+
+        $pos_to = strlen($total_query);
+        $pos_from = strpos($total_query, ' from ');
+
+        if (($pos_group_by = strpos($total_query, ' group by ', $pos_from)) !== false) {
+          if ($pos_group_by < $pos_to) {
+            $pos_to = $pos_group_by;
+          }
+        }
+
+        if (($pos_having = strpos($total_query, ' having ', $pos_from)) !== false) {
+          if ($pos_having < $pos_to) {
+            $pos_to = $pos_having;
+          }
+        }
+
+        if (($pos_order_by = strpos($total_query, ' order by ', $pos_from)) !== false) {
+          if ($pos_order_by < $pos_to) {
+            $pos_to = $pos_order_by;
+          }
+        }
+
+        $bb = $this->query('select count(' . $select_field . ') as total ' . substr($total_query, $pos_from, ($pos_to - $pos_from)));
+      }
+
+      return $bb->value('total');
+    }
+
+    function prepareSearch($columns) {
+      if ($this->use_fulltext === true) {
+        return 'match (' . implode(', ', $columns) . ') against (:keywords' . (($this->use_fulltext_boolean === true) ? ' in boolean mode' : '') . ')';
+      } else {
+        $search_sql = '(';
+
+        foreach ($columns as $column) {
+          $search_sql .= $column . ' like :keyword or ';
+        }
+
+        $search_sql = substr($search_sql, 0, -4) . ')';
+
+        return $search_sql;
+      }
     }
   }
 ?>
