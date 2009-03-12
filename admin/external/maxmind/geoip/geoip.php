@@ -3,7 +3,7 @@
 /* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 2; tab-width: 2 -*- */
 /* geoip.inc
  *
- * Copyright (C) 2004 MaxMind LLC
+ * Copyright (C) 2007 MaxMind LLC
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,17 +18,6 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-
-/*
- * Changelog:
- *
- * 2005-01-13   Andrew Hill, Awarez Ltd. (http://www.awarez.net)
- *              Formatted file according to PEAR library standards.
- *              Moved $GEOIP_COUNTRY_CODE_TO_NUMBER, $GEOIP_COUNTRY_CODES,
- *                  $GEOIP_COUNTRY_CODES3 and $GEOIP_COUNTRY_NAMES into the
- *                  GeoIP class, so that library will still work even when
- *                  not included in the $GLOBAL context.
  */
 
 define("GEOIP_COUNTRY_BEGIN", 16776960);
@@ -109,12 +98,13 @@ class GeoIP {
 "SM" => 198, "SN" => 199, "SO" => 200, "SR" => 201, "ST" => 202, "SV" => 203, 
 "SY" => 204, "SZ" => 205, "TC" => 206, "TD" => 207, "TF" => 208, "TG" => 209, 
 "TH" => 210, "TJ" => 211, "TK" => 212, "TM" => 213, "TN" => 214, "TO" => 215, 
-"TP" => 216, "TR" => 217, "TT" => 218, "TV" => 219, "TW" => 220, "TZ" => 221, 
+"TL" => 216, "TR" => 217, "TT" => 218, "TV" => 219, "TW" => 220, "TZ" => 221, 
 "UA" => 222, "UG" => 223, "UM" => 224, "US" => 225, "UY" => 226, "UZ" => 227, 
 "VA" => 228, "VC" => 229, "VE" => 230, "VG" => 231, "VI" => 232, "VN" => 233,
-"VU" => 234, "WF" => 235, "WS" => 236, "YE" => 237, "YT" => 238, "CS" => 239, 
-"ZA" => 240, "ZM" => 241, "ZR" => 242, "ZW" => 243, "A1" => 244, "A2" => 245, 
-"O1" => 246
+"VU" => 234, "WF" => 235, "WS" => 236, "YE" => 237, "YT" => 238, "RS" => 239, 
+"ZA" => 240, "ZM" => 241, "ME" => 242, "ZW" => 243, "A1" => 244, "A2" => 245, 
+"O1" => 246, "AX" => 247, "GG" => 248, "IM" => 249, "JE" => 250, "BL" => 251,
+"MF" => 252
 );
     var $GEOIP_COUNTRY_CODES = array(
 "", "AP", "EU", "AD", "AE", "AF", "AG", "AI", "AL", "AM", "AN", "AO", "AQ",
@@ -133,9 +123,10 @@ class GeoIP {
 "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY",
 "QA", "RE", "RO", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI",
 "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "ST", "SV", "SY", "SZ", "TC", "TD",
-"TF", "TG", "TH", "TJ", "TK", "TM", "TN", "TO", "TP", "TR", "TT", "TV", "TW",
+"TF", "TG", "TH", "TJ", "TK", "TM", "TN", "TO", "TL", "TR", "TT", "TV", "TW",
 "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN",
-"VU", "WF", "WS", "YE", "YT", "CS", "ZA", "ZM", "ZR", "ZW", "A1", "A2", "O1"
+"VU", "WF", "WS", "YE", "YT", "RS", "ZA", "ZM", "ME", "ZW", "A1", "A2", "O1",
+"AX", "GG", "IM", "JE", "BL", "MF"
 );
     var $GEOIP_COUNTRY_CODES3 = array(
 "","AP","EU","AND","ARE","AFG","ATG","AIA","ALB","ARM","ANT","AGO","AQ","ARG",
@@ -156,7 +147,8 @@ class GeoIP {
 "SVK","SLE","SMR","SEN","SOM","SUR","STP","SLV","SYR","SWZ","TCA","TCD","TF",
 "TGO","THA","TJK","TKL","TLS","TKM","TUN","TON","TUR","TTO","TUV","TWN","TZA",
 "UKR","UGA","UM","USA","URY","UZB","VAT","VCT","VEN","VGB","VIR","VNM","VUT",
-        "WLF","WSM","YEM","YT","SCG","ZAF","ZMB","ZR","ZWE","A1","A2","O1"
+"WLF","WSM","YEM","YT","SRB","ZAF","ZMB","MNE","ZWE","A1","A2","O1",
+"ALA","GGY","IMN","JEY","BLM","MAF"
     );
     var $GEOIP_COUNTRY_NAMES = array(
 "", "Asia/Pacific Region", "Europe", "Andorra", "United Arab Emirates",
@@ -167,48 +159,49 @@ class GeoIP {
 "Burundi", "Benin", "Bermuda", "Brunei Darussalam", "Bolivia", "Brazil",
 "Bahamas", "Bhutan", "Bouvet Island", "Botswana", "Belarus", "Belize",
 "Canada", "Cocos (Keeling) Islands", "Congo, The Democratic Republic of the",
-"Central African Republic", "Congo", "Switzerland", "Cote D'Ivoire", "Cook
-Islands", "Chile", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cape
-Verde", "Christmas Island", "Cyprus", "Czech Republic", "Germany", "Djibouti",
+"Central African Republic", "Congo", "Switzerland", "Cote D'Ivoire", "Cook Islands",
+"Chile", "Cameroon", "China", "Colombia", "Costa Rica", "Cuba", "Cape Verde",
+"Christmas Island", "Cyprus", "Czech Republic", "Germany", "Djibouti",
 "Denmark", "Dominica", "Dominican Republic", "Algeria", "Ecuador", "Estonia",
 "Egypt", "Western Sahara", "Eritrea", "Spain", "Ethiopia", "Finland", "Fiji",
-"Falkland Islands (Malvinas)", "Micronesia, Federated States of", "Faroe
-Islands", "France", "France, Metropolitan", "Gabon", "United Kingdom",
+"Falkland Islands (Malvinas)", "Micronesia, Federated States of", "Faroe Islands",
+"France", "France, Metropolitan", "Gabon", "United Kingdom",
 "Grenada", "Georgia", "French Guiana", "Ghana", "Gibraltar", "Greenland",
-"Gambia", "Guinea", "Guadeloupe", "Equatorial Guinea", "Greece", "South Georgia
-and the South Sandwich Islands", "Guatemala", "Guam", "Guinea-Bissau",
+"Gambia", "Guinea", "Guadeloupe", "Equatorial Guinea", "Greece", "South Georgia and the South Sandwich Islands",
+"Guatemala", "Guam", "Guinea-Bissau",
 "Guyana", "Hong Kong", "Heard Island and McDonald Islands", "Honduras",
 "Croatia", "Haiti", "Hungary", "Indonesia", "Ireland", "Israel", "India",
 "British Indian Ocean Territory", "Iraq", "Iran, Islamic Republic of",
 "Iceland", "Italy", "Jamaica", "Jordan", "Japan", "Kenya", "Kyrgyzstan",
-"Cambodia", "Kiribati", "Comoros", "Saint Kitts and Nevis", "Korea, Democratic
-People's Republic of", "Korea, Republic of", "Kuwait", "Cayman Islands",
+"Cambodia", "Kiribati", "Comoros", "Saint Kitts and Nevis", "Korea, Democratic People's Republic of",
+"Korea, Republic of", "Kuwait", "Cayman Islands",
 "Kazakstan", "Lao People's Democratic Republic", "Lebanon", "Saint Lucia",
 "Liechtenstein", "Sri Lanka", "Liberia", "Lesotho", "Lithuania", "Luxembourg",
-"Latvia", "Libyan Arab Jamahiriya", "Morocco", "Monaco", "Moldova, Republic
-of", "Madagascar", "Marshall Islands", "Macedonia",
+"Latvia", "Libyan Arab Jamahiriya", "Morocco", "Monaco", "Moldova, Republic of",
+"Madagascar", "Marshall Islands", "Macedonia",
 "Mali", "Myanmar", "Mongolia", "Macau", "Northern Mariana Islands",
 "Martinique", "Mauritania", "Montserrat", "Malta", "Mauritius", "Maldives",
 "Malawi", "Mexico", "Malaysia", "Mozambique", "Namibia", "New Caledonia",
 "Niger", "Norfolk Island", "Nigeria", "Nicaragua", "Netherlands", "Norway",
-"Nepal", "Nauru", "Niue", "New Zealand", "Oman", "Panama", "Peru", "French
-Polynesia", "Papua New Guinea", "Philippines", "Pakistan", "Poland", "Saint
-Pierre and Miquelon", "Pitcairn Islands", "Puerto Rico", "Palestinian Territory",
+"Nepal", "Nauru", "Niue", "New Zealand", "Oman", "Panama", "Peru", "French Polynesia",
+"Papua New Guinea", "Philippines", "Pakistan", "Poland", "Saint Pierre and Miquelon",
+"Pitcairn Islands", "Puerto Rico", "Palestinian Territory",
 "Portugal", "Palau", "Paraguay", "Qatar", "Reunion", "Romania",
 "Russian Federation", "Rwanda", "Saudi Arabia", "Solomon Islands",
 "Seychelles", "Sudan", "Sweden", "Singapore", "Saint Helena", "Slovenia",
 "Svalbard and Jan Mayen", "Slovakia", "Sierra Leone", "San Marino", "Senegal",
-"Somalia", "Suriname", "Sao Tome and Principe", "El Salvador", "Syrian Arab
-Republic", "Swaziland", "Turks and Caicos Islands", "Chad", "French Southern
-Territories", "Togo", "Thailand", "Tajikistan", "Tokelau", "Turkmenistan",
-"Tunisia", "Tonga", "East Timor", "Turkey", "Trinidad and Tobago", "Tuvalu",
+"Somalia", "Suriname", "Sao Tome and Principe", "El Salvador", "Syrian Arab Republic",
+"Swaziland", "Turks and Caicos Islands", "Chad", "French Southern Territories",
+"Togo", "Thailand", "Tajikistan", "Tokelau", "Turkmenistan",
+"Tunisia", "Tonga", "Timor-Leste", "Turkey", "Trinidad and Tobago", "Tuvalu",
 "Taiwan", "Tanzania, United Republic of", "Ukraine",
 "Uganda", "United States Minor Outlying Islands", "United States", "Uruguay",
-"Uzbekistan", "Holy See (Vatican City State)", "Saint Vincent and the
-Grenadines", "Venezuela", "Virgin Islands, British", "Virgin Islands, U.S.",
+"Uzbekistan", "Holy See (Vatican City State)", "Saint Vincent and the Grenadines",
+"Venezuela", "Virgin Islands, British", "Virgin Islands, U.S.",
 "Vietnam", "Vanuatu", "Wallis and Futuna", "Samoa", "Yemen", "Mayotte",
-"Serbia and Montenegro", "South Africa", "Zambia", "Zaire", "Zimbabwe",
-"Anonymous Proxy","Satellite Provider","Other"
+"Serbia", "South Africa", "Zambia", "Montenegro", "Zimbabwe",
+"Anonymous Proxy","Satellite Provider","Other",
+"Aland Islands","Guernsey","Isle of Man","Jersey","Saint Barthelemy","Saint Martin"
 );
 }
 function geoip_load_shared_mem ($file) {
@@ -292,7 +285,8 @@ function _setup_segments($gi){
             for ($j = 0;$j < SEGMENT_RECORD_LENGTH;$j++){
             $gi->databaseSegments += (ord($buf[$j]) << ($j * 8));
             }
-	    if ($gi->databaseType == GEOIP_ORG_EDITION) {
+	    if ($gi->databaseType == GEOIP_ORG_EDITION ||
+		$gi->databaseType == GEOIP_ISP_EDITION) {
 	    $gi->record_length = ORG_RECORD_LENGTH;
             }
         }
@@ -366,17 +360,27 @@ function geoip_country_id_by_addr($gi, $addr) {
 }
 
 function geoip_country_code_by_addr($gi, $addr) {
-  $country_id = geoip_country_id_by_addr($gi,$addr);
-  if ($country_id !== false) {
-    return $gi->GEOIP_COUNTRY_CODES[$country_id];
+  if ($gi->databaseType == GEOIP_CITY_EDITION_REV1) {
+    $record = geoip_record_by_addr($gi,$addr);
+    return $record->country_code;
+  } else {
+    $country_id = geoip_country_id_by_addr($gi,$addr);
+    if ($country_id !== false) {
+      return $gi->GEOIP_COUNTRY_CODES[$country_id];
+    }
   }
   return false;
 }
 
 function geoip_country_name_by_addr($gi, $addr) {
-  $country_id = geoip_country_id_by_addr($gi,$addr);
-  if ($country_id !== false) {
-        return $gi->GEOIP_COUNTRY_NAMES[$country_id];
+  if ($gi->databaseType == GEOIP_CITY_EDITION_REV1) {
+    $record = geoip_record_by_addr($gi,$addr);
+    return $record->country_name;
+  } else {
+    $country_id = geoip_country_id_by_addr($gi,$addr);
+    if ($country_id !== false) {
+      return $gi->GEOIP_COUNTRY_NAMES[$country_id];
+    }
   }
   return false;
 }
