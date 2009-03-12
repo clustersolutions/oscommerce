@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,41 +13,25 @@
 */
 ?>
 
-<script language="javascript" type="text/javascript" src="external/tiny_mce/tiny_mce_gzip.js"></script>
-<script language="javascript" type="text/javascript">
-tinyMCE_GZ.init({
-  plugins : 'style,layer,table,advimage,advlink,preview,contextmenu,paste,fullscreen,visualchars',
-  themes : 'advanced',
-  languages : '<?php echo substr($osC_Language->getCode(), 0, 2); ?>',
-  disk_cache : true,
-  debug : false
-});
-</script>
-<script language="javascript" type="text/javascript">
+<script type="text/javascript" src="../ext/tiny_mce/tiny_mce.js"></script>
+<script type="text/javascript">
 tinyMCE.init({
   mode : "none",
   theme : "advanced",
   language : "<?php echo substr($osC_Language->getCode(), 0, 2); ?>",
   height : "400",
-  theme_advanced_resizing : false,
-  theme_advanced_resize_horizontal : false,
-  theme_advanced_resizing_use_cookie : false,
   theme_advanced_toolbar_align : "left",
   theme_advanced_toolbar_location : "top",
   theme_advanced_statusbar_location : "bottom",
   cleanup : false,
   plugins : "style,layer,table,advimage,advlink,preview,contextmenu,paste,fullscreen,visualchars",
-  theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,formatselect,fontselect,fontsizeselect,bullist,numlist,separator,outdent,indent,separator",
+  theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,justifyleft,justifycenter,justifyright,justifyfull,separator,formatselect,fontselect,fontsizeselect,bullist,numlist,separator,outdent,indent",
   theme_advanced_buttons2 : "undo,redo,separator,link,unlink,anchor,image,code,separator,preview,separator,forecolor,backcolor,tablecontrols,separator,hr,removeformat,visualaid",
-  theme_advanced_buttons3 : "sub,sup,separator,charmap,fullscreen,separator,insertlayer,moveforward,movebackward,absolute,|,styleprops,|,visualchars,help",
-  content_css : "styles/word.css",
-  extended_valid_elements : "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]"
+  theme_advanced_buttons3 : "sub,sup,separator,charmap,fullscreen,separator,insertlayer,moveforward,movebackward,absolute,|,styleprops,|,visualchars"
 });
 
-function toggleHTMLEditor(id) {
-  var elm = document.getElementById(id);
-
-  if (tinyMCE.getInstanceById(id) == null) {
+function toggleEditor(id) {
+  if ( !tinyMCE.get(id) ) {
     tinyMCE.execCommand('mceAddControl', false, id);
   } else {
     tinyMCE.execCommand('mceRemoveControl', false, id);
@@ -56,13 +40,13 @@ function toggleHTMLEditor(id) {
 </script>
 
 <?php
-  if ( isset($_GET['pID']) ) {
-    $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::getData($_GET['pID']));
+  if ( is_numeric($_GET[$osC_Template->getModule()]) ) {
+    $osC_ObjectInfo = new osC_ObjectInfo(osC_Products_Admin::get($_GET[$osC_Template->getModule()]));
     $attributes = $osC_ObjectInfo->get('attributes');
 
     $Qpd = $osC_Database->query('select products_name, products_description, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
     $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-    $Qpd->bindInt(':products_id', $_GET['pID']);
+    $Qpd->bindInt(':products_id', $osC_ObjectInfo->getInt('products_id'));
     $Qpd->execute();
 
     $products_name = array();
@@ -104,9 +88,6 @@ function toggleHTMLEditor(id) {
                                   'text' => $Qwc->value('weight_class_title'));
   }
 ?>
-
-<script language="javascript" type="text/javascript" src="../ext/prototype/prototype.js"></script>
-<script language="javascript" type="text/javascript" src="../ext/scriptaculous/scriptaculous.js"></script>
 
 <style type="text/css"><!--
 .attributeAdd {
@@ -244,6 +225,10 @@ function toggleHTMLEditor(id) {
   }
 
   function addVariant() {
+    if ( variants_values.length < 1 ) {
+      return false;
+    }
+
     var newFields = document.getElementById('readroot').cloneNode(true);
     newFields.id = 'variant' + variants_counter;
 
@@ -363,143 +348,99 @@ function toggleHTMLEditor(id) {
   }
 
 <?php
-  if ( isset($_GET['pID']) ) {
+  if ( isset($osC_ObjectInfo) ) {
 ?>
 
-  function handleHttpResponseRemoveImage(http) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
-    result.shift();
-
-    if (result[0] == '1') {
-      document.getElementById('image_' + result[1]).style.display = 'none';
-
-      if (document.getElementById('image_' + result[1]).parentNode.id == 'imagesOriginal') {
-        getImagesOthers();
-      }
-    }
-  }
-
   function removeImage(id) {
-    var objOverlay = document.getElementById('overlay');
-    var objActionLayer = document.getElementById('actionLayer');
+    $('#deleteImageDialog').dialog('option', 'buttons', {
+      "Cancel": function() {
+        $(this).dialog("close");
+      },
+      "Ok": function() {
+        var image = id.split('_');
 
-    var arrayPageSize = getPageSize();
-    var arrayPageScroll = getPageScroll();
+        $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=deleteProductImage'); ?>' + '&image=' + image[1],
+          function (data) {
+            getImages();
+          }
+        );
 
-    objOverlay.style.height = (arrayPageSize[1] + 'px');
-    objOverlay.style.display = 'block';
+        $(this).dialog("close");
+      }
+    } );
 
-    objActionLayer.style.top = (arrayPageScroll[1] + ((arrayPageSize[3] - 35 - parseInt(objActionLayer.style.height)) / 2) + 'px');
-    objActionLayer.style.left = (((arrayPageSize[0] - 20 - parseInt(objActionLayer.style.width)) / 2) + 'px');
-
-    var s = new String(objActionLayer.innerHTML);
-    s = s.replace(/removeImageConfirmation\(\'[a-zA-Z0-9_]*\'\)/, 'removeImageConfirmation(\'' + id + '\')');
-    s = s.replace(/cancelRemoveImage\(\'[a-zA-Z0-9_]*\'\)/, 'cancelRemoveImage(\'' + id + '\')');
-
-    objActionLayer.innerHTML = s;
-
-    objActionLayer.style.display = 'block';
-  }
-
-  function removeImageConfirmation(id) {
-    var image = id.split('_');
-
-    document.getElementById('actionLayer').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-
-    new Ajax.Request("rpc.php?action=deleteProductImage&image=" + image[1] <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseRemoveImage});
-  }
-
-  function cancelRemoveImage(id) {
-    document.getElementById('actionLayer').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById(id).style.backgroundColor = '#ffffff';
-  }
-
-  function handleHttpResponseSetDefaultImage(http) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
-    result.shift();
-
-    if (result[0] == '1') {
-      getImagesOriginals();
-    }
+    $('#deleteImageDialog').dialog('open');
   }
 
   function setDefaultImage(id) {
     var image = id.split('_');
 
-    new Ajax.Request("rpc.php?action=setDefaultImage&image=" + image[1] <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseSetDefaultImage});
+    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=setDefaultImage'); ?>' + '&image=' + image[1],
+      function (data) {
+        getImagesOriginals();
+      }
+    );
   }
 
-  function handleHttpResponseReorderImages(http) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
-    result.shift();
+  function showImages(data) {
+    for ( i=0; i<data.entries.length; i++ ) {
+      var entry = data.entries[i];
 
-    if (result[0] == '1') {
-      getImagesOthers();
-    }
-  }
+      var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
 
-  function handleHttpResponseGetImages(http) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
-    result.shift();
+      if ( entry[1] == '1' ) { // original (products_images_groups_id)
+        var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
 
-    if (result[0] == '1') {
-      var str_array = result[1].split('[x]');
+        if ( entry[6] == '1' ) { // default_flag
+          style += ' background-color: #E5EFE5;';
 
-      for (i = 0; i < str_array.length; ++i) {
-        var str_ele = str_array[i].split('[-]');
-
-        var style = 'width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px; padding: 10px; float: left; text-align: center;';
-
-        if (str_ele[1] == '1') { // original (products_images_groups_id)
-          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\'; this.style.backgroundImage=\'url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/icons/16x16/drag.png'); ?>)\'; this.style.backgroundRepeat=\'no-repeat\'; this.style.backgroundPosition=\'0 0\';';
-
-          if (str_ele[6] == '1') { // default_flag
-            style += ' background-color: #E5EFE5;';
-
-            var onmouseout = 'this.style.backgroundColor=\'#E5EFE5\'; this.style.backgroundImage=\'none\';';
-          } else {
-            var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\'; this.style.backgroundImage=\'none\';';
-          }
+          var onmouseout = 'this.style.backgroundColor=\'#E5EFE5\'; this.style.backgroundImage=\'none\';';
         } else {
-          var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\';';
-          var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\';';
+          var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\'; this.style.backgroundImage=\'none\';';
         }
-
-        var newdiv = '<span id="image_' + str_ele[0] + '" style="' + style + '" onmouseover="' + onmouseover + '" onmouseout="' + onmouseout + '">';
-        newdiv += '<a href="' + str_ele[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/mini/'; ?>' + str_ele[2] + '" border="0" height="<?php echo $osC_Image->getHeight('mini'); ?>" alt="' + str_ele[2] + '" title="' + str_ele[2] + '" style="max-width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px;" /></a><br />' + str_ele[3] + '<br />' + str_ele[5] + ' bytes<br />';
-
-        if (str_ele[1] == '1') {
-          if (str_ele[6] == '1') {
-            newdiv += '<?php echo osc_icon('default.png'); ?>&nbsp;';
-          } else {
-            newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('default_grey.png'); ?></a>&nbsp;';
-          }
-
-          newdiv += '<a href="#" onclick="removeImage(\'image_' + str_ele[0] + '\');"><?php echo osc_icon('trash.png'); ?></a>';
-        }
-
-        newdiv += '</span>';
-
-        if (str_ele[1] == '1') {
-          document.getElementById('imagesOriginal').innerHTML += newdiv;
-        } else {
-          document.getElementById('imagesOther').innerHTML += newdiv;
-        }
+      } else {
+        var onmouseover = 'this.style.backgroundColor=\'#EFEBDE\';';
+        var onmouseout = 'this.style.backgroundColor=\'#FFFFFF\';';
       }
 
-      Sortable.create('imagesOriginal', {tag: 'span', overlap: 'horizontal', constraint: false, onUpdate: function() {
-        new Ajax.Request("rpc.php?action=reorderImages&pID=<?php echo urlencode($_GET['pID']); ?>&" + Sortable.serialize('imagesOriginal') <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseReorderImages});
-      }});
+      var newdiv = '<span id="image_' + entry[0] + '" style="' + style + '" onmouseover="' + onmouseover + '" onmouseout="' + onmouseout + '">';
+      newdiv += '<a href="' + entry[4] + '" target="_blank"><img src="<?php echo DIR_WS_HTTP_CATALOG . 'images/products/mini/'; ?>' + entry[2] + '" border="0" height="<?php echo $osC_Image->getHeight('mini'); ?>" alt="' + entry[2] + '" title="' + entry[2] + '" style="max-width: <?php echo $osC_Image->getWidth('mini') + 20; ?>px;" /></a><br />' + entry[3] + '<br />' + entry[5] + ' bytes<br />';
+
+      if ( entry[1] == '1' ) {
+        if ( entry[6] == '1' ) {
+          newdiv += '<?php echo osc_icon('default.png'); ?>&nbsp;';
+        } else {
+          newdiv += '<a href="#" onclick="setDefaultImage(\'image_' + entry[0] + '\');"><?php echo osc_icon('default_grey.png'); ?></a>&nbsp;';
+        }
+
+        newdiv += '<a href="#" onclick="removeImage(\'image_' + entry[0] + '\');"><?php echo osc_icon('trash.png'); ?></a>';
+      }
+
+      newdiv += '</span>';
+
+      if ( entry[1] == '1' ) {
+        $('#imagesOriginal').append(newdiv);
+      } else {
+        $('#imagesOther').append(newdiv);
+      }
     }
 
-    if (document.getElementById('showProgressOriginal').style.display != 'none') {
-      document.getElementById('showProgressOriginal').style.display = 'none';
+    $('#imagesOriginal').sortable( {
+      update: function(event, ui) {
+        $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=reorderImages'); ?>' + '&' + $(this).sortable('serialize'),
+          function (data) {
+            getImagesOthers();
+          }
+        );
+      }
+    } );
+
+    if ( $('#showProgressOriginal').css('display') != 'none') {
+      $('#showProgressOriginal').css('display', 'none');
     }
 
-    if (document.getElementById('showProgressOther').style.display != 'none') {
-      document.getElementById('showProgressOther').style.display = 'none';
+    if ( $('#showProgressOther').css('display') != 'none') {
+      $('#showProgressOther').css('display', 'none');
     }
   }
 
@@ -507,63 +448,79 @@ function toggleHTMLEditor(id) {
     getImagesOriginals(false);
     getImagesOthers(false);
 
-    new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>" <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseGetImages});
+    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages'); ?>',
+      function (data) {
+        showImages(data);
+      }
+    );
   }
 
   function getImagesOriginals(makeCall) {
-    document.getElementById('imagesOriginal').innerHTML = '<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>';
+    $('#imagesOriginal').html('<div id="showProgressOriginal" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>');
 
-    if (makeCall != false) {
-      new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=originals" <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseGetImages});
+    if ( makeCall != false ) {
+      $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages&filter=originals'); ?>',
+        function (data) {
+          showImages(data);
+        }
+      );
     }
   }
 
   function getImagesOthers(makeCall) {
-    document.getElementById('imagesOther').innerHTML = '<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>';
+    $('#imagesOther').html('<div id="showProgressOther" style="float: left; padding-left: 10px;"><?php echo osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('images_loading_from_server'); ?></div>');
 
-    if (makeCall != false) {
-      new Ajax.Request("rpc.php?action=getImages&pID=<?php echo urlencode($_GET['pID']); ?>&filter=others" <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseGetImages});
+    if ( makeCall != false ) {
+      $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=getImages&filter=others'); ?>',
+        function (data) {
+          showImages(data);
+        }
+      );
     }
+  }
+
+  function assignLocalImages() {
+    $('#showProgressAssigningLocalImages').css('display', 'inline');
+
+    var selectedFiles = '';
+
+    $('#localImagesSelection :selected').each(function(i, selected) {
+      selectedFiles += 'files[]=' + $(selected).text() + '&';
+    });
+
+    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=assignLocalImages'); ?>' + '&' + selectedFiles,
+      function (data) {
+        $('#showProgressAssigningLocalImages').css('display', 'none');
+        getLocalImages();
+        getImages();
+      }
+    );
   }
 
 <?php
   }
 ?>
 
-  function handleHttpResponseGetLocalImages(http) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(http.responseText);
-    result.shift();
+  function getLocalImages() {
+    $('#showProgressGetLocalImages').css('display', 'inline');
 
-    if (result[0] == '1') {
-      var i = 0;
+    $.getJSON('<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&action=getLocalImages'); ?>',
+      function (data) {
+        var i = 0;
+        var selectList = document.getElementById('localImagesSelection');
 
-      var selectList = document.getElementById('localImagesSelection');
+        for ( i=selectList.options.length; i>=0; i-- ) {
+          selectList.options[i] = null;
+        }
 
-      for (i = selectList.options.length; i >= 0; i--) {
-        selectList.options[i] = null;
-      }
-
-      if (result[1].length > 0) {
-        var entries = result[1].split('#');
-
-        for (i = 0; i < entries.length; i++) {
-          selectList.options[i] = new Option(entries[i]);
+        for ( i=0; i<data.entries.length; i++ ) {
+          selectList.options[i] = new Option(data.entries[i]);
           selectList.options[i].selected = false;
         }
+
+        $('#showProgressGetLocalImages').css('display', 'none');
       }
-    }
-
-    document.getElementById('showProgressGetLocalImages').style.display = 'none';
-  }
-
-  function getLocalImages() {
-    document.getElementById('showProgressGetLocalImages').style.display = 'inline';
-
-    new Ajax.Request("rpc.php?action=getLocalImages" <?php if ( !osc_empty(SID) ) { echo '+ "&' . SID . '"'; } ?>, {onSuccess: handleHttpResponseGetLocalImages});
-  }
-
-  function setFileUploadField() {
-    document.getElementById('fileUploadField').innerHTML = '<?php echo osc_draw_file_field('products_image', true); ?>';
+    );
   }
 
   function switchImageFilesView(layer) {
@@ -590,100 +547,68 @@ function toggleHTMLEditor(id) {
   }
 //--></script>
 
-<style type="text/css"><!--
-#overlay img {
-  border: none;
-}
+<div id="deleteImageDialog" title="<?php echo $osC_Language->get('action_heading_delete_image'); ?>"><p><?php echo $osC_Language->get('introduction_delete_image'); ?></p></div>
 
-#overlay {
-  background-image: url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>);
-}
-
-* html #overlay {
-  background-color: #000;
-  back\ground-color: transparent;
-  background-image: url(<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>);
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src="<?php echo osc_href_link_admin('templates/' . $osC_Template->getCode() . '/images/overlay.png'); ?>", sizingMethod="scale");
-  }
-//--></style>
-
-<link type="text/css" rel="stylesheet" href="external/tabpane/css/luna/tab.css" />
-<script type="text/javascript" src="external/tabpane/js/tabpane.js"></script>
-
-<div id="overlay" style="display: none; position: absolute; top: 0; left: 0; z-index: 90; width: 100%;"></div>
-
-<div id="actionLayer" style="display: none; position: absolute; z-index: 100; width: 400px; height: 200px;">
-  <div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_Language->get('action_heading_delete_image'); ?></div>
-  <div class="infoBoxContent">
-    <p><?php echo $osC_Language->get('introduction_delete_image'); ?></p>
-
-    <p align="center"><?php echo '<button onclick="removeImageConfirmation(\'\')" class="operationButton">' . $osC_Language->get('button_delete') . '</button> <button onclick="cancelRemoveImage(\'\')" class="operationButton">' . $osC_Language->get('button_cancel') . '</button>'; ?></p>
-  </div>
-</div>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#deleteImageDialog').dialog( {
+      autoOpen: false,
+      width: 600,
+      modal: true
+    } );
+  });
+</script>
 
 <h1><?php echo (isset($osC_ObjectInfo) && isset($products_name[$osC_Language->getID()])) ? $products_name[$osC_Language->getID()] : $osC_Language->get('heading_title_new_product'); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 ?>
 
-<div class="tab-pane" id="mainTabPane">
-  <script type="text/javascript"><!--
-    var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );
-  //--></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#mainTabs").tabs( { selected: 0 } );
+  $("#languageTabs").tabs( { selected: 0 } );
+});
+</script>
 
-  <form name="product" action="#" method="post" enctype="multipart/form-data">
+<form name="product" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (isset($osC_ObjectInfo) ? $osC_ObjectInfo->getInt('products_id') : '') . '&cID=' . $_GET['cID'] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
 
-  <div class="tab-page" id="tabDescription">
-    <h2 class="tab"><?php echo $osC_Language->get('section_general'); ?></h2>
+<div id="mainTabs">
+  <ul>
+    <li><?php echo osc_link_object('#section_general_content', $osC_Language->get('section_general')); ?></li>
+    <li><?php echo osc_link_object('#section_data_content', $osC_Language->get('section_data')); ?></li>
+    <li><?php echo osc_link_object('#section_images_content', $osC_Language->get('section_images')); ?></li>
+    <li><?php echo osc_link_object('#section_variants_content', $osC_Language->get('section_variants')); ?></li>
+    <li><?php echo osc_link_object('#section_categories_content', $osC_Language->get('section_categories')); ?></li>
+  </ul>
 
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabDescription" ) );
-    //--></script>
-
-    <div class="tab-pane" id="descriptionTabPane">
-      <script type="text/javascript"><!--
-        var descriptionTabPane = new WebFXTabPane( document.getElementById( "descriptionTabPane" ) );
-      //--></script>
+  <div id="section_general_content">
+    <div id="languageTabs">
+      <ul>
 
 <?php
-  foreach ($osC_Language->getAll() as $l) {
+  foreach ( $osC_Language->getAll() as $l ) {
+    echo '<li>' . osc_link_object('#languageTabs_' . $l['code'], $osC_Language->showImage($l['code']) . '&nbsp;' . $l['name']) . '</li>';
+  }
 ?>
 
-      <div class="tab-page" id="tabDescriptionLanguages_<?php echo $l['code']; ?>">
-        <h2 class="tab"><?php echo $osC_Language->showImage($l['code']) . '&nbsp;' . $l['name']; ?></h2>
+      </ul>
 
-        <script type="text/javascript"><!--
-          descriptionTabPane.addTabPage( document.getElementById( "tabDescriptionLanguages_<?php echo $l['code']; ?>" ) );
-        //--></script>
+<?php
+  foreach ( $osC_Language->getAll() as $l ) {
+?>
 
-        <table border="0" width="100%" cellspacing="0" cellpadding="2">
-          <tr>
-            <td><?php echo $osC_Language->get('field_name'); ?></td>
-            <td><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></td>
-          </tr>
-          <tr>
-            <td valign="top"><?php echo $osC_Language->get('field_description'); ?></td>
-            <td>
-              <?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null), 70, 15, 'style="width: 100%;" id="pd' . $l['id'] . '"'); ?>
-              <div style="text-align: right;"><?php echo '<a href="javascript:toggleHTMLEditor(\'pd' . $l['id'] . '\');">' . $osC_Language->get('toggle_html_editor') . '</a>'; ?></div>
-            </td>
-          </tr>
-          <tr>
-            <td><?php echo $osC_Language->get('field_keyword'); ?></td>
-            <td><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></td>
-          </tr>
-          <tr>
-            <td><?php echo $osC_Language->get('field_tags'); ?></td>
-            <td><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></td>
-          </tr>
-          <tr>
-            <td><?php echo $osC_Language->get('field_url'); ?></td>
-            <td><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></td>
-          </tr>
-        </table>
+      <div id="languageTabs_<?php echo $l['code']; ?>">
+        <fieldset>
+          <div><label for="<?php echo 'products_name[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_name'); ?></label><?php echo osc_draw_input_field('products_name[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_name[$l['id']]) ? $products_name[$l['id']] : null)); ?></div>
+          <div><label for="<?php echo 'products_description[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_description'); ?></label><?php echo osc_draw_textarea_field('products_description[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_description[$l['id']]) ? $products_description[$l['id']] : null)); ?><div style="width: 58.5%; text-align: right;"><?php echo '<a href="javascript:toggleEditor(\'products_description[' . $l['id'] . ']\');">' . $osC_Language->get('toggle_html_editor') . '</a>'; ?></div></div>
+          <div><label for="<?php echo 'products_keyword[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_keyword'); ?></label><?php echo osc_draw_input_field('products_keyword[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_keyword[$l['id']]) ? $products_keyword[$l['id']] : null)); ?></div>
+          <div><label for="<?php echo 'products_tags[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_tags'); ?></label><?php echo osc_draw_input_field('products_tags[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_tags[$l['id']]) ? $products_tags[$l['id']] : null)); ?></div>
+          <div><label for="<?php echo 'products_url[' . $l['id'] . ']'; ?>"><?php echo $osC_Language->get('field_url'); ?></label><?php echo osc_draw_input_field('products_url[' . $l['id'] . ']', (isset($osC_ObjectInfo) && isset($products_url[$l['id']]) ? $products_url[$l['id']] : null)); ?></div>
+        </fieldset>
       </div>
 
 <?php
@@ -693,47 +618,28 @@ function toggleHTMLEditor(id) {
     </div>
   </div>
 
-<?php
-  $data_width = ( isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') === 1) ) ? '100%' : '50%';
-?>
-
-  <div class="tab-page" id="tabData">
-    <h2 class="tab"><?php echo $osC_Language->get('section_data'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabData" ) );
-    //--></script>
-
+  <div id="section_data_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
 
 <?php
-  if ( !isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') !== 1)) ) {
+  $data_width = ( isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') === 1) ) ? '100%' : '50%';
+
+  if ( !isset($osC_ObjectInfo) || (isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') !== 1)) ) {
 ?>
 
         <td width="<?php echo $data_width;?>" height="100%" valign="top">
           <fieldset style="height: 100%;">
             <legend><?php echo $osC_Language->get('subsection_price'); ?></legend>
 
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_tax_class'); ?></td>
-                <td><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_tax_class_id') : null), 'id="tax_class0" onchange="updateGross(\'products_price0\');"'); ?></td>
-              </tr>
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_price_net'); ?></td>
-                <td><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0" onkeyup="updateGross(\'products_price0\')"'); ?></td>
-              </tr>
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_price_gross'); ?></td>
-                <td><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0_gross" onkeyup="updateNet(\'products_price0\')"'); ?></td>
-              </tr>
-            </table>
-
-            <script type="text/javascript"><!--
-              updateGross('products_price0');
-            //--></script>
+            <div><label for="tax_class0"><?php echo $osC_Language->get('field_tax_class'); ?></label><?php echo osc_draw_pull_down_menu('products_tax_class_id', $tax_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->getInt('products_tax_class_id') : null), 'id="tax_class0" onchange="updateGross(\'products_price0\');"'); ?></div>
+            <div><label for="products_price0"><?php echo $osC_Language->get('field_price_net'); ?></label><?php echo osc_draw_input_field('products_price', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0" onkeyup="updateGross(\'products_price0\')"'); ?></div>
+            <div><label for="products_price0_gross"><?php echo $osC_Language->get('field_price_gross'); ?></label><?php echo osc_draw_input_field('products_price_gross', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_price') : null), 'id="products_price0_gross" onkeyup="updateNet(\'products_price0\')"'); ?></div>
           </fieldset>
+
+<script type="text/javascript"><!--
+  updateGross('products_price0');
+//--></script>
         </td>
 
 <?php
@@ -741,56 +647,38 @@ function toggleHTMLEditor(id) {
 ?>
 
         <td width="<?php echo $data_width;?>" height="100%" valign="top">
-          <fieldset style="height: 100%;" disabled="disabled">
+          <fieldset style="height: 100%;">
             <legend><?php echo $osC_Language->get('subsection_data'); ?></legend>
 
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
-
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_status'); ?></td>
-                <td><?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => $osC_Language->get('status_enabled')), array('id' => '0', 'text' => $osC_Language->get('status_disabled'))), (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0')); ?></td>
-              </tr>
+            <div><label for="products_status"><?php echo $osC_Language->get('field_status'); ?></label><?php echo osc_draw_radio_field('products_status', array(array('id' => '1', 'text' => $osC_Language->get('status_enabled')), array('id' => '0', 'text' => $osC_Language->get('status_disabled'))), (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_status') : '0')); ?></div>
 
 <?php
-  if ( isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') !== 1) ) {
+  if ( isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') !== 1) ) {
 ?>
 
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_model'); ?></td>
-                <td><?php echo osc_draw_input_field('products_model', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_model') : null)); ?></td>
-              </tr>
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_quantity'); ?></td>
-                <td><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></td>
-              </tr>
-              <tr>
-                <td width="100px"><?php echo $osC_Language->get('field_weight'); ?></td>
-                <td><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)). '&nbsp;' . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></td>
-              </tr>
+            <div><label for="products_model"><?php echo $osC_Language->get('field_model'); ?></label><?php echo osc_draw_input_field('products_model', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_model') : null)); ?></div>
+            <div><label for="products_quantity"><?php echo $osC_Language->get('field_quantity'); ?></label><?php echo osc_draw_input_field('products_quantity', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_quantity') : null)); ?></div>
+            <div><label for="products_weight"><?php echo $osC_Language->get('field_weight'); ?></label><?php echo osc_draw_input_field('products_weight', (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight') : null)) . osc_draw_pull_down_menu('products_weight_class', $weight_class_array, (isset($osC_ObjectInfo) ? $osC_ObjectInfo->get('products_weight_class') : SHIPPING_WEIGHT_UNIT)); ?></div>
 
 <?php
   }
 ?>
 
-            </table>
           </fieldset>
         </td>
       </tr>
     </table>
 
 <?php
-  if ( isset($osC_ObjectInfo) && ((int)$osC_ObjectInfo->get('has_children') === 1) ) {
+  if ( isset($osC_ObjectInfo) && ($osC_ObjectInfo->getInt('has_children') === 1) ) {
     echo osc_draw_hidden_field('products_tax_class_id', 0) . osc_draw_hidden_field('products_price', 0) . osc_draw_hidden_field('products_model') . osc_draw_hidden_field('products_quantity', 0), osc_draw_hidden_field('products_weight', 0), osc_draw_hidden_field('products_weight_class', 0);
   }
 ?>
 
-    <table border="0" width="100%" cellspacing="0" cellpadding="2">
-      <tr>
-        <td>
-          <fieldset>
-            <legend>Attributes</legend>
+    <fieldset>
+      <legend>Attributes</legend>
 
-            <table border="0" width="100%" cellspacing="0" cellpadding="2">
+      <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
   $Qattributes = $osC_Database->query('select id, code from :table_templates_boxes where modules_group = :modules_group order by code');
@@ -812,30 +700,20 @@ function toggleHTMLEditor(id) {
       $module = new $module();
 ?>
 
-              <tr>
-                <td width="100px"><?php echo $module->getTitle() . ':'; ?></td>
-                <td><?php echo $module->setFunction((isset($attributes[$Qattributes->valueInt('id')]) ? $attributes[$Qattributes->valueInt('id')] : null)); ?></td>
-              </tr>
+        <tr>
+          <td width="100px"><?php echo $module->getTitle() . ':'; ?></td>
+          <td><?php echo $module->setFunction((isset($attributes[$Qattributes->valueInt('id')]) ? $attributes[$Qattributes->valueInt('id')] : null)); ?></td>
+        </tr>
 
 <?php
     }
   }
 ?>
-
-            </table>
-          </fieldset>
-        </td>
-      </tr>
-    </table>
+      </table>
+    </fieldset>
   </div>
 
-  <div class="tab-page" id="tabImages">
-    <h2 class="tab"><?php echo $osC_Language->get('section_images'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabImages" ) );
-    //--></script>
-
+  <div id="section_images_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td width="100%" height="100%" valign="top">
@@ -851,14 +729,36 @@ function toggleHTMLEditor(id) {
 
 <?php
     if ( isset($osC_ObjectInfo) ) {
-      echo '<input type="submit" value="' . $osC_Language->get('button_send_to_server') . '" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=fileUpload' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgress\').style.display=\'inline\';" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_upload_progress') . '</div>';
+      echo '<input type="button" id="uploadFile" value="' . $osC_Language->get('button_send_to_server') . '" class="operationButton" /><div id="showProgress" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_upload_progress') . '</div>';
+    } else {
+      echo osc_draw_file_field('products_image');
     }
 ?>
             </div>
 
+<?php
+    if ( isset($osC_ObjectInfo) ) {
+?>
+
 <script type="text/javascript"><!--
-  setFileUploadField();
+  $('#uploadFile').upload( {
+    name: 'products_image',
+    method: 'post',
+    enctype: 'multipart/form-data',
+    action: '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . $osC_ObjectInfo->getInt('products_id') . '&action=fileUpload'); ?>',
+    onSubmit: function() {
+      $('#showProgress').css('display', 'inline');
+    },
+    onComplete: function(data) {
+      $('#showProgress').css('display', 'none');
+      getImages();
+    }
+  } );
 //--></script>
+
+<?php
+    }
+?>
 
             <div id="localFiles" style="display: none;">
               <p><?php echo $osC_Language->get('introduction_select_local_images'); ?></p>
@@ -871,13 +771,11 @@ function toggleHTMLEditor(id) {
 
 <?php
     if ( isset($osC_ObjectInfo) ) {
-      echo '<input type="submit" value="Assign To Product" class="operationButton" onclick="document.product.target=\'fileUploadFrame\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=assignLocalImages' . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\'; document.getElementById(\'showProgressAssigningLocalImages\').style.display=\'inline\';" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_multiple_upload_progress') . '</div>';
+      echo '<input type="button" value="Assign To Product" class="operationButton" onclick="assignLocalImages();" /><div id="showProgressAssigningLocalImages" style="display: none; padding-left: 10px;">' . osc_icon('progress_ani.gif') . '&nbsp;' . $osC_Language->get('image_multiple_upload_progress') . '</div>';
     }
 ?>
 
             </div>
-
-            <iframe id="fileUploadFrame" name="fileUploadFrame" style="height: 0px; width: 0px; border: 0px"></iframe>
           </fieldset>
 
 <script type="text/javascript"><!--
@@ -913,11 +811,7 @@ function toggleHTMLEditor(id) {
     </table>
   </div>
 
-  <div class="tab-page" id="tabVariants">
-    <h2 class="tab"><?php echo $osC_Language->get('section_variants'); ?></h2>
-
-<script type="text/javascript">mainTabPane.addTabPage( document.getElementById( "tabVariants" ) );</script>
-
+  <div id="section_variants_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td colspan="3" align="right"><input type="button" value="Add Variant" class="infoBoxButton" onclick="addVariant();" /></td>
@@ -982,10 +876,10 @@ function toggleHTMLEditor(id) {
 <?php
   $variants_default_combo = null;
 
-  if (isset($_GET['pID'])) {
+  if ( isset($osC_ObjectInfo) ) {
     $Qvariants = $osC_Database->query('select * from :table_products where parent_id = :parent_id');
     $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
-    $Qvariants->bindInt(':parent_id', $_GET['pID']);
+    $Qvariants->bindInt(':parent_id', $osC_ObjectInfo->getInt('products_id'));
     $Qvariants->execute();
 
     $counter = 1;
@@ -1185,11 +1079,7 @@ function toggleHTMLEditor(id) {
     </table>
   </div>
 
-  <div class="tab-page" id="tabCategories">
-    <h2 class="tab"><?php echo $osC_Language->get('section_categories'); ?></h2>
-
-    <script type="text/javascript">mainTabPane.addTabPage( document.getElementById( "tabCategories" ) );</script>
-
+  <div id="section_categories_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td><table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
@@ -1203,10 +1093,10 @@ function toggleHTMLEditor(id) {
 <?php
   $product_categories_array = array();
 
-  if (isset($_GET['pID'])) {
+  if ( isset($osC_ObjectInfo) ) {
     $Qcategories = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id');
     $Qcategories->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-    $Qcategories->bindInt(':products_id', $_GET['pID']);
+    $Qcategories->bindInt(':products_id', $osC_ObjectInfo->getInt('products_id'));
     $Qcategories->execute();
 
     while ($Qcategories->next()) {
@@ -1229,8 +1119,8 @@ function toggleHTMLEditor(id) {
       </tr>
     </table>
   </div>
-
-  <p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" onclick="' . (isset($osC_ObjectInfo) ? 'setFileUploadField(); ' : '') . 'document.product.target=\'_self\'; document.product.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '') . '&action=save') . '\';" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cPath=' . $_GET['cPath'] . '&search=' . $_GET['search'] . (isset($_GET['pID']) ? '&pID=' . $_GET['pID'] : '')) . '\';" class="operationButton" />'; ?></p>
-
-  </form>
 </div>
+
+<p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID']) . '\';" class="operationButton" />'; ?></p>
+
+</form>
