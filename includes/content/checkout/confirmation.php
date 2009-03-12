@@ -87,7 +87,7 @@
 // Stock Check
       if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
         foreach ($osC_ShoppingCart->getProducts() as $product) {
-          if (!$osC_ShoppingCart->isInStock($product['id'])) {
+          if (!$osC_ShoppingCart->isInStock($product['item_id'])) {
             osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'AUTO'));
           }
         }

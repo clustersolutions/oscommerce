@@ -47,7 +47,7 @@
 // Stock Check
       if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
         foreach ($osC_ShoppingCart->getProducts() as $products) {
-          if ($osC_ShoppingCart->isInStock($products['id']) === false) {
+          if ($osC_ShoppingCart->isInStock($products['item_id']) === false) {
             osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'SSL'));
             break;
           }
