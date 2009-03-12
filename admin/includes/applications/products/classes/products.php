@@ -13,7 +13,7 @@
 */
 
   class osC_Products_Admin {
-    public static function getData($id) {
+    public static function get($id) {
       global $osC_Database, $osC_Language;
 
       $Qproducts = $osC_Database->query('select p.*, pd.* from :table_products p, :table_products_description pd where p.products_id = :products_id and p.products_id = pd.products_id and pd.language_id = :language_id');
@@ -39,6 +39,82 @@
       $data['attributes'] = $attributes_array;
 
       return $data;
+    }
+
+    public static function getAll($category_id = null, $pageset = 1) {
+      global $osC_Database, $osC_Language, $osC_Currencies;
+
+      if ( !is_numeric($category_id) ) {
+        $category_id = 0;
+      }
+
+      if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
+        $pageset = 1;
+      }
+
+      $result = array('entries' => array());
+
+      if ( $category_id > 0 ) {
+        $osC_CategoryTree = new osC_CategoryTree_Admin();
+        $osC_CategoryTree->setBreadcrumbUsage(false);
+
+        $in_categories = array($category_id);
+
+        foreach ( $osC_CategoryTree->getArray($category_id) as $category ) {
+          $in_categories[] = $category['id'];
+        }
+
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.products_name from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
+        $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
+        $Qproducts->bindRaw(':categories_id', implode(',', $in_categories));
+      } else {
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS p.*, pd.products_name from :table_products p, :table_products_description pd where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id');
+      }
+
+      $Qproducts->appendQuery('order by pd.products_name');
+      $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+      $Qproducts->bindInt(':language_id', $osC_Language->getID());
+
+      if ( $pageset !== -1 ) {
+        $Qproducts->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
+      }
+
+      $Qproducts->execute();
+
+      while ( $Qproducts->next() ) {
+        $price = $osC_Currencies->format($Qproducts->value('products_price'));
+        $products_status = ($Qproducts->valueInt('products_status') === 1);
+        $products_quantity = $Qproducts->valueInt('products_quantity');
+
+        if ( $Qproducts->valueInt('has_children') === 1 ) {
+          $Qvariants = $osC_Database->query('select min(products_price) as min_price, max(products_price) as max_price, sum(products_quantity) as total_quantity, min(products_status) as products_status from :table_products where parent_id = :parent_id');
+          $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
+          $Qvariants->bindInt(':parent_id', $Qproducts->valueInt('products_id'));
+          $Qvariants->execute();
+
+          $products_status = ($Qvariants->valueInt('products_status') === 1);
+          $products_quantity = '(' . $Qvariants->valueInt('total_quantity') . ')';
+
+          $price = $osC_Currencies->format($Qvariants->value('min_price'));
+
+          if ( $Qvariants->value('min_price') != $Qvariants->value('max_price') ) {
+            $price .= '&nbsp;-&nbsp;' . $osC_Currencies->format($Qvariants->value('max_price'));
+          }
+        }
+
+        $extra_data = array('products_price_formatted' => $price,
+                            'products_status' => $products_status,
+                            'products_quantity' => $products_quantity);
+
+        $result['entries'][] = array_merge($Qproducts->toArray(), $extra_data);
+      }
+
+      $result['total'] = $Qproducts->getBatchSize();
+
+      $Qproducts->freeResult();
+
+      return $result;
     }
 
     public static function save($id = null, $data) {
@@ -107,6 +183,7 @@
         $images = array();
 
         $products_image = new upload('products_image');
+        $products_image->set_extensions(array('gif', 'jpg', 'jpeg', 'png'));
 
         if ( $products_image->exists() ) {
           $products_image->set_destination(realpath('../images/products/originals'));
@@ -403,7 +480,7 @@
           }
         }
       } elseif ( $type == 'duplicate' ) {
-        $Qproduct = $osC_Database->query('select products_quantity, products_price, products_model, products_weight, products_weight_class, products_tax_class_id, manufacturers_id from :table_products where products_id = :products_id');
+        $Qproduct = $osC_Database->query('select * from :table_products where products_id = :products_id');
         $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproduct->bindInt(':products_id', $id);
         $Qproduct->execute();
@@ -428,12 +505,12 @@
           if ( $Qnew->affectedRows() ) {
             $new_product_id = $osC_Database->nextID();
 
-            $Qdesc = $osC_Database->query('select language_id, products_name, products_description, products_tags, products_url from :table_products_description where products_id = :products_id');
+            $Qdesc = $osC_Database->query('select * from :table_products_description where products_id = :products_id');
             $Qdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
             $Qdesc->bindInt(':products_id', $id);
             $Qdesc->execute();
 
-            while ($Qdesc->next()) {
+            while ( $Qdesc->next() ) {
               $Qnewdesc = $osC_Database->query('insert into :table_products_description (products_id, language_id, products_name, products_description, products_tags, products_url, products_viewed) values (:products_id, :language_id, :products_name, :products_description, :products_tags, :products_url, 0)');
               $Qnewdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
               $Qnewdesc->bindInt(':products_id', $new_product_id);
@@ -445,7 +522,7 @@
               $Qnewdesc->setLogging($_SESSION['module'], $new_product_id);
               $Qnewdesc->execute();
 
-              if ($osC_Database->isError()) {
+              if ( $osC_Database->isError() ) {
                 $error = true;
                 break;
               }
