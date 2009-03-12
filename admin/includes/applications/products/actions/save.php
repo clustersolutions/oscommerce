@@ -28,7 +28,7 @@
         $error = false;
 
         $data = array('quantity' => (isset($_POST['products_quantity']) ? $_POST['products_quantity'] : 0),
-                      'price' => $_POST['products_price'],
+                      'price' => (is_numeric($_POST['products_price']) ? $_POST['products_price'] : 0),
                       'weight' => (isset($_POST['products_weight']) ? $_POST['products_weight'] : 0),
                       'weight_class' => (isset($_POST['products_weight_class']) ? $_POST['products_weight_class'] : ''),
                       'status' => $_POST['products_status'],
