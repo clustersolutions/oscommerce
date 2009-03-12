@@ -129,7 +129,7 @@
 <script language="javascript" type="text/javascript">
   var originalPrice = '<?php echo $osC_Product->getPriceFormated(true); ?>';
   var productInfoNotAvailable = '<span id="productVariantCombinationNotAvailable">Not available in this combination. Please select another combination for your order.</span>';
-  var productInfoAvailability = '<?php echo addslashes($osC_Product->getAttribute('shipping_availability')); ?>';
+  var productInfoAvailability = '<?php if ( $osC_Product->hasAttribute('shipping_availability') ) { echo addslashes($osC_Product->getAttribute('shipping_availability')); } ?>';
 
   refreshVariants();
 </script>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2006 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -58,11 +58,7 @@
       if ( isset($file['tmp_name']) && !empty($file['tmp_name']) && ($file['tmp_name'] != 'none') && is_uploaded_file($file['tmp_name']) ) {
         if (sizeof($this->extensions) > 0) {
           if (!in_array(strtolower(substr($file['name'], strrpos($file['name'], '.')+1)), $this->extensions)) {
-            if ($this->message_location == 'direct') {
-              $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
-            } else { // HPDL
-              $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
-            }
+            $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_type_prohibited'), 'error');
 
             return false;
           }
@@ -77,14 +73,6 @@
         } else {
           return true;
         }
-      } else {
-        if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
-        } else { // HPDL
-          $osC_MessageStack->add('header', $osC_Language->get('ms_warning_upload_no_file'), 'warning');
-        }
-
-        return false;
       }
     }
 
@@ -96,19 +84,9 @@
       if (move_uploaded_file($this->file['tmp_name'], $this->destination . $this->filename)) {
         chmod($this->destination . $this->filename, $this->permissions);
 
-        if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
-        } else { // HPDL
-          $osC_MessageStack->add('header', $osC_Language->get('ms_success_upload_file_saved'), 'success');
-        }
-
         return true;
       } else {
-        if ($this->message_location == 'direct') {
-          $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
-        } else { // HPDL
-          $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
-        }
+        $osC_MessageStack->add('header', $osC_Language->get('ms_error_upload_file_not_saved'), 'error');
 
         return false;
       }
@@ -151,17 +129,9 @@
 
       if (!is_writeable($this->destination)) {
         if (is_dir($this->destination)) {
-          if ($this->message_location == 'direct') {
-            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
-          } else { // HPDL
-            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
-          }
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_not_writable'), $this->destination), 'error');
         } else {
-          if ($this->message_location == 'direct') {
-            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
-          } else { // HPDL
-            $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
-          }
+          $osC_MessageStack->add('header', sprintf($osC_Language->get('ms_error_upload_destination_non_existant'), $this->destination), 'error');
         }
 
         return false;
