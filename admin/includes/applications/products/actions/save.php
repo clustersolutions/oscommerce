@@ -27,12 +27,12 @@
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
         $error = false;
 
-        $data = array('quantity' => $_POST['products_quantity'],
+        $data = array('quantity' => (isset($_POST['products_quantity']) ? $_POST['products_quantity'] : 0),
                       'price' => $_POST['products_price'],
-                      'weight' => $_POST['products_weight'],
-                      'weight_class' => $_POST['products_weight_class'],
+                      'weight' => (isset($_POST['products_weight']) ? $_POST['products_weight'] : 0),
+                      'weight_class' => (isset($_POST['products_weight_class']) ? $_POST['products_weight_class'] : ''),
                       'status' => $_POST['products_status'],
-                      'model' => $_POST['products_model'],
+                      'model' => (isset($_POST['products_model']) ? $_POST['products_model'] : ''),
                       'tax_class_id' => $_POST['products_tax_class_id'],
                       'products_name' => $_POST['products_name'],
                       'products_description' => $_POST['products_description'],

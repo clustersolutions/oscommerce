@@ -12,6 +12,8 @@
   as published by the Free Software Foundation.
 */
 
+  require('includes/classes/address_book.php');
+
   class osC_Checkout_Process extends osC_Template {
 
 /* Private variables */
