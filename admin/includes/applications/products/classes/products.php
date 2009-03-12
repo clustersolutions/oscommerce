@@ -99,7 +99,7 @@
           $price = $osC_Currencies->format($Qvariants->value('min_price'));
 
           if ( $Qvariants->value('min_price') != $Qvariants->value('max_price') ) {
-            $price .= '&nbsp;-&nbsp;' . $osC_Currencies->format($Qvariants->value('max_price'));
+            $price .= ' - ' . $osC_Currencies->format($Qvariants->value('max_price'));
           }
         }
 
@@ -343,7 +343,7 @@
             if ( is_array($value) ) {
             } elseif ( !empty($value) ) {
               $Qcheck = $osC_Database->query('select id from :table_product_attributes where products_id = :products_id and id = :id limit 1');
-              $Qcheck->bindTable(':table_product_attributes');
+              $Qcheck->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
               $Qcheck->bindInt(':products_id', $products_id);
               $Qcheck->bindInt(':id', $attributes_id);
               $Qcheck->execute();
@@ -355,7 +355,7 @@
                 $Qattribute->bindInt(':languages_id', 0);
               }
 
-              $Qattribute->bindTable(':table_product_attributes');
+              $Qattribute->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
               $Qattribute->bindValue(':value', $value);
               $Qattribute->bindInt(':products_id', $products_id);
               $Qattribute->bindInt(':id', $attributes_id);

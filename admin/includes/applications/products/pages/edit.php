@@ -188,15 +188,15 @@ function toggleEditor(id) {
       addVariant();
     }
 
-    if (variants[variant_selected][document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id] == undefined) {
-      variants[variant_selected][document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id] = new Array();
+    if (variants[variant_selected][document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].parentNode.id] == undefined) {
+      variants[variant_selected][document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].parentNode.id] = new Array();
     }
 
-    if (variants_groups[document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id]['multiple'] == false) {
-      variants[variant_selected][document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id] = new Array();
+    if (variants_groups[document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].parentNode.id]['multiple'] == false) {
+      variants[variant_selected][document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].parentNode.id] = new Array();
     }
 
-    variants[variant_selected][document.product.attributes.options[document.product.attributes.options.selectedIndex].parentNode.id][document.product.attributes.options[document.product.attributes.options.selectedIndex].value] = document.product.attributes.options[document.product.attributes.options.selectedIndex].value;
+    variants[variant_selected][document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].parentNode.id][document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].value] = document.product.variantGroups.options[document.product.variantGroups.options.selectedIndex].value;
 
     var spanFields = document.getElementById('variant' + variant_selected).getElementsByTagName('span');
 
@@ -818,7 +818,7 @@ $(document).ready(function(){
       </tr>
       <tr>
         <td width="30%" valign="top">
-          <select name="attributes" ondblclick="moreFields();" size="20" style="width: 100%;">
+          <select name="variantGroups" ondblclick="moreFields();" size="20" style="width: 100%;">
 
 <?php
   $Qvgroups = $osC_Database->query('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');

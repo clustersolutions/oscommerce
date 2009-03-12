@@ -35,6 +35,8 @@
 
       if ( isset($_GET['cID']) && is_numeric($_GET['cID']) ) {
         $current_category_id = $_GET['cID'];
+      } else {
+        $_GET['cID'] = $current_category_id;
       }
 
       require('../includes/classes/currencies.php');

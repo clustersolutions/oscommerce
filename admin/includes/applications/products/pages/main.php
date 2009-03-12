@@ -128,7 +128,7 @@
       newCell.innerHTML = htmlSpecialChars(record.products_price_formatted);
 
       newCell = newRow.insertCell(2);
-      newCell.innerHTML = parseInt(record.products_quantity);
+      newCell.innerHTML = htmlSpecialChars(record.products_quantity);
 
       newCell = newRow.insertCell(3);
       newCell.innerHTML = '<a href="' + productEditLink.replace('PRODUCTID', parseInt(record.products_id)) + '">' + productEditLinkIcon + '</a>&nbsp;<a href="' + productCopyLink.replace('PRODUCTID', parseInt(record.products_id)) + '">' + productCopyLinkIcon + '</a>&nbsp;<a href="' + productDeleteLink.replace('PRODUCTID', parseInt(record.products_id)) + '">' + productDeleteLinkIcon + '</a>';
