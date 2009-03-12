@@ -19,7 +19,7 @@
 
 <table border="0" width="100%" cellspacing="0" cellpadding="0">
   <tr>
-    <td style="padding-left: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', 'osCommerce, 3.0 Alpha 4')); ?></td>
+    <td style="padding-left: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', PROJECT_VERSION)); ?></td>
     <td width="150" align="right" style="padding-right: 5px;">
 
 <?php

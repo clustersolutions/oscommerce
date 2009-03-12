@@ -3,7 +3,7 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2007 osCommerce
+# Copyright (c) 2009 osCommerce
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -14,18 +14,18 @@ CREATE TABLE osc_address_book (
    address_book_id int NOT NULL auto_increment,
    customers_id int NOT NULL,
    entry_gender char(1) NOT NULL,
-   entry_company varchar(32),
-   entry_firstname varchar(32) NOT NULL,
-   entry_lastname varchar(32) NOT NULL,
-   entry_street_address varchar(64) NOT NULL,
-   entry_suburb varchar(32),
-   entry_postcode varchar(10) NOT NULL,
-   entry_city varchar(32) NOT NULL,
-   entry_state varchar(32),
+   entry_company varchar(255),
+   entry_firstname varchar(255) NOT NULL,
+   entry_lastname varchar(255) NOT NULL,
+   entry_street_address varchar(255) NOT NULL,
+   entry_suburb varchar(255),
+   entry_postcode varchar(255) NOT NULL,
+   entry_city varchar(255) NOT NULL,
+   entry_state varchar(255),
    entry_country_id int DEFAULT '0' NOT NULL,
    entry_zone_id int DEFAULT '0' NOT NULL,
-   entry_telephone varchar(32),
-   entry_fax varchar(32),
+   entry_telephone varchar(255),
+   entry_fax varchar(255),
    PRIMARY KEY (address_book_id),
    KEY idx_address_book_customers_id (customers_id)
 );
@@ -33,7 +33,7 @@ CREATE TABLE osc_address_book (
 DROP TABLE IF EXISTS osc_administrators;
 CREATE TABLE osc_administrators (
   id int NOT NULL auto_increment,
-  user_name varchar(32) binary NOT NULL,
+  user_name varchar(255) binary NOT NULL,
   user_password varchar(40) NOT NULL,
   PRIMARY KEY (id)
 );
@@ -49,7 +49,7 @@ DROP TABLE IF EXISTS osc_administrators_log;
 CREATE TABLE osc_administrators_log (
   id int NOT NULL,
   module varchar(255) NOT NULL,
-  module_action varchar(32),
+  module_action varchar(255),
   module_id int,
   field_key varchar(255) NOT NULL,
   old_value text,
@@ -63,12 +63,12 @@ CREATE TABLE osc_administrators_log (
 DROP TABLE IF EXISTS osc_banners;
 CREATE TABLE osc_banners (
   banners_id int NOT NULL auto_increment,
-  banners_title varchar(64) NOT NULL,
+  banners_title varchar(255) NOT NULL,
   banners_url varchar(255) NOT NULL,
-  banners_image varchar(64) NOT NULL,
-  banners_group varchar(10) NOT NULL,
+  banners_image varchar(255) NOT NULL,
+  banners_group varchar(255) NOT NULL,
   banners_html_text text,
-  expires_impressions int(7) DEFAULT '0',
+  expires_impressions int DEFAULT '0',
   expires_date datetime DEFAULT NULL,
   date_scheduled datetime DEFAULT NULL,
   date_added datetime NOT NULL,
@@ -81,8 +81,8 @@ DROP TABLE IF EXISTS osc_banners_history;
 CREATE TABLE osc_banners_history (
   banners_history_id int NOT NULL auto_increment,
   banners_id int NOT NULL,
-  banners_shown int(5) NOT NULL DEFAULT '0',
-  banners_clicked int(5) NOT NULL DEFAULT '0',
+  banners_shown int NOT NULL DEFAULT '0',
+  banners_clicked int NOT NULL DEFAULT '0',
   banners_history_date datetime NOT NULL,
   PRIMARY KEY  (banners_history_id)
 );
@@ -90,9 +90,9 @@ CREATE TABLE osc_banners_history (
 DROP TABLE IF EXISTS osc_categories;
 CREATE TABLE osc_categories (
    categories_id int NOT NULL auto_increment,
-   categories_image varchar(64),
+   categories_image varchar(255),
    parent_id int DEFAULT '0' NOT NULL,
-   sort_order int(3),
+   sort_order int,
    date_added datetime,
    last_modified datetime,
    PRIMARY KEY (categories_id),
@@ -103,7 +103,7 @@ DROP TABLE IF EXISTS osc_categories_description;
 CREATE TABLE osc_categories_description (
    categories_id int DEFAULT '0' NOT NULL,
    language_id int DEFAULT '1' NOT NULL,
-   categories_name varchar(32) NOT NULL,
+   categories_name varchar(255) NOT NULL,
    PRIMARY KEY (categories_id, language_id),
    KEY idx_categories_name (categories_name)
 );
@@ -111,12 +111,12 @@ CREATE TABLE osc_categories_description (
 DROP TABLE IF EXISTS osc_configuration;
 CREATE TABLE osc_configuration (
   configuration_id int NOT NULL auto_increment,
-  configuration_title varchar(64) NOT NULL,
-  configuration_key varchar(64) NOT NULL,
-  configuration_value varchar(255) NOT NULL,
+  configuration_title varchar(255) NOT NULL,
+  configuration_key varchar(255) NOT NULL,
+  configuration_value text NOT NULL,
   configuration_description varchar(255) NOT NULL,
   configuration_group_id int NOT NULL,
-  sort_order int(5) NULL,
+  sort_order int NULL,
   last_modified datetime NULL,
   date_added datetime NOT NULL,
   use_function varchar(255) NULL,
@@ -127,10 +127,10 @@ CREATE TABLE osc_configuration (
 DROP TABLE IF EXISTS osc_configuration_group;
 CREATE TABLE osc_configuration_group (
   configuration_group_id int NOT NULL auto_increment,
-  configuration_group_title varchar(64) NOT NULL,
+  configuration_group_title varchar(255) NOT NULL,
   configuration_group_description varchar(255) NOT NULL,
-  sort_order int(5) NULL,
-  visible int(1) DEFAULT '1' NULL,
+  sort_order int NULL,
+  visible int DEFAULT '1' NULL,
   PRIMARY KEY (configuration_group_id)
 );
 
@@ -143,7 +143,7 @@ CREATE TABLE osc_counter (
 DROP TABLE IF EXISTS osc_countries;
 CREATE TABLE osc_countries (
   countries_id int NOT NULL auto_increment,
-  countries_name varchar(64) NOT NULL,
+  countries_name varchar(255) NOT NULL,
   countries_iso_code_2 char(2) NOT NULL,
   countries_iso_code_3 char(3) NOT NULL,
   address_format varchar(255) NULL,
@@ -154,8 +154,8 @@ CREATE TABLE osc_countries (
 DROP TABLE IF EXISTS osc_credit_cards;
 CREATE TABLE osc_credit_cards (
   id int NOT NULL auto_increment,
-  credit_card_name varchar(32) NOT NULL,
-  pattern varchar(64) NOT NULL,
+  credit_card_name varchar(255) NOT NULL,
+  pattern varchar(255) NOT NULL,
   credit_card_status char(1) NOT NULL,
   sort_order int default '0',
   PRIMARY KEY (id)
@@ -164,7 +164,7 @@ CREATE TABLE osc_credit_cards (
 DROP TABLE IF EXISTS osc_currencies;
 CREATE TABLE osc_currencies (
   currencies_id int NOT NULL auto_increment,
-  title varchar(32) NOT NULL,
+  title varchar(255) NOT NULL,
   code char(3) NOT NULL,
   symbol_left varchar(12),
   symbol_right varchar(12),
@@ -178,29 +178,29 @@ DROP TABLE IF EXISTS osc_customers;
 CREATE TABLE osc_customers (
   customers_id int NOT NULL auto_increment,
   customers_gender char(1),
-  customers_firstname varchar(32) NOT NULL,
-  customers_lastname varchar(32) NOT NULL,
+  customers_firstname varchar(255) NOT NULL,
+  customers_lastname varchar(255) NOT NULL,
   customers_dob datetime,
-  customers_email_address varchar(96) NOT NULL,
+  customers_email_address varchar(255) NOT NULL,
   customers_default_address_id int,
-  customers_telephone varchar(32),
-  customers_fax varchar(32),
+  customers_telephone varchar(255),
+  customers_fax varchar(255),
   customers_password varchar(40),
   customers_newsletter char(1),
-  customers_status int(1) DEFAULT '0',
+  customers_status int DEFAULT '0',
   customers_ip_address varchar(15),
   date_last_logon datetime,
-  number_of_logons int(5),
+  number_of_logons int,
   date_account_created datetime,
   date_account_last_modified datetime,
-  global_product_notifications int(1) DEFAULT '0',
+  global_product_notifications int DEFAULT '0',
   PRIMARY KEY (customers_id)
 );
 
 DROP TABLE IF EXISTS osc_languages;
 CREATE TABLE osc_languages (
   languages_id int NOT NULL auto_increment,
-  name varchar(32)  NOT NULL,
+  name varchar(255)  NOT NULL,
   code char(5) NOT NULL,
   locale varchar(255) NOT NULL,
   charset varchar(32) NOT NULL,
@@ -212,7 +212,7 @@ CREATE TABLE osc_languages (
   numeric_separator_decimal varchar(12) NOT NULL,
   numeric_separator_thousands varchar(12) NOT NULL,
   parent_id int DEFAULT 0,
-  sort_order int(3),
+  sort_order int,
   PRIMARY KEY (languages_id)
 );
 
@@ -220,7 +220,7 @@ DROP TABLE IF EXISTS osc_languages_definitions;
 CREATE TABLE osc_languages_definitions (
   id int NOT NULL auto_increment,
   languages_id int NOT NULL,
-  content_group varchar(32) NOT NULL,
+  content_group varchar(255) NOT NULL,
   definition_key varchar(255) NOT NULL,
   definition_value text NOT NULL,
   PRIMARY KEY (id),
@@ -232,8 +232,8 @@ CREATE TABLE osc_languages_definitions (
 DROP TABLE IF EXISTS osc_manufacturers;
 CREATE TABLE osc_manufacturers (
   manufacturers_id int NOT NULL auto_increment,
-  manufacturers_name varchar(32) NOT NULL,
-  manufacturers_image varchar(64),
+  manufacturers_name varchar(255) NOT NULL,
+  manufacturers_image varchar(255),
   date_added datetime NULL,
   last_modified datetime NULL,
   PRIMARY KEY (manufacturers_id),
@@ -245,7 +245,7 @@ CREATE TABLE osc_manufacturers_info (
   manufacturers_id int NOT NULL,
   languages_id int NOT NULL,
   manufacturers_url varchar(255) NOT NULL,
-  url_clicked int(5) NOT NULL default '0',
+  url_clicked int NOT NULL default '0',
   date_last_click datetime NULL,
   PRIMARY KEY (manufacturers_id, languages_id)
 );
@@ -258,8 +258,8 @@ CREATE TABLE osc_newsletters (
   module varchar(255) NOT NULL,
   date_added datetime NOT NULL,
   date_sent datetime,
-  status int(1),
-  locked int(1) DEFAULT '0',
+  status int,
+  locked int DEFAULT '0',
   PRIMARY KEY (newsletters_id)
 );
 
@@ -276,42 +276,42 @@ DROP TABLE IF EXISTS osc_orders;
 CREATE TABLE osc_orders (
   orders_id int NOT NULL auto_increment,
   customers_id int NOT NULL,
-  customers_name varchar(64) NOT NULL,
-  customers_company varchar(32),
-  customers_street_address varchar(64) NOT NULL,
-  customers_suburb varchar(32),
-  customers_city varchar(32) NOT NULL,
-  customers_postcode varchar(10) NOT NULL,
-  customers_state varchar(32),
-  customers_state_code varchar(32),
-  customers_country varchar(64) NOT NULL,
+  customers_name varchar(255) NOT NULL,
+  customers_company varchar(255),
+  customers_street_address varchar(255) NOT NULL,
+  customers_suburb varchar(255),
+  customers_city varchar(255) NOT NULL,
+  customers_postcode varchar(255) NOT NULL,
+  customers_state varchar(255),
+  customers_state_code varchar(255),
+  customers_country varchar(255) NOT NULL,
   customers_country_iso2 char(2) NOT NULL,
   customers_country_iso3 char(3) NOT NULL,
-  customers_telephone varchar(32) NOT NULL,
-  customers_email_address varchar(96) NOT NULL,
+  customers_telephone varchar(255) NOT NULL,
+  customers_email_address varchar(255) NOT NULL,
   customers_address_format varchar(255) NOT NULL,
   customers_ip_address varchar(15),
-  delivery_name varchar(64) NOT NULL,
-  delivery_company varchar(32),
-  delivery_street_address varchar(64) NOT NULL,
-  delivery_suburb varchar(32),
-  delivery_city varchar(32) NOT NULL,
-  delivery_postcode varchar(10) NOT NULL,
-  delivery_state varchar(32),
-  delivery_state_code varchar(32),
-  delivery_country varchar(64) NOT NULL,
+  delivery_name varchar(255) NOT NULL,
+  delivery_company varchar(255),
+  delivery_street_address varchar(255) NOT NULL,
+  delivery_suburb varchar(255),
+  delivery_city varchar(255) NOT NULL,
+  delivery_postcode varchar(255) NOT NULL,
+  delivery_state varchar(255),
+  delivery_state_code varchar(255),
+  delivery_country varchar(255) NOT NULL,
   delivery_country_iso2 char(2) NOT NULL,
   delivery_country_iso3 char(3) NOT NULL,
   delivery_address_format varchar(255) NOT NULL,
-  billing_name varchar(64) NOT NULL,
-  billing_company varchar(32),
-  billing_street_address varchar(64) NOT NULL,
-  billing_suburb varchar(32),
-  billing_city varchar(32) NOT NULL,
-  billing_postcode varchar(10) NOT NULL,
-  billing_state varchar(32),
-  billing_state_code varchar(32),
-  billing_country varchar(64) NOT NULL,
+  billing_name varchar(255) NOT NULL,
+  billing_company varchar(255),
+  billing_street_address varchar(255) NOT NULL,
+  billing_suburb varchar(255),
+  billing_city varchar(255) NOT NULL,
+  billing_postcode varchar(255) NOT NULL,
+  billing_state varchar(255),
+  billing_state_code varchar(255),
+  billing_country varchar(255) NOT NULL,
   billing_country_iso2 char(2) NOT NULL,
   billing_country_iso3 char(3) NOT NULL,
   billing_address_format varchar(255) NOT NULL,
@@ -319,7 +319,7 @@ CREATE TABLE osc_orders (
   payment_module varchar(255) NOT NULL,
   last_modified datetime,
   date_purchased datetime,
-  orders_status int(5) NOT NULL,
+  orders_status int NOT NULL,
   orders_date_finished datetime,
   currency char(3),
   currency_value decimal(14,6),
@@ -331,11 +331,11 @@ CREATE TABLE osc_orders_products (
   orders_products_id int NOT NULL auto_increment,
   orders_id int NOT NULL,
   products_id int NOT NULL,
-  products_model varchar(12),
-  products_name varchar(64) NOT NULL,
+  products_model varchar(255),
+  products_name varchar(255) NOT NULL,
   products_price decimal(15,4) NOT NULL,
   products_tax decimal(7,4) NOT NULL,
-  products_quantity int(2) NOT NULL,
+  products_quantity int NOT NULL,
   PRIMARY KEY (orders_products_id)
 );
 
@@ -343,7 +343,7 @@ DROP TABLE IF EXISTS osc_orders_status;
 CREATE TABLE osc_orders_status (
    orders_status_id int DEFAULT '0' NOT NULL,
    language_id int DEFAULT '1' NOT NULL,
-   orders_status_name varchar(32) NOT NULL,
+   orders_status_name varchar(255) NOT NULL,
    PRIMARY KEY (orders_status_id, language_id),
    KEY idx_orders_status_name (orders_status_name)
 );
@@ -352,9 +352,9 @@ DROP TABLE IF EXISTS osc_orders_status_history;
 CREATE TABLE osc_orders_status_history (
    orders_status_history_id int NOT NULL auto_increment,
    orders_id int NOT NULL,
-   orders_status_id int(5) NOT NULL,
+   orders_status_id int NOT NULL,
    date_added datetime NOT NULL,
-   customer_notified int(1) DEFAULT '0',
+   customer_notified int DEFAULT '0',
    comments text,
    PRIMARY KEY (orders_status_history_id)
 );
@@ -376,8 +376,8 @@ CREATE TABLE osc_orders_products_download (
   orders_id int NOT NULL default '0',
   orders_products_id int NOT NULL default '0',
   orders_products_filename varchar(255) NOT NULL default '',
-  download_maxdays int(2) NOT NULL default '0',
-  download_count int(2) NOT NULL default '0',
+  download_maxdays int NOT NULL default '0',
+  download_count int NOT NULL default '0',
   PRIMARY KEY  (orders_products_download_id)
 );
 
@@ -388,7 +388,7 @@ CREATE TABLE osc_orders_total (
   title varchar(255) NOT NULL,
   text varchar(255) NOT NULL,
   value decimal(15,4) NOT NULL,
-  class varchar(32) NOT NULL,
+  class varchar(255) NOT NULL,
   sort_order int NOT NULL,
   PRIMARY KEY (orders_total_id),
   KEY idx_orders_total_orders_id (orders_id)
@@ -410,7 +410,7 @@ DROP TABLE IF EXISTS osc_orders_transactions_status;
 CREATE TABLE osc_orders_transactions_status (
    id int unsigned NOT NULL,
    language_id int unsigned NOT NULL,
-   status_name varchar(32) NOT NULL,
+   status_name varchar(255) NOT NULL,
    PRIMARY KEY (id, language_id),
    KEY idx_orders_transactions_status_name (status_name)
 );
@@ -449,12 +449,12 @@ DROP TABLE IF EXISTS osc_products_description;
 CREATE TABLE osc_products_description (
   products_id int NOT NULL auto_increment,
   language_id int NOT NULL default '1',
-  products_name varchar(64) NOT NULL default '',
+  products_name varchar(255) NOT NULL default '',
   products_description text,
-  products_keyword varchar(64),
+  products_keyword varchar(255),
   products_tags varchar(255),
   products_url varchar(255),
-  products_viewed int(5) default '0',
+  products_viewed int default '0',
   PRIMARY KEY  (products_id,language_id),
   KEY products_name (products_name),
   KEY products_description_keyword (products_keyword)
@@ -477,7 +477,7 @@ CREATE TABLE osc_products_images_groups (
   id int NOT NULL,
   language_id int NOT NULL,
   title varchar(255) not null,
-  code varchar(32) not null,
+  code varchar(255) not null,
   size_width int,
   size_height int,
   force_size tinyint(1) default 0,
@@ -533,13 +533,13 @@ CREATE TABLE osc_reviews (
   reviews_id int NOT NULL auto_increment,
   products_id int NOT NULL,
   customers_id int,
-  customers_name varchar(64) NOT NULL,
-  reviews_rating int(1),
+  customers_name varchar(255) NOT NULL,
+  reviews_rating int,
   languages_id int NOT NULL,
   reviews_text text NOT NULL,
   date_added datetime,
   last_modified datetime,
-  reviews_read int(5) NOT NULL default '0',
+  reviews_read int NOT NULL default '0',
   reviews_status tinyint(1) NOT NULL,
   PRIMARY KEY (reviews_id)
 );
@@ -599,7 +599,7 @@ CREATE TABLE osc_specials (
 DROP TABLE IF EXISTS osc_tax_class;
 CREATE TABLE osc_tax_class (
   tax_class_id int NOT NULL auto_increment,
-  tax_class_title varchar(32) NOT NULL,
+  tax_class_title varchar(255) NOT NULL,
   tax_class_description varchar(255) NOT NULL,
   last_modified datetime NULL,
   date_added datetime NOT NULL,
@@ -611,7 +611,7 @@ CREATE TABLE osc_tax_rates (
   tax_rates_id int NOT NULL auto_increment,
   tax_zone_id int NOT NULL,
   tax_class_id int NOT NULL,
-  tax_priority int(5) DEFAULT 1,
+  tax_priority int DEFAULT 1,
   tax_rate decimal(7,4) NOT NULL,
   tax_description varchar(255) NOT NULL,
   last_modified datetime NULL,
@@ -622,7 +622,7 @@ CREATE TABLE osc_tax_rates (
 DROP TABLE IF EXISTS osc_geo_zones;
 CREATE TABLE osc_geo_zones (
   geo_zone_id int NOT NULL auto_increment,
-  geo_zone_name varchar(32) NOT NULL,
+  geo_zone_name varchar(255) NOT NULL,
   geo_zone_description varchar(255) NOT NULL,
   last_modified datetime NULL,
   date_added datetime NOT NULL,
@@ -632,24 +632,24 @@ CREATE TABLE osc_geo_zones (
 DROP TABLE IF EXISTS osc_templates;
 CREATE TABLE osc_templates (
   id int NOT NULL auto_increment,
-  title varchar(64) not null,
-  code varchar(32) not null,
-  author_name varchar(64) not null,
+  title varchar(255) not null,
+  code varchar(255) not null,
+  author_name varchar(255) not null,
   author_www varchar(255),
-  markup_version varchar(32),
+  markup_version varchar(255),
   css_based tinyint,
-  medium varchar(32),
+  medium varchar(255),
   PRIMARY KEY (id)
 );
 
 DROP TABLE IF EXISTS osc_templates_boxes;
 CREATE TABLE osc_templates_boxes (
   id int NOT NULL auto_increment,
-  title varchar(64) not null,
-  code varchar(32) not null,
-  author_name varchar(64) not null,
+  title varchar(255) not null,
+  code varchar(255) not null,
+  author_name varchar(255) not null,
   author_www varchar(255),
-  modules_group varchar(32) not null,
+  modules_group varchar(255) not null,
   PRIMARY KEY (id)
 );
 
@@ -659,7 +659,7 @@ CREATE TABLE osc_templates_boxes_to_pages (
   templates_boxes_id int not null,
   templates_id int not null,
   content_page varchar(255) not null,
-  boxes_group varchar(32) not null,
+  boxes_group varchar(255) not null,
   sort_order int default 0,
   page_specific int default 0,
   PRIMARY KEY (id),
@@ -671,20 +671,20 @@ CREATE TABLE osc_weight_classes (
   weight_class_id int NOT NULL default '0',
   weight_class_key varchar(4) NOT NULL default '',
   language_id int NOT NULL default '0',
-  weight_class_title varchar(32) NOT NULL default '',
+  weight_class_title varchar(255) NOT NULL default '',
   PRIMARY KEY (weight_class_id, language_id)
 );
 
 DROP TABLE IF EXISTS osc_weight_classes_rules;
 CREATE TABLE osc_weight_classes_rules (
-  weight_class_from_id int(11) NOT NULL default '0',
-  weight_class_to_id int(11) NOT NULL default '0',
+  weight_class_from_id int NOT NULL default '0',
+  weight_class_to_id int NOT NULL default '0',
   weight_class_rule decimal(15,4) NOT NULL default '0.0000'
 );
 DROP TABLE IF EXISTS osc_whos_online;
 CREATE TABLE osc_whos_online (
   customer_id int,
-  full_name varchar(64) NOT NULL,
+  full_name varchar(255) NOT NULL,
   session_id varchar(128) NOT NULL,
   ip_address varchar(15) NOT NULL,
   time_entry varchar(14) NOT NULL,
@@ -696,7 +696,7 @@ DROP TABLE IF EXISTS osc_zones;
 CREATE TABLE osc_zones (
   zone_id int NOT NULL auto_increment,
   zone_country_id int NOT NULL,
-  zone_code varchar(32) NOT NULL,
+  zone_code varchar(255) NOT NULL,
   zone_name varchar(255) NOT NULL,
   PRIMARY KEY (zone_id)
 );
