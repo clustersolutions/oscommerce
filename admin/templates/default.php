@@ -29,9 +29,10 @@
   }
 ?>
 
-<title><?php echo $osC_Language->get('administration_title') . ': ' . $osC_Template->getPageTitle(); ?></title>
+<title><?php echo STORE_NAME . ': ' . $osC_Language->get('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
 <meta name="Generator" value="osCommerce" />
+<meta name="robots" content="noindex,nofollow" />
 
 <script language="javascript" src="../ext/jquery/jquery-1.3.2.min.js"></script>
 <script language="javascript" src="../ext/jquery/jquery.cookie.js"></script>
