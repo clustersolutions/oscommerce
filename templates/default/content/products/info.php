@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -41,10 +41,20 @@
         <td class="productInfoKey">Price:</td>
         <td class="productInfoValue"><span id="productInfoPrice"><?php echo $osC_Product->getPriceFormated(true); ?></span> (plus <?php echo osc_link_object(osc_href_link(FILENAME_INFO, 'shipping'), 'shipping'); ?>)</td>
       </tr>
+
+<?php
+  if ( $osC_Product->hasAttribute('shipping_availability') ) {
+?>
+
       <tr>
         <td class="productInfoKey">Availability:</td>
         <td class="productInfoValue" id="productInfoAvailability"><?php echo $osC_Product->getAttribute('shipping_availability'); ?></td>
       </tr>
+
+<?php
+  }
+?>
+
     </table>
 
 <?php
@@ -153,11 +163,9 @@
 <div class="submitFormButtons" style="text-align: right;">
 
 <?php
-/*
   if ($osC_Services->isStarted('reviews')) {
     echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, 'reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', $osC_Language->get('button_reviews')));
   }
-*/
 ?>
 
 </div>
