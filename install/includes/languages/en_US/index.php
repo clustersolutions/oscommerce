@@ -3,19 +3,19 @@
 # osCommerce, Open Source E-Commerce Solutions
 # http://www.oscommerce.com
 #
-# Copyright (c) 2007 osCommerce
+# Copyright (c) 2009 osCommerce
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
-page_title_welcome = Welcome to osCommerce 3.0 Alpha 4!
+page_title_welcome = Welcome to osCommerce Online Merchant v3.0 Alpha 5!
 
 page_heading_installation_type = Installation Type
 
 title_language = Language:
 
-text_welcome = <p style="background-color: #ff6633; padding: 5px; border: 1px #000 solid;">Please be aware that this is an unsuppported development alpha release that is not to be used for production use.</p><p>osCommerce is an open source e-commerce solution under on going development by the open source community. Its feature packed out-of-the-box installation allows store owners to setup, run, and maintain their online stores with minimum effort and with no costs involved.</p><p>osCommerce combines open source solutions to provide a free and open development platform, which includes the <i>powerful</i> PHP web scripting language, the <i>stable</i> Apache web server, and the <i>fast</i> MySQL database server.</p><p>With no restrictions or special requirements, osCommerce can be installed on any PHP4 or PHP5 enabled web server, on any environment that PHP and MySQL supports, which includes Linux, Solaris, BSD, and Microsoft Windows environments.</p>
+text_welcome = <p>osCommerce Online Merchant is an Open Source online shop e-commerce solution that is available for free under the GNU General Public License. It features a rich set of out-of-the-box online shopping cart functionality that allows store owners to setup, run, and maintain online stores with minimum effort and with no costs, fees, or limitations involved.</p>
 text_installation_type = Please choose the installation method to continue.
 
 box_server_title = Server Capabilities
