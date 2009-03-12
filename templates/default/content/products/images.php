@@ -26,10 +26,10 @@ BODY {
 <script language="javascript" type="text/javascript">
 <!--
 function loadImage(imageUrl) {
-  new Effect.Fade('productImageLarge', {duration: 0.3, afterFinish: function() {
-    document.getElementById('productImageLarge').src = imageUrl;
-    new Effect.Appear('productImageLarge', {duration: 0.3});
-  }});
+  $("#productImageLarge").fadeOut('fast', function() {
+    $("#productImageLarge").attr('src', imageUrl);
+    $("#productImageLarge").fadeIn("slow");
+  });
 }
 //-->
 </script>
