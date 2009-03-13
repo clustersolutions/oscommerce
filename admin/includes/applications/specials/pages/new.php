@@ -14,7 +14,7 @@
 
   $specials_array = array();
 
-  $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
+  $Qspecials = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, pd.products_name, s.specials_new_products_price from :table_products p left join :table_specials s on (p.products_id = s.products_id), :table_products_description pd where p.products_id = pd.products_id and pd.language_id = :language_id and p.has_children = 0 order by pd.products_name');
   $Qspecials->bindTable(':table_products', TABLE_PRODUCTS);
   $Qspecials->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
   $Qspecials->bindTable(':table_specials', TABLE_SPECIALS);
