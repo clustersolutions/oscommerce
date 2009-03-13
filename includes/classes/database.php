@@ -380,6 +380,13 @@
           break;
         case 'raw':
           break;
+        case 'date':
+          if ( empty($value) ) {
+            $value = 'null';
+          } else {
+            $value = "'" . $this->db_class->parseString(trim($value)) . "'";
+          }
+          break;
         case 'string':
         default:
           $value = "'" . $this->db_class->parseString(trim($value)) . "'";
@@ -415,6 +422,10 @@
 
     function bindRaw($place_holder, $value) {
       $this->bindValueMixed($place_holder, $value, 'raw');
+    }
+
+    function bindDate($place_holder, $value) {
+      $this->bindValueMixed($place_holder, $value, 'date');
     }
 
     function bindTable($place_holder, $value = null) {

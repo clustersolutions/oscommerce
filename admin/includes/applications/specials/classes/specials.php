@@ -70,8 +70,8 @@
 
         $Qspecial->bindTable(':table_specials', TABLE_SPECIALS);
         $Qspecial->bindValue(':specials_new_products_price', $specials_price);
-        $Qspecial->bindValue(':expires_date', $data['expires_date']);
-        $Qspecial->bindValue(':start_date', $data['start_date']);
+        $Qspecial->bindDate(':expires_date', $data['expires_date']);
+        $Qspecial->bindDate(':start_date', $data['start_date']);
         $Qspecial->bindInt(':status', $data['status']);
         $Qspecial->setLogging($_SESSION['module'], $id);
         $Qspecial->execute();
