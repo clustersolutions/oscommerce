@@ -780,6 +780,7 @@
         osC_Cache::clear('categories');
         osC_Cache::clear('category_tree');
         osC_Cache::clear('also_purchased');
+        osC_Cache::clear('box-whats_new');
 
         return true;
       }

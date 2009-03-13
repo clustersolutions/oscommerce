@@ -119,7 +119,19 @@
     }
 
     function hasProducts() {
-      return ( (SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1') && isset($this->visits['products']) && !empty($this->visits['products']) );
+      if ( SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1' ) {
+        if ( isset($this->visits['products']) && !empty($this->visits['products']) ) {
+          foreach ($this->visits['products'] as $k => $v) {
+            if ( !osC_Product::checkEntry($v['id']) ) {
+              unset($this->visits['products'][$k]);
+            }
+          }
+
+          return (sizeof($this->visits['products']) > 0);
+        }
+      }
+
+      return false;
     }
 
     function getProducts() {
