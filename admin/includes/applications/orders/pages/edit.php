@@ -20,10 +20,25 @@
   if ( !$osC_Order->isValid() ) {
     $osC_MessageStack->add($osC_Template->getModule(), sprintf(ERROR_ORDER_DOES_NOT_EXIST, $_GET['oID']), 'error');
   }
-?>
 
-<link type="text/css" rel="stylesheet" href="external/tabpane/css/luna/tab.css" />
-<script type="text/javascript" src="external/tabpane/js/tabpane.js"></script>
+  $tabIndex = 0;
+
+  if ( isset($_GET['tabIndex']) && !empty($_GET['tabIndex']) ) {
+    switch ( $_GET['tabIndex'] ) {
+      case 'tabProducts':
+        $tabIndex = 1;
+        break;
+
+      case 'tabTransactionHistory':
+        $tabIndex = 2;
+        break;
+
+      case 'tabStatusHistory':
+        $tabIndex = 3;
+        break;
+    }
+  }
+?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
@@ -41,18 +56,23 @@
   if ( $osC_Order->isValid() ) {
 ?>
 
-<div class="tab-pane" id="mainTabPane">
-  <script type="text/javascript"><!--
-    var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );
-  //--></script>
+<script type="text/javascript">
+  var tabIndex = <?php echo (int)$tabIndex; ?>;
 
-  <div class="tab-page" id="tabSummary">
-    <h2 class="tab"><?php echo $osC_Language->get('section_summary'); ?></h2>
+  $(document).ready(function(){
+    $("#orderTabs").tabs( { selected: tabIndex } );
+  });
+</script>
 
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabSummary" ) );
-    //--></script>
+<div id="orderTabs">
+  <ul>
+    <li><?php echo osc_link_object('#section_summary_content', $osC_Language->get('section_summary')); ?></li>
+    <li><?php echo osc_link_object('#section_products_content', $osC_Language->get('section_products')); ?></li>
+    <li><?php echo osc_link_object('#section_transaction_history_content', $osC_Language->get('section_transaction_history')); ?></li>
+    <li><?php echo osc_link_object('#section_status_history_content', $osC_Language->get('section_status_history')); ?></li>
+  </ul>
 
+  <div id="section_summary_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
         <td width="33%" valign="top">
@@ -133,19 +153,7 @@
     </table>
   </div>
 
-  <div class="tab-page" id="tabProducts">
-    <h2 class="tab"><?php echo $osC_Language->get('section_products'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabProducts" ) );
-
-<?php
-    if ( isset($_GET['tabIndex']) && ( $_GET['tabIndex'] == 'tabProducts' ) ) {
-      echo 'mainTabPane.setSelectedIndex( mainTabPane.pages.length - 1 );';
-    }
-?>
-    //--></script>
-
+  <div id="section_products_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
@@ -214,19 +222,7 @@
     </table>
   </div>
 
-  <div class="tab-page" id="tabTransactionHistory">
-    <h2 class="tab"><?php echo $osC_Language->get('section_transaction_history'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabTransactionHistory" ) );
-
-<?php
-    if ( isset($_GET['tabIndex']) && ( $_GET['tabIndex'] == 'tabTransactionHistory' ) ) {
-      echo 'mainTabPane.setSelectedIndex( mainTabPane.pages.length - 1 );';
-    }
-?>
-    //--></script>
-
+  <div id="section_transaction_history_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>
@@ -274,19 +270,7 @@
 
   </div>
 
-  <div class="tab-page" id="tabStatusHistory">
-    <h2 class="tab"><?php echo $osC_Language->get('section_status_history'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabStatusHistory" ) );
-
-<?php
-    if ( isset($_GET['tabIndex']) && ( $_GET['tabIndex'] == 'tabStatusHistory' ) ) {
-      echo 'mainTabPane.setSelectedIndex( mainTabPane.pages.length - 1 );';
-    }
-?>
-    //--></script>
-
+  <div id="section_status_history_content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
       <thead>
         <tr>

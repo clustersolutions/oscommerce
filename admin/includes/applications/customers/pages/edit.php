@@ -20,9 +20,6 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_Customers_Admin::getData($_GET['cID']));
 ?>
 
-<link type="text/css" rel="stylesheet" href="external/tabpane/css/luna/tab.css" />
-<script type="text/javascript" src="external/tabpane/js/tabpane.js"></script>
-
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
@@ -31,18 +28,19 @@
   }
 ?>
 
-<div class="tab-pane" id="mainTabPane">
-  <script type="text/javascript"><!--
-    var mainTabPane = new WebFXTabPane( document.getElementById( "mainTabPane" ) );
-  //--></script>
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#customerTabs").tabs( { selected: <?php echo ( isset($_GET['tabIndex']) && ( $_GET['tabIndex'] == 'tabAddressBook' ) ? 1 : 0 ); ?> } );
+});
+</script>
 
-  <div class="tab-page" id="tabData">
-    <h2 class="tab"><?php echo $osC_Language->get('section_personal'); ?></h2>
+<div id="customerTabs">
+  <ul>
+    <li><?php echo osc_link_object('#section_personal_content', $osC_Language->get('section_personal')); ?></li>
+    <li><?php echo osc_link_object('#section_address_book_content', $osC_Language->get('section_address_book')); ?></li>
+  </ul>
 
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabData" ) );
-    //--></script>
-
+  <div id="section_personal_content">
     <form name="customers" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save'); ?>" method="post">
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -128,20 +126,7 @@
     </form>
   </div>
 
-  <div class="tab-page" id="tabAddressBook">
-    <h2 class="tab"><?php echo $osC_Language->get('section_address_book'); ?></h2>
-
-    <script type="text/javascript"><!--
-      mainTabPane.addTabPage( document.getElementById( "tabAddressBook" ) );
-
-<?php
-  if ( isset($_GET['tabIndex']) && ( $_GET['tabIndex'] == 'tabAddressBook' ) ) {
-    echo 'mainTabPane.setSelectedIndex( mainTabPane.pages.length - 1 );';
-  }
-?>
-
-    //--></script>
-
+  <div id="section_address_book_content">
     <p><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID'] . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=saveAddress'), osc_icon('new.png') . ' ' . $osC_Language->get('operation_new_address_book_entry')); ?></p>
 
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
