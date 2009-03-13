@@ -14,6 +14,9 @@
 
   $osC_DirectoryListing = new osC_DirectoryListing(DIR_FS_BACKUP);
   $osC_DirectoryListing->setIncludeDirectories(false);
+  $osC_DirectoryListing->setCheckExtension('zip');
+  $osC_DirectoryListing->setCheckExtension('sql');
+  $osC_DirectoryListing->setCheckExtension('gz');
 ?>
 
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
