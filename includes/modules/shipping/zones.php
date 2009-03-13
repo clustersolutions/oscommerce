@@ -47,6 +47,8 @@
       $dest_country = $osC_ShoppingCart->getShippingAddress('country_iso_code_2');
       $dest_zone = 0;
       $error = false;
+      $shipping_method = null;
+      $shipping_cost = null;
 
       $shipping_weight = $osC_Weight->convert($osC_ShoppingCart->getWeight(), SHIPPING_WEIGHT_UNIT, MODULE_SHIPPING_ZONES_WEIGHT_UNIT);
 

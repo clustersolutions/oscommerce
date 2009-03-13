@@ -12,6 +12,10 @@
   as published by the Free Software Foundation.
 */
 
+  if ( !class_exists('httpClient') ) {
+    include('includes/classes/http_client.php');
+  }
+
   class osC_Shipping_usps extends osC_Shipping {
     var $icon, $countries;
 

@@ -689,7 +689,7 @@ CREATE TABLE osc_whos_online (
   ip_address varchar(15) NOT NULL,
   time_entry varchar(14) NOT NULL,
   time_last_click varchar(14) NOT NULL,
-  last_page_url varchar(255) NOT NULL
+  last_page_url text NOT NULL
 );
 
 DROP TABLE IF EXISTS osc_zones;

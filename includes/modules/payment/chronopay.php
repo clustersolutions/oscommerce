@@ -89,9 +89,11 @@
           break;
       }
 
+      $total_price = $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $currency);
+
       $process_button_string = osc_draw_hidden_field('product_id', MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID) .
                                osc_draw_hidden_field('product_name', STORE_NAME) .
-                               osc_draw_hidden_field('product_price', $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $currency)) .
+                               osc_draw_hidden_field('product_price', $total_price) .
                                osc_draw_hidden_field('product_price_currency', $currency) .
                                osc_draw_hidden_field('cb_url', urlencode(osc_href_link(FILENAME_CHECKOUT, 'callback&module=' . $this->_code, 'SSL', null, null, true))) .
                                osc_draw_hidden_field('cb_type', 'P') .
@@ -108,7 +110,11 @@
                                osc_draw_hidden_field('email', $osC_Customer->getEmailAddress()) .
                                osc_draw_hidden_field('cs1', $osC_Customer->getID()) .
                                osc_draw_hidden_field('cs2', $this->_order_id) .
-                               osc_draw_hidden_field('cs3', md5(MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID . $this->_order_id . $osC_Customer->getID() . $osC_Currencies->formatRaw($osC_ShoppingCart->getTotal(), $currency) . MODULE_PAYMENT_CHRONOPAY_MD5_HASH));
+                               osc_draw_hidden_field('cs3', md5(MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID . $this->_order_id . $osC_Customer->getID() . $total_price . MODULE_PAYMENT_CHRONOPAY_MD5_HASH));
+
+      if ( !osc_empty(MODULE_PAYMENT_CHRONOPAY_MD5_HASH) ) {
+        $process_button_string .= osc_draw_hidden_field('sign', md5(MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID . '-' . $total_price . '-' . MODULE_PAYMENT_CHRONOPAY_MD5_HASH));
+      }
 
       return $process_button_string;
     }

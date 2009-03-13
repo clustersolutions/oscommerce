@@ -37,7 +37,7 @@
 </form>
 
 <?php
-  $Qorders = $osC_Database->query('select o.orders_id, o.customers_ip_address, o.customers_name, o.payment_method, o.date_purchased, o.last_modified, o.currency, o.currency_value, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id');
+  $Qorders = $osC_Database->query('select o.orders_id, o.customers_ip_address, o.customers_name, o.payment_method, o.date_purchased, o.last_modified, greatest(date_purchased, coalesce(last_modified, date_purchased)) as date_sort, o.currency, o.currency_value, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id');
 
   if ( isset($_GET['oID']) && is_numeric($_GET['oID']) ) {
     $Qorders->appendQuery('and o.orders_id = :orders_id');
@@ -54,7 +54,7 @@
     $Qorders->bindInt(':orders_status_id', $_GET['status']);
   }
 
-  $Qorders->appendQuery('order by o.last_modified desc, o.date_purchased desc, o.orders_id desc');
+  $Qorders->appendQuery('order by date_sort desc');
   $Qorders->bindTable(':table_orders', TABLE_ORDERS);
   $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
   $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
