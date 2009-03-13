@@ -65,6 +65,17 @@
     }
 
 /**
+ * Check if the category has an image
+ *
+ * @access public
+ * @return string
+ */
+
+    public function hasImage() {
+      return ( !empty($this->_data['image']) );
+    }
+
+/**
  * Return the image of the assigned category
  *
  * @access public

@@ -52,7 +52,10 @@
         $osC_Category = new osC_Category($current_category_id);
 
         $this->_page_title = $osC_Category->getTitle();
-        $this->_page_image = 'categories/' . $osC_Category->getImage();
+
+        if ( $osC_Category->hasImage() ) {
+          $this->_page_image = 'categories/' . $osC_Category->getImage();
+        }
 
         $Qproducts = $osC_Database->query('select products_id from :table_products_to_categories where categories_id = :categories_id limit 1');
         $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
