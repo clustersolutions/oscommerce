@@ -670,14 +670,67 @@
       }
 
       if ( ($error === false) && ($delete_product === true) ) {
-        $Qr = $osC_Database->query('delete from :table_reviews where products_id = :products_id');
-        $Qr->bindTable(':table_reviews', TABLE_REVIEWS);
-        $Qr->bindInt(':products_id', $id);
-        $Qr->setLogging($_SESSION['module'], $id);
-        $Qr->execute();
+        $Qvariants = $osC_Database->query('select products_id from :table_products where parent_id = :parent_id');
+        $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qvariants->bindInt(':parent_id', $id);
+        $Qvariants->execute();
 
-        if ( $osC_Database->isError() ) {
-          $error = true;
+        while ( $Qvariants->next() ) {
+          $Qsc = $osC_Database->query('delete from :table_shopping_carts where products_id = :products_id');
+          $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+          $Qsc->bindInt(':products_id', $Qvariants->valueInt('products_id'));
+          $Qsc->execute();
+
+          if ( $osC_Database->isError() ) {
+            $error = true;
+          }
+
+          if ( $error === false ) {
+            $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where products_id = :products_id');
+            $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
+            $Qsccvv->bindInt(':products_id', $Qvariants->valueInt('products_id'));
+            $Qsccvv->execute();
+
+            if ( $osC_Database->isError() ) {
+              $error = true;
+            }
+          }
+
+          if ( $error === false ) {
+            $Qpa = $osC_Database->query('delete from :table_products_variants where products_id = :products_id');
+            $Qpa->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
+            $Qpa->bindInt(':products_id', $Qvariants->valueInt('products_id'));
+            $Qpa->setLogging($_SESSION['module'], $id);
+            $Qpa->execute();
+
+            if ( $osC_Database->isError() ) {
+              $error = true;
+            }
+          }
+
+          if ( $error === false ) {
+            $Qp = $osC_Database->query('delete from :table_products where products_id = :products_id');
+            $Qp->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qp->bindInt(':products_id', $Qvariants->valueInt('products_id'));
+            $Qp->setLogging($_SESSION['module'], $id);
+            $Qp->execute();
+
+            if ( $osC_Database->isError() ) {
+              $error = true;
+            }
+          }
+        }
+
+        if ( $error === false ) {
+          $Qr = $osC_Database->query('delete from :table_reviews where products_id = :products_id');
+          $Qr->bindTable(':table_reviews', TABLE_REVIEWS);
+          $Qr->bindInt(':products_id', $id);
+          $Qr->setLogging($_SESSION['module'], $id);
+          $Qr->execute();
+
+          if ( $osC_Database->isError() ) {
+            $error = true;
+          }
         }
 
         if ( $error === false ) {
