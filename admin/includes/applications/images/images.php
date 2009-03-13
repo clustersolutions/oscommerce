@@ -12,7 +12,8 @@
   as published by the Free Software Foundation.
 */
 
-  require('includes/applications/images/classes/images.php');
+// HPDL  require('includes/applications/images/classes/images.php');
+  require('includes/classes/image.php');
 
   class osC_Application_Images extends osC_Template_Admin {
 
