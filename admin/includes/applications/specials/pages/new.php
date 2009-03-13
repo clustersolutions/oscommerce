@@ -41,11 +41,6 @@
   }
 ?>
 
-<style type="text/css">@import url('external/jscalendar/calendar-win2k-1.css');</style>
-<script type="text/javascript" src="external/jscalendar/calendar.js"></script>
-<script type="text/javascript" src="external/jscalendar/lang/calendar-en.js"></script>
-<script type="text/javascript" src="external/jscalendar/calendar-setup.js"></script>
-
 <script type="text/javascript"><!--
   var product_tax = new Array();
   var tax_rates = new Array();
@@ -146,12 +141,26 @@
   <p><?php echo '<b>' . $osC_Language->get('field_product') . '</b><br />' . osc_draw_pull_down_menu('products_id', $specials_array); ?></p>
   <p><?php echo '<b>' . $osC_Language->get('field_price_net_percentage') . '</b><br />' . osc_draw_input_field('specials_price', null, 'onkeyup="updateGross(\'specials_price\', event)"'); ?></p>
   <p><?php echo '<b>' . $osC_Language->get('field_price_gross') . '</b><br />' . osc_draw_input_field('specials_price_gross', null, 'onkeyup="updateNet(\'specials_price\', event)"'); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_status') . '</b><br />' . osc_draw_checkbox_field('specials_status', '1', null); ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_date_start') . '</b><br />' . osc_draw_input_field('specials_start_date', null) . '<input type="button" value="..." id="calendarTriggerStartDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_start_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerStartDate" } );</script>'; ?></p>
-  <p><?php echo '<b>' . $osC_Language->get('field_date_expires') . '</b><br />' . osc_draw_input_field('specials_expires_date', null) . '<input type="button" value="..." id="calendarTriggerEndDate" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "specials_expires_date", ifFormat: "%Y-%m-%d", button: "calendarTriggerEndDate" } );</script>'; ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_status') . '</b><br />' . osc_draw_checkbox_field('specials_status', '1'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_date_start') . '</b><br />' . osc_draw_input_field('specials_start_date'); ?></p>
+  <p><?php echo '<b>' . $osC_Language->get('field_date_expires') . '</b><br />' . osc_draw_input_field('specials_expires_date'); ?></p>
 
 <script type="text/javascript"><!--
   updateGross('specials_price', false);
+
+  $(function() {
+    $("#specials_start_date").datepicker( {
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true
+    } );
+
+    $("#specials_expires_date").datepicker( {
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true
+    } );
+  });
 //--></script>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>

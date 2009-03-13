@@ -26,11 +26,6 @@
   $osC_ObjectInfo = new osC_ObjectInfo(osC_BannerManager_Admin::getData($_GET['bID']));
 ?>
 
-<style type="text/css">@import url('external/jscalendar/calendar-win2k-1.css');</style>
-<script type="text/javascript" src="external/jscalendar/calendar.js"></script>
-<script type="text/javascript" src="external/jscalendar/lang/calendar-en.js"></script>
-<script type="text/javascript" src="external/jscalendar/calendar-setup.js"></script>
-
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
@@ -72,11 +67,11 @@
     </tr>
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_scheduled_date') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('date_scheduled', $osC_ObjectInfo->get('date_scheduled')); ?><input type="button" value="..." id="calendarTriggerDS" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_scheduled", ifFormat: "%Y-%m-%d", button: "calendarTriggerDS" } );</script></td>
+      <td width="60%"><?php echo osc_draw_input_field('date_scheduled', $osC_ObjectInfo->get('date_scheduled')); ?></td>
     </tr>
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_expiry_date') . '</b>'; ?></td>
-      <td width="60%"><?php echo osc_draw_input_field('date_expires', $osC_ObjectInfo->get('expires_date')); ?><input type="button" value="..." id="calendarTriggerDE" class="operationButton"><script type="text/javascript">Calendar.setup( { inputField: "date_expires", ifFormat: "%Y-%m-%d", button: "calendarTriggerDE" } );</script></td>
+      <td width="60%"><?php echo osc_draw_input_field('date_expires', $osC_ObjectInfo->get('expires_date')); ?></td>
     </tr>
     <tr>
       <td width="40%"><?php echo '<b>' . $osC_Language->get('field_maximum_impressions') . '</b>'; ?></td>
@@ -92,5 +87,21 @@
 
   </form>
 </div>
+
+<script type="text/javascript"><!--
+  $(function() {
+    $("#date_scheduled").datepicker( {
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true
+    } );
+
+    $("#date_expires").datepicker( {
+      dateFormat: 'yy-mm-dd',
+      changeMonth: true,
+      changeYear: true
+    } );
+  });
+//--></script>
 
 <p><?php echo $osC_Language->get('info_banner_fields'); ?></p>
