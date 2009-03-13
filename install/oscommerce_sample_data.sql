@@ -76,7 +76,7 @@ INSERT INTO osc_products_to_categories VALUES (2, 3);
 INSERT INTO osc_products_to_categories VALUES (5, 4);
 
 INSERT INTO osc_products_images VALUES (1, 1, 'pro_php_security.jpg', 1, 1, now());
-INSERT INTO osc_products_images VALUES (2, 2, 'dymo400.jpg', 1, 1, now());
+INSERT INTO osc_products_images VALUES (2, 2, 'dymo400.png', 1, 1, now());
 INSERT INTO osc_products_images VALUES (3, 5, 'front.png', 1, 1, now());
 INSERT INTO osc_products_images VALUES (4, 5, 'back.png', 0, 2, now());
 
