@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -71,6 +71,9 @@
         case 'price':
           $this->_sort_by = 'final_price';
           break;
+        case 'date_added':
+          $this->_sort_by = 'p.products_date_added';
+          break;
       }
 
       $this->_sort_by_direction = ($direction == '-') ? '-' : '+';
@@ -83,11 +86,10 @@
     function &execute() {
       global $osC_Database, $osC_Language, $osC_CategoryTree, $osC_Image;
 
-      $Qlisting = $osC_Database->query('select distinct p.*, pd.*, m.*, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price, i.image from :table_products p left join :table_manufacturers m using(manufacturers_id) left join :table_specials s on (p.products_id = s.products_id) left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd, :table_categories c, :table_products_to_categories p2c where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id');
+      $Qlisting = $osC_Database->query('select distinct p.products_id from :table_products p left join :table_product_attributes pa on (p.products_id = pa.products_id) left join :table_templates_boxes tb on (pa.id = tb.id and tb.code = "manufacturers"), :table_products_description pd, :table_categories c, :table_products_to_categories p2c where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id');
       $Qlisting->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qlisting->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-      $Qlisting->bindTable(':table_specials', TABLE_SPECIALS);
-      $Qlisting->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+      $Qlisting->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qlisting->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
       $Qlisting->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
       $Qlisting->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qlisting->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
@@ -108,7 +110,7 @@
       }
 
       if ($this->hasManufacturer()) {
-        $Qlisting->appendQuery('and m.manufacturers_id = :manufacturers_id');
+        $Qlisting->appendQuery('and pa.value = :manufacturers_id');
         $Qlisting->bindInt(':manufacturers_id', $this->_manufacturer);
       }
 

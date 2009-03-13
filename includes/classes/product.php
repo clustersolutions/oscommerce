@@ -20,7 +20,7 @@
 
       if ( !empty($id) ) {
         if ( is_numeric($id) ) {
-          $Qproduct = $osC_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+          $Qproduct = $osC_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_weight as weight, products_weight_class as weight_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
           $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
           $Qproduct->bindInt(':products_id', $id);
           $Qproduct->bindInt(':products_status', 1);
@@ -58,7 +58,7 @@
             }
           }
         } else {
-          $Qproduct = $osC_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
+          $Qproduct = $osC_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_weight as weight, p.products_weight_class as weight_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
           $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
           $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qproduct->bindValue(':products_keyword', $id);
@@ -250,6 +250,62 @@
       }
 
       return $price;
+    }
+
+    function getQuantity() {
+      $quantity = $this->_data['quantity'];
+
+      if ( $this->hasVariants() ) {
+        $quantity = 0;
+
+        foreach ( $this->_data['variants'] as $variants ) {
+          $quantity += $variants['data']['quantity'];
+        }
+      }
+
+      return $quantity;
+    }
+
+    function getWeight() {
+      global $osC_Weight;
+
+      $weight = 0;
+
+      if ( $this->hasVariants() ) {
+        foreach ( $this->_data['variants'] as $subproduct_id => $variants ) {
+          foreach ( $variants['values'] as $group_id => $values ) {
+            foreach ( $values as $value_id => $data ) {
+              if ( $data['default'] === true ) {
+                $weight = $osC_Weight->display($variants['data']['weight'], $variants['data']['weight_class_id']);
+
+                break 3;
+              }
+            }
+          }
+        }
+      } else {
+        $weight = $osC_Weight->display($this->_data['weight'], $this->_data['weight_class_id']);
+      }
+
+      return $weight;
+    }
+
+    function hasManufacturer() {
+      return ( $this->_data['manufacturers_id'] > 0 );
+    }
+
+    function getManufacturer() {
+      if ( !class_exists('osC_Manufacturer') ) {
+        include('includes/classes/manufacturer.php');
+      }
+
+      $osC_Manufacturer = new osC_Manufacturer($this->_data['manufacturers_id']);
+
+      return $osC_Manufacturer->getTitle();
+    }
+
+    function getManufacturerID() {
+      return $this->_data['manufacturers_id'];
     }
 
     function getCategoryID() {
@@ -466,22 +522,6 @@
 
     function numberOfImages() {
       return sizeof($this->_data['images']);
-    }
-
-    function &getListingNew() {
-      global $osC_Database, $osC_Language, $osC_Image;
-
-      $Qproducts = $osC_Database->query('select p.products_id, p.products_price, p.products_tax_class_id, p.products_date_added, pd.products_name, pd.products_keyword, m.manufacturers_name, i.image from :table_products p left join :table_manufacturers m on (p.manufacturers_id = m.manufacturers_id) left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_added desc, pd.products_name');
-      $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qproducts->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-      $Qproducts->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-      $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-      $Qproducts->bindInt(':default_flag', 1);
-      $Qproducts->bindInt(':language_id', $osC_Language->getID());
-      $Qproducts->setBatchLimit((isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1), MAX_DISPLAY_PRODUCTS_NEW);
-      $Qproducts->execute();
-
-      return $Qproducts;
     }
 
     protected static function _usortVariantValues($a, $b) {

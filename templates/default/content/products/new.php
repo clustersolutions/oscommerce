@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -20,29 +20,28 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-  $Qproducts = osC_Product::getListingNew();
+  $osC_Products = new osC_Products();
+  $osC_Products->setSortBy('date_added', '-');
+
+  $Qproducts = $osC_Products->execute();
 
   if ($Qproducts->numberOfRows() > 0) {
     while ($Qproducts->next()) {
-      if ($osC_Services->isStarted('specials') && ($new_price = $osC_Specials->getPrice($Qproducts->valueInt('products_id')))) {
-        $products_price = '<s>' . $osC_Currencies->displayPrice($Qproducts->value('products_price'), $Qproducts->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $osC_Currencies->displayPrice($new_price, $Qproducts->valueInt('products_tax_class_id')) . '</span>';
-      } else {
-        $products_price = $osC_Currencies->displayPrice($Qproducts->value('products_price'), $Qproducts->valueInt('products_tax_class_id'));
-      }
+      $osC_Product = new osC_Product($Qproducts->valueInt('products_id'));
 ?>
 
   <tr>
     <td width="<?php echo $osC_Image->getWidth('thumbnails') + 10; ?>" valign="top" align="center">
 
 <?php
-      if (osc_empty($Qproducts->value('image')) === false) {
-        echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), $osC_Image->show($Qproducts->value('image'), $Qproducts->value('products_name')));
+      if ( $osC_Product->hasImage() ) {
+        echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle()));
       }
 ?>
 
     </td>
-    <td valign="top"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword')), '<b><u>' . $Qproducts->value('products_name') . '</u></b>') . '<br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($Qproducts->value('products_date_added')) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $Qproducts->value('manufacturers_name') . '<br /><br />' . $osC_Language->get('price') . ' ' . $products_price; ?></td>
-    <td align="right" valign="middle"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qproducts->value('products_keyword') . '&action=cart_add'), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))); ?></td>
+    <td valign="top"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword()), '<b><u>' . $osC_Product->getTitle() . '</u></b>') . '<br />' . $osC_Language->get('date_added') . ' ' . osC_DateTime::getLong($osC_Product->getDateAdded()) . '<br />' . $osC_Language->get('manufacturer') . ' ' . $osC_Product->getManufacturer() . '<br /><br />' . $osC_Language->get('price') . ' ' . $osC_Product->getPriceFormated(); ?></td>
+    <td align="right" valign="middle"><?php echo osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&action=cart_add'), osc_draw_image_button('button_in_cart.gif', $osC_Language->get('button_add_to_cart'))); ?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>

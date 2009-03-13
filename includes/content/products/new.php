@@ -1,16 +1,18 @@
 <?php
 /*
-  $Id: password.php 64 2005-03-12 16:36:16Z hpdl $
+  $Id: $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2005 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  require('includes/classes/products.php');
 
   class osC_Products_New extends osC_Template {
 

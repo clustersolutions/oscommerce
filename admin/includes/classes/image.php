@@ -100,11 +100,21 @@
 
         $im_p = imagecreatetruecolor($width, $height);
 
+        if ( ($img_type == 'gif') || ($img_type == 'png') ) {
+          imagealphablending($im_p, false);
+          imagesavealpha($im_p, true);
+
+          $transparent = imagecolorallocatealpha($im_p, 255, 255, 255, 127);
+          imagefilledrectangle($im_p, 0, 0, $height, $width, $transparent);
+        }
+
         $x = 0;
 
         if ($this->_groups[$group_id]['force_size'] == '1') {
-          $bgcolour = imagecolorallocate($im_p, 255, 255, 255); // white
-          imagefill($im_p, 0, 0, $bgcolour);
+          if ( ($img_type != 'gif') && ($img_type != 'png') ) {
+            $bgcolour = imagecolorallocate($im_p, 255, 255, 255); // white
+            imagefill($im_p, 0, 0, $bgcolour);
+          }
 
           $width = round($orig_width * $height / $orig_height);
 

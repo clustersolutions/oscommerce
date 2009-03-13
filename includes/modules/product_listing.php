@@ -109,6 +109,8 @@
     $rows = 0;
 
     while ($Qlisting->next()) {
+      $osC_Product = new osC_Product($Qlisting->valueInt('products_id'));
+
       $rows++;
 
       echo '    <tr class="' . ((($rows/2) == floor($rows/2)) ? 'productListing-even' : 'productListing-odd') . '">' . "\n";
@@ -119,47 +121,47 @@
         switch ($column_list[$col]) {
           case 'PRODUCT_LIST_MODEL':
             $lc_align = '';
-            $lc_text = '&nbsp;' . $Qlisting->value('products_model') . '&nbsp;';
+            $lc_text = '&nbsp;' . $osC_Product->getModel() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&manufacturers=' . $_GET['manufacturers']), $Qlisting->value('products_name'));
+              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $osC_Product->getTitle());
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')), $Qlisting->value('products_name')) . '&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . ($cPath ? '&cPath=' . $cPath : '')), $osC_Product->getTitle()) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
             $lc_align = '';
-            $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $Qlisting->valueInt('manufacturers_id')), $Qlisting->value('manufacturers_name')) . '&nbsp;';
+            $lc_text = '&nbsp;';
+
+            if ( $osC_Product->hasManufacturer() ) {
+              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $osC_Product->getManufacturerID()), $osC_Product->getManufacturer()) . '&nbsp;';
+            }
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
-            if (!osc_empty($Qlisting->value('specials_new_products_price'))) {
-              $lc_text = '&nbsp;<s>' .  $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</s>&nbsp;&nbsp;<span class="productSpecialPrice">' . $osC_Currencies->displayPrice($Qlisting->value('specials_new_products_price'), $Qlisting->valueInt('products_tax_class_id')) . '</span>&nbsp;';
-            } else {
-              $lc_text = '&nbsp;' . $osC_Currencies->displayPrice($Qlisting->value('products_price'), $Qlisting->valueInt('products_tax_class_id')) . '&nbsp;';
-            }
+            $lc_text = '&nbsp;' . $osC_Product->getPriceFormated() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_QUANTITY':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $Qlisting->valueInt('products_quantity') . '&nbsp;';
+            $lc_text = '&nbsp;' . $osC_Product->getQuantity() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_WEIGHT':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $osC_Weight->display($Qlisting->value('products_weight'), $Qlisting->value('products_weight_class')) . '&nbsp;';
+            $lc_text = '&nbsp;' . $osC_Product->getWeight() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . '&manufacturers=' . $_GET['manufacturers']), $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name')));
+              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle()));
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $Qlisting->value('products_keyword') . ($cPath ? '&cPath=' . $cPath : '')), $osC_Image->show($Qlisting->value('image'), $Qlisting->value('products_name'))) . '&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . ($cPath ? '&cPath=' . $cPath : '')), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle())) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $Qlisting->value('products_keyword') . '&' . osc_get_all_get_params(array('action')) . '&action=cart_add'), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
+            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $osC_Product->getKeyword() . '&' . osc_get_all_get_params(array('action')) . '&action=cart_add'), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
             break;
         }
 
