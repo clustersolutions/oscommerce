@@ -421,7 +421,7 @@
 
           foreach ( $variants['values'] as $group_id => $value ) {
             foreach ( $value as $value_id => $value_data ) {
-              if ( array_key_exists($value_id, $variant[$group_id]) ) {
+              if ( is_array($variant[$group_id]) && array_key_exists($value_id, $variant[$group_id]) ) {
                 $_array[$group_id][$value_id] = $variant[$group_id][$value_id];
               } else {
                 $_array[$group_id] = $value_id;
