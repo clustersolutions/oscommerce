@@ -5820,6 +5820,8 @@ INSERT INTO osc_templates_boxes VALUES (16,'New Products','new_products','osComm
 INSERT INTO osc_templates_boxes VALUES (17,'Upcoming Products','upcoming_products','osCommerce','http://www.oscommerce.com','content');
 INSERT INTO osc_templates_boxes VALUES (18,'Recently Visited','recently_visited','osCommerce','http://www.oscommerce.com','content');
 INSERT INTO osc_templates_boxes VALUES (19,'Also Purchased Products','also_purchased_products','osCommerce','http://www.oscommerce.com','content');
+INSERT INTO osc_templates_boxes VALUES (20,'Date Available','date_available','osCommerce','http://www.oscommerce.com','product_attributes');
+INSERT INTO osc_templates_boxes VALUES (21,'Manufacturers','manufacturers','osCommerce','http://www.oscommerce.com','product_attributes');
 
 INSERT INTO osc_templates_boxes_to_pages VALUES (1,2,1,'*','left',100,0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (2,7,1,'*','left',200,0);

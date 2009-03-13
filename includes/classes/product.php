@@ -420,10 +420,8 @@
           $_array = array();
 
           foreach ( $variants['values'] as $group_id => $value ) {
-            $n = sizeof($value);
-
             foreach ( $value as $value_id => $value_data ) {
-              if ( $n > 1 ) {
+              if ( array_key_exists($value_id, $variant[$group_id]) ) {
                 $_array[$group_id][$value_id] = $variant[$group_id][$value_id];
               } else {
                 $_array[$group_id] = $value_id;
@@ -440,37 +438,6 @@
       }
 
       return $_product_id;
-
-/*HPDL; Useful for static version
-
-        $Qcheck = $osC_Database->query('select products_id from :table_products where parent_id = :parent_id limit 1');
-        $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qcheck->bindInt(':parent_id', $Qproduct->valueInt('products_id'));
-        $Qcheck->execute();
-
-        if ( $Qcheck->numberOfRows() < 1 ) {
-          return true;
-        } else {
-          $Qvariants = $osC_Database->query('select p.products_id from :table_products p, :table_products_variants pv where p.parent_id = :parent_id and p.products_id = pv.products_id and pv.products_variants_values_id in (":products_variants_values_id") group by pv.products_id');
-          $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
-          $Qvariants->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-          $Qvariants->bindInt(':parent_id', $Qproduct->valueInt('products_id'));
-          $Qvariants->bindRaw(':products_variants_values_id', implode('", "', $variants));
-          $Qvariants->execute();
-
-          while ( $Qvariants->next() ) {
-            $Qvcheck = $osC_Database->query('select count(*) as total from :table_products_variants where products_id = :products_id');
-            $Qvcheck->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-            $Qvcheck->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-            $Qvcheck->execute();
-
-            if ( $Qvcheck->valueInt('total') === sizeof($variants) ) {
-              return true;
-            }
-          }
-        }
-*/
-
     }
 
     function hasAttribute($code) {
