@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -16,13 +16,17 @@
 <h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
     echo $osC_MessageStack->get($osC_Template->getModule());
   }
 
-  $Qproducts = $osC_Database->query('select p.products_id, p.products_date_available, pd.products_name from :table_products p, :table_products_description pd where p.products_date_available is not null and p.products_id = pd.products_id and pd.language_id = :language_id order by p.products_date_available');
+  $Qproducts = $osC_Database->query('select p.products_id, pd.products_name, str_to_date(pa.value, "%Y-%m-%d") as products_date_available from :table_products p, :table_products_description pd, :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id and pa.products_id = p.products_id and p.products_id = pd.products_id and pd.language_id = :language_id order by products_date_available');
   $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
   $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+  $Qproducts->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+  $Qproducts->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+  $Qproducts->bindValue(':code', 'date_available');
+  $Qproducts->bindValue(':modules_group', 'product_attributes');
   $Qproducts->bindInt(':language_id', $osC_Language->getID());
   $Qproducts->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
   $Qproducts->execute();
@@ -43,13 +47,11 @@
       <th><?php echo $osC_Language->get('table_heading_products'); ?></th>
       <th><?php echo $osC_Language->get('table_heading_date_expected'); ?></th>
       <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php // echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php // echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php // echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th colspan="3">&nbsp;</th>
     </tr>
   </tfoot>
   <tbody>
@@ -68,7 +70,6 @@
 ?>
 
       </td>
-      <td align="center"><?php // echo osc_draw_checkbox_field('batch[]', $Qproducts->valueInt('products_id'), null, 'id="batch' . $Qproducts->valueInt('products_id') . '"'); ?></td>
     </tr>
 
 <?php

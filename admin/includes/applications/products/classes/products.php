@@ -887,26 +887,23 @@
     public static function setDateAvailable($id, $data) {
       global $osC_Database;
 
-/* HPDL
-      $Qproduct = $osC_Database->query('update :table_products set products_date_available = :products_date_available, products_last_modified = now() where products_id = :products_id');
-      $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qattribute = $osC_Database->query('select pa.id from :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id and products_id = :products_id');
+      $Qattribute->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+      $Qattribute->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qattribute->bindValue(':code', 'date_available');
+      $Qattribute->bindValue(':modules_group', 'product_attributes');
+      $Qattribute->bindInt(':products_id', $id);
+      $Qattribute->execute();
 
-      if ( date('Y-m-d') < $data['date_available'] ) {
-        $Qproduct->bindValue(':products_date_available', $data['date_available']);
-      } else {
-        $Qproduct->bindRaw(':products_date_available', 'null');
-      }
+      $Qupdate = $osC_Database->query('update :table_product_attributes set value = :value where id = :id and products_id = :products_id');
+      $Qupdate->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+      $Qupdate->bindDate(':value', $data['date_available']);
+      $Qupdate->bindInt(':id', $Qattribute->valueInt('id'));
+      $Qupdate->bindInt(':products_id', $id);
+      $Qupdate->setLogging($_SESSION['module'], $id);
+      $Qupdate->execute();
 
-      $Qproduct->bindInt(':products_id', $id);
-      $Qproduct->setLogging($_SESSION['module'], $id);
-      $Qproduct->execute();
-
-      if ( !$osC_Database->isError() ) {
-        return true;
-      }
-*/
-
-      return false;
+      return ( $Qupdate->affectedRows() > 0 );
     }
 
     public static function getKeywordCount($keyword, $id = null) {

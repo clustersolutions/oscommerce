@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function __construct() {
-      global $osC_Language, $osC_MessageStack;
+      global $osC_Database, $osC_Language, $osC_MessageStack;
 
       $this->_page_title = $osC_Language->get('heading_title');
 
@@ -37,17 +37,20 @@
         $_GET['page'] = 1;
       }
 
-/*HPDL
-      $Qcheck = $osC_Database->query('select products_id from :table_products where products_date_available is not null limit 1');
-      $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qcheck = $osC_Database->query('select pa.* from :table_product_attributes pa, :table_templates_boxes tb where tb.code = :code and tb.modules_group = :modules_group and tb.id = pa.id and unix_timestamp(now()) > unix_timestamp(str_to_date(pa.value, "%Y-%m-%d"))');
+      $Qcheck->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+      $Qcheck->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+      $Qcheck->bindValue(':code', 'date_available');
+      $Qcheck->bindValue(':modules_group', 'product_attributes');
       $Qcheck->execute();
 
       if ($Qcheck->numberOfRows()) {
-        $Qupdate = $osC_Database->query('update :table_products set products_date_available = null where unix_timestamp(now()) > unix_timestamp(products_date_available)');
-        $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qupdate->execute();
+        $Qdelete = $osC_Database->query('delete from :table_product_attributes where id = :id and products_id = :products_id');
+        $Qdelete->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+        $Qdelete->bindInt(':id', $Qcheck->valueInt('id'));
+        $Qdelete->bindInt(':products_id', $Qcheck->valueInt('products_id'));
+        $Qdelete->execute();
       }
-*/
 
       if ( !empty($_GET['action']) ) {
         switch ( $_GET['action'] ) {
