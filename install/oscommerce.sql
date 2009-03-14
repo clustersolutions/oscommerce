@@ -659,7 +659,7 @@ CREATE TABLE osc_templates_boxes_to_pages (
   templates_boxes_id int not null,
   templates_id int not null,
   content_page varchar(255) not null,
-  boxes_group varchar(255) not null,
+  boxes_group varchar(32) not null,
   sort_order int default 0,
   page_specific int default 0,
   PRIMARY KEY (id),
