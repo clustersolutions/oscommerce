@@ -109,7 +109,7 @@
 /* Private methods */
 
     function _process($id) {
-      global $osC_Language, $osC_MessageStack, $osC_Customer;
+      global $osC_Language, $osC_MessageStack, $osC_Customer, $osC_Reviews;
 
       $data = array('products_id' => $id);
 
