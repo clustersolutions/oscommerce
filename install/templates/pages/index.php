@@ -39,7 +39,7 @@
         <tr>
           <td><b><?php echo $osC_Language->get('box_server_php_version'); ?></b></td>
           <td align="right"><?php echo phpversion(); ?></td>
-          <td align="right" width="25"><img src="images/<?php echo ((phpversion() >= 4.1) ? 'tick.gif' : 'cross.gif'); ?>" border="0" width="16" height="16"></td>
+          <td align="right" width="25"><img src="images/<?php echo ((version_compare(PHP_VERSION, '5.2') === 1) ? 'tick.gif' : 'cross.gif'); ?>" border="0" width="16" height="16"></td>
         </tr>
       </table>
 
@@ -106,6 +106,13 @@
   </div>
 
   <div class="contentPane">
+    <h2><?php echo $osC_Language->get('page_heading_server_requirements'); ?></h2>
+
+    <ul>
+      <li>PHP v5.2+ (with MySQLi extension)</li>
+      <li>MySQL v4.1.13+ or v5.0.7+</li>
+    </ul>
+
     <h2><?php echo $osC_Language->get('page_heading_installation_type'); ?></h2>
 
 <?php
@@ -132,7 +139,7 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="50%" align="center"><?php echo '<a href="install.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/install.gif" border="0" alt="' . $osC_Language->get('image_button_install') . '" /></a>'; ?></td>
+        <td width="50%" align="center"><?php echo '<script type="text/javascript">document.write(\'<a href="install.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/install.gif" border="0" alt="' . addslashes($osC_Language->get('image_button_install')) . '" /></a>\');</script>'; ?></td>
 
 <!--
         <td width="50%" align="center"><?php echo '<a href="upgrade.php"><img src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/upgrade.gif" border="0" alt="' . $osC_Language->get('image_button_upgrade') . '" /></a>'; ?></td>
@@ -140,5 +147,12 @@
 
       </tr>
     </table>
+
+    <noscript>
+      <div class="noticeBox">
+        <?php echo $osC_Language->get('error_javascript_disabled'); ?>
+      </div>
+    </noscript>
+
   </div>
 </div>
