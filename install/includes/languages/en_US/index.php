@@ -37,7 +37,7 @@ box_server_off = Off
 
 error_configuration_file_not_writeable = <p>The webserver does not seem to be able to write the online store parameters to its configuration file due to file permission problems.</p><p>The configuration file is located at:</p><p>%s</p>
 error_configuration_file_alternate_method = <p>Alternatively the possibility to copy the configuration parameters to the configuration file by hand is also provided at the end of the installation procedure.</p>
-error_javascript_disabled = <p>Javascript is required for the installation procedure. Please enable it on your browser and <a href="index.php">re-run the installation procedure</a>.</p>
+error_javascript_disabled = <p>Javascript is required for the installation procedure and administration of this installation. Please enable it on your browser and <a href="index.php">re-run the installation procedure</a>.</p>
 
 image_button_install = Install
 image_button_upgrade = Upgrade
