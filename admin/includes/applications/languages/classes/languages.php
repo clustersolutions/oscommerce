@@ -712,7 +712,7 @@
                           'currency' => $source['language']['data']['default_currency'],
                           'numeric_separator_decimal' => $source['language']['data']['numerical_decimal_separator'],
                           'numeric_separator_thousands' => $source['language']['data']['numerical_thousands_separator'],
-                          'parent_language_code' => $source['language']['data']['parent_language_code'],
+                          'parent_language_code' => (isset($source['language']['data']['parent_language_code']) ? $source['language']['data']['parent_language_code'] : ''),
                           'parent_id' => 0);
 
         if ( osC_Currencies_Admin::exists($language['currency']) === false ) {
@@ -946,7 +946,7 @@
 
             while ( $Qvalues->next() ) {
               $Qinsert = $osC_Database->query('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
-              $Qinsert->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+              $Qinsert->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
               $Qinsert->bindInt(':id', $Qvalues->valueInt('id'));
               $Qinsert->bindInt(':languages_id', $language_id);
               $Qinsert->bindInt(':products_variants_groups_id', $Qvalues->valueInt('products_variants_groups_id'));
