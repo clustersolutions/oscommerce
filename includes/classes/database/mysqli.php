@@ -37,7 +37,7 @@
       if ($this->link = @$connect_function($this->server, $this->username, $this->password)) {
         $this->setConnected(true);
 
-        if ( version_compare(mysqli_get_server_info($this->link), '5.0.2') >= 0 ) {
+        if ( version_compare($this->getServerVersion(), '5.0.2') >= 0 ) {
           $this->simpleQuery('set session sql_mode="STRICT_ALL_TABLES"');
         }
 
@@ -73,6 +73,10 @@
       } else {
         return false;
       }
+    }
+
+    function getServerVersion() {
+      return mysqli_get_server_info($this->link);
     }
 
     function parseString($value) {
