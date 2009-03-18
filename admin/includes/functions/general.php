@@ -77,7 +77,7 @@
                  'zend' => (function_exists('zend_version') ? zend_version() : ''),
                  'db_server' => DB_SERVER,
                  'db_ip' => gethostbyname(DB_SERVER),
-                 'db_version' => 'MySQL ' . (function_exists('mysql_get_server_info') ? mysql_get_server_info() : ''),
+                 'db_version' => 'MySQL ' . $osC_Database->getServerVersion(),
                  'db_date' => osC_DateTime::getShort($Qdb_date->value('datetime'), true),
                  'db_uptime' => $db_uptime);
   }
