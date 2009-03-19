@@ -521,7 +521,7 @@
             $db = split(' ', $this->sql_query, 3);
             $this->logging_database = $db[1];
 
-            $test = $this->db_class->simpleQuery('select ' . implode(', ', array_keys($this->logging_fields)) . ' from ' . $this->logging_database . substr($this->sql_query, osc_strrpos_string($this->sql_query, ' where ')));
+            $test = $this->db_class->simpleQuery('select ' . implode(', ', array_keys($this->logging_fields)) . ' from ' . $this->logging_database . substr($this->sql_query, strrpos($this->sql_query, ' where ')));
 
             while ($result = $this->db_class->next($test)) {
               foreach ($this->logging_fields as $key => $value) {

@@ -28,12 +28,6 @@
 // include server parameters
   require('../includes/configure.php');
 
-// set the level of error reporting to E_ALL
-  error_reporting(E_ALL);
-
-  ini_set('log_errors', true);
-  ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
-
 // Define the project version
   define('PROJECT_VERSION', 'osCommerce Online Merchant v3.0a5');
 
@@ -46,9 +40,8 @@
     define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
   }
 
-// compatibility work-around logic for PHP4
+// compatibility logic
   require('../includes/functions/compatibility.php');
-  require('includes/functions/compatibility.php');
 
 // include the list of project filenames
   require('includes/filenames.php');
