@@ -26,12 +26,6 @@
 // include server parameters
   require('includes/configure.php');
 
-// set the level of error reporting
-  error_reporting(E_ALL);
-
-  ini_set('log_errors', true);
-  ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
-
 // redirect to the installation module if DB_SERVER is empty
   if (strlen(DB_SERVER) < 1) {
     if (is_dir('install')) {
@@ -51,7 +45,7 @@
     define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
   }
 
-// compatibility work-around logic for PHP4
+// compatibility logic
   require('includes/functions/compatibility.php');
 
 // include the list of project filenames
