@@ -16,9 +16,11 @@
  * Set the error reporting level to E_ALL and log all errors
  */
 
-  error_reporting(E_ALL);
-  ini_set('log_errors', true);
-  ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
+  if ( defined('DIR_FS_WORK') ) {
+    error_reporting(E_ALL);
+    ini_set('log_errors', true);
+    ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
+  }
 
 /**
  * Forcefully disable register_globals if enabled
