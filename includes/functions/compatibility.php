@@ -16,10 +16,16 @@
  * Set the error reporting level to E_ALL and log all errors
  */
 
+  error_reporting(E_ALL);
+  ini_set('log_errors', true);
+
   if ( defined('DIR_FS_WORK') ) {
-    error_reporting(E_ALL);
-    ini_set('log_errors', true);
     ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
+  } else {
+    $error_log_path = dirname(ini_get('error_log'));
+    if ( file_exists($error_log_path) ) { // checks if the directory exists
+      ini_set('error_log', $error_log_path . '/oscommerce_errors.log');
+    }
   }
 
 /**
