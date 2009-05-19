@@ -16,6 +16,7 @@
 
   class osC_Database_mysqli_innodb extends osC_Database_mysqli {
     var $use_transactions = true,
+        $use_foreign_keys = true,
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 

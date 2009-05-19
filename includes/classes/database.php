@@ -408,24 +408,24 @@
       }
     }
 
-    function bindValue($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'string');
+    function bindValue($place_holder, $value, $log = true) {
+      $this->bindValueMixed($place_holder, $value, 'string', $log);
     }
 
-    function bindInt($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'int');
+    function bindInt($place_holder, $value, $log = true) {
+      $this->bindValueMixed($place_holder, $value, 'int', $log);
     }
 
-    function bindFloat($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'float');
+    function bindFloat($place_holder, $value, $log = true) {
+      $this->bindValueMixed($place_holder, $value, 'float', $log);
     }
 
-    function bindRaw($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'raw');
+    function bindRaw($place_holder, $value, $log = true) {
+      $this->bindValueMixed($place_holder, $value, 'raw', $log);
     }
 
-    function bindDate($place_holder, $value) {
-      $this->bindValueMixed($place_holder, $value, 'date');
+    function bindDate($place_holder, $value, $log = true) {
+      $this->bindValueMixed($place_holder, $value, 'date', $log);
     }
 
     function bindTable($place_holder, $value = null) {
@@ -514,6 +514,79 @@
       }
 
       if ($this->cache_read === false) {
+        if ($this->db_class->use_foreign_keys == false) {
+          $query_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
+
+          if ($query_action == 'delete') {
+            $query_data = split(' ', $this->sql_query, 4);
+            $query_table = substr($query_data[2], strlen(DB_TABLE_PREFIX));
+
+            $fk_check_query = $this->db_class->simpleQuery('select * from ' . TABLE_FK_RELATIONSHIPS . ' where to_table = "' . $query_table . '"');
+            while ( $fk_check = $this->db_class->next($fk_check_query) ) {
+              $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[2] . ' ' . $query_data[3]);
+              while ( $parent_result = $this->db_class->next($parent_query) ) {
+                if ( $fk_check['on_delete'] == 'cascade' ) {
+                  if ( $this->logging === true ) {
+                    $checkQuery = $this->db_class->simpleQuery('select * from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+
+                    while ( $check = $this->db_class->next($checkQuery)) {
+                      foreach ($check as $key => $value) {
+                        $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $key, 'old' => $value, 'new' => '');
+                      }
+                    }
+                  }
+
+                  $this->db_class->simpleQuery('delete from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                } elseif ( $fk_check['on_delete'] == 'set_null' ) {
+                  if ( $this->logging === true ) {
+                    $checkQuery = $this->db_class->simpleQuery('select ' . $fk_check['from_field'] . ' from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+
+                    while ( $check = $this->db_class->next($checkQuery)) {
+                      if ($check[$fk_check['from_field']] != '') {
+                        $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $fk_check['from_field'], 'old' => $check[$fk_check['from_field']], 'new' => '');
+                      }
+                    }
+                  }
+
+                  $this->db_class->simpleQuery('update ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' set ' . $fk_check['from_field'] . ' = null where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                }
+              }
+            }
+          } elseif ($query_action == 'update') {
+            $query_data = split(' ', $this->sql_query, 3);
+            $query_table = substr($query_data[1], strlen(DB_TABLE_PREFIX));
+
+            $fk_check_query = $this->db_class->simpleQuery('select * from ' . TABLE_FK_RELATIONSHIPS . ' where to_table = "' . $query_table . '"');
+            while ( $fk_check = $this->db_class->next($fk_check_query) ) {
+// check to see if foreign key column value is being changed
+              if ( strpos(substr($this->sql_query, strpos($this->sql_query, ' set ')+4, strpos($this->sql_query, ' where ') - strpos($this->sql_query, ' set ') - 4), ' ' . $fk_check['to_field'] . ' ') !== false ) {
+                $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[1] . substr($this->sql_query, strrpos($this->sql_query, ' where ')));
+                while ( $parent_result = $this->db_class->next($parent_query) ) {
+                  if ( ($fk_check['on_update'] == 'cascade') || ($fk_check['on_update'] == 'set_null') ) {
+                    $on_update_value = '';
+
+                    if ( $fk_check['on_update'] == 'cascade' ) {
+                      $on_update_value = $this->logging_fields[$fk_check['to_field']];
+                    }
+
+                    if ( $this->logging === true ) {
+                      $checkQuery = $this->db_class->simpleQuery('select ' . $fk_check['from_field'] . ' from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+
+                      while ( $check = $this->db_class->next($checkQuery)) {
+                        if ($check[$fk_check['from_field']] != $on_update_value) {
+                          $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $fk_check['from_field'], 'old' => $check[$fk_check['from_field']], 'new' => $on_update_value);
+                        }
+                      }
+                    }
+
+                    $this->db_class->simpleQuery('update ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' set ' . $fk_check['from_field'] . ' = ' . (empty($on_update_value) ? 'null' : '"' . $on_update_value . '"') . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                  }
+                }
+              }
+            }
+          }
+        }
+
         if ($this->logging === true) {
           $this->logging_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
 

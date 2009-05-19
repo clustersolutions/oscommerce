@@ -23,11 +23,13 @@ CREATE TABLE osc_address_book (
    entry_city varchar(255) NOT NULL,
    entry_state varchar(255),
    entry_country_id int DEFAULT '0' NOT NULL,
-   entry_zone_id int DEFAULT '0' NOT NULL,
+   entry_zone_id int,
    entry_telephone varchar(255),
    entry_fax varchar(255),
    PRIMARY KEY (address_book_id),
    KEY idx_address_book_customers_id (customers_id)
+#   CONSTRAINT FK_ADDRESS_BOOK_COUNTRY_ID FOREIGN KEY (entry_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE,
+#   CONSTRAINT FK_ADDRESS_BOOK_ZONE_ID FOREIGN KEY (entry_zone_id) REFERENCES osc_zones (zone_id) ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS osc_administrators;
@@ -195,6 +197,18 @@ CREATE TABLE osc_customers (
   date_account_last_modified datetime,
   global_product_notifications int DEFAULT '0',
   PRIMARY KEY (customers_id)
+);
+
+DROP TABLE IF EXISTS osc_fk_relationships;
+CREATE TABLE osc_fk_relationships (
+  fk_id int unsigned NOT NULL AUTO_INCREMENT,
+  from_table varchar(255) NOT NULL,
+  to_table varchar(255) NOT NULL,
+  from_field varchar(255) NOT NULL,
+  to_field varchar(255) NOT NULL,
+  on_update varchar(255) NOT NULL,
+  on_delete varchar(255) NOT NULL,
+  PRIMARY KEY (fk_id)
 );
 
 DROP TABLE IF EXISTS osc_languages;
@@ -699,6 +713,7 @@ CREATE TABLE osc_zones (
   zone_code varchar(255) NOT NULL,
   zone_name varchar(255) NOT NULL,
   PRIMARY KEY (zone_id)
+#  CONSTRAINT FK_ZONES_COUNTRY_ID FOREIGN KEY (zone_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS osc_zones_to_geo_zones;
@@ -710,6 +725,7 @@ CREATE TABLE osc_zones_to_geo_zones (
    last_modified datetime NULL,
    date_added datetime NOT NULL,
    PRIMARY KEY (association_id)
+#   CONSTRAINT FK_ZONES2GEOZONES_COUNTRY_ID FOREIGN KEY (zone_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Name', 'STORE_NAME', 'osCommerce', 'The name of my store', '1', '1', now());
@@ -5882,3 +5898,10 @@ INSERT INTO osc_weight_classes_rules VALUES (3, 4, '0.0625');
 INSERT INTO osc_weight_classes_rules VALUES (4, 1, '453.5923');
 INSERT INTO osc_weight_classes_rules VALUES (4, 2, '0.4535');
 INSERT INTO osc_weight_classes_rules VALUES (4, 3, '16.0000');
+
+# Foreign key relationships
+
+INSERT INTO osc_fk_relationships VALUES (1, 'zones', 'countries', 'zone_country_id', 'countries_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (2, 'address_book', 'countries', 'entry_country_id', 'countries_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (3, 'zones_to_geo_zones', 'countries', 'zone_country_id', 'countries_id', 'cascade','cascade');
+INSERT INTO osc_fk_relationships VALUES (4, 'address_book', 'zones', 'entry_zone_id', 'zone_id', 'cascade', 'set_null');

@@ -180,7 +180,7 @@
 
       if ( is_numeric($id) ) {
         $Qcountry = $osC_Database->query('update :table_countries set countries_name = :countries_name, countries_iso_code_2 = :countries_iso_code_2, countries_iso_code_3 = :countries_iso_code_3, address_format = :address_format where countries_id = :countries_id');
-        $Qcountry->bindInt(':countries_id', $id);
+        $Qcountry->bindInt(':countries_id', $id, false);
       } else {
         $Qcountry = $osC_Database->query('insert into :table_countries (countries_name, countries_iso_code_2, countries_iso_code_3, address_format) values (:countries_name, :countries_iso_code_2, :countries_iso_code_3, :address_format)');
       }
@@ -193,49 +193,19 @@
       $Qcountry->setLogging($_SESSION['module'], $id);
       $Qcountry->execute();
 
-      if ( !$osC_Database->isError() ) {
-        return true;
-      }
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
+      $Qcountry = $osC_Database->query('delete from :table_countries where countries_id = :countries_id');
+      $Qcountry->bindTable(':table_countries', TABLE_COUNTRIES);
+      $Qcountry->bindInt(':countries_id', $id, false);
+      $Qcountry->setLogging($_SESSION['module'], $id);
+      $Qcountry->execute();
 
-      $osC_Database->startTransaction();
-
-      $Qzones = $osC_Database->query('delete from :table_zones where zone_country_id = :zone_country_id');
-      $Qzones->bindTable(':table_zones', TABLE_ZONES);
-      $Qzones->bindInt(':zone_country_id', $id);
-      $Qzones->setLogging($_SESSION['module'], $id);
-      $Qzones->execute();
-
-      if ( !$osC_Database->isError() ) {
-        $Qcountry = $osC_Database->query('delete from :table_countries where countries_id = :countries_id');
-        $Qcountry->bindTable(':table_countries', TABLE_COUNTRIES);
-        $Qcountry->bindInt(':countries_id', $id);
-        $Qcountry->setLogging($_SESSION['module'], $id);
-        $Qcountry->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      } else {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function saveZone($id = null, $data) {
@@ -243,7 +213,7 @@
 
       if ( is_numeric($id) ) {
         $Qzone = $osC_Database->query('update :table_zones set zone_name = :zone_name, zone_code = :zone_code, zone_country_id = :zone_country_id where zone_id = :zone_id');
-        $Qzone->bindInt(':zone_id', $id);
+        $Qzone->bindInt(':zone_id', $id, false);
       } else {
         $Qzone = $osC_Database->query('insert into :table_zones (zone_name, zone_code, zone_country_id) values (:zone_name, :zone_code, :zone_country_id)');
       }
@@ -254,11 +224,7 @@
       $Qzone->setLogging($_SESSION['module'], $id);
       $Qzone->execute();
 
-      if ( !$osC_Database->isError() ) {
-        return true;
-      }
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function deleteZone($id) {
@@ -266,15 +232,11 @@
 
       $Qzone = $osC_Database->query('delete from :table_zones where zone_id = :zone_id');
       $Qzone->bindTable(':table_zones', TABLE_ZONES);
-      $Qzone->bindInt(':zone_id', $id);
+      $Qzone->bindInt(':zone_id', $id, false);
       $Qzone->setLogging($_SESSION['module'], $id);
       $Qzone->execute();
 
-      if ( !$osC_Database->isError() ) {
-        return true;
-      }
-
-      return false;
+      return !$osC_Database->isError();
     }
   }
 ?>

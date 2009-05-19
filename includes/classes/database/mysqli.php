@@ -14,6 +14,7 @@
 
   class osC_Database_mysqli extends osC_Database {
     var $use_transactions = false,
+        $use_foreign_keys = false,
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 
