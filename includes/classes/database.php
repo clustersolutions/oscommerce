@@ -55,7 +55,7 @@
     }
 
     function &query($query) {
-      $osC_Database_Result =& new osC_Database_Result($this);
+      $osC_Database_Result = new osC_Database_Result($this);
       $osC_Database_Result->setQuery($query);
 
       return $osC_Database_Result;
@@ -69,7 +69,7 @@
         $this->error_number = $error_number;
         $this->error_query = $query;
 
-        trigger_error('[MYSQL] ' . $this->error . ' (' . $this->error_number . '): [QUERY] ' . $this->error_query, E_USER_WARNING);
+        error_log('[MYSQL] ' . $this->error . ' (' . $this->error_number . '): [QUERY] ' . $this->error_query);
 
         if (isset($osC_MessageStack)) {
           $osC_MessageStack->add('debug', $this->getError());
@@ -124,9 +124,7 @@
     function importSQL($sql_file, $database, $table_prefix = -1) {
       if ($this->selectDatabase($database)) {
         if (file_exists($sql_file)) {
-          $fd = fopen($sql_file, 'rb');
-          $import_queries = fread($fd, filesize($sql_file));
-          fclose($fd);
+          $import_queries = file_get_contents($sql_file);
         } else {
           $this->setError(sprintf(ERROR_SQL_FILE_NONEXISTENT, $sql_file));
 
@@ -184,7 +182,7 @@
               $next = 'insert';
             }
 
-            if ((strtoupper($next) == 'DROP T') || (strtoupper($next) == 'CREATE') || (strtoupper($next) == 'INSERT')) {
+            if ((strtoupper($next) == 'DROP T') || (strtoupper($next) == 'CREATE') || (strtoupper($next) == 'INSERT') || (strtoupper($next) == 'ALTER ') || (strtoupper($next) == 'SET FO')) {
               $next = '';
 
               $sql_query = substr($import_queries, 0, $i);
@@ -396,16 +394,7 @@
     }
 
     function bindReplace($place_holder, $value) {
-      $pos = strpos($this->sql_query, $place_holder);
-
-      if ($pos !== false) {
-        $length = strlen($place_holder);
-        $character_after_place_holder = substr($this->sql_query, $pos+$length, 1);
-
-        if (($character_after_place_holder === false) || ereg('[ ,)"]', $character_after_place_holder)) {
-          $this->sql_query = substr_replace($this->sql_query, $value, $pos, $length);
-        }
-      }
+      $this->sql_query = preg_replace('/\:\b' . substr($place_holder, 1) . '\b/', $value, $this->sql_query);
     }
 
     function bindValue($place_holder, $value, $log = true) {
@@ -665,11 +654,15 @@
     }
 
     function executeRandom() {
-      return $this->query_handler = $this->db_class->randomQuery($this->sql_query);
+      $this->query_handler = $this->db_class->randomQuery($this->sql_query);
+
+      return $this->query_handler;
     }
 
     function executeRandomMulti() {
-      return $this->query_handler = $this->db_class->randomQueryMulti($this->sql_query);
+      $this->query_handler = $this->db_class->randomQueryMulti($this->sql_query);
+
+      return $this->query_handler;
     }
 
     function setCache($key, $expire = 0) {

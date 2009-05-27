@@ -35,7 +35,7 @@
         $connect_function = 'mysqli_connect';
       }
 
-      if ($this->link = @$connect_function($this->server, $this->username, $this->password)) {
+      if ($this->link = $connect_function($this->server, $this->username, $this->password)) {
         $this->setConnected(true);
 
         if ( version_compare($this->getServerVersion(), '5.0.2') >= 0 ) {
@@ -52,7 +52,7 @@
 
     function disconnect() {
       if ($this->isConnected()) {
-        if (@mysqli_close($this->link)) {
+        if (mysqli_close($this->link)) {
           return true;
         } else {
           return false;
@@ -64,7 +64,7 @@
 
     function selectDatabase($database) {
       if ($this->isConnected()) {
-        if (@mysqli_select_db($this->link, $database)) {
+        if (mysqli_select_db($this->link, $database)) {
           return true;
         } else {
           $this->setError(mysqli_error($this->link), mysqli_errno($this->link));
@@ -100,7 +100,7 @@
           }
 
           if (!osc_empty(SERVICE_DEBUG_EXECUTION_TIME_LOG) && (SERVICE_DEBUG_LOG_DB_QUERIES == '1')) {
-            @error_log('QUERY ' . $query . "\n", 3, SERVICE_DEBUG_EXECUTION_TIME_LOG);
+            error_log('QUERY ' . $query . "\n", 3, SERVICE_DEBUG_EXECUTION_TIME_LOG);
           }
         } elseif ($debug === true) {
           $debug = false;
@@ -110,7 +110,7 @@
           $time_start = $this->getMicroTime();
         }
 
-        $resource = @mysqli_query($this->link, $query);
+        $resource = mysqli_query($this->link, $query);
 
         if ($debug === true) {
           $time_end = $this->getMicroTime();
@@ -132,9 +132,9 @@
           $this->error_query = null;
 
           if ( mysqli_warning_count($this->link) > 0 ) {
-            $warning_query = @mysqli_query($this->link, 'show warnings');
+            $warning_query = mysqli_query($this->link, 'show warnings');
             while ( $warning = mysqli_fetch_row($warning_query) ) {
-              trigger_error(sprintf('[MYSQL] %s (%d): %s [QUERY] ' . $query, $warning[0], $warning[1], $warning[2]), E_USER_WARNING);
+              error_log(sprintf('[MYSQL] %s (%d): %s [QUERY] ' . $query, $warning[0], $warning[1], $warning[2]));
             }
             mysqli_free_result($warning_query);
           }
@@ -151,7 +151,7 @@
     }
 
     function dataSeek($row_number, $resource) {
-      return @mysqli_data_seek($resource, $row_number);
+      return mysqli_data_seek($resource, $row_number);
     }
 
     function randomQuery($query) {
@@ -169,19 +169,17 @@
         $random_row = osc_rand(0, ($num_rows - 1));
 
         $this->dataSeek($random_row, $resource);
-
-        return $resource;
-      } else {
-        return false;
       }
+
+      return $resource;
     }
 
     function next($resource) {
-      return @mysqli_fetch_assoc($resource);
+      return mysqli_fetch_assoc($resource);
     }
 
     function freeResult($resource) {
-      return @mysqli_free_result($resource);
+      return mysqli_free_result($resource);
     }
 
     function nextID() {
@@ -190,7 +188,7 @@
         $this->nextID = null;
 
         return $id;
-      } elseif ($id = @mysqli_insert_id($this->link)) {
+      } elseif ($id = mysqli_insert_id($this->link)) {
         return $id;
       } else {
         $this->setError(mysqli_error($this->link), mysqli_errno($this->link));
@@ -200,18 +198,18 @@
     }
 
     function numberOfRows($resource) {
-      return @mysqli_num_rows($resource);
+      return mysqli_num_rows($resource);
     }
 
     function affectedRows() {
-      return @mysqli_affected_rows($this->link);
+      return mysqli_affected_rows($this->link);
     }
 
     function startTransaction() {
       $this->logging_transaction = true;
 
       if ($this->use_transactions === true) {
-        return @mysqli_autocommit($this->link, false);
+        return mysqli_autocommit($this->link, false);
       }
 
       return false;
@@ -224,9 +222,9 @@
       }
 
       if ($this->use_transactions === true) {
-        $result = @mysqli_commit($this->link);
+        $result = mysqli_commit($this->link);
 
-        @mysqli_autocommit($this->link, true);
+        mysqli_autocommit($this->link, true);
 
         return $result;
       }
@@ -241,9 +239,9 @@
       }
 
       if ($this->use_transactions === true) {
-        $result = @mysqli_rollback($this->link);
+        $result = mysqli_rollback($this->link);
 
-        @mysqli_autocommit($this->link, true);
+        mysqli_autocommit($this->link, true);
 
         return $result;
       }
