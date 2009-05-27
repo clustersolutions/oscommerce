@@ -18,6 +18,7 @@
 
   error_reporting(E_ALL);
   ini_set('log_errors', true);
+  ini_set('display_errors', false);
 
   if ( defined('DIR_FS_WORK') ) {
     ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
