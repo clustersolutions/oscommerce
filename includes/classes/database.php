@@ -396,7 +396,7 @@
     }
 
     function bindReplace($place_holder, $value) {
-      $this->sql_query = preg_replace('/\:\b' . substr($place_holder, 1) . '\b/', $value, $this->sql_query);
+      $this->sql_query = preg_replace('/\:\b' . substr($place_holder, 1) . '\b/', $value, $this->sql_query, 1);
     }
 
     function bindValue($place_holder, $value, $log = true) {
@@ -517,29 +517,39 @@
               $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[2] . ' ' . $query_data[3]);
               while ( $parent_result = $this->db_class->next($parent_query) ) {
                 if ( $fk_check['on_delete'] == 'cascade' ) {
-                  if ( $this->logging === true ) {
-                    $checkQuery = $this->db_class->simpleQuery('select * from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                  $Qdel = new self($this->db_class);
+                  $Qdel->setQuery('delete from :from_table where :from_field = :' . $fk_check['from_field']);
+                  $Qdel->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
+                  $Qdel->bindRaw(':from_field', $fk_check['from_field'], false);
+                  $Qdel->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']]);
 
-                    while ( $check = $this->db_class->next($checkQuery)) {
-                      foreach ($check as $key => $value) {
-                        $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $key, 'old' => $value, 'new' => '');
-                      }
+                  if ( $this->logging === true ) {
+                    if ( $this->db_class->logging_transaction === false ) {
+                      $this->db_class->logging_transaction = true;
                     }
+
+                    $Qdel->setLogging($this->logging_module, $this->logging_module_id);
                   }
 
-                  $this->db_class->simpleQuery('delete from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                  $Qdel->execute();
                 } elseif ( $fk_check['on_delete'] == 'set_null' ) {
-                  if ( $this->logging === true ) {
-                    $checkQuery = $this->db_class->simpleQuery('select ' . $fk_check['from_field'] . ' from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                  $Qupdate = new self($this->db_class);
+                  $Qupdate->setQuery('update :from_table set :from_field = :' . $fk_check['from_field'] . ' where :from_field = :' . $fk_check['from_field']);
+                  $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
+                  $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
+                  $Qupdate->bindRaw(':' . $fk_check['from_field'], 'null');
+                  $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
+                  $Qupdate->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']], false);
 
-                    while ( $check = $this->db_class->next($checkQuery)) {
-                      if ($check[$fk_check['from_field']] != '') {
-                        $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $fk_check['from_field'], 'old' => $check[$fk_check['from_field']], 'new' => '');
-                      }
+                  if ( $this->logging === true ) {
+                    if ( $this->db_class->logging_transaction === false ) {
+                      $this->db_class->logging_transaction = true;
                     }
+
+                    $Qupdate->setLogging($this->logging_module, $this->logging_module_id);
                   }
 
-                  $this->db_class->simpleQuery('update ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' set ' . $fk_check['from_field'] . ' = null where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                  $Qupdate->execute();
                 }
               }
             }
@@ -560,17 +570,29 @@
                       $on_update_value = $this->logging_fields[$fk_check['to_field']];
                     }
 
-                    if ( $this->logging === true ) {
-                      $checkQuery = $this->db_class->simpleQuery('select ' . $fk_check['from_field'] . ' from ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                    $Qupdate = new self($this->db_class);
+                    $Qupdate->setQuery('update :from_table set :from_field = :' . $fk_check['from_field'] . ' where :from_field = :' . $fk_check['from_field']);
+                    $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
+                    $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
 
-                      while ( $check = $this->db_class->next($checkQuery)) {
-                        if ($check[$fk_check['from_field']] != $on_update_value) {
-                          $this->logging_changed[] = array('key' => DB_TABLE_PREFIX . $fk_check['from_table'] . '.' . $fk_check['from_field'], 'old' => $check[$fk_check['from_field']], 'new' => $on_update_value);
-                        }
-                      }
+                    if ( empty($on_update_value) ) {
+                      $Qupdate->bindRaw(':' . $fk_check['from_field'], 'null');
+                    } else {
+                      $Qupdate->bindValue(':' . $fk_check['from_field'], $on_update_value);
                     }
 
-                    $this->db_class->simpleQuery('update ' . DB_TABLE_PREFIX . $fk_check['from_table'] . ' set ' . $fk_check['from_field'] . ' = ' . (empty($on_update_value) ? 'null' : '"' . $on_update_value . '"') . ' where ' . $fk_check['from_field'] . ' = "' . $parent_result[$fk_check['to_field']] . '"');
+                    $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
+                    $Qupdate->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']], false);
+
+                    if ( $this->logging === true ) {
+                      if ( $this->db_class->logging_transaction === false ) {
+                        $this->db_class->logging_transaction = true;
+                      }
+
+                      $Qupdate->setLogging($this->logging_module, $this->logging_module_id);
+                    }
+
+                    $Qupdate->execute();
                   }
                 }
               }
