@@ -66,8 +66,7 @@
   require('includes/classes/database.php');
 
 // make a connection to the database... now
-  $osC_Database = osC_Database::connect(DB_SERVER, DB_SERVER_USERNAME, DB_SERVER_PASSWORD);
-  $osC_Database->selectDatabase(DB_DATABASE);
+  $osC_Database = osC_Database::connect();
 
 // set the application parameters
   $Qcfg = $osC_Database->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');

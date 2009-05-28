@@ -20,9 +20,10 @@
   define('DB_SERVER', '');
   define('DB_SERVER_USERNAME', '');
   define('DB_SERVER_PASSWORD', '');
-  define('DB_DATABASE', 'osCommerce');
-  define('DB_DATABASE_CLASS', 'mysql');
+  define('DB_SERVER_PORT', '');
+  define('DB_DATABASE', 'oscommerce');
+  define('DB_DATABASE_CLASS', 'mysqli');
   define('DB_TABLE_PREFIX', 'osc_');
-  define('USE_PCONNECT', 'false');
+  define('DB_SERVER_PERSISTENT_CONNECTIONS', false);
   define('STORE_SESSIONS', '');
 ?>

@@ -20,8 +20,8 @@
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 
-    function __construct($server, $username, $password) {
-      parent::__construct($server, $username, $password);
+    function __construct($server, $username, $password, $database, $port) {
+      parent::__construct($server, $username, $password, $database, $port);
     }
 
     function prepareSearch($columns) {

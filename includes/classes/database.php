@@ -22,6 +22,8 @@
         $server,
         $username,
         $password,
+        $database,
+        $port,
         $debug = false,
         $number_of_queries = 0,
         $time_of_queries = 0,
@@ -29,11 +31,11 @@
         $logging_transaction = false,
         $logging_transaction_action = false;
 
-    function &connect($server, $username, $password, $type = DB_DATABASE_CLASS) {
+    function &connect($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
       require('database/' . $type . '.php');
 
       $class = 'osC_Database_' . $type;
-      $object = new $class($server, $username, $password);
+      $object = new $class($server, $username, $password, $database, $port);
 
       return $object;
     }

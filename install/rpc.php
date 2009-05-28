@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -26,10 +26,11 @@
                     'DB_SERVER_USERNAME' => trim(urldecode($_GET['username'])),
                     'DB_SERVER_PASSWORD' => trim(urldecode($_GET['password'])),
                     'DB_DATABASE' => trim(urldecode($_GET['name'])),
+                    'DB_SERVER_PORT' => trim(urldecode($_GET['port'])),
                     'DB_DATABASE_CLASS' => trim(urldecode($_GET['class']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE_CLASS']);
+        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $osC_Database->selectDatabase($db['DB_DATABASE']);
@@ -49,25 +50,16 @@
                     'DB_SERVER_USERNAME' => trim(urldecode($_GET['username'])),
                     'DB_SERVER_PASSWORD' => trim(urldecode($_GET['password'])),
                     'DB_DATABASE' => trim(urldecode($_GET['name'])),
+                    'DB_SERVER_PORT' => trim(urldecode($_GET['port'])),
                     'DB_DATABASE_CLASS' => trim(urldecode($_GET['class'])),
                     'DB_INSERT_SAMPLE_DATA' => ((trim(urldecode($_GET['import'])) == '1') ? 'true' : 'false'),
                     'DB_TABLE_PREFIX' => trim(urldecode($_GET['prefix']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE_CLASS']);
-
-        if ($osC_Database->isError() === false) {
-          $osC_Database->selectDatabase($db['DB_DATABASE']);
-        }
+        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $sql_file = $dir_fs_www_root . '/oscommerce.sql';
-
-          $osC_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
-        }
-
-        if ( ($osC_Database->isError() === false) && ($db['DB_INSERT_SAMPLE_DATA'] == 'true') ) {
-          $sql_file = $dir_fs_www_root . '/oscommerce_sample_data.sql';
 
           $osC_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
         }
@@ -238,11 +230,9 @@
         if ( ($osC_Database->isError() === false) && ($db['DB_DATABASE_CLASS'] == 'mysqli_innodb') ) {
           $Qinno = $osC_Database->query('show variables like "have_innodb"');
           if (($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes')) {
-            $database_tables = array('address_book', 'categories', 'categories_description', 'customers', 'manufacturers', 'manufacturers_info', 'orders', 'orders_products', 'orders_status', 'orders_status_history', 'orders_products_attributes', 'orders_products_download', 'orders_total', 'products', 'products_attributes', 'products_attributes_download', 'products_description', 'products_options', 'products_options_values', 'products_options_values_to_products_options', 'products_to_categories', 'reviews', 'shopping_carts', 'shopping_carts_custom_variants_values', 'weight_classes', 'weight_classes_rules');
+            $innodb_sql_file = $dir_fs_www_root . '/oscommerce_innodb.sql';
 
-            foreach ($database_tables as $table) {
-              $osC_Database->simpleQuery('alter table ' . $db['DB_TABLE_PREFIX'] . $table . ' type = innodb');
-            }
+            $osC_Database->importSQL($innodb_sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
           }
         }
 
@@ -260,15 +250,12 @@
                     'DB_SERVER_USERNAME' => trim(urldecode($_GET['username'])),
                     'DB_SERVER_PASSWORD' => trim(urldecode($_GET['password'])),
                     'DB_DATABASE' => trim(urldecode($_GET['name'])),
+                    'DB_SERVER_PORT' => trim(urldecode($_GET['port'])),
                     'DB_DATABASE_CLASS' => trim(urldecode($_GET['class'])),
                     'DB_TABLE_PREFIX' => trim(urldecode($_GET['prefix']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE_CLASS']);
-
-        if ($osC_Database->isError() === false) {
-          $osC_Database->selectDatabase($db['DB_DATABASE']);
-        }
+        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $sql_file = $dir_fs_www_root . '/oscommerce_sample_data.sql';

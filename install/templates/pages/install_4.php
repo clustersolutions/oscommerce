@@ -15,8 +15,7 @@
   define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
   include('../includes/database_tables.php');
 
-  $osC_Database = osC_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE_CLASS']);
-  $osC_Database->selectDatabase($_POST['DB_DATABASE']);
+  $osC_Database = osC_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
 
   $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
   $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
@@ -164,10 +163,11 @@
                    '  define(\'DB_SERVER\', \'' . $_POST['DB_SERVER'] . '\');' . "\n" .
                    '  define(\'DB_SERVER_USERNAME\', \'' . $_POST['DB_SERVER_USERNAME'] . '\');' . "\n" .
                    '  define(\'DB_SERVER_PASSWORD\', \'' . $_POST['DB_SERVER_PASSWORD']. '\');' . "\n" .
+                   '  define(\'DB_SERVER_PORT\', \'' . $_POST['DB_SERVER_PORT'] . '\');' . "\n" .
                    '  define(\'DB_DATABASE\', \'' . $_POST['DB_DATABASE']. '\');' . "\n" .
                    '  define(\'DB_DATABASE_CLASS\', \'' . $_POST['DB_DATABASE_CLASS'] . '\');' . "\n" .
                    '  define(\'DB_TABLE_PREFIX\', \'' . $_POST['DB_TABLE_PREFIX']. '\');' . "\n" .
-                   '  define(\'USE_PCONNECT\', \'false\');' . "\n" .
+                   '  define(\'DB_SERVER_PERSISTENT_CONNECTIONS\', false);' . "\n" .
                    '  define(\'STORE_SESSIONS\', \'database\');' . "\n" .
                    '?>';
 

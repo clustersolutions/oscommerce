@@ -24,6 +24,7 @@
   var dbUsername;
   var dbPassword;
   var dbName;
+  var dbPort;
   var dbClass;
   var dbPrefix;
 
@@ -57,7 +58,7 @@
         if (result[0] == '1') {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_importing'); ?></p>';
 
-          loadXMLDoc("rpc.php?action=dbImport&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass) + "&import=0&prefix=" + urlEncode(dbPrefix), handleHttpResponse_DoImport);
+          loadXMLDoc("rpc.php?action=dbImport&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&port=" + urlEncode(dbPort) + "&class=" + urlEncode(dbClass) + "&import=0&prefix=" + urlEncode(dbPrefix), handleHttpResponse_DoImport);
         } else {
           document.getElementById('mBoxContents').innerHTML = '<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_connection_error'); ?></p>'.replace('%s', result[1]);
           formSubmited = false;
@@ -83,10 +84,11 @@
     dbUsername = document.getElementById("DB_SERVER_USERNAME").value;
     dbPassword = document.getElementById("DB_SERVER_PASSWORD").value;
     dbName = document.getElementById("DB_DATABASE").value;
+    dbPort = document.getElementById("DB_SERVER_PORT").value;
     dbClass = document.getElementById("DB_DATABASE_CLASS").value;
     dbPrefix = document.getElementById("DB_TABLE_PREFIX").value;
 
-    loadXMLDoc("rpc.php?action=dbCheck&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass), handleHttpResponse);
+    loadXMLDoc("rpc.php?action=dbCheck&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&port=" + urlEncode(dbPort) + "&class=" + urlEncode(dbClass), handleHttpResponse);
   }
 
 //-->
@@ -135,12 +137,16 @@
         <td class="inputDescription"><?php echo $osC_Language->get('param_database_username_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo $osC_Language->get('param_database_password') . '<br />' . osc_draw_password_field('DB_SERVER_PASSWORD', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo $osC_Language->get('param_database_password') . '<br />' . osc_draw_input_field('DB_SERVER_PASSWORD', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_database_password_description'); ?></td>
       </tr>
       <tr>
         <td class="inputField"><?php echo $osC_Language->get('param_database_name') . '<br />' . osc_draw_input_field('DB_DATABASE', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo $osC_Language->get('param_database_name_description'); ?></td>
+      </tr>
+      <tr>
+        <td class="inputField"><?php echo $osC_Language->get('param_database_port') . '<br />' . osc_draw_input_field('DB_SERVER_PORT', null, 'class="text"'); ?></td>
+        <td class="inputDescription"><?php echo $osC_Language->get('param_database_port_description'); ?></td>
       </tr>
       <tr>
         <td class="inputField"><?php echo $osC_Language->get('param_database_type') . '<br />' . osc_draw_pull_down_menu('DB_DATABASE_CLASS', $db_table_types); ?></td>

@@ -21,6 +21,7 @@
   var dbUsername = "<?php echo $_POST['DB_SERVER_USERNAME']; ?>";
   var dbPassword = "<?php echo $_POST['DB_SERVER_PASSWORD']; ?>";
   var dbName = "<?php echo $_POST['DB_DATABASE']; ?>";
+  var dbPort = "<?php echo $_POST['DB_SERVER_PORT']; ?>";
   var dbClass = "<?php echo $_POST['DB_DATABASE_CLASS']; ?>";
   var dbPrefix = "<?php echo $_POST['DB_TABLE_PREFIX']; ?>";
 
@@ -57,7 +58,7 @@
 
       document.getElementById('mBoxContents').innerHTML = '<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo $osC_Language->get('rpc_database_sample_data_importing'); ?></p>';
 
-      loadXMLDoc("rpc.php?action=dbImportSample&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&class=" + urlEncode(dbClass) + "&prefix=" + urlEncode(dbPrefix), handleHttpResponse);
+      loadXMLDoc("rpc.php?action=dbImportSample&server=" + urlEncode(dbServer) + "&username=" + urlEncode(dbUsername) + "&password=" + urlEncode(dbPassword) + "&name=" + urlEncode(dbName) + "&port=" + urlEncode(dbPort) + "&class=" + urlEncode(dbClass) + "&prefix=" + urlEncode(dbPrefix), handleHttpResponse);
     } else {
       document.getElementById('installForm').submit();
     }

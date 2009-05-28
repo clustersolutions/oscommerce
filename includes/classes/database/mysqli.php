@@ -18,10 +18,12 @@
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 
-    function __construct($server, $username, $password) {
+    function __construct($server, $username, $password, $database, $port) {
       $this->server = $server;
       $this->username = $username;
       $this->password = $password;
+      $this->database = $database;
+      $this->port = $port;
 
       if ($this->is_connected === false) {
         $this->connect();
@@ -29,13 +31,15 @@
     }
 
     function connect() {
-      if (defined('USE_PCONNECT') && (USE_PCONNECT == 'true')) {
-        $connect_function = 'mysqli_pconnect';
-      } else {
-        $connect_function = 'mysqli_connect';
+      if (defined('DB_SERVER_PERSISTENT_CONNECTIONS') && (DB_SERVER_PERSISTENT_CONNECTIONS === true)) {
+        $this->server = 'p:' . $this->server;
       }
 
-      if ($this->link = $connect_function($this->server, $this->username, $this->password)) {
+      if ( empty($this->port) ) {
+        $this->port = null;
+      }
+
+      if ($this->link = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port)) {
         $this->setConnected(true);
 
         if ( version_compare($this->getServerVersion(), '5.0.2') >= 0 ) {
@@ -65,6 +69,8 @@
     function selectDatabase($database) {
       if ($this->isConnected()) {
         if (mysqli_select_db($this->link, $database)) {
+          $this->database = $database;
+
           return true;
         } else {
           $this->setError(mysqli_error($this->link), mysqli_errno($this->link));
