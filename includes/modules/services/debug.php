@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -14,7 +14,7 @@
 
   class osC_Services_debug {
     function start() {
-      global $osC_MessageStack, $osC_Language;
+      global $osC_Session, $osC_MessageStack, $osC_Language;
 
       if (SERVICE_DEBUG_CHECK_LOCALE == '1') {
         $setlocale = osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
