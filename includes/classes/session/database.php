@@ -39,20 +39,20 @@
 /**
  * Opens the database based session storage handler
  *
- * @access protected
+ * @access public
  */
 
-    protected function _custom_open() {
+    public function _custom_open() {
       return true;
     }
 
 /**
  * Closes the database based session storage handler
  *
- * @access protected
+ * @access public
  */
 
-    protected function _custom_close() {
+    public function _custom_close() {
       return true;
     }
 
@@ -60,10 +60,10 @@
  * Read session data from the database based session storage handler
  *
  * @param string $id The ID of the session
- * @access protected
+ * @access public
  */
 
-    protected function _custom_read($id) {
+    public function _custom_read($id) {
       global $osC_Database;
 
       $Qsession = $osC_Database->query('select value from :table_sessions where id = :id');
@@ -78,7 +78,7 @@
       $Qsession->execute();
 
       if ( $Qsession->numberOfRows() === 1 ) {
-        return $Qsession->value('value');
+        return base64_decode($Qsession->value('value'));
       }
 
       return false;
@@ -89,17 +89,17 @@
  *
  * @param string $id The ID of the session
  * @param string $value The session data to store
- * @access protected
+ * @access public
  */
 
-    protected function _custom_write($id, $value) {
+    public function _custom_write($id, $value) {
       global $osC_Database;
 
       $Qsession = $osC_Database->query('replace into :table_sessions values (:id, :expiry, :value)');
       $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
       $Qsession->bindValue(':id', $id);
       $Qsession->bindInt(':expiry', time() + $this->_life_time);
-      $Qsession->bindValue(':value', $value);
+      $Qsession->bindValue(':value', base64_encode($value));
       $Qsession->execute();
 
       return ( $Qsession->affectedRows() === 1 );
@@ -109,10 +109,10 @@
  * Destroys the session data from the database based session storage handler
  *
  * @param string $id The ID of the session
- * @access protected
+ * @access public
  */
 
-    protected function _custom_destroy($id) {
+    public function _custom_destroy($id) {
       return $this->delete($id);
     }
 
@@ -120,10 +120,10 @@
  * Garbage collector for the database based session storage handler
  *
  * @param string $max_life_time The maxmimum time a session should exist
- * @access protected
+ * @access public
  */
 
-    protected function _custom_gc($max_life_time) {
+    public function _custom_gc($max_life_time) {
       global $osC_Database;
 
 // $max_life_time is already added to the time in the _custom_write method
