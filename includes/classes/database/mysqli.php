@@ -13,12 +13,17 @@
 */
 
   class osC_Database_mysqli extends osC_Database {
-    var $use_transactions = false,
+    var $use_mysqli = false,
+        $use_transactions = false,
         $use_foreign_keys = false,
         $use_fulltext = false,
         $use_fulltext_boolean = false;
 
     function __construct($server, $username, $password, $database, $port) {
+      if ( function_exists('mysqli_connect') ) {
+        $this->use_mysqli = true;
+      }
+
       $this->server = $server;
       $this->username = $username;
       $this->password = $password;
@@ -31,15 +36,11 @@
     }
 
     function connect() {
-      if (defined('DB_SERVER_PERSISTENT_CONNECTIONS') && (DB_SERVER_PERSISTENT_CONNECTIONS === true)) {
-        $this->server = 'p:' . $this->server;
-      }
-
       if ( empty($this->port) ) {
         $this->port = null;
       }
 
-      if ($this->link = mysqli_connect($this->server, $this->username, $this->password, $this->database, $this->port)) {
+      if ( $this->_connect() ) {
         $this->setConnected(true);
 
         if ( version_compare($this->getServerVersion(), '5.0.2') >= 0 ) {
@@ -48,32 +49,28 @@
 
         return true;
       } else {
-        $this->setError(mysqli_connect_error(), mysqli_connect_errno());
+        $this->setError($this->_connect_error(), $this->_connect_errno());
 
         return false;
       }
     }
 
     function disconnect() {
-      if ($this->isConnected()) {
-        if (mysqli_close($this->link)) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return true;
+      if ( $this->isConnected() ) {
+        return $this->_close();
       }
+
+      return true;
     }
 
     function selectDatabase($database) {
-      if ($this->isConnected()) {
-        if (mysqli_select_db($this->link, $database)) {
+      if ( $this->isConnected() ) {
+        if ( $this->_select_db($database) ) {
           $this->database = $database;
 
           return true;
         } else {
-          $this->setError(mysqli_error($this->link), mysqli_errno($this->link));
+          $this->setError($this->_error(), $this->_errno());
 
           return false;
         }
@@ -83,11 +80,11 @@
     }
 
     function getServerVersion() {
-      return mysqli_get_server_info($this->link);
+      return $this->_get_server_info();
     }
 
     function parseString($value) {
-      return mysqli_real_escape_string($this->link, $value);
+      return $this->_real_escape_string($value);
     }
 
     function simpleQuery($query, $debug = false) {
@@ -116,7 +113,7 @@
           $time_start = $this->getMicroTime();
         }
 
-        $resource = mysqli_query($this->link, $query);
+        $resource = $this->_query($query);
 
         if ($debug === true) {
           $time_end = $this->getMicroTime();
@@ -137,17 +134,20 @@
           $this->error_number = null;
           $this->error_query = null;
 
-          if ( mysqli_warning_count($this->link) > 0 ) {
-            $warning_query = mysqli_query($this->link, 'show warnings');
-            while ( $warning = mysqli_fetch_row($warning_query) ) {
-              error_log(sprintf('[MYSQL] %s (%d): %s [QUERY] ' . $query, $warning[0], $warning[1], $warning[2]));
+          if ( $this->use_mysqli === true ) {
+            if ( mysqli_warning_count($this->link) > 0 ) {
+              $warning_query = mysqli_query($this->link, 'show warnings');
+              while ( $warning = mysqli_fetch_row($warning_query) ) {
+                error_log(sprintf('[MYSQL] %s (%d): %s [QUERY] ' . $query, $warning[0], $warning[1], $warning[2]));
+              }
+
+              mysqli_free_result($warning_query);
             }
-            mysqli_free_result($warning_query);
           }
 
           return $resource;
         } else {
-          $this->setError(mysqli_error($this->link), mysqli_errno($this->link), $query);
+          $this->setError($this->_error(), $this->_errno(), $query);
 
           return false;
         }
@@ -156,8 +156,8 @@
       }
     }
 
-    function dataSeek($row_number, $resource) {
-      return mysqli_data_seek($resource, $row_number);
+    function dataSeek($row_number, $resource = null) {
+      return $this->_data_seek($row_number, $resource);
     }
 
     function randomQuery($query) {
@@ -181,11 +181,11 @@
     }
 
     function next($resource) {
-      return mysqli_fetch_assoc($resource);
+      return $this->_fetch_assoc($resource);
     }
 
     function freeResult($resource) {
-      return mysqli_free_result($resource);
+      return $this->_free_result($resource);
     }
 
     function nextID() {
@@ -194,28 +194,28 @@
         $this->nextID = null;
 
         return $id;
-      } elseif ($id = mysqli_insert_id($this->link)) {
+      } elseif ( $id = $this->_insert_id() ) {
         return $id;
       } else {
-        $this->setError(mysqli_error($this->link), mysqli_errno($this->link));
+        $this->setError($this->_error(), $this->_errno());
 
         return false;
       }
     }
 
     function numberOfRows($resource) {
-      return mysqli_num_rows($resource);
+      return $this->_num_rows($resource);
     }
 
     function affectedRows() {
-      return mysqli_affected_rows($this->link);
+      return $this->_affected_rows();
     }
 
     function startTransaction() {
       $this->logging_transaction = true;
 
       if ($this->use_transactions === true) {
-        return mysqli_autocommit($this->link, false);
+        return $this->_trans_start();
       }
 
       return false;
@@ -228,11 +228,7 @@
       }
 
       if ($this->use_transactions === true) {
-        $result = mysqli_commit($this->link);
-
-        mysqli_autocommit($this->link, true);
-
-        return $result;
+        return $this->_trans_commit();
       }
 
       return false;
@@ -245,11 +241,7 @@
       }
 
       if ($this->use_transactions === true) {
-        $result = mysqli_rollback($this->link);
-
-        mysqli_autocommit($this->link, true);
-
-        return $result;
+        return $this->_trans_rollback();
       }
 
       return false;
@@ -306,6 +298,182 @@
 
         return $search_sql;
       }
+    }
+
+    function _connect() {
+      $this->link = false;
+
+      if ( $this->use_mysqli === true ) {
+        $this->link = mysqli_connect((DB_SERVER_PERSISTENT_CONNECTIONS === true ? 'p:' : '') . $this->server, $this->username, $this->password, $this->database, $this->port);
+      } else {
+        if ( DB_SERVER_PERSISTENT_CONNECTIONS === true ) {
+          $this->link = mysql_pconnect($this->server . ( !empty($this->port) ? ':' . $this->port : ''), $this->username, $this->password);
+        } else {
+          $this->link = mysql_connect($this->server . ( !empty($this->port) ? ':' . $this->port : ''), $this->username, $this->password);
+        }
+
+        if ( ($this->link !== false) && !empty($this->database) ) {
+          mysql_select_db($this->database, $this->link);
+        }
+      }
+
+      return ( $this->link !== false );
+    }
+
+    function _connect_error() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_connect_error();
+      }
+
+      return mysql_error();
+    }
+
+    function _connect_errno() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_connect_errno();
+      }
+
+      return mysql_errno();
+    }
+
+    function _close() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_close($this->link);
+      }
+
+      return mysql_close($this->link);
+    }
+
+    function _select_db($database) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_select_db($this->link, $database);
+      }
+
+      return mysql_select_db($database, $this->link);
+    }
+
+    function _error() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_error($this->link);
+      }
+
+      return mysql_error($this->link);
+    }
+
+    function _errno() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_errno($this->link);
+      }
+
+      return mysql_errno($this->link);
+    }
+
+    function _get_server_info() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_get_server_info($this->link);
+      }
+
+      return mysql_get_server_info($this->link);
+    }
+
+    function _real_escape_string($value) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_real_escape_string($this->link, $value);
+      }
+
+      return mysql_real_escape_string($value, $this->link);
+    }
+
+    function _query($query) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_query($this->link, $query);
+      }
+
+      return mysql_query($query, $this->link);
+    }
+
+    function _data_seek($row_number, $resource = null) {
+      if ( empty($resource) ) {
+        $resource =& $this->link;
+      }
+
+      if ( $this->use_mysqli === true ) {
+        return mysqli_data_seek($this->link, $row_number);
+      }
+
+      return mysql_data_seek($row_number, $this->link);
+    }
+
+    function _fetch_assoc($resource) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_fetch_assoc($resource);
+      }
+
+      return mysql_fetch_assoc($resource);
+    }
+
+    function _free_result($resource) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_free_result($resource);
+      }
+
+      return mysql_free_result($resource);
+    }
+
+    function _insert_id() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_insert_id($this->link);
+      }
+
+      return mysql_insert_id($this->link);
+    }
+
+    function _num_rows($resource) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_num_rows($resource);
+      }
+
+      return mysql_num_rows($resource);
+    }
+
+    function _affected_rows() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_affected_rows($this->link);
+      }
+
+      return mysql_affected_rows($this->link);
+    }
+
+    function _trans_start() {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_autocommit($this->link, false);
+      }
+
+      return $this->simpleQuery('start transaction');
+    }
+
+    function _trans_commit() {
+      if ( $this->use_mysqli === true ) {
+        $result = mysqli_commit($this->link);
+
+        mysqli_autocommit($this->link, true);
+
+        return $result;
+      }
+
+      return $this->simpleQuery('commit');
+    }
+
+    function _trans_rollback() {
+      if ( $this->use_mysqli === true ) {
+        $result = mysqli_rollback($this->link);
+
+        mysqli_autocommit($this->link, true);
+
+        return $result;
+      }
+
+      return $this->simpleQuery('rollback');
     }
   }
 ?>
