@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2009 osCommerce
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -20,7 +20,7 @@
         $wo_customer_id = $osC_Customer->getID();
         $wo_full_name = $osC_Customer->getName();
       } else {
-        $wo_customer_id = '';
+        $wo_customer_id = null;
         $wo_full_name = 'Guest';
 
         if (SERVICE_WHOS_ONLINE_SPIDER_DETECTION == '1') {
@@ -62,7 +62,13 @@
       if ($Qwhosonline->valueInt('count') > 0) {
         $Qwhosonline = $osC_Database->query('update :table_whos_online set customer_id = :customer_id, full_name = :full_name, ip_address = :ip_address, time_last_click = :time_last_click, last_page_url = :last_page_url where session_id = :session_id');
         $Qwhosonline->bindRaw(':table_whos_online', TABLE_WHOS_ONLINE);
-        $Qwhosonline->bindInt(':customer_id', $wo_customer_id);
+
+        if ( $wo_customer_id > 0 ) {
+          $Qwhosonline->bindInt(':customer_id', $wo_customer_id);
+        } else {
+          $Qwhosonline->bindRaw(':customer_id', 'null');
+        }
+
         $Qwhosonline->bindValue(':full_name', $wo_full_name);
         $Qwhosonline->bindValue(':ip_address', $wo_ip_address);
         $Qwhosonline->bindValue(':time_last_click', $current_time);
@@ -72,7 +78,13 @@
       } else {
         $Qwhosonline = $osC_Database->query('insert into :table_whos_online (customer_id, full_name, session_id, ip_address, time_entry, time_last_click, last_page_url) values (:customer_id, :full_name, :session_id, :ip_address, :time_entry, :time_last_click, :last_page_url)');
         $Qwhosonline->bindRaw(':table_whos_online', TABLE_WHOS_ONLINE);
-        $Qwhosonline->bindInt(':customer_id', $wo_customer_id);
+
+        if ( $wo_customer_id > 0 ) {
+          $Qwhosonline->bindInt(':customer_id', $wo_customer_id);
+        } else {
+          $Qwhosonline->bindRaw(':customer_id', 'null');
+        }
+
         $Qwhosonline->bindValue(':full_name', $wo_full_name);
         $Qwhosonline->bindValue(':session_id', $wo_session_id);
         $Qwhosonline->bindValue(':ip_address', $wo_ip_address);

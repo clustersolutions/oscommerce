@@ -66,7 +66,7 @@
       $data['variants'] = $variants_array;
 
       $Qattributes = $osC_Database->query('select id, value from :table_product_attributes where products_id = :products_id and languages_id in (0, :languages_id)');
-      $Qattributes->bindTable(':table_product_attributes');
+      $Qattributes->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
       $Qattributes->bindInt(':products_id', $id);
       $Qattributes->bindInt(':languages_id', $osC_Language->getID());
       $Qattributes->execute();
@@ -105,11 +105,11 @@
           $in_categories[] = $category['id'];
         }
 
-        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.products_name from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.products_name from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id is null and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
         $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
         $Qproducts->bindRaw(':categories_id', implode(',', $in_categories));
       } else {
-        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS p.*, pd.products_name from :table_products p, :table_products_description pd where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id');
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS p.*, pd.products_name from :table_products p, :table_products_description pd where p.parent_id is null and p.products_id = pd.products_id and pd.language_id = :language_id');
       }
 
       $Qproducts->appendQuery('order by pd.products_name');
@@ -181,11 +181,11 @@
           $in_categories[] = $category['id'];
         }
 
-        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.products_name from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.products_name from :table_products p, :table_products_description pd, :table_products_to_categories p2c where p.parent_id is null and p.products_id = pd.products_id and pd.language_id = :language_id and p.products_id = p2c.products_id and p2c.categories_id in (:categories_id)');
         $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
         $Qproducts->bindRaw(':categories_id', implode(',', $in_categories));
       } else {
-        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS p.*, pd.products_name from :table_products p, :table_products_description pd where p.parent_id = 0 and p.products_id = pd.products_id and pd.language_id = :language_id');
+        $Qproducts = $osC_Database->query('select SQL_CALC_FOUND_ROWS p.*, pd.products_name from :table_products p, :table_products_description pd where p.parent_id is null and p.products_id = pd.products_id and pd.language_id = :language_id');
       }
 
       $Qproducts->appendQuery('and (pd.products_name like :products_name or pd.products_keyword like :products_keyword) order by pd.products_name');
@@ -680,197 +680,25 @@
       return false;
     }
 
-    public static function delete($id, $categories = null) {
+    public static function delete($id) {
       global $osC_Database, $osC_Image;
 
-      $delete_product = true;
-      $error = false;
+      $Qim = $osC_Database->query('select id from :table_products_images where products_id = :products_id');
+      $Qim->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+      $Qim->bindInt(':products_id', $id);
+      $Qim->execute();
 
-      $osC_Database->startTransaction();
-
-      if ( is_array($categories) && !empty($categories) ) {
-        $Qpc = $osC_Database->query('delete from :table_products_to_categories where products_id = :products_id and categories_id in :categories_id');
-        $Qpc->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-        $Qpc->bindInt(':products_id', $id);
-        $Qpc->bindRaw(':categories_id', '("' . implode('", "', $categories) . '")');
-        $Qpc->setLogging($_SESSION['module'], $id);
-        $Qpc->execute();
-
-        if ( !$osC_Database->isError() ) {
-          $Qcheck = $osC_Database->query('select products_id from :table_products_to_categories where products_id = :products_id limit 1');
-          $Qcheck->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-          $Qcheck->bindInt(':products_id', $id);
-          $Qcheck->execute();
-
-          if ( $Qcheck->numberOfRows() > 0 ) {
-            $delete_product = false;
-          }
-        } else {
-          $error = true;
-        }
+      while ( $Qim->next() ) {
+        $osC_Image->delete($Qim->valueInt('id'));
       }
 
-      if ( ($error === false) && ($delete_product === true) ) {
-        $Qvariants = $osC_Database->query('select products_id from :table_products where parent_id = :parent_id');
-        $Qvariants->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qvariants->bindInt(':parent_id', $id);
-        $Qvariants->execute();
+      $Qp = $osC_Database->query('delete from :table_products where products_id = :products_id');
+      $Qp->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qp->bindInt(':products_id', $id);
+      $Qp->setLogging($_SESSION['module'], $id);
+      $Qp->execute();
 
-        while ( $Qvariants->next() ) {
-          $Qsc = $osC_Database->query('delete from :table_shopping_carts where products_id = :products_id');
-          $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-          $Qsc->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-          $Qsc->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-
-          if ( $error === false ) {
-            $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where products_id = :products_id');
-            $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-            $Qsccvv->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-            $Qsccvv->execute();
-
-            if ( $osC_Database->isError() ) {
-              $error = true;
-            }
-          }
-
-          if ( $error === false ) {
-            $Qpa = $osC_Database->query('delete from :table_products_variants where products_id = :products_id');
-            $Qpa->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-            $Qpa->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-            $Qpa->setLogging($_SESSION['module'], $id);
-            $Qpa->execute();
-
-            if ( $osC_Database->isError() ) {
-              $error = true;
-            }
-          }
-
-          if ( $error === false ) {
-            $Qp = $osC_Database->query('delete from :table_products where products_id = :products_id');
-            $Qp->bindTable(':table_products', TABLE_PRODUCTS);
-            $Qp->bindInt(':products_id', $Qvariants->valueInt('products_id'));
-            $Qp->setLogging($_SESSION['module'], $id);
-            $Qp->execute();
-
-            if ( $osC_Database->isError() ) {
-              $error = true;
-            }
-          }
-        }
-
-        if ( $error === false ) {
-          $Qr = $osC_Database->query('delete from :table_reviews where products_id = :products_id');
-          $Qr->bindTable(':table_reviews', TABLE_REVIEWS);
-          $Qr->bindInt(':products_id', $id);
-          $Qr->setLogging($_SESSION['module'], $id);
-          $Qr->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qsc = $osC_Database->query('delete from :table_shopping_carts where products_id = :products_id');
-          $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-          $Qsc->bindInt(':products_id', $id);
-          $Qsc->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where products_id = :products_id');
-          $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-          $Qsccvv->bindInt(':products_id', $id);
-          $Qsccvv->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qp2c = $osC_Database->query('delete from :table_products_to_categories where products_id = :products_id');
-          $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-          $Qp2c->bindInt(':products_id', $id);
-          $Qp2c->setLogging($_SESSION['module'], $id);
-          $Qp2c->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qs = $osC_Database->query('delete from :table_specials where products_id = :products_id');
-          $Qs->bindTable(':table_specials', TABLE_SPECIALS);
-          $Qs->bindInt(':products_id', $id);
-          $Qs->setLogging($_SESSION['module'], $id);
-          $Qs->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qpa = $osC_Database->query('delete from :table_products_variants where products_id = :products_id');
-          $Qpa->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-          $Qpa->bindInt(':products_id', $id);
-          $Qpa->setLogging($_SESSION['module'], $id);
-          $Qpa->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qpd = $osC_Database->query('delete from :table_products_description where products_id = :products_id');
-          $Qpd->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-          $Qpd->bindInt(':products_id', $id);
-          $Qpd->setLogging($_SESSION['module'], $id);
-          $Qpd->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qp = $osC_Database->query('delete from :table_products where products_id = :products_id');
-          $Qp->bindTable(':table_products', TABLE_PRODUCTS);
-          $Qp->bindInt(':products_id', $id);
-          $Qp->setLogging($_SESSION['module'], $id);
-          $Qp->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qim = $osC_Database->query('select id from :table_products_images where products_id = :products_id');
-          $Qim->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-          $Qim->bindInt(':products_id', $id);
-          $Qim->execute();
-
-          while ($Qim->next()) {
-            $osC_Image->delete($Qim->valueInt('id'));
-          }
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
+      if ( !$osC_Database->isError() ) {
         osC_Cache::clear('categories');
         osC_Cache::clear('category_tree');
         osC_Cache::clear('also_purchased');
@@ -878,8 +706,6 @@
 
         return true;
       }
-
-      $osC_Database->rollbackTransaction();
 
       return false;
     }

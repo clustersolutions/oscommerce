@@ -419,15 +419,7 @@
       $this->bindValueMixed($place_holder, $value, 'date', $log);
     }
 
-    function bindTable($place_holder, $value = null) {
-      if ( empty($value) ) { // remove :table_ from $place_holder and prefix it with the database name prefix value
-        if ( !isset($this->_db_tables[$place_holder]) ) {
-          $this->_db_tables[$place_holder] = DB_TABLE_PREFIX . substr($place_holder, 7);
-        }
-
-        $value = $this->_db_tables[$place_holder];
-      }
-
+    function bindTable($place_holder, $value) {
       $this->bindValueMixed($place_holder, $value, 'raw', false);
     }
 

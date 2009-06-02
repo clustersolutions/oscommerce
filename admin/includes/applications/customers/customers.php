@@ -144,7 +144,7 @@
             $this->_page_contents = 'delete.php';
 
             if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-              if ( osC_Customers_Admin::delete($_GET['cID'], (isset($_POST['delete_reviews']) && ($_POST['delete_reviews'] == 'on') ? true : false)) ) {
+              if ( osC_Customers_Admin::delete($_GET['cID']) ) {
                 $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
               } else {
                 $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
@@ -327,7 +327,7 @@
                 $error = false;
 
                 foreach ($_POST['batch'] as $id) {
-                  if ( !osC_Customers_Admin::delete($id, (isset($_POST['delete_reviews']) && ($_POST['delete_reviews'] == 'on') ? true : false)) ) {
+                  if ( !osC_Customers_Admin::delete($id) ) {
                     $error = true;
                     break;
                   }

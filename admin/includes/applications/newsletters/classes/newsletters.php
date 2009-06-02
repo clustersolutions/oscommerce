@@ -55,40 +55,13 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
-
-      $osC_Database->startTransaction();
-
-      $Qdelete = $osC_Database->query('delete from :table_newsletters_log where newsletters_id = :newsletters_id');
-      $Qdelete->bindTable(':table_newsletters_log', TABLE_NEWSLETTERS_LOG);
+      $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
+      $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
       $Qdelete->bindInt(':newsletters_id', $id);
+      $Qdelete->setLogging($_SESSION['module'], $id);
       $Qdelete->execute();
 
-      if ( $osC_Database->isError() ) {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $Qdelete = $osC_Database->query('delete from :table_newsletters where newsletters_id = :newsletters_id');
-        $Qdelete->bindTable(':table_newsletters', TABLE_NEWSLETTERS);
-        $Qdelete->bindInt(':newsletters_id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
-        $Qdelete->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
   }
 ?>

@@ -474,160 +474,16 @@
       global $osC_Database;
 
       if ( self::get($id, 'code') != DEFAULT_LANGUAGE ) {
-        $error = false;
+        $Qlanguages = $osC_Database->query('delete from :table_languages where languages_id = :languages_id');
+        $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
+        $Qlanguages->bindInt(':languages_id', $id);
+        $Qlanguages->setLogging($_SESSION['module'], $id);
+        $Qlanguages->execute();
 
-        $osC_Database->startTransaction();
-
-        $Qcategories = $osC_Database->query('delete from :table_categories_description where language_id = :language_id');
-        $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
-        $Qcategories->bindInt(':language_id', $id);
-        $Qcategories->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-
-        if ( $error === false ) {
-          $Qproducts = $osC_Database->query('delete from :table_products_description where language_id = :language_id');
-          $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-          $Qproducts->bindInt(':language_id', $id);
-          $Qproducts->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qproducts = $osC_Database->query('delete from :table_product_attributes where languages_id = :languages_id');
-          $Qproducts->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
-          $Qproducts->bindInt(':languages_id', $id);
-          $Qproducts->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qproducts = $osC_Database->query('delete from :table_products_variants_groups where languages_id = :languages_id');
-          $Qproducts->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-          $Qproducts->bindInt(':languages_id', $id);
-          $Qproducts->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qproducts = $osC_Database->query('delete from :table_products_variants_values where languages_id = :languages_id');
-          $Qproducts->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-          $Qproducts->bindInt(':languages_id', $id);
-          $Qproducts->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qmanufacturers = $osC_Database->query('delete from :table_manufacturers_info where languages_id = :languages_id');
-          $Qmanufacturers->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-          $Qmanufacturers->bindInt(':languages_id', $id);
-          $Qmanufacturers->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qmanufacturers = $osC_Database->query('delete from :table_reviews where languages_id = :languages_id');
-          $Qmanufacturers->bindTable(':table_reviews', TABLE_REVIEWS);
-          $Qmanufacturers->bindInt(':languages_id', $id);
-          $Qmanufacturers->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qstatus = $osC_Database->query('delete from :table_orders_status where language_id = :language_id');
-          $Qstatus->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-          $Qstatus->bindInt(':language_id', $id);
-          $Qstatus->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qgroup = $osC_Database->query('delete from :table_products_images_groups where language_id = :language_id');
-          $Qgroup->bindTable(':table_products_images_groups', TABLE_PRODUCTS_IMAGES_GROUPS);
-          $Qgroup->bindInt(':language_id', $id);
-          $Qgroup->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qgroup = $osC_Database->query('delete from :table_shipping_availability where languages_id = :languages_id');
-          $Qgroup->bindTable(':table_shipping_availability', TABLE_SHIPPING_AVAILABILITY);
-          $Qgroup->bindInt(':languages_id', $id);
-          $Qgroup->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qgroup = $osC_Database->query('delete from :table_weight_classes where language_id = :language_id');
-          $Qgroup->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-          $Qgroup->bindInt(':language_id', $id);
-          $Qgroup->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qlanguages = $osC_Database->query('delete from :table_languages where languages_id = :languages_id');
-          $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
-          $Qlanguages->bindInt(':languages_id', $id);
-          $Qlanguages->setLogging($_SESSION['module'], $id);
-          $Qlanguages->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $Qdefinitions = $osC_Database->query('delete from :table_languages_definitions where languages_id = :languages_id');
-          $Qdefinitions->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
-          $Qdefinitions->bindInt(':languages_id', $id);
-          $Qdefinitions->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-
-        if ( $error === false ) {
-          $osC_Database->commitTransaction();
-
+        if ( !$osC_Database->isError() ) {
           osC_Cache::clear('languages');
 
           return true;
-        } else {
-          $osC_Database->rollbackTransaction();
         }
       }
 

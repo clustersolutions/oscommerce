@@ -29,7 +29,7 @@
       global $osC_Database;
 
       $Qmodule = $osC_Database->query('select id from :table_templates_boxes where code = :code and modules_group = :modules_group');
-      $Qmodule->bindTable(':table_templates_boxes');
+      $Qmodule->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
       $Qmodule->bindValue(':code', $this->getCode());
       $Qmodule->bindValue(':modules_group', 'product_attributes');
       $Qmodule->execute();
@@ -53,7 +53,7 @@
       global $osC_Database;
 
       $Qinstall = $osC_Database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
-      $Qinstall->bindTable(':table_templates_boxes');
+      $Qinstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
       $Qinstall->bindValue(':title', $this->getTitle());
       $Qinstall->bindValue(':code', $this->getCode());
       $Qinstall->bindValue(':author_name', '');
@@ -72,7 +72,7 @@
       $osC_Database->startTransaction();
 
       $Qdelete = $osC_Database->query('delete from :table_product_attributes where id = :id');
-      $Qdelete->bindTable(':table_product_attributes');
+      $Qdelete->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
       $Qdelete->bindInt(':id', $this->getID());
       $Qdelete->execute();
 
@@ -82,7 +82,7 @@
 
       if ( $error === false ) {
         $Quninstall = $osC_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
-        $Quninstall->bindTable(':table_templates_boxes');
+        $Quninstall->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
         $Quninstall->bindValue(':code', $this->getCode());
         $Quninstall->bindValue(':modules_group', 'product_attributes');
         $Quninstall->execute();

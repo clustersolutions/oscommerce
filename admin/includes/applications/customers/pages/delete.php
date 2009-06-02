@@ -29,25 +29,7 @@
 
   <p><?php echo $osC_Language->get('introduction_delete_customer'); ?></p>
 
-  <p>
-
-<?php
-  $customer_name = osc_output_string_protected($osC_ObjectInfo->get('customers_full_name'));
-
-  if ( $osC_ObjectInfo->get('total_reviews') > 0 ) {
-    $customer_name .= ' (' . sprintf($osC_Language->get('total_reviews'), $osC_ObjectInfo->get('total_reviews')) . ')';
-  }
-
-  echo '<b>' . $customer_name . '</b>';
-?>
-
-  </p>
-
-<?php
-  if ( $osC_ObjectInfo->get('total_reviews') > 0 ) {
-    echo '  <p>' . osc_draw_checkbox_field('delete_reviews', null, true) . ' ' . $osC_Language->get('field_delete_reviews') . '</p>';
-  }
-?>
+  <p><?php echo '<b>' . osc_output_string_protected($osC_ObjectInfo->get('customers_full_name')) . '</b>'; ?></p>
 
   <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" class="operationButton" />'; ?></p>
 

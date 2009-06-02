@@ -90,8 +90,6 @@
 
       $error = false;
 
-      $osC_Database->startTransaction();
-
       if ( $delete_image === true ) {
         $Qimage = $osC_Database->query('select banners_image from :table_banners where banners_id = :banners_id');
         $Qimage->bindTable(':table_banners', TABLE_BANNERS);
@@ -110,17 +108,6 @@
       }
 
       if ( $error === false) {
-        $Qdelete = $osC_Database->query('delete from :table_banners_history where banners_id = :banners_id');
-        $Qdelete->bindTable(':table_banners_history', TABLE_BANNERS_HISTORY);
-        $Qdelete->bindInt(':banners_id', $id);
-        $Qdelete->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
         if ( $delete_image === true ) {
           if ( !osc_empty($Qimage->value('banners_image')) ) {
             if ( is_file('../images/' . $Qimage->value('banners_image')) && is_writeable('../images/' . $Qimage->value('banners_image')) ) {
@@ -145,12 +132,8 @@
           }
         }
 
-        $osC_Database->commitTransaction();
-
         return true;
       }
-
-      $osC_Database->rollbackTransaction();
 
       return false;
     }

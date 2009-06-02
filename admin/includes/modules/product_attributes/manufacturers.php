@@ -19,7 +19,7 @@
       $string = '';
 
       $Qmanufacturers = $osC_Database->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
-      $Qmanufacturers->bindTable(':table_manufacturers');
+      $Qmanufacturers->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qmanufacturers->execute();
 
       $array = array(array('id' => '',

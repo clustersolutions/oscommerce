@@ -134,8 +134,8 @@
           $this->_data['attributes'] = array();
 
           $Qattributes = $osC_Database->query('select tb.code, pa.value from :table_product_attributes pa, :table_templates_boxes tb where pa.products_id = :products_id and pa.languages_id in (0, :languages_id) and pa.id = tb.id');
-          $Qattributes->bindTable(':table_product_attributes');
-          $Qattributes->bindTable(':table_templates_boxes');
+          $Qattributes->bindTable(':table_product_attributes', TABLE_PRODUCT_ATTRIBUTES);
+          $Qattributes->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
           $Qattributes->bindInt(':products_id', $this->_data['master_id']);
           $Qattributes->bindInt(':languages_id', $osC_Language->getID());
           $Qattributes->execute();

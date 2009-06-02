@@ -69,8 +69,6 @@
     }
 
     function &getResult() {
-      global $osC_ShoppingCart;
-
       $this->_data = array();
 
       foreach ($this->_modules as $module) {

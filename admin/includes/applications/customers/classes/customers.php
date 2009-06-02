@@ -16,22 +16,13 @@
     public static function getData($id, $key = null) {
       global $osC_Database;
 
-      $Qcustomer = $osC_Database->query('select c.*, date_format(c.customers_dob, "%Y") as customers_dob_year, date_format(c.customers_dob, "%m") as customers_dob_month, date_format(c.customers_dob, "%d") as customers_dob_date, ab.* from :table_customers c left join :table_address_book ab on (c.customers_default_address_id = ab.address_book_id and c.customers_id = ab.customers_id) where c.customers_id = :customers_id');
+      $Qcustomer = $osC_Database->query('select *, date_format(c.customers_dob, "%Y") as customers_dob_year, date_format(c.customers_dob, "%m") as customers_dob_month, date_format(c.customers_dob, "%d") as customers_dob_date from :table_customers c where customers_id = :customers_id');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
-      $Qcustomer->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
       $Qcustomer->bindInt(':customers_id', $id);
       $Qcustomer->execute();
 
       $data = $Qcustomer->toArray();
 
-      $Qreviews = $osC_Database->query('select count(*) as total from :table_reviews where customers_id = :customers_id');
-      $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
-      $Qreviews->bindInt(':customers_id', $id);
-      $Qreviews->execute();
-
-      $data['total_reviews'] = $Qreviews->valueInt('total');
-
-      $Qreviews->freeResult();
       $Qcustomer->freeResult();
 
       $data['customers_full_name'] = $data['customers_firstname'] . ' ' . $data['customers_lastname'];
@@ -149,129 +140,25 @@
       return false;
     }
 
-    public static function delete($id, $delete_reviews = true) {
+    public static function delete($id) {
       global $osC_Database, $osC_Session;
 
-      $error = false;
+      $Qcheck = $osC_Database->query('select session_id from :table_whos_online where customer_id = :customer_id');
+      $Qcheck->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
+      $Qcheck->bindInt(':customer_id', $id);
+      $Qcheck->execute();
 
-      $osC_Database->startTransaction();
-
-      if ( $delete_reviews === true ) {
-        $Qreviews = $osC_Database->query('delete from :table_reviews where customers_id = :customers_id');
-        $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
-        $Qreviews->bindInt(':customers_id', $id);
-        $Qreviews->setLogging($_SESSION['module'], $id);
-        $Qreviews->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      } else {
-        $Qcheck = $osC_Database->query('select reviews_id from :table_reviews where customers_id = :customers_id limit 1');
-        $Qcheck->bindTable(':table_reviews', TABLE_REVIEWS);
-        $Qcheck->bindInt(':customers_id', $id);
-        $Qcheck->execute();
-
-        if ( $Qcheck->numberOfRows() > 0 ) {
-          $Qreviews = $osC_Database->query('update :table_reviews set customers_id = null where customers_id = :customers_id');
-          $Qreviews->bindTable(':table_reviews', TABLE_REVIEWS);
-          $Qreviews->bindInt(':customers_id', $id);
-          $Qreviews->setLogging($_SESSION['module'], $id);
-          $Qreviews->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
+      if ( $Qcheck->numberOfRows() > 0 ) {
+        $osC_Session->delete($Qcheck->value('session_id'));
       }
 
-      if ( $error === false ) {
-        $Qab = $osC_Database->query('delete from :table_address_book where customers_id = :customers_id');
-        $Qab->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qab->bindInt(':customers_id', $id);
-        $Qab->setLogging($_SESSION['module'], $id);
-        $Qab->execute();
+      $Qcustomers = $osC_Database->query('delete from :table_customers where customers_id = :customers_id');
+      $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
+      $Qcustomers->bindInt(':customers_id', $id);
+      $Qcustomers->setLogging($_SESSION['module'], $id);
+      $Qcustomers->execute();
 
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $Qsc = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id');
-        $Qsc->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-        $Qsc->bindInt(':customers_id', $id);
-        $Qsc->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $Qsccvv = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
-        $Qsccvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-        $Qsccvv->bindInt(':customers_id', $id);
-        $Qsccvv->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $Qpn = $osC_Database->query('delete from :table_products_notifications where customers_id = :customers_id');
-        $Qpn->bindTable(':table_products_notifications', TABLE_PRODUCTS_NOTIFICATIONS);
-        $Qpn->bindInt(':customers_id', $id);
-        $Qpn->setLogging($_SESSION['module'], $id);
-        $Qpn->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $Qcheck = $osC_Database->query('select session_id from :table_whos_online where customer_id = :customer_id');
-        $Qcheck->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
-        $Qcheck->bindInt(':customer_id', $id);
-        $Qcheck->execute();
-
-        if ( $Qcheck->numberOfRows() > 0 ) {
-          $osC_Session->delete($Qcheck->value('session_id'));
-
-          $Qwho = $osC_Database->query('delete from :table_whos_online where customer_id = :customer_id');
-          $Qwho->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
-          $Qwho->bindInt(':customer_id', $id);
-          $Qwho->execute();
-
-          if ( $osC_Database->isError() ) {
-            $error = true;
-          }
-        }
-      }
-
-      if ( $error === false ) {
-        $Qcustomers = $osC_Database->query('delete from :table_customers where customers_id = :customers_id');
-        $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
-        $Qcustomers->bindInt(':customers_id', $id);
-        $Qcustomers->setLogging($_SESSION['module'], $id);
-        $Qcustomers->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function saveAddress($id = null, $data) {

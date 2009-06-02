@@ -161,43 +161,18 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
+      $Qclasses = $osC_Database->query('delete from :table_weight_classes where weight_class_id = :weight_class_id');
+      $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
+      $Qclasses->bindInt(':weight_class_id', $id);
+      $Qclasses->setLogging($_SESSION['module'], $id);
+      $Qclasses->execute();
 
-      $osC_Database->startTransaction();
-
-      $Qrules = $osC_Database->query('delete from :table_weight_classes_rules where weight_class_from_id = :weight_class_from_id or weight_class_to_id = :weight_class_to_id');
-      $Qrules->bindTable(':table_weight_classes_rules', TABLE_WEIGHT_CLASS_RULES);
-      $Qrules->bindInt(':weight_class_from_id', $id);
-      $Qrules->bindInt(':weight_class_to_id', $id);
-      $Qrules->setLogging($_SESSION['module'], $id);
-      $Qrules->execute();
-
-      if ( $osC_Database->isError() ) {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $Qclasses = $osC_Database->query('delete from :table_weight_classes where weight_class_id = :weight_class_id');
-        $Qclasses->bindTable(':table_weight_classes', TABLE_WEIGHT_CLASS);
-        $Qclasses->bindInt(':weight_class_id', $id);
-        $Qclasses->setLogging($_SESSION['module'], $id);
-        $Qclasses->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
+      if ( !$osC_Database->isError() ) {
         osC_Cache::clear('weight-classes');
         osC_Cache::clear('weight-rules');
 
         return true;
       }
-
-      $osC_Database->rollbackTransaction();
 
       return false;
     }

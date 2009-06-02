@@ -217,31 +217,13 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $osC_Database->startTransaction();
-
-      $Qdel = $osC_Database->query('delete from :table_administrators_access where administrators_id = :administrators_id');
-      $Qdel->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
-      $Qdel->bindInt(':administrators_id', $id);
+      $Qdel = $osC_Database->query('delete from :table_administrators where id = :id');
+      $Qdel->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+      $Qdel->bindInt(':id', $id);
       $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
 
-      if ( !$osC_Database->isError() ) {
-        $Qdel = $osC_Database->query('delete from :table_administrators where id = :id');
-        $Qdel->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-        $Qdel->bindInt(':id', $id);
-        $Qdel->setLogging($_SESSION['module'], $id);
-        $Qdel->execute();
-
-        if ( !$osC_Database->isError() ) {
-          $osC_Database->commitTransaction();
-
-          return true;
-        }
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function setAccessLevels($id, $modules, $mode = self::ACCESS_MODE_ADD) {

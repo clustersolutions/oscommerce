@@ -19,7 +19,7 @@
       $string = '';
 
       $Qstatus = $osC_Database->query('select id, title from :table_shipping_availability where languages_id = :languages_id order by title');
-      $Qstatus->bindTable(':table_shipping_availability');
+      $Qstatus->bindTable(':table_shipping_availability', TABLE_SHIPPING_AVAILABILITY);
       $Qstatus->bindInt(':languages_id', $osC_Language->getID());
       $Qstatus->execute();
 

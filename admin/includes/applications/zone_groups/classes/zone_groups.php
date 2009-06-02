@@ -123,39 +123,13 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
+      $Qzone = $osC_Database->query('delete from :table_geo_zones where geo_zone_id = :geo_zone_id');
+      $Qzone->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
+      $Qzone->bindInt(':geo_zone_id', $id);
+      $Qzone->setLogging($_SESSION['module'], $id);
+      $Qzone->execute();
 
-      $osC_Database->startTransaction();
-
-      $Qentry = $osC_Database->query('delete from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id');
-      $Qentry->bindTable(':table_zones_to_geo_zones', TABLE_ZONES_TO_GEO_ZONES);
-      $Qentry->bindInt(':geo_zone_id', $id);
-      $Qentry->setLogging($_SESSION['module'], $id);
-      $Qentry->execute();
-
-      if ( !$osC_Database->isError() ) {
-        $Qzone = $osC_Database->query('delete from :table_geo_zones where geo_zone_id = :geo_zone_id');
-        $Qzone->bindTable(':table_geo_zones', TABLE_GEO_ZONES);
-        $Qzone->bindInt(':geo_zone_id', $id);
-        $Qzone->setLogging($_SESSION['module'], $id);
-        $Qzone->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      } else {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function numberOfEntries($id) {

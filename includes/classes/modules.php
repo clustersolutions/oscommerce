@@ -232,17 +232,6 @@
     function remove() {
       global $osC_Database, $osC_Language;
 
-      $Qmodule = $osC_Database->query('select id from :table_templates_boxes where code = :code and modules_group = :modules_group');
-      $Qmodule->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-      $Qmodule->bindValue(':code', $this->_code);
-      $Qmodule->bindValue(':modules_group', $this->_group);
-      $Qmodule->execute();
-
-      $Qdel = $osC_Database->query('delete from :table_templates_boxes_to_pages where templates_boxes_id = :templates_boxes_id');
-      $Qdel->bindTable(':table_templates_boxes_to_pages', TABLE_TEMPLATES_BOXES_TO_PAGES);
-      $Qdel->bindValue(':templates_boxes_id', $Qmodule->valueInt('id'));
-      $Qdel->execute();
-
       $Qdel = $osC_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
       $Qdel->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
       $Qdel->bindValue(':code', $this->_code);

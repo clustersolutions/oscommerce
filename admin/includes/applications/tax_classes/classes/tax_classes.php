@@ -140,39 +140,13 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
+      $Qclass = $osC_Database->query('delete from :table_tax_class where tax_class_id = :tax_class_id');
+      $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+      $Qclass->bindInt(':tax_class_id', $id);
+      $Qclass->setLogging($_SESSION['module'], $id);
+      $Qclass->execute();
 
-      $osC_Database->startTransaction();
-
-      $Qrates = $osC_Database->query('delete from :table_tax_rates where tax_class_id = :tax_class_id');
-      $Qrates->bindTable(':table_tax_rates', TABLE_TAX_RATES);
-      $Qrates->bindInt(':tax_class_id', $id);
-      $Qrates->setLogging($_SESSION['module'], $id);
-      $Qrates->execute();
-
-      if ( !$osC_Database->isError() ) {
-        $Qclass = $osC_Database->query('delete from :table_tax_class where tax_class_id = :tax_class_id');
-        $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
-        $Qclass->bindInt(':tax_class_id', $id);
-        $Qclass->setLogging($_SESSION['module'], $id);
-        $Qclass->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      } else {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function getAllEntries($tax_class_id) {

@@ -682,7 +682,7 @@ $(document).ready(function(){
 
 <?php
   $Qattributes = $osC_Database->query('select id, code from :table_templates_boxes where modules_group = :modules_group order by code');
-  $Qattributes->bindTable(':table_templates_boxes');
+  $Qattributes->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
   $Qattributes->bindValue(':modules_group', 'product_attributes');
   $Qattributes->execute();
 

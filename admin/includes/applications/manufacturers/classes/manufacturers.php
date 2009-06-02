@@ -147,18 +147,6 @@
         }
       }
 
-      $Qm = $osC_Database->query('delete from :table_manufacturers where manufacturers_id = :manufacturers_id');
-      $Qm->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
-      $Qm->bindInt(':manufacturers_id', $id);
-      $Qm->setLogging($_SESSION['module'], $id);
-      $Qm->execute();
-
-      $Qmi = $osC_Database->query('delete from :table_manufacturers_info where manufacturers_id = :manufacturers_id');
-      $Qmi->bindTable(':table_manufacturers_info', TABLE_MANUFACTURERS_INFO);
-      $Qmi->bindInt(':manufacturers_id', $id);
-      $Qmi->setLogging($_SESSION['module'], $id);
-      $Qmi->execute();
-
       if ( $delete_products === true ) {
         $Qproducts = $osC_Database->query('select products_id from :table_products where manufacturers_id = :manufacturers_id');
         $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
@@ -168,17 +156,21 @@
         while ( $Qproducts->next() ) {
           osC_Products_Admin::delete($Qproducts->valueInt('products_id'));
         }
-      } else {
-        $Qupdate = $osC_Database->query('update :table_products set manufacturers_id = null where manufacturers_id = :manufacturers_id');
-        $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
-        $Qupdate->bindInt(':manufacturers_id', $id);
-        $Qupdate->setLogging($_SESSION['module'], $id);
-        $Qupdate->execute();
       }
 
-      osC_Cache::clear('manufacturers');
+      $Qm = $osC_Database->query('delete from :table_manufacturers where manufacturers_id = :manufacturers_id');
+      $Qm->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
+      $Qm->bindInt(':manufacturers_id', $id);
+      $Qm->setLogging($_SESSION['module'], $id);
+      $Qm->execute();
 
-      return true;
+      if ( !$osC_Database->isError() ) {
+        osC_Cache::clear('manufacturers');
+
+        return true;
+      }
+
+      return false;
     }
   }
 ?>

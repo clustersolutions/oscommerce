@@ -103,41 +103,13 @@
     public static function delete($id) {
       global $osC_Database;
 
-      $error = false;
-
-      $osC_Database->startTransaction();
-
-      $Qdelete = $osC_Database->query('delete from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id');
-      $Qdelete->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-      $Qdelete->bindInt(':products_variants_groups_id', $id);
+      $Qdelete = $osC_Database->query('delete from :table_products_variants_groups where id = :id');
+      $Qdelete->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+      $Qdelete->bindInt(':id', $id);
       $Qdelete->setLogging($_SESSION['module'], $id);
       $Qdelete->execute();
 
-      if ( $osC_Database->isError() ) {
-        $error = true;
-      }
-
-      if ( $error === false ) {
-        $Qdelete = $osC_Database->query('delete from :table_products_variants_groups where id = :id');
-        $Qdelete->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
-        $Qdelete->bindInt(':id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
-        $Qdelete->execute();
-
-        if ( $osC_Database->isError() ) {
-          $error = true;
-        }
-      }
-
-      if ( $error === false ) {
-        $osC_Database->commitTransaction();
-
-        return true;
-      }
-
-      $osC_Database->rollbackTransaction();
-
-      return false;
+      return !$osC_Database->isError();
     }
 
     public static function getEntry($id, $language_id = null) {

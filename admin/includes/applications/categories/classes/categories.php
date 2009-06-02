@@ -54,11 +54,19 @@
 
       $result = array('entries' => array());
 
-      $Qcategories = $osC_Database->query('select c.*, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id and c.parent_id = :parent_id order by c.sort_order, cd.categories_name');
+      $Qcategories = $osC_Database->query('select c.*, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id and');
+
+      if ( $id > 0 ) {
+        $Qcategories->appendQuery('c.parent_id = :parent_id');
+        $Qcategories->bindInt(':parent_id', $id);
+      } else {
+        $Qcategories->appendQuery('c.parent_id is null');
+      }
+
+      $Qcategories->appendQuery('order by c.sort_order, cd.categories_name');
       $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
       $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
       $Qcategories->bindInt(':language_id', $osC_Language->getID());
-      $Qcategories->bindInt(':parent_id', $id);
       $Qcategories->execute();
 
       while ( $Qcategories->next() ) {
@@ -139,7 +147,12 @@
         $Qcat->bindInt(':categories_id', $id);
       } else {
         $Qcat = $osC_Database->query('insert into :table_categories (parent_id, sort_order, date_added) values (:parent_id, :sort_order, now())');
-        $Qcat->bindInt(':parent_id', $data['parent_id']);
+
+        if ( $data['parent_id'] > 0 ) {
+          $Qcat->bindInt(':parent_id', $data['parent_id']);
+        } else {
+          $Qcat->bindRaw(':parent_id', 'null');
+        }
       }
 
       $Qcat->bindTable(':table_categories', TABLE_CATEGORIES);
@@ -204,102 +217,15 @@
     }
 
     public static function delete($id) {
-      global $osC_Database, $osC_CategoryTree;
+      global $osC_Database;
 
-      if ( is_numeric($id) ) {
-        $osC_CategoryTree->setBreadcrumbUsage(false);
+      $Qc = $osC_Database->query('delete from :table_categories where categories_id = :categories_id');
+      $Qc->bindTable(':table_categories', TABLE_CATEGORIES);
+      $Qc->bindInt(':categories_id', $id);
+      $Qc->setLogging($_SESSION['module'], $id);
+      $Qc->execute();
 
-        $categories = array_merge(array(array('id' => $id, 'text' => '')), $osC_CategoryTree->getArray($id));
-        $products = array();
-        $products_delete = array();
-
-        foreach ( $categories as $category ) {
-          $Qproducts = $osC_Database->query('select products_id from :table_products_to_categories where categories_id = :categories_id');
-          $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-          $Qproducts->bindInt(':categories_id', $category['id']);
-          $Qproducts->execute();
-
-          while ( $Qproducts->next() ) {
-            $products[$Qproducts->valueInt('products_id')]['categories'][] = $category['id'];
-          }
-        }
-
-        foreach ( $products as $key => $value ) {
-          $Qcheck = $osC_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id and categories_id not in :categories_id limit 1');
-          $Qcheck->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-          $Qcheck->bindInt(':products_id', $key);
-          $Qcheck->bindRaw(':categories_id', '("' . implode('", "', $value['categories']) . '")');
-          $Qcheck->execute();
-
-          if ( $Qcheck->numberOfRows() === 0 ) {
-            $products_delete[$key] = $key;
-          }
-        }
-
-        osc_set_time_limit(0);
-
-        foreach ( $categories as $category) {
-          $osC_Database->startTransaction();
-
-          $Qimage = $osC_Database->query('select categories_image from :table_categories where categories_id = :categories_id');
-          $Qimage->bindTable(':table_categories', TABLE_CATEGORIES);
-          $Qimage->bindInt(':categories_id', $category['id']);
-          $Qimage->execute();
-
-          $Qc = $osC_Database->query('delete from :table_categories where categories_id = :categories_id');
-          $Qc->bindTable(':table_categories', TABLE_CATEGORIES);
-          $Qc->bindInt(':categories_id', $category['id']);
-          $Qc->setLogging($_SESSION['module'], $id);
-          $Qc->execute();
-
-          if ( !$osC_Database->isError() ) {
-            $Qcd = $osC_Database->query('delete from :table_categories_description where categories_id = :categories_id');
-            $Qcd->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
-            $Qcd->bindInt(':categories_id', $category['id']);
-            $Qcd->setLogging($_SESSION['module'], $id);
-            $Qcd->execute();
-
-            if ( !$osC_Database->isError() ) {
-              $Qp2c = $osC_Database->query('delete from :table_products_to_categories where categories_id = :categories_id');
-              $Qp2c->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
-              $Qp2c->bindInt(':categories_id', $category['id']);
-              $Qp2c->setLogging($_SESSION['module'], $id);
-              $Qp2c->execute();
-
-              if ( !$osC_Database->isError() ) {
-                $osC_Database->commitTransaction();
-
-                osC_Cache::clear('categories');
-                osC_Cache::clear('category_tree');
-                osC_Cache::clear('also_purchased');
-
-                if ( !osc_empty($Qimage->value('categories_image')) ) {
-                  $Qcheck = $osC_Database->query('select count(*) as total from :table_categories where categories_image = :categories_image');
-                  $Qcheck->bindTable(':table_categories', TABLE_CATEGORIES);
-                  $Qcheck->bindValue(':categories_image', $Qimage->value('categories_image'));
-                  $Qcheck->execute();
-
-                  if ( $Qcheck->numberOfRows() === 0 ) {
-                    if (file_exists(realpath('../' . DIR_WS_IMAGES . 'categories/' . $Qimage->value('categories_image')))) {
-                      @unlink(realpath('../' . DIR_WS_IMAGES . 'categories/' . $Qimage->value('categories_image')));
-                    }
-                  }
-                }
-              } else {
-                $osC_Database->rollbackTransaction();
-              }
-            } else {
-              $osC_Database->rollbackTransaction();
-            }
-          } else {
-            $osC_Database->rollbackTransaction();
-          }
-        }
-
-        foreach ( $products_delete as $id ) {
-          osC_Products_Admin::remove($id);
-        }
-
+      if ( !$osC_Database->isError() ) {
         osC_Cache::clear('categories');
         osC_Cache::clear('category_tree');
         osC_Cache::clear('also_purchased');
@@ -319,9 +245,17 @@
         return false;
       }
 
+      $parent_id = end($category_array);
+
       $Qupdate = $osC_Database->query('update :table_categories set parent_id = :parent_id, last_modified = now() where categories_id = :categories_id');
       $Qupdate->bindTable(':table_categories', TABLE_CATEGORIES);
-      $Qupdate->bindInt(':parent_id', end($category_array));
+
+      if ( $parent_id > 0 ) {
+        $Qupdate->bindInt(':parent_id', $parent_id);
+      } else {
+        $Qupdate->bindRaw(':parent_id', 'null');
+      }
+
       $Qupdate->bindInt(':categories_id', $id);
       $Qupdate->setLogging($_SESSION['module'], $id);
       $Qupdate->execute();

@@ -9,195 +9,211 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+SET FOREIGN_KEY_CHECKS = 0;
+
 DROP TABLE IF EXISTS osc_address_book;
 CREATE TABLE osc_address_book (
-   address_book_id int NOT NULL auto_increment,
-   customers_id int NOT NULL,
-   entry_gender char(1) NOT NULL,
-   entry_company varchar(255),
-   entry_firstname varchar(255) NOT NULL,
-   entry_lastname varchar(255) NOT NULL,
-   entry_street_address varchar(255) NOT NULL,
-   entry_suburb varchar(255),
-   entry_postcode varchar(255) NOT NULL,
-   entry_city varchar(255) NOT NULL,
-   entry_state varchar(255),
-   entry_country_id int DEFAULT '0' NOT NULL,
-   entry_zone_id int,
-   entry_telephone varchar(255),
-   entry_fax varchar(255),
-   PRIMARY KEY (address_book_id),
-   KEY idx_address_book_customers_id (customers_id)
-#   CONSTRAINT FK_ADDRESS_BOOK_COUNTRY_ID FOREIGN KEY (entry_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE,
-#   CONSTRAINT FK_ADDRESS_BOOK_ZONE_ID FOREIGN KEY (entry_zone_id) REFERENCES osc_zones (zone_id) ON DELETE SET NULL ON UPDATE CASCADE
-);
+  address_book_id int unsigned NOT NULL AUTO_INCREMENT,
+  customers_id int unsigned NOT NULL,
+  entry_gender char(1),
+  entry_company varchar(255),
+  entry_firstname varchar(255) NOT NULL,
+  entry_lastname varchar(255) NOT NULL,
+  entry_street_address varchar(255) NOT NULL,
+  entry_suburb varchar(255),
+  entry_postcode varchar(255),
+  entry_city varchar(255) NOT NULL,
+  entry_state varchar(255),
+  entry_country_id int unsigned NOT NULL,
+  entry_zone_id int unsigned,
+  entry_telephone varchar(255),
+  entry_fax varchar(255),
+  PRIMARY KEY (address_book_id),
+  KEY idx_address_book_customers_id (customers_id),
+  KEY idx_address_book_country_id (entry_country_id),
+  KEY idx_address_book_zone_id (entry_zone_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_administrators;
 CREATE TABLE osc_administrators (
-  id int NOT NULL auto_increment,
+  id int unsigned NOT NULL AUTO_INCREMENT,
   user_name varchar(255) binary NOT NULL,
   user_password varchar(40) NOT NULL,
+  KEY idx_administrators_user_name (user_name),
   PRIMARY KEY (id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_administrators_access;
 CREATE TABLE osc_administrators_access (
-  administrators_id int NOT NULL,
+  administrators_id int unsigned NOT NULL,
   module varchar(255) NOT NULL,
-  PRIMARY KEY (administrators_id, module)
-);
+  PRIMARY KEY (administrators_id, module),
+  KEY idx_admin_access_admin_id (administrators_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_administrators_log;
 CREATE TABLE osc_administrators_log (
-  id int NOT NULL,
+  id int unsigned NOT NULL,
   module varchar(255) NOT NULL,
   module_action varchar(255),
-  module_id int,
+  module_id int unsigned,
   field_key varchar(255) NOT NULL,
   old_value text,
   new_value text,
   action varchar(255) NOT NULL,
-  administrators_id int NOT NULL,
+  administrators_id int unsigned NOT NULL,
   datestamp datetime NOT NULL,
-  KEY idx_administrators_log_id (id)
-);
+  KEY idx_administrators_log_id (id),
+  KEY idx_administrators_log_module (module),
+  KEY idx_administrators_log_admin_id (administrators_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_banners;
 CREATE TABLE osc_banners (
-  banners_id int NOT NULL auto_increment,
+  banners_id int unsigned NOT NULL AUTO_INCREMENT,
   banners_title varchar(255) NOT NULL,
   banners_url varchar(255) NOT NULL,
   banners_image varchar(255) NOT NULL,
   banners_group varchar(255) NOT NULL,
   banners_html_text text,
-  expires_impressions int DEFAULT '0',
+  expires_impressions int DEFAULT 0,
   expires_date datetime DEFAULT NULL,
   date_scheduled datetime DEFAULT NULL,
   date_added datetime NOT NULL,
   date_status_change datetime DEFAULT NULL,
-  status int(1) DEFAULT '1' NOT NULL,
-  PRIMARY KEY  (banners_id)
-);
+  status int NOT NULL DEFAULT 1,
+  PRIMARY KEY (banners_id),
+  KEY idx_banners_group (banners_group),
+  KEY idx_banners_expires_date (expires_date)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_banners_history;
 CREATE TABLE osc_banners_history (
-  banners_history_id int NOT NULL auto_increment,
-  banners_id int NOT NULL,
-  banners_shown int NOT NULL DEFAULT '0',
-  banners_clicked int NOT NULL DEFAULT '0',
+  banners_history_id int unsigned NOT NULL AUTO_INCREMENT,
+  banners_id int unsigned NOT NULL,
+  banners_shown int unsigned NOT NULL DEFAULT 0,
+  banners_clicked int unsigned NOT NULL DEFAULT 0,
   banners_history_date datetime NOT NULL,
-  PRIMARY KEY  (banners_history_id)
-);
+  PRIMARY KEY (banners_history_id),
+  KEY idx_banners_history_banners_id (banners_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_categories;
 CREATE TABLE osc_categories (
-   categories_id int NOT NULL auto_increment,
-   categories_image varchar(255),
-   parent_id int DEFAULT '0' NOT NULL,
-   sort_order int,
-   date_added datetime,
-   last_modified datetime,
-   PRIMARY KEY (categories_id),
-   KEY idx_categories_parent_id (parent_id)
-);
+  categories_id int unsigned NOT NULL AUTO_INCREMENT,
+  categories_image varchar(255),
+  parent_id int unsigned,
+  sort_order int,
+  date_added datetime,
+  last_modified datetime,
+  PRIMARY KEY (categories_id),
+  KEY idx_categories_parent_id (parent_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_categories_description;
 CREATE TABLE osc_categories_description (
-   categories_id int DEFAULT '0' NOT NULL,
-   language_id int DEFAULT '1' NOT NULL,
-   categories_name varchar(255) NOT NULL,
-   PRIMARY KEY (categories_id, language_id),
-   KEY idx_categories_name (categories_name)
-);
+  categories_id int unsigned NOT NULL,
+  language_id int unsigned NOT NULL,
+  categories_name varchar(255) NOT NULL,
+  PRIMARY KEY (categories_id, language_id),
+  KEY idx_categories_desc_categories_id (categories_id),
+  KEY idx_categories_desc_language_id (language_id),
+  KEY idx_categories_desc_categories_name (categories_name)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_configuration;
 CREATE TABLE osc_configuration (
-  configuration_id int NOT NULL auto_increment,
+  configuration_id int unsigned NOT NULL AUTO_INCREMENT,
   configuration_title varchar(255) NOT NULL,
   configuration_key varchar(255) NOT NULL,
   configuration_value text NOT NULL,
   configuration_description varchar(255) NOT NULL,
-  configuration_group_id int NOT NULL,
-  sort_order int NULL,
-  last_modified datetime NULL,
+  configuration_group_id int unsigned NOT NULL,
+  sort_order int,
+  last_modified datetime,
   date_added datetime NOT NULL,
   use_function varchar(255) NULL,
   set_function varchar(255) NULL,
-  PRIMARY KEY (configuration_id)
-);
+  PRIMARY KEY (configuration_id),
+  KEY idx_configuration_group_id (configuration_group_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_configuration_group;
 CREATE TABLE osc_configuration_group (
-  configuration_group_id int NOT NULL auto_increment,
+  configuration_group_id int unsigned NOT NULL AUTO_INCREMENT,
   configuration_group_title varchar(255) NOT NULL,
   configuration_group_description varchar(255) NOT NULL,
-  sort_order int NULL,
-  visible int DEFAULT '1' NULL,
+  sort_order int,
+  visible int DEFAULT 1,
   PRIMARY KEY (configuration_group_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_counter;
 CREATE TABLE osc_counter (
   startdate datetime,
-  counter int
-);
+  counter int unsigned
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_countries;
 CREATE TABLE osc_countries (
-  countries_id int NOT NULL auto_increment,
+  countries_id int unsigned NOT NULL AUTO_INCREMENT,
   countries_name varchar(255) NOT NULL,
   countries_iso_code_2 char(2) NOT NULL,
   countries_iso_code_3 char(3) NOT NULL,
-  address_format varchar(255) NULL,
+  address_format varchar(255),
   PRIMARY KEY (countries_id),
-  KEY IDX_COUNTRIES_NAME (countries_name)
-);
+  KEY idx_countries_name (countries_name),
+  KEY idx_countries_iso_2 (countries_iso_code_2),
+  KEY idx_countries_iso_3 (countries_iso_code_3)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_credit_cards;
 CREATE TABLE osc_credit_cards (
-  id int NOT NULL auto_increment,
+  id int unsigned NOT NULL AUTO_INCREMENT,
   credit_card_name varchar(255) NOT NULL,
   pattern varchar(255) NOT NULL,
   credit_card_status char(1) NOT NULL,
-  sort_order int default '0',
+  sort_order int,
   PRIMARY KEY (id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_currencies;
 CREATE TABLE osc_currencies (
-  currencies_id int NOT NULL auto_increment,
+  currencies_id int unsigned NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
   code char(3) NOT NULL,
   symbol_left varchar(12),
   symbol_right varchar(12),
   decimal_places char(1),
   value float(13,8),
-  last_updated datetime NULL,
-  PRIMARY KEY (currencies_id)
-);
+  last_updated datetime,
+  PRIMARY KEY (currencies_id),
+  KEY idx_currencies_code (code)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_customers;
 CREATE TABLE osc_customers (
-  customers_id int NOT NULL auto_increment,
+  customers_id int unsigned NOT NULL AUTO_INCREMENT,
   customers_gender char(1),
   customers_firstname varchar(255) NOT NULL,
   customers_lastname varchar(255) NOT NULL,
   customers_dob datetime,
   customers_email_address varchar(255) NOT NULL,
-  customers_default_address_id int,
+  customers_default_address_id int unsigned,
   customers_telephone varchar(255),
   customers_fax varchar(255),
   customers_password varchar(40),
   customers_newsletter char(1),
-  customers_status int DEFAULT '0',
+  customers_status int DEFAULT 1,
   customers_ip_address varchar(15),
   date_last_logon datetime,
-  number_of_logons int,
+  number_of_logons int DEFAULT 0,
   date_account_created datetime,
   date_account_last_modified datetime,
-  global_product_notifications int DEFAULT '0',
-  PRIMARY KEY (customers_id)
-);
+  global_product_notifications int DEFAULT 0,
+  PRIMARY KEY (customers_id),
+  KEY idx_customers_default_address_id (customers_default_address_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_fk_relationships;
 CREATE TABLE osc_fk_relationships (
@@ -209,12 +225,22 @@ CREATE TABLE osc_fk_relationships (
   on_update varchar(255) NOT NULL,
   on_delete varchar(255) NOT NULL,
   PRIMARY KEY (fk_id)
-);
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_geo_zones;
+CREATE TABLE osc_geo_zones (
+  geo_zone_id int unsigned NOT NULL AUTO_INCREMENT,
+  geo_zone_name varchar(255) NOT NULL,
+  geo_zone_description varchar(255) NOT NULL,
+  last_modified datetime,
+  date_added datetime NOT NULL,
+  PRIMARY KEY (geo_zone_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_languages;
 CREATE TABLE osc_languages (
-  languages_id int NOT NULL auto_increment,
-  name varchar(255)  NOT NULL,
+  languages_id int unsigned NOT NULL AUTO_INCREMENT,
+  name varchar(255) NOT NULL,
   code char(5) NOT NULL,
   locale varchar(255) NOT NULL,
   charset varchar(32) NOT NULL,
@@ -222,86 +248,90 @@ CREATE TABLE osc_languages (
   date_format_long varchar(32) NOT NULL,
   time_format varchar(32) NOT NULL,
   text_direction varchar(12) NOT NULL,
-  currencies_id int NOT NULL,
+  currencies_id int unsigned NOT NULL,
   numeric_separator_decimal varchar(12) NOT NULL,
   numeric_separator_thousands varchar(12) NOT NULL,
-  parent_id int DEFAULT 0,
+  parent_id int unsigned DEFAULT 0,
   sort_order int,
-  PRIMARY KEY (languages_id)
-);
+  PRIMARY KEY (languages_id),
+  KEY idx_languages_code (code),
+  KEY idx_languages_currencies_id (currencies_id),
+  KEY idx_languages_parent_id (parent_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_languages_definitions;
 CREATE TABLE osc_languages_definitions (
-  id int NOT NULL auto_increment,
-  languages_id int NOT NULL,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  languages_id int unsigned NOT NULL,
   content_group varchar(255) NOT NULL,
   definition_key varchar(255) NOT NULL,
   definition_value text NOT NULL,
   PRIMARY KEY (id),
-  KEY IDX_LANGUAGES_DEFINITIONS_LANGUAGES (languages_id),
-  KEY IDX_LANGUAGES_DEFINITIONS (languages_id, content_group),
-  KEY IDX_LANGUAGES_DEFINITIONS_GROUPS (content_group)
-);
+  KEY idx_languages_definitions_languages_id (languages_id),
+  KEY idx_languages_definitions_groups (content_group)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_manufacturers;
 CREATE TABLE osc_manufacturers (
-  manufacturers_id int NOT NULL auto_increment,
+  manufacturers_id int unsigned NOT NULL AUTO_INCREMENT,
   manufacturers_name varchar(255) NOT NULL,
   manufacturers_image varchar(255),
-  date_added datetime NULL,
-  last_modified datetime NULL,
+  date_added datetime,
+  last_modified datetime,
   PRIMARY KEY (manufacturers_id),
-  KEY IDX_MANUFACTURERS_NAME (manufacturers_name)
-);
+  KEY idx_manufacturers_name (manufacturers_name)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_manufacturers_info;
 CREATE TABLE osc_manufacturers_info (
-  manufacturers_id int NOT NULL,
-  languages_id int NOT NULL,
+  manufacturers_id int unsigned NOT NULL,
+  languages_id int unsigned NOT NULL,
   manufacturers_url varchar(255) NOT NULL,
-  url_clicked int NOT NULL default '0',
-  date_last_click datetime NULL,
-  PRIMARY KEY (manufacturers_id, languages_id)
-);
+  url_clicked int DEFAULT 0,
+  date_last_click datetime,
+  PRIMARY KEY (manufacturers_id, languages_id),
+  KEY idx_manufacturers_info_id (manufacturers_id),
+  KEY idx_manufacturers_info_languages_id (languages_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_newsletters;
 CREATE TABLE osc_newsletters (
-  newsletters_id int NOT NULL auto_increment,
+  newsletters_id int unsigned NOT NULL AUTO_INCREMENT,
   title varchar(255) NOT NULL,
   content text NOT NULL,
   module varchar(255) NOT NULL,
   date_added datetime NOT NULL,
   date_sent datetime,
   status int,
-  locked int DEFAULT '0',
+  locked int DEFAULT 0,
   PRIMARY KEY (newsletters_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_newsletters_log;
 CREATE TABLE osc_newsletters_log (
-  newsletters_id int NOT NULL,
+  newsletters_id int unsigned NOT NULL,
   email_address varchar(255) NOT NULL,
   date_sent datetime,
-  KEY IDX_NEWSLETTERS_LOG_NEWSLETTERS_ID (newsletters_id),
-  KEY IDX_NEWSLETTERS_LOG_EMAIL_ADDRESS (email_address)
-);
+  KEY idx_newsletters_log_newsletters_id (newsletters_id),
+  KEY idx_newsletters_log_email_address (email_address)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders;
 CREATE TABLE osc_orders (
-  orders_id int NOT NULL auto_increment,
-  customers_id int NOT NULL,
+  orders_id int unsigned NOT NULL AUTO_INCREMENT,
+  customers_id int unsigned,
   customers_name varchar(255) NOT NULL,
   customers_company varchar(255),
   customers_street_address varchar(255) NOT NULL,
   customers_suburb varchar(255),
   customers_city varchar(255) NOT NULL,
-  customers_postcode varchar(255) NOT NULL,
+  customers_postcode varchar(255),
   customers_state varchar(255),
   customers_state_code varchar(255),
   customers_country varchar(255) NOT NULL,
   customers_country_iso2 char(2) NOT NULL,
   customers_country_iso3 char(3) NOT NULL,
-  customers_telephone varchar(255) NOT NULL,
+  customers_telephone varchar(255),
   customers_email_address varchar(255) NOT NULL,
   customers_address_format varchar(255) NOT NULL,
   customers_ip_address varchar(15),
@@ -310,7 +340,7 @@ CREATE TABLE osc_orders (
   delivery_street_address varchar(255) NOT NULL,
   delivery_suburb varchar(255),
   delivery_city varchar(255) NOT NULL,
-  delivery_postcode varchar(255) NOT NULL,
+  delivery_postcode varchar(255),
   delivery_state varchar(255),
   delivery_state_code varchar(255),
   delivery_country varchar(255) NOT NULL,
@@ -322,7 +352,7 @@ CREATE TABLE osc_orders (
   billing_street_address varchar(255) NOT NULL,
   billing_suburb varchar(255),
   billing_city varchar(255) NOT NULL,
-  billing_postcode varchar(255) NOT NULL,
+  billing_postcode varchar(255),
   billing_state varchar(255),
   billing_state_code varchar(255),
   billing_country varchar(255) NOT NULL,
@@ -333,72 +363,82 @@ CREATE TABLE osc_orders (
   payment_module varchar(255) NOT NULL,
   last_modified datetime,
   date_purchased datetime,
-  orders_status int NOT NULL,
+  orders_status int unsigned NOT NULL,
   orders_date_finished datetime,
   currency char(3),
   currency_value decimal(14,6),
-  PRIMARY KEY (orders_id)
-);
+  PRIMARY KEY (orders_id),
+  KEY idx_orders_customers_id (customers_id),
+  KEY idx_orders_status (orders_status)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders_products;
 CREATE TABLE osc_orders_products (
-  orders_products_id int NOT NULL auto_increment,
-  orders_id int NOT NULL,
-  products_id int NOT NULL,
+  orders_products_id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
+  products_id int unsigned NOT NULL,
   products_model varchar(255),
   products_name varchar(255) NOT NULL,
   products_price decimal(15,4) NOT NULL,
   products_tax decimal(7,4) NOT NULL,
-  products_quantity int NOT NULL,
-  PRIMARY KEY (orders_products_id)
-);
-
-DROP TABLE IF EXISTS osc_orders_status;
-CREATE TABLE osc_orders_status (
-   orders_status_id int DEFAULT '0' NOT NULL,
-   language_id int DEFAULT '1' NOT NULL,
-   orders_status_name varchar(255) NOT NULL,
-   PRIMARY KEY (orders_status_id, language_id),
-   KEY idx_orders_status_name (orders_status_name)
-);
-
-DROP TABLE IF EXISTS osc_orders_status_history;
-CREATE TABLE osc_orders_status_history (
-   orders_status_history_id int NOT NULL auto_increment,
-   orders_id int NOT NULL,
-   orders_status_id int NOT NULL,
-   date_added datetime NOT NULL,
-   customer_notified int DEFAULT '0',
-   comments text,
-   PRIMARY KEY (orders_status_history_id)
-);
-
-DROP TABLE IF EXISTS osc_orders_products_variants;
-CREATE TABLE osc_orders_products_variants (
-  id int NOT NULL auto_increment,
-  orders_id int NOT NULL,
-  orders_products_id int NOT NULL,
-  group_title varchar(255) NOT NULL,
-  value_title text NOT NULL,
-  PRIMARY KEY (id),
-  KEY idx_orders_products_variants_orders_products_ids (orders_id, orders_products_id)
-);
+  products_quantity int unsigned NOT NULL,
+  PRIMARY KEY (orders_products_id),
+  KEY idx_orders_products_orders_id (orders_id),
+  KEY idx_orders_products_products_id (products_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders_products_download;
 CREATE TABLE osc_orders_products_download (
-  orders_products_download_id int NOT NULL auto_increment,
-  orders_id int NOT NULL default '0',
-  orders_products_id int NOT NULL default '0',
-  orders_products_filename varchar(255) NOT NULL default '',
-  download_maxdays int NOT NULL default '0',
-  download_count int NOT NULL default '0',
-  PRIMARY KEY  (orders_products_download_id)
-);
+  orders_products_download_id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
+  orders_products_id int unsigned NOT NULL,
+  orders_products_filename varchar(255) NOT NULL,
+  download_maxdays int NOT NULL,
+  download_count int NOT NULL,
+  PRIMARY KEY (orders_products_download_id),
+  KEY idx_orders_products_download_orders_id (orders_id),
+  KEY idx_orders_products_download_products_id (orders_products_id)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_orders_products_variants;
+CREATE TABLE osc_orders_products_variants (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
+  orders_products_id int unsigned NOT NULL,
+  group_title varchar(255) NOT NULL,
+  value_title text NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_orders_products_variants_orders_id (orders_id),
+  KEY idx_orders_products_variants_products_id (orders_products_id)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_orders_status;
+CREATE TABLE osc_orders_status (
+  orders_status_id int unsigned NOT NULL,
+  language_id int unsigned NOT NULL,
+  orders_status_name varchar(255) NOT NULL,
+  PRIMARY KEY (orders_status_id, language_id),
+  KEY idx_orders_status_language_id (language_id),
+  KEY idx_orders_status_name (orders_status_name)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_orders_status_history;
+CREATE TABLE osc_orders_status_history (
+  orders_status_history_id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
+  orders_status_id int unsigned NOT NULL,
+  date_added datetime NOT NULL,
+  customer_notified int DEFAULT 0,
+  comments text,
+  PRIMARY KEY (orders_status_history_id),
+  KEY idx_orders_status_history_orders_id (orders_id),
+  KEY idx_orders_status_history_orders_status_id (orders_status_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders_total;
 CREATE TABLE osc_orders_total (
-  orders_total_id int unsigned NOT NULL auto_increment,
-  orders_id int NOT NULL,
+  orders_total_id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
   title varchar(255) NOT NULL,
   text varchar(255) NOT NULL,
   value decimal(15,4) NOT NULL,
@@ -406,157 +446,177 @@ CREATE TABLE osc_orders_total (
   sort_order int NOT NULL,
   PRIMARY KEY (orders_total_id),
   KEY idx_orders_total_orders_id (orders_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders_transactions_history;
 CREATE TABLE osc_orders_transactions_history (
-  id int unsigned not null auto_increment,
-  orders_id int unsigned not null,
-  transaction_code int not null,
-  transaction_return_value text not null,
-  transaction_return_status int not null,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  orders_id int unsigned NOT NULL,
+  transaction_code int NOT NULL,
+  transaction_return_value text NOT NULL,
+  transaction_return_status int NOT NULL,
   date_added datetime,
   PRIMARY KEY (id),
   KEY idx_orders_transactions_history_orders_id (orders_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_orders_transactions_status;
 CREATE TABLE osc_orders_transactions_status (
-   id int unsigned NOT NULL,
-   language_id int unsigned NOT NULL,
-   status_name varchar(255) NOT NULL,
-   PRIMARY KEY (id, language_id),
-   KEY idx_orders_transactions_status_name (status_name)
-);
+  id int unsigned NOT NULL,
+  language_id int unsigned NOT NULL,
+  status_name varchar(255) NOT NULL,
+  PRIMARY KEY (id, language_id),
+  KEY idx_orders_transactions_status_name (status_name),
+  KEY idx_orders_transactions_status_language_id (language_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_product_attributes;
 CREATE TABLE osc_product_attributes (
-  id INT UNSIGNED NOT NULL,
-  products_id INT UNSIGNED NOT NULL,
-  languages_id INT UNSIGNED NOT NULL,
-  value TEXT NOT NULL,
+  id int unsigned NOT NULL,
+  products_id int unsigned NOT NULL,
+  languages_id int unsigned NOT NULL,
+  value text NOT NULL,
   KEY idx_pa_id_products_id (id, products_id),
+  KEY idx_pa_products_id (products_id),
   KEY idx_pa_languages_id (languages_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
-  products_id int NOT NULL auto_increment,
-  parent_id int NOT NULL DEFAULT 0,
+  products_id int unsigned NOT NULL AUTO_INCREMENT,
+  parent_id int unsigned,
   products_quantity int NOT NULL,
   products_price decimal(15,4) NOT NULL,
   products_model varchar(255) NOT NULL,
   products_date_added datetime NOT NULL,
   products_last_modified datetime,
-  products_weight decimal(5,2) NOT NULL,
-  products_weight_class int NOT NULL,
+  products_weight decimal(5,2),
+  products_weight_class int unsigned,
   products_status tinyint(1) NOT NULL,
-  products_tax_class_id int NOT NULL,
-  manufacturers_id int NULL,
-  products_ordered int NOT NULL default '0',
-  has_children int default 0,
+  products_tax_class_id int unsigned,
+  manufacturers_id int unsigned,
+  products_ordered int unsigned NOT NULL DEFAULT 0,
+  has_children int DEFAULT 0,
   PRIMARY KEY (products_id),
-  KEY idx_products_date_added (products_date_added)
-);
+  KEY idx_products_parent_id (parent_id),
+  KEY idx_products_date_added (products_date_added),
+  KEY idx_products_weight_class (products_weight_class),
+  KEY idx_products_tax_class_id (products_tax_class_id),
+  KEY idx_products_manufacturers_id (manufacturers_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_description;
 CREATE TABLE osc_products_description (
-  products_id int NOT NULL auto_increment,
-  language_id int NOT NULL default '1',
-  products_name varchar(255) NOT NULL default '',
+  products_id int unsigned NOT NULL AUTO_INCREMENT,
+  language_id int unsigned NOT NULL,
+  products_name varchar(255) NOT NULL,
   products_description text,
   products_keyword varchar(255),
   products_tags varchar(255),
   products_url varchar(255),
-  products_viewed int default '0',
-  PRIMARY KEY  (products_id,language_id),
-  KEY products_name (products_name),
-  KEY products_description_keyword (products_keyword)
-);
+  products_viewed int unsigned DEFAULT 0,
+  PRIMARY KEY (products_id, language_id),
+  KEY idx_products_id (products_id),
+  KEY idx_products_language_id (language_id),
+  KEY idx_products_name (products_name),
+  KEY idx_products_description_keyword (products_keyword)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_images;
 CREATE TABLE osc_products_images (
-  id int NOT NULL auto_increment,
-  products_id int NOT NULL,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  products_id int unsigned NOT NULL,
   image varchar(255) NOT NULL,
   default_flag tinyint(1) NOT NULL,
   sort_order int NOT NULL,
   date_added datetime NOT NULL,
   PRIMARY KEY (id),
-  KEY products_images_products_id (products_id)
-);
+  KEY idx_products_images_products_id (products_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_images_groups;
 CREATE TABLE osc_products_images_groups (
-  id int NOT NULL,
-  language_id int NOT NULL,
-  title varchar(255) not null,
-  code varchar(255) not null,
+  id int unsigned NOT NULL,
+  language_id int unsigned NOT NULL,
+  title varchar(255) NOT NULL,
+  code varchar(255) NOT NULL,
   size_width int,
   size_height int,
-  force_size tinyint(1) default 0,
-  PRIMARY KEY (id, language_id)
-);
+  force_size tinyint(1) DEFAULT 0,
+  PRIMARY KEY (id, language_id),
+  KEY idx_products_images_groups_language_id (language_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_notifications;
 CREATE TABLE osc_products_notifications (
-  products_id int NOT NULL,
-  customers_id int NOT NULL,
+  products_id int unsigned NOT NULL,
+  customers_id int unsigned NOT NULL,
   date_added datetime NOT NULL,
-  PRIMARY KEY (products_id, customers_id)
-);
+  PRIMARY KEY (products_id, customers_id),
+  KEY idx_products_notifications_products_id (products_id),
+  KEY idx_products_notifications_customers_id (customers_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_to_categories;
 CREATE TABLE osc_products_to_categories (
-  products_id int NOT NULL,
-  categories_id int NOT NULL,
-  PRIMARY KEY (products_id,categories_id)
-);
+  products_id int unsigned NOT NULL,
+  categories_id int unsigned NOT NULL,
+  PRIMARY KEY (products_id, categories_id),
+  KEY idx_p2c_products_id (products_id),
+  KEY idx_p2c_categories_id (categories_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_variants;
 CREATE TABLE osc_products_variants (
-  products_id INT UNSIGNED NOT NULL,
-  products_variants_values_id INT UNSIGNED NOT NULL,
-  default_combo TINYINT UNSIGNED DEFAULT 0,
-  PRIMARY KEY (products_id, products_variants_values_id)
-);
+  products_id int unsigned NOT NULL,
+  products_variants_values_id int unsigned NOT NULL,
+  default_combo tinyint unsigned default 0,
+  PRIMARY KEY (products_id, products_variants_values_id),
+  KEY idx_products_variants_products_id (products_id),
+  KEY idx_products_variants_values_id (products_variants_values_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_variants_groups;
 CREATE TABLE osc_products_variants_groups (
-  id int NOT NULL auto_increment,
-  languages_id int NOT NULL,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  languages_id int unsigned NOT NULL,
   title varchar(255) NOT NULL,
   sort_order int NOT NULL,
   module varchar(255) NOT NULL,
-  PRIMARY KEY (id, languages_id)
-);
+  PRIMARY KEY (id, languages_id),
+  KEY idx_products_variants_groups_languages_id (languages_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_variants_values;
 CREATE TABLE osc_products_variants_values (
-  id int NOT NULL auto_increment,
-  languages_id int NOT NULL,
-  products_variants_groups_id int NOT NULL,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  languages_id int unsigned NOT NULL,
+  products_variants_groups_id int unsigned NOT NULL,
   title varchar(255) NOT NULL,
   sort_order int NOT NULL,
   PRIMARY KEY (id, languages_id),
+  KEY idx_products_variants_values_languages_id (languages_id),
   KEY idx_products_variants_values_groups_id (products_variants_groups_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_reviews;
 CREATE TABLE osc_reviews (
-  reviews_id int NOT NULL auto_increment,
-  products_id int NOT NULL,
-  customers_id int,
+  reviews_id int unsigned NOT NULL AUTO_INCREMENT,
+  products_id int unsigned NOT NULL,
+  customers_id int unsigned,
   customers_name varchar(255) NOT NULL,
   reviews_rating int,
-  languages_id int NOT NULL,
+  languages_id int unsigned NOT NULL,
   reviews_text text NOT NULL,
   date_added datetime,
   last_modified datetime,
   reviews_read int NOT NULL default '0',
   reviews_status tinyint(1) NOT NULL,
-  PRIMARY KEY (reviews_id)
-);
+  PRIMARY KEY (reviews_id),
+  KEY idx_reviews_products_id (products_id),
+  KEY idx_reviews_customers_id (customers_id),
+  KEY idx_reviews_languages_id (languages_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_sessions;
 CREATE TABLE osc_sessions (
@@ -564,42 +624,47 @@ CREATE TABLE osc_sessions (
   expiry int unsigned NOT NULL,
   value text NOT NULL,
   PRIMARY KEY (id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_shipping_availability;
 CREATE TABLE osc_shipping_availability (
-  id INT UNSIGNED NOT NULL,
-  languages_id INT UNSIGNED NOT NULL,
+  id int unsigned NOT NULL,
+  languages_id int unsigned NOT NULL,
   title varchar(255) NOT NULL,
   css_key varchar(255),
-  PRIMARY KEY (id, languages_id)
-);
+  PRIMARY KEY (id, languages_id),
+  KEY idx_shipping_availability_languages_id (languages_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_shopping_carts;
 CREATE TABLE osc_shopping_carts (
-  customers_id INT UNSIGNED NOT NULL,
-  item_id SMALLINT UNSIGNED NOT NULL,
-  products_id INT UNSIGNED NOT NULL,
-  quantity SMALLINT UNSIGNED NOT NULL,
+  customers_id int unsigned NOT NULL,
+  item_id smallint unsigned NOT NULL,
+  products_id int unsigned NOT NULL,
+  quantity smallint unsigned NOT NULL,
   date_added DATETIME,
   KEY idx_sc_customers_id (customers_id),
-  KEY idx_sc_customers_id_products_id (customers_id, products_id)
-);
+  KEY idx_sc_customers_id_products_id (customers_id, products_id),
+  KEY idx_sc_products_id (products_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_shopping_carts_custom_variants_values;
 CREATE TABLE osc_shopping_carts_custom_variants_values (
-  shopping_carts_item_id SMALLINT UNSIGNED NOT NULL,
-  customers_id INT UNSIGNED NOT NULL,
-  products_id INT UNSIGNED NOT NULL,
-  products_variants_values_id INT UNSIGNED NOT NULL,
+  shopping_carts_item_id smallint unsigned NOT NULL,
+  customers_id int unsigned NOT NULL,
+  products_id int unsigned NOT NULL,
+  products_variants_values_id int unsigned NOT NULL,
   products_variants_values_text TEXT NOT NULL,
-  KEY idx_sccvv_customers_id_products_id (customers_id, products_id)
-);
+  KEY idx_sccvv_customers_id_products_id (customers_id, products_id),
+  KEY idx_sccvv_customers_id (customers_id),
+  KEY idx_sccvv_products_id (products_id),
+  KEY idx_sccvv_products_variants_values_id (products_variants_values_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_specials;
 CREATE TABLE osc_specials (
-  specials_id int NOT NULL auto_increment,
-  products_id int NOT NULL,
+  specials_id int unsigned NOT NULL AUTO_INCREMENT,
+  products_id int unsigned NOT NULL,
   specials_new_products_price decimal(15,4) NOT NULL,
   specials_date_added datetime,
   specials_last_modified datetime,
@@ -607,126 +672,135 @@ CREATE TABLE osc_specials (
   expires_date datetime,
   date_status_change datetime,
   status int(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (specials_id)
-);
+  PRIMARY KEY (specials_id),
+  KEY idx_specials_products_id (products_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_tax_class;
 CREATE TABLE osc_tax_class (
-  tax_class_id int NOT NULL auto_increment,
+  tax_class_id int unsigned NOT NULL AUTO_INCREMENT,
   tax_class_title varchar(255) NOT NULL,
   tax_class_description varchar(255) NOT NULL,
-  last_modified datetime NULL,
+  last_modified datetime,
   date_added datetime NOT NULL,
   PRIMARY KEY (tax_class_id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_tax_rates;
 CREATE TABLE osc_tax_rates (
-  tax_rates_id int NOT NULL auto_increment,
-  tax_zone_id int NOT NULL,
-  tax_class_id int NOT NULL,
+  tax_rates_id int unsigned NOT NULL AUTO_INCREMENT,
+  tax_zone_id int unsigned NOT NULL,
+  tax_class_id int unsigned NOT NULL,
   tax_priority int DEFAULT 1,
   tax_rate decimal(7,4) NOT NULL,
   tax_description varchar(255) NOT NULL,
-  last_modified datetime NULL,
+  last_modified datetime,
   date_added datetime NOT NULL,
-  PRIMARY KEY (tax_rates_id)
-);
-
-DROP TABLE IF EXISTS osc_geo_zones;
-CREATE TABLE osc_geo_zones (
-  geo_zone_id int NOT NULL auto_increment,
-  geo_zone_name varchar(255) NOT NULL,
-  geo_zone_description varchar(255) NOT NULL,
-  last_modified datetime NULL,
-  date_added datetime NOT NULL,
-  PRIMARY KEY (geo_zone_id)
-);
+  PRIMARY KEY (tax_rates_id),
+  KEY idx_tax_rates_zone_id (tax_zone_id),
+  KEY idx_tax_rates_class_id (tax_class_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_templates;
 CREATE TABLE osc_templates (
-  id int NOT NULL auto_increment,
-  title varchar(255) not null,
-  code varchar(255) not null,
-  author_name varchar(255) not null,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  code varchar(255) NOT NULL,
+  author_name varchar(255) NOT NULL,
   author_www varchar(255),
   markup_version varchar(255),
   css_based tinyint,
   medium varchar(255),
   PRIMARY KEY (id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_templates_boxes;
 CREATE TABLE osc_templates_boxes (
-  id int NOT NULL auto_increment,
-  title varchar(255) not null,
-  code varchar(255) not null,
-  author_name varchar(255) not null,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  code varchar(255) NOT NULL,
+  author_name varchar(255) NOT NULL,
   author_www varchar(255),
-  modules_group varchar(255) not null,
+  modules_group varchar(255) NOT NULL,
   PRIMARY KEY (id)
-);
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_templates_boxes_to_pages;
 CREATE TABLE osc_templates_boxes_to_pages (
-  id int NOT NULL auto_increment,
-  templates_boxes_id int not null,
-  templates_id int not null,
-  content_page varchar(255) not null,
-  boxes_group varchar(32) not null,
-  sort_order int default 0,
-  page_specific int default 0,
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  templates_boxes_id int unsigned NOT NULL,
+  templates_id int unsigned NOT NULL,
+  content_page varchar(255) NOT NULL,
+  boxes_group varchar(32) NOT NULL,
+  sort_order int DEFAULT 0,
+  page_specific int DEFAULT 0,
   PRIMARY KEY (id),
-  INDEX (templates_boxes_id, templates_id, content_page, boxes_group)
-);
+  KEY (templates_boxes_id, templates_id, content_page, boxes_group),
+  KEY idx_tb2p_templates_boxes_id (templates_boxes_id),
+  KEY idx_tb2p_templates_id (templates_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_weight_classes;
 CREATE TABLE osc_weight_classes (
-  weight_class_id int NOT NULL default '0',
-  weight_class_key varchar(4) NOT NULL default '',
-  language_id int NOT NULL default '0',
-  weight_class_title varchar(255) NOT NULL default '',
-  PRIMARY KEY (weight_class_id, language_id)
-);
+  weight_class_id int unsigned NOT NULL,
+  weight_class_key varchar(4) NOT NULL,
+  language_id int unsigned NOT NULL,
+  weight_class_title varchar(255) NOT NULL,
+  PRIMARY KEY (weight_class_id, language_id),
+  KEY idx_weight_classes_language_id (language_id)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_weight_classes_rules;
 CREATE TABLE osc_weight_classes_rules (
-  weight_class_from_id int NOT NULL default '0',
-  weight_class_to_id int NOT NULL default '0',
-  weight_class_rule decimal(15,4) NOT NULL default '0.0000'
-);
+  weight_class_from_id int unsigned NOT NULL,
+  weight_class_to_id int unsigned NOT NULL,
+  weight_class_rule decimal(15,4) NOT NULL,
+  PRIMARY KEY (weight_class_from_id, weight_class_to_id),
+  KEY idx_weight_class_from_id (weight_class_from_id),
+  KEY idx_weight_class_to_id (weight_class_to_id)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS osc_whos_online;
 CREATE TABLE osc_whos_online (
-  customer_id int,
+  customer_id int unsigned,
   full_name varchar(255) NOT NULL,
   session_id varchar(128) NOT NULL,
   ip_address varchar(15) NOT NULL,
   time_entry varchar(14) NOT NULL,
   time_last_click varchar(14) NOT NULL,
-  last_page_url text NOT NULL
-);
+  last_page_url text NOT NULL,
+  KEY idx_whos_online_customer_id (customer_id),
+  KEY idx_whos_online_full_name (full_name),
+  KEY idx_whos_online_time_last_click (time_last_click)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_zones;
 CREATE TABLE osc_zones (
-  zone_id int NOT NULL auto_increment,
-  zone_country_id int NOT NULL,
+  zone_id int unsigned NOT NULL AUTO_INCREMENT,
+  zone_country_id int unsigned NOT NULL,
   zone_code varchar(255) NOT NULL,
   zone_name varchar(255) NOT NULL,
-  PRIMARY KEY (zone_id)
-#  CONSTRAINT FK_ZONES_COUNTRY_ID FOREIGN KEY (zone_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+  PRIMARY KEY (zone_id),
+  KEY idx_zones_country_id (zone_country_id),
+  KEY idx_zones_code (zone_code),
+  KEY idx_zones_name (zone_name)
+) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_zones_to_geo_zones;
 CREATE TABLE osc_zones_to_geo_zones (
-   association_id int NOT NULL auto_increment,
-   zone_country_id int NOT NULL,
-   zone_id int NULL,
-   geo_zone_id int NULL,
-   last_modified datetime NULL,
-   date_added datetime NOT NULL,
-   PRIMARY KEY (association_id)
-#   CONSTRAINT FK_ZONES2GEOZONES_COUNTRY_ID FOREIGN KEY (zone_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE
-);
+  association_id int unsigned NOT NULL AUTO_INCREMENT,
+  zone_country_id int unsigned NOT NULL,
+  zone_id int unsigned,
+  geo_zone_id int unsigned NOT NULL,
+  last_modified datetime,
+  date_added datetime NOT NULL,
+  PRIMARY KEY (association_id),
+  KEY idx_z2gz_zone_country_id (zone_country_id),
+  KEY idx_z2gz_zone_id (zone_id),
+  KEY idx_z2gz_geo_zone_id (geo_zone_id)
+) ENGINE=MyISAM;
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Name', 'STORE_NAME', 'osCommerce', 'The name of my store', '1', '1', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Store Owner', 'STORE_OWNER', 'Store Owner', 'The name of my store owner', '1', '2', now());
@@ -834,7 +908,7 @@ INSERT INTO osc_configuration_group VALUES ('4', 'Images', 'Image parameters', '
 INSERT INTO osc_configuration_group VALUES ('5', 'Customer Details', 'Customer account configuration', '5', '1');
 INSERT INTO osc_configuration_group VALUES ('6', 'Module Options', 'Hidden from configuration', '6', '0');
 INSERT INTO osc_configuration_group VALUES ('7', 'Shipping/Packaging', 'Shipping options available at my store', '7', '1');
-INSERT INTO osc_configuration_group VALUES ('8', 'Product Listing', 'Product Listing    configuration options', '8', '1');
+INSERT INTO osc_configuration_group VALUES ('8', 'Product Listing', 'Product Listing configuration options', '8', '1');
 INSERT INTO osc_configuration_group VALUES ('9', 'Stock', 'Stock configuration options', '9', '1');
 INSERT INTO osc_configuration_group VALUES ('12', 'E-Mail Options', 'General setting for E-Mail transport and HTML E-Mails', '12', '1');
 INSERT INTO osc_configuration_group VALUES ('13', 'Download', 'Downloadable products options', '13', '1');
@@ -5901,7 +5975,71 @@ INSERT INTO osc_weight_classes_rules VALUES (4, 3, '16.0000');
 
 # Foreign key relationships
 
-INSERT INTO osc_fk_relationships VALUES (1, 'zones', 'countries', 'zone_country_id', 'countries_id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (2, 'address_book', 'countries', 'entry_country_id', 'countries_id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (3, 'zones_to_geo_zones', 'countries', 'zone_country_id', 'countries_id', 'cascade','cascade');
-INSERT INTO osc_fk_relationships VALUES (4, 'address_book', 'zones', 'entry_zone_id', 'zone_id', 'cascade', 'set_null');
+INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'customers', 'customers_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'countries', 'entry_country_id', 'countries_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'zones', 'entry_zone_id', 'zone_id', 'cascade', 'set_null');
+INSERT INTO osc_fk_relationships VALUES (null, 'administrators_access', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'administrators_log', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'banners_history', 'banners', 'banners_id', 'banners_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'categories', 'categories', 'parent_id', 'categories_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'categories_description', 'categories', 'categories_id', 'categories_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'categories_description', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'configuration', 'configuration_group', 'configuration_group_id', 'configuration_group_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'customers', 'address_book', 'customers_default_address_id', 'address_book_id', 'cascade', 'set_null');
+#INSERT INTO osc_fk_relationships VALUES (null, 'languages', 'currencies', 'currencies_id', 'currencies_id', 'cascade', 'restrict');
+INSERT INTO osc_fk_relationships VALUES (null, 'languages_definitions', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'manufacturers_info', 'manufacturers', 'manufacturers_id', 'manufacturers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'manufacturers_info', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'newsletters_log', 'newsletters', 'newsletters_id', 'newsletters_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders', 'customers', 'customers_id', 'customers_id', 'cascade', 'set_null');
+#INSERT INTO osc_fk_relationships VALUES (null, 'orders', 'orders_status', 'orders_status', 'orders_status_id', 'cascade', 'restrict');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_products', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_products_download', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_products_variants', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_status', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_status_history', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+#INSERT INTO osc_fk_relationships VALUES (null, 'orders_status_history', 'orders_status', 'orders_status_id', 'orders_status_id', 'cascade', 'restrict');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_total', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_transactions_history', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'orders_transactions_status', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'product_attributes', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'product_attributes', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products', 'products', 'parent_id', 'products_id', 'cascade', 'cascade');
+#INSERT INTO osc_fk_relationships VALUES (null, 'products', 'weight_classes', 'products_weight_class', 'weight_class_id', 'cascade', 'restrict');
+INSERT INTO osc_fk_relationships VALUES (null, 'products', 'tax_class', 'products_tax_class_id', 'tax_class_id', 'cascade', 'set_null');
+INSERT INTO osc_fk_relationships VALUES (null, 'products', 'manufacturers', 'manufacturers_id', 'manufacturers_id', 'cascade', 'set_null');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_description', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_description', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_images', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_images_groups', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_notifications', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_notifications', 'customers', 'customers_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_to_categories', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_to_categories', 'categories', 'categories_id', 'categories_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_variants', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_variants', 'products_variants_values', 'products_variants_values_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_variants_groups', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_variants_values', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'products_variants_values', 'products_variants_groups', 'products_variants_groups_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'reviews', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'reviews', 'customers', 'customers_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'reviews', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shipping_availability', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts', 'customers', 'customers_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_values', 'customers', 'customers_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_values', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_values', 'products_variants_values', 'products_variants_values_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'specials', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'tax_rates', 'zones', 'tax_zone_id', 'zone_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'tax_rates', 'tax_class', 'tax_class_id', 'tax_class_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'templates_boxes_to_pages', 'templates_boxes', 'templates_boxes_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'templates_boxes_to_pages', 'templates', 'templates_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'weight_classes', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'weight_classes_rules', 'weight_classes', 'weight_class_from_id', 'weight_class_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'weight_classes_rules', 'weight_classes', 'weight_class_to_id', 'weight_class_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'whos_online', 'customers', 'customer_id', 'customers_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'zones', 'countries', 'zone_country_id', 'countries_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'zones_to_geo_zones', 'countries', 'zone_country_id', 'countries_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'zones_to_geo_zones', 'zones', 'zone_id', 'zone_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'zones_to_geo_zones', 'geo_zones', 'geo_zone_id', 'geo_zone_id', 'cascade', 'cascade');

@@ -61,66 +61,6 @@
       }
 
       if ($error === false) {
-        $Qvariants = $osC_Database->query('delete from :table_orders_products_variants where orders_id = :orders_id');
-        $Qvariants->bindTable(':table_orders_products_variants', TABLE_ORDERS_PRODUCTS_VARIANTS);
-        $Qvariants->bindInt(':orders_id', $id);
-        $Qvariants->setLogging($_SESSION['module'], $id);
-        $Qvariants->execute();
-
-        if ($osC_Database->isError() === true) {
-          $error = true;
-        }
-      }
-
-      if ($error === false) {
-        $Qop = $osC_Database->query('delete from :table_orders_products where orders_id = :orders_id');
-        $Qop->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
-        $Qop->bindInt(':orders_id', $id);
-        $Qop->setLogging($_SESSION['module'], $id);
-        $Qop->execute();
-
-        if ($osC_Database->isError() === true) {
-          $error = true;
-        }
-      }
-
-      if ($error === false) {
-        $Qosh = $osC_Database->query('delete from :table_orders_transactions_history where orders_id = :orders_id');
-        $Qosh->bindTable(':table_orders_transactions_history', TABLE_ORDERS_TRANSACTIONS_HISTORY);
-        $Qosh->bindInt(':orders_id', $id);
-        $Qosh->setLogging($_SESSION['module'], $id);
-        $Qosh->execute();
-
-        if ($osC_Database->isError() === true) {
-          $error = true;
-        }
-      }
-
-      if ($error === false) {
-        $Qosh = $osC_Database->query('delete from :table_orders_status_history where orders_id = :orders_id');
-        $Qosh->bindTable(':table_orders_status_history', TABLE_ORDERS_STATUS_HISTORY);
-        $Qosh->bindInt(':orders_id', $id);
-        $Qosh->setLogging($_SESSION['module'], $id);
-        $Qosh->execute();
-
-        if ($osC_Database->isError() === true) {
-          $error = true;
-        }
-      }
-
-      if ($error === false) {
-        $Qot = $osC_Database->query('delete from :table_orders_total where orders_id = :orders_id');
-        $Qot->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
-        $Qot->bindInt(':orders_id', $id);
-        $Qot->setLogging($_SESSION['module'], $id);
-        $Qot->execute();
-
-        if ($osC_Database->isError() === true) {
-          $error = true;
-        }
-      }
-
-      if ($error === false) {
         $Qo = $osC_Database->query('delete from :table_orders where orders_id = :orders_id');
         $Qo->bindTable(':table_orders', TABLE_ORDERS);
         $Qo->bindInt(':orders_id', $id);

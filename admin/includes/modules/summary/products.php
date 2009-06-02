@@ -59,7 +59,7 @@
                      '  </thead>' .
                      '  <tbody>';
 
-      $Qproducts = $osC_Database->query('select products_id, greatest(products_date_added, products_last_modified) as date_last_modified from :table_products where parent_id = 0 order by date_last_modified desc limit 6');
+      $Qproducts = $osC_Database->query('select products_id, greatest(products_date_added, products_last_modified) as date_last_modified from :table_products where parent_id is null order by date_last_modified desc limit 6');
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->execute();
 

@@ -36,9 +36,9 @@
         $data = $osC_Cache->getCache();
       } else {
         if ( $current_category_id < 1 ) {
-          $Qproducts = $osC_Database->query('select products_id from :table_products where products_status = :products_status and parent_id = :parent_id order by products_date_added desc limit :max_display_new_products');
+          $Qproducts = $osC_Database->query('select products_id from :table_products where products_status = :products_status and parent_id is null order by products_date_added desc limit :max_display_new_products');
         } else {
-          $Qproducts = $osC_Database->query('select distinct p2c.products_id from :table_products p, :table_products_to_categories p2c, :table_categories c where c.parent_id = :category_parent_id and c.categories_id = p2c.categories_id and p2c.products_id = p.products_id and p.products_status = :products_status and p.parent_id = :parent_id order by p.products_date_added desc limit :max_display_new_products');
+          $Qproducts = $osC_Database->query('select distinct p2c.products_id from :table_products p, :table_products_to_categories p2c, :table_categories c where c.parent_id = :category_parent_id and c.categories_id = p2c.categories_id and p2c.products_id = p.products_id and p.products_status = :products_status and p.parent_id is null order by p.products_date_added desc limit :max_display_new_products');
           $Qproducts->bindTable(':table_products_to_categories', TABLE_PRODUCTS_TO_CATEGORIES);
           $Qproducts->bindTable(':table_categories', TABLE_CATEGORIES);
           $Qproducts->bindInt(':category_parent_id', $current_category_id);
@@ -46,7 +46,6 @@
 
         $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
         $Qproducts->bindInt(':products_status', 1);
-        $Qproducts->bindInt(':parent_id', 0);
         $Qproducts->bindInt(':max_display_new_products', MODULE_CONTENT_NEW_PRODUCTS_MAX_DISPLAY);
         $Qproducts->execute();
 

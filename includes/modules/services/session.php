@@ -19,7 +19,7 @@
       include('includes/classes/session.php');
       $osC_Session = osC_Session::load();
 
-      if (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') {
+      if ( (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') || ((bool)ini_get('session.use_only_cookies') === true) ) {
         osc_setcookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);
 
         if (isset($_COOKIE['cookie_test'])) {

@@ -21,7 +21,7 @@
       $this->_page_contents = 'delete.php';
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( osC_Products_Admin::delete($_GET[$this->_module], (isset($_POST['product_categories']) && is_array($_POST['product_categories'])) ? $_POST['product_categories'] : null) ) {
+        if ( osC_Products_Admin::delete($_GET[$this->_module]) ) {
           $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
         } else {
           $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
