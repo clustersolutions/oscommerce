@@ -398,10 +398,10 @@
       }
 
       if ( $this->use_mysqli === true ) {
-        return mysqli_data_seek($this->link, $row_number);
+        return mysqli_data_seek($resource, $row_number);
       }
 
-      return mysql_data_seek($row_number, $this->link);
+      return mysql_data_seek($row_number, $resource);
     }
 
     function _fetch_assoc($resource) {
