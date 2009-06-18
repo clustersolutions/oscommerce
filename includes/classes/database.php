@@ -29,7 +29,8 @@
         $time_of_queries = 0,
         $nextID = null,
         $logging_transaction = false,
-        $logging_transaction_action = false;
+        $logging_transaction_action = false,
+        $fkeys = array();
 
     function &connect($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
       require('database/' . $type . '.php');
@@ -500,81 +501,76 @@
         if ($this->db_class->use_foreign_keys == false) {
           $query_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
 
+          if ( ($query_action == 'delete') || ($query_action == 'update') ) {
+            if ( empty($this->db_class->fkeys) ) {
+              $Qfk = new self($this->db_class);
+              $Qfk->setQuery('select * from :table_fk_relationships');
+              $Qfk->bindTable(':table_fk_relationships', TABLE_FK_RELATIONSHIPS);
+//              $Qfk->setCache('fk_relationships');
+              $Qfk->execute();
+
+              while ( $Qfk->next() ) {
+                $this->db_class->fkeys[$Qfk->value('to_table')][] = array('from_table' => $Qfk->value('from_table'),
+                                                                          'from_field' => $Qfk->value('from_field'),
+                                                                          'to_field' => $Qfk->value('to_field'),
+                                                                          'on_update' => $Qfk->value('on_update'),
+                                                                          'on_delete' => $Qfk->value('on_delete'));
+              }
+
+              $Qfk->freeResult();
+            }
+          }
+
           if ($query_action == 'delete') {
             $query_data = split(' ', $this->sql_query, 4);
             $query_table = substr($query_data[2], strlen(DB_TABLE_PREFIX));
 
-            $fk_check_query = $this->db_class->simpleQuery('select * from ' . TABLE_FK_RELATIONSHIPS . ' where to_table = "' . $query_table . '"');
-            while ( $fk_check = $this->db_class->next($fk_check_query) ) {
-              $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[2] . ' ' . $query_data[3]);
-              while ( $parent_result = $this->db_class->next($parent_query) ) {
-                if ( $fk_check['on_delete'] == 'cascade' ) {
-                  $Qdel = new self($this->db_class);
-                  $Qdel->setQuery('delete from :from_table where :from_field = :' . $fk_check['from_field']);
-                  $Qdel->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
-                  $Qdel->bindRaw(':from_field', $fk_check['from_field'], false);
-                  $Qdel->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']]);
+            if ( isset($this->db_class->fkeys[$query_table]) ) {
+// check for RESTRICT constraints first
+              foreach ( $this->db_class->fkeys[$query_table] as $fk ) {
+                if ( $fk['on_delete'] == 'restrict' ) {
+                  $child_query = $this->db_class->simpleQuery('select ' . $fk['to_field'] . ' from ' . $query_data[2] . ' ' . $query_data[3]);
+                  while ( $child_result = $this->db_class->next($child_query) ) {
+                    $Qcheck = new self($this->db_class);
+                    $Qcheck->setQuery('select ' . $fk['from_field'] . ' from ' . DB_TABLE_PREFIX .  $fk['from_table'] . ' where ' . $fk['from_field'] . ' = "' . $child_result[$fk['to_field']] . '" limit 1');
+                    $Qcheck->execute();
 
-                  if ( $this->logging === true ) {
-                    if ( $this->db_class->logging_transaction === false ) {
-                      $this->db_class->logging_transaction = true;
+                    if ( $Qcheck->numberOfRows() === 1 ) {
+                      $this->db_class->setError('RESTRICT constraint condition from table ' . DB_TABLE_PREFIX .  $fk['from_table'], null, $this->sql_query);
+
+                      return false;
                     }
-
-                    $Qdel->setLogging($this->logging_module, $this->logging_module_id);
                   }
-
-                  $Qdel->execute();
-                } elseif ( $fk_check['on_delete'] == 'set_null' ) {
-                  $Qupdate = new self($this->db_class);
-                  $Qupdate->setQuery('update :from_table set :from_field = :' . $fk_check['from_field'] . ' where :from_field = :' . $fk_check['from_field']);
-                  $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
-                  $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
-                  $Qupdate->bindRaw(':' . $fk_check['from_field'], 'null');
-                  $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
-                  $Qupdate->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']], false);
-
-                  if ( $this->logging === true ) {
-                    if ( $this->db_class->logging_transaction === false ) {
-                      $this->db_class->logging_transaction = true;
-                    }
-
-                    $Qupdate->setLogging($this->logging_module, $this->logging_module_id);
-                  }
-
-                  $Qupdate->execute();
                 }
               }
-            }
-          } elseif ($query_action == 'update') {
-            $query_data = split(' ', $this->sql_query, 3);
-            $query_table = substr($query_data[1], strlen(DB_TABLE_PREFIX));
 
-            $fk_check_query = $this->db_class->simpleQuery('select * from ' . TABLE_FK_RELATIONSHIPS . ' where to_table = "' . $query_table . '"');
-            while ( $fk_check = $this->db_class->next($fk_check_query) ) {
-// check to see if foreign key column value is being changed
-              if ( strpos(substr($this->sql_query, strpos($this->sql_query, ' set ')+4, strpos($this->sql_query, ' where ') - strpos($this->sql_query, ' set ') - 4), ' ' . $fk_check['to_field'] . ' ') !== false ) {
-                $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[1] . substr($this->sql_query, strrpos($this->sql_query, ' where ')));
+              foreach ( $this->db_class->fkeys[$query_table] as $fk ) {
+                $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[2] . ' ' . $query_data[3]);
                 while ( $parent_result = $this->db_class->next($parent_query) ) {
-                  if ( ($fk_check['on_update'] == 'cascade') || ($fk_check['on_update'] == 'set_null') ) {
-                    $on_update_value = '';
+                  if ( $fk['on_delete'] == 'cascade' ) {
+                    $Qdel = new self($this->db_class);
+                    $Qdel->setQuery('delete from :from_table where :from_field = :' . $fk['from_field']);
+                    $Qdel->bindTable(':from_table', DB_TABLE_PREFIX . $fk['from_table']);
+                    $Qdel->bindRaw(':from_field', $fk['from_field'], false);
+                    $Qdel->bindValue(':' . $fk['from_field'], $parent_result[$fk['to_field']]);
 
-                    if ( $fk_check['on_update'] == 'cascade' ) {
-                      $on_update_value = $this->logging_fields[$fk_check['to_field']];
+                    if ( $this->logging === true ) {
+                      if ( $this->db_class->logging_transaction === false ) {
+                        $this->db_class->logging_transaction = true;
+                      }
+
+                      $Qdel->setLogging($this->logging_module, $this->logging_module_id);
                     }
 
+                    $Qdel->execute();
+                  } elseif ( $fk['on_delete'] == 'set_null' ) {
                     $Qupdate = new self($this->db_class);
-                    $Qupdate->setQuery('update :from_table set :from_field = :' . $fk_check['from_field'] . ' where :from_field = :' . $fk_check['from_field']);
-                    $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk_check['from_table']);
-                    $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
-
-                    if ( empty($on_update_value) ) {
-                      $Qupdate->bindRaw(':' . $fk_check['from_field'], 'null');
-                    } else {
-                      $Qupdate->bindValue(':' . $fk_check['from_field'], $on_update_value);
-                    }
-
-                    $Qupdate->bindRaw(':from_field', $fk_check['from_field'], false);
-                    $Qupdate->bindValue(':' . $fk_check['from_field'], $parent_result[$fk_check['to_field']], false);
+                    $Qupdate->setQuery('update :from_table set :from_field = :' . $fk['from_field'] . ' where :from_field = :' . $fk['from_field']);
+                    $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk['from_table']);
+                    $Qupdate->bindRaw(':from_field', $fk['from_field'], false);
+                    $Qupdate->bindRaw(':' . $fk['from_field'], 'null');
+                    $Qupdate->bindRaw(':from_field', $fk['from_field'], false);
+                    $Qupdate->bindValue(':' . $fk['from_field'], $parent_result[$fk['to_field']], false);
 
                     if ( $this->logging === true ) {
                       if ( $this->db_class->logging_transaction === false ) {
@@ -585,6 +581,69 @@
                     }
 
                     $Qupdate->execute();
+                  }
+                }
+              }
+            }
+          } elseif ($query_action == 'update') {
+            $query_data = split(' ', $this->sql_query, 3);
+            $query_table = substr($query_data[1], strlen(DB_TABLE_PREFIX));
+
+            if ( isset($this->db_class->fkeys[$query_table]) ) {
+// check for RESTRICT constraints first
+              foreach ( $this->db_class->fkeys[$query_table] as $fk ) {
+                if ( $fk['on_update'] == 'restrict' ) {
+                  $child_query = $this->db_class->simpleQuery('select ' . $fk['to_field'] . ' from ' . $query_data[2] . ' ' . $query_data[3]);
+                  while ( $child_result = $this->db_class->next($child_query) ) {
+                    $Qcheck = new self($this->db_class);
+                    $Qcheck->setQuery('select ' . $fk['from_field'] . ' from ' . DB_TABLE_PREFIX .  $fk['from_table'] . ' where ' . $fk['from_field'] . ' = "' . $child_result[$fk['to_field']] . '" limit 1');
+                    $Qcheck->execute();
+
+                    if ( $Qcheck->numberOfRows() === 1 ) {
+                      $this->db_class->setError('RESTRICT constraint condition from table ' . DB_TABLE_PREFIX .  $fk['from_table'], null, $this->sql_query);
+
+                      return false;
+                    }
+                  }
+                }
+              }
+
+              foreach ( $this->db_class->fkeys[$query_table] as $fk ) {
+// check to see if foreign key column value is being changed
+                if ( strpos(substr($this->sql_query, strpos($this->sql_query, ' set ')+4, strpos($this->sql_query, ' where ') - strpos($this->sql_query, ' set ') - 4), ' ' . $fk['to_field'] . ' ') !== false ) {
+                  $parent_query = $this->db_class->simpleQuery('select * from ' . $query_data[1] . substr($this->sql_query, strrpos($this->sql_query, ' where ')));
+                  while ( $parent_result = $this->db_class->next($parent_query) ) {
+                    if ( ($fk['on_update'] == 'cascade') || ($fk['on_update'] == 'set_null') ) {
+                      $on_update_value = '';
+
+                      if ( $fk['on_update'] == 'cascade' ) {
+                        $on_update_value = $this->logging_fields[$fk['to_field']];
+                      }
+
+                      $Qupdate = new self($this->db_class);
+                      $Qupdate->setQuery('update :from_table set :from_field = :' . $fk['from_field'] . ' where :from_field = :' . $fk['from_field']);
+                      $Qupdate->bindTable(':from_table', DB_TABLE_PREFIX . $fk['from_table']);
+                      $Qupdate->bindRaw(':from_field', $fk['from_field'], false);
+
+                      if ( empty($on_update_value) ) {
+                        $Qupdate->bindRaw(':' . $fk['from_field'], 'null');
+                      } else {
+                        $Qupdate->bindValue(':' . $fk['from_field'], $on_update_value);
+                      }
+
+                      $Qupdate->bindRaw(':from_field', $fk['from_field'], false);
+                      $Qupdate->bindValue(':' . $fk['from_field'], $parent_result[$fk['to_field']], false);
+
+                      if ( $this->logging === true ) {
+                        if ( $this->db_class->logging_transaction === false ) {
+                          $this->db_class->logging_transaction = true;
+                        }
+
+                        $Qupdate->setLogging($this->logging_module, $this->logging_module_id);
+                      }
+
+                      $Qupdate->execute();
+                    }
                   }
                 }
               }
