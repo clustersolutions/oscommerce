@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -54,12 +50,16 @@
       $Qlog->bindRaw(':modules', implode('", "', $_SESSION['admin']['access']));
       $Qlog->execute();
 
+      $counter = 0;
+
       while ( $Qlog->next() ) {
-        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
                         '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'administrators_log&lID=' . $Qlog->valueInt('id') . '&action=info'), osc_icon('log.png') . '&nbsp;' . $Qlog->valueProtected('user_name')) . '</td>' .
                         '      <td>' . $Qlog->value('module') . ' (' . $Qlog->valueInt('total') . ')</td>' .
                         '      <td>' . $Qlog->value('datestamp') . '</td>' .
                         '    </tr>';
+
+        $counter++;
       }
 
       $this->_data .= '  </tbody>' .

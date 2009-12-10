@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -115,6 +111,21 @@
     }
 
     return $params;
+  }
+
+/**
+ * Return a language definition
+ *
+ * @param string $key The language definition to return
+ * @param int $precision The precision to use for the rounding
+ * @return string The language definition
+ * @access public
+ */
+
+  function __($key) {
+    global $osC_Language;
+
+    return $osC_Language->get($key);
   }
 
 /**

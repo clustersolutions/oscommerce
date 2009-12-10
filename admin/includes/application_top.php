@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -29,7 +25,7 @@
   require('../includes/configure.php');
 
 // Define the project version
-  define('PROJECT_VERSION', 'osCommerce Online Merchant v3.0a5');
+  define('PROJECT_VERSION', 'osCommerce Online Merchant $osCommerce-SIG$');
 
 // set the type of request (secure or not)
   $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
@@ -48,6 +44,10 @@
 
 // include the list of project database tables
   require('../includes/database_tables.php');
+
+// initialize the message stack for output messages
+  require('includes/classes/message_stack.php');
+  $osC_MessageStack = new osC_MessageStack_Admin();
 
 // initialize the cache class
   require('../includes/classes/cache.php');
@@ -86,6 +86,8 @@
   require('../includes/classes/session.php');
   $osC_Session = osC_Session::load('osCAdminID');
   $osC_Session->start();
+
+  $osC_MessageStack->loadFromSession();
 
   if ( !isset($_SESSION['admin']) && (basename($_SERVER['PHP_SELF']) != FILENAME_RPC) ) {
     $redirect = false;
@@ -138,12 +140,8 @@
 // define our localization functions
   require('includes/functions/localization.php');
 
-// initialize the message stack for output messages
-  require('../includes/classes/message_stack.php');
-  $osC_MessageStack = new osC_MessageStack();
-
 // entry/item info classes
-  require('includes/classes/object_info.php');
+  require('../includes/classes/object_info.php');
 
 // email class
   require('../includes/classes/mail.php');

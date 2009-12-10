@@ -1,9 +1,5 @@
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2007 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -17,7 +13,7 @@ header_title_online_catalog = Online Catalog
 header_title_languages = Languages
 header_title_logoff = Logoff
 
-ssl_protection = You are protected by a %s secure SSL connection.
+ssl_protection = You are protected by a secure SSL connection.
 ssl_unprotected = You are not protected by a secure SSL connection.
 
 gender_male = Male

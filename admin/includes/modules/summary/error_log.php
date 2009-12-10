@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -52,12 +48,12 @@
       $counter = 0;
 
       foreach ( osc_toObjectInfo(osC_ErrorLog_Admin::getAll())->get('entries') as $log ) {
-        $counter ++;
-
-        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
                         '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . osc_output_string_protected($log['date']) . '</td>' .
                         '      <td>' . osc_output_string_protected(substr($log['message'], 0, 60)) . '..</td>' .
                         '    </tr>';
+
+        $counter++;
 
         if ( $counter == 6 ) {
           break;

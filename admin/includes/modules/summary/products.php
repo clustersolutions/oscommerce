@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -63,6 +59,8 @@
       $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
       $Qproducts->execute();
 
+      $counter = 0;
+
       while ( $Qproducts->next() ) {
         $data = osC_Products_Admin::get($Qproducts->valueInt('products_id'));
 
@@ -84,12 +82,14 @@
           }
         }
 
-        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
                         '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'products=' . (int)$data['products_id'] . '&action=save'), $products_icon . '&nbsp;' . osc_output_string_protected($data['products_name'])) . '</td>' .
                         '      <td>' . ( !empty($data['variants']) ? 'from ' : '' ) . $osC_Currencies->format($products_price) . '</td>' .
                         '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .
                         '      <td align="center">' . osc_icon(((int)$data['products_status'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                         '    </tr>';
+
+        $counter++;
       }
 
       $this->_data .= '  </tbody>' .

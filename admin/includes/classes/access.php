@@ -1,25 +1,73 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Access {
-    var $_group = 'misc',
-        $_icon = 'configure.png',
-        $_title,
-        $_sort_order = 0,
-        $_subgroups;
+/**
+ * The osC_Access manages the permission levels of administrators who have access to the Administration Tool
+ */
 
-    function getUserLevels($id) {
+  class osC_Access {
+
+/**
+ * Holds the group code for the current access module
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_group = 'misc';
+
+/**
+ * Holds the icon for the current access module
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_icon = 'configure.png';
+
+/**
+ * Holds the title of the current access module
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_title;
+
+/**
+ * Holds the sort ordering number for the current access module
+ *
+ * @var int
+ * @access protected
+ */
+
+    protected $_sort_order = 0;
+
+/**
+ * Holds the sub level children entries for the current access module
+ *
+ * @var array
+ * @access protected
+ */
+
+    protected $_subgroups = array();
+
+/**
+ * Return the Administration Tool Application modules the administrator has access to
+ *
+ * @param int $id The ID of the administrator
+ * @access public
+ * @return array
+ */
+
+    public static function getUserLevels($id) {
       global $osC_Database;
 
       $modules = array();
@@ -47,32 +95,42 @@
       return $modules;
     }
 
-    function getLevels() {
+    public static function getLevels($group = null) {
       global $osC_Language;
 
       $access = array();
 
-      foreach ( $_SESSION['admin']['access'] as $module ) {
-        if ( file_exists('includes/modules/access/' . $module . '.php') ) {
-          $module_class = 'osC_Access_' . ucfirst($module);
+      if ( isset($_SESSION['admin']) ) {
+        foreach ( $_SESSION['admin']['access'] as $module ) {
+          if ( file_exists('includes/modules/access/' . $module . '.php') ) {
+            $module_class = 'osC_Access_' . ucfirst($module);
 
-          if ( !class_exists( $module_class ) ) {
-            $osC_Language->loadIniFile('modules/access/' . $module . '.php');
-            include('includes/modules/access/' . $module . '.php');
+            if ( !class_exists( $module_class ) ) {
+              $osC_Language->loadIniFile('modules/access/' . $module . '.php');
+              include('includes/modules/access/' . $module . '.php');
+            }
+
+            $module_class = new $module_class();
+
+            if ( empty($group) || ( $group == $module_class->getGroup() ) ) {
+              $data = array('module' => $module,
+                            'icon' => $module_class->getIcon(),
+                            'title' => $module_class->getTitle(),
+                            'subgroups' => $module_class->getSubGroups());
+
+              if ( !isset( $access[$module_class->getGroup()][$module_class->getSortOrder()] ) ) {
+                $access[$module_class->getGroup()][$module_class->getSortOrder()] = $data;
+              } else {
+                $access[$module_class->getGroup()][] = $data;
+              }
+            }
           }
+        }
 
-          $module_class = new $module_class();
+        ksort($access);
 
-          $data = array('module' => $module,
-                        'icon' => $module_class->getIcon(),
-                        'title' => $module_class->getTitle(),
-                        'subgroups' => $module_class->getSubGroups());
-
-          if ( !isset( $access[$module_class->getGroup()][$module_class->getSortOrder()] ) ) {
-            $access[$module_class->getGroup()][$module_class->getSortOrder()] = $data;
-          } else {
-            $access[$module_class->getGroup()][] = $data;
-          }
+        foreach ( $access as $group => $modules ) {
+          ksort($access[$group]);
         }
       }
 
@@ -83,8 +141,20 @@
       return $this->_module;
     }
 
-    function getGroup() {
-      return $this->_group;
+    function getGroup($module = null) {
+      if ( empty($module) ) {
+        return $this->_group;
+      }
+
+      foreach ( osC_Access::getLevels() as $group => $links ) {
+        foreach ( $links as $link ) {
+          if ( $link['module'] == $module ) {
+            return $group;
+          }
+        }
+      }
+
+      return false;
     }
 
     function getGroupTitle($group) {

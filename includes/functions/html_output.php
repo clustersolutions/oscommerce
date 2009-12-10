@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -593,6 +589,71 @@
 
     return '<label for="' . osc_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . osc_output_string($access_key) . '"' : '') . '>' . osc_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
   }
+
+  function osc_draw_button($params) {
+    $types = array('submit', 'button', 'reset');
+
+    if ( !isset($params['type']) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( !in_array($params['type'], $types) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( ($params['type'] == 'submit') && isset($params['href']) ) {
+      $params['type'] = 'button';
+    }
+
+    $class = 'fg-button';
+
+    if ( isset($params['radius']) ) {
+      if ( $params['radius'] == 'left' ) {
+        $class = 'fg-button-left';
+      } elseif ( $params['radius'] == 'right' ) {
+        $class = 'fg-button-right';
+      }
+    }
+
+    $button = '<button type="' . osc_output_string($params['type']) . '"';
+
+    if ( isset($params['href']) ) {
+      $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
+    }
+
+    $button .= ' class="' . $class . '';
+
+    if ( isset($params['icon']) ) {
+      if ( !isset($params['iconpos']) ) {
+        $params['iconpos'] = 'left';
+      }
+
+      $button .= ' fg-button-icon-' . $params['iconpos'];
+    }
+
+    if ( isset($params['priority']) ) {
+      $button .= ' ui-priority-' . $params['priority'];
+    }
+
+    $button .= ' ui-state-default"';
+
+    if ( isset($params['params']) ) {
+      $button .= ' ' . $params['params'];
+    }
+
+    $button .= '>';
+
+    if ( isset($params['icon']) ) {
+      $button .= '<span class="ui-icon ui-icon-' . $params['icon'] . '"></span>';
+    }
+
+    $button .= $params['title'] . '</button>';
+
+    return $button;
+  }
+
+
+
 
 /**
  * Outputs a form pull down menu for a date selection

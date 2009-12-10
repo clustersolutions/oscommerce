@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -14,32 +10,60 @@
 
 /**
  * The osC_MessageStack class manages information messages to be displayed.
- * Messages that are shown are automatically removed from the stack.
+ * Messages shown are automatically removed from the stack.
+ * Core message types: info, success, warning, error
  */
 
   class osC_MessageStack {
 
 /**
- * A reference to the messages stored in the session messageToStack variable
+ * The storage handler for the messages
  *
  * @var array
- * @access private
+ * @access protected
  */
 
-    private $_data = array();
+    protected $_data = array();
 
 /**
- * Constructor, references the session data to the private $_data variable
+ * Constructor, registers a shutdown function to store the remaining messages
+ * in the session
  *
  * @access public
  */
 
     public function __construct() {
-      if ( !isset($_SESSION['messageToStack']) ) {
-        $_SESSION['messageToStack'] = array();
-      }
+      register_shutdown_function(array($this, 'saveInSession'));
+    }
 
-      $this->_data =& $_SESSION['messageToStack'];
+/**
+ * Loads messages stored in the session into the stack
+ *
+ * @access public
+ */
+
+    public function loadFromSession() {
+      if ( isset($_SESSION['osC_MessageStack_Data']) && !empty($_SESSION['osC_MessageStack_Data']) ) {
+        foreach ( $_SESSION['osC_MessageStack_Data'] as $group => $messages ) {
+          foreach ( $messages as $message ) {
+            $this->_data[$group][] = $message;
+          }
+        }
+
+        unset($_SESSION['osC_MessageStack_Data']);
+      }
+    }
+
+/**
+ * Stores remaining messages in the session
+ *
+ * @access public
+ */
+
+    public function saveInSession() {
+      if ( !empty($this->_data) ) {
+        $_SESSION['osC_MessageStack_Data'] = $this->_data;
+      }
     }
 
 /**
@@ -47,7 +71,7 @@
  *
  * @param string $group The group the message belongs to
  * @param string $message The message information text
- * @param string $type The type of message: error, warning, success
+ * @param string $type The type of message: info, error, warning, success
  * @access public
  */
 

@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,105 +9,65 @@
 */
 ?>
 
-<script language="javascript" src="external/jscookmenu/JSCookMenu.js"></script>
-<link rel="stylesheet" href="external/jscookmenu/ThemeOffice/theme.css" type="text/css">
-<script language="javascript" src="external/jscookmenu/ThemeOffice/theme.js"></script>
-
-<table border="0" width="100%" cellspacing="0" cellpadding="0">
-  <tr>
-    <td style="padding-left: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', PROJECT_VERSION)); ?></td>
-    <td width="150" align="right" style="padding-right: 5px;">
+<div id="header">
+  <div style="float: left; padding: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', PROJECT_VERSION)); ?></div>
+  <div style="float: right; width: 150px; text-align: center;">
 
 <?php
   if ( $request_type == 'SSL' ) {
-    echo sprintf($osC_Language->get('ssl_protection'), (isset($_SERVER['SSL_CIPHER_ALGKEYSIZE']) ? $_SERVER['SSL_CIPHER_ALGKEYSIZE'] . '-bit' : '<i>n/a</i>')) . osc_icon('locked.png');
+    echo '<div class="reqSSL">' . __('ssl_protection') . '</div>';
   } else {
-    echo $osC_Language->get('ssl_unprotected') . ' ' . osc_icon('unlocked.png');
+    echo '<div class="reqNONSSL">' . __('ssl_unprotected') . '</div>';
   }
 ?>
 
-    </td>
-  </tr>
-</table>
+  </div>
+</div>
 
-<div id="administrationMenu" class="ThemeOfficeMainItem">
-  <ul style="visibility: hidden">
+<div id="adminMenu">
+  <ul class="levelTop">
 
 <?php
-  $access = array();
-
-  if ( isset($_SESSION['admin']) ) {
-    $access = osC_Access::getLevels();
-  }
-
-  ksort($access);
-
-  foreach ( $access as $group => $links ) {
-    echo '    <li><span></span><span>' . osC_Access::getGroupTitle($group) . '</span>' .
-         '      <ul>';
-
-    ksort($links);
+  foreach ( osC_Access::getLevels() as $group => $links ) {
+    echo '<li' . ($group == osC_Access::getGroup($osC_Template->getModule()) ? ' class="activeGreen"' : ' class="hoverGreen"') . '><span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $links[array_shift(array_keys($links))]['module']) . '">' . osC_Access::getGroupTitle($group) . '</a></span><ul class="levelSub">';
 
     foreach ( $links as $link ) {
-      echo '        <li><span>' . osc_icon($link['icon'], $link['title']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a>';
-
-      if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
-        echo '          <ul>';
-
-        foreach ( $link['subgroups'] as $subgroup ) {
-          echo '            <li><span>' . osc_icon($subgroup['icon']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module'] . '&' . $subgroup['identifier']) . '">' . $subgroup['title'] . '</a></li>';
-        }
-
-        echo '          </ul>';
-      }
-
-      echo '        </li>';
+      echo '<li><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a></li>';
     }
 
-    echo '      </ul>' .
-         '    </li>' .
-         '    <li></li>';
+    echo '</ul></li>';
   }
 
-  echo '    <li><span></span><span>' . $osC_Language->get('header_title_help') . '</span>' .
-       '      <ul>' .
-       '        <li><span>' . osc_icon('oscommerce.png') . '</span><span>' . $osC_Language->get('header_title_oscommerce_support_site') . '</span>' .
-       '          <ul>' .
-       '            <li><span>' . osc_icon('oscommerce.png') . '</span><a href="http://www.oscommerce.com" target="_blank">Support Site</a></li>' .
-       '            <li><span>' . osc_icon('log.png') . '</span><a href="http://www.oscommerce.info" target="_blank">Knowledge Base</a></li>' .
-       '            <li><span>' . osc_icon('people.png') . '</span><a href="http://forums.oscommerce.com" target="_blank">Community Forums</a></li>' .
-       '            <li><span>' . osc_icon('run.png') . '</span><a href="http://www.oscommerce.com/community/contributions" target="_blank">Contributions</a></li>' .
-       '            <li><span>' . osc_icon('configure.png') . '</span><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li>' .
-       '          </ul>' .
-       '        </li>' .
-       '        <li><span>' . osc_icon('locale.png') . '</span><span>' . $osC_Language->get('header_title_languages') . '</span>' .
-       '          <ul>';
-
-  foreach ( $osC_Language->getAll() as $l ) {
-    echo '            <li><span>' . $osC_Language->showImage($l['code']) . '</span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'language=' . $l['code']) . '">' . $l['name'] . '</a></li>';
-  }
-
-  echo '          </ul>' .
-       '        </li>' .
-       '        <li><span>' . osc_icon('home.png') . '</span><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . $osC_Language->get('header_title_online_catalog') . '</a></li>' .
-       '      </ul>' .
-       '    </li>';
+  echo '<li class="hoverGreen"><span><a href="http://www.oscommerce.com" target="_blank">' . __('header_title_help') . '</a></span><ul class="levelSub">' .
+       '<li><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a></li>' .
+       '<li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
+       '<li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
+       '<li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
+       '<li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li></ul></li>' .
+       '<li class="hoverGreen"><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . __('header_title_online_catalog') . '</a></li>';
 
   if ( isset($_SESSION['admin']) ) {
-    echo '    <li></li>' .
-         '    <li><span></span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . $osC_Language->get('header_title_logoff') . '</a></li>';
+    echo '<li class="hoverRed"><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . __('header_title_logoff') . '</a></li>';
   }
 ?>
 
   </ul>
 </div>
 
-<script type="text/javascript"><!--
-  cmDrawFromText('administrationMenu', 'hbr', cmThemeOffice, 'ThemeOffice');
-//--></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('ul.levelTop li span').hover(function() {
+      $(this).parent().find('ul.levelSub').stop().slideDown('fast').show('fast', function() {
+        $(this).height('auto');
+      });
 
-<?php
-  if ( $osC_MessageStack->size('header') > 0 ) {
-    echo $osC_MessageStack->get('header');
-  }
-?>
+      $(this).parent().hover(function() {}, function() {
+        $(this).parent().find('ul.levelSub').stop().slideUp('fast');
+      });
+    }).hover(function() {
+      $(this).addClass('subhover');
+    }, function() {
+      $(this).removeClass('subhover');
+    });
+  });
+</script>

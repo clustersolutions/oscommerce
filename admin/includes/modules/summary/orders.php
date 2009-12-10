@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -56,13 +52,17 @@
       $Qorders->bindInt(':language_id', $osC_Language->getID());
       $Qorders->execute();
 
+      $counter = 0;
+
       while ( $Qorders->next() ) {
-        $this->_data .= '    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">' .
+        $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
                         '      <td>' . osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&oID=' . $Qorders->valueInt('orders_id') . '&action=save'), osc_icon('orders.png') . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                         '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .
                         '      <td>' . $Qorders->value('date_last_modified') . '</td>' .
                         '      <td>' . $Qorders->value('orders_status_name') . '</td>' .
                         '    </tr>';
+
+        $counter++;
       }
 
       $this->_data .= '  </tbody>' .
