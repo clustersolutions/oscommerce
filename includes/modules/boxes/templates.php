@@ -26,8 +26,6 @@
     }
 
     function initialize() {
-      global $osC_Session;
-
       $data = array();
 
       foreach (osC_Template::getTemplates() as $template) {
@@ -38,7 +36,7 @@
         $hidden_get_variables = '';
 
         foreach ($_GET as $key => $value) {
-          if ( ($key != 'template') && ($key != $osC_Session->getName()) && ($key != 'x') && ($key != 'y') ) {
+          if ( ($key != 'template') && ($key != OSCOM_Registry::get('Session')->getName()) && ($key != 'x') && ($key != 'y') ) {
             $hidden_get_variables .= osc_draw_hidden_field($key, $value);
           }
         }

@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -14,10 +10,11 @@
 
   class osC_Services_session {
     function start() {
-      global $request_type, $osC_Session;
+      global $request_type, $osC_Session, $osC_MessageStack;
 
       include('includes/classes/session.php');
-      $osC_Session = osC_Session::load();
+      $osC_Session = OSCOM_Session::load();
+      OSCOM_Registry::set('Session', $osC_Session);
 
       if ( (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') || ((bool)ini_get('session.use_only_cookies') === true) ) {
         osc_setcookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);
@@ -91,6 +88,8 @@
           osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
         }
       }
+
+      $osC_MessageStack->loadFromSession();
 
       return true;
     }

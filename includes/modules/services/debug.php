@@ -14,7 +14,7 @@
 
   class osC_Services_debug {
     function start() {
-      global $osC_Session, $osC_MessageStack, $osC_Language;
+      global $osC_MessageStack, $osC_Language;
 
       if (SERVICE_DEBUG_CHECK_LOCALE == '1') {
         $setlocale = osc_setlocale(LC_TIME, explode(',', $osC_Language->getLocale()));
@@ -33,10 +33,10 @@
       }
 
       if ((SERVICE_DEBUG_CHECK_SESSION_DIRECTORY == '1') && (STORE_SESSIONS == '')) {
-        if (!is_dir($osC_Session->getSavePath())) {
-          $osC_MessageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_non_existent'), $osC_Session->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
-        } elseif (!is_writeable($osC_Session->getSavePath())) {
-          $osC_MessageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_not_writeable'), $osC_Session->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
+        if (!is_dir(OSCOM_Registry::get('Session')->getSavePath())) {
+          $osC_MessageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_non_existent'), OSCOM_Registry::get('Session')->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
+        } elseif (!is_writeable(OSCOM_Registry::get('Session')->getSavePath())) {
+          $osC_MessageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_not_writeable'), OSCOM_Registry::get('Session')->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
         }
       }
 

@@ -16,7 +16,7 @@
   header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 
   require('includes/application.php');
-
+  
   $dir_fs_www_root = dirname(__FILE__);
 
   if (isset($_GET['action']) && !empty($_GET['action'])) {
@@ -30,7 +30,7 @@
                     'DB_DATABASE_CLASS' => trim(urldecode($_GET['class']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
+        $osC_Database = OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $osC_Database->selectDatabase($db['DB_DATABASE']);
@@ -56,7 +56,7 @@
                     'DB_TABLE_PREFIX' => trim(urldecode($_GET['prefix']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
+        $osC_Database = OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $sql_file = $dir_fs_www_root . '/oscommerce.sql';
@@ -75,7 +75,7 @@
             $Qdef->execute();
           }
 
-          $osC_DirectoryListing = new osC_DirectoryListing('../includes/languages/en_US');
+          $osC_DirectoryListing = new OSCOM_DirectoryListing('../includes/languages/en_US');
           $osC_DirectoryListing->setRecursive(true);
           $osC_DirectoryListing->setIncludeDirectories(false);
           $osC_DirectoryListing->setAddDirectoryToFilename(true);
@@ -132,7 +132,7 @@
           $installed = array();
 
           foreach ($services as $service) {
-            include('../admin/includes/modules/services/' . $service . '.php');
+            include('../includes/sites/Admin/includes/modules/services/' . $service . '.php');
             $class = 'osC_Services_' . $service . '_Admin';
             $module = new $class();
             $module->install();
@@ -197,7 +197,7 @@
           include('includes/classes/shipping.php');
           include('includes/classes/order_total.php');
 
-          include('../admin/includes/modules/payment/cod.php');
+          include('../includes/sites/Admin/includes/modules/payment/cod.php');
           $module = new osC_Payment_cod();
           $module->install();
 
@@ -206,23 +206,23 @@
           $Qupdate->bindValue(':configuration_key', 'MODULE_PAYMENT_COD_STATUS');
           $Qupdate->execute();
 
-          include('../admin/includes/modules/shipping/flat.php');
+          include('../includes/sites/Admin/includes/modules/shipping/flat.php');
           $module = new osC_Shipping_flat();
           $module->install();
 
-          include('../admin/includes/modules/order_total/sub_total.php');
+          include('../includes/sites/Admin/includes/modules/order_total/sub_total.php');
           $module = new osC_OrderTotal_sub_total();
           $module->install();
 
-          include('../admin/includes/modules/order_total/shipping.php');
+          include('../includes/sites/Admin/includes/modules/order_total/shipping.php');
           $module = new osC_OrderTotal_shipping();
           $module->install();
 
-          include('../admin/includes/modules/order_total/tax.php');
+          include('../includes/sites/Admin/includes/modules/order_total/tax.php');
           $module = new osC_OrderTotal_tax();
           $module->install();
 
-          include('../admin/includes/modules/order_total/total.php');
+          include('../includes/sites/Admin/includes/modules/order_total/total.php');
           $module = new osC_OrderTotal_total();
           $module->install();
         }
@@ -255,7 +255,7 @@
                     'DB_TABLE_PREFIX' => trim(urldecode($_GET['prefix']))
                    );
 
-        $osC_Database = osC_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
+        $osC_Database = OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']);
 
         if ($osC_Database->isError() === false) {
           $sql_file = $dir_fs_www_root . '/oscommerce_sample_data.sql';

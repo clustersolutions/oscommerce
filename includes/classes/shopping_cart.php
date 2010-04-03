@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,14 +9,14 @@
 */
 
   class osC_ShoppingCart {
-    private $_contents = array();
-    private $_sub_total = 0;
-    private $_total = 0;
-    private $_weight = 0;
-    private $_tax = 0;
-    private $_tax_groups = array();
-    private $_content_type;
-    private $_products_in_stock = true;
+    protected $_contents = array();
+    protected $_sub_total = 0;
+    protected $_total = 0;
+    protected $_weight = 0;
+    protected $_tax = 0;
+    protected $_tax_groups = array();
+    protected $_content_type;
+    protected $_products_in_stock = true;
 
     public function __construct() {
       if ( !isset($_SESSION['osC_ShoppingCart_data']) ) {
@@ -300,20 +296,15 @@
     }
 
     public function add($product_id, $quantity = null) {
-      global $osC_Database, $osC_Services, $osC_Language, $osC_Customer;
+      global $osC_Database, $osC_Language, $osC_Customer;
 
       if ( !is_numeric($product_id) ) {
         return false;
       }
 
-      $Qproduct = $osC_Database->query('select p.parent_id, p.products_price, p.products_tax_class_id, p.products_model, p.products_weight, p.products_weight_class, p.products_status, i.image from :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag) where p.products_id = :products_id');
-      $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qproduct->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
-      $Qproduct->bindInt(':default_flag', 1);
-      $Qproduct->bindInt(':products_id', $product_id);
-      $Qproduct->execute();
+      $osC_Product = new osC_Product($product_id);
 
-      if ( $Qproduct->valueInt('products_status') === 1 ) {
+      if ( $osC_Product->isValid() ) {
         if ( $this->exists($product_id) ) {
           $item_id = $this->getBasketID($product_id);
 
@@ -336,22 +327,6 @@
             $quantity = 1;
           }
 
-          $Qdescription = $osC_Database->query('select products_name, products_keyword from :table_products_description where products_id = :products_id and language_id = :language_id');
-          $Qdescription->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
-          $Qdescription->bindInt(':products_id', ($Qproduct->valueInt('parent_id') > 0) ? $Qproduct->valueInt('parent_id') : $product_id);
-          $Qdescription->bindInt(':language_id', $osC_Language->getID());
-          $Qdescription->execute();
-
-          $price = $Qproduct->value('products_price');
-
-          if ( $osC_Services->isStarted('specials') ) {
-            global $osC_Specials;
-
-            if ( $new_price = $osC_Specials->getPrice($product_id) ) {
-              $price = $new_price;
-            }
-          }
-
           if ( $osC_Customer->isLoggedOn() ) {
             $Qid = $osC_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
             $Qid->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
@@ -369,17 +344,17 @@
 
           $this->_contents[$item_id] = array('item_id' => $item_id,
                                              'id' => $product_id,
-                                             'parent_id' => $Qproduct->valueInt('parent_id'),
-                                             'name' => $Qdescription->value('products_name'),
-                                             'model' => $Qproduct->value('products_model'),
-                                             'keyword' => $Qdescription->value('products_keyword'),
-                                             'image' => $Qproduct->value('image'),
-                                             'price' => $price,
+                                             'parent_id' => (int)$osC_Product->getData('parent_id'),
+                                             'name' => $osC_Product->getTitle(),
+                                             'model' => $osC_Product->getModel(),
+                                             'keyword' => $osC_Product->getKeyword(),
+                                             'image' => $osC_Product->getImage(),
+                                             'price' => $osC_Product->getPrice(true),
                                              'quantity' => $quantity,
-                                             'weight' => $Qproduct->value('products_weight'),
-                                             'tax_class_id' => $Qproduct->valueInt('products_tax_class_id'),
+                                             'weight' => $osC_Product->getData('weight'),
+                                             'tax_class_id' => $osC_Product->getData('tax_class_id'),
                                              'date_added' => osC_DateTime::getShort(osC_DateTime::getNow()),
-                                             'weight_class_id' => $Qproduct->valueInt('products_weight_class'));
+                                             'weight_class_id' => $osC_Product->getData('weight_class_id'));
 
           if ( $osC_Customer->isLoggedOn() ) {
             $Qnew = $osC_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
@@ -392,7 +367,7 @@
             $Qnew->execute();
           }
 
-          if ( $Qproduct->valueInt('parent_id') > 0 ) {
+          if ( $osC_Product->getData('parent_id') > 0 ) {
             $Qvariant = $osC_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
             $Qvariant->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
             $Qvariant->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
@@ -444,7 +419,7 @@
 
     public function getBasketID($product_id) {
       foreach ( $this->_contents as $item_id => $product ) {
-        if ( $product['id'] === $product_id ) {
+        if ( $product['id'] == $product_id ) {
           return $item_id;
         }
       }
@@ -644,45 +619,71 @@
       return isset($this->_shipping_address['id']);
     }
 
-    public function setShippingAddress($address_id) {
+/* param $address mixed int for address book entry, or array containing address data */
+    public function setShippingAddress($address) {
       global $osC_Database, $osC_Customer;
 
-      $previous_address = null;
+      $previous_address = false;
 
       if ( isset($this->_shipping_address['id']) ) {
         $previous_address = $this->getShippingAddress();
       }
 
-      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
-      $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-      $Qaddress->bindTable(':table_zones', TABLE_ZONES);
-      $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
-      $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
-      $Qaddress->bindInt(':address_book_id', $address_id);
-      $Qaddress->execute();
+      if ( $osC_Customer->isLoggedOn() && is_numeric($address) ) {
+        $Qaddress = $osC_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+        $Qaddress->bindTable(':table_zones', TABLE_ZONES);
+        $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
+        $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
+        $Qaddress->bindInt(':address_book_id', $address);
+        $Qaddress->execute();
 
-      if ( $Qaddress->numberOfRows() === 1 ) {
-        $this->_shipping_address = array('id' => $address_id,
-                                         'firstname' => $Qaddress->valueProtected('entry_firstname'),
-                                         'lastname' => $Qaddress->valueProtected('entry_lastname'),
-                                         'company' => $Qaddress->valueProtected('entry_company'),
-                                         'street_address' => $Qaddress->valueProtected('entry_street_address'),
-                                         'suburb' => $Qaddress->valueProtected('entry_suburb'),
-                                         'city' => $Qaddress->valueProtected('entry_city'),
-                                         'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                         'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
-                                         'zone_id' => $Qaddress->valueInt('entry_zone_id'),
-                                         'zone_code' => $Qaddress->value('zone_code'),
-                                         'country_id' => $Qaddress->valueInt('entry_country_id'),
-                                         'country_title' => $Qaddress->value('countries_name'),
-                                         'country_iso_code_2' => $Qaddress->value('countries_iso_code_2'),
-                                         'country_iso_code_3' => $Qaddress->value('countries_iso_code_3'),
-                                         'format' => $Qaddress->value('address_format'),
-                                         'telephone_number' => $Qaddress->value('entry_telephone'));
+        if ( $Qaddress->numberOfRows() === 1 ) {
+          $this->_shipping_address = array('id' => (int)$address,
+                                           'firstname' => $Qaddress->valueProtected('entry_firstname'),
+                                           'lastname' => $Qaddress->valueProtected('entry_lastname'),
+                                           'gender' => $Qaddress->valueProtected('entry_gender'),
+                                           'company' => $Qaddress->valueProtected('entry_company'),
+                                           'street_address' => $Qaddress->valueProtected('entry_street_address'),
+                                           'suburb' => $Qaddress->valueProtected('entry_suburb'),
+                                           'city' => $Qaddress->valueProtected('entry_city'),
+                                           'postcode' => $Qaddress->valueProtected('entry_postcode'),
+                                           'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                           'zone_id' => $Qaddress->valueInt('entry_zone_id'),
+                                           'zone_code' => $Qaddress->value('zone_code'),
+                                           'country_id' => $Qaddress->valueInt('entry_country_id'),
+                                           'country_title' => $Qaddress->valueProtected('countries_name'),
+                                           'country_iso_code_2' => $Qaddress->valueProtected('countries_iso_code_2'),
+                                           'country_iso_code_3' => $Qaddress->valueProtected('countries_iso_code_3'),
+                                           'format' => $Qaddress->value('address_format'),
+                                           'telephone' => $Qaddress->valueProtected('entry_telephone'),
+                                           'fax' => $Qaddress->valueProtected('entry_fax'));
 
-        if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_shipping_address['id']) || ($previous_address['country_id'] != $this->_shipping_address['country_id']) || ($previous_address['zone_id'] != $this->_shipping_address['zone_id']) || ($previous_address['state'] != $this->_shipping_address['state']) || ($previous_address['postcode'] != $this->_shipping_address['postcode']) ) ) {
-          $this->_calculate();
         }
+      } else {
+        $this->_shipping_address = array('id' => 0,
+                                         'firstname' => osc_output_string_protected($address['firstname']),
+                                         'lastname' => osc_output_string_protected($address['lastname']),
+                                         'gender' => osc_output_string_protected($address['gender']),
+                                         'company' => osc_output_string_protected($address['company']),
+                                         'street_address' => osc_output_string_protected($address['street_address']),
+                                         'suburb' => osc_output_string_protected($address['suburb']),
+                                         'city' => osc_output_string_protected($address['city']),
+                                         'postcode' => osc_output_string_protected($address['postcode']),
+                                         'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(osC_Address::getZoneName($address['zone_id']))),
+                                         'zone_id' => (int)$address['zone_id'],
+                                         'zone_code' => osc_output_string_protected(osC_Address::getZoneCode($address['zone_id'])),
+                                         'country_id' => osc_output_string_protected($address['country_id']),
+                                         'country_title' => osc_output_string_protected(osC_Address::getCountryName($address['country_id'])),
+                                         'country_iso_code_2' => osc_output_string_protected(osC_Address::getCountryIsoCode2($address['country_id'])),
+                                         'country_iso_code_3' => osc_output_string_protected(osC_Address::getCountryIsoCode3($address['country_id'])),
+                                         'format' => osC_Address::getFormat($address['country_id']),
+                                         'telephone' => osc_output_string_protected($address['telephone']),
+                                         'fax' => osc_output_string_protected($address['fax']));
+      }
+
+      if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_shipping_address['id']) || ($previous_address['country_id'] != $this->_shipping_address['country_id']) || ($previous_address['zone_id'] != $this->_shipping_address['zone_id']) || ($previous_address['state'] != $this->_shipping_address['state']) || ($previous_address['postcode'] != $this->_shipping_address['postcode']) ) ) {
+        $this->_calculate();
       }
     }
 
@@ -735,7 +736,8 @@
       return isset($this->_billing_address['id']);
     }
 
-    public function setBillingAddress($address_id) {
+/* param $address mixed int for address book entry, or array containing address data */
+    public function setBillingAddress($address) {
       global $osC_Database, $osC_Customer;
 
       $previous_address = false;
@@ -744,36 +746,61 @@
         $previous_address = $this->getBillingAddress();
       }
 
-      $Qaddress = $osC_Database->query('select ab.entry_firstname, ab.entry_lastname, ab.entry_company, ab.entry_street_address, ab.entry_suburb, ab.entry_postcode, ab.entry_city, ab.entry_zone_id, ab.entry_telephone, z.zone_code, z.zone_name, ab.entry_country_id, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format, ab.entry_state from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
-      $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-      $Qaddress->bindTable(':table_zones', TABLE_ZONES);
-      $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
-      $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
-      $Qaddress->bindInt(':address_book_id', $address_id);
-      $Qaddress->execute();
+      if ( $osC_Customer->isLoggedOn() && is_numeric($address) ) {
+        $Qaddress = $osC_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+        $Qaddress->bindTable(':table_zones', TABLE_ZONES);
+        $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
+        $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
+        $Qaddress->bindInt(':address_book_id', $address);
+        $Qaddress->execute();
 
-      if ( $Qaddress->numberOfRows() === 1 ) {
-        $this->_billing_address = array('id' => $address_id,
-                                        'firstname' => $Qaddress->valueProtected('entry_firstname'),
-                                        'lastname' => $Qaddress->valueProtected('entry_lastname'),
-                                        'company' => $Qaddress->valueProtected('entry_company'),
-                                        'street_address' => $Qaddress->valueProtected('entry_street_address'),
-                                        'suburb' => $Qaddress->valueProtected('entry_suburb'),
-                                        'city' => $Qaddress->valueProtected('entry_city'),
-                                        'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                        'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
-                                        'zone_id' => $Qaddress->valueInt('entry_zone_id'),
-                                        'zone_code' => $Qaddress->value('zone_code'),
-                                        'country_id' => $Qaddress->valueInt('entry_country_id'),
-                                        'country_title' => $Qaddress->value('countries_name'),
-                                        'country_iso_code_2' => $Qaddress->value('countries_iso_code_2'),
-                                        'country_iso_code_3' => $Qaddress->value('countries_iso_code_3'),
-                                        'format' => $Qaddress->value('address_format'),
-                                        'telephone_number' => $Qaddress->value('entry_telephone'));
+        if ( $Qaddress->numberOfRows() === 1 ) {
+          $this->_billing_address = array('id' => (int)$address,
+                                          'firstname' => $Qaddress->valueProtected('entry_firstname'),
+                                          'lastname' => $Qaddress->valueProtected('entry_lastname'),
+                                          'gender' => $Qaddress->valueProtected('entry_gender'),
+                                          'company' => $Qaddress->valueProtected('entry_company'),
+                                          'street_address' => $Qaddress->valueProtected('entry_street_address'),
+                                          'suburb' => $Qaddress->valueProtected('entry_suburb'),
+                                          'city' => $Qaddress->valueProtected('entry_city'),
+                                          'postcode' => $Qaddress->valueProtected('entry_postcode'),
+                                          'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                          'zone_id' => $Qaddress->valueInt('entry_zone_id'),
+                                          'zone_code' => $Qaddress->value('zone_code'),
+                                          'country_id' => $Qaddress->valueInt('entry_country_id'),
+                                          'country_title' => $Qaddress->valueProtected('countries_name'),
+                                          'country_iso_code_2' => $Qaddress->valueProtected('countries_iso_code_2'),
+                                          'country_iso_code_3' => $Qaddress->valueProtected('countries_iso_code_3'),
+                                          'format' => $Qaddress->value('address_format'),
+                                          'telephone' => $Qaddress->valueProtected('entry_telephone'),
+                                          'fax' => $Qaddress->valueProtected('entry_fax'));
 
-        if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_billing_address['id']) || ($previous_address['country_id'] != $this->_billing_address['country_id']) || ($previous_address['zone_id'] != $this->_billing_address['zone_id']) || ($previous_address['state'] != $this->_billing_address['state']) || ($previous_address['postcode'] != $this->_billing_address['postcode']) ) ) {
-          $this->_calculate();
         }
+      } else {
+        $this->_billing_address = array('id' => 0,
+                                        'firstname' => osc_output_string_protected($address['firstname']),
+                                        'lastname' => osc_output_string_protected($address['lastname']),
+                                        'gender' => osc_output_string_protected($address['gender']),
+                                        'company' => osc_output_string_protected($address['company']),
+                                        'street_address' => osc_output_string_protected($address['street_address']),
+                                        'suburb' => osc_output_string_protected($address['suburb']),
+                                        'city' => osc_output_string_protected($address['city']),
+                                        'postcode' => osc_output_string_protected($address['postcode']),
+                                        'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(osC_Address::getZoneName($address['zone_id']))),
+                                        'zone_id' => (int)$address['zone_id'],
+                                        'zone_code' => osc_output_string_protected(osC_Address::getZoneCode($address['zone_id'])),
+                                        'country_id' => osc_output_string_protected($address['country_id']),
+                                        'country_title' => osc_output_string_protected(osC_Address::getCountryName($address['country_id'])),
+                                        'country_iso_code_2' => osc_output_string_protected(osC_Address::getCountryIsoCode2($address['country_id'])),
+                                        'country_iso_code_3' => osc_output_string_protected(osC_Address::getCountryIsoCode3($address['country_id'])),
+                                        'format' => osC_Address::getFormat($address['country_id']),
+                                        'telephone' => osc_output_string_protected($address['telephone']),
+                                        'fax' => osc_output_string_protected($address['fax']));
+      }
+
+      if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_billing_address['id']) || ($previous_address['country_id'] != $this->_billing_address['country_id']) || ($previous_address['zone_id'] != $this->_billing_address['zone_id']) || ($previous_address['state'] != $this->_billing_address['state']) || ($previous_address['postcode'] != $this->_billing_address['postcode']) ) ) {
+        $this->_calculate();
       }
     }
 

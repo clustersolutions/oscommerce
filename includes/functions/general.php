@@ -83,11 +83,9 @@
  */
 
   function osc_get_all_get_params($exclude = null) {
-    global $osC_Session;
-
     $params = '';
 
-    $array = array($osC_Session->getName(),
+    $array = array(OSCOM_Registry::get('Session')->getName(),
                    'error',
                    'x',
                    'y');

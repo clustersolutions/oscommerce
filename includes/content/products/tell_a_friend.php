@@ -25,7 +25,7 @@
 /* Class constructor */
 
     function osC_Products_Tell_a_friend() {
-      global $osC_Services, $osC_Session, $osC_Language, $osC_Breadcrumb, $osC_Customer, $osC_NavigationHistory, $osC_Product;
+      global $osC_Services, $osC_Language, $osC_Breadcrumb, $osC_Customer, $osC_NavigationHistory, $osC_Product;
 
       if ((ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($osC_Customer->isLoggedOn() === false)) {
         $osC_NavigationHistory->setSnapshot();
@@ -41,7 +41,7 @@
           continue;
         }
 
-        if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
+        if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
           if (osC_Product::checkEntry($key) === false) {
             $this->_page_title = $osC_Language->get('product_not_found_heading');
             $this->_page_contents = 'info_not_found.php';

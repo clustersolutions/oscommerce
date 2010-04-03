@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -20,7 +16,7 @@
 
       if ( !empty($id) ) {
         if ( is_numeric($id) ) {
-          $Qproduct = $osC_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_weight as weight, products_weight_class as weight_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+          $Qproduct = $osC_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_types_id as type_id, products_weight as weight, products_weight_class as weight_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
           $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
           $Qproduct->bindInt(':products_id', $id);
           $Qproduct->bindInt(':products_status', 1);
@@ -58,7 +54,7 @@
             }
           }
         } else {
-          $Qproduct = $osC_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_weight as weight, p.products_weight_class as weight_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
+          $Qproduct = $osC_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_types_id as type_id, p.products_weight as weight, p.products_weight_class as weight_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
           $Qproduct->bindTable(':table_products', TABLE_PRODUCTS);
           $Qproduct->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
           $Qproduct->bindValue(':products_keyword', $id);
@@ -92,6 +88,19 @@
           $Qcategory->execute();
 
           $this->_data['category_id'] = $Qcategory->valueInt('categories_id');
+
+          if ( $this->_data['type_id'] > 0 ) {
+            $this->_data['type_assignments'] = array();
+
+            $Qtypes = $osC_Database->query('select action, module from :table_product_types_assignments where types_id = :types_id order by action, sort_order, module');
+            $Qtypes->bindTable(':table_product_types_assignments', TABLE_PRODUCT_TYPES_ASSIGNMENTS);
+            $Qtypes->bindInt(':types_id', $this->_data['type_id']);
+            $Qtypes->execute();
+
+            while ( $Qtypes->next() ) {
+              $this->_data['type_assignments'][$Qtypes->value('action')][] = $Qtypes->value('module');
+            }
+          }
 
           if ( $this->_data['has_children'] === 1 ) {
             $this->_data['variants'] = array();
@@ -209,7 +218,20 @@
       return $this->_data['tags'];
     }
 
-    function getPrice() {
+    function getPrice($with_special = false) {
+      global $osC_Services, $osC_Specials, $osC_Currencies;
+
+      if (($with_special === true) && $osC_Services->isStarted('specials') && ($new_price = $osC_Specials->getPrice($this->_data['id']))) {
+        $price = $osC_Currencies->displayPriceRaw($new_price, $this->_data['tax_class_id']);
+      } else {
+        if ( $this->hasVariants() ) {
+          $price = $osC_Currencies->displayPriceRaw($this->getVariantMinPrice(), $this->_data['tax_class_id']);
+        } else {
+          $price = $osC_Currencies->displayPriceRaw($this->_data['price'], $this->_data['tax_class_id']);
+        }
+      }
+
+      return $price;
     }
 
     function getPriceFormated($with_special = false) {
@@ -288,6 +310,55 @@
       }
 
       return $weight;
+    }
+
+    function hasClass() {
+      return ( $this->_data['type_id'] > 0 );
+    }
+
+// $action mixed, string = action, array $key $value = action + single module
+    public function isTypeActionAllowed($action, $stop_at_module = null, $execute_onfail = true) {
+      $action_call = $action;
+      $module_call = null;
+
+      $return_value = false;
+
+      if ( is_array($action) ) {
+        $action_call = $action[0];
+        $module_call = $action[1];
+      }
+
+      if ( isset($this->_data['type_assignments'][$action_call]) ) {
+        foreach ( $this->_data['type_assignments'][$action_call] as $module ) {
+          if ( $module == $stop_at_module ) {
+            break;
+          }
+
+          if ( is_null($module_call) || ($module_call == $module) ) {
+            if ( !class_exists('osC_ProductTypes_Modules_' . $module) ) {
+              include('includes/modules/product_types/modules/' . $module . '.php');
+            }
+
+            if ( !call_user_func(array('osC_ProductTypes_Modules_' . $module, 'isValid'), $this) ) {
+              if ( ($execute_onfail === true) && method_exists('osC_ProductTypes_Modules_' . $module, 'onFail') ) {
+                call_user_func(array('osC_ProductTypes_Modules_' . $module, 'onFail'), $this);
+              }
+
+              $return_value = false;
+
+              break;
+            } else {
+              $return_value = true;
+
+              if ( $module_call == $module ) {
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      return $return_value;
     }
 
     function hasManufacturer() {

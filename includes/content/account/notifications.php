@@ -47,7 +47,7 @@
 /* Public methods */
 
     function &getListing() {
-      global $osC_Database, $osC_Session, $osC_Customer, $osC_Language;
+      global $osC_Database, $osC_Customer, $osC_Language;
 
       $Qproducts = $osC_Database->query('select pd.products_id, pd.products_name from :table_products_description pd, :table_products_notifications pn where pn.customers_id = :customers_id and pn.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
       $Qproducts->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);

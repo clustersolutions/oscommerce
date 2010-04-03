@@ -26,7 +26,7 @@
     }
 
     function initialize() {
-      global $osC_Session, $osC_Currencies;
+      global $osC_Currencies;
 
       $data = array();
 
@@ -38,7 +38,7 @@
         $hidden_get_variables = '';
 
         foreach ($_GET as $key => $value) {
-          if ( ($key != 'currency') && ($key != $osC_Session->getName()) && ($key != 'x') && ($key != 'y') ) {
+          if ( ($key != 'currency') && ($key != OSCOM_Registry::get('Session')->getName()) && ($key != 'x') && ($key != 'y') ) {
             $hidden_get_variables .= osc_draw_hidden_field($key, $value);
           }
         }

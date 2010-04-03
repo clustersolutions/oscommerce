@@ -87,6 +87,18 @@
       return $this->format($price * $quantity, $currency_code, $currency_value);
     }
 
+    function displayPriceRaw($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
+      global $osC_Tax;
+
+      $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+
+      if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
+        $price += osc_round($price * ($osC_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      }
+
+      return $this->formatRaw($price * $quantity, $currency_code, $currency_value);
+    }
+
     function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $force = false, $currency_code = '', $currency_value = '') {
       global $osC_Tax;
 

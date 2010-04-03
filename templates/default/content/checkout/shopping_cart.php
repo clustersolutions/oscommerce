@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -18,13 +14,15 @@
 <h1><?php echo $osC_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ($osC_ShoppingCart->hasContents()) {
+  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
+    echo $osC_MessageStack->get($osC_Template->getModule());
+  }
 ?>
-
-<form name="shopping_cart" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'action=cart_update', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo $osC_Language->get('shopping_cart_heading'); ?></h6>
+
+  <form name="shopping_cart" action="<?php echo osc_href_link(FILENAME_CHECKOUT, 'action=cart_update', 'SSL'); ?>" method="post">
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -66,7 +64,7 @@
 ?>
 
         </td>
-        <td valign="top"><?php echo osc_draw_input_field('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?></td>
+        <td valign="top"><?php echo osc_draw_input_field('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?> <a href="#" onclick="document.shopping_cart.submit(); return false;">update</a></td>
         <td valign="top" align="right"><?php echo '<b>' . $osC_Currencies->displayPrice($products['price'], $products['tax_class_id'], $products['quantity']) . '</b>'; ?></td>
       </tr>
 
@@ -76,6 +74,8 @@
 
     </table>
   </div>
+
+  </form>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
@@ -106,24 +106,36 @@
 
 </div>
 
+<?php
+  if ( $osC_Template->requireCustomerAccount() ) {
+?>
+
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'), osc_draw_image_button('button_checkout.gif', $osC_Language->get('button_checkout'))); ?></span>
-
-  <?php echo osc_draw_image_submit_button('button_update_cart.gif', $osC_Language->get('button_update_cart')); ?>
+  <span style="float: right;">
+    <?php echo osc_link_object(osc_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'), osc_draw_image_button('button_checkout.gif', $osC_Language->get('button_checkout'))); ?>
+  </span>
 </div>
-
-</form>
 
 <?php
   } else {
 ?>
 
-<p><?php echo $osC_Language->get('shopping_cart_empty'); ?></p>
+<div class="moduleBox">
+  <form name="checkout" action="<?php echo osc_href_link(FILENAME_CHECKOUT, $osC_Template->getModule() . '&action=email', 'SSL'); ?>" method="post">
 
-<div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_link_object(osc_href_link(FILENAME_DEFAULT), osc_draw_image_button('button_continue.gif', $osC_Language->get('button_continue'))); ?>
+  <div class="content">
+    <div style="float: right;">
+      <?php echo osc_draw_image_submit_button('button_checkout.gif', $osC_Language->get('button_checkout')); ?>
+    </div>
+
+    <?php echo 'E-Mail Address: ' . osc_draw_input_field('email', $osC_Customer->getEMailAddress()) . ' or ' . osc_link_object(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'), 'Sign-In') . ' to process this order'; ?>
+  </div>
+
+  </form>
 </div>
 
 <?php
   }
 ?>
+
+</form>

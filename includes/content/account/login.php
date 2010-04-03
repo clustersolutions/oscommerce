@@ -48,12 +48,12 @@
 /* Private methods */
 
     function _process() {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_MessageStack, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Language, $osC_ShoppingCart, $osC_MessageStack, $osC_Customer, $osC_NavigationHistory;
 
       if (osC_Account::checkEntry($_POST['email_address'])) {
         if (osC_Account::checkPassword($_POST['password'], $_POST['email_address'])) {
           if (SERVICE_SESSION_REGENERATE_ID == '1') {
-            $osC_Session->recreate();
+            OSCOM_Registry::get('Session')->recreate();
           }
 
           $osC_Customer->setCustomerData(osC_Account::getID($_POST['email_address']));

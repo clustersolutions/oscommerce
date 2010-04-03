@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,9 +9,10 @@
 */
 
   class osC_Services_core {
-    function start() {
+    public function start() {
       global $osC_Customer, $osC_Tax, $osC_Weight, $osC_ShoppingCart, $osC_NavigationHistory, $osC_Image;
 
+      include('includes/classes/object_info.php');
       include('includes/classes/template.php');
       include('includes/classes/modules.php');
       include('includes/classes/category.php');
@@ -48,7 +45,7 @@
       return true;
     }
 
-    function stop() {
+    public function stop() {
       return true;
     }
   }

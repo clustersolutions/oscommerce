@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2005 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,97 +9,77 @@
 */
 
   class osC_Customer {
+    protected $_is_logged_on = false;
+    protected $_data = array();
 
-/* Private variables */
+    public function __construct() {
+      if ( !isset($_SESSION['osC_Customer_data']) ) {
+        $_SESSION['osC_Customer_data'] = $this->_data;
+      }
 
-    var $_is_logged_on = false,
-        $_data = array();
+      $this->_data =& $_SESSION['osC_Customer_data'];
 
-/* Class constructor */
-
-    function osC_Customer() {
-      if (isset($_SESSION['osC_Customer_data']) && is_array($_SESSION['osC_Customer_data']) && isset($_SESSION['osC_Customer_data']['id']) && is_numeric($_SESSION['osC_Customer_data']['id'])) {
+      if ( isset($this->_data['id']) && is_numeric($this->_data['id']) && ($this->_data['id'] > 0) ) {
         $this->setIsLoggedOn(true);
-        $this->_data =& $_SESSION['osC_Customer_data'];
       }
     }
 
-/* Public methods */
-
-    function getID() {
-      if (isset($this->_data['id']) && is_numeric($this->_data['id'])) {
+    public function getID() {
+      if ( isset($this->_data['id']) && is_numeric($this->_data['id']) ) {
         return $this->_data['id'];
+      }
+
+      return 0;
+    }
+
+    public function getFirstName() {
+      if ( isset($this->_data['first_name']) ) {
+        return $this->_data['first_name'];
       }
 
       return false;
     }
 
-    function getFirstName() {
-      static $first_name = null;
-
-      if (is_null($first_name)) {
-        if (isset($this->_data['first_name'])) {
-          $first_name = $this->_data['first_name'];
-        }
+    public function getLastName() {
+      if ( isset($this->_data['last_name']) ) {
+        return $this->_data['last_name'];
       }
 
-      return $first_name;
+      return false;
     }
 
-    function getLastName() {
-      static $last_name = null;
+    public function getName() {
+      $name = '';
 
-      if (is_null($last_name)) {
-        if (isset($this->_data['last_name'])) {
-          $last_name = $this->_data['last_name'];
-        }
+      if ( isset($this->_data['first_name']) ) {
+        $name .= $this->_data['first_name'];
       }
 
-      return $last_name;
-    }
-
-    function getName() {
-      static $name = '';
-
-      if (empty($name)) {
-        if (isset($this->_data['first_name'])) {
-          $name .= $this->_data['first_name'];
+      if ( isset($this->_data['last_name']) ) {
+        if ( !empty($name) ) {
+          $name .= ' ';
         }
 
-        if (isset($this->_data['last_name'])) {
-          if (empty($name) === false) {
-            $name .= ' ';
-          }
-
-          $name .= $this->_data['last_name'];
-        }
+        $name .= $this->_data['last_name'];
       }
 
       return $name;
     }
 
-    function getGender() {
-      static $gender = null;
-
-      if (is_null($gender)) {
-        if (isset($this->_data['gender'])) {
-          $gender = $this->_data['gender'];
-        }
+    public function getGender() {
+      if ( isset($this->_data['gender']) ) {
+        return $this->_data['gender'];
       }
 
-      return $gender;
+      return false;
     }
 
     function getEmailAddress() {
-      static $email_address = null;
-
-      if (is_null($email_address)) {
-        if (isset($this->_data['email_address'])) {
-          $email_address = $this->_data['email_address'];
-        }
+      if ( isset($this->_data['email_address']) ) {
+        return $this->_data['email_address'];
       }
 
-      return $email_address;
+      return false;
     }
 
     function getCountryID() {

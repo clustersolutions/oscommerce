@@ -91,12 +91,16 @@
       static $total_entries;
 
       if ( !isset($total_entries) ) {
-        $Qaddresses = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id');
-        $Qaddresses->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qaddresses->bindInt(':customers_id', $osC_Customer->getID());
-        $Qaddresses->execute();
+        $total_entries = 0;
 
-        $total_entries = $Qaddresses->valueInt('total');
+        if ( $osC_Customer->isLoggedOn() ) {
+          $Qaddresses = $osC_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id');
+          $Qaddresses->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+          $Qaddresses->bindInt(':customers_id', $osC_Customer->getID());
+          $Qaddresses->execute();
+
+          $total_entries = $Qaddresses->valueInt('total');
+        }
       }
 
       return $total_entries;

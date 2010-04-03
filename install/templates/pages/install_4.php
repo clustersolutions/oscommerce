@@ -15,7 +15,7 @@
   define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
   include('../includes/database_tables.php');
 
-  $osC_Database = osC_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
+  $osC_Database = OSCOM_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
 
   $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
   $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
@@ -135,7 +135,7 @@
     $http_work_directory .= '/';
   }
 
-  $osC_DirectoryListing = new osC_DirectoryListing($http_work_directory);
+  $osC_DirectoryListing = new OSCOM_DirectoryListing($http_work_directory);
   $osC_DirectoryListing->setIncludeDirectories(false);
   $osC_DirectoryListing->setCheckExtension('cache');
 
@@ -143,40 +143,39 @@
     @unlink($osC_DirectoryListing->getDirectory() . '/' . $files['name']);
   }
 
-  $file_contents = '<?php' . "\n" .
-                   '  define(\'HTTP_SERVER\', \'' . $http_server . '\');' . "\n" .
-                   '  define(\'HTTPS_SERVER\', \'' . $http_server . '\');' . "\n" .
-                   '  define(\'ENABLE_SSL\', false);' . "\n" .
-                   '  define(\'HTTP_COOKIE_DOMAIN\', \'' . $http_url['host'] . '\');' . "\n" .
-                   '  define(\'HTTPS_COOKIE_DOMAIN\', \'' . $http_url['host'] . '\');' . "\n" .
-                   '  define(\'HTTP_COOKIE_PATH\', \'' . $http_catalog . '\');' . "\n" .
-                   '  define(\'HTTPS_COOKIE_PATH\', \'' . $http_catalog . '\');' . "\n" .
-                   '  define(\'DIR_WS_HTTP_CATALOG\', \'' . $http_catalog . '\');' . "\n" .
-                   '  define(\'DIR_WS_HTTPS_CATALOG\', \'' . $http_catalog . '\');' . "\n" .
-                   '  define(\'DIR_WS_IMAGES\', \'images/\');' . "\n\n" .
-                   '  define(\'DIR_WS_DOWNLOAD_PUBLIC\', \'pub/\');' . "\n" .
-                   '  define(\'DIR_FS_CATALOG\', \'' . $dir_fs_document_root . '\');' . "\n" .
-                   '  define(\'DIR_FS_WORK\', \'' . $http_work_directory . '\');' . "\n" .
-                   '  define(\'DIR_FS_DOWNLOAD\', DIR_FS_CATALOG . \'download/\');' . "\n" .
-                   '  define(\'DIR_FS_DOWNLOAD_PUBLIC\', DIR_FS_CATALOG . \'pub/\');' . "\n" .
-                   '  define(\'DIR_FS_BACKUP\', \'' . $dir_fs_document_root . 'admin/backups/\');' . "\n\n" .
-                   '  define(\'DB_SERVER\', \'' . $_POST['DB_SERVER'] . '\');' . "\n" .
-                   '  define(\'DB_SERVER_USERNAME\', \'' . $_POST['DB_SERVER_USERNAME'] . '\');' . "\n" .
-                   '  define(\'DB_SERVER_PASSWORD\', \'' . $_POST['DB_SERVER_PASSWORD']. '\');' . "\n" .
-                   '  define(\'DB_SERVER_PORT\', \'' . $_POST['DB_SERVER_PORT'] . '\');' . "\n" .
-                   '  define(\'DB_DATABASE\', \'' . $_POST['DB_DATABASE']. '\');' . "\n" .
-                   '  define(\'DB_DATABASE_CLASS\', \'' . $_POST['DB_DATABASE_CLASS'] . '\');' . "\n" .
-                   '  define(\'DB_TABLE_PREFIX\', \'' . $_POST['DB_TABLE_PREFIX']. '\');' . "\n" .
-                   '  define(\'DB_SERVER_PERSISTENT_CONNECTIONS\', false);' . "\n" .
-                   '  define(\'STORE_SESSIONS\', \'database\');' . "\n" .
-                   '?>';
+  $file_contents = 'OSCOM_DEFAULT_SITE = "Shop"' . "\n" .
+                   'HTTP_SERVER = "' . $http_server . '"' . "\n" .
+                   'HTTPS_SERVER = "' . $http_server . '"' . "\n" .
+                   'ENABLE_SSL = "false"' . "\n" .
+                   'HTTP_COOKIE_DOMAIN = "' . $http_url['host'] . '"' . "\n" .
+                   'HTTPS_COOKIE_DOMAIN = "' . $http_url['host'] . '"' . "\n" .
+                   'HTTP_COOKIE_PATH = "' . $http_catalog . '"' . "\n" .
+                   'HTTPS_COOKIE_PATH = "' . $http_catalog . '"' . "\n" .
+                   'DIR_WS_HTTP_CATALOG = "' . $http_catalog . '"' . "\n" .
+                   'DIR_WS_HTTPS_CATALOG = "' . $http_catalog . '"' . "\n" .
+                   'DIR_WS_IMAGES = "images/"' . "\n" .
+                   'DIR_WS_DOWNLOAD_PUBLIC = "pub/"' . "\n" .
+                   'DIR_FS_CATALOG = "' . $dir_fs_document_root . '"' . "\n" .
+                   'DIR_FS_WORK = "' . $http_work_directory . '"' . "\n" .
+                   'DIR_FS_DOWNLOAD = "' . $dir_fs_document_root . 'download/"' . "\n" .
+                   'DIR_FS_DOWNLOAD_PUBLIC = "' . $dir_fs_document_root . 'pub/"' . "\n" .
+                   'DIR_FS_BACKUP = "' . $dir_fs_document_root . 'admin/backups/"' . "\n" .
+                   'DB_SERVER = "' . $_POST['DB_SERVER'] . '"' . "\n" .
+                   'DB_SERVER_USERNAME = "' . $_POST['DB_SERVER_USERNAME'] . '"' . "\n" .
+                   'DB_SERVER_PASSWORD = "' . $_POST['DB_SERVER_PASSWORD'] . '"' . "\n" .
+                   'DB_SERVER_PORT = "' . $_POST['DB_SERVER_PORT'] . '"' . "\n" .
+                   'DB_DATABASE = "' . $_POST['DB_DATABASE']. '"' . "\n" .
+                   'DB_DATABASE_CLASS = "' . $_POST['DB_DATABASE_CLASS'] . '"' . "\n" .
+                   'DB_TABLE_PREFIX = "' . $_POST['DB_TABLE_PREFIX']. '"' . "\n" .
+                   'DB_SERVER_PERSISTENT_CONNECTIONS = "false"' . "\n" .
+                   'STORE_SESSIONS = "database"' . "\n";
 
-  if (file_exists($dir_fs_document_root . 'includes/configure.php') && !is_writeable($dir_fs_document_root . 'includes/configure.php')) {
-    @chmod($dir_fs_document_root . 'includes/configure.php', 0777);
+  if (file_exists($dir_fs_document_root . 'includes/config.php') && !is_writeable($dir_fs_document_root . 'includes/config.php')) {
+    @chmod($dir_fs_document_root . 'includes/config.php', 0777);
   }
 
-  if (file_exists($dir_fs_document_root . 'includes/configure.php') && is_writeable($dir_fs_document_root . 'includes/configure.php')) {
-    $fp = fopen($dir_fs_document_root . 'includes/configure.php', 'w');
+  if (file_exists($dir_fs_document_root . 'includes/config.php') && is_writeable($dir_fs_document_root . 'includes/config.php')) {
+    $fp = fopen($dir_fs_document_root . 'includes/config.php', 'w');
     fputs($fp, $file_contents);
     fclose($fp);
 ?>
@@ -190,7 +189,7 @@
     <form name="install" action="install.php?step=4" method="post">
 
     <div class="noticeBox">
-      <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), $dir_fs_document_root . 'includes/configure.php'); ?>
+      <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), $dir_fs_document_root . 'includes/config.php'); ?>
 
       <p align="right"><?php echo '<input type="image" src="templates/' . $template . '/languages/' . $osC_Language->getCode() . '/images/buttons/retry.gif" border="0" alt="' . $osC_Language->get('image_button_retry') . '" />'; ?></p>
 
@@ -226,7 +225,7 @@
     <table border="0" width="99%" cellspacing="0" cellpadding="0">
       <tr>
         <td align="center" width="50%"><a href="<?php echo $http_server . $http_catalog . 'index.php'; ?>" target="_blank"><img src="images/button_catalog.gif" border="0" alt="Catalog" /></a></td>
-        <td align="center" width="50%"><a href="<?php echo $http_server . $http_catalog . 'admin/index.php'; ?>" target="_blank"><img src="images/button_administration_tool.gif" border="0" alt="Administration Tool" /></a></td>
+        <td align="center" width="50%"><a href="<?php echo $http_server . $http_catalog . 'index.php?Admin'; ?>" target="_blank"><img src="images/button_administration_tool.gif" border="0" alt="Administration Tool" /></a></td>
       </tr>
     </table>
   </div>

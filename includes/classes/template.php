@@ -1,22 +1,21 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+// HPDL following alias to remove
+class osC_Template extends OSCOM_Template {}
+
 /**
- * The osC_Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks
+ * The Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks
  */
 
-  class osC_Template {
+  class OSCOM_Template {
 
 /**
  * Holds the template name value
@@ -46,6 +45,15 @@
     protected $_module;
 
 /**
+ * Holds the Application object instance
+ *
+ * @var OSCOM_Site_Admin_ApplicationAbstract
+ * @access protected
+ */
+
+    protected $_application;
+
+/**
  * Holds the group name of the page
  *
  * @var string
@@ -55,15 +63,6 @@
     protected $_group;
 
 /**
- * Holds the title of the page
- *
- * @var string
- * @access protected
- */
-
-    protected $_page_title;
-
-/**
  * Holds the image of the page
  *
  * @var string
@@ -71,15 +70,6 @@
  */
 
     protected $_page_image;
-
-/**
- * Holds the filename of the content to be added to the page
- *
- * @var string
- * @access protected
- */
-
-    protected $_page_contents;
 
 /**
  * Holds the meta tags of the page
@@ -205,6 +195,10 @@
       return $object;
     }
 
+    public function setApplication(OSCOM_ApplicationAbstract $application) {
+      $this->_application = $application;
+    }
+
 /**
  * Returns the template ID
  *
@@ -251,7 +245,7 @@
  */
 
     function getModule() {
-      return $this->_module;
+      return OSCOM::getSiteApplication();
     }
 
 /**
@@ -273,7 +267,11 @@
  */
 
     function getPageTitle() {
-      return osc_output_string_protected($this->_page_title);
+      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
+        return osc_output_string_protected($this->_page_title);
+      }
+
+      return osc_output_string_protected($this->_application->getPageTitle());
     }
 
 /**
@@ -342,7 +340,11 @@
  */
 
     function getPageContentsFilename() {
-      return $this->_page_contents;
+      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
+        return $this->_page_contents;
+      }
+
+      return $this->_application->getPageContent();
     }
 
 /**
@@ -400,7 +402,11 @@
  */
 
     function hasPageTitle() {
-      return !empty($this->_page_title);
+      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
+        return strlen($this->_page_title) > 0;
+      }
+
+      return strlen($this->_application->getPageTitle()) > 0;
     }
 
 /**
@@ -488,7 +494,7 @@
  */
 
     function set($code = null) {
-      if ( (isset($_SESSION['template']) === false) || !empty($code) || (isset($_GET['template']) && !empty($_GET['template'])) ) {
+      if ( !isset($_SESSION['template']) || !empty($code) || (isset($_GET['template']) && !empty($_GET['template'])) ) {
         if ( !empty( $code ) ) {
           $set_template = $code;
         } else {
@@ -525,7 +531,12 @@
  */
 
     function setPageTitle($title) {
-      $this->_page_title = $title;
+      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
+        $this->_page_title = $title;
+        return true;
+      }
+
+      $this->_application->setPageTitle($title);
     }
 
 /**
@@ -547,7 +558,12 @@
  */
 
     function setPageContentsFilename($filename) {
-      $this->_page_contents = $filename;
+      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
+        $this->_page_contents = $filename;
+        return true;
+      }
+
+      $this->_application->setPageContent($filename);
     }
 
 /**

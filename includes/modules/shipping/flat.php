@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,27 +9,22 @@
 */
 
   class osC_Shipping_flat extends osC_Shipping {
-    var $icon;
+    protected $icon;
+    protected $_title;
+    protected $_code = 'flat';
+    protected $_status = false;
+    protected $_sort_order;
 
-    var $_title,
-        $_code = 'flat',
-        $_status = false,
-        $_sort_order;
-
-// class constructor
-    function osC_Shipping_flat() {
-      global $osC_Language;
-
+    public function __construct() {
       $this->icon = '';
 
-      $this->_title = $osC_Language->get('shipping_flat_title');
-      $this->_description = $osC_Language->get('shipping_flat_description');
+      $this->_title = __('shipping_flat_title');
+      $this->_description = __('shipping_flat_description');
       $this->_status = (defined('MODULE_SHIPPING_FLAT_STATUS') && (MODULE_SHIPPING_FLAT_STATUS == 'True') ? true : false);
       $this->_sort_order = (defined('MODULE_SHIPPING_FLAT_SORT_ORDER') ? MODULE_SHIPPING_FLAT_SORT_ORDER : null);
     }
 
-// class methods
-    function initialize() {
+    public function initialize() {
       global $osC_Database, $osC_ShoppingCart;
 
       $this->tax_class = MODULE_SHIPPING_FLAT_TAX_CLASS;
@@ -63,13 +54,11 @@
       }
     }
 
-    function quote() {
-      global $osC_Language;
-
+    public function quote() {
       $this->quotes = array('id' => $this->_code,
                             'module' => $this->_title,
                             'methods' => array(array('id' => $this->_code,
-                                                     'title' => $osC_Language->get('shipping_flat_method'),
+                                                     'title' => __('shipping_flat_method'),
                                                      'cost' => MODULE_SHIPPING_FLAT_COST)),
                             'tax_class_id' => $this->tax_class);
 

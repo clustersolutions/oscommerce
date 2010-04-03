@@ -27,13 +27,15 @@
   require('functions/general.php');
   require('../includes/functions/html_output.php');
 
-  require('../includes/classes/database.php');
-
+  require('../includes/classes/Database.php');
+  require('../includes/classes/Database/mysqli.php');
+  require('../includes/classes/Database/mysqli_innodb.php');
+  
   require('../includes/classes/xml.php');
 
   session_start();
 
-  require('../admin/includes/classes/directory_listing.php');
+  require('../includes/classes/DirectoryListing.php');
 
   require('includes/classes/language.php');
   $osC_Language = new osC_LanguageInstall();

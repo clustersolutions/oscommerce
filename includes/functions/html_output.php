@@ -21,7 +21,7 @@
  */
 
   function osc_href_link($page = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_full_address = false) {
-    global $request_type, $osC_Session, $osC_Services;
+    global $request_type, $osC_Services;
 
     if (!in_array($connection, array('NONSSL', 'SSL', 'AUTO'))) {
       $connection = 'NONSSL';
@@ -77,12 +77,12 @@
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
-    if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+    if ( ($add_session_id === true) && OSCOM_Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
       if (!osc_empty(SID)) {
         $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
-          $_sid = $osC_Session->getName() . '=' . $osC_Session->getID();
+          $_sid = OSCOM_Registry::get('Session')->getName() . '=' . OSCOM_Registry::get('Session')->getID();
         }
       }
     }
@@ -505,10 +505,8 @@
  */
 
   function osc_draw_hidden_session_id_field() {
-    global $osC_Session;
-
-    if ($osC_Session->hasStarted() && !osc_empty(SID)) {
-      return osc_draw_hidden_field($osC_Session->getName(), $osC_Session->getID());
+    if (OSCOM_Registry::get('Session')->hasStarted() && !osc_empty(SID)) {
+      return osc_draw_hidden_field(OSCOM_Registry::get('Session')->getName(), OSCOM_Registry::get('Session')->getID());
     }
   }
 

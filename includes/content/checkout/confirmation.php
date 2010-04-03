@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id:confirmation.php 188 2005-09-15 02:25:52 +0200 (Do, 15 Sep 2005) hpdl $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,45 +9,53 @@
 */
 
   require('includes/classes/address_book.php');
+  require('includes/classes/payment.php');
+  require('includes/classes/order.php');
 
   class osC_Checkout_Confirmation extends osC_Template {
+    protected $_module = 'confirmation';
+    protected $_group = 'checkout';
+    protected $_page_title;
+    protected $_page_contents = 'confirmation.php';
+    protected $_page_image = 'table_background_confirmation.gif';
 
-/* Private variables */
+    public function __construct() {
+      global $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_MessageStack, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
 
-    var $_module = 'confirmation',
-        $_group = 'checkout',
-        $_page_title,
-        $_page_contents = 'checkout_confirmation.php',
-        $_page_image = 'table_background_confirmation.gif';
-
-/* Class constructor */
-
-    function osC_Checkout_Confirmation() {
-      global $osC_Session, $osC_Services, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_MessageStack, $osC_NavigationHistory, $osC_Breadcrumb, $osC_Payment;
-
-      if ($osC_Customer->isLoggedOn() === false) {
-        $osC_NavigationHistory->setSnapshot();
-
-        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
-      }
-
-      if ($osC_ShoppingCart->hasContents() === false) {
+// redirect to shopping cart if shopping cart is empty
+      if ( !$osC_ShoppingCart->hasContents() ) {
         osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
       }
 
-// if no shipping method has been selected, redirect the customer to the shipping method selection page
-      if ($osC_ShoppingCart->hasShippingAddress() == false) {
-        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'shipping', 'SSL'));
+// check product type perform_order conditions
+      foreach ( $osC_ShoppingCart->getProducts() as $product ) {
+        $osC_Product = new osC_Product($product['id']);
+
+        if ( !$osC_Product->isTypeActionAllowed('perform_order') ) {
+          osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'SSL'));
+        }
       }
 
-      include('includes/classes/order.php');
+// load the selected payment module
+      $osC_Payment = new osC_Payment($osC_ShoppingCart->getBillingMethod('id'));
 
-      $this->_page_title = $osC_Language->get('confirmation_heading');
+      if ( isset($_GET[$this->_module]) && ($_GET[$this->_module] == 'process') ) {
+        $osC_Payment->process();
+
+        $osC_ShoppingCart->reset(true);
+
+// unregister session variables used during checkout
+        unset($_SESSION['comments']);
+
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'success', 'SSL'));
+      }
+
+      $this->_page_title = __('confirmation_heading');
 
       $osC_Language->load('order');
 
-      if ($osC_Services->isStarted('breadcrumb')) {
-        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_confirmation'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+      if ( $osC_Services->isStarted('breadcrumb') ) {
+        $osC_Breadcrumb->add(__('breadcrumb_checkout_confirmation'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
       if ( (isset($_POST['comments'])) && (isset($_SESSION['comments'])) && (empty($_POST['comments'])) ) {
@@ -62,37 +66,12 @@
 
       if (DISPLAY_CONDITIONS_ON_CHECKOUT == '1') {
         if (!isset($_POST['conditions']) || ($_POST['conditions'] != '1')) {
-          $osC_MessageStack->add('checkout_payment', $osC_Language->get('error_conditions_not_accepted'), 'error');
+          $osC_MessageStack->add('checkout_payment', __('error_conditions_not_accepted'), 'error');
         }
-      }
-
-// load the selected payment module
-      include('includes/classes/payment.php');
-      $osC_Payment = new osC_Payment((isset($_POST['payment_method']) ? $_POST['payment_method'] : $osC_ShoppingCart->getBillingMethod('id')));
-
-      if (isset($_POST['payment_method'])) {
-        $osC_ShoppingCart->setBillingMethod(array('id' => $_POST['payment_method'], 'title' => $GLOBALS['osC_Payment_' . $_POST['payment_method']]->getMethodTitle()));
-      }
-
-      if ( $osC_Payment->hasActive() && ((isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) === false) || (isset($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && is_object($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]) && ($GLOBALS['osC_Payment_' . $osC_ShoppingCart->getBillingMethod('id')]->isEnabled() === false))) ) {
-        $osC_MessageStack->add('checkout_payment', $osC_Language->get('error_no_payment_module_selected'), 'error');
-      }
-
-      if ($osC_MessageStack->size('checkout_payment') > 0) {
-        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment', 'SSL'));
       }
 
       if ($osC_Payment->hasActive()) {
         $osC_Payment->pre_confirmation_check();
-      }
-
-// Stock Check
-      if ( (STOCK_CHECK == '1') && (STOCK_ALLOW_CHECKOUT == '-1') ) {
-        foreach ($osC_ShoppingCart->getProducts() as $product) {
-          if (!$osC_ShoppingCart->isInStock($product['item_id'])) {
-            osc_redirect(osc_href_link(FILENAME_CHECKOUT, null, 'AUTO'));
-          }
-        }
       }
     }
   }

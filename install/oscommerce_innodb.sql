@@ -42,6 +42,8 @@ ALTER TABLE osc_orders_total engine = InnoDB;
 ALTER TABLE osc_orders_transactions_history engine = InnoDB;
 ALTER TABLE osc_orders_transactions_status engine = InnoDB;
 ALTER TABLE osc_product_attributes engine = InnoDB;
+ALTER TABLE osc_product_types engine = InnoDB;
+ALTER TABLE osc_product_types_assignments engine = InnoDB;
 ALTER TABLE osc_products engine = InnoDB;
 ALTER TABLE osc_products_description engine = InnoDB;
 ALTER TABLE osc_products_images engine = InnoDB;
@@ -98,7 +100,6 @@ ALTER TABLE osc_manufacturers_info add CONSTRAINT idx_manufacturers_info_languag
 
 ALTER TABLE osc_newsletters_log add CONSTRAINT idx_newsletters_log_newsletters_id FOREIGN KEY (newsletters_id) REFERENCES osc_newsletters (newsletters_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE osc_orders add CONSTRAINT idx_orders_customers_id FOREIGN KEY (customers_id) REFERENCES osc_customers (customers_id) ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE osc_orders add CONSTRAINT idx_orders_status FOREIGN KEY (orders_status) REFERENCES osc_orders_status (orders_status_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 ALTER TABLE osc_orders_products add CONSTRAINT idx_orders_products_orders_id FOREIGN KEY (orders_id) REFERENCES osc_orders (orders_id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -121,9 +122,12 @@ ALTER TABLE osc_orders_transactions_status add CONSTRAINT idx_orders_transaction
 ALTER TABLE osc_product_attributes add CONSTRAINT idx_pa_products_id FOREIGN KEY (products_id) REFERENCES osc_products (products_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE osc_product_attributes add CONSTRAINT idx_pa_languages_id FOREIGN KEY (languages_id) REFERENCES osc_languages (languages_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE osc_product_types_assignments add CONSTRAINT idx_product_types_assignments_types_id FOREIGN KEY (types_id) REFERENCES osc_product_types (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE osc_products add CONSTRAINT idx_products_parent_id FOREIGN KEY (parent_id) REFERENCES osc_products (products_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE osc_products add CONSTRAINT idx_products_weight_class FOREIGN KEY (products_weight_class) REFERENCES osc_weight_classes (weight_class_id) ON DELETE RESTRICT ON UPDATE CASCADE;
 ALTER TABLE osc_products add CONSTRAINT idx_products_tax_class_id FOREIGN KEY (products_tax_class_id) REFERENCES osc_tax_class (tax_class_id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE osc_products add CONSTRAINT idx_products_types_id FOREIGN KEY (products_types_id) REFERENCES osc_product_types (id) ON DELETE SET NULL ON UPDATE CASCADE;
 ALTER TABLE osc_products add CONSTRAINT idx_products_manufacturers_id FOREIGN KEY (manufacturers_id) REFERENCES osc_manufacturers (manufacturers_id) ON DELETE SET NULL ON UPDATE CASCADE;
 
 ALTER TABLE osc_products_description add CONSTRAINT idx_products_id FOREIGN KEY (products_id) REFERENCES osc_products (products_id) ON DELETE CASCADE ON UPDATE CASCADE;

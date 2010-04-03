@@ -46,6 +46,8 @@
   define('TABLE_ORDERS_TRANSACTIONS_HISTORY', DB_TABLE_PREFIX . 'orders_transactions_history');
   define('TABLE_ORDERS_TRANSACTIONS_STATUS', DB_TABLE_PREFIX . 'orders_transactions_status');
   define('TABLE_PRODUCT_ATTRIBUTES', DB_TABLE_PREFIX . 'product_attributes');
+  define('TABLE_PRODUCT_TYPES', DB_TABLE_PREFIX . 'product_types');
+  define('TABLE_PRODUCT_TYPES_ASSIGNMENTS', DB_TABLE_PREFIX . 'product_types_assignments');
   define('TABLE_PRODUCTS', DB_TABLE_PREFIX . 'products');
   define('TABLE_PRODUCTS_DESCRIPTION', DB_TABLE_PREFIX . 'products_description');
   define('TABLE_PRODUCTS_IMAGES', DB_TABLE_PREFIX . 'products_images');

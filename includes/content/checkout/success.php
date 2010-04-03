@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,57 +9,48 @@
 */
 
   class osC_Checkout_Success extends osC_Template {
+    protected $_module = 'success';
+    protected $_group = 'checkout';
+    protected $_page_title;
+    protected $_page_contents = 'success.php';
 
-/* Private variables */
+    public function __construct() {
+      global $osC_Services, $osC_Breadcrumb;
 
-    var $_module = 'success',
-        $_group = 'checkout',
-        $_page_title,
-        $_page_contents = 'checkout_success.php';
+      $this->_page_title = __('success_heading');
 
-/* Class constructor */
-
-    function osC_Checkout_Success() {
-      global $osC_Services, $osC_Language, $osC_Customer, $osC_NavigationHistory, $osC_Breadcrumb;
-
-      $this->_page_title = $osC_Language->get('success_heading');
-
-      if ($osC_Customer->isLoggedOn() === false) {
-        $osC_NavigationHistory->setSnapshot();
-
-        osc_redirect(osc_href_link(FILENAME_ACCOUNT, 'login', 'SSL'));
+      if ( $osC_Services->isStarted('breadcrumb') ) {
+        $osC_Breadcrumb->add(__('breadcrumb_checkout_success'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
       }
 
-      if ($osC_Services->isStarted('breadcrumb')) {
-        $osC_Breadcrumb->add($osC_Language->get('breadcrumb_checkout_success'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
-      }
-
-      if ($_GET[$this->_module] == 'update') {
+      if ( $_GET[$this->_module] == 'update' ) {
         $this->_process();
       }
     }
 
-/* Private methods */
+    protected function _process() {
+      global $osC_Customer;
 
-    function _process() {
       $notify_string = '';
 
-      $products_array = (isset($_POST['notify']) ? $_POST['notify'] : array());
+      if ( $osC_Customer->isLoggedOn() ) {
+        $products_array = (isset($_POST['notify']) ? $_POST['notify'] : array());
 
-      if (!is_array($products_array)) {
-        $products_array = array($products_array);
-      }
-
-      $notifications = array();
-
-      foreach ($products_array as $product_id) {
-        if (is_numeric($product_id) && !in_array($product_id, $notifications)) {
-          $notifications[] = $product_id;
+        if ( !is_array($products_array) ) {
+          $products_array = array($products_array);
         }
-      }
 
-      if (!empty($notifications)) {
-        $notify_string = 'action=notify_add&products=' . implode(';', $notifications);
+        $notifications = array();
+
+        foreach ( $products_array as $product_id ) {
+          if ( is_numeric($product_id) && !in_array($product_id, $notifications) ) {
+            $notifications[] = $product_id;
+          }
+        }
+
+        if ( !empty($notifications) ) {
+          $notify_string = 'action=notify_add&products=' . implode(';', $notifications);
+        }
       }
 
       osc_redirect(osc_href_link(FILENAME_DEFAULT, $notify_string, 'AUTO'));

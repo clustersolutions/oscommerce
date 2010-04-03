@@ -116,15 +116,15 @@
     <h2><?php echo $osC_Language->get('page_heading_installation_type'); ?></h2>
 
 <?php
-  if (file_exists(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php') && !is_writeable(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php')) {
-    @chmod(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php', 0777);
+  if (file_exists(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php') && !is_writeable(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php')) {
+    @chmod(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php', 0777);
   }
 
-  if (file_exists(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php') && !is_writeable(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php')) {
+  if (file_exists(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php') && !is_writeable(osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php')) {
 ?>
 
     <div class="noticeBox">
-      <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), osc_realpath(dirname(__FILE__) . '/../../../includes') . '/configure.php'); ?>
+      <?php echo sprintf($osC_Language->get('error_configuration_file_not_writeable'), osc_realpath(dirname(__FILE__) . '/../../../includes') . '/config.php'); ?>
 
       <?php echo $osC_Language->get('error_configuration_file_alternate_method'); ?>
     </div>

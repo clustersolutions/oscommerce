@@ -189,9 +189,7 @@
     }
 
     function _parseParameters($array, $additional_exclude = array()) {
-      global $osC_Session;
-
-      $exclude = array('x', 'y', $osC_Session->getName());
+      $exclude = array('x', 'y', OSCOM_Registry::get('Session')->getName());
 
       if (is_array($additional_exclude) && (empty($additional_exclude) === false)) {
         $exclude = array_merge($exclude, $additional_exclude);

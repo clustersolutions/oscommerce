@@ -45,7 +45,9 @@
         $osC_Language->load('modules-payment');
 
         foreach ($this->_modules as $modules) {
-          include('includes/modules/payment/' . $modules . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
+          if ( !class_exists('osC_Payment_' . $modules) ) {
+            include('includes/modules/payment/' . $modules . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
+          }
 
           $module_class = 'osC_Payment_' . $modules;
 
@@ -343,6 +345,18 @@
           if ($GLOBALS['osC_Payment_' . $module]->isEnabled()) {
             $active++;
           }
+        }
+      }
+
+      return $active;
+    }
+
+    function getActive() {
+      $active = array();
+
+      foreach ( $this->_modules as $module ) {
+        if ( $GLOBALS['osC_Payment_' . $module]->isEnabled() ) {
+          $active[] = $module;
         }
       }
 

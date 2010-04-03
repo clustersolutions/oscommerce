@@ -14,7 +14,7 @@
 
   class osC_Actions_cart_remove {
     function execute() {
-      global $osC_Session, $osC_ShoppingCart;
+      global $osC_ShoppingCart;
 
       if ( is_numeric($_GET['item']) ) {
         $osC_ShoppingCart->remove($_GET['item']);

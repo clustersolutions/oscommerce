@@ -25,14 +25,14 @@
 /* Class constructor */
 
     function osC_Products_Products() {
-      global $osC_Database, $osC_Services, $osC_Session, $osC_Language, $osC_Breadcrumb, $osC_Product;
+      global $osC_Database, $osC_Services, $osC_Language, $osC_Breadcrumb, $osC_Product;
 
       if (empty($_GET) === false) {
         $id = false;
 
 // PHP < 5.0.2; array_slice() does not preserve keys and will not work with numerical key values, so foreach() is used
         foreach ($_GET as $key => $value) {
-          if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
+          if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
             $id = $key;
           }
 

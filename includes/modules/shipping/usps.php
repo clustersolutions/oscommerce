@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -17,27 +13,23 @@
   }
 
   class osC_Shipping_usps extends osC_Shipping {
-    var $icon, $countries;
+    protected $icon;
+    protected $countries;
+    protected $_title;
+    protected $_code = 'usps';
+    protected $_status = false;
+    protected $_sort_order;
 
-    var $_title,
-        $_code = 'usps',
-        $_status = false,
-        $_sort_order;
-
-// class constructor
-    function osC_Shipping_usps() {
-      global $osC_Language;
-
+    public function __construct() {
       $this->icon = DIR_WS_IMAGES . 'icons/shipping_usps.gif';
 
-      $this->_title = $osC_Language->get('shipping_usps_title');
-      $this->_description = $osC_Language->get('shipping_usps_description');
+      $this->_title = __('shipping_usps_title');
+      $this->_description = __('shipping_usps_description');
       $this->_status = (defined('MODULE_SHIPPING_USPS_STATUS') && (MODULE_SHIPPING_USPS_STATUS == 'True') ? true : false);
       $this->_sort_order = (defined('MODULE_SHIPPING_USPS_SORT_ORDER') ? MODULE_SHIPPING_USPS_SORT_ORDER : null);
     }
 
-// class methods
-    function initialize() {
+    public function initialize() {
       global $osC_Database, $osC_ShoppingCart;
 
       $this->tax_class = MODULE_SHIPPING_USPS_TAX_CLASS;
@@ -82,18 +74,27 @@
                                 'Surface Letter' => 'Economy (Surface) Letter-post',
                                 'Surface Post' => 'Economy (Surface) Parcel Post');
 
-      $this->countries = $this->country_list();
+      $this->countries = $this->_country_list();
     }
 
-    function quote() {
-      global $osC_Language, $osC_ShoppingCart;
+    public function quote() {
+      global $osC_ShoppingCart;
 
       $this->_setMachinable('False');
       $this->_setContainer('None');
       $this->_setSize('REGULAR');
 
 // usps doesnt accept zero weight
-      $shipping_weight = ($osC_ShoppingCart->getShippingBoxesWeight() < 0.1 ? 0.1 : $osC_ShoppingCart->getShippingBoxesWeight());
+      $shipping_weight = 0.1;
+
+      foreach ( $osC_ShoppingCart->getProducts() as $product ) {
+        $osC_Product = new osC_Product($product['id']);
+
+        if ( $osC_Product->isTypeActionAllowed('apply_shipping_fees') ) {
+          $shipping_weight += $product['weight'] * $product['quantity'];
+        }
+      }
+
       $shipping_pounds = floor ($shipping_weight);
       $shipping_ounces = round(16 * ($shipping_weight - floor($shipping_weight)));
       $this->_setWeight($shipping_pounds, $shipping_ounces);
@@ -106,7 +107,7 @@
                                 'error' => $uspsQuote['error']);
         } else {
           $this->quotes = array('id' => $this->_code,
-                                'module' => $this->_title . ' (' . $osC_ShoppingCart->numberOfShippingBoxes() . ' x ' . $shipping_weight . 'lbs)',
+                                'module' => $this->_title . ' (' . $osC_ShoppingCart->numberOfShippingBoxes() . ' x ' . ($osC_ShoppingCart->getShippingBoxesWeight() < 0.1 ? 0.1 : $osC_ShoppingCart->getShippingBoxesWeight()) . 'lbs)',
                                 'tax_class_id' => $this->tax_class);
 
           $methods = array();
@@ -123,7 +124,7 @@
         }
       } else {
         $this->quotes = array('module' => $this->_title,
-                              'error' => $osC_Language->get('shipping_usps_error'));
+                              'error' => __('shipping_usps_error'));
       }
 
       if (!empty($this->icon)) $this->quotes['icon'] = osc_image($this->icon, $this->_title);
@@ -131,28 +132,28 @@
       return $this->quotes;
     }
 
-    function _setService($service) {
+    protected function _setService($service) {
       $this->service = $service;
     }
 
-    function _setWeight($pounds, $ounces=0) {
+    protected function _setWeight($pounds, $ounces=0) {
       $this->pounds = $pounds;
       $this->ounces = $ounces;
     }
 
-    function _setContainer($container) {
+    protected function _setContainer($container) {
       $this->container = $container;
     }
 
-    function _setSize($size) {
+    protected function _setSize($size) {
       $this->size = $size;
     }
 
-    function _setMachinable($machinable) {
+    protected function _setMachinable($machinable) {
       $this->machinable = $machinable;
     }
 
-    function _getQuote() {
+    protected function _getQuote() {
       global $osC_ShoppingCart;
 
       if ($osC_ShoppingCart->getShippingAddress('country_id') == SHIPPING_ORIGIN_COUNTRY) {
@@ -300,7 +301,7 @@
       return ((sizeof($rates) > 0) ? $rates : false);
     }
 
-    function country_list() {
+    protected function _country_list() {
       $list = array('AF' => 'Afghanistan',
                     'AL' => 'Albania',
                     'DZ' => 'Algeria',

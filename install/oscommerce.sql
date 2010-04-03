@@ -1,9 +1,5 @@
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2009 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -481,6 +477,26 @@ CREATE TABLE osc_product_attributes (
   KEY idx_pa_languages_id (languages_id)
 ) ENGINE=MyISAM;
 
+DROP TABLE IF EXISTS osc_product_types;
+CREATE TABLE osc_product_types (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_product_types_title (title)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_product_types_assignments;
+CREATE TABLE osc_product_types_assignments (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  types_id int unsigned NOT NULL,
+  action varchar(255) NOT NULL,
+  module varchar(255),
+  sort_order tinyint unsigned,
+  PRIMARY KEY (id),
+  KEY idx_product_types_assignments_types_id (types_id),
+  KEY idx_product_types_assignments_actions (action)
+) ENGINE=MyISAM;
+
 DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
   products_id int unsigned NOT NULL AUTO_INCREMENT,
@@ -494,6 +510,7 @@ CREATE TABLE osc_products (
   products_weight_class int unsigned,
   products_status tinyint(1) NOT NULL,
   products_tax_class_id int unsigned,
+  products_types_id int unsigned,
   manufacturers_id int unsigned,
   products_ordered int unsigned NOT NULL DEFAULT 0,
   has_children int DEFAULT 0,
@@ -502,7 +519,8 @@ CREATE TABLE osc_products (
   KEY idx_products_date_added (products_date_added),
   KEY idx_products_weight_class (products_weight_class),
   KEY idx_products_tax_class_id (products_tax_class_id),
-  KEY idx_products_manufacturers_id (manufacturers_id)
+  KEY idx_products_manufacturers_id (manufacturers_id),
+  KEY idx_products_types_id (products_types_id)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_products_description;
@@ -5874,6 +5892,9 @@ INSERT INTO osc_orders_transactions_status VALUES ( '2', '1', 'Cancel');
 INSERT INTO osc_orders_transactions_status VALUES ( '3', '1', 'Approve');
 INSERT INTO osc_orders_transactions_status VALUES ( '4', '1', 'Inquiry');
 
+INSERT INTO osc_product_types values (1, 'Shippable');
+INSERT INTO osc_product_types_assignments values (1, 1, 'add_to_shopping_cart', 'require_customer_account', 1);
+
 INSERT INTO osc_products_images_groups values (1, 1, 'Originals', 'originals', 0, 0, 0);
 INSERT INTO osc_products_images_groups values (2, 1, 'Thumbnails', 'thumbnails', 100, 80, 0);
 INSERT INTO osc_products_images_groups values (3, 1, 'Product Information Page', 'product_info', 188, 150, 0);
@@ -5991,7 +6012,6 @@ INSERT INTO osc_fk_relationships VALUES (null, 'languages_definitions', 'languag
 INSERT INTO osc_fk_relationships VALUES (null, 'manufacturers_info', 'manufacturers', 'manufacturers_id', 'manufacturers_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'manufacturers_info', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'newsletters_log', 'newsletters', 'newsletters_id', 'newsletters_id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (null, 'orders', 'customers', 'customers_id', 'customers_id', 'cascade', 'set_null');
 INSERT INTO osc_fk_relationships VALUES (null, 'orders', 'orders_status', 'orders_status', 'orders_status_id', 'cascade', 'restrict');
 INSERT INTO osc_fk_relationships VALUES (null, 'orders_products', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'orders_products_download', 'orders', 'orders_id', 'orders_id', 'cascade', 'cascade');
@@ -6004,10 +6024,12 @@ INSERT INTO osc_fk_relationships VALUES (null, 'orders_transactions_history', 'o
 INSERT INTO osc_fk_relationships VALUES (null, 'orders_transactions_status', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'product_attributes', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'product_attributes', 'languages', 'languages_id', 'languages_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'product_types_assignments', 'product_types', 'types_id', 'id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'products', 'products', 'parent_id', 'products_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'products', 'weight_classes', 'products_weight_class', 'weight_class_id', 'cascade', 'restrict');
 INSERT INTO osc_fk_relationships VALUES (null, 'products', 'tax_class', 'products_tax_class_id', 'tax_class_id', 'cascade', 'set_null');
 INSERT INTO osc_fk_relationships VALUES (null, 'products', 'manufacturers', 'manufacturers_id', 'manufacturers_id', 'cascade', 'set_null');
+INSERT INTO osc_fk_relationships VALUES (null, 'products', 'product_types', 'products_types_id', 'id', 'cascade', 'set_null');
 INSERT INTO osc_fk_relationships VALUES (null, 'products_description', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'products_description', 'languages', 'language_id', 'languages_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'products_images', 'products', 'products_id', 'products_id', 'cascade', 'cascade');

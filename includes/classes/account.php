@@ -67,7 +67,7 @@
  */
 
     public static function createEntry($data) {
-      global $osC_Database, $osC_Session, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_NavigationHistory;
+      global $osC_Database, $osC_Language, $osC_ShoppingCart, $osC_Customer, $osC_NavigationHistory;
 
       $Qcustomer = $osC_Database->query('insert into :table_customers (customers_firstname, customers_lastname, customers_email_address, customers_newsletter, customers_status, customers_ip_address, customers_password, customers_gender, customers_dob, number_of_logons, date_account_created) values (:customers_firstname, :customers_lastname, :customers_email_address, :customers_newsletter, :customers_status, :customers_ip_address, :customers_password, :customers_gender, :customers_dob, :number_of_logons, :date_account_created)');
       $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
@@ -88,7 +88,7 @@
         $customer_id = $osC_Database->nextID();
 
         if ( SERVICE_SESSION_REGENERATE_ID == '1' ) {
-          $osC_Session->recreate();
+          OSCOM_Registry::get('Session')->recreate();
         }
 
         $osC_Customer->setCustomerData($customer_id);

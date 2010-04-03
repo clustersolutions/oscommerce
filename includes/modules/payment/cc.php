@@ -228,7 +228,7 @@
 
         $osC_MessageStack->add('checkout_payment', $error, 'error');
 
-        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&cc_owner=' . $osC_CreditCard->getOwner() . '&cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
+        osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'billing&cc_owner=' . $osC_CreditCard->getOwner() . '&cc_expires_month=' . $osC_CreditCard->getExpiryMonth() . '&cc_expires_year=' . $osC_CreditCard->getExpiryYear(), 'SSL'));
       }
     }
   }

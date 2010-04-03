@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,17 +9,18 @@
 */
 
   class osC_Order {
-    var $info, $totals, $products, $customer, $delivery, $content_type;
+    protected $info;
+    protected $totals;
+    protected $products;
+    protected $customer;
+    protected $delivery;
+    protected $content_type;
 
-/* Private variables */
+    protected $_id;
 
-    var $_id;
-
-/* Class constructor */
-
-    function __construct($order_id = '') {
-      if (is_numeric($order_id)) {
-        $this->_id = $order_id;
+    public function __construct($id = null) {
+      if ( is_numeric($id) ) {
+        $this->_id = $id;
       }
 
       $this->info = array();
@@ -32,14 +29,12 @@
       $this->customer = array();
       $this->delivery = array();
 
-      if (!empty($order_id)) {
-        $this->query($order_id);
+      if ( is_numeric($id) ) {
+        $this->query($id);
       } else {
         $this->cart();
       }
     }
-
-/* Public methods */
 
     function getStatusID($id) {
       global $osC_Database;
@@ -103,22 +98,34 @@
       }
     }
 
-    function insert() {
+    public static function insert() {
       global $osC_Database, $osC_Customer, $osC_Language, $osC_Currencies, $osC_ShoppingCart, $osC_Tax;
 
-      if (isset($_SESSION['prepOrderID'])) {
+      if ( isset($_SESSION['prepOrderID']) ) {
         $_prep = explode('-', $_SESSION['prepOrderID']);
 
-        if ($_prep[0] == $osC_ShoppingCart->getCartID()) {
+        if ( $_prep[0] == $osC_ShoppingCart->getCartID() ) {
           return $_prep[1]; // order_id
         } else {
-          if (osC_Order::getStatusID($_prep[1]) === 4) {
+          if ( osC_Order::getStatusID($_prep[1]) === 4 ) {
             osC_Order::remove($_prep[1]);
           }
         }
       }
 
-      $customer_address = osC_AddressBook::getEntry($osC_Customer->getDefaultAddressID())->toArray();
+      if ( $osC_Customer->isLoggedOn() ) {
+        $customer_address = osC_AddressBook::getEntry($osC_Customer->getDefaultAddressID())->toArray();
+      } else {
+        $customer_address = array('entry_company' => $osC_ShoppingCart->getShippingAddress('company'),
+                                  'entry_street_address' => $osC_ShoppingCart->getShippingAddress('street_address'),
+                                  'entry_suburb' => $osC_ShoppingCart->getShippingAddress('suburb'),
+                                  'entry_city' => $osC_ShoppingCart->getShippingAddress('city'),
+                                  'entry_postcode' => $osC_ShoppingCart->getShippingAddress('postcode'),
+                                  'entry_state' => $osC_ShoppingCart->getShippingAddress('state'),
+                                  'entry_zone_id' => $osC_ShoppingCart->getShippingAddress('zone_id'),
+                                  'entry_country_id' => $osC_ShoppingCart->getShippingAddress('country_id'),
+                                  'entry_telephone' => $osC_ShoppingCart->getShippingAddress('telephone'));
+      }
 
       $Qorder = $osC_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_state_code, customers_country, customers_country_iso2, customers_country_iso3, customers_telephone, customers_email_address, customers_address_format, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_state_code, delivery_country, delivery_country_iso2, delivery_country_iso3, delivery_address_format, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_state_code, billing_country, billing_country_iso2, billing_country_iso3, billing_address_format, payment_method, payment_module, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_state_code, :customers_country, :customers_country_iso2, :customers_country_iso3, :customers_telephone, :customers_email_address, :customers_address_format, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_state_code, :delivery_country, :delivery_country_iso2, :delivery_country_iso3, :delivery_address_format, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_state_code, :billing_country, :billing_country_iso2, :billing_country_iso3, :billing_address_format, :payment_method, :payment_module, now(), :orders_status, :currency, :currency_value)');
       $Qorder->bindTable(':table_orders', TABLE_ORDERS);
@@ -171,7 +178,7 @@
 
       $insert_id = $osC_Database->nextID();
 
-      foreach ($osC_ShoppingCart->getOrderTotals() as $module) {
+      foreach ( $osC_ShoppingCart->getOrderTotals() as $module ) {
         $Qtotals = $osC_Database->query('insert into :table_orders_total (orders_id, title, text, value, class, sort_order) values (:orders_id, :title, :text, :value, :class, :sort_order)');
         $Qtotals->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
         $Qtotals->bindInt(':orders_id', $insert_id);
@@ -191,7 +198,7 @@
       $Qstatus->bindValue(':comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : ''));
       $Qstatus->execute();
 
-      foreach ($osC_ShoppingCart->getProducts() as $products) {
+      foreach ( $osC_ShoppingCart->getProducts() as $products ) {
         $Qproducts = $osC_Database->query('insert into :table_orders_products (orders_id, products_id, products_model, products_name, products_price, products_tax, products_quantity) values (:orders_id, :products_id, :products_model, :products_name, :products_price, :products_tax, :products_quantity)');
         $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
         $Qproducts->bindInt(':orders_id', $insert_id);
@@ -252,10 +259,10 @@
       return $insert_id;
     }
 
-    function process($order_id, $status_id = '') {
+    public static function process($order_id, $status_id = null) {
       global $osC_Database;
 
-      if (empty($status_id) || (is_numeric($status_id) === false)) {
+      if ( !is_numeric($status_id) ) {
         $status_id = DEFAULT_ORDERS_STATUS_ID;
       }
 
@@ -278,7 +285,7 @@
       $Qproducts->bindInt(':orders_id', $order_id);
       $Qproducts->execute();
 
-      while ($Qproducts->next()) {
+      while ( $Qproducts->next() ) {
         if (STOCK_LIMITED == '1') {
 
 /********** HPDL ; still uses logic from the shopping cart class
@@ -307,7 +314,7 @@
 
           $Qstock->execute();
 
-          if ($Qstock->numberOfRows() > 0) {
+          if ( $Qstock->numberOfRows() > 0 ) {
             $stock_left = $Qstock->valueInt('products_quantity');
 
 // do not decrement quantities if products_attributes_filename exists
@@ -321,7 +328,7 @@
               $Qupdate->execute();
 // HPDL            }
 
-            if ((STOCK_ALLOW_CHECKOUT == '-1') && ($stock_left < 1)) {
+            if ( (STOCK_ALLOW_CHECKOUT == '-1') && ($stock_left < 1) ) {
               $Qupdate = $osC_Database->query('update :table_products set products_status = 0 where products_id = :products_id');
               $Qupdate->bindTable(':table_products', TABLE_PRODUCTS);
               $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
@@ -343,7 +350,7 @@
       unset($_SESSION['prepOrderID']);
     }
 
-    function sendEmail($id) {
+    public static function sendEmail($id) {
       global $osC_Database, $osC_Language, $osC_Currencies;
 
       $Qorder = $osC_Database->query('select * from :table_orders where orders_id = :orders_id limit 1');
@@ -351,21 +358,21 @@
       $Qorder->bindInt(':orders_id', $id);
       $Qorder->execute();
 
-      if ($Qorder->numberOfRows() === 1) {
+      if ( $Qorder->numberOfRows() === 1 ) {
         $email_order = STORE_NAME . "\n" .
-                       $osC_Language->get('email_order_separator') . "\n" .
-                       sprintf($osC_Language->get('email_order_order_number'), $id) . "\n" .
-                       sprintf($osC_Language->get('email_order_invoice_url'), osc_href_link(FILENAME_ACCOUNT, 'orders=' . $id, 'SSL', false, true, true)) . "\n" .
-                       sprintf($osC_Language->get('email_order_date_ordered'), osC_DateTime::getLong()) . "\n\n" .
-                       $osC_Language->get('email_order_products') . "\n" .
-                       $osC_Language->get('email_order_separator') . "\n";
+                       __('email_order_separator') . "\n" .
+                       sprintf(__('email_order_order_number'), $id) . "\n" .
+                       sprintf(__('email_order_invoice_url'), osc_href_link(FILENAME_ACCOUNT, 'orders=' . $id, 'SSL', false, true, true)) . "\n" .
+                       sprintf(__('email_order_date_ordered'), osC_DateTime::getLong()) . "\n\n" .
+                       __('email_order_products') . "\n" .
+                       __('email_order_separator') . "\n";
 
         $Qproducts = $osC_Database->query('select orders_products_id, products_model, products_name, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id order by orders_products_id');
         $Qproducts->bindTable(':table_orders_products', TABLE_ORDERS_PRODUCTS);
         $Qproducts->bindInt(':orders_id', $id);
         $Qproducts->execute();
 
-        while ($Qproducts->next()) {
+        while ( $Qproducts->next() ) {
           $email_order .= $Qproducts->valueInt('products_quantity') . ' x ' . $Qproducts->value('products_name') . ' (' . $Qproducts->value('products_model') . ') = ' . $osC_Currencies->displayPriceWithTaxRate($Qproducts->value('products_price'), $Qproducts->value('products_tax'), $Qproducts->valueInt('products_quantity'), false, $Qorder->value('currency'), $Qorder->value('currency_value')) . "\n";
 
           $Qvariants = $osC_Database->query('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
@@ -382,20 +389,20 @@
         unset($Qproducts);
         unset($Qvariants);
 
-        $email_order .= $osC_Language->get('email_order_separator') . "\n";
+        $email_order .= __('email_order_separator') . "\n";
 
         $Qtotals = $osC_Database->query('select title, text from :table_orders_total where orders_id = :orders_id order by sort_order');
         $Qtotals->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
         $Qtotals->bindInt(':orders_id', $id);
         $Qtotals->execute();
 
-        while ($Qtotals->next()) {
+        while ( $Qtotals->next() ) {
           $email_order .= strip_tags($Qtotals->value('title') . ' ' . $Qtotals->value('text')) . "\n";
         }
 
         unset($Qtotals);
 
-        if ( (osc_empty($Qorder->value('delivery_name')) === false) && (osc_empty($Qorder->value('delivery_street_address')) === false) ) {
+        if ( !osc_empty($Qorder->value('delivery_name')) && !osc_empty($Qorder->value('delivery_street_address')) ) {
           $address = array('name' => $Qorder->value('delivery_name'),
                            'company' => $Qorder->value('delivery_company'),
                            'street_address' => $Qorder->value('delivery_street_address'),
@@ -409,8 +416,8 @@
                            'postcode' => $Qorder->value('delivery_postcode'),
                            'format' => $Qorder->value('delivery_address_format'));
 
-          $email_order .= "\n" . $osC_Language->get('email_order_delivery_address') . "\n" .
-                          $osC_Language->get('email_order_separator') . "\n" .
+          $email_order .= "\n" . __('email_order_delivery_address') . "\n" .
+                          __('email_order_separator') . "\n" .
                           osC_Address::format($address) . "\n";
 
           unset($address);
@@ -429,8 +436,8 @@
                          'postcode' => $Qorder->value('billing_postcode'),
                          'format' => $Qorder->value('billing_address_format'));
 
-        $email_order .= "\n" . $osC_Language->get('email_order_billing_address') . "\n" .
-                        $osC_Language->get('email_order_separator') . "\n" .
+        $email_order .= "\n" . __('email_order_billing_address') . "\n" .
+                        __('email_order_separator') . "\n" .
                         osC_Address::format($address) . "\n\n";
 
         unset($address);
@@ -441,8 +448,8 @@
         $Qstatus->bindInt(':language_id', $osC_Language->getID());
         $Qstatus->execute();
 
-        $email_order .= sprintf($osC_Language->get('email_order_status'), $Qstatus->value('orders_status_name')) . "\n" .
-                        $osC_Language->get('email_order_separator') . "\n";
+        $email_order .= sprintf(__('email_order_status'), $Qstatus->value('orders_status_name')) . "\n" .
+                        __('email_order_separator') . "\n";
 
         unset($Qstatus);
 
@@ -451,15 +458,15 @@
         $Qstatuses->bindInt(':orders_id', $id);
         $Qstatuses->execute();
 
-        while ($Qstatuses->next()) {
+        while ( $Qstatuses->next() ) {
           $email_order .= osC_DateTime::getLong($Qstatuses->value('date_added')) . "\n\t" . wordwrap(str_replace("\n", "\n\t", $Qstatuses->value('comments')), 60, "\n\t", 1) . "\n\n";
         }
 
         unset($Qstatuses);
 
 //        if (is_object($GLOBALS[$payment])) {
-//          $email_order .= $osC_Language->get('email_order_payment_method') . "\n" .
-//                          $osC_Language->get('email_order_separator') . "\n";
+//          $email_order .= __('email_order_payment_method') . "\n" .
+//                          __('email_order_separator') . "\n";
 
 //          $email_order .= $osC_ShoppingCart->getBillingMethod('title') . "\n\n";
 //          if (isset($GLOBALS[$payment]->email_footer)) {
@@ -467,11 +474,11 @@
 //          }
 //        }
 
-        osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), __('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
 // send emails to other people
         if (SEND_EXTRA_ORDER_EMAILS_TO != '') {
-          osc_email('', SEND_EXTRA_ORDER_EMAILS_TO, $osC_Language->get('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          osc_email('', SEND_EXTRA_ORDER_EMAILS_TO, __('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
         }
       }
 

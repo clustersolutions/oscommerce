@@ -1,30 +1,28 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-// start the timer for the page parse time log
+// to delete ///////
   define('PAGE_PARSE_START_TIME', microtime());
+  define('PROJECT_VERSION', 'osCommerce Online Merchant $osCommerce-SIG$');
+  $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
+////////////////////
 
-// set the level of error reporting to E_ALL except E_NOTICE
-  error_reporting(E_ALL ^ E_NOTICE);
 
-// set the local configuration parameters - mainly for developers
-  if ( file_exists('includes/local/configure.php') ) {
-    include('includes/local/configure.php');
-  }
+  define('OSCOM_TIMESTAMP_START', microtime());
 
-// include server parameters
-  require('includes/configure.php');
+  error_reporting(E_ALL);
+
+  define('OSCOM_BASE_DIRECTORY', dirname(dirname(__FILE__)));
+
+  require('core/OSCOM.php');
+  OSCOM::initialize();
 
 // redirect to the installation module if DB_SERVER is empty
   if (strlen(DB_SERVER) < 1) {
@@ -33,11 +31,7 @@
     }
   }
 
-// define the project version
-  define('PROJECT_VERSION', 'osCommerce Online Merchant v3.0a5');
 
-// set the type of request (secure or not)
-  $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
 
   if ($request_type == 'NONSSL') {
     define('DIR_WS_CATALOG', DIR_WS_HTTP_CATALOG);
@@ -55,18 +49,18 @@
   require('includes/database_tables.php');
 
 // initialize the message stack for output messages
-  require('includes/classes/message_stack.php');
-  $osC_MessageStack = new osC_MessageStack();
+//  require('includes/classes/message_stack.php');
+  $osC_MessageStack = new OSCOM_Core_MessageStack();
 
 // initialize the cache class
-  require('includes/classes/cache.php');
-  $osC_Cache = new osC_Cache();
+//  require('includes/classes/cache.php');
+  $osC_Cache = new OSCOM_Core_Cache();
 
 // include the database class
-  require('includes/classes/database.php');
+//  require('includes/classes/database.php');
 
 // make a connection to the database... now
-  $osC_Database = osC_Database::connect();
+  $osC_Database = OSCOM_Core_Database::connect();
 
 // set the application parameters
   $Qcfg = $osC_Database->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
@@ -85,7 +79,7 @@
   require('includes/functions/html_output.php');
 
 // include and start the services
-  require('includes/classes/services.php');
-  $osC_Services = new osC_Services();
+//  require('includes/classes/services.php');
+  $osC_Services = new OSCOM_Core_Services();
   $osC_Services->startServices();
 ?>

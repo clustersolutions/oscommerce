@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -20,41 +16,54 @@
 
 // class constructor
     function osC_Shipping($module = '') {
-      global $osC_Database, $osC_Language;
+      global $osC_Database, $osC_ShoppingCart, $osC_Language;
 
-      $this->_quotes =& $_SESSION['osC_ShoppingCart_data']['shipping_quotes'];
+      $do_shipping = false;
 
-      $Qmodules = $osC_Database->query('select code from :table_templates_boxes where modules_group = "shipping"');
-      $Qmodules->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
-      $Qmodules->setCache('modules-shipping');
-      $Qmodules->execute();
+      foreach ( $osC_ShoppingCart->getProducts() as $product ) {
+        $osC_Product = new osC_Product($product['id']);
 
-      while ($Qmodules->next()) {
-        $this->_modules[] = $Qmodules->value('code');
+        if ( $osC_Product->isTypeActionAllowed('apply_shipping_fees') ) {
+          $do_shipping = true;
+          break;
+        }
       }
 
-      $Qmodules->freeResult();
+      if ( $do_shipping === true ) {
+        $this->_quotes =& $_SESSION['osC_ShoppingCart_data']['shipping_quotes'];
 
-      if (empty($this->_modules) === false) {
-        if ((empty($module) === false) && in_array(substr($module, 0, strpos($module, '_')), $this->_modules)) {
-          $this->_selected_module = $module;
-          $this->_modules = array(substr($module, 0, strpos($module, '_')));
+        $Qmodules = $osC_Database->query('select code from :table_templates_boxes where modules_group = "shipping"');
+        $Qmodules->bindTable(':table_templates_boxes', TABLE_TEMPLATES_BOXES);
+        $Qmodules->setCache('modules-shipping');
+        $Qmodules->execute();
+
+        while ($Qmodules->next()) {
+          $this->_modules[] = $Qmodules->value('code');
         }
 
-        $osC_Language->load('modules-shipping');
+        $Qmodules->freeResult();
 
-        foreach ($this->_modules as $module) {
-          $module_class = 'osC_Shipping_' . $module;
-
-          if (class_exists($module_class) === false) {
-            include('includes/modules/shipping/' . $module . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
+        if (empty($this->_modules) === false) {
+          if ((empty($module) === false) && in_array(substr($module, 0, strpos($module, '_')), $this->_modules)) {
+            $this->_selected_module = $module;
+            $this->_modules = array(substr($module, 0, strpos($module, '_')));
           }
 
-          $GLOBALS[$module_class] = new $module_class();
-          $GLOBALS[$module_class]->initialize();
-        }
+          $osC_Language->load('modules-shipping');
 
-        usort($this->_modules, array('osC_Shipping', '_usortModules'));
+          foreach ($this->_modules as $module) {
+            $module_class = 'osC_Shipping_' . $module;
+
+            if (class_exists($module_class) === false) {
+              include('includes/modules/shipping/' . $module . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
+            }
+
+            $GLOBALS[$module_class] = new $module_class();
+            $GLOBALS[$module_class]->initialize();
+          }
+
+          usort($this->_modules, array('osC_Shipping', '_usortModules'));
+        }
       }
 
       if ( empty($this->_quotes) ) {
