@@ -1,0 +1,66 @@
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
+  class OSCOM_Site_Admin_Module_IndexModules_Customers extends OSCOM_Site_Admin_Application_Index_IndexModules {
+    public function __construct() {
+      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/Customers.php');
+
+      $this->_title = __('admin_indexmodules_customers_title');
+      $this->_title_link = OSCOM::getLink(null, 'Customers');
+
+      if ( osC_Access::hasAccess('customers') ) {
+        $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
+                       '  <thead>' .
+                       '    <tr>' .
+                       '      <th>' . __('admin_indexmodules_customers_table_heading_customers') . '</th>' .
+                       '      <th>' . __('admin_indexmodules_customers_table_heading_date') . '</th>' .
+                       '      <th>' . __('admin_indexmodules_customers_table_heading_status') . '</th>' .
+                       '    </tr>' .
+                       '  </thead>' .
+                       '  <tbody>';
+
+        $Qcustomers = OSCOM_Registry::get('Database')->query('select customers_id, customers_gender, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
+        $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
+        $Qcustomers->execute();
+
+        $counter = 0;
+
+        while ( $Qcustomers->next() ) {
+          $customer_icon = osc_icon('people.png');
+
+          if ( ACCOUNT_GENDER > -1 ) {
+            switch ( $Qcustomers->value('customers_gender') ) {
+              case 'm':
+                $customer_icon = osc_icon('user_male.png');
+
+                break;
+
+              case 'f':
+                $customer_icon = osc_icon('user_female.png');
+
+                break;
+            }
+          }
+
+          $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
+                          '      <td>' . osc_link_object(OSCOM::getLink(null, 'Customers', 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), $customer_icon . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
+                          '      <td>' . $Qcustomers->value('date_account_created') . '</td>' .
+                          '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
+                          '    </tr>';
+
+          $counter++;
+        }
+
+        $this->_data .= '  </tbody>' .
+                        '</table>';
+      }
+    }
+  }
+?>

@@ -29,8 +29,6 @@
  */
 
   function osc_redirect_admin($url) {
-    global $osC_Session;
-
     if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
       $url = osc_href_link_admin(FILENAME_DEFAULT);
     }
@@ -312,7 +310,7 @@
       }
 
       if (!function_exists($function_name)) {
-        include('includes/functions/cfg_parameters/' . $function_name . '.php');
+        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/cfg_parameters/' . $function_name . '.php');
       }
 
       if (!empty($function_parameter)) {

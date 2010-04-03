@@ -1,0 +1,111 @@
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+?>
+
+<h1><?php echo osc_link_object(OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID']), $osC_Template->getPageTitle()); ?></h1>
+
+<?php
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
+  }
+?>
+
+<form id="liveSearchForm">
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
+</form>
+
+<div style="padding: 20px 5px 5px 5px; height: 16px;">
+  <span id="batchTotalPages"></span>
+  <span id="batchPageLinks"></span>
+</div>
+
+<form name="batch" action="#" method="post">
+
+<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="configurationDataTable">
+  <thead>
+    <tr>
+      <th width="35%;"><?php echo __('table_heading_title'); ?></th>
+      <th><?php echo __('table_heading_value'); ?></th>
+      <th width="150"><?php echo __('table_heading_action'); ?></th>
+      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . __('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'gID=' . $_GET['gID'] . '&action=BatchSave') . '\';" />'; ?></th>
+      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+    </tr>
+  </tfoot>
+  <tbody>
+  </tbody>
+</table>
+
+</form>
+
+<div style="padding: 2px; min-height: 16px;">
+  <span id="dataTableLegend"><?php echo '<b>' . __('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . __('icon_edit'); ?></span>
+  <span id="batchPullDownMenu"></span>
+</div>
+
+<script type="text/javascript">
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+
+  var moduleParams = new Object();
+  moduleParams.page = 1;
+  moduleParams.search = '';
+
+  if ( $.cookie(moduleParamsCookieName) != null ) {
+    var p = $.secureEvalJSON($.cookie(moduleParamsCookieName));
+    moduleParams.page = parseInt(p.page);
+    moduleParams.search = String(p.search);
+  }
+
+  var dataTableName = 'configurationDataTable';
+  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll&gID=' . (int)$_GET['gID']); ?>';
+
+  var configEditLink = '<?php echo OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID'] . '&id=CONFIGID&action=Save'); ?>';
+  var configEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+
+  var osC_DataTable = new osC_DataTable();
+  osC_DataTable.load();
+
+  function feedDataTable(data) {
+    var rowCounter = 0;
+
+    for ( var r in data.entries ) {
+      var record = data.entries[r];
+
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row' + parseInt(record.configuration_id);
+
+      $('#row' + parseInt(record.configuration_id)).mouseover( function() { $(this).addClass('mouseOver'); }).mouseout( function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+        if (event.target.type !== 'checkbox') {
+          $(':checkbox', this).trigger('click');
+        }
+      }).css('cursor', 'pointer');
+
+      var newCell = newRow.insertCell(0);
+      newCell.innerHTML = htmlSpecialChars(record.configuration_title);
+
+      var newCell = newRow.insertCell(1);
+      newCell.innerHTML = htmlSpecialChars(record.configuration_value).replace(/([^>]?)\n/g, '$1<br />\n'); // nl2br() in javascript
+
+      newCell = newRow.insertCell(2);
+      newCell.innerHTML = '<a href="' + configEditLink.replace('CONFIGID', parseInt(record.configuration_id)) + '">' + configEditLinkIcon + '</a>';
+      newCell.align = 'right';
+
+      newCell = newRow.insertCell(3);
+      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.configuration_id) + '" id="batch' + parseInt(record.configuration_id) + '" />';
+      newCell.align = 'center';
+
+      rowCounter++;
+    }
+  }
+</script>

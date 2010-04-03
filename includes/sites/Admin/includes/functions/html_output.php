@@ -36,17 +36,17 @@
  */
 
   function osc_icon($image, $title = null, $group = null, $parameters = null) {
-    global $osC_Language, $osC_Template;
+    global $osC_Template;
 
     if ( is_null($title) ) {
-      $title = $osC_Language->get('icon_' . substr($image, 0, strpos($image, '.')));
+      $title = __('icon_' . substr($image, 0, strpos($image, '.')));
     }
 
     if ( is_null($group) ) {
       $group = '16x16';
     }
 
-    return osc_image('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image, $title, null, null, $parameters);
+    return osc_image(OSCOM::getPublicSiteLink('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image), $title, null, null, $parameters);
   }
 
 /**
@@ -60,7 +60,7 @@
   function osc_icon_raw($image, $group = '16x16') {
     global $osC_Template;
 
-    return 'templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image;
+    return 'public/sites/Admin/templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image;
   }
 
 ////

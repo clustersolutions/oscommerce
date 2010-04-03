@@ -1,7 +1,7 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -19,41 +19,41 @@
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
 
 <?php
-  if ( $request_type == 'SSL' ) {
-    echo '<link rel="shortcut icon" href="images/favicon_ssl.ico" type="image/x-icon" />';
+  if ( OSCOM::getRequestType() == 'SSL' ) {
+    echo '<link rel="shortcut icon" href="' . OSCOM::getPublicSiteLink('images/favicon_ssl.ico') . '" type="image/x-icon" />';
   } else {
-    echo '<link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon" />';
+    echo '<link rel="shortcut icon" href="' . OSCOM::getPublicSiteLink('images/favicon.ico') . '" type="image/x-icon" />';
   }
 ?>
 
-<title><?php echo STORE_NAME . ': ' . $osC_Language->get('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
+<title><?php echo STORE_NAME . ': ' . __('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
 
-<script type="text/javascript" src="../ext/jquery/jquery-1.3.2.min.js"></script>
-<script type="text/javascript" src="../ext/jquery/jquery.cookie.js"></script>
-<script type="text/javascript" src="../ext/jquery/jquery.json-1.3.min.js"></script>
-<script type="text/javascript" src="../ext/jquery/jquery.tinysort.min.js"></script>
-<script type="text/javascript" src="../ext/jquery/jquery.ocupload-1.1.2.packed.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.json-1.3.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.tinysort.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.ocupload-1.1.2.packed.js"></script>
 
-<link rel="stylesheet" type="text/css" href="../ext/jquery/ui/themes/smoothness/jquery-ui-1.7.2.custom.css" />
-<script type="text/javascript" src="../ext/jquery/ui/jquery-ui-1.7.2.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.7.2.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.7.2.custom.min.js"></script>
 
-<script type="text/javascript" src="../ext/alexei/sprintf.js"></script>
+<script type="text/javascript" src="ext/alexei/sprintf.js"></script>
 
-<script type="text/javascript" src="includes/sites/Admin/includes/general.js"></script>
-<script type="text/javascript" src="includes/sites/Admin/js/datatable.js"></script>
+<script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/general.js'); ?>"></script>
+<script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/datatable.js'); ?>"></script>
 
-<link rel="stylesheet" type="text/css" href="includes/sites/Admin/templates/default/stylesheet.css" />
+<link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/default/stylesheets/general.css'); ?>" />
 
 <script type="text/javascript">
-  var pageURL = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()); ?>';
-  var pageModule = '<?php echo $osC_Template->getModule(); ?>';
+  var pageURL = '<?php echo OSCOM::getLink(); ?>';
+  var pageModule = '<?php echo OSCOM::getSiteApplication(); ?>';
 
   var batchSize = parseInt('<?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>');
-  var batchTotalPagesText = '<?php echo addslashes($osC_Language->get('batch_results_number_of_entries')); ?>';
-  var batchCurrentPageset = '<?php echo addslashes($osC_Language->get('result_set_current_page')); ?>';
+  var batchTotalPagesText = '<?php echo addslashes(__('batch_results_number_of_entries')); ?>';
+  var batchCurrentPageset = '<?php echo addslashes(__('result_set_current_page')); ?>';
   var batchIconNavigationBack = '<?php echo osc_icon('nav_back.png'); ?>';
   var batchIconNavigationBackGrey = '<?php echo osc_icon('nav_back_grey.png'); ?>';
   var batchIconNavigationForward = '<?php echo osc_icon('nav_forward.png'); ?>';
@@ -89,27 +89,27 @@
 
 <?php
   if ( $osC_Template->hasPageHeader() ) {
-    include(OSCOM::BASE_DIRECTORY . '/includes/sites/Admin/templates/default/header.php');
+    include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/header.php');
   }
 
-  if ( isset($_SESSION['admin']) && !in_array($osC_Template->getModule(), array('index', 'login')) ) {
+  if ( isset($_SESSION['admin']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
 ?>
 
 <div id="appsPane">
-  <h4><?php echo osC_Access::getGroupTitle(osC_Access::getGroup($osC_Template->getModule())); ?></h4>
+  <h4><?php echo osC_Access::getGroupTitle(osC_Access::getGroup(OSCOM::getSiteApplication())); ?></h4>
 
 <?php
-    foreach ( osC_Access::getLevels(osC_Access::getGroup($osC_Template->getModule())) as $group => $links ) {
+    foreach ( osC_Access::getLevels(osC_Access::getGroup(OSCOM::getSiteApplication())) as $group => $links ) {
       echo '<ul>';
 
       foreach ( $links as $link ) {
-        echo '<li' . ( $link['module'] == $osC_Template->getModule() ? ' class="selected"' : '') . '><span>' . osc_icon($link['icon'], $link['title']) . '</span> <a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a>';
+        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '><span>' . osc_icon($link['icon'], $link['title']) . '</span> <a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a>';
 
         if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
-          echo '<ul' . ($link['module'] == $osC_Template->getModule() ? ' style="display: block;"' : '') . '>';
+          echo '<ul' . ($link['module'] == OSCOM::getSiteApplication() ? ' style="display: block;"' : '') . '>';
 
           foreach ( $link['subgroups'] as $subgroup ) {
-            echo '<li><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module'] . '&' . $subgroup['identifier']) . '">' . $subgroup['title'] . '</a></li>';
+            echo '<li><a href="' . OSCOM::getLink(null, $link['module'], $subgroup['identifier']) . '">' . $subgroup['title'] . '</a></li>';
           }
 
           echo '</ul>';
@@ -131,17 +131,17 @@
 <div id="appContent">
 
 <?php
-  if ( $osC_MessageStack->exists('header') ) {
-    echo $osC_MessageStack->get('header');
+  if ( OSCOM_Registry::get('MessageStack')->exists('header') ) {
+    echo OSCOM_Registry::get('MessageStack')->get('header');
   }
 
-  require(OSCOM::BASE_DIRECTORY . '/includes/sites/Admin/includes/applications/' . $osC_Template->getModule() . '/pages/' . $osC_Template->getPageContentsFilename());
+  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications/' . OSCOM::getSiteApplication() . '/pages/' . $osC_Template->getPageContentsFilename());
 ?>
 
 </div>
 
 <?php
-  if ( isset($_SESSION['admin']) && !in_array($osC_Template->getModule(), array('index', 'login')) ) {
+  if ( isset($_SESSION['admin']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
 ?>
 
 <script type="text/javascript">
@@ -155,7 +155,7 @@
 ?>
 
 <div id="footer">
-  <?php include(OSCOM::BASE_DIRECTORY . '/includes/sites/Admin/templates/default/footer.php'); ?>
+  <?php include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/footer.php'); ?>
 </div>
 
 <?php

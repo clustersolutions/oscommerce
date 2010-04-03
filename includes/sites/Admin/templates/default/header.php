@@ -1,7 +1,7 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -10,11 +10,11 @@
 ?>
 
 <div id="header">
-  <div style="float: left; padding: 5px;"><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT), osc_image('images/oscommerce.jpg', PROJECT_VERSION)); ?></div>
+  <div style="float: left; padding: 5px;"><?php echo osc_link_object(OSCOM::getLink(OSCOM::getSite(), 'Index'), osc_image(OSCOM::getPublicSiteLink('images/oscommerce.jpg'), PROJECT_VERSION)); ?></div>
   <div style="float: right; width: 150px; text-align: center;">
 
 <?php
-  if ( $request_type == 'SSL' ) {
+  if ( OSCOM::getRequestType() == 'SSL' ) {
     echo '<div class="reqSSL">' . __('ssl_protection') . '</div>';
   } else {
     echo '<div class="reqNONSSL">' . __('ssl_unprotected') . '</div>';
@@ -29,10 +29,10 @@
 
 <?php
   foreach ( osC_Access::getLevels() as $group => $links ) {
-    echo '<li' . ($group == osC_Access::getGroup($osC_Template->getModule()) ? ' class="activeGreen"' : ' class="hoverGreen"') . '><span><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $links[array_shift(array_keys($links))]['module']) . '">' . osC_Access::getGroupTitle($group) . '</a></span><ul class="levelSub">';
+    echo '<li' . ($group == osC_Access::getGroup(OSCOM::getSiteApplication()) ? ' class="activeGreen"' : ' class="hoverGreen"') . '><span><a href="' . OSCOM::getLink(null, $links[array_shift(array_keys($links))]['module']) . '">' . osC_Access::getGroupTitle($group) . '</a></span><ul class="levelSub">';
 
     foreach ( $links as $link ) {
-      echo '<li><a href="' . osc_href_link_admin(FILENAME_DEFAULT, $link['module']) . '">' . $link['title'] . '</a></li>';
+      echo '<li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a></li>';
     }
 
     echo '</ul></li>';
@@ -44,10 +44,10 @@
        '<li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
        '<li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
        '<li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li></ul></li>' .
-       '<li class="hoverGreen"><a href="' . osc_href_link('', null, 'NONSSL', false, false, true) . '" target="_blank">' . __('header_title_online_catalog') . '</a></li>';
+       '<li class="hoverGreen"><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . __('header_title_online_catalog') . '</a></li>';
 
   if ( isset($_SESSION['admin']) ) {
-    echo '<li class="hoverRed"><a href="' . osc_href_link_admin(FILENAME_DEFAULT, 'login&action=logoff') . '">' . __('header_title_logoff') . '</a></li>';
+    echo '<li class="hoverRed"><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . __('header_title_logoff') . '</a></li>';
   }
 ?>
 
