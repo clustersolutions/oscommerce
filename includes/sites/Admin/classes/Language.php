@@ -91,8 +91,8 @@
     public function &extractDefinitions($xml) {
       $definitions = array();
 
-      if ( file_exists(dirname(__FILE__) . '/../../../includes/languages/' . $xml) ) {
-        $osC_XML = new osC_XML(file_get_contents(dirname(__FILE__) . '/../../../includes/languages/' . $xml));
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $xml) ) {
+        $osC_XML = new osC_XML(file_get_contents(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
 
         $definitions = $osC_XML->toArray();
 

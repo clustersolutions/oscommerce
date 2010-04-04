@@ -15,6 +15,9 @@
 // Set the level of error reporting
   error_reporting(E_ALL & ~E_NOTICE);
 
+  define('OSCOM_BASE_DIRECTORY', dirname(__FILE__) . '/../../includes/');
+  class OSCOM { const BASE_DIRECTORY = OSCOM_BASE_DIRECTORY; }
+
   define('DEFAULT_LANGUAGE', 'en_US');
   define('HTTP_COOKIE_PATH', '');
   define('HTTPS_COOKIE_PATH', '');
