@@ -31,14 +31,14 @@
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
 
-<script type="text/javascript" src="public/external/jquery/jquery-1.3.2.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery-1.4.2.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.json-1.3.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.tinysort.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.ocupload-1.1.2.packed.js"></script>
 
-<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.7.2.custom.css" />
-<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.7.2.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery.ui.all.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.custom.min.js"></script>
 
 <script type="text/javascript" src="ext/alexei/sprintf.js"></script>
 
