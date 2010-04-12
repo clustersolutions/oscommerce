@@ -681,6 +681,9 @@
           }
         }
 
+// Automatically bind table names
+        $this->sql_query = str_replace(':table_', DB_TABLE_PREFIX, $this->sql_query);
+
         $this->query_handler = $this->db_class->simpleQuery($this->sql_query, $this->debug);
 
         if ($this->logging === true) {
