@@ -1,37 +1,90 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  include(dirname(__FILE__) . '/../../ext/phpxml/xml.php');
+  class OSCOM_XML {
+    public static function toArray($xml) {
+      if ( get_class($xml) == 'SimpleXMLElement' ) {
+        $attributes = $xml->attributes();
 
-  class osC_XML {
-    var $_xml,
-        $_encoding;
+        foreach ( $attributes as $k => $v ) {
+          if ( $v ) {
+            $a[$k] = (string)$v;
+          }
+        }
 
-    function osC_XML($xml, $encoding = '') {
-      $this->_xml = $xml;
-
-      if (!empty($encoding)) {
-        $this->_encoding = $encoding;
+        $x = $xml;
+        $xml = get_object_vars($xml);
       }
+
+      if ( is_array($xml) ) {
+        if ( count($xml) == 0 ) {
+          return (string)$x; // for CDATA
+        }
+
+        foreach ( $xml as $key => $value ) {
+          $r[$key] = self::toArray($value);
+        }
+
+        if ( isset($a) ) {
+          $r['@attributes'] = $a; // attributes
+        }
+
+        return $r;
+      }
+
+      return (string)$xml;
     }
 
-    function toArray() {
-      return XML_unserialize($this->_xml);
+    public static function fromArray($data, $encoding = 'UTF-8') {
+      $xml = new XMLWriter();
+      $xml->openMemory();
+      $xml->setIndent(true);
+      $xml->setIndentString('  ');
+      $xml->startDocument('1.0', $encoding);
+      self::_write($xml, $data);
+      $xml->endDocument();
+
+      return $xml->outputMemory(true);
     }
 
-    function toXML() {
-      return XML_serialize($this->_xml, $this->_encoding);
+    protected static function _write(XMLWriter $xml, $data, $parent = null, $add_to_parent_element = false) {
+      foreach ( $data as $key => $value ) {
+        if ( is_array($value) ) {
+          if ( is_int($key) ) {
+            if ( $add_to_parent_element === false ) {
+              $add_to_parent_element = true;
+
+              self::_write($xml, $value, $parent, $add_to_parent_element);
+              $xml->endElement();
+            } else {
+              $xml->startElement($parent);
+              self::_write($xml, $value, $parent, $add_to_parent_element);
+              $xml->endElement();
+            }
+          } else {
+            $xml->startElement($key);
+            self::_write($xml, $value, $key, $add_to_parent_element);
+            $xml->endElement();
+          }
+         } else {
+          if ( ($pos = strpos($key, '-CDATA')) !== false ) {
+            $key = substr($key, 0, $pos);
+
+            $xml->startElement($key);
+            $xml->writeCData($value);
+            $xml->endElement();
+          } else {
+            $xml->writeElement($key, $value);
+          }
+        }
+      }
     }
   }
 ?>
