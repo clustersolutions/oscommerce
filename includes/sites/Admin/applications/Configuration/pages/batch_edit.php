@@ -40,7 +40,7 @@
     }
 ?>
 
-    <div><label for="configuration[<?php echo $Qcfg->valueProtected('configuration_key'); ?>]"><?php echo $Qcfg->valueProtected('configuration_title'); ?></label><?php echo $value_field . osc_draw_hidden_field('batch[]', $Qcfg->valueInt('configuration_id')); ?></div>
+    <p><label for="configuration[<?php echo $Qcfg->valueProtected('configuration_key'); ?>]"><?php echo $Qcfg->valueProtected('configuration_title'); ?></label><?php echo $value_field . osc_draw_hidden_field('batch[]', $Qcfg->valueInt('configuration_id')); ?></p>
 
     <p><?php echo $Qcfg->value('configuration_description'); ?></p>
 

@@ -14,7 +14,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('people.png') . ' ' . __('action_heading_login'); ?></h3>
 
-  <form name="login" action="<?php echo OSCOM::getLink(null, null, 'action=Process'); ?>" method="post">
+  <form name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Process'); ?>" method="post">
 
   <p><?php echo __('introduction'); ?></p>
 

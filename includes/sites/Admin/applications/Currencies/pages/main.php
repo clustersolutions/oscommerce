@@ -20,7 +20,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Save'), 'icon' => 'plus', 'title' => __('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=UpdateRates'), 'icon' => 'refresh', 'title' => __('button_update_currency_exchange_rates'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Save'), 'icon' => 'plus', 'title' => __('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -30,18 +30,19 @@
 
 <form name="batch" action="#" method="post">
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="ccDataTable">
+<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="currenciesDataTable">
   <thead>
     <tr>
-      <th><?php echo __('table_heading_credit_cards'); ?></th>
-      <th><?php echo __('table_heading_sort_order'); ?></th>
+      <th><?php echo __('table_heading_currencies'); ?></th>
+      <th><?php echo __('table_heading_code'); ?></th>
+      <th><?php echo __('table_heading_value'); ?></th>
       <th width="150"><?php echo __('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . __('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchSave') . '\';" />&nbsp;<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . __('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . __('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -69,14 +70,17 @@
     moduleParams.search = String(p.search);
   }
 
-  var dataTableName = 'ccDataTable';
+  var dataTableName = 'currenciesDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
 
-  var ccEditLink = '<?php echo OSCOM::getLink(null, null, 'id=CCID&action=Save'); ?>';
-  var ccEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var cEditLink = '<?php echo OSCOM::getLink(null, null, 'id=CID&action=Save'); ?>';
+  var cEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var ccDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=CCID&action=Delete'); ?>';
-  var ccDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+  var cDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=CID&action=Delete'); ?>';
+  var cDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+
+  var defaultCurrency = '<?php echo DEFAULT_CURRENCY; ?>';
+  var defaultText = '<?php echo addslashes(__('default_entry')); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -87,31 +91,36 @@
     for ( var r in data.entries ) {
       var record = data.entries[r];
 
-      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
-      newRow.id = 'row' + parseInt(record.id);
+      var currencyName = record.title;
 
-      if ( parseInt(record.credit_card_status) != 1 ) {
-        $('#row' + parseInt(record.id)).addClass('deactivatedRow');
+      if ( record.code == defaultCurrency ) {
+        currencyName += ' (' + defaultText + ')';
       }
 
-      $('#row' + parseInt(record.id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row' + parseInt(record.currencies_id);
+
+      $('#row' + parseInt(record.currencies_id)).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
       }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
-      newCell.innerHTML = htmlSpecialChars(record.credit_card_name);
+      newCell.innerHTML = htmlSpecialChars(currencyName);
 
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = parseInt(record.sort_order);
+      newCell.innerHTML = htmlSpecialChars(record.code);
 
       newCell = newRow.insertCell(2);
-      newCell.innerHTML = '<a href="' + ccEditLink.replace('CCID', parseInt(record.id)) + '">' + ccEditLinkIcon + '</a>&nbsp;<a href="' + ccDeleteLink.replace('CCID', parseInt(record.id)) + '">' + ccDeleteLinkIcon + '</a>';
-      newCell.align = 'right';
+      newCell.innerHTML = htmlSpecialChars(record.value);
 
       newCell = newRow.insertCell(3);
-      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.id) + '" id="batch' + parseInt(record.id) + '" />';
+      newCell.innerHTML = '<a href="' + cEditLink.replace('CID', parseInt(record.currencies_id)) + '">' + cEditLinkIcon + '</a>&nbsp;<a href="' + cDeleteLink.replace('CID', parseInt(record.currencies_id)) + '">' + cDeleteLinkIcon + '</a>';
+      newCell.align = 'right';
+
+      newCell = newRow.insertCell(4);
+      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.currencies_id) + '" id="batch' + parseInt(record.currencies_id) + '" />';
       newCell.align = 'center';
 
       rowCounter++;

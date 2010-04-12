@@ -88,15 +88,17 @@
       }
     }
 
-    public function &extractDefinitions($xml) {
+    public function extractDefinitions($xml) {
       $definitions = array();
 
       if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $xml) ) {
-        $osC_XML = new osC_XML(file_get_contents(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
+        $definitions = OSCOM_XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
 
-        $definitions = $osC_XML->toArray();
+        if ( !isset($definitions['language']) ) { // create root element (simpleXML does not use root element)
+          $definitions = array('language' => $definitions);
+        }
 
-        if (isset($definitions['language']['definitions']['definition'][0]) === false) {
+        if ( !isset($definitions['language']['definitions']['definition'][0]) ) {
           $definitions['language']['definitions']['definition'] = array($definitions['language']['definitions']['definition']);
         }
 
@@ -178,7 +180,7 @@
         $height = 10;
       }
 
-      return osc_image('../images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
+      return osc_image('images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
     }
 
     function isDefined($key) {
