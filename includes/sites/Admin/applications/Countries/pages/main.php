@@ -1,7 +1,7 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -9,22 +9,21 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div>
-  <span style="float: left;"><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?></form></span>
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=save'), 'icon' => 'plus', 'title' => __('button_insert'))); ?></span>
-</div>
+<form id="liveSearchForm">
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-<div style="clear: right; padding: 10px;"></div>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+</form>
 
-<div style="padding: 2px; height: 16px;">
+<div style="padding: 20px 5px 5px 5px; height: 16px;">
   <span id="batchTotalPages"></span>
   <span id="batchPageLinks"></span>
 </div>
@@ -34,16 +33,16 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="countryDataTable">
   <thead>
     <tr>
-      <th><?php echo __('table_heading_countries'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_countries'); ?></th>
       <th width="20">&nbsp;</th>
-      <th><?php echo __('table_heading_code'); ?></th>
-      <th width="150"><?php echo __('table_heading_action'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_code'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . __('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&action=batch_delete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -54,11 +53,11 @@
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . __('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . __('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . __('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">
   var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
 
   var moduleParams = new Object();
@@ -72,17 +71,17 @@
   }
 
   var dataTableName = 'countryDataTable';
-  var dataTableDataURL = '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '&action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
 
-  var countryLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=COUNTRYID'); ?>';
+  var countryLink = '<?php echo OSCOM::getLink(null, null, 'id=COUNTRYID'); ?>';
   var countryLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
 
-  var countryFlag = '<?php echo osc_image('../images/worldflags/COUNTRYISOCODE2.png', 'COUNTRYNAME'); ?>';
+  var countryFlag = '<?php echo osc_image('images/worldflags/COUNTRYISOCODE2.png', 'COUNTRYNAME'); ?>';
 
-  var countryEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=COUNTRYID&action=save'); ?>';
+  var countryEditLink = '<?php echo OSCOM::getLink(null, null, 'id=COUNTRYID&action=Save'); ?>';
   var countryEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var countryDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=COUNTRYID&action=delete'); ?>';
+  var countryDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=COUNTRYID&action=Delete'); ?>';
   var countryDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
@@ -97,7 +96,7 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(record.countries_id);
 
-      $('#row' + parseInt(record.countries_id)).mouseover( function() { $(this).addClass('mouseOver'); }).mouseout( function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+      $('#row' + parseInt(record.countries_id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
@@ -123,4 +122,4 @@
       rowCounter++;
     }
   }
-//--></script>
+</script>

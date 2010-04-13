@@ -1,7 +1,7 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -9,20 +9,21 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div style="padding-bottom: 10px;">
-  <span><form id="liveSearchForm"><input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><input type="button" value="Reset" class="operationButton" onclick="osC_DataTable.reset();" /></form></span>
-  <span style="float: right;"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=zone_save') . '\';" class="infoBoxButton" />'; ?></span>
-</div>
+<form id="liveSearchForm">
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-<div style="padding: 2px; height: 16px;">
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=ZoneSave'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+</form>
+
+<div style="padding: 20px 5px 5px 5px; height: 16px;">
   <span id="batchTotalPages"></span>
   <span id="batchPageLinks"></span>
 </div>
@@ -32,15 +33,15 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="countryZonesDataTable">
   <thead>
     <tr>
-      <th><?php echo $osC_Language->get('table_heading_zones'); ?></th>
-      <th><?php echo $osC_Language->get('table_heading_zone_code'); ?></th>
-      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_zones'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_zone_code'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=batch_delete_zones') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=BatchDeleteZones') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -51,11 +52,11 @@
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">
   var moduleParamsCookieName = 'oscadmin_module_' + pageModule;// + '_zones';
 
   var moduleParams = new Object();
@@ -69,12 +70,12 @@
   }
 
   var dataTableName = 'countryZonesDataTable';
-  var dataTableDataURL = '<?php echo osc_href_link_admin('rpc.php', $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&action=getAllZones'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'id=' . $_GET['id'] . '&action=getAllZones'); ?>';
 
-  var zoneEditLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&zID=ZONEID&action=zone_save'); ?>';
+  var zoneEditLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=ZONEID&action=ZoneSave'); ?>';
   var zoneEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var zoneDeleteLink = '<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&zID=ZONEID&action=zone_delete'); ?>';
+  var zoneDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=ZONEID&action=ZoneDelete'); ?>';
   var zoneDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
@@ -89,7 +90,7 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(record.zone_id);
 
-      $('#row' + parseInt(record.zone_id)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); }).click(function(event) {
+      $('#row' + parseInt(record.zone_id)).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
@@ -112,4 +113,4 @@
       rowCounter++;
     }
   }
-//--></script>
+</script>

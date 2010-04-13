@@ -1,20 +1,14 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  require('includes/applications/countries/classes/countries.php');
-
-  class osC_Countries_Admin_rpc {
+  class OSCOM_Site_Admin_Application_Countries_RPC {
     public static function getAll() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
@@ -25,9 +19,9 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = osC_Countries_Admin::find($_GET['search'], $_GET['page']);
+        $result = OSCOM_Site_Admin_Application_Countries_Countries::find($_GET['search'], $_GET['page']);
       } else {
-        $result = osC_Countries_Admin::getAll($_GET['page']);
+        $result = OSCOM_Site_Admin_Application_Countries_Countries::getAll($_GET['page']);
       }
 
       $result['rpcStatus'] = RPC_STATUS_SUCCESS;
@@ -36,16 +30,14 @@
     }
 
     public static function getAllZones() {
-      global $_module;
-
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = osC_Countries_Admin::findZones($_GET['search'], $_GET[$_module]);
+        $result = OSCOM_Site_Admin_Application_Countries_Countries::findZones($_GET['search'], $_GET['id']);
       } else {
-        $result = osC_Countries_Admin::getAllZones($_GET[$_module]);
+        $result = OSCOM_Site_Admin_Application_Countries_Countries::getAllZones($_GET['id']);
       }
 
       $result['rpcStatus'] = RPC_STATUS_SUCCESS;

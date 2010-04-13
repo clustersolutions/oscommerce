@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,26 +9,27 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_zone'); ?></div>
-<div class="infoBoxContent">
-  <form name="zNew" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&action=zone_save'); ?>" method="post">
+<div class="infoBox">
+  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_zone'); ?></h3>
 
-  <p><?php echo $osC_Language->get('introduction_new_zone'); ?></p>
+  <form name="zNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=ZoneSave'); ?>" method="post">
+
+  <p><?php echo OSCOM::getDef('introduction_new_zone'); ?></p>
 
   <fieldset>
-    <div><label for="zone_name"><?php echo $osC_Language->get('field_zone_name'); ?></label><?php echo osc_draw_input_field('zone_name'); ?></div>
-    <div><label for="zone_code"><?php echo $osC_Language->get('field_zone_code'); ?></label><?php echo osc_draw_input_field('zone_code'); ?></div>
+    <p><label for="zone_name"><?php echo OSCOM::getDef('field_zone_name'); ?></label><?php echo osc_draw_input_field('zone_name'); ?></p>
+    <p><label for="zone_code"><?php echo OSCOM::getDef('field_zone_code'); ?></label><?php echo osc_draw_input_field('zone_code'); ?></p>
   </fieldset>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

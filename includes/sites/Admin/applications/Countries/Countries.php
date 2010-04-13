@@ -1,30 +1,20 @@
 <?php
 /*
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
-
-  $osCommerce-SIG$
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  require('includes/applications/countries/classes/countries.php');
+  class OSCOM_Site_Admin_Application_Countries extends OSCOM_Site_Admin_ApplicationAbstract {
+    protected function initialize() {
+      $this->_page_title = OSCOM::getDef('heading_title');
 
-  class osC_Application_Countries extends osC_Template_Admin {
-    protected $_module = 'countries';
-    protected $_page_title;
-    protected $_page_contents = 'main.php';
-
-    public function __construct() {
-      $this->_page_title = __('heading_title');
-
-      if ( !empty($_GET[$this->_module]) && is_numeric($_GET[$this->_module]) ) {
+      if ( !empty($_GET['id']) && is_numeric($_GET['id']) ) {
+        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Countries_Countries::get($_GET['id'], 'countries_name');
         $this->_page_contents = 'zones.php';
-        $this->_page_title .= ': ' . osC_Address::getCountryName($_GET[$this->_module]);
       }
     }
   }
