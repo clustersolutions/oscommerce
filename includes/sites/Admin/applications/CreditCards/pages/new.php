@@ -18,20 +18,20 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('new.png') . ' ' . __('action_heading_new_card'); ?></h3>
+  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_card'); ?></h3>
 
   <form name="ccNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Save'); ?>" method="post">
 
-  <p><?php echo __('introduction_new_card'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_new_card'); ?></p>
 
   <fieldset>
-    <p><label for="credit_card_name"><?php echo __('field_name'); ?></label><?php echo osc_draw_input_field('credit_card_name'); ?></p>
-    <p><label for="pattern"><?php echo __('field_pattern'); ?></label><?php echo osc_draw_input_field('pattern'); ?></p>
-    <p><label for="sort_order"><?php echo __('field_sort_order'); ?></label><?php echo osc_draw_input_field('sort_order'); ?></p>
-    <p><label for="credit_card_status"><?php echo __('field_status'); ?></label><?php echo osc_draw_checkbox_field('credit_card_status', '1'); ?></p>
+    <p><label for="credit_card_name"><?php echo OSCOM::getDef('field_name'); ?></label><?php echo osc_draw_input_field('credit_card_name'); ?></p>
+    <p><label for="pattern"><?php echo OSCOM::getDef('field_pattern'); ?></label><?php echo osc_draw_input_field('pattern'); ?></p>
+    <p><label for="sort_order"><?php echo OSCOM::getDef('field_sort_order'); ?></label><?php echo osc_draw_input_field('sort_order'); ?></p>
+    <p><label for="credit_card_status"><?php echo OSCOM::getDef('field_status'); ?></label><?php echo osc_draw_checkbox_field('credit_card_status', '1'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

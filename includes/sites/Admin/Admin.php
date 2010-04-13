@@ -65,7 +65,7 @@
 // HPDL move following checks elsewhere
 // check if a default currency is set
       if (!defined('DEFAULT_CURRENCY')) {
-        OSCOM_Registry::get('MessageStack')->add('header', __('ms_error_no_default_currency'), 'error');
+        OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_no_default_currency'), 'error');
       }
 
 // check if a default language is set
@@ -74,7 +74,7 @@
       }
 
       if (function_exists('ini_get') && ((bool)ini_get('file_uploads') == false) ) {
-        OSCOM_Registry::get('MessageStack')->add('header', __('ms_warning_uploads_disabled'), 'warning');
+        OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_uploads_disabled'), 'warning');
       }
     }
  

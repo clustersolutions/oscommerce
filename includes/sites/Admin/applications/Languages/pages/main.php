@@ -20,7 +20,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Import'), 'icon' => 'triangle-1-se', 'title' => __('button_import'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Import'), 'icon' => 'triangle-1-se', 'title' => OSCOM::getDef('button_import'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -33,17 +33,17 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="langDataTable">
   <thead>
     <tr>
-      <th><?php echo __('table_heading_languages'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_languages'); ?></th>
       <th width="20">&nbsp;</th>
-      <th><?php echo __('table_heading_code'); ?></th>
-      <th><?php echo __('table_heading_total_definitions'); ?></th>
-      <th width="150"><?php echo __('table_heading_action'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_code'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_total_definitions'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . __('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -54,7 +54,7 @@
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . __('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . __('icon_edit') . '&nbsp;&nbsp;' . osc_icon('export.png') . '&nbsp;' . __('icon_export') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . __('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('export.png') . '&nbsp;' . OSCOM::getDef('icon_export') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -89,7 +89,7 @@
   var languageDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var defaultLanguage = '<?php echo DEFAULT_LANGUAGE; ?>';
-  var defaultText = '<?php echo addslashes(__('default_entry')); ?>';
+  var defaultText = '<?php echo addslashes(OSCOM::getDef('default_entry')); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

@@ -39,7 +39,7 @@
     global $osC_Template;
 
     if ( is_null($title) ) {
-      $title = __('icon_' . substr($image, 0, strpos($image, '.')));
+      $title = OSCOM::getDef('icon_' . substr($image, 0, strpos($image, '.')));
     }
 
     if ( is_null($group) ) {

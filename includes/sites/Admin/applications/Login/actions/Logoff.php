@@ -12,7 +12,7 @@
     public static function execute(OSCOM_ApplicationAbstract $application) {
       unset($_SESSION['admin']);
 
-      OSCOM_Registry::get('MessageStack')->add('header', __('ms_success_logged_out'), 'success');
+      OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_logged_out'), 'success');
 
       osc_redirect_admin(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
     }

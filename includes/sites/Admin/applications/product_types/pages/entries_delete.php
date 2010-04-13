@@ -24,7 +24,7 @@
 
   <form name="tDelete" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&aID=' . $osC_ObjectInfo->get('action') . '&action=entry_delete'); ?>" method="post">
 
-  <p><?php echo __('introduction_delete_assignments'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_delete_assignments'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->getProtected('action_title') . '</b>'; ?></p>
 
@@ -38,7 +38,7 @@
 
   </ul>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => __('button_delete'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

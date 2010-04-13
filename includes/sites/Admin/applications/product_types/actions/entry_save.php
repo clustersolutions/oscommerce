@@ -20,7 +20,7 @@
         $this->_page_contents = 'entries_new.php';
 
         if ( sizeof(osC_ProductTypes_Admin::getActions($_GET[$this->_module])) < 1 ) {
-          $osC_MessageStack->add($this->_module, __('ms_warning_no_available_actions'), 'warning');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_warning_no_available_actions'), 'warning');
 
           $this->_page_contents = 'entries.php';
         }
@@ -30,9 +30,9 @@
         $data = array('modules' => explode(',', $_POST['modules']));
 
         if ( osC_ProductTypes_Admin::saveAssignments($_GET[$this->_module], (isset($_GET['aID']) ? $_GET['aID'] : $_POST['action']), $data) ) {
-          $osC_MessageStack->add($this->_module, __('ms_success_action_performed'), 'success');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          $osC_MessageStack->add($this->_module, __('ms_error_action_not_performed'), 'error');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module]));

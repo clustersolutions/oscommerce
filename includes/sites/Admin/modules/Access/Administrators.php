@@ -16,7 +16,7 @@
         $_sort_order = 100;
 
     public function __construct() {
-      $this->_title = __('access_administrators_title');
+      $this->_title = OSCOM::getDef('access_administrators_title');
     }
   }
 ?>

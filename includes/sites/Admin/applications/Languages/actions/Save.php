@@ -28,9 +28,9 @@
                       'sort_order' => $_POST['sort_order']);
 
         if ( OSCOM_Site_Admin_Application_Languages_Languages::update($_GET['id'], $data, (isset($_POST['default']) && ($_POST['default'] == 'on'))) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_success_action_performed'), 'success');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_action_not_performed'), 'error');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink());

@@ -24,13 +24,13 @@
           }
 
           if ( $error === false ) {
-            OSCOM_Registry::get('MessageStack')->add(null, __('ms_success_action_performed'), 'success');
+            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
 
             if ( in_array($_SESSION['admin']['id'], $_POST['batch']) ) {
               $_SESSION['admin']['access'] = osC_Access::getUserLevels($_SESSION['admin']['id']);
             }
           } else {
-            OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_action_not_performed'), 'error');
+            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
           osc_redirect_admin(OSCOM::getLink());

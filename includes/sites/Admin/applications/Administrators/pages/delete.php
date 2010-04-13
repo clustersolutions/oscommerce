@@ -24,11 +24,11 @@
 
   <form name="aDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $osC_ObjectInfo->getInt('id') . '&action=Delete'); ?>" method="post">
 
-  <p><?php echo __('introduction_delete_administrator'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_delete_administrator'); ?></p>
 
   <p><?php echo '<b>' . $osC_ObjectInfo->get('user_name') . '</b>'; ?></p>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => __('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -15,9 +15,9 @@
 
 <?php
   if ( OSCOM::getRequestType() == 'SSL' ) {
-    echo '<div class="reqSSL">' . __('ssl_protection') . '</div>';
+    echo '<div class="reqSSL">' . OSCOM::getDef('ssl_protection') . '</div>';
   } else {
-    echo '<div class="reqNONSSL">' . __('ssl_unprotected') . '</div>';
+    echo '<div class="reqNONSSL">' . OSCOM::getDef('ssl_unprotected') . '</div>';
   }
 ?>
 
@@ -38,16 +38,16 @@
     echo '</ul></li>';
   }
 
-  echo '<li class="hoverGreen"><span><a href="http://www.oscommerce.com" target="_blank">' . __('header_title_help') . '</a></span><ul class="levelSub">' .
+  echo '<li class="hoverGreen"><span><a href="http://www.oscommerce.com" target="_blank">' . OSCOM::getDef('header_title_help') . '</a></span><ul class="levelSub">' .
        '<li><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a></li>' .
        '<li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
        '<li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
        '<li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
        '<li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li></ul></li>' .
-       '<li class="hoverGreen"><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . __('header_title_online_catalog') . '</a></li>';
+       '<li class="hoverGreen"><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . OSCOM::getDef('header_title_online_catalog') . '</a></li>';
 
   if ( isset($_SESSION['admin']) ) {
-    echo '<li class="hoverRed"><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . __('header_title_logoff') . '</a></li>';
+    echo '<li class="hoverRed"><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>';
   }
 ?>
 

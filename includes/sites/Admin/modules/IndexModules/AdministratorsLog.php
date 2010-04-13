@@ -12,16 +12,16 @@
     public function __construct() {
       OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/AdministratorsLog.php');
 
-      $this->_title = __('admin_indexmodules_administratorslog_title');
+      $this->_title = OSCOM::getDef('admin_indexmodules_administratorslog_title');
       $this->_title_link = OSCOM::getLink(null, 'AdministratorsLog');
 
       if ( osC_Access::hasAccess('administrators_log') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
-                       '      <th>' . __('admin_indexmodules_administratorslog_table_heading_users') . '</th>' .
-                       '      <th>' . __('admin_indexmodules_administratorslog_table_heading_module') . '</th>' .
-                       '      <th>' . __('admin_indexmodules_administratorslog_table_heading_date') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_administratorslog_table_heading_users') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_administratorslog_table_heading_module') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_administratorslog_table_heading_date') . '</th>' .
                        '    </tr>' .
                        '  </thead>' .
                        '  <tbody>';

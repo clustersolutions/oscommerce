@@ -16,7 +16,7 @@
     protected $_page_contents = 'main.php';
 
     public function __construct() {
-      $this->_page_title = __('heading_title');
+      $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( !empty($_GET[$this->_module]) && is_numeric($_GET[$this->_module]) ) {
         $this->_page_contents = 'entries.php';

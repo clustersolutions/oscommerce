@@ -18,9 +18,9 @@
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
         if ( osC_ProductTypes_Admin::deleteAssignments($_GET[$this->_module], $_GET['aID']) ) {
-          $osC_MessageStack->add($this->_module, __('ms_success_action_performed'), 'success');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          $osC_MessageStack->add($this->_module, __('ms_error_action_not_performed'), 'error');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module . '=' . $_GET[$this->_module]));

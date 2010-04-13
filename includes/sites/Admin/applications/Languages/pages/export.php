@@ -31,15 +31,15 @@
 
   <form name="lExport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=Export'); ?>" method="post">
 
-  <p><?php echo __('introduction_export_language'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_export_language'); ?></p>
 
   <fieldset>
-    <p>(<a href="javascript:selectAllFromPullDownMenu('groups');"><u><?php echo __('select_all'); ?></u></a> | <a href="javascript:resetPullDownMenuSelection('groups');"><u><?php echo __('select_none'); ?></u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="groups" size="10" multiple="multiple"'); ?></p>
+    <p>(<a href="javascript:selectAllFromPullDownMenu('groups');"><u><?php echo OSCOM::getDef('select_all'); ?></u></a> | <a href="javascript:resetPullDownMenuSelection('groups');"><u><?php echo OSCOM::getDef('select_none'); ?></u></a>)<br /><?php echo osc_draw_pull_down_menu('groups[]', $groups_array, array('account', 'checkout', 'general', 'index', 'info', 'order', 'products', 'search'), 'id="groups" size="10" multiple="multiple"'); ?></p>
 
-    <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => __('field_export_with_data'))), true); ?></p>
+    <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => OSCOM::getDef('field_export_with_data'))), true); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-nw', 'title' => __('button_export'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-nw', 'title' => OSCOM::getDef('button_export'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

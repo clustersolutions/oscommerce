@@ -18,11 +18,11 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . __('action_heading_batch_delete_administrators'); ?></h3>
+  <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_administrators'); ?></h3>
 
   <form name="aDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchDelete'); ?>" method="post">
 
-  <p><?php echo __('introduction_batch_delete_administrators'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_batch_delete_administrators'); ?></p>
 
 <?php
   $Qadmins = $OSCOM_Database->query('select id, user_name from :table_administrators where id in (":id") order by user_name');
@@ -43,7 +43,7 @@
   echo '<p>' . $names_string . '</p>';
 ?>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => __('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -18,22 +18,22 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('new.png') . ' ' . __('action_heading_new_administrator'); ?></h3>
+  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_administrator'); ?></h3>
 
   <form name="aEdit" class="dataForm" autocomplete="off" action="<?php echo OSCOM::getLink(null, null, 'action=Save'); ?>" method="post">
 
-  <p><?php echo __('introduction_new_administrator'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_new_administrator'); ?></p>
 
   <fieldset>
-    <p><label for="user_name"><?php echo __('field_username'); ?></label><?php echo osc_draw_input_field('user_name'); ?></p>
-    <p><label for="user_password"><?php echo __('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
+    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name'); ?></p>
+    <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
 
-    <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo __('global_access'); ?></option></select></p>
+    <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo OSCOM::getDef('global_access'); ?></option></select></p>
 
     <ul id="accessToModules" class="modulesListing"></ul>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

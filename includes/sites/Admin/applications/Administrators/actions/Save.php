@@ -26,21 +26,21 @@
               $_SESSION['admin']['access'] = osC_Access::getUserLevels($_GET['id']);
             }
 
-            OSCOM_Registry::get('MessageStack')->add(null, __('ms_success_action_performed'), 'success');
+            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
 
             osc_redirect_admin(OSCOM::getLink());
 
             break;
 
           case -1:
-            OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_action_not_performed'), 'error');
+            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
 
             osc_redirect_admin(OSCOM::getLink());
 
             break;
 
           case -2:
-            OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_username_already_exists'), 'error');
+            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_username_already_exists'), 'error');
 
             break;
         }

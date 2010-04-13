@@ -25,9 +25,9 @@
                       'value' => $_POST['value']);
 
         if ( OSCOM_Site_Admin_Application_Currencies_Currencies::save((isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : null), $data, ((isset($_POST['default']) && ($_POST['default'] == 'on')) || (isset($_POST['is_default']) && ($_POST['is_default'] == 'true') && ($_POST['code'] != DEFAULT_CURRENCY)))) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_success_action_performed'), 'success');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_action_not_performed'), 'error');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink());

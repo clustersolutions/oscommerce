@@ -16,7 +16,7 @@
         $_sort_order = 300;
 
     public function __construct() {
-      $this->_title = __('access_credit_cards_title');
+      $this->_title = OSCOM::getDef('access_credit_cards_title');
     }
   }
 ?>

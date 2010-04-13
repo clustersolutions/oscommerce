@@ -18,11 +18,11 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . __('action_heading_batch_delete_currency'); ?></h3>
+  <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_currency'); ?></h3>
 
   <form name="aDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchDelete'); ?>" method="post">
 
-  <p><?php echo __('introduction_batch_delete_currencies'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_batch_delete_currencies'); ?></p>
 
 <?php
   $check_default_flag = false;
@@ -48,11 +48,11 @@
   echo '<p>' . $names_string . '</p>';
 
   if ( $check_default_flag === false ) {
-    echo '<p>' . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => __('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))) . '</p>';
+    echo '<p>' . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
   } else {
-    echo '<p><b>' . __('introduction_delete_currency_invalid') . '</b></p>';
+    echo '<p><b>' . OSCOM::getDef('introduction_delete_currency_invalid') . '</b></p>';
 
-    echo '<p>' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => __('button_back'))) . '</p>';
+    echo '<p>' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . '</p>';
   }
 ?>
 

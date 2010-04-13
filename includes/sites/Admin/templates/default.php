@@ -26,7 +26,7 @@
   }
 ?>
 
-<title><?php echo STORE_NAME . ': ' . __('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
+<title><?php echo STORE_NAME . ': ' . OSCOM::getDef('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
 
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
@@ -52,8 +52,8 @@
   var pageModule = '<?php echo OSCOM::getSiteApplication(); ?>';
 
   var batchSize = parseInt('<?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>');
-  var batchTotalPagesText = '<?php echo addslashes(__('batch_results_number_of_entries')); ?>';
-  var batchCurrentPageset = '<?php echo addslashes(__('result_set_current_page')); ?>';
+  var batchTotalPagesText = '<?php echo addslashes(OSCOM::getDef('batch_results_number_of_entries')); ?>';
+  var batchCurrentPageset = '<?php echo addslashes(OSCOM::getDef('result_set_current_page')); ?>';
   var batchIconNavigationBack = '<?php echo osc_icon('nav_back.png'); ?>';
   var batchIconNavigationBackGrey = '<?php echo osc_icon('nav_back_grey.png'); ?>';
   var batchIconNavigationForward = '<?php echo osc_icon('nav_forward.png'); ?>';

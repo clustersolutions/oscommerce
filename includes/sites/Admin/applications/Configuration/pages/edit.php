@@ -30,14 +30,14 @@
 
   <form name="cEdit" action="<?php echo OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID'] . '&action=Save'); ?>" method="post">
 
-  <p><?php echo __('introduction_edit_parameter'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_edit_parameter'); ?></p>
 
   <fieldset>
     <p><label for="configuration[<?php echo $osC_ObjectInfo->get('configuration_key'); ?>]"><?php echo $osC_ObjectInfo->getProtected('configuration_title'); ?></label><?php echo $value_field; ?></p>
     <p><?php echo $osC_ObjectInfo->get('configuration_description'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID']), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

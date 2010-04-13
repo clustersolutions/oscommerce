@@ -18,11 +18,11 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . __('action_heading_batch_edit_administrators'); ?></h3>
+  <h3><?php echo osc_icon('edit.png') . ' ' . OSCOM::getDef('action_heading_batch_edit_administrators'); ?></h3>
 
   <form name="aEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchSave'); ?>" method="post">
 
-  <p><?php echo __('introduction_batch_edit_administrators'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_batch_edit_administrators'); ?></p>
 
 <?php
   $Qadmins = $OSCOM_Database->query('select id, user_name from :table_administrators where id in (":id") order by user_name');
@@ -44,14 +44,14 @@
 ?>
 
   <fieldset>
-    <p><?php echo osc_draw_radio_field('mode', array(array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD, 'text' => __('add_to')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_REMOVE, 'text' => __('remove_from')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_SET, 'text' => __('set_to'))), OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD); ?></p>
+    <p><?php echo osc_draw_radio_field('mode', array(array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD, 'text' => OSCOM::getDef('add_to')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_REMOVE, 'text' => OSCOM::getDef('remove_from')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_SET, 'text' => OSCOM::getDef('set_to'))), OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD); ?></p>
 
-    <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo __('global_access'); ?></option></select></p>
+    <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo OSCOM::getDef('global_access'); ?></option></select></p>
 
     <ul id="accessToModules" class="modulesListing"></ul>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

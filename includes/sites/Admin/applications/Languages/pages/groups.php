@@ -20,7 +20,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => __('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=InsertDefinition'), 'icon' => 'plus', 'title' => __('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=InsertDefinition'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -31,9 +31,9 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="langDefGroupDataTable">
   <thead>
     <tr>
-      <th><?php echo __('table_heading_definition_groups'); ?></th>
-      <th><?php echo __('table_heading_total_definitions'); ?></th>
-      <th width="150"><?php echo __('table_heading_action'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_definition_groups'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_total_definitions'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -46,7 +46,7 @@
 </table>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . __('table_action_legend') . '</b> ' . osc_icon('trash.png') . '&nbsp;' . __('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 

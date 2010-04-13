@@ -58,14 +58,14 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('new.png') . ' ' . __('action_heading_new_assignment'); ?></h3>
+  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_assignment'); ?></h3>
 
   <form name="tNew" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . (int)$_GET[$osC_Template->getModule()] . '&action=entry_save'); ?>" method="post">
 
-  <p><?php echo __('introduction_new_assignment'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_new_assignment'); ?></p>
 
   <fieldset id="containment">
-    <p><label for="actions"><?php echo __('field_actions'); ?></label><?php echo osc_draw_pull_down_menu('action', $actions_array); ?></p>
+    <p><label for="actions"><?php echo OSCOM::getDef('field_actions'); ?></label><?php echo osc_draw_pull_down_menu('action', $actions_array); ?></p>
 
     <p><label>Installed Modules:</label><ul id="modulesInstalled" class="connectedList"></ul></p>
 
@@ -80,7 +80,7 @@
     </ul></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('modules', implode(',', $activated_modules_array), 'id="modules"') . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

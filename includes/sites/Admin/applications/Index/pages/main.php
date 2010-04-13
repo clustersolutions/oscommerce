@@ -20,7 +20,7 @@
 
 <h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
-<p><?php echo osc_link_object(OSCOM::getLink(null, 'OnlineCustomers'), osc_icon('people.png') . '&nbsp;' . sprintf(__('total_customers_online'), $Qonline->valueInt('total'))); ?></p>
+<p><?php echo osc_link_object(OSCOM::getLink(null, 'OnlineCustomers'), osc_icon('people.png') . '&nbsp;' . sprintf(OSCOM::getDef('total_customers_online'), $Qonline->valueInt('total'))); ?></p>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
 

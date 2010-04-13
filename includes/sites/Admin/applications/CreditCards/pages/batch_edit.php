@@ -18,11 +18,11 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . __('action_heading_batch_edit_cards'); ?></h3>
+  <h3><?php echo osc_icon('edit.png') . ' ' . OSCOM::getDef('action_heading_batch_edit_cards'); ?></h3>
 
   <form name="ccEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchSave'); ?>" method="post">
 
-  <p><?php echo __('introduction_batch_edit_cards'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_batch_edit_cards'); ?></p>
 
 <?php
   $Qcc = $OSCOM_Database->query('select id, credit_card_name from :table_credit_cards where id in (":id") order by credit_card_name');
@@ -42,10 +42,10 @@
 
   echo '<p>' . $names_string . '</p>';
 
-  echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => __('activate')), array('id' => 'deactivate', 'text' => __('deactivate'))), 'activate') . '</p>';
+  echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => OSCOM::getDef('activate')), array('id' => 'deactivate', 'text' => OSCOM::getDef('deactivate'))), 'activate') . '</p>';
 ?>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

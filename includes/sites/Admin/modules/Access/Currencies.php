@@ -16,7 +16,7 @@
         $_sort_order = 500;
 
     function __construct() {
-      $this->_title = __('access_currencies_title');
+      $this->_title = OSCOM::getDef('access_currencies_title');
     }
   }
 ?>

@@ -14,9 +14,9 @@
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
         if ( OSCOM_Site_Admin_Application_Configuration_Configuration::save($_POST['configuration']) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_success_action_performed'), 'success');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, __('ms_error_action_not_performed'), 'error');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink(null, null, 'gID=' . $_GET['gID']));

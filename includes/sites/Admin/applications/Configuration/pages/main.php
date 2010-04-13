@@ -31,15 +31,15 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="configurationDataTable">
   <thead>
     <tr>
-      <th width="35%;"><?php echo __('table_heading_title'); ?></th>
-      <th><?php echo __('table_heading_value'); ?></th>
-      <th width="150"><?php echo __('table_heading_action'); ?></th>
+      <th width="35%;"><?php echo OSCOM::getDef('table_heading_title'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_value'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . __('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'gID=' . $_GET['gID'] . '&action=BatchSave') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . OSCOM::getDef('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'gID=' . $_GET['gID'] . '&action=BatchSave') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -50,7 +50,7 @@
 </form>
 
 <div style="padding: 2px; min-height: 16px;">
-  <span id="dataTableLegend"><?php echo '<b>' . __('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . __('icon_edit'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 

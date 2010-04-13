@@ -17,11 +17,11 @@
           $results = OSCOM_Site_Admin_Application_Currencies_Currencies::updateRates($_POST['service']);
 
           foreach ( $results[0] as $result ) {
-            OSCOM_Registry::get('MessageStack')->add(null, sprintf(__('ms_error_invalid_currency'), $result['title'], $result['code']), 'error');
+            OSCOM_Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_error_invalid_currency'), $result['title'], $result['code']), 'error');
           }
 
           foreach ( $results[1] as $result ) {
-            OSCOM_Registry::get('MessageStack')->add(null, sprintf(__('ms_success_currency_updated'), $result['title'], $result['code']), 'success');
+            OSCOM_Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_success_currency_updated'), $result['title'], $result['code']), 'success');
           }
         }
 

@@ -35,7 +35,7 @@
         }
       }
 
-      OSCOM_Registry::get('MessageStack')->add('header', __('ms_error_login_invalid'), 'error');
+      OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_login_invalid'), 'error');
     }
   }
 ?>

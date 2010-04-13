@@ -16,7 +16,7 @@
         $_sort_order = 200;
 
     public function __construct() {
-      $this->_title = __('access_configuration_title');
+      $this->_title = OSCOM::getDef('access_configuration_title');
 
       $this->_subgroups = array();
 

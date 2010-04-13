@@ -16,7 +16,7 @@
         $_sort_order = 400;
 
     function __construct() {
-      $this->_title = __('access_languages_title');
+      $this->_title = OSCOM::getDef('access_languages_title');
     }
   }
 ?>

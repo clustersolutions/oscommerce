@@ -12,17 +12,17 @@
     public function __construct() {
       OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/Orders.php');
 
-      $this->_title = __('admin_indexmodules_orders_title');
+      $this->_title = OSCOM::getDef('admin_indexmodules_orders_title');
       $this->_title_link = OSCOM::getLink(null, 'Orders');
 
       if ( osC_Access::hasAccess('orders') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
-                       '      <th>' . __('admin_indexmodules_orders_table_heading_orders') . '</th>' .
-                       '      <th>' . __('admin_indexmodules_orders_table_heading_total') . '</th>' .
-                       '      <th>' . __('admin_indexmodules_orders_table_heading_date') . '</th>' .
-                       '      <th>' . __('admin_indexmodules_orders_table_heading_status') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_orders_table_heading_orders') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_orders_table_heading_total') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_orders_table_heading_date') . '</th>' .
+                       '      <th>' . OSCOM::getDef('admin_indexmodules_orders_table_heading_status') . '</th>' .
                        '    </tr>' .
                        '  </thead>' .
                        '  <tbody>';

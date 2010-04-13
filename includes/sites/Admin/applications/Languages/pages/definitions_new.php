@@ -24,15 +24,15 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('new.png') . ' ' . __('action_heading_new_language_definition'); ?></h3>
+  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_language_definition'); ?></h3>
 
   <form name="lNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . (isset($_GET['group']) ? '&group=' . $_GET['group'] : '') . '&action=InsertDefinition'); ?>" method="post">
 
-  <p><?php echo __('introduction_new_language_definition'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_new_language_definition'); ?></p>
 
   <fieldset>
-    <p><label for="key"><?php echo __('field_definition_key'); ?></label><?php echo osc_draw_input_field('key'); ?></p>
-    <p><label><?php echo __('field_definition_value'); ?></label>
+    <p><label for="key"><?php echo OSCOM::getDef('field_definition_key'); ?></label><?php echo osc_draw_input_field('key'); ?></p>
+    <p><label><?php echo OSCOM::getDef('field_definition_value'); ?></label>
 
 <?php
   foreach ( $osC_Language->getAll() as $l ) {
@@ -41,10 +41,10 @@
 ?>
 
     </p>
-    <p><label for="defgroup"><?php echo __('field_definition_group'); ?></label><?php echo osc_draw_input_field('defgroup', (isset($_GET['group']) ? $_GET['group'] : null)); ?></p>
+    <p><label for="defgroup"><?php echo OSCOM::getDef('field_definition_group'); ?></label><?php echo osc_draw_input_field('defgroup', (isset($_GET['group']) ? $_GET['group'] : null)); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => __('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . (isset($_GET['group']) ? '&group=' . $_GET['group'] : '')), 'priority' => 'secondary', 'icon' => 'close', 'title' => __('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . (isset($_GET['group']) ? '&group=' . $_GET['group'] : '')), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

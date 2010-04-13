@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Configuration extends OSCOM_Site_Admin_ApplicationAbstract {
     protected function initialize() {
-      $this->_page_title = __('heading_title');
+      $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( !isset($_GET['gID']) || !is_numeric($_GET['gID']) ) {
         $_GET['gID'] = 1;

@@ -12,18 +12,18 @@
 <h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('people.png') . ' ' . __('action_heading_login'); ?></h3>
+  <h3><?php echo osc_icon('people.png') . ' ' . OSCOM::getDef('action_heading_login'); ?></h3>
 
   <form name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Process'); ?>" method="post">
 
-  <p><?php echo __('introduction'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction'); ?></p>
 
   <fieldset>
-    <p><label for="user_name"><?php echo __('field_username'); ?></label><?php echo osc_draw_input_field('user_name'); ?></p>
-    <p><label for="user_password"><?php echo __('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
+    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name'); ?></p>
+    <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_button(array('icon' => 'key', 'title' => __('button_login'))); ?></p>
+  <p><?php echo osc_draw_button(array('icon' => 'key', 'title' => OSCOM::getDef('button_login'))); ?></p>
 
   </form>
 </div>

@@ -24,9 +24,9 @@
         $data = array('title' => $_POST['title']);
 
         if ( osC_ProductTypes_Admin::save((isset($_GET['tID']) && is_numeric($_GET['tID']) ? $_GET['tID'] : null), $data) ) {
-          $osC_MessageStack->add($this->_module, __('ms_success_action_performed'), 'success');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          $osC_MessageStack->add($this->_module, __('ms_error_action_not_performed'), 'error');
+          $osC_MessageStack->add($this->_module, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
