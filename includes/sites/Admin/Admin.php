@@ -46,7 +46,8 @@
         unset($redirect);
       }
 
-      OSCOM_Registry::set('osC_Language', new OSCOM_Site_Admin_Language());
+      OSCOM_Registry::set('Language', new OSCOM_Site_Admin_Language());
+      OSCOM_Registry::set('osC_Language', OSCOM_Registry::get('Language')); // HPDL to delete
 
       $_SESSION['module'] = OSCOM::getSiteApplication(); // HPDL to delete; use OSCOM::getSiteApplication()
       if ( !osC_Access::hasAccess(OSCOM::getSiteApplication()) ) {

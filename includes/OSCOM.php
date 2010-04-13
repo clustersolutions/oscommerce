@@ -45,7 +45,6 @@
 
 // set the application parameters
       $Qcfg = OSCOM_Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-      $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
       $Qcfg->setCache('configuration');
       $Qcfg->execute();
 
@@ -225,6 +224,18 @@
       return self::$_request_type;
     }
 
+/**
+ * Return an internal URL address.
+ *
+ * @param string $site The Site to link to. Default: The currently used Site.
+ * @param string $application The Site Application to link to. Default: The currently used Site Application.
+ * @param string $parameters Parameters to add to the link. Example: key1=value1&key2=value2
+ * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: NONSSL.
+ * @param bool $add_session_id Add the session ID to the link. Default: True.
+ * @param bool $search_engine_safe Use search engine safe URLs. Default: True.
+ * @return string The URL address.
+ */
+
     public static function getLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
       if ( empty($site) ) {
         $site = self::getSite();
@@ -234,15 +245,15 @@
         $application = self::getSiteApplication();
       }
 
-      if (!in_array($connection, array('NONSSL', 'SSL', 'AUTO'))) {
+      if ( !in_array($connection, array('NONSSL', 'SSL', 'AUTO')) ) {
         $connection = 'NONSSL';
       }
 
-      if (!is_bool($add_session_id)) {
+      if ( !is_bool($add_session_id) ) {
         $add_session_id = true;
       }
 
-      if (!is_bool($search_engine_safe)) {
+      if ( !is_bool($search_engine_safe) ) {
         $search_engine_safe = true;
       }
 
@@ -297,6 +308,14 @@
       return $link;
     }
 
+/**
+ * Return an internal URL address for public objects.
+ *
+ * @param string $url The object location from the public/sites/SITE/ directory.
+ * @param string $parameters Parameters to add to the link. Example: key1=value1&key2=value2
+ * @return string The URL address.
+ */
+
     public static function getPublicSiteLink($url, $parameters = null) {
       $link = 'public/sites/' . self::getSite() . '/' . $url;
 
@@ -309,6 +328,18 @@
       }
 
       return $link;
+    }
+
+/**
+ * Return a language definition
+ *
+ * @param string $key The language definition to return
+ * @return string The language definition
+ * @access public
+ */
+
+    public static function getDef($key) {
+      return OSCOM_Registry::get('Language')->get($key);
     }
   }
 ?>
