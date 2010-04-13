@@ -110,7 +110,7 @@ var osC_DataTable = function() {
             if ( batchPages > 1 ) {
               var form = '<form action="#" onsubmit="return false;">';
 
-              var select = '<select name="page" onclick="osC_DataTable.load(this.form.page.options[this.form.page.selectedIndex].value);">';
+              var select = '<select name="page" onchange="osC_DataTable.load(this.form.page.options[this.form.page.selectedIndex].value);">';
 
               for ( var i = 1; i <= batchPages; i++ ) {
                 var option = '<option value="' + i + '"';
