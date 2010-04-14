@@ -90,7 +90,7 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(record.id);
 
-      $('#row' + parseInt(record.id)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); }).click(function(event) {
+      $('#row' + parseInt(record.id)).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }

@@ -12,12 +12,10 @@
 heading_title = Languages
 
 table_heading_languages = Languages
-table_heading_total_definitions = Total Definitions
 table_heading_code = Code
 table_heading_action = Action
 
 table_heading_definition_groups = Definition Groups
-table_heading_total_definitions = Total Definitions
 
 action_heading_import_language = Import Language
 action_heading_batch_delete_languages = Batch Delete Languages

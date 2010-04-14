@@ -36,14 +36,13 @@
       <th><?php echo OSCOM::getDef('table_heading_languages'); ?></th>
       <th width="20">&nbsp;</th>
       <th><?php echo OSCOM::getDef('table_heading_code'); ?></th>
-      <th><?php echo OSCOM::getDef('table_heading_total_definitions'); ?></th>
       <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -109,14 +108,14 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(record.languages_id);
 
-      $('#row' + parseInt(record.languages_id)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); }).click(function(event) {
+      $('#row' + parseInt(record.languages_id)).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
       }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
-      newCell.innerHTML = '<a href="' + languageLink.replace('LANGUAGEID', parseInt(record.languages_id)) + '">' + languageLinkIcon + '&nbsp;' + htmlSpecialChars(languageName) + '</a>';
+      newCell.innerHTML = languageLinkIcon + '&nbsp;<a href="' + languageLink.replace('LANGUAGEID', parseInt(record.languages_id)) + '" class="parent">' + htmlSpecialChars(languageName) + '</a><span style="float: right;">(' + parseInt(record.total_definitions) + ')</span>';
 
       newCell = newRow.insertCell(1);
       newCell.innerHTML = languageIcon.replace('LANGUAGECODE', htmlSpecialChars(record.code.toLowerCase().substring(3))).replace('LANGUAGENAME', htmlSpecialChars(record.name)).replace('LANGUAGENAME', htmlSpecialChars(record.name));
@@ -125,13 +124,10 @@
       newCell.innerHTML = htmlSpecialChars(record.code);
 
       newCell = newRow.insertCell(3);
-      newCell.innerHTML = parseInt(record.total_definitions);
-
-      newCell = newRow.insertCell(4);
       newCell.innerHTML = '<a href="' + languageEditLink.replace('LANGUAGEID', parseInt(record.languages_id)) + '">' + languageEditLinkIcon + '</a>&nbsp;<a href="' + languageExportLink.replace('LANGUAGEID', parseInt(record.languages_id)) + '">' + languageExportLinkIcon + '</a>&nbsp;<a href="' + languageDeleteLink.replace('LANGUAGEID', parseInt(record.languages_id)) + '">' + languageDeleteLinkIcon + '</a>';
       newCell.align = 'right';
 
-      newCell = newRow.insertCell(5);
+      newCell = newRow.insertCell(4);
       newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.languages_id) + '" id="batch' + parseInt(record.languages_id) + '" />';
       newCell.align = 'center';
 

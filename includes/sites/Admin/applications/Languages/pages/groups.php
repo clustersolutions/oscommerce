@@ -32,13 +32,12 @@
   <thead>
     <tr>
       <th><?php echo OSCOM::getDef('table_heading_definition_groups'); ?></th>
-      <th><?php echo OSCOM::getDef('table_heading_total_definitions'); ?></th>
       <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th colspan="3">&nbsp;</th>
+      <th colspan="2">&nbsp;</th>
     </tr>
   </tfoot>
   <tbody>
@@ -84,15 +83,12 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + record.content_group;
 
-      $('#row' + record.content_group).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); });
+      $('#row' + record.content_group).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); });
 
       var newCell = newRow.insertCell(0);
-      newCell.innerHTML = '<a href="' + groupLink.replace('GROUPCODE', htmlSpecialChars(record.content_group)) + '">' + groupLinkIcon + '&nbsp;' + htmlSpecialChars(record.content_group) + '</a>';
+      newCell.innerHTML = groupLinkIcon + '&nbsp;<a href="' + groupLink.replace('GROUPCODE', htmlSpecialChars(record.content_group)) + '" class="parent">' + htmlSpecialChars(record.content_group) + '</a><span style="float: right;">(' + parseInt(record.total_entries) + ')</span>';
 
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = parseInt(record.total_entries);
-
-      newCell = newRow.insertCell(2);
       newCell.innerHTML = '<a href="' + groupDeleteLink.replace('GROUPCODE', htmlSpecialChars(record.content_group)) + '">' + groupDeleteLinkIcon + '</a>';
       newCell.align = 'right';
 
