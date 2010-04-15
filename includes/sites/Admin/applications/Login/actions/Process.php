@@ -12,7 +12,6 @@
     public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
         $Qadmin = OSCOM_Registry::get('Database')->query('select id, user_name, user_password from :table_administrators where user_name = :user_name limit 1');
-        $Qadmin->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
         $Qadmin->bindValue(':user_name', $_POST['user_name']);
         $Qadmin->execute();
 

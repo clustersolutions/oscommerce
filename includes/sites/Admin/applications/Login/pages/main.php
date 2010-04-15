@@ -19,8 +19,8 @@
   <p><?php echo OSCOM::getDef('introduction'); ?></p>
 
   <fieldset>
-    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name'); ?></p>
-    <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
+    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name', null, 'tabindex="1"'); ?></p>
+    <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo osc_draw_password_field('user_password', 'tabindex="2"'); ?></p>
   </fieldset>
 
   <p><?php echo osc_draw_button(array('icon' => 'key', 'title' => OSCOM::getDef('button_login'))); ?></p>
@@ -29,5 +29,19 @@
 </div>
 
 <script type="text/javascript">
-$('#user_name').focus();
+  $('#user_name').focus();
 </script>
+
+<?php
+  if ( isset($_GET['action']) && ($_GET['action'] == 'Process') && !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
+?>
+
+<script type="text/javascript" src="public/external/jquery/jquery.showPasswordCheckbox.js"></script>
+<script type="text/javascript">
+  var showPasswordText = '<?php echo addslashes(OSCOM::getDef('field_show_password')); ?>';
+  $("#user_password").showPasswordCheckbox();
+</script>
+
+<?php
+  }
+?>
