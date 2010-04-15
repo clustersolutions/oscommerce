@@ -28,7 +28,7 @@
 
   <p><?php echo '<b>' . OSCOM::getDef('introduction_delete_language_invalid') . '</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
+  <p><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
 
 <?php
   } else {

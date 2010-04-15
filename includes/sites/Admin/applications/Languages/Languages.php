@@ -12,13 +12,13 @@
     protected function initialize() {
       $this->_page_title = OSCOM::getDef('heading_title');
 
-      if ( !empty($_GET['id']) && is_numeric($_GET['id']) && OSCOM_Site_Admin_Application_Languages_Languages::exists($_GET['id']) ) {
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Languages_Languages::get($_GET['id'], 'name');
+      if ( isset($_GET['id']) && is_numeric($_GET['id']) && OSCOM_Site_Admin_Application_Languages_Languages::exists($_GET['id']) ) {
         $this->_page_contents = 'groups.php';
+        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Languages_Languages::get($_GET['id'], 'name');
 
-        if ( isset($_GET['group']) && !empty($_GET['group']) && OSCOM_Site_Admin_Application_Languages_Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
-          $this->_page_title .= ': ' . $_GET['group'];
+        if ( isset($_GET['group']) && OSCOM_Site_Admin_Application_Languages_Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
           $this->_page_contents = 'definitions.php';
+          $this->_page_title .= ': ' . $_GET['group'];
         }
       }
     }

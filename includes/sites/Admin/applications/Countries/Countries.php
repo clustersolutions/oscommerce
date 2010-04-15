@@ -12,9 +12,9 @@
     protected function initialize() {
       $this->_page_title = OSCOM::getDef('heading_title');
 
-      if ( !empty($_GET['id']) && is_numeric($_GET['id']) ) {
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Countries_Countries::get($_GET['id'], 'countries_name');
+      if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
         $this->_page_contents = 'zones.php';
+        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Countries_Countries::get($_GET['id'], 'countries_name');
       }
     }
   }
