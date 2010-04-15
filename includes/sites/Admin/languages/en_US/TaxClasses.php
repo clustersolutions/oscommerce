@@ -12,7 +12,6 @@
 heading_title = Tax Classes
 
 table_heading_tax_classes = Tax Classes
-table_heading_total_rates = Total Tax Rates
 table_heading_action = Action
 
 table_heading_tax_rate_priority = Priority

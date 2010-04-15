@@ -1,52 +1,50 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_TaxClasses_Admin::get($_GET['tcID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::get($_GET['id']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('tax_class_title'); ?></div>
-<div class="infoBoxContent">
-  <form name="tcDelete" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&tcID=' . $osC_ObjectInfo->getInt('tax_class_id') . '&action=delete'); ?>" method="post">
+<div class="infoBox">
+  <h3><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('tax_class_title'); ?></h3>
+
+  <form name="tcDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $osC_ObjectInfo->getInt('tax_class_id') . '&action=Delete'); ?>" method="post">
 
 <?php
-  if ( osC_TaxClasses_Admin::hasProducts($osC_ObjectInfo->getInt('tax_class_id')) ) {
+  if ( OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::hasProducts($osC_ObjectInfo->getInt('tax_class_id')) ) {
 ?>
 
-  <p><?php echo '<b>' . sprintf($osC_Language->get('delete_warning_tax_class_in_use'), osC_TaxClasses_Admin::getNumberOfProducts($osC_ObjectInfo->getInt('tax_class_id'))) . '</b>'; ?></p>
+  <p><?php echo '<b>' . sprintf(OSCOM::getDef('delete_warning_tax_class_in_use'), OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::getNumberOfProducts($osC_ObjectInfo->getInt('tax_class_id'))) . '</b>'; ?></p>
 
-  <p align="center"><?php echo '<input type="button" value="' . $osC_Language->get('button_back') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
 
 <?php
   } else {
 ?>
 
-  <p><?php echo $osC_Language->get('introduction_delete_tax_class'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_delete_tax_class'); ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('tax_class_title') . ' (' . sprintf($osC_Language->get('total_entries'), $osC_ObjectInfo->getInt('total_tax_rates')) . ')</b>'; ?></p>
+  <p><?php echo '<b>' . $osC_ObjectInfo->get('tax_class_title') . ' (' . sprintf(OSCOM::getDef('total_entries'), $osC_ObjectInfo->getInt('total_tax_rates')) . ')</b>'; ?></p>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_delete') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
 <?php
   }
 ?>
 
+  </form>
 </div>

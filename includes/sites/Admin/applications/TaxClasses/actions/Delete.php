@@ -1,33 +1,25 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Application_Tax_classes_Actions_delete extends osC_Application_Tax_classes {
-    public function __construct() {
-      global $osC_Language, $osC_MessageStack;
-
-      parent::__construct();
-
-      $this->_page_contents = 'delete.php';
+  class OSCOM_Site_Admin_Application_TaxClasses_Action_Delete {
+    public function execute(OSCOM_ApplicationAbstract $application) {
+      $application->setPageContent('delete.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( osC_TaxClasses_Admin::delete($_GET['tcID']) ) {
-          $osC_MessageStack->add($this->_module, $osC_Language->get('ms_success_action_performed'), 'success');
+        if ( OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::delete($_GET['id']) ) {
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          $osC_MessageStack->add($this->_module, $osC_Language->get('ms_error_action_not_performed'), 'error');
+          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
-        osc_redirect_admin(osc_href_link_admin(FILENAME_DEFAULT, $this->_module));
+        osc_redirect_admin(OSCOM::getLink());
       }
     }
   }

@@ -1,28 +1,22 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Access_Tax_classes extends osC_Access {
-    var $_module = 'tax_classes',
+  class osC_Access_TaxClasses extends osC_Access {
+    var $_module = 'TaxClasses',
         $_group = 'configuration',
         $_icon = 'classes.png',
         $_title,
         $_sort_order = 800;
 
-    function osC_Access_Tax_classes() {
-      global $osC_Language;
-
-      $this->_title = $osC_Language->get('access_tax_classes_title');
+    public function __construct() {
+      $this->_title = OSCOM::getDef('access_tax_classes_title');
     }
   }
 ?>
