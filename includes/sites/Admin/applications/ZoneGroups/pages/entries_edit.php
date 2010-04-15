@@ -1,21 +1,17 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(osC_ZoneGroups_Admin::getEntry($_GET['zeID']));
+  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::getEntry($_GET['zID']));
 
   $countries_array = array(array('id' => '',
-                                 'text' => $osC_Language->get('all_countries')));
+                                 'text' => OSCOM::getDef('all_countries')));
 
   foreach ( osC_Address::getCountries() as $country ) {
     $countries_array[] = array('id' => $country['id'],
@@ -23,7 +19,7 @@
   }
 
   $zones_array = array(array('id' => '',
-                             'text' => $osC_Language->get('all_zones')));
+                             'text' => OSCOM::getDef('all_zones')));
 
   if ( $osC_ObjectInfo->get('zone_country_id') > 0 ) {
     foreach ( osC_Address::getZones($osC_ObjectInfo->get('zone_country_id')) as $zone ) {
@@ -33,43 +29,43 @@
   }
 ?>
 
-<script type="text/javascript"><!--
-function update_zone(theForm) {
-  var NumState = theForm.zone_id.options.length;
-  var SelectedCountry = "";
+<script type="text/javascript">
+  function update_zone(theForm) {
+    var NumState = theForm.zone_id.options.length;
+    var SelectedCountry = "";
 
-  while(NumState > 0) {
-    NumState--;
-    theForm.zone_id.options[NumState] = null;
-  }
+    while(NumState > 0) {
+      NumState--;
+      theForm.zone_id.options[NumState] = null;
+    }
 
-  SelectedCountry = theForm.zone_country_id.options[theForm.zone_country_id.selectedIndex].value;
+    SelectedCountry = theForm.zone_country_id.options[theForm.zone_country_id.selectedIndex].value;
 
 <?php echo osc_js_zone_list('SelectedCountry', 'theForm', 'zone_id'); ?>
+  }
+</script>
 
-}
-//--></script>
-
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('countries_name') . ': ' . $osC_ObjectInfo->getProtected('zone_name'); ?></div>
-<div class="infoBoxContent">
-  <form name="zeEdit" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&zeID=' . $osC_ObjectInfo->getInt('association_id') . '&action=entry_save'); ?>" method="post">
+<div class="infoBox">
+  <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('countries_name') . ': ' . $osC_ObjectInfo->getProtected('zone_name'); ?></h3>
 
-  <p><?php echo $osC_Language->get('introduction_edit_zone_entry'); ?></p>
+  <form name="zEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=' . $osC_ObjectInfo->getInt('association_id') . '&action=EntrySave'); ?>" method="post">
+
+  <p><?php echo OSCOM::getDef('introduction_edit_zone_entry'); ?></p>
 
   <fieldset>
-    <div><label for="zone_country_id"><?php echo $osC_Language->get('field_country'); ?></label><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, $osC_ObjectInfo->get('zone_country_id'), 'onchange="update_zone(this.form);"'); ?></div>
-    <div><label for="zone_id"><?php echo $osC_Language->get('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array, $osC_ObjectInfo->get('zone_id')); ?></div>
+    <p><label for="zone_country_id"><?php echo OSCOM::getDef('field_country'); ?></label><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, $osC_ObjectInfo->get('zone_country_id'), 'onchange="update_zone(this.form);"'); ?></p>
+    <p><label for="zone_id"><?php echo OSCOM::getDef('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array, $osC_ObjectInfo->get('zone_id')); ?></p>
   </fieldset>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

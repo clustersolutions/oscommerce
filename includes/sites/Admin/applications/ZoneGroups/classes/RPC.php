@@ -1,20 +1,14 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  require('includes/applications/zone_groups/classes/zone_groups.php');
-
-  class osC_Zone_groups_Admin_rpc {
+  class OSCOM_Site_Admin_Application_ZoneGroups_RPC {
     public static function getAll() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
@@ -25,9 +19,9 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = osC_ZoneGroups_Admin::find($_GET['search'], $_GET['page']);
+        $result = OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::find($_GET['search'], $_GET['page']);
       } else {
-        $result = osC_ZoneGroups_Admin::getAll($_GET['page']);
+        $result = OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::getAll($_GET['page']);
       }
 
       $result['rpcStatus'] = RPC_STATUS_SUCCESS;
@@ -43,9 +37,9 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = osC_ZoneGroups_Admin::findEntries($_GET['search'], $_GET[$_module]);
+        $result = OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::findEntries($_GET['search'], $_GET['id']);
       } else {
-        $result = osC_ZoneGroups_Admin::getAllEntries($_GET[$_module]);
+        $result = OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::getAllEntries($_GET['id']);
       }
 
       $result['rpcStatus'] = RPC_STATUS_SUCCESS;
