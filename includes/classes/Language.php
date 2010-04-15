@@ -153,7 +153,7 @@
 
         foreach ($browser_languages as $browser_language) {
           foreach ($languages as $key => $value) {
-            if (eregi('^(' . $value . ')(;q=[0-9]\\.[0-9])?$', $browser_language) && $this->exists($key)) {
+            if (preg_match('/^(' . $value . ')(;q=[0-9]\\.[0-9])?$/i', $browser_language) && $this->exists($key)) {
               return $key;
             }
           }

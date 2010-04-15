@@ -79,7 +79,7 @@
         }
       }
 
-      $table_cost = split("[:,]" , MODULE_SHIPPING_TABLE_COST);
+      $table_cost = preg_split("/[:,]/" , MODULE_SHIPPING_TABLE_COST);
       $size = sizeof($table_cost);
       for ($i=0, $n=$size; $i<$n; $i+=2) {
         if ($order_total <= $table_cost[$i]) {

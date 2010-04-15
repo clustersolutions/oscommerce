@@ -30,7 +30,7 @@
       global $osC_Database;
 
       if (empty($number) === false) {
-        $this->_number = ereg_replace('[^0-9]', '', $number);
+        $this->_number = preg_replace('/[^0-9]/', '', $number);
         $this->_expiry_month = (int)$exp_month;
         $this->_expiry_year = (int)$exp_year;
       }

@@ -440,7 +440,7 @@
       global $osC_Cache;
 
       if ($this->cache_read === false) {
-        if (eregi('^SELECT', $this->sql_query)) {
+        if (preg_match('/^SELECT/i', $this->sql_query)) {
           $this->db_class->freeResult($this->query_handler);
         }
 
@@ -516,7 +516,7 @@
           }
 
           if ($query_action == 'delete') {
-            $query_data = split(' ', $this->sql_query, 4);
+            $query_data = explode(' ', $this->sql_query, 4);
             $query_table = substr($query_data[2], strlen(DB_TABLE_PREFIX));
 
             if ( isset($this->db_class->fkeys[$query_table]) ) {
@@ -580,7 +580,7 @@
               }
             }
           } elseif ($query_action == 'update') {
-            $query_data = split(' ', $this->sql_query, 3);
+            $query_data = explode(' ', $this->sql_query, 3);
             $query_table = substr($query_data[1], strlen(DB_TABLE_PREFIX));
 
             if ( isset($this->db_class->fkeys[$query_table]) ) {
@@ -649,7 +649,7 @@
           $this->logging_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
 
           if ($this->logging_action == 'update') {
-            $db = split(' ', $this->sql_query, 3);
+            $db = explode(' ', $this->sql_query, 3);
             $this->logging_database = $db[1];
 
             $test = $this->db_class->simpleQuery('select ' . implode(', ', array_keys($this->logging_fields)) . ' from ' . $this->logging_database . substr($this->sql_query, strrpos($this->sql_query, ' where ')));
@@ -662,14 +662,14 @@
               }
             }
           } elseif ($this->logging_action == 'insert') {
-            $db = split(' ', $this->sql_query, 4);
+            $db = explode(' ', $this->sql_query, 4);
             $this->logging_database = $db[2];
 
             foreach ($this->logging_fields as $key => $value) {
               $this->logging_changed[] = array('key' => $this->logging_database . '.' . $key, 'old' => '', 'new' => $value);
             }
           } elseif ($this->logging_action == 'delete') {
-            $db = split(' ', $this->sql_query, 4);
+            $db = explode(' ', $this->sql_query, 4);
             $this->logging_database = $db[2];
 
             $del = $this->db_class->simpleQuery('select * from ' . $this->logging_database . ' ' . $db[3]);

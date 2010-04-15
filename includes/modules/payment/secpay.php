@@ -154,7 +154,7 @@
 
     function before_process() {
       if ($_GET['valid'] == 'true') {
-        list($REQUEST_URI) = split("hash=", $_SERVER['REQUEST_URI']);
+        list($REQUEST_URI) = explode("hash=", $_SERVER['REQUEST_URI']);
         if ($_GET['hash'] != MD5($REQUEST_URI . MODULE_PAYMENT_SECPAY_DIGEST_KEY)) {
           osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'payment&' . session_name() . '=' . $_GET[session_name()] . '&payment_error=' . $this->_code, 'SSL', false, false));
         }

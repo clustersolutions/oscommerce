@@ -336,7 +336,7 @@
       $_POST['authorizenet_echeck_owner'] = (isset($_POST['authorizenet_echeck_owner']) ? trim($_POST['authorizenet_echeck_owner']) : '');
       $_POST['authorizenet_echeck_account_number'] = (isset($_POST['authorizenet_echeck_account_number']) ? trim($_POST['authorizenet_echeck_account_number']) : '');
       $_POST['authorizenet_echeck_bank_name'] = (isset($_POST['authorizenet_echeck_bank_name']) ? trim($_POST['authorizenet_echeck_bank_name']) : '');
-      $_POST['authorizenet_echeck_routing_code'] = (isset($_POST['authorizenet_echeck_routing_code']) ? ereg_replace('[^0-9]', '', $_POST['authorizenet_echeck_routing_code']) : '');
+      $_POST['authorizenet_echeck_routing_code'] = (isset($_POST['authorizenet_echeck_routing_code']) ? preg_replace('/[^0-9]/', '', $_POST['authorizenet_echeck_routing_code']) : '');
 
       if (empty($_POST['authorizenet_echeck_owner']) || empty($_POST['authorizenet_echeck_account_number']) || empty($_POST['authorizenet_echeck_bank_name']) || (in_array($_POST['authorizenet_echeck_account_type'], array('CHECKING', 'BUSINESSCHECKING', 'SAVINGS')) === false)) {
         $error = true;
@@ -349,7 +349,7 @@
       }
 
       if (($error === false) && (MODULE_PAYMENT_AUTHORIZENET_ECHECK_VERIFY_WITH_WF_SS == '1')) {
-        $_POST['authorizenet_echeck_tax_id'] = (isset($_POST['authorizenet_echeck_tax_id']) ? ereg_replace('[^0-9]', '', $_POST['authorizenet_echeck_tax_id']) : '');
+        $_POST['authorizenet_echeck_tax_id'] = (isset($_POST['authorizenet_echeck_tax_id']) ? preg_replace('/[^0-9]/', '', $_POST['authorizenet_echeck_tax_id']) : '');
 
         if (in_array($_POST['authorizenet_echeck_org_type'], array('I', 'B')) === false) {
           $error = true;

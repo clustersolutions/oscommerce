@@ -38,7 +38,7 @@
         $id = false;
 
         foreach ($_GET as $key => $value) {
-          if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
+          if ( (preg_match('/^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$/', $key) || preg_match('/^[a-zA-Z0-9 -_]*$/', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
             $id = $key;
           }
 

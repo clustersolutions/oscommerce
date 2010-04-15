@@ -89,7 +89,7 @@
         @exec('nslookup -type=' . escapeshellarg($type) . ' ' . escapeshellarg($host), $output);
 
         foreach ( $output as $k => $line ) {
-          if ( eregi('^' . $host, $line) ) {
+          if ( preg_match('/^' . $host . '/i', $line) ) {
             return true;
           }
         }

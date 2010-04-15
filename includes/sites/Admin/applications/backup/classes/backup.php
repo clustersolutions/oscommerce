@@ -73,7 +73,7 @@
           $schema .= ',' . "\n";
         }
 
-        $schema = ereg_replace(",\n$", '', $schema);
+        $schema = preg_replace("/,\n$/", '', $schema);
 
 // add the keys
         $Qkeys = $osC_Database->query('show keys from :table');
@@ -131,7 +131,7 @@
                 $schema .= 'NULL, ';
               } elseif ( strlen($rows[$i]) > 0 ) {
                 $row = addslashes($rows[$i]);
-                $row = ereg_replace("\n#", "\n".'\#', $row);
+                $row = preg_replace("/\n#/", "\n".'\#', $row);
 
                 $schema .= '\'' . $row . '\', ';
               } else {
@@ -139,7 +139,7 @@
               }
             }
 
-            $schema = ereg_replace(', $', '', $schema) . ');' . "\n";
+            $schema = preg_replace('/, $/', '', $schema) . ');' . "\n";
 
             fputs($fp, $schema);
           }
@@ -280,7 +280,7 @@
               $next = 'insert';
             }
 
-            if ( eregi('create', $next) || eregi('insert', $next) || eregi('drop t', $next) ) {
+            if ( preg_match('/create/i', $next) || preg_match('/insert/i', $next) || preg_match('/drop t/i', $next) ) {
               $next = '';
               $sql_array[] = substr($restore_query, 0, $i);
               $restore_query = ltrim(substr($restore_query, $i+1));

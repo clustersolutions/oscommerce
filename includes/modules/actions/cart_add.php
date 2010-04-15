@@ -16,7 +16,7 @@
         $id = false;
 
         foreach ( $_GET as $key => $value ) {
-          if ( (is_numeric($key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
+          if ( (is_numeric($key) || preg_match('/^[a-zA-Z0-9 -_]*$/', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
             $id = $key;
           }
 

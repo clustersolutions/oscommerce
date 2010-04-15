@@ -34,7 +34,7 @@
       if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
         return strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
+        return preg_replace('/2037/', $year, strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 
@@ -55,7 +55,7 @@
       if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
         return strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        return ereg_replace('2037', $year, strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
+        return preg_replace('/2037/', $year, strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 
