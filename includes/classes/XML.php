@@ -10,7 +10,7 @@
 
   class OSCOM_XML {
     public static function toArray($xml) {
-      if ( get_class($xml) == 'SimpleXMLElement' ) {
+      if ( $xml instanceof SimpleXMLElement ) {
         $attributes = $xml->attributes();
 
         foreach ( $attributes as $k => $v ) {
