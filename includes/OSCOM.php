@@ -43,17 +43,6 @@
       OSCOM_Registry::set('Database', OSCOM_Database::connect());
       OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
 
-// set the application parameters
-      $Qcfg = OSCOM_Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-      $Qcfg->setCache('configuration');
-      $Qcfg->execute();
-
-      while ( $Qcfg->next() ) {
-        define($Qcfg->value('cfgKey'), $Qcfg->value('cfgValue'));
-      }
-
-      $Qcfg->freeResult();
-
       self::initializeSite();
     }
 

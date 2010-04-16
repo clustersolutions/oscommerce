@@ -13,6 +13,17 @@
     protected static $_application = 'index';
 
     public static function initialize() {
+// set the application parameters
+      $Qcfg = OSCOM_Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
+      $Qcfg->setCache('configuration');
+      $Qcfg->execute();
+
+      while ( $Qcfg->next() ) {
+        define($Qcfg->value('cfgKey'), $Qcfg->value('cfgValue'));
+      }
+
+      $Qcfg->freeResult();
+
       if ( !empty($_GET) ) {
         $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1))));
 

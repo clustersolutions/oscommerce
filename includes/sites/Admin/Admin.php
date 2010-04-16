@@ -21,6 +21,17 @@
     protected static $_guest_applications = array('Index', 'Login');
 
     public static function initialize() {
+// set the application parameters
+      $Qcfg = OSCOM_Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
+      $Qcfg->setCache('configuration');
+      $Qcfg->execute();
+
+      while ( $Qcfg->next() ) {
+        define($Qcfg->value('cfgKey'), $Qcfg->value('cfgValue'));
+      }
+
+      $Qcfg->freeResult();
+
       OSCOM_Registry::set('MessageStack', new OSCOM_Site_Admin_MessageStack(), true); // initialize before session due to register_shutdown_function
 
       OSCOM_Registry::set('Session', OSCOM_Session::load('adminSid'));
