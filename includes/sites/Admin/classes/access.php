@@ -67,7 +67,7 @@
  * @return array
  */
 
-    public static function getUserLevels($id) {
+    public static function getUserLevels($site, $id) {
       global $osC_Database;
 
       $modules = array();
@@ -100,8 +100,8 @@
 
       $access = array();
 
-      if ( isset($_SESSION['admin']) ) {
-        foreach ( $_SESSION['admin']['access'] as $module ) {
+      if ( isset($_SESSION['Admin']) ) {
+        foreach ( $_SESSION['Admin']['access'] as $module ) {
           if ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php') ) {
             $module_class = 'osC_Access_' . ucfirst($module);
 
@@ -183,8 +183,8 @@
       return $this->_subgroups;
     }
 
-    public static function hasAccess($application) {
-      return in_array($application, call_user_func(array('OSCOM_' . OSCOM::getSite(), 'getGuestApplications'))) || in_array($application, $_SESSION['admin']['access']);
+    public static function hasAccess($site, $application) {
+      return in_array($application, call_user_func(array('OSCOM_' . $site, 'getGuestApplications'))) || in_array($application, $_SESSION[$site]['access']);
     }
   }
 ?>

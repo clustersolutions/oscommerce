@@ -1,15 +1,13 @@
-#
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2006 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
-image_button_continue = Continue
-image_button_cancel = Cancel
-image_button_retry = Retry
+button_continue = Continue
+button_cancel = Cancel
+button_retry = Retry
+
+button_shop = Online Shop
+button_admin = Administration Tool

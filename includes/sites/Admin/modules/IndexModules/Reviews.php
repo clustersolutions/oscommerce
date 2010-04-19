@@ -15,7 +15,7 @@
       $this->_title = OSCOM::getDef('admin_indexmodules_reviews_title');
       $this->_title_link = OSCOM::getLink(null, 'Reviews');
 
-      if ( osC_Access::hasAccess('reviews') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'reviews') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .

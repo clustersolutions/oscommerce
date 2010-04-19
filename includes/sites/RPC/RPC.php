@@ -8,61 +8,45 @@
   as published by the Free Software Foundation.
 */
 
-  define('OSC_IN_ADMIN', true);
-  define('RPC_STATUS_SUCCESS', 1);
-  define('RPC_STATUS_NO_SESSION', -10);
-  define('RPC_STATUS_NO_MODULE', -20);
-  define('RPC_STATUS_NO_ACCESS', -50);
-  define('RPC_STATUS_CLASS_NONEXISTENT', -60);
-  define('RPC_STATUS_NO_ACTION', -70);
-  define('RPC_STATUS_ACTION_NONEXISTENT', -71);
-
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/general.php');
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/html_output.php');
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/classes/access.php');
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/localization.php');
-  require(OSCOM::BASE_DIRECTORY . 'classes/object_info.php');
-  
   class OSCOM_RPC extends OSCOM_SiteAbstract {
-    protected static $_guest_applications = array('Index', 'Login');
+    const STATUS_SUCCESS = 1;
+    const STATUS_NO_SESSION = -10;
+    const STATUS_NO_MODULE = -20;
+    const STATUS_NO_ACCESS = -50;
+    const STATUS_CLASS_NONEXISTENT = -60;
+    const STATUS_NO_ACTION = -70;
+    const STATUS_ACTION_NONEXISTENT = -71;
 
     public static function initialize() {
-// set the application parameters
-      $Qcfg = OSCOM_Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-      $Qcfg->setCache('configuration');
-      $Qcfg->execute();
-
-      while ( $Qcfg->next() ) {
-        define($Qcfg->value('cfgKey'), $Qcfg->value('cfgValue'));
-      }
-
-      $Qcfg->freeResult();
-
       header('Cache-Control: no-cache, must-revalidate');
       header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 
-      OSCOM_Registry::set('Session', OSCOM_Session::load('adminSid'));
-      OSCOM_Registry::get('Session')->start();
-
-      OSCOM_Registry::set('osC_Language', new OSCOM_Site_RPC_Language());
-
-      if ( !isset($_SESSION['admin']) ) {
-        echo json_encode(array('rpcStatus' => RPC_STATUS_NO_SESSION));
-        exit;
-      }
-
-      $module = null;
-      $class = null;
-
       if ( empty($_GET) ) {
-        echo json_encode(array('rpcStatus' => RPC_STATUS_NO_MODULE));
+        echo json_encode(array('rpcStatus' => self::STATUS_NO_MODULE));
         exit;
       } else {
-        $first_array = array_slice($_GET, 1, 1);
-        $_module = osc_sanitize_string(basename(key($first_array)));
+        $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1))));
+        $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1))));
 
-        if ( !osC_Access::hasAccess($_module) ) {
-          echo json_encode(array('rpcStatus' => RPC_STATUS_NO_ACCESS));
+        if ( !OSCOM::siteExists($site) ) {
+          echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
+          exit;
+        }
+
+        OSCOM::setSite($site);
+
+        if ( !OSCOM::siteApplicationExists($application) ) {
+          echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
+          exit;
+        }
+
+        OSCOM::setSiteApplication($application);
+
+        include(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/' . $site . '.php');
+        call_user_func(array('OSCOM_' . $site, 'initialize'));
+
+        if ( !call_user_func(array('OSCOM_' . $site, 'hasAccess'), $application)) {
+          echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
           exit;
         }
 
@@ -70,27 +54,23 @@
         $action = (isset($_GET['action']) && !empty($_GET['action'])) ? osc_sanitize_string(basename($_GET['action'])) : '';
 
         if ( empty($action) ) {
-          echo json_encode(array('rpcStatus' => RPC_STATUS_NO_ACTION));
+          echo json_encode(array('rpcStatus' => self::STATUS_NO_ACTION));
           exit;
         }
 
-        if ( class_exists('OSCOM_Site_Admin_Application_' . $_module . '_' . $class) ) {
-          if ( method_exists('OSCOM_Site_Admin_Application_' . $_module . '_' . $class, $action) ) {
-            call_user_func(array('OSCOM_Site_Admin_Application_' . $_module . '_' . $class, $action));
+        if ( class_exists('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class) ) {
+          if ( method_exists('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class, $action) ) {
+            call_user_func(array('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class, $action));
             exit;
           } else {
-            echo json_encode(array('rpcStatus' => RPC_STATUS_ACTION_NONEXISTENT));
+            echo json_encode(array('rpcStatus' => self::STATUS_ACTION_NONEXISTENT));
             exit;
           }
         } else {
-          echo json_encode(array('rpcStatus' => RPC_STATUS_CLASS_NONEXISTENT));
+          echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
           exit;
         }
       }
-    }
-
-    public static function getGuestApplications() {
-      return self::$_guest_applications;
     }
   }
 ?>

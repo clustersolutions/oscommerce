@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Login_Action_Logoff {
     public static function execute(OSCOM_ApplicationAbstract $application) {
-      unset($_SESSION['admin']);
+      unset($_SESSION[OSCOM::getSite()]);
 
       OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_logged_out'), 'success');
 

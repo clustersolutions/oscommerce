@@ -499,7 +499,6 @@
             if ( empty($this->db_class->fkeys) ) {
               $Qfk = new self($this->db_class);
               $Qfk->setQuery('select * from :table_fk_relationships');
-              $Qfk->bindTable(':table_fk_relationships', TABLE_FK_RELATIONSHIPS);
 //              $Qfk->setCache('fk_relationships');
               $Qfk->execute();
 

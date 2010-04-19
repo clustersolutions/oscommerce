@@ -12,7 +12,7 @@
   as published by the Free Software Foundation.
 */
 
-  include('../includes/classes/order_total.php');
+  include(OSCOM::BASE_DIRECTORY . 'classes/order_total.php');
 
   class osC_OrderTotal_Admin extends osC_OrderTotal {
     var $_group = 'order_total';
@@ -41,7 +41,7 @@
       $Qinstall->execute();
 
       foreach ($osC_Language->getAll() as $key => $value) {
-        if (file_exists('../includes/languages/' . $key . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
+        if (file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $key . '/modules/' . $this->_group . '/' . $this->_code . '.xml')) {
           foreach ($osC_Language->extractDefinitions($key . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def) {
             $Qcheck = $osC_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
             $Qcheck->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
@@ -65,7 +65,7 @@
         }
       }
 
-      osC_Cache::clear('languages');
+      OSCOM_Cache::clear('languages');
     }
 
     function remove() {

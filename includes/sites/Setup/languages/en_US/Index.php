@@ -1,25 +1,21 @@
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2009 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
-page_title_welcome = Welcome to osCommerce Online Merchant v3.0 Alpha 5!
+page_title_welcome = Welcome To Your New Online Store!
 
 page_heading_server_requirements = Server Requirements
 page_heading_installation_type = Installation Type
 
 title_language = Language:
 
-text_welcome = <p>osCommerce Online Merchant is an Open Source online shop e-commerce solution that is available for free under the GNU General Public License. It features a rich set of out-of-the-box online shopping cart functionality that allows store owners to setup, run, and maintain online stores with minimum effort and with no costs, fees, or limitations involved.</p>
-text_installation_type = Please choose the installation method to continue.
+text_welcome = <span style="font-size: 12px; font-weight: bold;">Thank you!</span> for choosing osCommerce Online Merchant to power your new online store! We welcome you to join and participate in our growing community of store owners, developers, and service providers.<br /><br />Please visit our <a href="http://www.oscommerce.com/support" target="_blank">Support</a> page if problems are experienced with the installation or operation of your online store.
+text_installation_type = Click on New Install to begin the installation procedure.
 
-box_server_title = Server Capabilities
+box_server_title = Server Recommendations
 box_server_php_version = PHP Version
 box_server_php_settings = PHP Settings
 box_server_register_globals = register_globals
@@ -35,9 +31,7 @@ box_server_openssl = OpenSSL
 box_server_on = On
 box_server_off = Off
 
-error_configuration_file_not_writeable = <p>The webserver does not seem to be able to write the online store parameters to its configuration file due to file permission problems.</p><p>The configuration file is located at:</p><p>%s</p>
-error_configuration_file_alternate_method = <p>Alternatively the possibility to copy the configuration parameters to the configuration file by hand is also provided at the end of the installation procedure.</p>
-error_javascript_disabled = <p>Javascript is required for the installation procedure and administration of this installation. Please enable it on your browser and <a href="index.php">re-run the installation procedure</a>.</p>
+error_configuration_file_not_writeable = The webserver is not able to write the installation parameters to the configuration file due to file permission problems. The configuration file is located at:<br /><br />%s
+error_configuration_file_alternate_method = You will be presented with the configuration parameters at the end of the installation procedure to copy to the configuration file by hand.
 
-image_button_install = Install
-image_button_upgrade = Upgrade
+button_new_install = New Install

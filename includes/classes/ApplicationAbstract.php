@@ -9,8 +9,8 @@
 */
 
   abstract class OSCOM_ApplicationAbstract {
-    protected $_page_title;
     protected $_page_contents = 'main.php';
+    protected $_page_title;
 
     abstract protected function initialize();
 

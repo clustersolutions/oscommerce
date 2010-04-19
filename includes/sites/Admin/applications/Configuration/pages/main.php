@@ -68,7 +68,7 @@
   }
 
   var dataTableName = 'configurationDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll&gID=' . (int)$_GET['gID']); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll&gID=' . (int)$_GET['gID']); ?>';
 
   var configEditLink = '<?php echo OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID'] . '&id=CONFIGID&action=Save'); ?>';
   var configEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

@@ -17,7 +17,7 @@
       $this->_title = OSCOM::getDef('admin_indexmodules_errorlog_title');
       $this->_title_link = OSCOM::getLink(null, 'ErrorLog');
 
-      if ( osC_Access::hasAccess('error_log') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'error_log') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .

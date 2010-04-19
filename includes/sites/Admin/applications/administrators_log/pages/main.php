@@ -15,7 +15,7 @@
   $modules_array = array(array('id' => '',
                                'text' => $osC_Language->get('filter_all')));
 
-  foreach ( $_SESSION['admin']['access'] as $module ) {
+  foreach ( $_SESSION[OSCOM::getSite()]['access'] as $module ) {
     $modules_array[] = array('id' => $module,
                              'text' => $module);
 
@@ -56,12 +56,12 @@
 <?php
   $Qlog = $osC_Database->query('select SQL_CALC_FOUND_ROWS count(al.id) as total, al.id, al.module, al.module_action, al.module_id, al.action, a.user_name, unix_timestamp(al.datestamp) as datestamp from :table_administrators_log al, :table_administrators a where');
 
-  if ( !empty($_GET['fm']) && in_array($_GET['fm'], $_SESSION['admin']['access']) ) {
+  if ( !empty($_GET['fm']) && in_array($_GET['fm'], $_SESSION[OSCOM::getSite()]['access']) ) {
     $Qlog->appendQuery('al.module = :module');
     $Qlog->bindValue(':module', $_GET['fm']);
   } else {
     $Qlog->appendQuery('al.module in (":modules")');
-    $Qlog->bindRaw(':modules', implode('", "', $_SESSION['admin']['access']));
+    $Qlog->bindRaw(':modules', implode('", "', $_SESSION[OSCOM::getSite()]['access']));
   }
 
   $Qlog->appendQuery('and');

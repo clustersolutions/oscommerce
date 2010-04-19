@@ -16,5 +16,9 @@
     public static function getDefaultApplication() {
       return self::$_default_application;
     }
+
+    public static function hasAccess($application) {
+      return true;
+    }
   }
 ?>

@@ -24,7 +24,7 @@
         $result = OSCOM_Site_Admin_Application_Configuration_Configuration::getAll($_GET['gID']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

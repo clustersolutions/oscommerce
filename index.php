@@ -23,7 +23,7 @@
   require(OSCOM_BASE_DIRECTORY . 'OSCOM.php');
   OSCOM::initialize();
 
-  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/' . OSCOM_Registry::get('osC_Template')->getCode() . '.php');
+  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/' . OSCOM_Registry::get('Template')->getCode() . '.php');
 
 //  require('includes/application_bottom.php');
 ?>

@@ -17,7 +17,7 @@
       $this->_title = OSCOM::getDef('admin_indexmodules_products_title');
       $this->_title_link = OSCOM::getLink(null, 'Products');
 
-      if ( osC_Access::hasAccess('products') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'products') ) {
         if ( !isset($osC_Currencies) ) {
           if ( !class_exists('osC_Currencies') ) {
             include('../includes/classes/currencies.php');

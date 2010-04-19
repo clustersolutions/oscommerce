@@ -14,36 +14,28 @@
 
     protected static $_version;
     protected static $_request_type;
-    protected static $_site = OSCOM_DEFAULT_SITE;
+    protected static $_site;
     protected static $_application;
 
     public static function initialize() {
       spl_autoload_register('self::autoload');
 
-      self::loadConfig();
-
       require(self::BASE_DIRECTORY . 'functions/compatibility.php');
-      require(self::BASE_DIRECTORY . 'filenames.php');
-      require(self::BASE_DIRECTORY . 'database_tables.php');
       require(self::BASE_DIRECTORY . 'functions/general.php');
       require(self::BASE_DIRECTORY . 'functions/html_output.php');
 
       self::setSite();
 
-      if ( self::getRequestType() == 'NONSSL' ) {
-        define('DIR_WS_CATALOG', DIR_WS_HTTP_CATALOG);
-      } else {
-        define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
+      if ( !file_exists(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php') ) {
+        trigger_error('Site \'' . self::getSite() . '\' does not exist', E_USER_ERROR);
+        exit();
       }
 
-      OSCOM_Registry::set('MessageStack', new OSCOM_MessageStack());
-      OSCOM_Registry::set('osC_MessageStack', OSCOM_Registry::get('MessageStack')); // HPDL to delete
-      OSCOM_Registry::set('Cache', new OSCOM_Cache());
-      OSCOM_Registry::set('osC_Cache', OSCOM_Registry::get('Cache')); // HPDL to delete
-      OSCOM_Registry::set('Database', OSCOM_Database::connect());
-      OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
+      include(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php');
 
-      self::initializeSite();
+      self::setSiteApplication();
+
+      call_user_func(array('OSCOM_' . self::getSite(), 'initialize'));
     }
 
     public static function siteExists($site) {
@@ -51,16 +43,14 @@
     }
 
     public static function setSite($site = null) {
-      if (strlen(DB_SERVER) < 1) {
-        $site = 'Install';
-      }
-
       if ( isset($site) ) {
         if ( !self::siteExists($site) ) {
           trigger_error('Site \'' . $site . '\' does not exist, using default \'' . self::getDefaultSite() . '\'', E_USER_ERROR);
           $site = self::getDefaultSite();
         }
       } else {
+        $site = self::getDefaultSite();
+
         if ( !empty($_GET) ) {
           $requested_site = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1))));
 
@@ -80,20 +70,11 @@
     }
 
     public static function getDefaultSite() {
-      return OSCOM_DEFAULT_SITE;
-    }
-
-    public static function initializeSite() {
-      if ( !file_exists(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php') ) {
-        trigger_error('Site \'' . self::getSite() . '\' does not exist', E_USER_ERROR);
-        exit();
+      if ( defined('OSCOM_DEFAULT_SITE') ) {
+        return OSCOM_DEFAULT_SITE;
       }
 
-      include(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php');
-
-      self::setSiteApplication();
-
-      call_user_func(array('OSCOM_' . self::getSite(), 'initialize'));
+      return 'Shop';
     }
 
     public static function siteApplicationExists($application) {
@@ -169,7 +150,7 @@
       }
     }
 
-    protected static function loadConfig() {
+    public static function loadConfig() {
       $ini = parse_ini_file(self::BASE_DIRECTORY . 'config.php');
 
       if ( file_exists(self::BASE_DIRECTORY . 'local/config.php') ) {
@@ -186,6 +167,12 @@
         }
 
         define($key, $value);
+      }
+
+      if ( self::getRequestType() == 'NONSSL' ) { // HPDL to remove
+        define('DIR_WS_CATALOG', DIR_WS_HTTP_CATALOG);
+      } else {
+        define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
       }
     }
 
@@ -272,7 +259,7 @@
         $link .= $parameters . '&';
       }
 
-      if ( ($add_session_id === true) && OSCOM_Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+      if ( ($add_session_id === true) && OSCOM_Registry::exists('Session') && OSCOM_Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
         if ( strlen(SID) > 0 ) {
           $_sid = SID;
         } elseif ( ((self::getRequestType() == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || ((self::getRequestType() == 'SSL') && ($connection != 'SSL')) ) {
@@ -317,6 +304,30 @@
       }
 
       return $link;
+    }
+
+/**
+ * Return an internal URL address for an RPC call.
+ *
+ * @param string $site The Site to link to. Default: The currently used Site.
+ * @param string $application The Site Application to link to. Default: The currently used Site Application.
+ * @param string $parameters Parameters to add to the link. Example: key1=value1&key2=value2
+ * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: NONSSL.
+ * @param bool $add_session_id Add the session ID to the link. Default: True.
+ * @param bool $search_engine_safe Use search engine safe URLs. Default: True.
+ * @return string The URL address.
+ */
+
+    public static function getRPCLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
+      if ( empty($site) ) {
+        $site = self::getSite();
+      }
+
+      if ( empty($application) ) {
+        $application = self::getSiteApplication();
+      }
+
+      return self::getLink('RPC', $site, $application . '&' . $parameters, $connection, $add_session_id, $search_engine_safe);
     }
 
 /**

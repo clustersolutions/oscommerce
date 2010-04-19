@@ -70,7 +70,7 @@
   }
 
   var dataTableName = 'countryZonesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'id=' . $_GET['id'] . '&action=getAllZones'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getAllZones'); ?>';
 
   var zoneEditLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=ZONEID&action=ZoneSave'); ?>';
   var zoneEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

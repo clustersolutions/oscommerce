@@ -24,7 +24,7 @@
         $result = OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
@@ -42,7 +42,7 @@
         $result = OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::getAllEntries($_GET['id']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

@@ -24,7 +24,7 @@
         $result = OSCOM_Site_Admin_Application_Administrators_Administrators::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

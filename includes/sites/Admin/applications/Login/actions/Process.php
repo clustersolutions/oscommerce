@@ -17,9 +17,9 @@
 
         if ( $Qadmin->numberOfRows() === 1 ) {
           if ( osc_validate_password($_POST['user_password'], $Qadmin->value('user_password')) ) {
-            $_SESSION['admin'] = array('id' => $Qadmin->valueInt('id'),
-                                       'username' => $Qadmin->value('user_name'),
-                                       'access' => osC_Access::getUserLevels($Qadmin->valueInt('id')));
+            $_SESSION[OSCOM::getSite()] = array('id' => $Qadmin->valueInt('id'),
+                                                'username' => $Qadmin->value('user_name'),
+                                                'access' => osC_Access::getUserLevels(OSCOM::getSite(), $Qadmin->valueInt('id')));
 
             $to_application = OSCOM::getDefaultSiteApplication();
 

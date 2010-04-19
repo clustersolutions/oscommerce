@@ -26,8 +26,8 @@
           if ( $error === false ) {
             OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
 
-            if ( in_array($_SESSION['admin']['id'], $_POST['batch']) ) {
-              $_SESSION['admin']['access'] = osC_Access::getUserLevels($_SESSION['admin']['id']);
+            if ( in_array($_SESSION[OSCOM::getSite()]['id'], $_POST['batch']) ) {
+              $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels(OSCOM::getSite(), $_SESSION[OSCOM::getSite()]['id']);
             }
           } else {
             OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');

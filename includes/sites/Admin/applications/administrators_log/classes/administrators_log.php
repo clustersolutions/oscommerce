@@ -57,7 +57,7 @@
         $Qlog->bindValue(':old_value', $entry['old']);
         $Qlog->bindValue(':new_value', $entry['new']);
         $Qlog->bindValue(':action', $action);
-        $Qlog->bindInt(':administrators_id', $_SESSION['admin']['id']);
+        $Qlog->bindInt(':administrators_id', $_SESSION[OSCOM::getSite()]['id']);
         $Qlog->execute();
       }
     }

@@ -78,7 +78,7 @@ class osC_Template extends OSCOM_Template {}
  * @access protected
  */
 
-    protected $_page_tags = array('generator' => array('osCommerce, Open Source E-Commerce Solutions'));
+    protected $_page_tags = array('generator' => array('osCommerce Online Merchant'));
 
 /**
  * Holds javascript filenames to be included in the page
@@ -376,20 +376,15 @@ class osC_Template extends OSCOM_Template {}
  */
 
     function &getTemplates() {
-      global $osC_Database;
-
       $templates = array();
 
-      $Qtemplates = $osC_Database->query('select id, code, title from :table_templates');
-      $Qtemplates->bindTable(':table_templates', TABLE_TEMPLATES);
+      $Qtemplates = OSCOM_Registry::get('Database')->query('select id, code, title from :table_templates');
       $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 
-      while ($Qtemplates->next()) {
+      while ( $Qtemplates->next() ) {
         $templates[] = $Qtemplates->toArray();
       }
-
-      $Qtemplates->freeResult();
 
       return $templates;
     }

@@ -24,7 +24,7 @@
         $result = OSCOM_Site_Admin_Application_Languages_Languages::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
@@ -40,7 +40,7 @@
         $result = OSCOM_Site_Admin_Application_Languages_Languages::getDefinitionGroups($_GET['id']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
@@ -56,7 +56,7 @@
         $result = OSCOM_Site_Admin_Application_Languages_Languages::getDefinitions($_GET['id'], $_GET['group']);
       }
 
-      $result['rpcStatus'] = RPC_STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

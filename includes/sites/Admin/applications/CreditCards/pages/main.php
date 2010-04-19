@@ -70,7 +70,7 @@
   }
 
   var dataTableName = 'ccDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
   var ccEditLink = '<?php echo OSCOM::getLink(null, null, 'id=CCID&action=Save'); ?>';
   var ccEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

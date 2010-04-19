@@ -71,7 +71,7 @@
   }
 
   var dataTableName = 'langDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
   var languageLink = '<?php echo OSCOM::getLink(null, null, 'id=LANGUAGEID'); ?>';
   var languageLinkIcon = '<?php echo osc_icon('folder.png'); ?>';

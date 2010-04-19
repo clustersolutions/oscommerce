@@ -69,7 +69,7 @@
   }
 
   var dataTableName = 'zoneGroupsDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
   var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID'); ?>';
   var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';

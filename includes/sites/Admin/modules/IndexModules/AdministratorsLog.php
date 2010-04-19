@@ -15,7 +15,7 @@
       $this->_title = OSCOM::getDef('admin_indexmodules_administratorslog_title');
       $this->_title_link = OSCOM::getLink(null, 'AdministratorsLog');
 
-      if ( osC_Access::hasAccess('administrators_log') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'administrators_log') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -29,7 +29,7 @@
         $Qlog = OSCOM_Registry::get('Database')->query('select count(al.id) as total, al.id, al.module, a.user_name, al.datestamp from :table_administrators_log al, :table_administrators a where al.module in (":modules") and al.administrators_id = a.id group by al.id order by al.id desc limit 6');
         $Qlog->bindTable(':table_administrators_log', TABLE_ADMINISTRATORS_LOG);
         $Qlog->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
-        $Qlog->bindRaw(':modules', implode('", "', $_SESSION['admin']['access']));
+        $Qlog->bindRaw(':modules', implode('", "', $_SESSION[OSCOM::getSite()]['access']));
         $Qlog->execute();
 
         $counter = 0;

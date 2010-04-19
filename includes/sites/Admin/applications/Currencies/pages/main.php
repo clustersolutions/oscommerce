@@ -71,7 +71,7 @@
   }
 
   var dataTableName = 'currenciesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
   var cEditLink = '<?php echo OSCOM::getLink(null, null, 'id=CID&action=Save'); ?>';
   var cEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

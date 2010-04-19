@@ -12,17 +12,9 @@
  * Log all errors
  */
 
-  ini_set('log_errors', true);
   ini_set('display_errors', false);
-
-  if ( defined('DIR_FS_WORK') ) {
-    ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
-  } else {
-    $error_log_path = dirname(ini_get('error_log'));
-    if ( file_exists($error_log_path) ) { // checks if the directory exists
-      ini_set('error_log', $error_log_path . '/oscommerce_errors.log');
-    }
-  }
+  ini_set('log_errors', true);
+  ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
 
 /**
  * Forcefully disable register_globals if enabled

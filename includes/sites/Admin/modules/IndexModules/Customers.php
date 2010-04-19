@@ -15,7 +15,7 @@
       $this->_title = OSCOM::getDef('admin_indexmodules_customers_title');
       $this->_title_link = OSCOM::getLink(null, 'Customers');
 
-      if ( osC_Access::hasAccess('customers') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'customers') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .

@@ -71,7 +71,7 @@
   }
 
   var dataTableName = 'taxClassEntriesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getLink('RPC', null, 'id=' . $_GET['id'] . '&action=getAllEntries'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getAllEntries'); ?>';
 
   var entryEditLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&rID=ENTRYID&action=EntrySave'); ?>';
   var entryEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
