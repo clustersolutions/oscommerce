@@ -38,11 +38,11 @@
     result.shift();
 
     if (result[0] == '1') {
-      $('#mBoxContents').html('<p><img src="images/success.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_imported'); ?></p>');
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/success.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_imported'); ?></p>');
 
       $('#installForm').submit();
     } else {
-      $('#mBoxContents').html('<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_import_error'); ?></p>'.replace('%s', result[1]));
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/failed.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_import_error'); ?></p>'.replace('%s', result[1]));
 
       formSubmited = false;
     }
@@ -53,7 +53,7 @@
     result.shift();
 
     if (result[0] == '1') {
-      $('#mBoxContents').html('<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_importing'); ?></p>');
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_importing'); ?></p>');
 
       $.ajax({
         type: "POST",
@@ -62,7 +62,7 @@
         success: handleHttpResponse_DoImport
       });
     } else {
-      $('#mBoxContents').html('<p><img src="images/failed.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_connection_error'); ?></p>'.replace('%s', result[1]));
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/failed.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_connection_error'); ?></p>'.replace('%s', result[1]));
 
       formSubmited = false;
     }
@@ -76,7 +76,7 @@
     formSubmited = true;
 
     $('#mBox').css('visibility', 'visible').show();
-    $('#mBoxContents').html('<p><img src="images/progress.gif" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_connection_test'); ?></p>');
+    $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_connection_test'); ?></p>');
 
     dbServer = $('#DB_SERVER').val();
     dbUsername = $('#DB_SERVER_USERNAME').val();
