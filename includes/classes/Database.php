@@ -492,6 +492,9 @@
       }
 
       if ($this->cache_read === false) {
+// Automatically bind table names
+        $this->sql_query = str_replace(':table_', DB_TABLE_PREFIX, $this->sql_query);
+
         if ($this->db_class->use_foreign_keys == false) {
           $query_action = substr($this->sql_query, 0, strpos($this->sql_query, ' '));
 
@@ -679,9 +682,6 @@
             }
           }
         }
-
-// Automatically bind table names
-        $this->sql_query = str_replace(':table_', DB_TABLE_PREFIX, $this->sql_query);
 
         $this->query_handler = $this->db_class->simpleQuery($this->sql_query, $this->debug);
 
