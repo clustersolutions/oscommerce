@@ -15,7 +15,12 @@
     public static function initialize() {
       OSCOM::loadConfig();
 
+      if ( strlen(DB_SERVER) < 1 ) {
+        osc_redirect(OSCOM::getLink('Setup'));
+      }
+
       include(OSCOM::BASE_DIRECTORY . 'database_tables.php'); // HPDL to remove
+      include(OSCOM::BASE_DIRECTORY . 'filenames.php'); // HPDL to remove
 
       OSCOM_Registry::set('MessageStack', new OSCOM_MessageStack());
       OSCOM_Registry::set('osC_MessageStack', OSCOM_Registry::get('MessageStack')); // HPDL to delete
@@ -54,7 +59,8 @@
 
       OSCOM_Registry::get('osC_Language')->load(self::$_application);
 
-      OSCOM_Registry::set('osC_Template', OSCOM_Template::setup(self::$_application));
+      OSCOM_Registry::set('Template', OSCOM_Template::setup(self::$_application));
+      OSCOM_Registry::set('osC_Template', OSCOM_Registry::get('Template')); // HPDL to remove
     }
   }
 ?>

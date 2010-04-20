@@ -200,7 +200,7 @@
         $module->install();
       }
 
-      if ( !$OSCOM_Database->isError() && ($db['DB_DATABASE_CLASS'] == 'mysqli_innodb') ) {
+      if ( !$OSCOM_Database->isError() && ($db['DB_DATABASE_CLASS'] == 'mysql_innodb') ) {
         $Qinno = $OSCOM_Database->query('show variables like "have_innodb"');
 
         if ( ($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes') ) {

@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Database_mysqli extends OSCOM_Database {
+  class OSCOM_Database_mysql extends OSCOM_Database {
     var $use_mysqli = false,
         $use_transactions = false,
         $use_foreign_keys = false,

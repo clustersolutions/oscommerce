@@ -217,7 +217,7 @@
         $site = self::getSite();
       }
 
-      if ( empty($application) ) {
+      if ( empty($application) && ($site == self::getSite()) ) {
         $application = self::getSiteApplication();
       }
 
