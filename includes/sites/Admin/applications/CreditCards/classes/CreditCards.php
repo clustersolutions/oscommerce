@@ -10,22 +10,19 @@
 
   class OSCOM_Site_Admin_Application_CreditCards_CreditCards {
     public static function get($id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcc = $osC_Database->query('select * from :table_credit_cards where id = :id');
-      $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+      $Qcc = $OSCOM_Database->query('select * from :table_credit_cards where id = :id');
       $Qcc->bindInt(':id', $id);
       $Qcc->execute();
 
       $result = $Qcc->toArray();
 
-      $Qcc->freeResult();
-
       return $result;
     }
 
     public static function getAll($pageset = 1) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -33,8 +30,7 @@
 
       $result = array('entries' => array());
 
-      $Qcc = $osC_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards order by sort_order, credit_card_name');
-      $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+      $Qcc = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards order by sort_order, credit_card_name');
 
       if ( $pageset !== -1 ) {
         $Qcc->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
@@ -48,13 +44,11 @@
 
       $result['total'] = $Qcc->getBatchSize();
 
-      $Qcc->freeResult();
-
       return $result;
     }
 
     public static function find($search, $pageset = 1) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -62,8 +56,7 @@
 
       $result = array('entries' => array());
 
-      $Qcc = $osC_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards where (credit_card_name like :credit_card_name) order by credit_card_name');
-      $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+      $Qcc = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards where (credit_card_name like :credit_card_name) order by credit_card_name');
       $Qcc->bindValue(':credit_card_name', '%' . $search . '%');
 
       if ( $pageset !== -1 ) {
@@ -78,22 +71,19 @@
 
       $result['total'] = $Qcc->getBatchSize();
 
-      $Qcc->freeResult();
-
       return $result;
     }
 
     public static function save($id = null, $data) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
       if ( is_numeric($id) ) {
-        $Qcc = $osC_Database->query('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
+        $Qcc = $OSCOM_Database->query('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
         $Qcc->bindInt(':id', $id);
       } else {
-        $Qcc = $osC_Database->query('insert into :table_credit_cards (credit_card_name, pattern, credit_card_status, sort_order) values (:credit_card_name, :pattern, :credit_card_status, :sort_order)');
+        $Qcc = $OSCOM_Database->query('insert into :table_credit_cards (credit_card_name, pattern, credit_card_status, sort_order) values (:credit_card_name, :pattern, :credit_card_status, :sort_order)');
       }
 
-      $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
       $Qcc->bindValue(':credit_card_name', $data['name']);
       $Qcc->bindValue(':pattern', $data['pattern']);
       $Qcc->bindInt(':credit_card_status', $data['status']);
@@ -111,10 +101,9 @@
     }
 
     public static function delete($id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qdel = $osC_Database->query('delete from :table_credit_cards where id = :id');
-      $Qdel->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+      $Qdel = $OSCOM_Database->query('delete from :table_credit_cards where id = :id');
       $Qdel->bindInt(':id', $id);
       $Qdel->setLogging($_SESSION['module'], $id);
       $Qdel->execute();
@@ -129,10 +118,9 @@
     }
 
     public static function setStatus($id, $status) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcc = $osC_Database->query('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
-      $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+      $Qcc = $OSCOM_Database->query('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
       $Qcc->bindInt(':credit_card_status', ($status === true) ? 1 : 0);
       $Qcc->bindInt(':id', $id);
       $Qcc->setLogging($_SESSION['module'], $id);

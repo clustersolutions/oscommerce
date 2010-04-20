@@ -106,8 +106,6 @@
 
       $result['total'] = $Qlanguages->getBatchSize();
 
-      $Qlanguages->freeResult();
-
       return $result;
     }
 
@@ -160,8 +158,6 @@
       if ( $Qgroup->numberOfRows() === 1 ) {
         $result = true;
       }
-
-      $Qgroup->freeResult();
 
       return $result;
     }

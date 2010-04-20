@@ -10,25 +10,21 @@
 
   class OSCOM_Site_Admin_Application_Configuration_Configuration {
     public static function get($id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcfg = $osC_Database->query('select * from :table_configuration where configuration_id = :configuration_id');
-      $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_id = :configuration_id');
       $Qcfg->bindInt(':configuration_id', $id);
       $Qcfg->execute();
 
       $result = $Qcfg->toArray();
 
-      $Qcfg->freeResult();
-
       return $result;
     }
 
     public static function getAll($group_id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcfg = $osC_Database->query('select * from :table_configuration where configuration_group_id = :configuration_group_id order by sort_order');
-      $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_group_id = :configuration_group_id order by sort_order');
       $Qcfg->bindInt(':configuration_group_id', $group_id);
       $Qcfg->execute();
 
@@ -44,13 +40,11 @@
 
       $result['total'] = $Qcfg->numberOfRows();
 
-      $Qcfg->freeResult();
-
       return $result;
     }
 
     public static function find($search) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
       $in_group = array();
 
@@ -60,8 +54,7 @@
 
       $result = array('entries' => array());
 
-      $Qcfg = $osC_Database->query('select * from :table_configuration where (configuration_key like :configuration_key or configuration_value like :configuration_value) and configuration_group_id in (:configuration_group_id) order by configuration_key');
-      $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qcfg = $OSCOM_Database->query('select * from :table_configuration where (configuration_key like :configuration_key or configuration_value like :configuration_value) and configuration_group_id in (:configuration_group_id) order by configuration_key');
       $Qcfg->bindValue(':configuration_key', '%' . $search . '%');
       $Qcfg->bindValue(':configuration_value', '%' . $search . '%');
       $Qcfg->bindRaw(':configuration_group_id', implode(',', $in_group));
@@ -77,22 +70,18 @@
 
       $result['total'] = $Qcfg->numberOfRows();
 
-      $Qcfg->freeResult();
-
       return $result;
     }
 
     public static function save($parameter) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcfg = $osC_Database->query('select configuration_id from :table_configuration where configuration_key = :configuration_key');
-      $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
+      $Qcfg = $OSCOM_Database->query('select configuration_id from :table_configuration where configuration_key = :configuration_key');
       $Qcfg->bindValue(':configuration_key', key($parameter));
       $Qcfg->execute();
 
       if ( $Qcfg->numberOfRows() === 1 ) {
-        $Qupdate = $osC_Database->query('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
-        $Qupdate->bindTable(':table_configuration', TABLE_CONFIGURATION);
+        $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
         $Qupdate->bindValue(':configuration_value', $parameter[key($parameter)]);
         $Qupdate->bindValue(':configuration_key', key($parameter));
         $Qupdate->setLogging($_SESSION['module'], $Qcfg->valueInt('configuration_id'));
@@ -109,10 +98,9 @@
     }
 
     public static function getAllGroups() {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qgroups = $osC_Database->query('select * from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
-      $Qgroups->bindTable(':table_configuration_group', TABLE_CONFIGURATION_GROUP);
+      $Qgroups = $OSCOM_Database->query('select * from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
       $Qgroups->execute();
 
       $result = array('entries' => array());
@@ -123,22 +111,17 @@
 
       $result['total'] = $Qgroups->numberOfRows();
 
-      $Qgroups->freeResult();
-
       return $result;
     }
 
     public static function getGroupTitle($id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
-      $Qcg = $osC_Database->query('select configuration_group_title from :table_configuration_group where configuration_group_id = :configuration_group_id');
-      $Qcg->bindTable(':table_configuration_group', TABLE_CONFIGURATION_GROUP);
+      $Qcg = $OSCOM_Database->query('select configuration_group_title from :table_configuration_group where configuration_group_id = :configuration_group_id');
       $Qcg->bindInt(':configuration_group_id', $id);
       $Qcg->execute();
 
       $result = $Qcg->value('configuration_group_title');
-
-      $Qcg->freeResult();
 
       return $result;
     }

@@ -48,7 +48,6 @@
 
       while ( $Qcountries->next() ) {
         $Qzones = $OSCOM_Database->query('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
-        $Qzones->bindTable(':table_zones', TABLE_ZONES);
         $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('countries_id'));
         $Qzones->execute();
 
