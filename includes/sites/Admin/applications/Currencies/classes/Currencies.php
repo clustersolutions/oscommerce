@@ -116,7 +116,7 @@
       $Qcurrency->bindValue(':symbol_right', $data['symbol_right']);
       $Qcurrency->bindInt(':decimal_places', $data['decimal_places']);
       $Qcurrency->bindValue(':value', $data['value']);
-      $Qcurrency->setLogging($_SESSION['module'], $id);
+      $Qcurrency->setLogging(null, $id);
       $Qcurrency->execute();
 
       if ( $OSCOM_Database->isError() === false ) {
@@ -128,7 +128,7 @@
           $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
           $Qupdate->bindValue(':configuration_value', $data['code']);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_CURRENCY');
-          $Qupdate->setLogging($_SESSION['module'], $id);
+          $Qupdate->setLogging(null, $id);
           $Qupdate->execute();
         }
 
@@ -160,7 +160,7 @@
       if ( $Qcheck->value('code') != DEFAULT_CURRENCY ) {
         $Qdelete = $OSCOM_Database->query('delete from :table_currencies where currencies_id = :currencies_id');
         $Qdelete->bindInt(':currencies_id', $id);
-        $Qdelete->setLogging($_SESSION['module'], $id);
+        $Qdelete->setLogging(null, $id);
         $Qdelete->execute();
 
         if ( $OSCOM_Database->isError() === false ) {
@@ -186,7 +186,7 @@
           $Qupdate = $OSCOM_Database->query('update :table_currencies set value = :value, last_updated = now() where currencies_id = :currencies_id');
           $Qupdate->bindValue(':value', $rate);
           $Qupdate->bindInt(':currencies_id', $currency['currencies_id']);
-          $Qupdate->setLogging($_SESSION['module'], $currency['currencies_id']);
+          $Qupdate->setLogging(null, $currency['currencies_id']);
           $Qupdate->execute();
 
           $updated[1][] = array('title' => $currency['title'],

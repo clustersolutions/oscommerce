@@ -52,24 +52,6 @@
 
       OSCOM_Registry::get('MessageStack')->loadFromSession();
 
-      if ( !isset($_SESSION[OSCOM::getSite()]) ) {
-        $redirect = false;
-
-        if ( OSCOM::getSiteApplication() != 'Login' ) {
-          if ( !isset($_SESSION['redirect_origin']) ) {
-            $_SESSION['redirect_origin'] = OSCOM::getSiteApplication();
-          }
-
-          $redirect = true;
-        }
-
-        if ( $redirect === true ) {
-          osc_redirect_admin(OSCOM::getLink(OSCOM::getSite(), 'Login'));
-        }
-
-        unset($redirect);
-      }
-
       OSCOM_Registry::set('Language', new OSCOM_Site_Admin_Language());
       OSCOM_Registry::set('osC_Language', OSCOM_Registry::get('Language')); // HPDL to delete
 
@@ -108,7 +90,21 @@
     }
 
     public static function hasAccess($application) {
-      return osC_Access::hasAccess('Admin', $application);
+      if ( !isset($_SESSION[OSCOM::getSite()]['id']) ) {
+        $redirect = false;
+
+        if ( $application != 'Login' ) {
+          $_SESSION[OSCOM::getSite()]['redirect_origin'] = $application;
+
+          $redirect = true;
+        }
+
+        if ( $redirect === true ) {
+          osc_redirect_admin(OSCOM::getLink(null, 'Login'));
+        }
+      }
+
+      return osC_Access::hasAccess(OSCOM::getSite(), $application);
     }
   }
 ?>

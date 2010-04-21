@@ -100,7 +100,7 @@
 
       $access = array();
 
-      if ( isset($_SESSION['Admin']) ) {
+      if ( isset($_SESSION['Admin']['id']) ) {
         foreach ( $_SESSION['Admin']['access'] as $module ) {
           if ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php') ) {
             $module_class = 'osC_Access_' . ucfirst($module);

@@ -17,16 +17,16 @@
 
         if ( $Qadmin->numberOfRows() === 1 ) {
           if ( osc_validate_password($_POST['user_password'], $Qadmin->value('user_password')) ) {
-            $_SESSION[OSCOM::getSite()] = array('id' => $Qadmin->valueInt('id'),
-                                                'username' => $Qadmin->value('user_name'),
-                                                'access' => osC_Access::getUserLevels(OSCOM::getSite(), $Qadmin->valueInt('id')));
+            $_SESSION[OSCOM::getSite()]['id'] = $Qadmin->valueInt('id');
+            $_SESSION[OSCOM::getSite()]['username'] = $Qadmin->value('user_name');
+            $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels(OSCOM::getSite(), $Qadmin->valueInt('id'));
 
             $to_application = OSCOM::getDefaultSiteApplication();
 
-            if ( isset($_SESSION['redirect_origin']) ) {
-              $to_application = $_SESSION['redirect_origin'];
+            if ( isset($_SESSION[OSCOM::getSite()]['redirect_origin']) ) {
+              $to_application = $_SESSION[OSCOM::getSite()]['redirect_origin'];
 
-              unset($_SESSION['redirect_origin']);
+              unset($_SESSION[OSCOM::getSite()]['redirect_origin']);
             }
 
             osc_redirect_admin(OSCOM::getLink(null, $to_application));

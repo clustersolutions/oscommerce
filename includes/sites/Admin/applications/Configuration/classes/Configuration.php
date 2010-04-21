@@ -84,7 +84,7 @@
         $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
         $Qupdate->bindValue(':configuration_value', $parameter[key($parameter)]);
         $Qupdate->bindValue(':configuration_key', key($parameter));
-        $Qupdate->setLogging($_SESSION['module'], $Qcfg->valueInt('configuration_id'));
+        $Qupdate->setLogging(null, $Qcfg->valueInt('configuration_id'));
         $Qupdate->execute();
 
         if ( $Qupdate->affectedRows() ) {

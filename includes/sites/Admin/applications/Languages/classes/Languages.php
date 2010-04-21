@@ -191,7 +191,7 @@
 
       $Qdel = $OSCOM_Database->query('delete from :table_languages_definitions where content_group = :content_group');
       $Qdel->bindValue(':content_group', $group);
-      $Qdel->setLogging($_SESSION['module']);
+      $Qdel->setLogging();
       $Qdel->execute();
 
       if ( !$OSCOM_Database->isError() ) {
@@ -277,7 +277,7 @@
         $Qdef->bindValue(':content_group', $group);
         $Qdef->bindValue(':definition_key', $data['key']);
         $Qdef->bindValue(':definition_value', $data['value'][$l['languages_id']]);
-        $Qdef->setLogging($_SESSION['module']);
+        $Qdef->setLogging();
         $Qdef->execute();
 
         if ( $OSCOM_Database->isError() ) {
@@ -312,7 +312,7 @@
         $Qupdate->bindValue(':definition_key', $key);
         $Qupdate->bindInt(':languages_id', $language_id);
         $Qupdate->bindValue(':content_group', $group);
-        $Qupdate->setLogging($_SESSION['module'], $language_id);
+        $Qupdate->setLogging(null, $language_id);
         $Qupdate->execute();
 
         if ( $OSCOM_Database->isError() ) {
@@ -344,7 +344,7 @@
       foreach ( $keys as $id ) {
         $Qdel = $OSCOM_Database->query('delete from :table_languages_definitions where id = :id');
         $Qdel->bindValue(':id', $id);
-        $Qdel->setLogging($_SESSION['module'], $id);
+        $Qdel->setLogging(null, $id);
         $Qdel->execute();
 
         if ( $OSCOM_Database->isError() ) {
@@ -388,7 +388,7 @@
       $Qlanguage->bindInt(':parent_id', $data['parent_id']);
       $Qlanguage->bindInt(':sort_order', $data['sort_order']);
       $Qlanguage->bindInt(':languages_id', $id);
-      $Qlanguage->setLogging($_SESSION['module'], $id);
+      $Qlanguage->setLogging(null, $id);
       $Qlanguage->execute();
 
       if ( $OSCOM_Database->isError() ) {
@@ -400,7 +400,7 @@
           $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
           $Qupdate->bindValue(':configuration_value', $data['code']);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_LANGUAGE');
-          $Qupdate->setLogging($_SESSION['module'], $id);
+          $Qupdate->setLogging(null, $id);
           $Qupdate->execute();
 
           if ( $OSCOM_Database->isError() ) {
@@ -432,7 +432,7 @@
       if ( self::get($id, 'code') != DEFAULT_LANGUAGE ) {
         $Qlanguages = $OSCOM_Database->query('delete from :table_languages where languages_id = :languages_id');
         $Qlanguages->bindInt(':languages_id', $id);
-        $Qlanguages->setLogging($_SESSION['module'], $id);
+        $Qlanguages->setLogging(null, $id);
         $Qlanguages->execute();
 
         if ( !$OSCOM_Database->isError() ) {
@@ -572,7 +572,7 @@
         $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
         $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
         $Qlanguage->bindInt(':parent_id', $language['parent_id']);
-        $Qlanguage->setLogging($_SESSION['module'], ($language_id !== false ? $language_id : null));
+        $Qlanguage->setLogging(null, ($language_id !== false ? $language_id : null));
         $Qlanguage->execute();
 
         if ( $OSCOM_Database->isError() ) {

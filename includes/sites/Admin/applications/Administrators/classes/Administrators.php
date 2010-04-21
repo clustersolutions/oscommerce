@@ -123,7 +123,7 @@
         }
 
         $Qadmin->bindValue(':user_name', $data['username']);
-        $Qadmin->setLogging($_SESSION['module'], $id);
+        $Qadmin->setLogging(null, $id);
         $Qadmin->execute();
 
         if ( !$OSCOM_Database->isError() ) {
@@ -150,7 +150,7 @@
                 $Qinsert = $OSCOM_Database->query('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
                 $Qinsert->bindInt(':administrators_id', $id);
                 $Qinsert->bindValue(':module', $module);
-                $Qinsert->setLogging($_SESSION['module'], $id);
+                $Qinsert->setLogging(null, $id);
                 $Qinsert->execute();
 
                 if ( $OSCOM_Database->isError() ) {
@@ -171,7 +171,7 @@
           }
 
           $Qdel->bindInt(':administrators_id', $id);
-          $Qdel->setLogging($_SESSION['module'], $id);
+          $Qdel->setLogging(null, $id);
           $Qdel->execute();
 
           if ( $OSCOM_Database->isError() ) {
@@ -198,7 +198,7 @@
 
       $Qdel = $OSCOM_Database->query('delete from :table_administrators where id = :id');
       $Qdel->bindInt(':id', $id);
-      $Qdel->setLogging($_SESSION['module'], $id);
+      $Qdel->setLogging(null, $id);
       $Qdel->execute();
 
       return !$OSCOM_Database->isError();
@@ -240,7 +240,7 @@
               $Qinsert = $OSCOM_Database->query('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
               $Qinsert->bindInt(':administrators_id', $id);
               $Qinsert->bindValue(':module', $module);
-              $Qinsert->setLogging($_SESSION['module'], $id);
+              $Qinsert->setLogging(null, $id);
               $Qinsert->execute();
 
               if ( $OSCOM_Database->isError() ) {
@@ -268,7 +268,7 @@
             }
 
             $Qdel->bindInt(':administrators_id', $id);
-            $Qdel->setLogging($_SESSION['module'], $id);
+            $Qdel->setLogging(null, $id);
             $Qdel->execute();
 
             if ( $OSCOM_Database->isError() ) {

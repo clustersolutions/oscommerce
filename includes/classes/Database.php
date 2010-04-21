@@ -741,8 +741,13 @@
       $this->cache_expire = $expire;
     }
 
-    function setLogging($module, $id = null) {
+    function setLogging($module = null, $id = null) {
       $this->logging = true;
+
+      if ( empty($module) ) {
+        $module = OSCOM::getSiteApplication();
+      }
+
       $this->logging_module = $module;
       $this->logging_module_id = $id;
     }

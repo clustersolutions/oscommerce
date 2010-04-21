@@ -107,7 +107,7 @@
 
       $Qclass->bindValue(':tax_class_title', $data['title']);
       $Qclass->bindValue(':tax_class_description', $data['description']);
-      $Qclass->setLogging($_SESSION['module'], $id);
+      $Qclass->setLogging(null, $id);
       $Qclass->execute();
 
       return !$osC_Database->isError();
@@ -118,7 +118,7 @@
 
       $Qclass = $OSCOM_Database->query('delete from :table_tax_class where tax_class_id = :tax_class_id');
       $Qclass->bindInt(':tax_class_id', $id);
-      $Qclass->setLogging($_SESSION['module'], $id);
+      $Qclass->setLogging(null, $id);
       $Qclass->execute();
 
       return !$osC_Database->isError();
@@ -176,7 +176,7 @@
       $Qrate->bindInt(':tax_priority', $data['priority']);
       $Qrate->bindValue(':tax_rate', $data['rate']);
       $Qrate->bindValue(':tax_description', $data['description']);
-      $Qrate->setLogging($_SESSION['module'], $id);
+      $Qrate->setLogging(null, $id);
       $Qrate->execute();
 
       return !$osC_Database->isError();
@@ -187,7 +187,7 @@
 
       $Qrate = $OSCOM_Database->query('delete from :table_tax_rates where tax_rates_id = :tax_rates_id');
       $Qrate->bindInt(':tax_rates_id', $id);
-      $Qrate->setLogging($_SESSION['module'], $id);
+      $Qrate->setLogging(null, $id);
       $Qrate->execute();
 
       return !$osC_Database->isError();

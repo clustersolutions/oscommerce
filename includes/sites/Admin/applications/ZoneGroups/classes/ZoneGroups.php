@@ -93,7 +93,7 @@
 
       $Qzone->bindValue(':geo_zone_name', $data['zone_name']);
       $Qzone->bindValue(':geo_zone_description', $data['zone_description']);
-      $Qzone->setLogging($_SESSION['module'], $id);
+      $Qzone->setLogging(null, $id);
       $Qzone->execute();
 
       return !$osC_Database->isError();
@@ -104,7 +104,7 @@
 
       $Qzone = $OSCOM_Database->query('delete from :table_geo_zones where geo_zone_id = :geo_zone_id');
       $Qzone->bindInt(':geo_zone_id', $id);
-      $Qzone->setLogging($_SESSION['module'], $id);
+      $Qzone->setLogging(null, $id);
       $Qzone->execute();
 
       return !$osC_Database->isError();
@@ -210,7 +210,7 @@
       }
       $Qentry->bindInt(':zone_country_id', $data['country_id']);
       $Qentry->bindInt(':zone_id', $data['zone_id']);
-      $Qentry->setLogging($_SESSION['module'], $id);
+      $Qentry->setLogging(null, $id);
       $Qentry->execute();
 
       return !$osC_Database->isError();
@@ -221,7 +221,7 @@
 
       $Qentry = $OSCOM_Database->query('delete from :table_zones_to_geo_zones where association_id = :association_id');
       $Qentry->bindInt(':association_id', $id);
-      $Qentry->setLogging($_SESSION['module'], $id);
+      $Qentry->setLogging(null, $id);
       $Qentry->execute();
 
       return !$osC_Database->isError();

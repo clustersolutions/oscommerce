@@ -92,7 +92,7 @@
     include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/header.php');
   }
 
-  if ( isset($_SESSION[OSCOM::getSite()]) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
+  if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
 ?>
 
 <div id="appsPane">
@@ -141,7 +141,7 @@
 </div>
 
 <?php
-  if ( isset($_SESSION[OSCOM::getSite()]) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
+  if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
 ?>
 
 <script type="text/javascript">

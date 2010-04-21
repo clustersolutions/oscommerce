@@ -46,7 +46,7 @@
        '<li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li></ul></li>' .
        '<li class="hoverGreen"><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . OSCOM::getDef('header_title_online_catalog') . '</a></li>';
 
-  if ( isset($_SESSION[OSCOM::getSite()]) ) {
+  if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
     echo '<li class="hoverRed"><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>';
   }
 ?>

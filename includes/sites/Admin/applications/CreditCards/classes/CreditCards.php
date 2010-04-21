@@ -88,7 +88,7 @@
       $Qcc->bindValue(':pattern', $data['pattern']);
       $Qcc->bindInt(':credit_card_status', $data['status']);
       $Qcc->bindInt(':sort_order', $data['sort_order']);
-      $Qcc->setLogging($_SESSION['module'], $id);
+      $Qcc->setLogging(null, $id);
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {
@@ -105,7 +105,7 @@
 
       $Qdel = $OSCOM_Database->query('delete from :table_credit_cards where id = :id');
       $Qdel->bindInt(':id', $id);
-      $Qdel->setLogging($_SESSION['module'], $id);
+      $Qdel->setLogging(null, $id);
       $Qdel->execute();
 
       if ( $Qdel->affectedRows() ) {
@@ -123,7 +123,7 @@
       $Qcc = $OSCOM_Database->query('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
       $Qcc->bindInt(':credit_card_status', ($status === true) ? 1 : 0);
       $Qcc->bindInt(':id', $id);
-      $Qcc->setLogging($_SESSION['module'], $id);
+      $Qcc->setLogging(null, $id);
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {
