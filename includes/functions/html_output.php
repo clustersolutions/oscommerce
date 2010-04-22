@@ -589,6 +589,8 @@
   }
 
   function osc_draw_button($params) {
+    static $button_counter = 1;
+
     $types = array('submit', 'button', 'reset');
 
     if ( !isset($params['type']) ) {
@@ -603,49 +605,39 @@
       $params['type'] = 'button';
     }
 
-    $class = 'fg-button';
-
-    if ( isset($params['radius']) ) {
-      if ( $params['radius'] == 'left' ) {
-        $class = 'fg-button-left';
-      } elseif ( $params['radius'] == 'right' ) {
-        $class = 'fg-button-right';
-      }
-    }
-
-    $button = '<button type="' . osc_output_string($params['type']) . '"';
+    $button = '<button id="button' . $button_counter . '" type="' . osc_output_string($params['type']) . '"';
 
     if ( isset($params['href']) ) {
       $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
     }
 
-    $button .= ' class="' . $class . '';
+    if ( isset($params['params']) ) {
+      $button .= ' ' . $params['params'];
+    }
+
+    $button .= '>' . $params['title'] . '</button><script>$("#button' . $button_counter . '").button(';
 
     if ( isset($params['icon']) ) {
       if ( !isset($params['iconpos']) ) {
         $params['iconpos'] = 'left';
       }
 
-      $button .= ' fg-button-icon-' . $params['iconpos'];
+      if ( $params['iconpos'] == 'left' ) {
+        $button .= '{icons:{primary:"ui-icon-' . $params['icon'] . '"}}';
+      } else {
+        $button .= '{icons:{secondary:"ui-icon-' . $params['icon'] . '"}}';
+      }
     }
+
+    $button .= ')';
 
     if ( isset($params['priority']) ) {
-      $button .= ' ui-priority-' . $params['priority'];
+      $button .= '.addClass("ui-priority-' . $params['priority'] . '")';
     }
 
-    $button .= ' ui-state-default"';
+    $button .= ';</script>';
 
-    if ( isset($params['params']) ) {
-      $button .= ' ' . $params['params'];
-    }
-
-    $button .= '>';
-
-    if ( isset($params['icon']) ) {
-      $button .= '<span class="ui-icon ui-icon-' . $params['icon'] . '"></span>';
-    }
-
-    $button .= $params['title'] . '</button>';
+    $button_counter++;
 
     return $button;
   }
