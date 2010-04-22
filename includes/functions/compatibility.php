@@ -16,6 +16,14 @@
   ini_set('log_errors', true);
   ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
 
+/*
+ * Set default timezone if none exists (PHP 5.3 throws an E_WARNING)
+ */
+
+  if ( (strlen(ini_get('date.timezone')) < 1) && function_exists('date_default_timezone_set') ) {
+    date_default_timezone_set(@date_default_timezone_get());
+  }
+
 /**
  * Forcefully disable register_globals if enabled
  *
