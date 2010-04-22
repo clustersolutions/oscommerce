@@ -46,6 +46,26 @@
       $this->loadIniFile(OSCOM::getSiteApplication() . '.php');
     }
 
+    function set($code = null) {
+      $this->_code = $code;
+
+      if ( empty($this->_code) ) {
+        if ( isset($_COOKIE[OSCOM::getSite()]['language']) ) {
+          $this->_code = $_COOKIE[OSCOM::getSite()]['language'];
+        } else {
+          $this->_code = $this->getBrowserSetting();
+        }
+      }
+
+      if ( empty($this->_code) || !$this->exists($this->_code) ) {
+        $this->_code = 'en_US';
+      }
+
+      if ( !isset($_COOKIE[OSCOM::getSite()]['language']) || ($_COOKIE[OSCOM::getSite()]['language'] != $this->_code) ) {
+        osc_setcookie(OSCOM::getSite() . '[language]', $this->_code, time()+60*60*24*90);
+      }
+    }
+
     public function loadIniFile($filename = null, $comment = '#', $language_code = null) {
       if ( is_null($language_code) ) {
         $language_code = $this->_code;
