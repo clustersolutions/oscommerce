@@ -13,6 +13,8 @@
 
     public static function initialize() {
       define('HTTP_SERVER', '');
+      define('HTTP_COOKIE_PATH', '');
+      define('HTTP_COOKIE_DOMAIN', '');
       define('DIR_WS_HTTP_CATALOG', '');
       define('DIR_WS_IMAGES', '');
       define('DB_SERVER_PERSISTENT_CONNECTIONS', false);
