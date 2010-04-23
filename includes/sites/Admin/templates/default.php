@@ -18,15 +18,9 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
 
-<?php
-  if ( OSCOM::getRequestType() == 'SSL' ) {
-    echo '<link rel="shortcut icon" href="' . OSCOM::getPublicSiteLink('images/favicon_ssl.ico') . '" type="image/x-icon" />';
-  } else {
-    echo '<link rel="shortcut icon" href="' . OSCOM::getPublicSiteLink('images/favicon.ico') . '" type="image/x-icon" />';
-  }
-?>
-
 <title><?php echo STORE_NAME . ': ' . OSCOM::getDef('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
+
+<link rel="icon" type="image/png" href="<?php echo OSCOM::getPublicSiteLink('images/oscommerce_icon.png'); ?>" />
 
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
