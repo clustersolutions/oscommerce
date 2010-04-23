@@ -48,101 +48,79 @@ a:hover {
   clear: both;
   background: #6c6c6c url('../images/adminmenubg.png') repeat-x;
   border-top: 1px solid #6c6c6c;
-  font-size: 10px;
+  font-size: 11px;
   height: 27px;
   padding-left: 2px;
   z-index: 1;
 }
 
-#adminMenu ul.levelTop {
+#adminMenu ul.apps {
+  display: block;
   margin: 0;
   padding: 0;
-  list-style-type: none;
-}
-
-#adminMenu ul.levelTop li {
-  float: left;
-  margin: 0;
-  padding: 0 10px 0 2px;
   position: relative;
 }
 
-#adminMenu ul.levelTop li a {
-  padding: 6px 7px 7px 7px;
-  color: #fff;
+#adminMenu ul.apps li {
   display: block;
-  text-decoration: none;
-  float: left;
-}
-
-#adminMenu ul.levelTop li span {
-  float: left;
-}
-
-#adminMenu ul.levelTop li span.subhover {
-  background-position: center bottom;
-  cursor: pointer;
-}
-
-#adminMenu ul.levelTop li ul.levelSub {
   list-style: none;
-  position: absolute;
-  left: 0;
-  top: 24px;
-  background: #333;
   margin: 0;
   padding: 0;
+  float: left;
+  position: relative;
+}
+
+#adminMenu ul.apps a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 6px 12px;
+}
+
+#adminMenu ul.apps li.hover a {
+  background-color: #5E5A5A;
+}
+
+#adminMenu ul.apps ul {
   display: none;
-  float: left;
-  width: 170px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  -moz-border-radius-bottomright: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -webkit-border-bottom-right-radius: 5px;
-  border: 1px solid #111;
-  z-index: 100;
-}
-
-#adminMenu ul.levelTop li ul.levelSub li {
+  position: absolute;
+  top: 27px;
+  width: 130px;
+  left: 0;
   margin: 0;
   padding: 0;
-  border-top: 1px solid #252525;
-  border-bottom: 1px solid #444;
-  clear: both;
-  width: 170px;
-  float: left;
 }
 
-#adminMenu ul.levelTop li ul.levelSub li a {
-  float: left;
-  width: 150px;
-  padding-left: 10px;
-  background-color: #333;
-  background-image: none !important;
+* html #adminMenu ul.apps ul { /* IE6 "fix" */
+  line-height: 0;
 }
 
-#adminMenu ul.levelTop li ul.levelSub li a:hover {
-  background: #222;
-  width: 153px;
-  background-image: none !important;
+#adminMenu ul.apps ul li {
+  float: none;
 }
 
-#adminMenu ul.levelTop li.hoverGreen:hover, #adminMenu ul.levelTop li.activeGreen  {
-  background: url('../images/nav-hov-left-green.png') no-repeat left;
+#adminMenu ul.apps ul ul {
+  top: 0;
+  left: 130px;
 }
 
-#adminMenu ul.levelTop li.hoverGreen:hover a, #adminMenu ul.levelTop li.activeGreen a {
-  background: url('../images/nav-hov-right-green.png') no-repeat right;	
+#adminMenu ul.apps ul li a {
+  background-color: #5E5A5A;
 }
 
-#adminMenu ul.levelTop li.hoverRed:hover, #adminMenu ul.levelTop li.activeRed  {
-  background: url('../images/nav-hov-left-red.png') no-repeat left;
+#adminMenu ul.apps ul a.has-subnav {
+  background-color: #2E2A2A;
 }
 
-#adminMenu ul.levelTop li.hoverRed:hover a, #adminMenu ul.levelTop li.activeRed a {
-  background: url('../images/nav-hov-right-red.png') no-repeat right;	
+#adminMenu ul.apps ul a.hover {
+  background-color: #30A8C3;
+}
+
+#adminMenu ul.apps ul a {
+  border-right: none;
+  opacity: 0.9;
+  filter: alpha(opacity=90);
+  zoom: 1; /* IE6/7 fix */
 }
 
 /* Data table */
@@ -527,36 +505,6 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
 #appContent {
   padding-left: 10px;
   padding-right: 10px;
-}
-
-#header {
-  height: 60px;
-}
-
-#header .reqSSL {
-  margin: 5px;
-  padding: 5px;
-  border: 1px #1aab17 solid;
-  background-color: #97fb80;
-  background-image: url('../images/icons/32x32/lock-light.png');
-  background-repeat: no-repeat;
-  background-position: bottom right;
-  border-radius: 15px;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-}
-
-#header .reqNONSSL {
-  margin: 5px;
-  padding: 5px;
-  border: 1px #D8000C solid;
-  background-color: #FFBABA;
-  background-image: url('../images/icons/32x32/unlock-light.png');
-  background-repeat: no-repeat;
-  background-position: bottom right;
-  border-radius: 15px;
-  -moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
 }
 
 #footer {

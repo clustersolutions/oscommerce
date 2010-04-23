@@ -36,6 +36,8 @@
 <script type="text/javascript" src="public/external/jquery/jquery.json-1.3.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.tinysort.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.ocupload-1.1.2.packed.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.hoverIntent.minified.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.droppy.js"></script>
 
 <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery.ui.all.css" />
 <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.custom.min.js"></script>
