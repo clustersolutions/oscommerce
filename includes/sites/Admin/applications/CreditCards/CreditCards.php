@@ -9,7 +9,15 @@
 */
 
   class OSCOM_Site_Admin_Application_CreditCards extends OSCOM_Site_Admin_ApplicationAbstract {
+    protected $_group = 'configuration';
+    protected $_icon = 'wallet.png';
+    protected $_sort_order = 300;
+
     protected function initialize() {
+      $this->_title = OSCOM::getDef('app_title');
+    }
+
+    protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
     }
   }

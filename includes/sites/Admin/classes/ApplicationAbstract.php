@@ -9,16 +9,51 @@
 */
 
   abstract class OSCOM_Site_Admin_ApplicationAbstract extends OSCOM_ApplicationAbstract {
-    public function __construct() {
+    protected $_link_to = true;
+    protected $_group;
+    protected $_subgroups = array();
+    protected $_icon;
+    protected $_title;
+    protected $_sort_order;
+
+    public function __construct($process = true) {
       $this->initialize();
 
-      if ( isset($_GET['action']) && !empty($_GET['action']) ) {
-        $action = osc_sanitize_string(basename($_GET['action']));
+      if ( $process === true ) {
+        $this->process();
 
-        if ( class_exists('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action) ) {
-          call_user_func(array('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action, 'execute'), $this);
+        if ( isset($_GET['action']) && !empty($_GET['action']) ) {
+          $action = osc_sanitize_string(basename($_GET['action']));
+
+          if ( class_exists('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action) ) {
+            call_user_func(array('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action, 'execute'), $this);
+          }
         }
       }
+    }
+
+    public function canLinkTo() {
+      return $this->_link_to;
+    }
+
+    public function getGroup() {
+      return $this->_group;
+    }
+
+    public function getSubGroups() {
+      return $this->_subgroups;
+    }
+
+    public function getIcon() {
+      return $this->_icon;
+    }
+
+    public function getTitle() {
+      return $this->_title;
+    }
+
+    public function getSortOrder() {
+      return $this->_sort_order;
     }
   }
 ?>

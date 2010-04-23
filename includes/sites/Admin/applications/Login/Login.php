@@ -9,7 +9,11 @@
 */
 
   class OSCOM_Site_Admin_Application_Login extends OSCOM_Site_Admin_ApplicationAbstract {
-    protected function initialize() {
+    protected $_link_to = false;
+
+    protected function initialize() {}
+
+    protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
     }
   }

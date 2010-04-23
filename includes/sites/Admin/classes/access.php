@@ -68,12 +68,11 @@
  */
 
     public static function getUserLevels($site, $id) {
-      global $osC_Database;
+      $OSCOM_Database = OSCOM_Registry::get('Database');
 
       $modules = array();
 
-      $Qaccess = $osC_Database->query('select module from :table_administrators_access where administrators_id = :administrators_id');
-      $Qaccess->bindTable(':table_administrators_access', TABLE_ADMINISTRATORS_ACCESS);
+      $Qaccess = $OSCOM_Database->query('select module from :table_administrators_access where administrators_id = :administrators_id');
       $Qaccess->bindInt(':administrators_id', $id);
       $Qaccess->execute();
 
@@ -84,11 +83,22 @@
       if ( in_array('*', $modules) ) {
         $modules = array();
 
-        $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access');
-        $OSCOM_DirectoryListing->setIncludeDirectories(false);
+        $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications');
+        $DLapps->setIncludeFiles(false);
 
-        foreach ( $OSCOM_DirectoryListing->getFiles() as $file ) {
-          $modules[] = substr($file['name'], 0, strrpos($file['name'], '.'));
+        foreach ( $DLapps->getFiles() as $file ) {
+          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('OSCOM_' . OSCOM::getSite(), 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
+            $modules[] = $file['name'];
+          }
+        }
+
+        $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access'); // HPDL to remove
+        $DLapps->setIncludeDirectories(false);
+
+        foreach ( $DLapps->getFiles() as $file ) {
+          if ( preg_match('/[^A-Z]/', substr($file['name'], 0, 1)) ) {
+            $modules[] = substr($file['name'], 0, strrpos($file['name'], '.'));
+          }
         }
       }
 
@@ -102,7 +112,31 @@
 
       if ( isset($_SESSION['Admin']['id']) ) {
         foreach ( $_SESSION['Admin']['access'] as $module ) {
-          if ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php') ) {
+          if ( preg_match('/[A-Z]/', substr($module, 0, 1)) ) {
+            $application_class = 'OSCOM_Site_' . OSCOM::getSite() . '_Application_' . $module;
+
+            if ( class_exists($application_class) ) {
+              if ( $module == OSCOM::getSiteApplication() ) {
+                $OSCOM_Application = OSCOM_Registry::get('Application');
+              } else {
+                OSCOM_Registry::get('Language')->loadIniFile($module . '.php');
+                $OSCOM_Application = new $application_class(false);
+              }
+
+              if ( $OSCOM_Application->canLinkTo() && (empty($group) || ($group == $OSCOM_Application->getGroup())) ) {
+                $data = array('module' => $module,
+                              'icon' => $OSCOM_Application->getIcon(),
+                              'title' => $OSCOM_Application->getTitle(),
+                              'subgroups' => $OSCOM_Application->getSubGroups());
+
+                if ( !isset($access[$OSCOM_Application->getGroup()][$OSCOM_Application->getSortOrder()]) ) {
+                  $access[$OSCOM_Application->getGroup()][$OSCOM_Application->getSortOrder()] = $data;
+                } else {
+                  $access[$OSCOM_Application->getGroup()][] = $data;
+                }
+              }
+            }
+          } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php') ) { // HPDL to remove
             $module_class = 'osC_Access_' . ucfirst($module);
 
             if ( !class_exists( $module_class ) ) {

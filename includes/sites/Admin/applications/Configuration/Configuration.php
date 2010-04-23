@@ -9,7 +9,15 @@
 */
 
   class OSCOM_Site_Admin_Application_Configuration extends OSCOM_Site_Admin_ApplicationAbstract {
+    protected $_group = 'configuration';
+    protected $_icon = 'configure.png';
+    protected $_sort_order = 200;
+
     protected function initialize() {
+      $this->_title = OSCOM::getDef('app_title');
+    }
+
+    protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( !isset($_GET['gID']) || !is_numeric($_GET['gID']) ) {

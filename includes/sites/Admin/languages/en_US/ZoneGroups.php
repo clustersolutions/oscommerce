@@ -9,6 +9,8 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+app_title = Zone Groups
+
 heading_title = Zone Groups
 
 table_heading_zone_groups = Zone Groups

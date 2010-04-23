@@ -5,6 +5,8 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+app_title = Configuration
+
 heading_title = Configuration
 
 table_heading_title = Title

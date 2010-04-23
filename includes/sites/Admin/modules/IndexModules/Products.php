@@ -20,7 +20,7 @@
       if ( osC_Access::hasAccess(OSCOM::getSite(), 'products') ) {
         if ( !isset($osC_Currencies) ) {
           if ( !class_exists('osC_Currencies') ) {
-            include('../includes/classes/currencies.php');
+            include('includes/classes/currencies.php');
           }
 
           $osC_Currencies = new osC_Currencies();

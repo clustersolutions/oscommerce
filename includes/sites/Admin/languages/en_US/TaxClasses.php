@@ -9,6 +9,8 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+app_title = Tax Classes
+
 heading_title = Tax Classes
 
 table_heading_tax_classes = Tax Classes

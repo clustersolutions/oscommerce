@@ -9,6 +9,8 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+app_title = Currencies
+
 heading_title = Currencies
 
 table_heading_currencies = Currencies

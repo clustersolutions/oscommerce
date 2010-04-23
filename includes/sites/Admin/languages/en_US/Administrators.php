@@ -5,6 +5,8 @@
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
+app_title = Administrators
+
 heading_title = Administrators
 
 table_heading_administrators = Administrators
