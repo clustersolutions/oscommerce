@@ -52,6 +52,9 @@ a:hover {
   height: 27px;
   padding-left: 2px;
   z-index: 1;
+  position: fixed;
+  width: 100%;
+  top: 0px;
 }
 
 #adminMenu ul.apps {
@@ -448,7 +451,6 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
   border-left: 1px solid #b0ceac;
   border-top: 1px solid #b0ceac;
   border-bottom: 1px solid #b0ceac;
-  margin-top: 10px;
   margin-left: 10px;
   border-radius: 4px;
   -moz-border-radius: 4px;
@@ -505,6 +507,7 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
 #appContent {
   padding-left: 10px;
   padding-right: 10px;
+  margin-top: 40px;
 }
 
 #footer {
