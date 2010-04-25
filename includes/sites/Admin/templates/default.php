@@ -12,13 +12,13 @@
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $osC_Language->getTextDirection(); ?>" xml:lang="<?php echo $osC_Language->getCode(); ?>">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" xml:lang="<?php echo $OSCOM_Language->getCode(); ?>">
 
 <head>
 
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $osC_Language->getCharacterSet(); ?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $OSCOM_Language->getCharacterSet(); ?>" />
 
-<title><?php echo STORE_NAME . ': ' . OSCOM::getDef('administration_title') . ($osC_Template->hasPageTitle() ? ': ' . $osC_Template->getPageTitle() : ''); ?></title>
+<title><?php echo STORE_NAME . ': ' . OSCOM::getDef('administration_title') . ($OSCOM_Template->hasPageTitle() ? ': ' . $OSCOM_Template->getPageTitle() : ''); ?></title>
 
 <link rel="icon" type="image/png" href="<?php echo OSCOM::getPublicSiteLink('images/oscommerce_icon.png'); ?>" />
 
@@ -64,7 +64,7 @@
 <body>
 
 <?php
-  if ( $osC_Template->hasPageHeader() ) {
+  if ( $OSCOM_Template->hasPageHeader() ) {
     include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/header.php');
   }
 
@@ -79,7 +79,7 @@
       echo '<ul>';
 
       foreach ( $links as $link ) {
-        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '><span>' . osc_icon($link['icon'], $link['title']) . '</span> <a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a>';
+        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '>' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;<a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a>';
 
         if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
           echo '<ul' . ($link['module'] == OSCOM::getSiteApplication() ? ' style="display: block;"' : '') . '>';
@@ -111,7 +111,7 @@
     echo OSCOM_Registry::get('MessageStack')->get('header');
   }
 
-  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications/' . OSCOM::getSiteApplication() . '/pages/' . $osC_Template->getPageContentsFilename());
+  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
 ?>
 
 </div>
@@ -127,7 +127,7 @@
 <?php
   }
 
-  if ( $osC_Template->hasPageFooter() ) {
+  if ( $OSCOM_Template->hasPageFooter() ) {
 ?>
 
 <div id="footer">

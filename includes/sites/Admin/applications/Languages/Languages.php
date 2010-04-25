@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Languages extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'locale.png';
+    protected $_icon = 'languages.png';
     protected $_sort_order = 400;
 
     protected function initialize() {

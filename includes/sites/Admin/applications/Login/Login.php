@@ -10,6 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Login extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_link_to = false;
+    protected $_icon = 'login.png';
 
     protected function initialize() {}
 

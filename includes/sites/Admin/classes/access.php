@@ -30,7 +30,7 @@
  * @access protected
  */
 
-    protected $_icon = 'configure.png';
+    protected $_icon = 'default.png';
 
 /**
  * Holds the title of the current access module

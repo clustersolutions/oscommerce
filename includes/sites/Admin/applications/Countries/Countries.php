@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Countries extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'world.png';
+    protected $_icon = 'countries.png';
     protected $_sort_order = 600;
 
     protected function initialize() {

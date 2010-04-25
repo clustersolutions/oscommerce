@@ -18,7 +18,7 @@
   $Qonline->execute();
 ?>
 
-<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <p><?php echo osc_link_object(OSCOM::getLink(null, 'OnlineCustomers'), osc_icon('people.png') . '&nbsp;' . sprintf(OSCOM::getDef('total_customers_online'), $Qonline->valueInt('total'))); ?></p>
 

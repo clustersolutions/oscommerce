@@ -10,6 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Index extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_link_to = false;
+    protected $_icon = 'oscommerce.png';
 
     protected function initialize() {}
 

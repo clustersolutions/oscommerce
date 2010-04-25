@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_TaxClasses extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'classes.png';
+    protected $_icon = 'taxclasses.png';
     protected $_sort_order = 800;
 
     protected function initialize() {

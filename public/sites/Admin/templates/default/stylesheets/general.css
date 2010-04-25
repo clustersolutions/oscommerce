@@ -88,10 +88,14 @@ a:hover {
   display: none;
   position: absolute;
   top: 27px;
-  width: 130px;
+  width: 170px;
   left: 0;
   margin: 0;
   padding: 0;
+}
+
+#adminMenu ul.apps img {
+  vertical-align: middle;
 }
 
 * html #adminMenu ul.apps ul { /* IE6 "fix" */
@@ -104,7 +108,7 @@ a:hover {
 
 #adminMenu ul.apps ul ul {
   top: 0;
-  left: 130px;
+  left: 170px;
 }
 
 #adminMenu ul.apps ul li a {
@@ -470,6 +474,10 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
 
 #appsPane ul li {
   padding: 3px;
+}
+
+#appsPane ul li img {
+  vertical-align: middle;
 }
 
 #appsPane ul li.selected {

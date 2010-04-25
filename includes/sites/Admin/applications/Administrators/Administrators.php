@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_Administrators extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'people.png';
+    protected $_icon = 'administrators.png';
     protected $_sort_order = 100;
 
     protected function initialize() {

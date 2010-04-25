@@ -12,7 +12,7 @@
     protected $_link_to = true;
     protected $_group;
     protected $_subgroups = array();
-    protected $_icon;
+    protected $_icon = 'default.png';
     protected $_title;
     protected $_sort_order;
 

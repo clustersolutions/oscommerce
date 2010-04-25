@@ -9,7 +9,7 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {

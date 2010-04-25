@@ -22,7 +22,7 @@
       echo '<li><a href="' . OSCOM::getLink(null, $links[array_shift(array_keys($links))]['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a><ul>';
 
       foreach ( $links as $link ) {
-        echo '<li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a></li>';
+        echo '<li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $osC_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
       }
 
       echo '</ul></li>';

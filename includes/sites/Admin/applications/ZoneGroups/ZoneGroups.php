@@ -10,7 +10,7 @@
 
   class OSCOM_Site_Admin_Application_ZoneGroups extends OSCOM_Site_Admin_ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'relationships.png';
+    protected $_icon = 'zonegroups.png';
     protected $_sort_order = 700;
 
     protected function initialize() {

@@ -9,7 +9,7 @@
 */
 ?>
 
-<h1><?php echo osc_link_object(OSCOM::getLink(), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <div class="infoBox">
   <h3><?php echo osc_icon('people.png') . ' ' . OSCOM::getDef('action_heading_login'); ?></h3>
