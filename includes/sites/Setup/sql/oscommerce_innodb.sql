@@ -1,15 +1,12 @@
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2009 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
 # as published by the Free Software Foundation.
 
 ALTER TABLE osc_address_book engine = InnoDB;
+ALTER TABLE osc_administrator_shortcuts engine = InnoDB;
 ALTER TABLE osc_administrators engine = InnoDB;
 ALTER TABLE osc_administrators_access engine = InnoDB;
 ALTER TABLE osc_administrators_log engine = InnoDB;
@@ -75,6 +72,8 @@ SET FOREIGN_KEY_CHECKS = 0;
 ALTER TABLE osc_address_book add CONSTRAINT idx_address_book_customers_id FOREIGN KEY (customers_id) REFERENCES osc_customers (customers_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE osc_address_book add CONSTRAINT idx_address_book_country_id FOREIGN KEY (entry_country_id) REFERENCES osc_countries (countries_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE osc_address_book add CONSTRAINT idx_address_book_zone_id FOREIGN KEY (entry_zone_id) REFERENCES osc_zones (zone_id) ON DELETE SET NULL ON UPDATE CASCADE;
+
+ALTER TABLE osc_administrator_shortcuts add CONSTRAINT idx_admin_shortcuts_admin_id FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE osc_administrators_access add CONSTRAINT idx_admin_access_admin_id FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
 

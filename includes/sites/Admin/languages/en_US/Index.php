@@ -12,3 +12,6 @@
 heading_title = Shop Administration
 
 total_customers_online = There are currently %s customers online.
+
+ms_success_shortcut_added = The application was successfully added as a shortcut.
+ms_success_shortcut_removed = The application was successfully removed as a shortcut.

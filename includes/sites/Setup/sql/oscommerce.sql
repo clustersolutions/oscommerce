@@ -1,5 +1,5 @@
 # osCommerce Online Merchant $osCommerce-SIG$
-# Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -28,6 +28,14 @@ CREATE TABLE osc_address_book (
   KEY idx_address_book_customers_id (customers_id),
   KEY idx_address_book_country_id (entry_country_id),
   KEY idx_address_book_zone_id (entry_zone_id)
+) ENGINE=MyISAM;
+
+DROP TABLE IF EXISTS osc_administrator_shortcuts;
+CREATE TABLE osc_administrator_shortcuts (
+  administrators_id int unsigned NOT NULL,
+  module varchar(255) NOT NULL,
+  PRIMARY KEY (administrators_id, module),
+  KEY idx_admin_shortcuts_admin_id (administrators_id)
 ) ENGINE=MyISAM;
 
 DROP TABLE IF EXISTS osc_administrators;

@@ -10,41 +10,72 @@
 ?>
 
 <div id="adminMenu">
-  <span style="float: left;"><?php echo osc_link_object(OSCOM::getLink(OSCOM::getSite(), 'Index'), osc_image(OSCOM::getPublicSiteLink('images/oscommerce_icon.png'), null, 16, 16, 'style="padding: 4px;"')); ?></span>
-
   <ul class="apps">
+    <li class="shortcuts"><?php echo osc_link_object(OSCOM::getLink(OSCOM::getSite(), 'Index'), osc_image(OSCOM::getPublicSiteLink('images/oscommerce_icon.png'), null, 16, 16)); ?></li>
 
 <?php
   if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
-    echo '<li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>Applications</a><ul>';
+    echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>Applications</a>' .
+         '    <ul>';
 
     foreach ( osC_Access::getLevels() as $group => $links ) {
-      echo '<li><a href="' . OSCOM::getLink(null, $links[array_shift(array_keys($links))]['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a><ul>';
+      echo '      <li><a href="' . OSCOM::getLink(null, $links[array_shift(array_keys($links))]['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a>' .
+           '        <ul>';
 
       foreach ( $links as $link ) {
-        echo '<li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $osC_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
+        echo '          <li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $osC_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
       }
 
-      echo '</ul></li>';
+      echo '        </ul>' .
+           '      </li>';
     }
 
-    echo '</ul></li>';
+    echo '    </ul>' .
+         '  </li>';
   }
 
-  echo '<li><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . OSCOM::getDef('header_title_online_catalog') . '</a></li>' .
-       '<li><a href="http://www.oscommerce.com" target="_blank"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . OSCOM::getDef('header_title_help') . '</a><ul>' .
-       '<li><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a></li>' .
-       '<li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
-       '<li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
-       '<li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
-       '<li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li></ul></li>';
+  echo '  <li><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . OSCOM::getDef('header_title_online_catalog') . '</a></li>' .
+       '  <li><a href="http://www.oscommerce.com" target="_blank"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . OSCOM::getDef('header_title_help') . '</a>' .
+       '    <ul>' .
+       '      <li><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a></li>' .
+       '      <li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
+       '      <li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
+       '      <li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
+       '      <li><a href="http://svn.oscommerce.com/jira" target="_blank">Bug Reporter</a></li>' .
+       '    </ul>' .
+       '  </li>';
 ?>
 
   </ul>
 
 <?php
   if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
-    echo '<ul class="apps" style="float: right;"><li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . osc_output_string_protected($_SESSION[OSCOM::getSite()]['username']) . '</a><ul><li><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li></ul></li></ul>';
+    echo '<ul class="apps" style="float: right;">';
+
+    if ( $OSCOM_Application->canLinkTo() ) {
+      if ( osC_Access::isShortcut(OSCOM::getSiteApplication()) ) {
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
+      } else {
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
+      }
+    }
+
+    if ( osC_Access::hasShortcut() ) {
+      echo '  <li class="shortcuts">';
+
+      foreach ( osC_Access::getShortcuts() as $shortcut ) {
+        echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '">' . $osC_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '</a>';
+      }
+
+      echo '  </li>';
+    }
+
+    echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . osc_output_string_protected($_SESSION[OSCOM::getSite()]['username']) . '</a>' .
+         '    <ul>' .
+         '      <li><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>' .
+         '    </ul>' .
+         '  </li>' .
+         '</ul>';
   }
 ?>
 

@@ -59,7 +59,7 @@
       if ( !self::hasAccess(OSCOM::getSiteApplication()) ) {
         OSCOM_Registry::get('MessageStack')->add('header', 'No access.', 'error');
 
-        osc_redirect_admin(OSCOM::getLink());
+        osc_redirect_admin(OSCOM::getLink(null, 'Index'));
       }
 
       $application = 'OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication();

@@ -84,6 +84,15 @@ a:hover {
   background-color: #5E5A5A;
 }
 
+#adminMenu ul.apps li.shortcuts, #adminMenu ul.apps li.shortcuts a {
+  display: inline;
+  padding: 4px;
+}
+
+#adminMenu ul.apps li.shortcuts:hover a {
+  background-color: transparent;
+}
+
 #adminMenu ul.apps ul {
   display: none;
   position: absolute;

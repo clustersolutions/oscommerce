@@ -23,7 +23,7 @@
         switch ( OSCOM_Site_Admin_Application_Administrators_Administrators::save((isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : null), $data, (isset($_POST['modules']) ? $_POST['modules'] : null)) ) {
           case 1:
             if ( isset($_GET['id']) && is_numeric($_GET['id']) && ($_GET['id'] == $_SESSION[OSCOM::getSite()]['id']) ) {
-              $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels(OSCOM::getSite(), $_GET['id']);
+              $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels($_GET['id']);
             }
 
             OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');

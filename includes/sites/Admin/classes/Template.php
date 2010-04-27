@@ -13,12 +13,12 @@
       $this->set('default');
     }
 
-    public function getIcon($size = 16, $icon = null) {
+    public function getIcon($size = 16, $icon = null, $title = null) {
       if ( empty($icon) ) {
         $icon = $this->_application->getIcon();
       }
 
-      return '<img src="' . OSCOM::getPublicSiteLink('images/applications/' . (int)$size . '/' . $icon) . '" border="0" alt="" width="' . (int)$size . '" height="' . (int)$size . '" />';
+      return '<img src="' . OSCOM::getPublicSiteLink('images/applications/' . (int)$size . '/' . $icon) . '" border="0" alt="" title="' . osc_output_string_protected($title) . '" width="' . (int)$size . '" height="' . (int)$size . '" />';
     }
   }
 ?>
