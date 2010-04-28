@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Configuration_Configuration::get($_GET['id']));
+  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Configuration_Configuration::getEntry($_GET['pID']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -28,7 +28,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('configuration_title'); ?></h3>
 
-  <form name="cEdit" action="<?php echo OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID'] . '&action=Save'); ?>" method="post">
+  <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=EntrySave'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_parameter'); ?></p>
 
@@ -37,7 +37,7 @@
     <p><?php echo $osC_ObjectInfo->get('configuration_description'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

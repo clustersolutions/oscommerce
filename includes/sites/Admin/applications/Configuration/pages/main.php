@@ -31,16 +31,12 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="configurationDataTable">
   <thead>
     <tr>
-      <th width="35%;"><?php echo OSCOM::getDef('table_heading_title'); ?></th>
-      <th><?php echo OSCOM::getDef('table_heading_value'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_groups'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . OSCOM::getDef('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'gID=' . $_GET['gID'] . '&action=BatchSave') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th>&nbsp;</th>
     </tr>
   </tfoot>
   <tbody>
@@ -50,7 +46,7 @@
 </form>
 
 <div style="padding: 2px; min-height: 16px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit'); ?></span>
+  <span id="dataTableLegend"></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -68,10 +64,10 @@
   }
 
   var dataTableName = 'configurationDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll&gID=' . (int)$_GET['gID']); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
-  var configEditLink = '<?php echo OSCOM::getLink(null, null, 'gID=' . (int)$_GET['gID'] . '&id=CONFIGID&action=Save'); ?>';
-  var configEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID'); ?>';
+  var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -83,27 +79,12 @@
       var record = data.entries[r];
 
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
-      newRow.id = 'row' + parseInt(record.configuration_id);
+      newRow.id = 'row' + parseInt(record.configuration_group_id);
 
-      $('#row' + parseInt(record.configuration_id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
-        if (event.target.type !== 'checkbox') {
-          $(':checkbox', this).trigger('click');
-        }
-      }).css('cursor', 'pointer');
+      $('#row' + parseInt(record.configuration_group_id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
-      newCell.innerHTML = htmlSpecialChars(record.configuration_title);
-
-      var newCell = newRow.insertCell(1);
-      newCell.innerHTML = htmlSpecialChars(record.configuration_value).replace(/([^>]?)\n/g, '$1<br />\n'); // nl2br() in javascript
-
-      newCell = newRow.insertCell(2);
-      newCell.innerHTML = '<a href="' + configEditLink.replace('CONFIGID', parseInt(record.configuration_id)) + '">' + configEditLinkIcon + '</a>';
-      newCell.align = 'right';
-
-      newCell = newRow.insertCell(3);
-      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.configuration_id) + '" id="batch' + parseInt(record.configuration_id) + '" />';
-      newCell.align = 'center';
+      newCell.innerHTML = groupLinkIcon + '&nbsp;<a href="' + groupLink.replace('GROUPID', parseInt(record.configuration_group_id)) + '" class="parent">' + htmlSpecialChars(record.configuration_group_title) + '</a><span style="float: right;">(' + parseInt(record.total_entries) + ')</span>';
 
       rowCounter++;
     }

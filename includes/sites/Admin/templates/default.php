@@ -79,19 +79,7 @@
       echo '<ul>';
 
       foreach ( $links as $link ) {
-        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '>' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;<a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a>';
-
-        if ( is_array($link['subgroups']) && !empty($link['subgroups']) ) {
-          echo '<ul' . ($link['module'] == OSCOM::getSiteApplication() ? ' style="display: block;"' : '') . '>';
-
-          foreach ( $link['subgroups'] as $subgroup ) {
-            echo '<li><a href="' . OSCOM::getLink(null, $link['module'], $subgroup['identifier']) . '">' . $subgroup['title'] . '</a></li>';
-          }
-
-          echo '</ul>';
-        }
-
-        echo '</li>';
+        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '>' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;<a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a></li>';
       }
 
       echo '</ul>';

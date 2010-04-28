@@ -8,16 +8,16 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Configuration_Action_BatchSave {
+  class OSCOM_Site_Admin_Application_Configuration_Action_BatchSaveEntries {
     public function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
-        $application->setPageContent('batch_edit.php');
+        $application->setPageContent('entries_batch_edit.php');
 
         if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
           $error = false;
 
           foreach ( $_POST['configuration'] as $key => $param ) {
-            if ( !OSCOM_Site_Admin_Application_Configuration_Configuration::save(array($key => $param)) ) {
+            if ( !OSCOM_Site_Admin_Application_Configuration_Configuration::saveEntry(array($key => $param)) ) {
               $error = true;
               break;
             }
@@ -29,7 +29,7 @@
             OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
-          osc_redirect_admin(OSCOM::getLink(null, null, 'gID=' . $_GET['gID']));
+          osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id']));
         }
       }
     }

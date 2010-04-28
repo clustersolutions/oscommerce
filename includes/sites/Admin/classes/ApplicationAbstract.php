@@ -11,7 +11,6 @@
   abstract class OSCOM_Site_Admin_ApplicationAbstract extends OSCOM_ApplicationAbstract {
     protected $_link_to = true;
     protected $_group;
-    protected $_subgroups = array();
     protected $_icon = 'default.png';
     protected $_title;
     protected $_sort_order;
@@ -38,10 +37,6 @@
 
     public function getGroup() {
       return $this->_group;
-    }
-
-    public function getSubGroups() {
-      return $this->_subgroups;
     }
 
     public function getIcon() {

@@ -51,15 +51,6 @@
     protected $_sort_order = 0;
 
 /**
- * Holds the sub level children entries for the current access module
- *
- * @var array
- * @access protected
- */
-
-    protected $_subgroups = array();
-
-/**
  * Return the Administration Tool Application modules the administrator has access to
  *
  * @param int $id The ID of the administrator
@@ -134,7 +125,6 @@
                                      'icon' => $OSCOM_Application->getIcon(),
                                      'title' => $OSCOM_Application->getTitle(),
                                      'group' => $OSCOM_Application->getGroup(),
-                                     'subgroups' => $OSCOM_Application->getSubGroups(),
                                      'linkable' => $OSCOM_Application->canLinkTo(),
                                      'shortcut' => in_array($module, $shortcuts),
                                      'sort_order' => $OSCOM_Application->getSortOrder());
@@ -153,7 +143,6 @@
                                    'icon' => $module_class->getIcon(),
                                    'title' => $module_class->getTitle(),
                                    'group' => $module_class->getGroup(),
-                                   'subgroups' => $module_class->getSubGroups(),
                                    'linkable' => true,
                                    'shortcut' => in_array($module, $shortcuts),
                                    'sort_order' => $module_class->getSortOrder());
@@ -275,10 +264,6 @@
 
     function getSortOrder() {
       return $this->_sort_order;
-    }
-
-    function getSubGroups() {
-      return $this->_subgroups;
     }
 
     public static function hasAccess($site, $application) {

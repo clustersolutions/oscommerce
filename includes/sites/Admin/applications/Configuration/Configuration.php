@@ -15,22 +15,14 @@
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');
-
-      $Qgroups = OSCOM_Registry::get('Database')->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
-      $Qgroups->execute();
-
-      while ($Qgroups->next()) {
-        $this->_subgroups[] = array('icon' => 'configuration.png',
-                                    'title' => $Qgroups->value('configuration_group_title'),
-                                    'identifier' => 'gID=' . $Qgroups->valueInt('configuration_group_id'));
-      }
     }
 
     protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
 
-      if ( !isset($_GET['gID']) || !is_numeric($_GET['gID']) ) {
-        $_GET['gID'] = 1;
+      if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
+        $this->_page_contents = 'entries.php';
+        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Configuration_Configuration::get($_GET['id'], 'configuration_group_title');
       }
     }
   }

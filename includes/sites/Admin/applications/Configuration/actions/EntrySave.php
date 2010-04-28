@@ -8,18 +8,18 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Configuration_Action_Save {
+  class OSCOM_Site_Admin_Application_Configuration_Action_EntrySave {
     public function execute(OSCOM_ApplicationAbstract $application) {
-      $application->setPageContent('edit.php');
+      $application->setPageContent('entries_edit.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( OSCOM_Site_Admin_Application_Configuration_Configuration::save($_POST['configuration']) ) {
+        if ( OSCOM_Site_Admin_Application_Configuration_Configuration::saveEntry($_POST['configuration']) ) {
           OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
           OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
-        osc_redirect_admin(OSCOM::getLink(null, null, 'gID=' . $_GET['gID']));
+        osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id']));
       }
     }
   }

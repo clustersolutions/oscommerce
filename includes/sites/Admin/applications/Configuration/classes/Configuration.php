@@ -9,7 +9,75 @@
 */
 
   class OSCOM_Site_Admin_Application_Configuration_Configuration {
-    public static function get($id) {
+    public static function get($id, $key = null) {
+      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+
+      $result = false;
+
+      $Qgroup = $OSCOM_Database->query('select * from :table_configuration_group where configuration_group_id = :configuration_group_id');
+      $Qgroup->bindInt(':configuration_group_id', $id);
+      $Qgroup->execute();
+
+      if ( $Qgroup->numberOfRows() === 1 ) {
+        $Qentries = $OSCOM_Database->query('select count(*) as total_entries from :table_configuration where configuration_group_id = :configuration_group_id');
+        $Qentries->bindInt(':configuration_group_id', $Qgroup->valueInt('configuration_group_id'));
+        $Qentries->execute();
+
+        $result = array_merge($Qgroup->toArray(), $Qentries->toArray());
+
+        if ( !empty($key) && isset($result[$key]) ) {
+          $result = $result[$key];
+        }
+      }
+
+      return $result;
+    }
+
+    public static function getAll() {
+      $OSCOM_Database = OSCOM_Registry::get('Database');
+
+      $Qgroups = $OSCOM_Database->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
+      $Qgroups->execute();
+
+      $result = array('entries' => array());
+
+      while ( $Qgroups->next() ) {
+        $Qentries = $OSCOM_Database->query('select count(*) as total_entries from :table_configuration where configuration_group_id = :configuration_group_id');
+        $Qentries->bindInt(':configuration_group_id', $Qgroups->valueInt('configuration_group_id'));
+        $Qentries->execute();
+
+        $result['entries'][] = array_merge($Qgroups->toArray(), $Qentries->toArray());
+      }
+
+      $result['total'] = $Qgroups->numberOfRows();
+
+      return $result;
+    }
+
+    public static function find($search) {
+      $OSCOM_Database = OSCOM_Registry::get('Database');
+
+      $result = array('entries' => array());
+
+      $Qgroups = $OSCOM_Database->query('select distinct g.configuration_group_id, g.configuration_group_title from :table_configuration c, :table_configuration_group g where (c.configuration_key like :configuration_key or c.configuration_value like :configuration_value) and c.configuration_group_id = g.configuration_group_id and g.visible = 1 order by g.sort_order, g.configuration_group_title');
+      $Qgroups->bindValue(':configuration_key', '%' . $search . '%');
+      $Qgroups->bindValue(':configuration_value', '%' . $search . '%');
+      $Qgroups->execute();
+
+      while ( $Qgroups->next() ) {
+        $Qentries = $OSCOM_Database->query('select count(*) as total_entries from :table_configuration where configuration_group_id = :configuration_group_id');
+        $Qentries->bindInt(':configuration_group_id', $Qgroups->valueInt('configuration_group_id'));
+        $Qentries->execute();
+
+        $result['entries'][] = array_merge($Qgroups->toArray(), $Qentries->toArray());
+      }
+
+      $result['total'] = $Qgroups->numberOfRows();
+
+      return $result;
+    }
+
+    public static function getEntry($id) {
       $OSCOM_Database = OSCOM_Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_id = :configuration_id');
@@ -21,7 +89,7 @@
       return $result;
     }
 
-    public static function getAll($group_id) {
+    public static function getAllEntries($group_id) {
       $OSCOM_Database = OSCOM_Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_group_id = :configuration_group_id order by sort_order');
@@ -43,21 +111,15 @@
       return $result;
     }
 
-    public static function find($search) {
+    public static function findEntries($search, $group_id) {
       $OSCOM_Database = OSCOM_Registry::get('Database');
-
-      $in_group = array();
-
-      foreach ( osc_toObjectInfo(self::getAllGroups())->get('entries') as $group ) {
-        $in_group[] = $group['configuration_group_id'];
-      }
 
       $result = array('entries' => array());
 
-      $Qcfg = $OSCOM_Database->query('select * from :table_configuration where (configuration_key like :configuration_key or configuration_value like :configuration_value) and configuration_group_id in (:configuration_group_id) order by configuration_key');
+      $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_group_id = :configuration_group_id and (configuration_key like :configuration_key or configuration_value like :configuration_value) order by sort_order');
+      $Qcfg->bindInt(':configuration_group_id', $group_id);
       $Qcfg->bindValue(':configuration_key', '%' . $search . '%');
       $Qcfg->bindValue(':configuration_value', '%' . $search . '%');
-      $Qcfg->bindRaw(':configuration_group_id', implode(',', $in_group));
       $Qcfg->execute();
 
       while ( $Qcfg->next() ) {
@@ -73,7 +135,7 @@
       return $result;
     }
 
-    public static function save($parameter) {
+    public static function saveEntry($parameter) {
       $OSCOM_Database = OSCOM_Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select configuration_id from :table_configuration where configuration_key = :configuration_key');
@@ -95,35 +157,6 @@
       }
 
       return false;
-    }
-
-    public static function getAllGroups() {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
-
-      $Qgroups = $OSCOM_Database->query('select * from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
-      $Qgroups->execute();
-
-      $result = array('entries' => array());
-
-      while ( $Qgroups->next() ) {
-        $result['entries'][] = $Qgroups->toArray();
-      }
-
-      $result['total'] = $Qgroups->numberOfRows();
-
-      return $result;
-    }
-
-    public static function getGroupTitle($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
-
-      $Qcg = $OSCOM_Database->query('select configuration_group_title from :table_configuration_group where configuration_group_id = :configuration_group_id');
-      $Qcg->bindInt(':configuration_group_id', $id);
-      $Qcg->execute();
-
-      $result = $Qcg->value('configuration_group_title');
-
-      return $result;
     }
   }
 ?>
