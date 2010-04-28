@@ -16,7 +16,7 @@
   require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/localization.php');
   require(OSCOM::BASE_DIRECTORY . 'classes/object_info.php');
 
-  class OSCOM_Admin extends OSCOM_SiteAbstract {
+  class OSCOM_Admin implements OSCOM_SiteInterface {
     protected static $_default_application = 'Index';
     protected static $_guest_applications = array('Index', 'Login');
 
@@ -85,8 +85,8 @@
       }
     }
 
-    public static function getGuestApplications() {
-      return self::$_guest_applications;
+    public static function getDefaultApplication() {
+      return self::$_default_application;
     }
 
     public static function hasAccess($application) {
@@ -105,6 +105,10 @@
       }
 
       return osC_Access::hasAccess(OSCOM::getSite(), $application);
+    }
+
+    public static function getGuestApplications() {
+      return self::$_guest_applications;
     }
   }
 ?>

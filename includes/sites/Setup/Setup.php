@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Setup extends OSCOM_SiteAbstract {
+  class OSCOM_Setup implements OSCOM_SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {
@@ -28,6 +28,14 @@
 
       OSCOM_Registry::set('Template', new OSCOM_Site_Setup_Template());
       OSCOM_Registry::get('Template')->setApplication(OSCOM_Registry::get('Application'));
+    }
+
+    public static function getDefaultApplication() {
+      return self::$_default_application;
+    }
+
+    public static function hasAccess($application) {
+      return true;
     }
   }
 ?>

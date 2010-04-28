@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_RPC extends OSCOM_SiteAbstract {
+  class OSCOM_RPC implements OSCOM_SiteInterface {
     const STATUS_SUCCESS = 1;
     const STATUS_NO_SESSION = -10;
     const STATUS_NO_MODULE = -20;
@@ -16,6 +16,8 @@
     const STATUS_CLASS_NONEXISTENT = -60;
     const STATUS_NO_ACTION = -70;
     const STATUS_ACTION_NONEXISTENT = -71;
+
+    protected static $_default_application = 'Index';
 
     public static function initialize() {
       header('Cache-Control: no-cache, must-revalidate');
@@ -71,6 +73,14 @@
           exit;
         }
       }
+    }
+
+    public static function getDefaultApplication() {
+      return self::$_default_application;
+    }
+
+    public static function hasAccess($application) {
+      return true;
     }
   }
 ?>
