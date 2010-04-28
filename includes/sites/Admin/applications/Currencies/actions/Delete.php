@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Currencies_Action_Delete {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('delete.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

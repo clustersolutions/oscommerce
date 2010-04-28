@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_ZoneGroups_Action_EntryDelete {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('entries_delete.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

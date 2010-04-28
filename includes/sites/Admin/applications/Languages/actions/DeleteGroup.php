@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Languages_Action_DeleteGroup {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( OSCOM_Site_Admin_Application_Languages_Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
         $application->setPageContent('groups_delete.php');
 

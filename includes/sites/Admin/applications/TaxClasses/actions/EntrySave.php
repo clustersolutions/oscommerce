@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_TaxClasses_Action_EntrySave {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_GET['rID']) && is_numeric($_GET['rID']) ) {
         $application->setPageContent('entries_edit.php');
       } else {

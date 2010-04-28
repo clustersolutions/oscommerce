@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Languages_Action_Export {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('export.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

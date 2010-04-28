@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_ZoneGroups_Action_Save {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
         $application->setPageContent('edit.php');
       } else {

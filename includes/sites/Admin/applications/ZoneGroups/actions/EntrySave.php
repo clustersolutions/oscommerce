@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_ZoneGroups_Action_EntrySave {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_GET['zID']) && is_numeric($_GET['zID']) ) {
         $application->setPageContent('entries_edit.php');
       } else {

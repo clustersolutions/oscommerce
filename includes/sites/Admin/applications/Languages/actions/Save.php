@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Languages_Action_Save {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('edit.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

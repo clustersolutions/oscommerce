@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Countries_Action_ZoneSave {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_GET['zID']) && is_numeric($_GET['zID']) ) {
         $application->setPageContent('zones_edit.php');
       } else {

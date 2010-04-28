@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Countries_Action_ZoneDelete {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('zones_delete.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

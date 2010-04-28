@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Currencies_Action_BatchDelete {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('batch_delete.php');
 

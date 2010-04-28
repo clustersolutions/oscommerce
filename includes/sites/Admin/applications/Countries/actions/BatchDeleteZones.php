@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Countries_Action_BatchDeleteZones {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('zones_batch_delete.php');
 

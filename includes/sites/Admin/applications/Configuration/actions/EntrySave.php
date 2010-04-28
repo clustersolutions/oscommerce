@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Configuration_Action_EntrySave {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('entries_edit.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

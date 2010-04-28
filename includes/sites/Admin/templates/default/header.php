@@ -19,7 +19,9 @@
          '    <ul>';
 
     foreach ( osC_Access::getLevels() as $group => $links ) {
-      echo '      <li><a href="' . OSCOM::getLink(null, $links[array_shift(array_keys($links))]['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a>' .
+      $application = current($links);
+
+      echo '      <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a>' .
            '        <ul>';
 
       foreach ( $links as $link ) {

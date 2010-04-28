@@ -9,7 +9,7 @@
 */
 
   class OSCOM_Site_Admin_Application_Currencies_Action_UpdateRates {
-    public function execute(OSCOM_ApplicationAbstract $application) {
+    public static function execute(OSCOM_ApplicationAbstract $application) {
       $application->setPageContent('update_rates.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {

@@ -228,11 +228,7 @@
       return $this->_module;
     }
 
-    function getGroup($module = null) {
-      if ( empty($module) ) {
-        return $this->_group;
-      }
-
+    public static function getGroup($module) {
       foreach ( osC_Access::getLevels() as $group => $links ) {
         foreach ( $links as $link ) {
           if ( $link['module'] == $module ) {
@@ -244,14 +240,14 @@
       return false;
     }
 
-    function getGroupTitle($group) {
-      global $osC_Language;
+    public static function getGroupTitle($group) {
+      $OSCOM_Language = OSCOM_Registry::get('Language');
 
-      if ( !$osC_Language->isDefined('access_group_' . $group . '_title') ) {
-        $osC_Language->loadIniFile( 'modules/access/groups/' . $group . '.php' );
+      if ( !$OSCOM_Language->isDefined('access_group_' . $group . '_title') ) {
+        $OSCOM_Language->loadIniFile( 'modules/access/groups/' . $group . '.php' );
       }
 
-      return $osC_Language->get('access_group_' . $group . '_title');
+      return $OSCOM_Language->get('access_group_' . $group . '_title');
     }
 
     function getIcon() {
