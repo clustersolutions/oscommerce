@@ -8,14 +8,6 @@
   as published by the Free Software Foundation.
 */
 
-/**
- * Log all errors
- */
-
-  ini_set('display_errors', false);
-  ini_set('log_errors', true);
-  ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
-
 /*
  * Set default timezone if none exists (PHP 5.3 throws an E_WARNING)
  */

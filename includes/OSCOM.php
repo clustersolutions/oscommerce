@@ -20,6 +20,8 @@
     public static function initialize() {
       spl_autoload_register('self::autoload');
 
+      OSCOM_ErrorHandler::initialize();
+
       require(self::BASE_DIRECTORY . 'functions/compatibility.php');
       require(self::BASE_DIRECTORY . 'functions/general.php');
       require(self::BASE_DIRECTORY . 'functions/html_output.php');

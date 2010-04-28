@@ -8,8 +8,6 @@
   as published by the Free Software Foundation.
 */
 
-  require('includes/sites/Admin/applications/error_log/classes/error_log.php');
-
   class OSCOM_Site_Admin_Module_IndexModules_ErrorLog extends OSCOM_Site_Admin_Application_Index_IndexModules {
     public function __construct() {
       OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
@@ -27,19 +25,11 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $counter = 0;
-
-        foreach ( osc_toObjectInfo(osC_ErrorLog_Admin::getAll())->get('entries') as $log ) {
+        foreach ( OSCOM_ErrorHandler::getAll(6) as $row ) {
           $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                          '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . osc_output_string_protected($log['date']) . '</td>' .
-                          '      <td>' . osc_output_string_protected(substr($log['message'], 0, 60)) . '..</td>' .
+                          '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . date('Y-m-d H:i:s', $row['timestamp']) . '</td>' .
+                          '      <td>' . osc_output_string_protected(substr($row['message'], 0, 60)) . '..</td>' .
                           '    </tr>';
-
-          $counter++;
-
-          if ( $counter == 6 ) {
-            break;
-          }
         }
 
         $this->_data .= '  </tbody>' .
