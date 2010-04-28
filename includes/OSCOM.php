@@ -245,7 +245,7 @@
         $link = HTTP_SERVER . DIR_WS_HTTP_CATALOG;
       }
 
-      $link .= 'index.php?';
+      $link .= OSCOM_BOOTSTRAP_FILE . '?';
 
       if ( $site != self::getDefaultSite() ) {
         $link .= $site . '&';

@@ -1,9 +1,12 @@
-# $Id$
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
-# This is used with Apache WebServers
-#
-# For this to work, you must include the parameter 'Options' to
-# the AllowOverride configuration
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License v2 (1991)
+# as published by the Free Software Foundation.
+
+# This is used with Apache web servers. For this to work, you must include the
+# parameter 'Options' to the AllowOverride configuration.
 #
 # Example:
 #
@@ -11,25 +14,38 @@
 #   AllowOverride Options
 # </Directory>
 #
-# 'All' with also work. (This configuration is in the
-# apache/conf/httpd.conf file)
+# 'All' with also work. (This configuration is in the apache/conf/httpd.conf
+# file)
 
-# The following makes adjustments to the SSL protocol for Internet
-# Explorer browsers
+##########
+# The following makes adjustments to the SSL protocol for Internet Explorer 5
+# browsers.
+##########
 
-<IfModule mod_setenvif.c>
-  <IfDefine SSL>
-    SetEnvIf User-Agent ".*MSIE.*" \
-             nokeepalive ssl-unclean-shutdown \
-             downgrade-1.0 force-response-1.0
-  </IfDefine>
-</IfModule>
+#<IfModule mod_setenvif.c>
+#  <IfDefine SSL>
+#    SetEnvIf User-Agent ".*MSIE.*" \
+#             nokeepalive ssl-unclean-shutdown \
+#             downgrade-1.0 force-response-1.0
+#  </IfDefine>
+#</IfModule>
 
-# Fix certain PHP values
-# (commented out by default to prevent errors occuring on certain
-# servers)
+##########
+# Fix certain PHP values.
+##########
 
-#<IfModule mod_php4.c>
-#  php_value session.use_trans_sid 0
-#  php_value magic_quotes_gpc 0
+#php_value session.use_trans_sid 0
+#php_value magic_quotes_gpc 0
+
+##########
+# Redirect all none index.php requests to index.php for a cleaner URL scheme.
+##########
+
+#<IfModule mod_rewrite.c>
+#  RewriteEngine On
+#
+#  RewriteCond %{REQUEST_FILENAME} !-f
+#  RewriteCond %{REQUEST_FILENAME} !-d
+#
+#  RewriteRule ^(.*)$ index.php/$1 [PT,L]
 #</IfModule>

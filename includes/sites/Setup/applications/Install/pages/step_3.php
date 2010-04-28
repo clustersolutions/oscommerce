@@ -116,7 +116,8 @@
     @unlink($OSCOM_DirectoryListing->getDirectory() . '/' . $files['name']);
   }
 
-  $file_contents = 'OSCOM_DEFAULT_SITE = "Shop"' . "\n" .
+  $file_contents = 'OSCOM_BOOTSTRAP_FILE = "index.php"' . "\n" .
+                   'OSCOM_DEFAULT_SITE = "Shop"' . "\n" .
                    'HTTP_SERVER = "' . $http_server . '"' . "\n" .
                    'HTTPS_SERVER = "' . $http_server . '"' . "\n" .
                    'ENABLE_SSL = "false"' . "\n" .
