@@ -28,7 +28,7 @@
         $logging_transaction_action = false,
         $fkeys = array();
 
-    function &connect($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
+    public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
       $class = 'OSCOM_Database_' . $type;
       $object = new $class($server, $username, $password, $database, $port);
 

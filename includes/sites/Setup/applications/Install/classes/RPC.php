@@ -18,7 +18,7 @@
                   'DB_DATABASE_CLASS' => trim(urldecode($_POST['class']))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
       OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
 
       $OSCOM_Database = OSCOM_Registry::get('Database');
@@ -45,7 +45,7 @@
                   'DB_TABLE_PREFIX' => trim(urldecode($_POST['prefix']))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
       OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
 
       $OSCOM_Database = OSCOM_Registry::get('Database');
@@ -227,7 +227,7 @@
                   'DB_TABLE_PREFIX' => trim(urldecode($_POST['prefix']))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::connect($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
       OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
 
       $OSCOM_Database = OSCOM_Registry::get('Database');

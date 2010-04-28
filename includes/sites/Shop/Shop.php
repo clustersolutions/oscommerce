@@ -26,7 +26,7 @@
       OSCOM_Registry::set('osC_MessageStack', OSCOM_Registry::get('MessageStack')); // HPDL to delete
       OSCOM_Registry::set('Cache', new OSCOM_Cache());
       OSCOM_Registry::set('osC_Cache', OSCOM_Registry::get('Cache')); // HPDL to delete
-      OSCOM_Registry::set('Database', OSCOM_Database::connect());
+      OSCOM_Registry::set('Database', OSCOM_Database::initialize());
       OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
 
 // set the application parameters

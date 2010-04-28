@@ -10,7 +10,7 @@
 
   define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
 
-  $OSCOM_Database = OSCOM_Database::connect($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
+  $OSCOM_Database = OSCOM_Database::initialize($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
 
   $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
   $Qupdate->bindValue(':configuration_value', $_POST['CFG_STORE_NAME']);
