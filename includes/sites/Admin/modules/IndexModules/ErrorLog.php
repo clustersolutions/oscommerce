@@ -25,10 +25,20 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        foreach ( OSCOM_ErrorHandler::getAll(6) as $row ) {
-          $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                          '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . date('Y-m-d H:i:s', $row['timestamp']) . '</td>' .
-                          '      <td>' . osc_output_string_protected(substr($row['message'], 0, 60)) . '..</td>' .
+        if ( OSCOM_ErrorHandler::getTotalEntries() > 0 ) {
+          $counter = 0;
+
+          foreach ( OSCOM_ErrorHandler::getAll(6) as $row ) {
+            $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
+                            '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . date('Y-m-d H:i:s', $row['timestamp']) . '</td>' .
+                            '      <td>' . osc_output_string_protected(substr($row['message'], 0, 60)) . '..</td>' .
+                            '    </tr>';
+
+            $counter++;
+          }
+        } else {
+          $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');">' .
+                          '      <td colspan="2">' . osc_icon('tick.png') . '&nbsp;' . OSCOM::getDef('admin_indexmodules_errorlog_no_errors_found') . '</td>' .
                           '    </tr>';
         }
 

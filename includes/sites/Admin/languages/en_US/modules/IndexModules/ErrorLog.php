@@ -8,3 +8,4 @@
 admin_indexmodules_errorlog_title = Error Log
 admin_indexmodules_errorlog_table_heading_date = Date
 admin_indexmodules_errorlog_table_heading_message = Message
+admin_indexmodules_errorlog_no_errors_found = No errors found.

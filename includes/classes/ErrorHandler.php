@@ -79,5 +79,13 @@
 
       return $result;
     }
+
+    public static function getTotalEntries() {
+      if ( !is_resource(self::$_resource) ) {
+        self::connect();
+      }
+
+      return self::$_resource->querySingle('select count(*) from error_log');
+    }
   }
 ?>
