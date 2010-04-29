@@ -20,6 +20,8 @@
 
 <title>osCommerce Online Merchant</title>
 
+<link rel="icon" type="image/png" href="<?php echo OSCOM::getPublicSiteLink('images/oscommerce_icon.png'); ?>" />
+
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
 
