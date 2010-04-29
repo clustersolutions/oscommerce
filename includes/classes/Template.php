@@ -375,7 +375,7 @@ class osC_Template extends OSCOM_Template {}
  * @return array
  */
 
-    function &getTemplates() {
+    function getTemplates() {
       $templates = array();
 
       $Qtemplates = OSCOM_Registry::get('Database')->query('select id, code, title from :table_templates');
