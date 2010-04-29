@@ -12,6 +12,7 @@
     protected static $_default_application = 'Index';
 
     public static function initialize() {
+      define('OSCOM_BOOTSTRAP_FILE', 'index.php');
       define('HTTP_SERVER', '');
       define('HTTP_COOKIE_PATH', '');
       define('HTTP_COOKIE_DOMAIN', '');
