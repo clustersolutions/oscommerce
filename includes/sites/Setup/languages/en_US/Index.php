@@ -25,6 +25,7 @@ box_server_session_auto_start = session.auto_start
 box_server_session_use_trans_sid = session.use_trans_sid
 box_server_php_extensions = PHP Extensions
 box_server_mysqli = MySQLi
+box_server_sqlite3 = SQLite3
 box_server_gd = GD
 box_server_curl = cURL
 box_server_openssl = OpenSSL
