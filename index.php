@@ -16,7 +16,7 @@
 
   define('OSCOM_TIMESTAMP_START', microtime());
 
-  error_reporting(E_STRICT);
+  error_reporting(E_ALL | E_STRICT);
 
   define('OSCOM_BASE_DIRECTORY', dirname(__FILE__) . '/includes/');
 

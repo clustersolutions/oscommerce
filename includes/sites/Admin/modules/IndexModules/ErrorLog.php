@@ -10,12 +10,12 @@
 
   class OSCOM_Site_Admin_Module_IndexModules_ErrorLog extends OSCOM_Site_Admin_Application_Index_IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
+      OSCOM_Registry::get('Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_errorlog_title');
       $this->_title_link = OSCOM::getLink(null, 'ErrorLog');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'error_log') ) {
+      if ( osC_Access::hasAccess(OSCOM::getSite(), 'ErrorLog') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -30,7 +30,7 @@
 
           foreach ( OSCOM_ErrorHandler::getAll(6) as $row ) {
             $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                            '      <td style="white-space: nowrap;">' . osc_icon('error.png') . '&nbsp;' . date('Y-m-d H:i:s', $row['timestamp']) . '</td>' .
+                            '      <td style="white-space: nowrap;">' . OSCOM_Registry::get('Template')->getIcon(16, 'errorlog.png') . '&nbsp;' . OSCOM_DateTime::getShort(OSCOM_DateTime::fromUnixTimestamp($row['timestamp']), true) . '</td>' .
                             '      <td>' . osc_output_string_protected(substr($row['message'], 0, 60)) . '..</td>' .
                             '    </tr>';
 

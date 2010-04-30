@@ -13,7 +13,15 @@
 
     public static function initialize() {
       if ( class_exists('SQLite3', false) ) {
-        set_error_handler(array('OSCOM_ErrorHandler', 'execute'), E_STRICT);
+        ini_set('display_errors', false);
+        ini_set('log_errors', true);
+        ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
+
+        set_error_handler(array('OSCOM_ErrorHandler', 'execute'));
+
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log') ) {
+          self::import(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
+        }
       }
     }
 
@@ -44,13 +52,7 @@
 
       self::$_resource->exec('insert into error_log (timestamp, message) values (' . time() . ', "' . $error_msg . '");');
 
-      if ( (int)ini_get('display_errors') > 0 ) {
-        echo sprintf('<br />' . "\n" . '<b>%s</b>: %s in <b>%s</b> on line <b>%d</b><br /><br />' . "\n", $errors, $errstr, $errfile, $errline);
-      }
-
-      if ( (int)ini_get('log_errors') > 0 ) {
-        error_log($error_msg);
-      }
+      return true;
     }
 
     public static function connect() {
@@ -58,7 +60,7 @@
       self::$_resource->exec('create table if not exists error_log ( timestamp int, message text );');
     }
 
-    public static function getAll($limit = null, $offset = null) {
+    public static function getAll($limit = null, $pageset = null) {
       if ( !is_resource(self::$_resource) ) {
         self::connect();
       }
@@ -67,8 +69,14 @@
 
       $query = 'select timestamp, message from error_log order by timestamp desc';
 
-      if ( !empty($limit) ) {
+      if ( is_numeric($limit) ) {
         $query .= ' limit ' . (int)$limit;
+
+        if ( is_numeric($pageset) ) {
+          $offset = max(($pageset * $limit) - $limit, 0);
+
+          $query .= ' offset ' . $offset;
+        }
       }
 
       $Qlogs = self::$_resource->query($query);
@@ -86,6 +94,62 @@
       }
 
       return self::$_resource->querySingle('select count(*) from error_log');
+    }
+
+    public static function find($search, $limit = null, $offset = null) {
+      if ( !is_resource(self::$_resource) ) {
+        self::connect();
+      }
+
+      $result = array();
+
+      $query = 'select timestamp, message from error_log where message like "%' . addslashes($search) . '%" order by timestamp desc';
+
+      if ( !empty($limit) ) {
+        $query .= ' limit ' . (int)$limit;
+      }
+
+      $Qlogs = self::$_resource->query($query);
+
+      while ( $row = $Qlogs->fetchArray(SQLITE3_ASSOC) ) {
+        $result[] = $row;
+      }
+
+      return $result;
+    }
+
+    public static function getTotalFindEntries($search) {
+      if ( !is_resource(self::$_resource) ) {
+        self::connect();
+      }
+
+      return self::$_resource->querySingle('select count(*) from error_log where message like "%' . addslashes($search) . '%"');
+    }
+
+    public static function import($filename) {
+      $error_log = array_reverse(file($filename));
+      unlink($filename);
+
+      if ( !is_resource(self::$_resource) ) {
+        self::connect();
+      }
+
+      foreach ( $error_log as $error ) {
+        if ( preg_match('/^\[([0-9]{2})-([A-Za-z]{3})-([0-9]{4}) ([0-9]{2}):([0-5][0-9]):([0-5][0-9])\] (.*)$/', $error) ) {
+          $timestamp = OSCOM_DateTime::getTimestamp(substr($error, 1, 20), 'd-M-Y H:i:s');
+          $message = substr($error, 23);
+
+          self::$_resource->exec('insert into error_log (timestamp, message) values (' . $timestamp . ', "' . $message . '");');
+        }
+      }
+    }
+
+    public static function clear() {
+      if ( !is_resource(self::$_resource) ) {
+        self::connect();
+      }
+
+      self::$_resource->exec('delete from error_log');
     }
   }
 ?>

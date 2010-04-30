@@ -1,27 +1,29 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_DateTime {
-    function getNow() {
-      return date('Y-m-d H:i:s');      
+  class OSCOM_DateTime {
+    const DEFAULT_FORMAT = 'Y-m-d H:i:s';
+
+    public static function getNow($format = null) {
+      if ( empty($format) ) {
+        $format = self::DEFAULT_FORMAT;
+      }
+
+      return date($format);
     }
 
-    function getShort($date = null, $with_time = false) {
-      global $osC_Language;
+    public static function getShort($date = null, $with_time = false) {
+      $OSCOM_Language = OSCOM_Registry::get('Language');
 
-      if (empty($date)) {
-        $date = osC_DateTime::getNow();
+      if ( empty($date) ) {
+        $date = self::getNow();
       }
 
       $year = substr($date, 0, 4);
@@ -31,18 +33,18 @@
       $minute = (int)substr($date, 14, 2);
       $second = (int)substr($date, 17, 2);
 
-      if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
-        return strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, $year));
+      if ( @date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year ) {
+        return strftime($OSCOM_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        return preg_replace('/2037/', $year, strftime($osC_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
+        return preg_replace('/2037/', $year, strftime($OSCOM_Language->getDateFormatShort($with_time), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 
-    function getLong($date = '') {
-      global $osC_Language;
+    function getLong($date = null) {
+      $OSCOM_Language = OSCOM_Registry::get('Language');
 
-      if (empty($date)) {
-        $date = osC_DateTime::getNow();
+      if ( empty($date) ) {
+        $date = self::getNow();
       }
 
       $year = substr($date, 0, 4);
@@ -52,32 +54,34 @@
       $minute = (int)substr($date, 14, 2);
       $second = (int)substr($date, 17, 2);
 
-      if (@date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year) {
-        return strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, $year));
+      if ( @date('Y', mktime($hour, $minute, $second, $month, $day, $year)) == $year ) {
+        return strftime($OSCOM_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, $year));
       } else {
-        return preg_replace('/2037/', $year, strftime($osC_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
+        return preg_replace('/2037/', $year, strftime($OSCOM_Language->getDateFormatLong(), mktime($hour, $minute, $second, $month, $day, 2037)));
       }
     }
 
-    function getTimestamp($date = '') {
-      global $osC_Language;
-
-      if (empty($date)) {
-        $date = osC_DateTime::getNow();
+    public static function getTimestamp($date = null, $format = null) {
+      if ( empty($date) ) {
+        $date = self::getNow($format);
       }
 
-      $year = substr($date, 0, 4);
-      $month = (int)substr($date, 5, 2);
-      $day = (int)substr($date, 8, 2);
-      $hour = (int)substr($date, 11, 2);
-      $minute = (int)substr($date, 14, 2);
-      $second = (int)substr($date, 17, 2);
+      if ( empty($format) ) {
+        $format = self::DEFAULT_FORMAT;
+      }
 
-      return mktime($hour, $minute, $second, $month, $day, $year);
+      $dt = DateTime::createFromFormat($format, $date);
+      $timestamp = $dt->getTimestamp();
+
+      return $timestamp;
     }
 
-    function fromUnixTimestamp($timestamp) {
-      return date('Y-m-d H:i:s', $timestamp);
+    public static function fromUnixTimestamp($timestamp, $format = null) {
+      if ( empty($format) ) {
+        $format = self::DEFAULT_FORMAT;
+      }
+
+      return date($format, $timestamp);
     }
 
     function isLeapYear($year = '') {

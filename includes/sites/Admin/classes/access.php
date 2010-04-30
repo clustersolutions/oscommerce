@@ -203,7 +203,7 @@
     public static function getLevels($group = null) {
       $access = array();
 
-      if ( isset($_SESSION['Admin']['id']) ) {
+      if ( isset($_SESSION['Admin']['id']) && isset($_SESSION['Admin']['access']) ) {
         foreach ( $_SESSION['Admin']['access'] as $module => $data ) {
           if ( ($data['linkable'] === true) && (empty($group) || ($group == $data['group'])) ) {
             if ( !isset($access[$data['group']][$data['sort_order']]) ) {
@@ -228,7 +228,11 @@
       return $this->_module;
     }
 
-    public static function getGroup($module) {
+    public static function getGroup($module = null) {
+      if ( empty($module) && isset($this) ) { // HPDL to remove
+        return $this->_group;
+      }
+
       foreach ( osC_Access::getLevels() as $group => $links ) {
         foreach ( $links as $link ) {
           if ( $link['module'] == $module ) {
