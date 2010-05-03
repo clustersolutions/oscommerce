@@ -165,7 +165,7 @@ ALTER TABLE osc_shopping_carts_custom_variants_values add CONSTRAINT idx_sccvv_p
 
 ALTER TABLE osc_specials add CONSTRAINT idx_specials_products_id FOREIGN KEY (products_id) REFERENCES osc_products (products_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE osc_tax_rates add CONSTRAINT idx_tax_rates_zone_id FOREIGN KEY (tax_zone_id) REFERENCES osc_zones (zone_id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE osc_tax_rates add CONSTRAINT idx_tax_rates_zone_id FOREIGN KEY (tax_zone_id) REFERENCES osc_geo_zones (geo_zone_id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE osc_tax_rates add CONSTRAINT idx_tax_rates_class_id FOREIGN KEY (tax_class_id) REFERENCES osc_tax_class (tax_class_id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE osc_templates_boxes_to_pages add CONSTRAINT idx_tb2p_templates_boxes_id FOREIGN KEY (templates_boxes_id) REFERENCES osc_templates_boxes (id) ON DELETE CASCADE ON UPDATE CASCADE;

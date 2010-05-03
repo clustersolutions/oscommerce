@@ -6061,7 +6061,7 @@ INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_v
 INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_values', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'shopping_carts_custom_variants_values', 'products_variants_values', 'products_variants_values_id', 'id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'specials', 'products', 'products_id', 'products_id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (null, 'tax_rates', 'zones', 'tax_zone_id', 'zone_id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'tax_rates', 'geo_zones', 'tax_zone_id', 'geo_zone_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'tax_rates', 'tax_class', 'tax_class_id', 'tax_class_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'templates_boxes_to_pages', 'templates_boxes', 'templates_boxes_id', 'id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'templates_boxes_to_pages', 'templates', 'templates_id', 'id', 'cascade', 'cascade');
