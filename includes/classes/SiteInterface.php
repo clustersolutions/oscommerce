@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  interface OSCOM_SiteInterface {
+  namespace osCommerce\OM;
+
+  interface SiteInterface {
     public static function initialize();
 
     public static function getDefaultApplication();

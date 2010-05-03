@@ -8,8 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_TaxClasses_Action_EntrySave {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\TaxClasses\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\TaxClasses\TaxClasses;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class EntrySave {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_GET['rID']) && is_numeric($_GET['rID']) ) {
         $application->setPageContent('entries_edit.php');
       } else {
@@ -24,10 +31,10 @@
                       'rate' => $_POST['tax_rate'],
                       'tax_class_id' => $_GET['id']);
 
-        if ( OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::saveEntry((isset($_GET['rID']) && is_numeric($_GET['rID']) ? $_GET['rID'] : null), $data) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if ( TaxClasses::saveEntry((isset($_GET['rID']) && is_numeric($_GET['rID']) ? $_GET['rID'] : null), $data) ) {
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id']));

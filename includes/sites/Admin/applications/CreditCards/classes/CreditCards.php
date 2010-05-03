@@ -8,21 +8,24 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_CreditCards_CreditCards {
+  namespace osCommerce\OM\Site\Admin\Application\CreditCards;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Cache;
+
+  class CreditCards {
     public static function get($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcc = $OSCOM_Database->query('select * from :table_credit_cards where id = :id');
       $Qcc->bindInt(':id', $id);
       $Qcc->execute();
 
-      $result = $Qcc->toArray();
-
-      return $result;
+      return $Qcc->toArray();
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -48,7 +51,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -75,7 +78,7 @@
     }
 
     public static function save($id = null, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( is_numeric($id) ) {
         $Qcc = $OSCOM_Database->query('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
@@ -92,7 +95,7 @@
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {
-        OSCOM_Cache::clear('credit-cards');
+        Cache::clear('credit-cards');
 
         return true;
       }
@@ -101,7 +104,7 @@
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qdel = $OSCOM_Database->query('delete from :table_credit_cards where id = :id');
       $Qdel->bindInt(':id', $id);
@@ -109,7 +112,7 @@
       $Qdel->execute();
 
       if ( $Qdel->affectedRows() ) {
-        OSCOM_Cache::clear('credit-cards');
+        Cache::clear('credit-cards');
 
         return true;
       }
@@ -118,7 +121,7 @@
     }
 
     public static function setStatus($id, $status) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcc = $OSCOM_Database->query('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
       $Qcc->bindInt(':credit_card_status', ($status === true) ? 1 : 0);
@@ -127,7 +130,7 @@
       $Qcc->execute();
 
       if ( $Qcc->affectedRows() ) {
-        OSCOM_Cache::clear('credit-cards');
+        Cache::clear('credit-cards');
 
         return true;
       }

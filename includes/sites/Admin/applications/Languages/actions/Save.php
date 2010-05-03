@@ -8,8 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_Action_Save {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class Save {
+    public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('edit.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
@@ -27,10 +34,10 @@
                       'parent_id' => $_POST['parent_id'],
                       'sort_order' => $_POST['sort_order']);
 
-        if ( OSCOM_Site_Admin_Application_Languages_Languages::update($_GET['id'], $data, (isset($_POST['default']) && ($_POST['default'] == 'on'))) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if ( Languages::update($_GET['id'], $data, (isset($_POST['default']) && ($_POST['default'] == 'on'))) ) {
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink());

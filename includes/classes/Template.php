@@ -8,14 +8,16 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 // HPDL following alias to remove
-class osC_Template extends OSCOM_Template {}
+class osC_Template extends Template {}
 
 /**
  * The Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks
  */
 
-  class OSCOM_Template {
+  class Template {
 
 /**
  * Holds the template name value
@@ -47,7 +49,7 @@ class osC_Template extends OSCOM_Template {}
 /**
  * Holds the Application object instance
  *
- * @var OSCOM_Site_Admin_ApplicationAbstract
+ * @var ApplicationAbstract
  * @access protected
  */
 
@@ -195,7 +197,7 @@ class osC_Template extends OSCOM_Template {}
       return $object;
     }
 
-    public function setApplication(OSCOM_ApplicationAbstract $application) {
+    public function setApplication(ApplicationAbstract $application) {
       $this->_application = $application;
     }
 
@@ -378,7 +380,7 @@ class osC_Template extends OSCOM_Template {}
     function getTemplates() {
       $templates = array();
 
-      $Qtemplates = OSCOM_Registry::get('Database')->query('select id, code, title from :table_templates');
+      $Qtemplates = Registry::get('Database')->query('select id, code, title from :table_templates');
       $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 

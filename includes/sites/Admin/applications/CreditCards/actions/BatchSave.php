@@ -8,8 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_CreditCards_Action_BatchSave {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\CreditCards\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\CreditCards\CreditCards;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class BatchSave {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('batch_edit.php');
 
@@ -17,16 +24,16 @@
           $error = false;
 
           foreach ( $_POST['batch'] as $id ) {
-            if ( !OSCOM_Site_Admin_Application_CreditCards_CreditCards::setStatus($id, (($_POST['type'] == 'activate') ? true : false)) ) {
+            if ( !CreditCards::setStatus($id, (($_POST['type'] == 'activate') ? true : false)) ) {
               $error = true;
               break;
             }
           }
 
           if ( $error === false ) {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
           } else {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
           osc_redirect_admin(OSCOM::getLink());

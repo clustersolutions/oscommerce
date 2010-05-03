@@ -8,15 +8,19 @@
   as published by the Free Software Foundation.
 */
 
-  abstract class OSCOM_Site_Setup_ApplicationAbstract extends OSCOM_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Setup;
+
+  use osCommerce\OM\OSCOM;
+
+  abstract class ApplicationAbstract extends \osCommerce\OM\ApplicationAbstract {
     public function __construct() {
       $this->initialize();
 
       if ( isset($_GET['action']) && !empty($_GET['action']) ) {
         $action = osc_sanitize_string(basename($_GET['action']));
 
-        if ( class_exists('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action) ) {
-          call_user_func(array('OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication() . '_Action_' . $action, 'execute'), $this);
+        if ( class_exists('osCommerce\\OM\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action) ) {
+          call_user_func(array('osCommerce\\OM\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
         }
       }
     }

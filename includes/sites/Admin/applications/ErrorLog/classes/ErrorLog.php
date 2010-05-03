@@ -8,17 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_ErrorLog_ErrorLog {
+  namespace osCommerce\OM\Site\Admin\Application\ErrorLog;
+
+  use osCommerce\OM\ErrorHandler;
+  use osCommerce\OM\DateTime;
+
+  class ErrorLog {
     public static function getAll($pageset = 1) {
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
       }
 
       $result = array('entries' => array(),
-                      'total' => OSCOM_ErrorHandler::getTotalEntries());
+                      'total' => ErrorHandler::getTotalEntries());
 
-      foreach ( OSCOM_ErrorHandler::getAll(MAX_DISPLAY_SEARCH_RESULTS, $pageset) as $row ) {
-        $result['entries'][] = array('date' => OSCOM_DateTime::getShort(OSCOM_DateTime::fromUnixTimestamp($row['timestamp']), true),
+      foreach ( ErrorHandler::getAll(MAX_DISPLAY_SEARCH_RESULTS, $pageset) as $row ) {
+        $result['entries'][] = array('date' => DateTime::getShort(DateTime::fromUnixTimestamp($row['timestamp']), true),
                                      'message' => $row['message']);
       }
 
@@ -31,10 +36,10 @@
       }
 
       $result = array('entries' => array(),
-                      'total' => OSCOM_ErrorHandler::getTotalFindEntries($search));
+                      'total' => ErrorHandler::getTotalFindEntries($search));
 
-      foreach ( OSCOM_ErrorHandler::find($search, MAX_DISPLAY_SEARCH_RESULTS, $pageset) as $row ) {
-        $result['entries'][] = array('date' => OSCOM_DateTime::getShort(OSCOM_DateTime::fromUnixTimestamp($row['timestamp']), true),
+      foreach ( ErrorHandler::find($search, MAX_DISPLAY_SEARCH_RESULTS, $pageset) as $row ) {
+        $result['entries'][] = array('date' => DateTime::getShort(DateTime::fromUnixTimestamp($row['timestamp']), true),
                                      'message' => $row['message']);
       }
 
@@ -42,7 +47,7 @@
     }
 
     public static function delete() {
-      OSCOM_ErrorHandler::clear();
+      ErrorHandler::clear();
 
       return true;
     }

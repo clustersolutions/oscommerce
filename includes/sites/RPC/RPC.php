@@ -8,7 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_RPC implements OSCOM_SiteInterface {
+  namespace osCommerce\OM\Site;
+
+  use osCommerce\OM\SiteInterface;
+  use osCommerce\OM\OSCOM;
+
+  class RPC implements SiteInterface {
     const STATUS_SUCCESS = 1;
     const STATUS_NO_SESSION = -10;
     const STATUS_NO_MODULE = -20;
@@ -45,9 +50,9 @@
         OSCOM::setSiteApplication($application);
 
         include(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/' . $site . '.php');
-        call_user_func(array('OSCOM_' . $site, 'initialize'));
+        call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'initialize'));
 
-        if ( !call_user_func(array('OSCOM_' . $site, 'hasAccess'), $application)) {
+        if ( !call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'hasAccess'), $application)) {
           echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
           exit;
         }
@@ -60,9 +65,9 @@
           exit;
         }
 
-        if ( class_exists('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class) ) {
-          if ( method_exists('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class, $action) ) {
-            call_user_func(array('OSCOM_Site_' . $site . '_Application_' . $application . '_' . $class, $action));
+        if ( class_exists('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class) ) {
+          if ( method_exists('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action) ) {
+            call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action));
             exit;
           } else {
             echo json_encode(array('rpcStatus' => self::STATUS_ACTION_NONEXISTENT));

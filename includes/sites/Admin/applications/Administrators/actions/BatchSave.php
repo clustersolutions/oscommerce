@@ -8,8 +8,16 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Administrators_Action_BatchSave {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Administrators\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Administrators\Administrators;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Access;
+
+  class BatchSave {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('batch_edit.php');
 
@@ -17,20 +25,20 @@
           $error = false;
 
           foreach ( $_POST['batch'] as $id ) {
-            if ( !OSCOM_Site_Admin_Application_Administrators_Administrators::setAccessLevels($id, $_POST['modules'], $_POST['mode']) ) {
+            if ( !Administrators::setAccessLevels($id, $_POST['modules'], $_POST['mode']) ) {
               $error = true;
               break;
             }
           }
 
           if ( $error === false ) {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
 
             if ( in_array($_SESSION[OSCOM::getSite()]['id'], $_POST['batch']) ) {
-              $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels($_SESSION[OSCOM::getSite()]['id']);
+              $_SESSION[OSCOM::getSite()]['access'] = Access::getUserLevels($_SESSION[OSCOM::getSite()]['id']);
             }
           } else {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
           osc_redirect_admin(OSCOM::getLink());

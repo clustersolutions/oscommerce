@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Index_IndexModules {
+  namespace osCommerce\OM\Site\Admin\Application\Index;
+
+  class IndexModules {
     protected $_title;
     protected $_title_link;
     protected $_data;

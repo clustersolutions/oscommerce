@@ -8,9 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Currencies_Currencies {
+  namespace osCommerce\OM\Site\Admin\Application\Currencies;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Cache;
+
+  class Currencies {
     public static function get($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = false;
 
@@ -43,7 +48,7 @@
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -69,7 +74,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -99,7 +104,7 @@
     }
 
     public static function save($id = null, $data, $set_default = false) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $OSCOM_Database->startTransaction();
 
@@ -135,10 +140,10 @@
         if ( $OSCOM_Database->isError() === false ) {
           $OSCOM_Database->commitTransaction();
 
-          OSCOM_Cache::clear('currencies');
+          Cache::clear('currencies');
 
           if ( ( $set_default === true ) && $Qupdate->affectedRows() ) {
-            OSCOM_Cache::clear('configuration');
+            Cache::clear('configuration');
           }
 
           return true;
@@ -151,7 +156,7 @@
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcheck = $OSCOM_Database->query('select code from :table_currencies where currencies_id = :currencies_id');
       $Qcheck->bindInt(':currencies_id', $id);
@@ -164,7 +169,7 @@
         $Qdelete->execute();
 
         if ( $OSCOM_Database->isError() === false ) {
-          OSCOM_Cache::clear('currencies');
+          Cache::clear('currencies');
 
           return true;
         }
@@ -174,7 +179,7 @@
     }
 
     public static function updateRates($service) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $updated = array('0' => array(),
                        '1' => array());
@@ -197,7 +202,7 @@
         }
       }
 
-      OSCOM_Cache::clear('currencies');
+      Cache::clear('currencies');
 
       return $updated;
     }

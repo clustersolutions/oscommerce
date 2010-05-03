@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+
   $Qcountries = $OSCOM_Database->query('select countries_id, countries_name from :table_countries where countries_id in (":countries_id") order by countries_name');
   $Qcountries->bindRaw(':countries_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qcountries->execute();
@@ -36,7 +38,7 @@
 
   <form name="cDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchDelete'); ?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_batch_delete_countries'); ?></p>
+  <p><?php echo OSCOM::getDef('introduction_batch_delete_countries'); ?></p>
 
   <p><?php echo $names_string; ?></p>
 

@@ -8,9 +8,16 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Index_Action_AddShortcut {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+  namespace osCommerce\OM\Site\Admin\Application\Index\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+
+  class AddShortcut {
+    public static function execute(ApplicationAbstract $application) {
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !empty($_GET['shortcut']) ) {
         $application = osc_sanitize_string($_GET['shortcut']);
@@ -22,9 +29,9 @@
           $Qsc->execute();
 
           if ( !$OSCOM_Database->isError() ) {
-            $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels($_SESSION[OSCOM::getSite()]['id']);
+            $_SESSION[OSCOM::getSite()]['access'] = Access::getUserLevels($_SESSION[OSCOM::getSite()]['id']);
 
-            OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_shortcut_added'), 'success');
+            Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_shortcut_added'), 'success');
 
             osc_redirect_admin(OSCOM::getLink(null, $application));
           }

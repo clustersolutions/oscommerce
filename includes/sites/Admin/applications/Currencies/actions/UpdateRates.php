@@ -8,20 +8,27 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Currencies_Action_UpdateRates {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Currencies\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Currencies\Currencies;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class UpdateRates {
+    public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('update_rates.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
         if ( isset($_POST['service']) && (($_POST['service'] == 'oanda') || ($_POST['service'] == 'xe')) ) {
-          $results = OSCOM_Site_Admin_Application_Currencies_Currencies::updateRates($_POST['service']);
+          $results = Currencies::updateRates($_POST['service']);
 
           foreach ( $results[0] as $result ) {
-            OSCOM_Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_error_invalid_currency'), $result['title'], $result['code']), 'error');
+            Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_error_invalid_currency'), $result['title'], $result['code']), 'error');
           }
 
           foreach ( $results[1] as $result ) {
-            OSCOM_Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_success_currency_updated'), $result['title'], $result['code']), 'success');
+            Registry::get('MessageStack')->add(null, sprintf(OSCOM::getDef('ms_success_currency_updated'), $result['title'], $result['code']), 'success');
           }
         }
 

@@ -12,6 +12,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Cache;
+
   include(OSCOM::BASE_DIRECTORY . 'classes/order_total.php');
 
   class osC_OrderTotal_Admin extends osC_OrderTotal {
@@ -65,7 +68,7 @@
         }
       }
 
-      OSCOM_Cache::clear('languages');
+      Cache::clear('languages');
     }
 
     function remove() {
@@ -93,7 +96,7 @@
           $Qdel->execute();
         }
 
-        osC_Cache::clear('languages');
+        Cache::clear('languages');
       }
     }
   }

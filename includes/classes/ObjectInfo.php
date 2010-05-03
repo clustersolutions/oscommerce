@@ -1,18 +1,20 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 /**
  * The osC_ObjectInfo class wraps an object instance around an array data set
  */
 
-  class osC_ObjectInfo {
+  class ObjectInfo {
 
 /**
  * Holds the array data set values

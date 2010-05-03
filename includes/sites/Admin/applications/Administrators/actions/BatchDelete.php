@@ -8,8 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Administrators_Action_BatchDelete {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Administrators\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Administrators\Administrators;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class BatchDelete {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('batch_delete.php');
 
@@ -17,16 +24,16 @@
           $error = false;
 
           foreach ( $_POST['batch'] as $id ) {
-            if ( !OSCOM_Site_Admin_Application_Administrators_Administrators::delete($id) ) {
+            if ( !Administrators::delete($id) ) {
               $error = true;
               break;
             }
           }
 
           if ( $error === false ) {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
           } else {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
           osc_redirect_admin(OSCOM::getLink());

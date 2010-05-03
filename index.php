@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 // HPDL to delete ///////
   define('PAGE_PARSE_START_TIME', microtime());
   define('PROJECT_VERSION', 'osCommerce Online Merchant $osCommerce-SIG$');
@@ -23,7 +25,7 @@
   require(OSCOM_BASE_DIRECTORY . 'OSCOM.php');
   OSCOM::initialize();
 
-  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/' . OSCOM_Registry::get('Template')->getCode() . '.php');
+  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/' . Registry::get('Template')->getCode() . '.php');
 
 //  require('includes/application_bottom.php');
 ?>

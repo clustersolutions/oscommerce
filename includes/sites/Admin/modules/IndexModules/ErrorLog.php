@@ -8,14 +8,23 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Module_IndexModules_ErrorLog extends OSCOM_Site_Admin_Application_Index_IndexModules {
+  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+
+  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+  use osCommerce\OM\ErrorHandler;
+  use osCommerce\OM\DateTime;
+
+  class ErrorLog extends IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
+      Registry::get('Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_errorlog_title');
       $this->_title_link = OSCOM::getLink(null, 'ErrorLog');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'ErrorLog') ) {
+      if ( Access::hasAccess(OSCOM::getSite(), 'ErrorLog') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -25,12 +34,12 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        if ( OSCOM_ErrorHandler::getTotalEntries() > 0 ) {
+        if ( ErrorHandler::getTotalEntries() > 0 ) {
           $counter = 0;
 
-          foreach ( OSCOM_ErrorHandler::getAll(6) as $row ) {
+          foreach ( ErrorHandler::getAll(6) as $row ) {
             $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                            '      <td style="white-space: nowrap;">' . OSCOM_Registry::get('Template')->getIcon(16, 'errorlog.png') . '&nbsp;' . OSCOM_DateTime::getShort(OSCOM_DateTime::fromUnixTimestamp($row['timestamp']), true) . '</td>' .
+                            '      <td style="white-space: nowrap;">' . Registry::get('Template')->getIcon(16, 'errorlog.png') . '&nbsp;' . DateTime::getShort(DateTime::fromUnixTimestamp($row['timestamp']), true) . '</td>' .
                             '      <td>' . osc_output_string_protected(substr($row['message'], 0, 60)) . '..</td>' .
                             '    </tr>';
 

@@ -8,16 +8,23 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_Action_BatchSaveDefinitions {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class BatchSaveDefinitions {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $application->setPageContent('definitions_batch_edit.php');
 
         if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-          if ( OSCOM_Site_Admin_Application_Languages_Languages::updateDefinitions($_GET['id'], $_GET['group'], $_POST['def']) ) {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+          if ( Languages::updateDefinitions($_GET['id'], $_GET['group'], $_POST['def']) ) {
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
           } else {
-            OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+            Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
           }
 
           osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']));

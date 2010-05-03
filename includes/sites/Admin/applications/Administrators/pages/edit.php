@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Administrators_Administrators::get($_GET['id']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Administrators\Administrators;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Administrators::get($_GET['id']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -20,14 +24,14 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('user_name'); ?></h3>
+  <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('user_name'); ?></h3>
 
-  <form name="aEdit" class="dataForm" autocomplete="off" action="<?php echo OSCOM::getLink(null, null, 'id=' . $osC_ObjectInfo->getInt('id') . '&action=Save'); ?>" method="post">
+  <form name="aEdit" class="dataForm" autocomplete="off" action="<?php echo OSCOM::getLink(null, null, 'id=' . $OSCOM_ObjectInfo->getInt('id') . '&action=Save'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_administrator'); ?></p>
 
   <fieldset>
-    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name', $osC_ObjectInfo->get('user_name')); ?></p>
+    <p><label for="user_name"><?php echo OSCOM::getDef('field_username'); ?></label><?php echo osc_draw_input_field('user_name', $OSCOM_ObjectInfo->get('user_name')); ?></p>
     <p><label for="user_password"><?php echo OSCOM::getDef('field_password'); ?></label><?php echo osc_draw_password_field('user_password'); ?></p>
 
     <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo OSCOM::getDef('global_access'); ?></option></select></p>
@@ -41,8 +45,8 @@
 </div>
 
 <script type="text/javascript">
-  var accessModules = <?php echo json_encode(OSCOM_Site_Admin_Application_Administrators_Administrators::getAccessModules()); ?>;
-  var hasAccessTo = <?php echo json_encode($osC_ObjectInfo->get('access_modules')); ?>;
+  var accessModules = <?php echo json_encode(Administrators::getAccessModules()); ?>;
+  var hasAccessTo = <?php echo json_encode($OSCOM_ObjectInfo->get('access_modules')); ?>;
   var deleteAccessModuleIcon = '<?php echo osc_icon('uninstall.png'); ?>';
 
   var $modulesList = $('#modulesList');

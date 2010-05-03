@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Database_mysql_innodb extends OSCOM_Database_mysql {
+  namespace osCommerce\OM\Database\mysql;
+
+  class innodb extends \osCommerce\OM\Database\mysql {
     var $use_transactions = true,
         $use_foreign_keys = true,
         $use_fulltext = false,

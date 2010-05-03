@@ -8,11 +8,13 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 /**
  * The Session class manages the session data and custom storage handlers
  */
 
-  class OSCOM_Session {
+  class Session {
 
 /**
  * Holds the session cookie parameters (lifetime, path, domain, secure, httponly)
@@ -87,11 +89,11 @@
  */
 
     public static function load($name = null) {
-      $class_name = 'OSCOM_Session';
+      $class_name = 'osCommerce\\OM\\Session';
 
       if ( strlen(STORE_SESSIONS) > 0 ) {
-        if ( class_exists('OSCOM_Session_' . STORE_SESSIONS) ) {
-          $class_name = 'OSCOM_Session_' . STORE_SESSIONS;
+        if ( class_exists('osCommerce\OM\Session\\' . STORE_SESSIONS) ) {
+          $class_name = 'osCommerce\OM\Session\\' . STORE_SESSIONS;
         } else {
           trigger_error('Session Manager \'OSCOM_Session_' . STORE_SESSIONS . '\' does not exist, using default \'OSCOM_Session\'', E_USER_ERROR);
         }

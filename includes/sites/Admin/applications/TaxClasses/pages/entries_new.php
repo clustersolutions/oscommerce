@@ -8,9 +8,13 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\ZoneGroups\ZoneGroups;
+  use osCommerce\OM\OSCOM;
+
   $zones_array = array();
 
-  foreach ( osc_toObjectInfo(OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::getAll(-1))->get('entries') as $group ) {
+  foreach ( osc_toObjectInfo(ZoneGroups::getAll(-1))->get('entries') as $group ) {
     $zones_array[] = array('id' => $group['geo_zone_id'],
                            'text' => $group['geo_zone_name']);
   }

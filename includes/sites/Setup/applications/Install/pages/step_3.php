@@ -8,9 +8,17 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Database;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\DirectoryListing;
+
   define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
 
-  $OSCOM_Database = OSCOM_Database::initialize($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], $_POST['DB_DATABASE_CLASS']);
+  Registry::set('Database', Database::initialize($_POST['DB_SERVER'], $_POST['DB_SERVER_USERNAME'], $_POST['DB_SERVER_PASSWORD'], $_POST['DB_DATABASE'], $_POST['DB_SERVER_PORT'], str_replace('_', '\\', $_POST['DB_DATABASE_CLASS'])));
+//  Registry::set('osC_Database', Registry::get('Database')); // HPDL to delete
+
+  $OSCOM_Database = Registry::get('Database');
 
   $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
   $Qupdate->bindValue(':configuration_value', $_POST['CFG_STORE_NAME']);
@@ -108,7 +116,7 @@
 
   $dir_fs_document_root = realpath(OSCOM::BASE_DIRECTORY . '../') . '/';
 
-  $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'work');
+  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'work');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $OSCOM_DirectoryListing->setCheckExtension('cache');
 
@@ -139,7 +147,7 @@
                    'DB_SERVER_PASSWORD = "' . $_POST['DB_SERVER_PASSWORD'] . '"' . "\n" .
                    'DB_SERVER_PORT = "' . $_POST['DB_SERVER_PORT'] . '"' . "\n" .
                    'DB_DATABASE = "' . $_POST['DB_DATABASE']. '"' . "\n" .
-                   'DB_DATABASE_CLASS = "' . $_POST['DB_DATABASE_CLASS'] . '"' . "\n" .
+                   'DB_DATABASE_CLASS = "' . str_replace('_', '\\', $_POST['DB_DATABASE_CLASS']) . '"' . "\n" .
                    'DB_TABLE_PREFIX = "' . $_POST['DB_TABLE_PREFIX']. '"' . "\n" .
                    'DB_SERVER_PERSISTENT_CONNECTIONS = "false"' . "\n" .
                    'STORE_SESSIONS = "database"' . "\n";

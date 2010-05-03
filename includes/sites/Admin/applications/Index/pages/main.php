@@ -8,12 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/IndexModules');
+  use osCommerce\OM\DirectoryListing;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
+
+  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/IndexModules');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $files = $OSCOM_DirectoryListing->getFiles();
 
-  $Qonline = OSCOM_Registry::get('Database')->query('select count(*) as total from :table_whos_online where time_last_click >= :time_last_click');
-  $Qonline->bindTable(':table_whos_online', TABLE_WHOS_ONLINE);
+  $Qonline = Registry::get('Database')->query('select count(*) as total from :table_whos_online where time_last_click >= :time_last_click');
   $Qonline->bindInt(':time_last_click', (time() - 900));
   $Qonline->execute();
 ?>
@@ -29,7 +32,7 @@
 
   foreach ($files as $file) {
     $module = substr($file['name'], 0, strrpos($file['name'], '.'));
-    $module_class = 'OSCOM_Site_Admin_Module_IndexModules_' . $module;
+    $module_class = 'osCommerce\\OM\\Site\\Admin\\Module\\IndexModules\\' . $module;
 
     $OSCOM_Admin_IndexModule= new $module_class();
 

@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\Site\Admin\Application\TaxClasses\TaxClasses;
+  use osCommerce\OM\OSCOM;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -34,11 +37,11 @@
   $names_string = '';
 
   while ( $Qclasses->next() ) {
-    if ( OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::hasProducts($Qclasses->valueInt('tax_class_id')) ) {
+    if ( TaxClasses::hasProducts($Qclasses->valueInt('tax_class_id')) ) {
       $check_tax_classes_flag[] = $Qclasses->value('tax_class_title');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $Qclasses->value('tax_class_title') . ' (' . sprintf(OSCOM::getDef('total_entries'), OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::getNumberOfTaxRates($Qclasses->valueInt('tax_class_id'))) . ')</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qclasses->valueInt('tax_class_id')) . '<b>' . $Qclasses->value('tax_class_title') . ' (' . sprintf(OSCOM::getDef('total_entries'), TaxClasses::getNumberOfTaxRates($Qclasses->valueInt('tax_class_id'))) . ')</b>, ';
   }
 
   if ( !empty($names_string) ) {

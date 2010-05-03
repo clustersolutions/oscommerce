@@ -8,14 +8,21 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Module_IndexModules_AdministratorsLog extends OSCOM_Site_Admin_Application_Index_IndexModules {
+  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+
+  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+
+  class AdministratorsLog extends IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/AdministratorsLog.php');
+      Registry::get('Language')->loadIniFile('modules/IndexModules/AdministratorsLog.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_administratorslog_title');
       $this->_title_link = OSCOM::getLink(null, 'AdministratorsLog');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'administrators_log') ) {
+      if ( Access::hasAccess(OSCOM::getSite(), 'AdministratorsLog') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -26,9 +33,7 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qlog = OSCOM_Registry::get('Database')->query('select count(al.id) as total, al.id, al.module, a.user_name, al.datestamp from :table_administrators_log al, :table_administrators a where al.module in (":modules") and al.administrators_id = a.id group by al.id order by al.id desc limit 6');
-        $Qlog->bindTable(':table_administrators_log', TABLE_ADMINISTRATORS_LOG);
-        $Qlog->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
+        $Qlog = Registry::get('Database')->query('select count(al.id) as total, al.id, al.module, a.user_name, al.datestamp from :table_administrators_log al, :table_administrators a where al.module in (":modules") and al.administrators_id = a.id group by al.id order by al.id desc limit 6');
         $Qlog->bindRaw(':modules', implode('", "', array_keys($_SESSION[OSCOM::getSite()]['access'])));
         $Qlog->execute();
 

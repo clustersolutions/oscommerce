@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
   class OSCOM {
     const TIMESTAMP_START = OSCOM_TIMESTAMP_START;
     const BASE_DIRECTORY = OSCOM_BASE_DIRECTORY;
@@ -20,7 +22,7 @@
     public static function initialize() {
       spl_autoload_register('self::autoload');
 
-      OSCOM_ErrorHandler::initialize();
+      ErrorHandler::initialize();
 
       require(self::BASE_DIRECTORY . 'functions/compatibility.php');
       require(self::BASE_DIRECTORY . 'functions/general.php');
@@ -37,7 +39,7 @@
 
       self::setSiteApplication();
 
-      call_user_func(array('OSCOM_' . self::getSite(), 'initialize'));
+      call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite(), 'initialize'));
     }
 
     public static function siteExists($site) {
@@ -80,7 +82,7 @@
     }
 
     public static function siteApplicationExists($application) {
-      return file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . self::getSite() . '/applications/' . $application . '/' . $application . '.php');
+      return file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . self::getSite() . '/applications/' . $application . '/Controller.php');
     }
 
     public static function setSiteApplication($application = null) {
@@ -117,34 +119,35 @@
     }
 
     public static function getDefaultSiteApplication() {
-      return call_user_func(array('OSCOM_' . self::getSite(), 'getDefaultApplication'));
+      return call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite(), 'getDefaultApplication'));
     }
 
     public static function autoload($class) {
-      $namespace = explode('_', $class);
+      $namespace = explode('\\', $class);
 
       $class_file = '';
 
-      if ( $namespace[1] == 'Site' ) {
-        if ( $namespace[3] == 'Application' ) {
-          if ( isset($namespace[5]) ) {
-            if ( $namespace[5] == 'Action' ) {
-              $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[2] . '/applications/' . $namespace[4] . '/actions/' . implode('/', array_slice($namespace, 6)) . '.php';
-            } else {
-              $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[2] . '/applications/' . $namespace[4] . '/classes/' . implode('/', array_slice($namespace, 5)) . '.php';
+      if ( ($namespace[0] == 'osCommerce') && ($namespace[1] == 'OM') ) {
+        if ( $namespace[2] == 'Site' ) {
+          if ( isset($namespace[4]) && ($namespace[4] == 'Application') ) {
+            if ( isset($namespace[6]) ) {
+              if ( $namespace[6] == 'Controller' ) {
+                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/Controller.php';
+              } elseif ( $namespace[6] == 'Action' ) {
+                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/actions/' . implode('/', array_slice($namespace, 7)) . '.php';
+              } else {
+                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/classes/' . implode('/', array_slice($namespace, 6)) . '.php';
+              }
             }
+          } elseif ( isset($namespace[4]) && ($namespace[4] == 'Module') ) {
+            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/modules/' . implode('/', array_slice($namespace, 5)) . '.php';
           } else {
-            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[2] . '/applications/' . $namespace[4] . '/' . $namespace[4] . '.php';
+            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/classes/' . implode('/', array_slice($namespace, 4)) . '.php';
           }
-        } elseif ( $namespace[3] == 'Module' ) {
-          $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[2] . '/modules/' . implode('/', array_slice($namespace, 4)) . '.php';
         } else {
-          $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[2] . '/classes/' . implode('/', array_slice($namespace, 3)) . '.php';
+          $class_file = self::BASE_DIRECTORY . 'classes/' . implode('/', array_slice($namespace, 2)) . '.php';
         }
-      } else {
-        $class_file = self::BASE_DIRECTORY . 'classes/' . implode('/', array_slice($namespace, 1)) . '.php';
       }
-
       if ( !empty($class_file) ) {
         if ( file_exists($class_file) ) {
           include($class_file);
@@ -261,12 +264,12 @@
         $link .= $parameters . '&';
       }
 
-      if ( ($add_session_id === true) && OSCOM_Registry::exists('Session') && OSCOM_Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+      if ( ($add_session_id === true) && Registry::exists('Session') && Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
         if ( strlen(SID) > 0 ) {
           $_sid = SID;
         } elseif ( ((self::getRequestType() == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || ((self::getRequestType() == 'SSL') && ($connection != 'SSL')) ) {
           if ( HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN ) {
-            $_sid = OSCOM_Registry::get('Session')->getName() . '=' . OSCOM_Registry::get('Session')->getID();
+            $_sid = Registry::get('Session')->getName() . '=' . Registry::get('Session')->getID();
           }
         }
       }
@@ -279,7 +282,7 @@
         $link = substr($link, 0, -1);
       }
 
-      if ( ($search_engine_safe === true) && OSCOM_Registry::exists('osC_Services') && OSCOM_Registry::get('osC_Services')->isStarted('sefu') ) {
+      if ( ($search_engine_safe === true) && Registry::exists('osC_Services') && Registry::get('osC_Services')->isStarted('sefu') ) {
         $link = str_replace(array('?', '&', '='), array('/', '/', ','), $link);
       }
 
@@ -341,7 +344,7 @@
  */
 
     public static function getDef($key) {
-      return OSCOM_Registry::get('Language')->get($key);
+      return Registry::get('Language')->get($key);
     }
   }
 ?>

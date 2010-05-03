@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Configuration_Configuration::getEntry($_GET['pID']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Configuration\Configuration;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Configuration::getEntry($_GET['pID']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -18,23 +22,23 @@
     echo $OSCOM_MessageStack->get();
   }
 
-  if ( !osc_empty($osC_ObjectInfo->get('set_function')) ) {
-    $value_field = osc_call_user_func($osC_ObjectInfo->get('set_function'), $osC_ObjectInfo->get('configuration_value'), $osC_ObjectInfo->get('configuration_key'));
+  if ( !osc_empty($OSCOM_ObjectInfo->get('set_function')) ) {
+    $value_field = osc_call_user_func($OSCOM_ObjectInfo->get('set_function'), $OSCOM_ObjectInfo->get('configuration_value'), $osC_ObjectInfo->get('configuration_key'));
   } else {
-    $value_field = osc_draw_input_field('configuration[' . $osC_ObjectInfo->get('configuration_key') . ']', $osC_ObjectInfo->get('configuration_value'));
+    $value_field = osc_draw_input_field('configuration[' . $OSCOM_ObjectInfo->get('configuration_key') . ']', $OSCOM_ObjectInfo->get('configuration_value'));
   }
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('configuration_title'); ?></h3>
+  <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('configuration_title'); ?></h3>
 
   <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=EntrySave'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_parameter'); ?></p>
 
   <fieldset>
-    <p><label for="configuration[<?php echo $osC_ObjectInfo->get('configuration_key'); ?>]"><?php echo $osC_ObjectInfo->getProtected('configuration_title'); ?></label><?php echo $value_field; ?></p>
-    <p><?php echo $osC_ObjectInfo->get('configuration_description'); ?></p>
+    <p><label for="configuration[<?php echo $OSCOM_ObjectInfo->get('configuration_key'); ?>]"><?php echo $OSCOM_ObjectInfo->getProtected('configuration_title'); ?></label><?php echo $value_field; ?></p>
+    <p><?php echo $OSCOM_ObjectInfo->get('configuration_description'); ?></p>
   </fieldset>
 
   <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>

@@ -8,7 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Setup implements OSCOM_SiteInterface {
+  namespace osCommerce\OM\Site;
+
+  use osCommerce\OM\SiteInterface;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Site\Setup\Language;
+  use osCommerce\OM\Site\Setup\Template;
+
+  class Setup implements SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {
@@ -21,14 +29,14 @@
       define('DB_SERVER_PERSISTENT_CONNECTIONS', false);
       define('DIR_FS_WORK', OSCOM::BASE_DIRECTORY . 'work/');
 
-      OSCOM_Registry::set('Language', new OSCOM_Site_Setup_Language());
-      OSCOM_Registry::set('osC_Language', OSCOM_Registry::get('Language')); // HPDL to delete
+      Registry::set('Language', new Language());
+      Registry::set('osC_Language', Registry::get('Language')); // HPDL to remove
 
-      $application = 'OSCOM_Site_' . OSCOM::getSite() . '_Application_' . OSCOM::getSiteApplication();
-      OSCOM_Registry::set('Application', new $application());
+      $application = 'osCommerce\\OM\\Site\\Setup\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
+      Registry::set('Application', new $application());
 
-      OSCOM_Registry::set('Template', new OSCOM_Site_Setup_Template());
-      OSCOM_Registry::get('Template')->setApplication(OSCOM_Registry::get('Application'));
+      Registry::set('Template', new Template());
+      Registry::get('Template')->setApplication(Registry::get('Application'));
     }
 
     public static function getDefaultApplication() {

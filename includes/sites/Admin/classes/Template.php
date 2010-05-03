@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Template extends OSCOM_Template {
+  namespace osCommerce\OM\Site\Admin;
+
+  use osCommerce\OM\OSCOM;
+
+  class Template extends \osCommerce\OM\Template {
     public function __construct() {
       $this->set('default');
     }

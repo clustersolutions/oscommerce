@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -25,7 +27,7 @@
   <p><?php echo OSCOM::getDef('introduction_batch_delete_tax_rates'); ?></p>
 
 <?php
-  $Qentries = $osC_Database->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in (":tax_rates_id") order by tax_description');
+  $Qentries = $OSCOM_Database->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in (":tax_rates_id") order by tax_description');
   $Qentries->bindRaw(':tax_rates_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qentries->execute();
 

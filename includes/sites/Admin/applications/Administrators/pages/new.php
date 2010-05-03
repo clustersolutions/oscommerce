@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Application\Administrators\Administrators;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -39,7 +42,7 @@
 </div>
 
 <script type="text/javascript">
-  var accessModules = <?php echo json_encode(OSCOM_Site_Admin_Application_Administrators_Administrators::getAccessModules()); ?>;
+  var accessModules = <?php echo json_encode(Administrators::getAccessModules()); ?>;
   var deleteAccessModuleIcon = '<?php echo osc_icon('uninstall.png'); ?>';
 
   var $modulesList = $('#modulesList');

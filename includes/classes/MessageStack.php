@@ -8,13 +8,15 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 /**
  * The MessageStack class manages information messages to be displayed.
  * Messages shown are automatically removed from the stack.
  * Core message types: info, success, warning, error
  */
 
-  class OSCOM_MessageStack {
+  class MessageStack {
 
 /**
  * The storage handler for the messages

@@ -8,9 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Configuration_Configuration {
+  namespace osCommerce\OM\Site\Admin\Application\Configuration;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Cache;
+
+  class Configuration {
     public static function get($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = false;
 
@@ -34,7 +39,7 @@
     }
 
     public static function getAll() {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qgroups = $OSCOM_Database->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
       $Qgroups->execute();
@@ -55,7 +60,7 @@
     }
 
     public static function find($search) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -78,7 +83,7 @@
     }
 
     public static function getEntry($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_id = :configuration_id');
       $Qcfg->bindInt(':configuration_id', $id);
@@ -90,7 +95,7 @@
     }
 
     public static function getAllEntries($group_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select * from :table_configuration where configuration_group_id = :configuration_group_id order by sort_order');
       $Qcfg->bindInt(':configuration_group_id', $group_id);
@@ -112,7 +117,7 @@
     }
 
     public static function findEntries($search, $group_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -136,7 +141,7 @@
     }
 
     public static function saveEntry($parameter) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcfg = $OSCOM_Database->query('select configuration_id from :table_configuration where configuration_key = :configuration_key');
       $Qcfg->bindValue(':configuration_key', key($parameter));
@@ -150,7 +155,7 @@
         $Qupdate->execute();
 
         if ( $Qupdate->affectedRows() ) {
-          OSCOM_Cache::clear('configuration');
+          Cache::clear('configuration');
 
           return true;
         }

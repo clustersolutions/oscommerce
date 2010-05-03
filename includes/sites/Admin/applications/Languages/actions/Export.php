@@ -8,12 +8,17 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_Action_Export {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+
+  class Export {
+    public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('export.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        OSCOM_Site_Admin_Application_Languages_Languages::export($_GET['id'], $_POST['groups'], (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
+        Languages::export($_GET['id'], $_POST['groups'], (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
       }
     }
   }

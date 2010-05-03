@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  abstract class OSCOM_ApplicationAbstract {
+  namespace osCommerce\OM;
+
+  abstract class ApplicationAbstract {
     protected $_page_contents = 'main.php';
     protected $_page_title;
 

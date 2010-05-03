@@ -12,6 +12,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Cache;
+
   include(OSCOM::BASE_DIRECTORY . 'classes/payment.php');
 
   class osC_Payment_Admin extends osC_Payment {
@@ -69,7 +72,7 @@
         }
       }
 
-      OSCOM_Cache::clear('languages');
+      Cache::clear('languages');
     }
 
     function remove() {
@@ -97,7 +100,7 @@
           $Qdel->execute();
         }
 
-        osC_Cache::clear('languages');
+        Cache::clear('languages');
       }
     }
   }

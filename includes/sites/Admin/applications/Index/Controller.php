@@ -8,14 +8,16 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Administrators extends OSCOM_Site_Admin_ApplicationAbstract {
-    protected $_group = 'configuration';
-    protected $_icon = 'administrators.png';
-    protected $_sort_order = 100;
+  namespace osCommerce\OM\Site\Admin\Application\Index;
 
-    protected function initialize() {
-      $this->_title = OSCOM::getDef('app_title');
-    }
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
+    protected $_link_to = false;
+    protected $_icon = 'oscommerce.png';
+
+    protected function initialize() {}
 
     protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');

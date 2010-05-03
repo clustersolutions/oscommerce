@@ -8,7 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages extends OSCOM_Site_Admin_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Admin\Application\Languages;
+
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected $_group = 'configuration';
     protected $_icon = 'languages.png';
     protected $_sort_order = 400;
@@ -20,11 +25,11 @@
     protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
 
-      if ( isset($_GET['id']) && is_numeric($_GET['id']) && OSCOM_Site_Admin_Application_Languages_Languages::exists($_GET['id']) ) {
+      if ( isset($_GET['id']) && is_numeric($_GET['id']) && Languages::exists($_GET['id']) ) {
         $this->_page_contents = 'groups.php';
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Languages_Languages::get($_GET['id'], 'name');
+        $this->_page_title .= ': ' . Languages::get($_GET['id'], 'name');
 
-        if ( isset($_GET['group']) && OSCOM_Site_Admin_Application_Languages_Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
+        if ( isset($_GET['group']) && Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
           $this->_page_contents = 'definitions.php';
           $this->_page_title .= ': ' . $_GET['group'];
         }

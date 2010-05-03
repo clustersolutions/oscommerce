@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -28,7 +30,6 @@
   $check_default_flag = false;
 
   $Qlanguages = $OSCOM_Database->query('select languages_id, name, code from :table_languages where languages_id in (":languages_id") order by name');
-  $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
   $Qlanguages->bindRaw(':languages_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qlanguages->execute();
 

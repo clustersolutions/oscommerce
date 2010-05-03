@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <div class="mainBlock">

@@ -8,11 +8,17 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Login_Action_Logoff {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Login\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class Logoff {
+    public static function execute(ApplicationAbstract $application) {
       unset($_SESSION[OSCOM::getSite()]);
 
-      OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_logged_out'), 'success');
+      Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_logged_out'), 'success');
 
       osc_redirect_admin(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
     }

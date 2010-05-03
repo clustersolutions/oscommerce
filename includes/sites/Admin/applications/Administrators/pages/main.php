@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -55,7 +57,7 @@
   <span id="batchPullDownMenu"></span>
 </div>
 
-<script type="text/javascript"><!--
+<script type="text/javascript">
   var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
 
   var moduleParams = new Object();
@@ -109,4 +111,4 @@
       rowCounter++;
     }
   }
-//--></script>
+</script>

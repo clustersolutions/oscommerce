@@ -12,6 +12,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
+
 /**
  * Generate an internal URL address for the administration side
  *
@@ -36,8 +39,6 @@
  */
 
   function osc_icon($image, $title = null, $group = null, $parameters = null) {
-    global $osC_Template;
-
     if ( is_null($title) ) {
       $title = OSCOM::getDef('icon_' . substr($image, 0, strpos($image, '.')));
     }
@@ -46,7 +47,7 @@
       $group = '16x16';
     }
 
-    return osc_image(OSCOM::getPublicSiteLink('templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image), $title, null, null, $parameters);
+    return osc_image(OSCOM::getPublicSiteLink('templates/' . Registry::get('Template')->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image), $title, null, null, $parameters);
   }
 
 /**
@@ -58,26 +59,23 @@
  */
 
   function osc_icon_raw($image, $group = '16x16') {
-    global $osC_Template;
-
-    return 'public/sites/Admin/templates/' . $osC_Template->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image;
+    return 'public/sites/Admin/templates/' . Registry::get('Template')->getCode() . '/images/icons/' . (!empty($group) ? $group . '/' : null) . $image;
   }
 
 ////
 // javascript to dynamically update the states/provinces list when the country is changed
 // TABLES: zones
   function osc_js_zone_list($country, $form, $field) {
-    global $osC_Database, $osC_Language;
+    $OSCOM_Database = Registry::get('Database');
 
     $num_country = 1;
     $output_string = '';
 
-    $Qcountries = $osC_Database->query('select distinct zone_country_id from :table_zones order by zone_country_id');
-    $Qcountries->bindTable(':table_zones', TABLE_ZONES);
+    $Qcountries = $OSCOM_Database->query('select distinct zone_country_id from :table_zones order by zone_country_id');
     $Qcountries->execute();
 
-    while ($Qcountries->next()) {
-      if ($num_country == 1) {
+    while ( $Qcountries->next() ) {
+      if ( $num_country == 1 ) {
         $output_string .= '  if (' . $country . ' == "' . $Qcountries->valueInt('zone_country_id') . '") {' . "\n";
       } else {
         $output_string .= '  } else if (' . $country . ' == "' . $Qcountries->valueInt('zone_country_id') . '") {' . "\n";
@@ -85,14 +83,13 @@
 
       $num_state = 1;
 
-      $Qzones = $osC_Database->query('select zone_name, zone_id from :table_zones where zone_country_id = :zone_country_id order by zone_name');
-      $Qzones->bindTable(':table_zones', TABLE_ZONES);
+      $Qzones = $OSCOM_Database->query('select zone_name, zone_id from :table_zones where zone_country_id = :zone_country_id order by zone_name');
       $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('zone_country_id'));
       $Qzones->execute();
 
-      while ($Qzones->next()) {
-        if ($num_state == '1') {
-          $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . $osC_Language->get('all_zones') . '", "");' . "\n";
+      while ( $Qzones->next() ) {
+        if ( $num_state == '1' ) {
+          $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . OSCOM::getDef('all_zones') . '", "");' . "\n";
         }
 
         $output_string .= '    ' . $form . '.' . $field . '.options[' . $num_state . '] = new Option("' . $Qzones->value('zone_name') . '", "' . $Qzones->valueInt('zone_id') . '");' . "\n";
@@ -104,7 +101,7 @@
     }
 
     $output_string .= '  } else {' . "\n" .
-                      '    ' . $form . '.' . $field . '.options[0] = new Option("' . $osC_Language->get('all_zones') . '", "");' . "\n" .
+                      '    ' . $form . '.' . $field . '.options[0] = new Option("' . OSCOM::getDef('all_zones') . '", "");' . "\n" .
                       '  }' . "\n";
 
     return $output_string;

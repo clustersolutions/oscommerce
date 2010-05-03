@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::get($_GET['id']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Languages::get($_GET['id']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -20,10 +24,10 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('name'); ?></h3>
+  <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('name'); ?></h3>
 
 <?php
-  if ( $osC_ObjectInfo->get('code') == DEFAULT_LANGUAGE ) {
+  if ( $OSCOM_ObjectInfo->get('code') == DEFAULT_LANGUAGE ) {
 ?>
 
   <p><?php echo '<b>' . OSCOM::getDef('introduction_delete_language_invalid') . '</b>'; ?></p>
@@ -38,7 +42,7 @@
 
   <p><?php echo OSCOM::getDef('introduction_delete_language'); ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->getProtected('name') . '</b>'; ?></p>
+  <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('name') . '</b>'; ?></p>
 
   <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 

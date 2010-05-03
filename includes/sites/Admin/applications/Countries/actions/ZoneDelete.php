@@ -8,15 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Countries_Action_ZoneDelete {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Countries\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Countries\Countries;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class ZoneDelete {
+    public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('zones_delete.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( OSCOM_Site_Admin_Application_Countries_Countries::deleteZone($_GET['zID']) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if ( Countries::deleteZone($_GET['zID']) ) {
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id']));

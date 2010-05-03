@@ -8,14 +8,20 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Setup_Language extends OSCOM_Site_Admin_Language {
-    public function __construct() {
-      $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
-      $OSCOM_DirectoryListing->setIncludeDirectories(false);
-      $OSCOM_DirectoryListing->setCheckExtension('xml');
+  namespace osCommerce\OM\Site\Setup;
 
-      foreach ( $OSCOM_DirectoryListing->getFiles() as $file ) {
-        $lang = OSCOM_XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file['name']));
+  use osCommerce\OM\DirectoryListing;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\XML;
+
+  class Language extends \osCommerce\OM\Site\Admin\Language {
+    public function __construct() {
+      $DLlang = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
+      $DLlang->setIncludeDirectories(false);
+      $DLlang->setCheckExtension('xml');
+
+      foreach ( $DLlang->getFiles() as $file ) {
+        $lang = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file['name']));
 
         if ( !isset($lang['language']) ) { // create root element (simpleXML does not use root element)
           $lang = array('language' => $lang);

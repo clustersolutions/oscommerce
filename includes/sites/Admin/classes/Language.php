@@ -8,9 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Language extends OSCOM_Language {
+  namespace osCommerce\OM\Site\Admin;
 
-/* Public methods */
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\XML;
+  use osCommerce\OM\Registry;
+
+  class Language extends \osCommerce\OM\Language {
     public function __construct() {
       parent::__construct();
 
@@ -88,11 +92,11 @@
       }
     }
 
-    public function extractDefinitions($xml) {
+    public static function extractDefinitions($xml) {
       $definitions = array();
 
       if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $xml) ) {
-        $definitions = OSCOM_XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
+        $definitions = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
 
         if ( !isset($definitions['language']) ) { // create root element (simpleXML does not use root element)
           $definitions = array('language' => $definitions);
@@ -109,16 +113,13 @@
     }
 
     function getData($id, $key = null) {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
-      $Qlanguage = $osC_Database->query('select * from :table_languages where languages_id = :languages_id');
-      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage = $OSCOM_Database->query('select * from :table_languages where languages_id = :languages_id');
       $Qlanguage->bindInt(':languages_id', $id);
       $Qlanguage->execute();
 
       $result = $Qlanguage->toArray();
-
-      $Qlanguage->freeResult();
 
       if ( empty($key) ) {
         return $result;
@@ -128,39 +129,33 @@
     }
 
     function getID($code = null) {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
       if ( empty($code) ) {
         return $this->_languages[$this->_code]['id'];
       }
 
-      $Qlanguage = $osC_Database->query('select languages_id from :table_languages where code = :code');
-      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage = $OSCOM_Database->query('select languages_id from :table_languages where code = :code');
       $Qlanguage->bindValue(':code', $code);
       $Qlanguage->execute();
 
       $result = $Qlanguage->toArray();
 
-      $Qlanguage->freeResult();
-
       return $result['languages_id'];
     }
 
     function getCode($id = null) {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
       if ( empty($id) ) {
         return $this->_code;
       }
 
-      $Qlanguage = $osC_Database->query('select code from :table_languages where languages_id = :languages_id');
-      $Qlanguage->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguage = $OSCOM_Database->query('select code from :table_languages where languages_id = :languages_id');
       $Qlanguage->bindValue(':languages_id', $id);
       $Qlanguage->execute();
 
       $result = $Qlanguage->toArray();
-
-      $Qlanguage->freeResult();
 
       return $result['code'];
     }

@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Registry {
+  namespace osCommerce\OM;
+
+  class Registry {
     static private $_data = array();
 
     static public function get($key) {

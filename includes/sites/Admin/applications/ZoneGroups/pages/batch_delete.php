@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Application\ZoneGroups\ZoneGroups;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -27,18 +30,18 @@
 <?php
   $check_tax_zones_flag = array();
 
-  $Qzones = $osC_Database->query('select geo_zone_id, geo_zone_name from :table_geo_zones where geo_zone_id in (":geo_zone_id") order by geo_zone_name');
+  $Qzones = $OSCOM_Database->query('select geo_zone_id, geo_zone_name from :table_geo_zones where geo_zone_id in (":geo_zone_id") order by geo_zone_name');
   $Qzones->bindRaw(':geo_zone_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qzones->execute();
 
   $names_string = '';
 
   while ( $Qzones->next() ) {
-    if ( OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::hasTaxRate($Qzones->valueInt('geo_zone_id')) ) {
+    if ( ZoneGroups::hasTaxRate($Qzones->valueInt('geo_zone_id')) ) {
       $check_tax_zones_flag[] = $Qzones->value('geo_zone_name');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $Qzones->valueProtected('geo_zone_name') . ' (' . sprintf(OSCOM::getDef('total_entries'), OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::numberOfEntries($Qzones->valueInt('geo_zone_id'))) . ')</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $Qzones->valueProtected('geo_zone_name') . ' (' . sprintf(OSCOM::getDef('total_entries'), ZoneGroups::numberOfEntries($Qzones->valueInt('geo_zone_id'))) . ')</b>, ';
   }
 
   if ( !empty($names_string) ) {

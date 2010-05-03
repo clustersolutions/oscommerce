@@ -8,9 +8,12 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
   $groups_array = array();
 
-  foreach ( osc_toObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::getDefinitionGroups($_GET['id']))->get('entries') as $value ) {
+  foreach ( osc_toObjectInfo(Languages::getDefinitionGroups($_GET['id']))->get('entries') as $value ) {
     $groups_array[] = $value['content_group'];
   }
 ?>
@@ -35,8 +38,8 @@
     <p><label><?php echo OSCOM::getDef('field_definition_value'); ?></label>
 
 <?php
-  foreach ( $osC_Language->getAll() as $l ) {
-    echo '<br />' . $osC_Language->showImage($l['code']) . '<br />' . osc_draw_textarea_field('value[' . $l['id'] . ']');
+  foreach ( $OSCOM_Language->getAll() as $l ) {
+    echo '<br />' . $OSCOM_Language->showImage($l['code']) . '<br />' . osc_draw_textarea_field('value[' . $l['id'] . ']');
   }
 ?>
 

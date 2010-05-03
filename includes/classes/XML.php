@@ -8,9 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_XML {
+  namespace osCommerce\OM;
+
+  class XML {
     public static function toArray($xml) {
-      if ( $xml instanceof SimpleXMLElement ) {
+      if ( $xml instanceof \SimpleXMLElement ) {
         $attributes = $xml->attributes();
 
         foreach ( $attributes as $k => $v ) {
@@ -43,7 +45,7 @@
     }
 
     public static function fromArray($data, $encoding = 'UTF-8') {
-      $xml = new XMLWriter();
+      $xml = new \XMLWriter();
       $xml->openMemory();
       $xml->setIndent(true);
       $xml->setIndentString('  ');

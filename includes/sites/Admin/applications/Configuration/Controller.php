@@ -8,10 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Countries extends OSCOM_Site_Admin_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Admin\Application\Configuration;
+
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'countries.png';
-    protected $_sort_order = 600;
+    protected $_icon = 'configuration.png';
+    protected $_sort_order = 200;
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');
@@ -21,8 +26,8 @@
       $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
-        $this->_page_contents = 'zones.php';
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_Countries_Countries::get($_GET['id'], 'countries_name');
+        $this->_page_contents = 'entries.php';
+        $this->_page_title .= ': ' . Configuration::get($_GET['id'], 'configuration_group_title');
       }
     }
   }

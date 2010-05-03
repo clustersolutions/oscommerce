@@ -8,9 +8,19 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_Languages {
+  namespace osCommerce\OM\Site\Admin\Application\Languages;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Cache;
+  use osCommerce\OM\Site\Admin\Application\Currencies\Currencies;
+  use osCommerce\OM\XML;
+  use osCommerce\OM\DirectoryListing;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Language;
+
+  class Languages {
     public static function get($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = false;
 
@@ -46,7 +56,7 @@
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -76,7 +86,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -110,7 +120,7 @@
     }
 
     public static function getDefinitionGroup($group) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -128,7 +138,7 @@
     }
 
     public static function getDefinitionGroups($language_id) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -146,7 +156,7 @@
     }
 
     public static function isDefinitionGroup($language_id, $group) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qgroup = $OSCOM_Database->query('select id from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group limit 1');
       $Qgroup->bindInt(':languages_id', $language_id);
@@ -163,7 +173,7 @@
     }
 
     public static function findDefinitionGroups($language_id, $search) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -187,7 +197,7 @@
     }
 
     public static function deleteDefinitionGroup($group) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qdel = $OSCOM_Database->query('delete from :table_languages_definitions where content_group = :content_group');
       $Qdel->bindValue(':content_group', $group);
@@ -195,7 +205,7 @@
       $Qdel->execute();
 
       if ( !$OSCOM_Database->isError() ) {
-        OSCOM_Cache::clear('languages');
+        Cache::clear('languages');
 
         return true;
       }
@@ -204,7 +214,7 @@
     }
 
     public static function getDefinition($id) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qdef = $OSCOM_Database->query('select * from :table_languages_definitions where id = :id');
       $Qdef->bindInt(':id', $id);
@@ -216,7 +226,7 @@
     }
 
     public static function getDefinitions($language_id, $group) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -244,7 +254,7 @@
     }
 
     public static function findDefinitions($language_id, $group, $search) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -265,7 +275,7 @@
     }
 
     public static function insertDefinition($group, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -285,7 +295,7 @@
           break;
         }
 
-        OSCOM_Cache::clear('languages-' . $l['code'] . '-' . $group);
+        Cache::clear('languages-' . $l['code'] . '-' . $group);
       }
 
       if ( $error === false ) {
@@ -300,7 +310,7 @@
     }
 
     public static function updateDefinitions($language_id, $group, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -324,7 +334,7 @@
       if ( $error === false ) {
         $OSCOM_Database->commitTransaction();
 
-        OSCOM_Cache::clear('languages-' . self::get($language_id, 'code') . '-' . $group);
+        Cache::clear('languages-' . self::get($language_id, 'code') . '-' . $group);
 
         return true;
       }
@@ -335,7 +345,7 @@
     }
 
     public static function deleteDefinitions($language_id, $group, $keys) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -356,7 +366,7 @@
       if ( $error === false ) {
         $OSCOM_Database->commitTransaction();
 
-        OSCOM_Cache::clear('languages-' . self::get($language_id, 'code') . '-' . $group);
+        Cache::clear('languages-' . self::get($language_id, 'code') . '-' . $group);
 
         return true;
       }
@@ -367,7 +377,7 @@
     }
 
     public static function update($id, $data, $default = false) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -407,7 +417,7 @@
             $error = true;
           } else {
             if ( $Qupdate->affectedRows() ) {
-              OSCOM_Cache::clear('configuration');
+              Cache::clear('configuration');
             }
           }
         }
@@ -416,7 +426,7 @@
       if ( $error === false ) {
         $OSCOM_Database->commitTransaction();
 
-        OSCOM_Cache::clear('languages');
+        Cache::clear('languages');
 
         return true;
       }
@@ -427,7 +437,7 @@
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( self::get($id, 'code') != DEFAULT_LANGUAGE ) {
         $Qlanguages = $OSCOM_Database->query('delete from :table_languages where languages_id = :languages_id');
@@ -436,7 +446,7 @@
         $Qlanguages->execute();
 
         if ( !$OSCOM_Database->isError() ) {
-          OSCOM_Cache::clear('languages');
+          Cache::clear('languages');
 
           return true;
         }
@@ -459,7 +469,7 @@
                                                   'date_format_short-CDATA' => $language['date_format_short'],
                                                   'date_format_long-CDATA' => $language['date_format_long'],
                                                   'time_format-CDATA' => $language['time_format'],
-                                                  'default_currency-CDATA' => OSCOM_Site_Admin_Application_Currencies_Currencies::get($language['currencies_id'], 'code'),
+                                                  'default_currency-CDATA' => Currencies::get($language['currencies_id'], 'code'),
                                                   'numerical_decimal_separator-CDATA' => $language['numeric_separator_decimal'],
                                                   'numerical_thousands_separator-CDATA' => $language['numeric_separator_thousands']);
 
@@ -474,7 +484,7 @@
                                                                          'group' => $def['content_group']);
       }
 
-      $xml = OSCOM_XML::fromArray($export_array, $language['charset']);
+      $xml = XML::fromArray($export_array, $language['charset']);
 
       header('Content-disposition: attachment; filename=' . $language['code'] . '.xml');
       header('Content-Type: application/force-download');
@@ -491,7 +501,7 @@
     public static function getDirectoryListing() {
       $result = array();
 
-      $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
+      $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
       $OSCOM_DirectoryListing->setIncludeDirectories(false);
       $OSCOM_DirectoryListing->setCheckExtension('xml');
 
@@ -503,10 +513,10 @@
     }
 
     public static function import($file, $type) {
-      $OSCOM_Database = OSCOM_Registry::get('OSCOM_Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $file . '.xml') ) {
-        $source = array('language' => OSCOM_XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file . '.xml')));
+        $source = array('language' => XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file . '.xml')));
 
         $language = array('name' => $source['language']['data']['title'],
                           'code' => $source['language']['data']['code'],
@@ -522,7 +532,7 @@
                           'parent_language_code' => (isset($source['language']['data']['parent_language_code']) ? $source['language']['data']['parent_language_code'] : ''),
                           'parent_id' => 0);
 
-        if ( !OSCOM_Site_Admin_Application_Currencies_Currencies::exists($language['currency']) ) {
+        if ( !Currencies::exists($language['currency']) ) {
           $language['currency'] = DEFAULT_CURRENCY;
         }
 
@@ -568,7 +578,7 @@
         $Qlanguage->bindValue(':date_format_long', $language['date_format_long']);
         $Qlanguage->bindValue(':time_format', $language['time_format']);
         $Qlanguage->bindValue(':text_direction', $language['text_direction']);
-        $Qlanguage->bindInt(':currencies_id', OSCOM_Site_Admin_Application_Currencies_Currencies::get($language['currency'], 'currencies_id'));
+        $Qlanguage->bindInt(':currencies_id', Currencies::get($language['currency'], 'currencies_id'));
         $Qlanguage->bindValue(':numeric_separator_decimal', $language['numeric_separator_decimal']);
         $Qlanguage->bindValue(':numeric_separator_thousands', $language['numeric_separator_thousands']);
         $Qlanguage->bindInt(':parent_id', $language['parent_id']);
@@ -596,14 +606,14 @@
         }
 
         if ( $error === false ) {
-          $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages/' . $file);
+          $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages/' . $file);
           $OSCOM_DirectoryListing->setRecursive(true);
           $OSCOM_DirectoryListing->setIncludeDirectories(false);
           $OSCOM_DirectoryListing->setAddDirectoryToFilename(true);
           $OSCOM_DirectoryListing->setCheckExtension('xml');
 
           foreach ( $OSCOM_DirectoryListing->getFiles() as $files ) {
-            $definitions = array_merge($definitions, OSCOM_Site_Admin_Language::extractDefinitions($file . '/' . $files['name']));
+            $definitions = array_merge($definitions, Language::extractDefinitions($file . '/' . $files['name']));
           }
 
           foreach ( $definitions as $def ) {
@@ -879,7 +889,7 @@
       if ( $error === false ) {
         $OSCOM_Database->commitTransaction();
 
-        OSCOM_Cache::clear('languages');
+        Cache::clear('languages');
 
         return true;
       } else {

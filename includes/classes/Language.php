@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Language {
+  namespace osCommerce\OM;
+
+  class Language {
 
 /* Private variables */
     var $_code,
@@ -18,10 +20,7 @@
 /* Class constructor */
 
     function __construct() {
-      global $osC_Database;
-
-      $Qlanguages = $osC_Database->query('select * from :table_languages order by sort_order, name');
-      $Qlanguages->bindTable(':table_languages', TABLE_LANGUAGES);
+      $Qlanguages = Registry::get('Database')->query('select * from :table_languages order by sort_order, name');
       $Qlanguages->setCache('languages');
       $Qlanguages->execute();
 
@@ -49,8 +48,6 @@
 /* Public methods */
 
     function load($key, $language_code = null) {
-      global $osC_Database;
-
       if ( is_null($language_code) ) {
         $language_code = $this->_code;
       }
@@ -59,8 +56,7 @@
         $this->load($key, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
       }
 
-      $Qdef = $osC_Database->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group');
-      $Qdef->bindTable(':table_languages_definitions', TABLE_LANGUAGES_DEFINITIONS);
+      $Qdef = Registry::get('Database')->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group');
       $Qdef->bindInt(':languages_id', $this->getData('id', $language_code));
       $Qdef->bindValue(':content_group', $key);
       $Qdef->setCache('languages-' . $language_code . '-' . $key);

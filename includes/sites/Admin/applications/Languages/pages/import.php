@@ -8,9 +8,12 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
   $languages_array = array();
 
-  foreach ( OSCOM_Site_Admin_Application_Languages_Languages::getDirectoryListing() as $directory ) {
+  foreach ( Languages::getDirectoryListing() as $directory ) {
     $languages_array[] = array('id' => $directory,
                                'text' => $directory);
   }

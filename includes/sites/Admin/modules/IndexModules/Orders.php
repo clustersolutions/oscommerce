@@ -8,14 +8,21 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Module_IndexModules_Orders extends OSCOM_Site_Admin_Application_Index_IndexModules {
+  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+
+  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+
+  class Orders extends IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/Orders.php');
+      Registry::get('Language')->loadIniFile('modules/IndexModules/Orders.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_orders_title');
       $this->_title_link = OSCOM::getLink(null, 'Orders');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'orders') ) {
+      if ( Access::hasAccess(OSCOM::getSite(), 'Orders') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -27,11 +34,8 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qorders = OSCOM_Registry::get('Database')->query('select o.orders_id, o.customers_name, greatest(o.date_purchased, ifnull(o.last_modified, "1970-01-01")) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
-        $Qorders->bindTable(':table_orders', TABLE_ORDERS);
-        $Qorders->bindTable(':table_orders_total', TABLE_ORDERS_TOTAL);
-        $Qorders->bindTable(':table_orders_status', TABLE_ORDERS_STATUS);
-        $Qorders->bindInt(':language_id', OSCOM_Registry::get('osC_Language')->getID());
+        $Qorders = Registry::get('Database')->query('select o.orders_id, o.customers_name, greatest(o.date_purchased, ifnull(o.last_modified, "1970-01-01")) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
+        $Qorders->bindInt(':language_id', Registry::get('Language')->getID());
         $Qorders->execute();
 
         $counter = 0;

@@ -12,23 +12,23 @@
   as published by the Free Software Foundation.
 */
 
-  function osc_cfg_use_get_boolean_value($string) {
-    global $osC_Language;
+  use osCommerce\OM\OSCOM;
 
+  function osc_cfg_use_get_boolean_value($string) {
     switch ($string) {
       case -1:
       case '-1':
-        return $osC_Language->get('parameter_false');
+        return OSCOM::getDef('parameter_false');
         break;
 
       case 0:
       case '0':
-        return $osC_Language->get('parameter_optional');
+        return OSCOM::getDef('parameter_optional');
         break;
 
       case 1:
       case '1':
-        return $osC_Language->get('parameter_true');
+        return OSCOM::getDef('parameter_true');
         break;
 
       default:

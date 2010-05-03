@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::getDefinitionGroup($_GET['group']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Languages::getDefinitionGroup($_GET['group']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -31,8 +35,8 @@
   <p>
 
 <?php
-  foreach ( $osC_ObjectInfo->get('entries') as $l ) {
-    echo OSCOM_Site_Admin_Application_Languages_Languages::get($l['languages_id'], 'name') . ': ' . (int)$l['total_entries'] . '<br />';
+  foreach ( $OSCOM_ObjectInfo->get('entries') as $l ) {
+    echo Languages::get($l['languages_id'], 'name') . ': ' . (int)$l['total_entries'] . '<br />';
   }
 ?>
 

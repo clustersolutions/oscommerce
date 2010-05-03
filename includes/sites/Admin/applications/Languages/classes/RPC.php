@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_RPC {
+  namespace osCommerce\OM\Site\Admin\Application\Languages;
+
+  use osCommerce\OM\Site\RPC as OSCOM_Site_RPC;
+
+  class RPC {
     public static function getAll() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
@@ -19,12 +23,12 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::find($_GET['search'], $_GET['page']);
+        $result = Languages::find($_GET['search'], $_GET['page']);
       } else {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::getAll($_GET['page']);
+        $result = Languages::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
@@ -35,12 +39,12 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::findDefinitionGroups($_GET['id'], $_GET['search']);
+        $result = Languages::findDefinitionGroups($_GET['id'], $_GET['search']);
       } else {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::getDefinitionGroups($_GET['id']);
+        $result = Languages::getDefinitionGroups($_GET['id']);
       }
 
-      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
@@ -51,12 +55,12 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::findDefinitions($_GET['id'], $_GET['group'], $_GET['search']);
+        $result = Languages::findDefinitions($_GET['id'], $_GET['group'], $_GET['search']);
       } else {
-        $result = OSCOM_Site_Admin_Application_Languages_Languages::getDefinitions($_GET['id'], $_GET['group']);
+        $result = Languages::getDefinitions($_GET['id'], $_GET['group']);
       }
 
-      $result['rpcStatus'] = OSCOM_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

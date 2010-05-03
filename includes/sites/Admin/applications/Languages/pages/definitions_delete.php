@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::getDefinition($_GET['dID']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Languages::getDefinition($_GET['dID']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -20,13 +24,13 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('definition_key'); ?></h3>
+  <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('definition_key'); ?></h3>
 
   <form name="lDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group'] . '&dID=' . $_GET['dID'] . '&action=DeleteDefinition'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_delete_language_definition'); ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->getProtected('definition_key') . '</b>'; ?></p>
+  <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('definition_key') . '</b>'; ?></p>
 
   <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 

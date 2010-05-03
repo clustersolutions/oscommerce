@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_ErrorHandler {
+  namespace osCommerce\OM;
+
+  class ErrorHandler {
     static protected $_resource;
 
     public static function initialize() {
@@ -17,7 +19,7 @@
         ini_set('log_errors', true);
         ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
 
-        set_error_handler(array('OSCOM_ErrorHandler', 'execute'));
+        set_error_handler(array('osCommerce\\OM\\ErrorHandler', 'execute'));
 
         if ( file_exists(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log') ) {
           self::import(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
@@ -52,11 +54,12 @@
 
       self::$_resource->exec('insert into error_log (timestamp, message) values (' . time() . ', "' . $error_msg . '");');
 
+// return true to stop further processing of internal php error handler
       return true;
     }
 
     public static function connect() {
-      self::$_resource = new SQLite3(OSCOM::BASE_DIRECTORY . 'work/oscommerce.sqlite3');
+      self::$_resource = new \SQLite3(OSCOM::BASE_DIRECTORY . 'work/oscommerce.sqlite3');
       self::$_resource->exec('create table if not exists error_log ( timestamp int, message text );');
     }
 
@@ -67,7 +70,7 @@
 
       $result = array();
 
-      $query = 'select timestamp, message from error_log order by timestamp desc';
+      $query = 'select timestamp, message from error_log order by rowid desc';
 
       if ( is_numeric($limit) ) {
         $query .= ' limit ' . (int)$limit;
@@ -103,7 +106,7 @@
 
       $result = array();
 
-      $query = 'select timestamp, message from error_log where message like "%' . addslashes($search) . '%" order by timestamp desc';
+      $query = 'select timestamp, message from error_log where message like "%' . addslashes($search) . '%" order by rowid desc';
 
       if ( !empty($limit) ) {
         $query .= ' limit ' . (int)$limit;
@@ -136,7 +139,7 @@
 
       foreach ( $error_log as $error ) {
         if ( preg_match('/^\[([0-9]{2})-([A-Za-z]{3})-([0-9]{4}) ([0-9]{2}):([0-5][0-9]):([0-5][0-9])\] (.*)$/', $error) ) {
-          $timestamp = OSCOM_DateTime::getTimestamp(substr($error, 1, 20), 'd-M-Y H:i:s');
+          $timestamp = DateTime::getTimestamp(substr($error, 1, 20), 'd-M-Y H:i:s');
           $message = substr($error, 23);
 
           self::$_resource->exec('insert into error_log (timestamp, message) values (' . $timestamp . ', "' . $message . '");');
@@ -149,7 +152,7 @@
         self::connect();
       }
 
-      self::$_resource->exec('delete from error_log');
+      self::$_resource->exec('drop table if exists error_log');
     }
   }
 ?>

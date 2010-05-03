@@ -8,11 +8,17 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\DirectoryListing;
+
 /**
  * The osC_Access manages the permission levels of administrators who have access to the Administration Tool
  */
 
-  class osC_Access {
+  class Access {
 
 /**
  * Holds the group code for the current access module
@@ -59,40 +65,31 @@
  */
 
     public static function getUserLevels($id, $site = null) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( empty($site) ) {
         $site = OSCOM::getSite();
       }
 
-      $modules = array();
+      $applications = array();
 
       $Qaccess = $OSCOM_Database->query('select module from :table_administrators_access where administrators_id = :administrators_id');
       $Qaccess->bindInt(':administrators_id', $id);
       $Qaccess->execute();
 
       while ( $Qaccess->next() ) {
-        $modules[] = $Qaccess->value('module');
+        $applications[] = $Qaccess->value('module');
       }
 
-      if ( in_array('*', $modules) ) {
-        $modules = array();
+      if ( in_array('*', $applications) ) {
+        $applications = array();
 
-        $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/applications');
+        $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/applications');
         $DLapps->setIncludeFiles(false);
 
         foreach ( $DLapps->getFiles() as $file ) {
-          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('OSCOM_' . $site, 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
-            $modules[] = $file['name'];
-          }
-        }
-
-        $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/modules/Access'); // HPDL to remove
-        $DLapps->setIncludeDirectories(false);
-
-        foreach ( $DLapps->getFiles() as $file ) {
-          if ( preg_match('/[^A-Z]/', substr($file['name'], 0, 1)) ) {
-            $modules[] = substr($file['name'], 0, strrpos($file['name'], '.'));
+          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) { // HPDL remove preg_match
+            $applications[] = $file['name'];
           }
         }
       }
@@ -109,43 +106,24 @@
 
       $levels = array();
 
-      foreach ( $modules as $module ) {
-        if ( preg_match('/[A-Z]/', substr($module, 0, 1)) ) {
-          $application_class = 'OSCOM_Site_' . $site . '_Application_' . $module;
+      foreach ( $applications as $app ) {
+        $application_class = 'osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $app . '\\Controller';
 
-          if ( class_exists($application_class) ) {
-            if ( OSCOM_Registry::exists('Application') && ($module == OSCOM::getSiteApplication()) ) {
-              $OSCOM_Application = OSCOM_Registry::get('Application');
-            } else {
-              OSCOM_Registry::get('Language')->loadIniFile($module . '.php');
-              $OSCOM_Application = new $application_class(false);
-            }
-
-            $levels[$module] = array('module' => $module,
-                                     'icon' => $OSCOM_Application->getIcon(),
-                                     'title' => $OSCOM_Application->getTitle(),
-                                     'group' => $OSCOM_Application->getGroup(),
-                                     'linkable' => $OSCOM_Application->canLinkTo(),
-                                     'shortcut' => in_array($module, $shortcuts),
-                                     'sort_order' => $OSCOM_Application->getSortOrder());
-          }
-        } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/modules/Access/' . $module . '.php') ) { // HPDL to remove
-          $module_class = 'osC_Access_' . ucfirst($module);
-
-          if ( !class_exists( $module_class ) ) {
-            OSCOM_Registry::get('Language')->loadIniFile('modules/access/' . $module . '.php');
-            include(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/modules/Access/' . $module . '.php');
+        if ( class_exists($application_class) ) {
+          if ( Registry::exists('Application') && ($app == OSCOM::getSiteApplication()) ) {
+            $OSCOM_Application = Registry::get('Application');
+          } else {
+            Registry::get('Language')->loadIniFile($app . '.php');
+            $OSCOM_Application = new $application_class(false);
           }
 
-          $module_class = new $module_class();
-
-          $levels[$module] = array('module' => $module,
-                                   'icon' => $module_class->getIcon(),
-                                   'title' => $module_class->getTitle(),
-                                   'group' => $module_class->getGroup(),
-                                   'linkable' => true,
-                                   'shortcut' => in_array($module, $shortcuts),
-                                   'sort_order' => $module_class->getSortOrder());
+          $levels[$app] = array('module' => $app,
+                                'icon' => $OSCOM_Application->getIcon(),
+                                'title' => $OSCOM_Application->getTitle(),
+                                'group' => $OSCOM_Application->getGroup(),
+                                'linkable' => $OSCOM_Application->canLinkTo(),
+                                'shortcut' => in_array($app, $shortcuts),
+                                'sort_order' => $OSCOM_Application->getSortOrder());
         }
       }
 
@@ -233,7 +211,7 @@
         return $this->_group;
       }
 
-      foreach ( osC_Access::getLevels() as $group => $links ) {
+      foreach ( self::getLevels() as $group => $links ) {
         foreach ( $links as $link ) {
           if ( $link['module'] == $module ) {
             return $group;
@@ -245,7 +223,7 @@
     }
 
     public static function getGroupTitle($group) {
-      $OSCOM_Language = OSCOM_Registry::get('Language');
+      $OSCOM_Language = Registry::get('Language');
 
       if ( !$OSCOM_Language->isDefined('access_group_' . $group . '_title') ) {
         $OSCOM_Language->loadIniFile( 'modules/access/groups/' . $group . '.php' );
@@ -267,7 +245,7 @@
     }
 
     public static function hasAccess($site, $application) {
-      return in_array($application, call_user_func(array('OSCOM_' . $site, 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
+      return in_array($application, call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
     }
   }
 ?>

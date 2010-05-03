@@ -8,11 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::get($_GET['id']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Languages::get($_GET['id']));
 
   $groups_array = array();
 
-  foreach ( osc_toObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::getDefinitionGroups($osC_ObjectInfo->getInt('languages_id')))->get('entries') as $group ) {
+  foreach ( osc_toObjectInfo(Languages::getDefinitionGroups($OSCOM_ObjectInfo->getInt('languages_id')))->get('entries') as $group ) {
     $groups_array[] = array('id' => $group['content_group'],
                             'text' => $group['content_group']);
   }
@@ -27,7 +31,7 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('export.png') . ' ' . $osC_ObjectInfo->getProtected('name'); ?></h3>
+  <h3><?php echo osc_icon('export.png') . ' ' . $OSCOM_ObjectInfo->getProtected('name'); ?></h3>
 
   <form name="lExport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=Export'); ?>" method="post">
 

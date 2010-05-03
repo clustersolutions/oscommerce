@@ -8,11 +8,13 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM;
+
 /**
  * The Cache class handles the caching of dynamically generated data
  */
 
-  class OSCOM_Cache {
+  class Cache {
 
 /**
  * The cached data

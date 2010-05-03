@@ -8,20 +8,27 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Setup_Application_Install_RPC {
+  namespace osCommerce\OM\Site\Setup\Application\Install;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Database;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\DirectoryListing;
+
+  class RPC {
     public static function dbCheck() {
       $db = array('DB_SERVER' => trim(urldecode($_POST['server'])),
                   'DB_SERVER_USERNAME' => trim(urldecode($_POST['username'])),
                   'DB_SERVER_PASSWORD' => trim(urldecode($_POST['password'])),
                   'DB_DATABASE' => trim(urldecode($_POST['name'])),
                   'DB_SERVER_PORT' => trim(urldecode($_POST['port'])),
-                  'DB_DATABASE_CLASS' => trim(urldecode($_POST['class']))
+                  'DB_DATABASE_CLASS' => trim(urldecode(str_replace('_', '\\', $_POST['class'])))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
-      OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
+      Registry::set('Database', Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      Registry::set('osC_Database', Registry::get('Database')); // HPDL to delete
 
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !$OSCOM_Database->isError() ) {
         $OSCOM_Database->selectDatabase($db['DB_DATABASE']);
@@ -40,15 +47,15 @@
                   'DB_SERVER_PASSWORD' => trim(urldecode($_POST['password'])),
                   'DB_DATABASE' => trim(urldecode($_POST['name'])),
                   'DB_SERVER_PORT' => trim(urldecode($_POST['port'])),
-                  'DB_DATABASE_CLASS' => trim(urldecode($_POST['class'])),
+                  'DB_DATABASE_CLASS' => trim(urldecode(str_replace('_', '\\', $_POST['class']))),
                   'DB_INSERT_SAMPLE_DATA' => ((trim(urldecode($_POST['import'])) == '1') ? 'true' : 'false'),
                   'DB_TABLE_PREFIX' => trim(urldecode($_POST['prefix']))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
-      OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
+      Registry::set('Database', Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      Registry::set('osC_Database', Registry::get('Database')); // HPDL to delete
 
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !$OSCOM_Database->isError() ) {
         $sql_file = OSCOM::BASE_DIRECTORY . 'sites/Setup/sql/oscommerce.sql';
@@ -60,7 +67,7 @@
         define('DB_TABLE_PREFIX', $db['DB_TABLE_PREFIX']); // HPDL to remove
         include(OSCOM::BASE_DIRECTORY . 'database_tables.php'); // HPDL to remove
 
-        foreach ( OSCOM_Registry::get('Language')->extractDefinitions('en_US.xml') as $def ) {
+        foreach ( Registry::get('Language')->extractDefinitions('en_US.xml') as $def ) {
           $Qdef = $OSCOM_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
           $Qdef->bindInt(':languages_id', 1);
           $Qdef->bindValue(':content_group', $def['group']);
@@ -69,14 +76,14 @@
           $Qdef->execute();
         }
 
-        $OSCOM_DirectoryListing = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages/en_US');
+        $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages/en_US');
         $OSCOM_DirectoryListing->setRecursive(true);
         $OSCOM_DirectoryListing->setIncludeDirectories(false);
         $OSCOM_DirectoryListing->setAddDirectoryToFilename(true);
         $OSCOM_DirectoryListing->setCheckExtension('xml');
 
         foreach ( $OSCOM_DirectoryListing->getFiles() as $files ) {
-          foreach ( OSCOM_Registry::get('Language')->extractDefinitions('en_US/' . $files['name']) as $def ) {
+          foreach ( Registry::get('Language')->extractDefinitions('en_US/' . $files['name']) as $def ) {
             $Qdef = $OSCOM_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
             $Qdef->bindInt(':languages_id', 1);
             $Qdef->bindValue(':content_group', $def['group']);
@@ -172,7 +179,7 @@
 
         define('DEFAULT_ORDERS_STATUS_ID', 1); // HPDL to remove
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/payment/cod.php');
-        $module = new osC_Payment_cod();
+        $module = new \osC_Payment_cod(); // HPDL
         $module->install();
 
         $Qupdate = $OSCOM_Database->query('update :table_configuration set configuration_value = 1 where configuration_key = :configuration_key');
@@ -180,23 +187,23 @@
         $Qupdate->execute();
 
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/shipping/flat.php');
-        $module = new osC_Shipping_flat();
+        $module = new \osC_Shipping_flat(); // HPDL
         $module->install();
 
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/sub_total.php');
-        $module = new osC_OrderTotal_sub_total();
+        $module = new \osC_OrderTotal_sub_total(); // HPDL
         $module->install();
 
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/shipping.php');
-        $module = new osC_OrderTotal_shipping();
+        $module = new \osC_OrderTotal_shipping(); // HPDL
         $module->install();
 
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/tax.php');
-        $module = new osC_OrderTotal_tax();
+        $module = new \osC_OrderTotal_tax(); // HPDL
         $module->install();
 
         include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/total.php');
-        $module = new osC_OrderTotal_total();
+        $module = new \osC_OrderTotal_total(); // HPDL
         $module->install();
       }
 
@@ -223,14 +230,14 @@
                   'DB_SERVER_PASSWORD' => trim(urldecode($_POST['password'])),
                   'DB_DATABASE' => trim(urldecode($_POST['name'])),
                   'DB_SERVER_PORT' => trim(urldecode($_POST['port'])),
-                  'DB_DATABASE_CLASS' => trim(urldecode($_POST['class'])),
+                  'DB_DATABASE_CLASS' => trim(urldecode(str_replace('_', '\\', $_POST['class']))),
                   'DB_TABLE_PREFIX' => trim(urldecode($_POST['prefix']))
                  );
 
-      OSCOM_Registry::set('Database', OSCOM_Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
-      OSCOM_Registry::set('osC_Database', OSCOM_Registry::get('Database')); // HPDL to delete
+      Registry::set('Database', Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
+      Registry::set('osC_Database', Registry::get('Database')); // HPDL to delete
 
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !$OSCOM_Database->isError() ) {
         $sql_file = OSCOM::BASE_DIRECTORY . 'sites/Setup/sql/oscommerce_sample_data.sql';

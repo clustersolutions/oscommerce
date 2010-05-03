@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>

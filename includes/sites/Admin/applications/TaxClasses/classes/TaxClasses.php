@@ -8,9 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_TaxClasses_TaxClasses {
+  namespace osCommerce\OM\Site\Admin\Application\TaxClasses;
+
+  use osCommerce\OM\Registry;
+
+  class TaxClasses {
     public static function get($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qclasses = $OSCOM_Database->query('select * from :table_tax_class where tax_class_id = :tax_class_id');
       $Qclasses->bindInt(':tax_class_id', $id);
@@ -26,7 +30,7 @@
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -52,7 +56,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -80,7 +84,7 @@
     }
 
     public static function getEntry($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qrates = $OSCOM_Database->query('select tr.*, tc.tax_class_title, z.geo_zone_id, z.geo_zone_name from :table_tax_rates tr, :table_tax_class tc, :table_geo_zones z where tr.tax_rates_id = :tax_rates_id and tr.tax_class_id = tc.tax_class_id and tr.tax_zone_id = z.geo_zone_id');
       $Qrates->bindInt(':tax_rates_id', $id);
@@ -96,7 +100,7 @@
     }
 
     public static function save($id = null, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( is_numeric($id) ) {
         $Qclass = $OSCOM_Database->query('update :table_tax_class set tax_class_title = :tax_class_title, tax_class_description = :tax_class_description, last_modified = now() where tax_class_id = :tax_class_id');
@@ -110,22 +114,22 @@
       $Qclass->setLogging(null, $id);
       $Qclass->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qclass = $OSCOM_Database->query('delete from :table_tax_class where tax_class_id = :tax_class_id');
       $Qclass->bindInt(':tax_class_id', $id);
       $Qclass->setLogging(null, $id);
       $Qclass->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function getAllEntries($tax_class_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -143,7 +147,7 @@
     }
 
     public static function findEntries($search, $tax_class_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -162,7 +166,7 @@
     }
 
     public static function saveEntry($id = null, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( is_numeric($id) ) {
         $Qrate = $OSCOM_Database->query('update :table_tax_rates set tax_zone_id = :tax_zone_id, tax_priority = :tax_priority, tax_rate = :tax_rate, tax_description = :tax_description, last_modified = now() where tax_rates_id = :tax_rates_id');
@@ -179,22 +183,22 @@
       $Qrate->setLogging(null, $id);
       $Qrate->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function deleteEntry($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qrate = $OSCOM_Database->query('delete from :table_tax_rates where tax_rates_id = :tax_rates_id');
       $Qrate->bindInt(':tax_rates_id', $id);
       $Qrate->setLogging(null, $id);
       $Qrate->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function getNumberOfTaxRates($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qrates = $OSCOM_Database->query('select count(*) as total_tax_rates from :table_tax_rates where tax_class_id = :tax_class_id');
       $Qrates->bindInt(':tax_class_id', $id);
@@ -204,7 +208,7 @@
     }
 
     public static function hasProducts($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcheck = $OSCOM_Database->query('select products_id from :table_products where products_tax_class_id = :products_tax_class_id limit 1');
       $Qcheck->bindInt(':products_tax_class_id', $id);
@@ -214,7 +218,7 @@
     }
 
     public static function getNumberOfProducts($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qtotal = $OSCOM_Database->query('select count(*) as total from :table_products where products_tax_class_id = :products_tax_class_id');
       $Qtotal->bindInt(':products_tax_class_id', $id);

@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_DirectoryListing {
+  namespace osCommerce\OM;
+
+  class DirectoryListing {
     protected $_directory = '';
     protected $_include_files = true;
     protected $_include_directories = true;

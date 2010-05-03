@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_MessageStack extends OSCOM_MessageStack {
+  namespace osCommerce\OM\Site\Admin;
+
+  use osCommerce\OM\OSCOM;
+
+  class MessageStack extends \osCommerce\OM\MessageStack {
     public function get($group = null) {
       if ( empty($group) ) {
         $group = OSCOM::getSiteApplication();

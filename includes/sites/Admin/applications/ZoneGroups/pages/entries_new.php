@@ -8,10 +8,13 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Shop\Address;
+
   $countries_array = array(array('id' => '',
                                  'text' => OSCOM::getDef('all_countries')));
 
-  foreach ( osC_Address::getCountries() as $country ) {
+  foreach ( Address::getCountries() as $country ) {
     $countries_array[] = array('id' => $country['id'],
                                'text' => $country['name']);
   }

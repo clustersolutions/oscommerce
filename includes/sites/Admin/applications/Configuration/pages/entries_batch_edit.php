@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -27,8 +30,7 @@
   <fieldset>
 
 <?php
-  $Qcfg = $osC_Database->query('select configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_id in (:configuration_id)');
-  $Qcfg->bindTable(':table_configuration', TABLE_CONFIGURATION);
+  $Qcfg = Registry::get('Database')->query('select configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_id in (:configuration_id)');
   $Qcfg->bindRaw(':configuration_id', implode(',', array_unique(array_filter($_POST['batch'], 'is_numeric'))));
   $Qcfg->execute();
 

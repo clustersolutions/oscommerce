@@ -8,9 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups {
+  namespace osCommerce\OM\Site\Admin\Application\ZoneGroups;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class ZoneGroups {
     public static function get($id, $key = null) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qzones = $OSCOM_Database->query('select * from :table_geo_zones where geo_zone_id = :geo_zone_id');
       $Qzones->bindInt(':geo_zone_id', $id);
@@ -26,7 +31,7 @@
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -52,7 +57,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -82,7 +87,7 @@
     }
 
     public static function save($id = null, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( is_numeric($id) ) {
         $Qzone = $OSCOM_Database->query('update :table_geo_zones set geo_zone_name = :geo_zone_name, geo_zone_description = :geo_zone_description, last_modified = now() where geo_zone_id = :geo_zone_id');
@@ -96,22 +101,22 @@
       $Qzone->setLogging(null, $id);
       $Qzone->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qzone = $OSCOM_Database->query('delete from :table_geo_zones where geo_zone_id = :geo_zone_id');
       $Qzone->bindInt(':geo_zone_id', $id);
       $Qzone->setLogging(null, $id);
       $Qzone->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function numberOfEntries($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qentries = $OSCOM_Database->query('select count(*) as total from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id');
       $Qentries->bindInt(':geo_zone_id', $id);
@@ -121,7 +126,7 @@
     }
 
     public static function hasTaxRate($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qcheck = $OSCOM_Database->query('select tax_zone_id from :table_tax_rates where tax_zone_id = :tax_zone_id limit 1');
       $Qcheck->bindInt(':tax_zone_id', $id);
@@ -131,7 +136,7 @@
     }
 
     public static function numberOfTaxRates($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qtotal = $OSCOM_Database->query('select count(*) as total from :table_tax_rates where tax_zone_id = :tax_zone_id');
       $Qtotal->bindInt(':tax_zone_id', $id);
@@ -141,7 +146,7 @@
     }
 
     public static function getEntry($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qentries = $OSCOM_Database->query('select z2gz.*, c.countries_name, z.zone_name from :table_zones_to_geo_zones z2gz left join :table_countries c on (z2gz.zone_country_id = c.countries_id) left join :table_zones z on (z2gz.zone_id = z.zone_id) where z2gz.association_id = :association_id');
       $Qentries->bindInt(':association_id', $id);
@@ -161,7 +166,7 @@
     }
 
     public static function getAllEntries($group_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -179,7 +184,7 @@
     }
 
     public static function findEntries($search, $group_id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $result = array('entries' => array());
 
@@ -199,7 +204,7 @@
     }
 
     public static function saveEntry($id = null, $data) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( is_numeric($id) ) {
         $Qentry = $OSCOM_Database->query('update :table_zones_to_geo_zones set zone_country_id = :zone_country_id, zone_id = :zone_id, last_modified = now() where association_id = :association_id');
@@ -213,18 +218,18 @@
       $Qentry->setLogging(null, $id);
       $Qentry->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
 
     public static function deleteEntry($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qentry = $OSCOM_Database->query('delete from :table_zones_to_geo_zones where association_id = :association_id');
       $Qentry->bindInt(':association_id', $id);
       $Qentry->setLogging(null, $id);
       $Qentry->execute();
 
-      return !$osC_Database->isError();
+      return !$OSCOM_Database->isError();
     }
   }
 ?>

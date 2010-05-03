@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+
   $Qzones = $OSCOM_Database->query('select zone_id, zone_name from :table_zones where zone_id in (":zone_id") order by zone_name');
   $Qzones->bindRaw(':zone_id', implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))));
   $Qzones->execute();

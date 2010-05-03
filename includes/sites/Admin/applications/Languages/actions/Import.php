@@ -8,15 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Languages_Action_Import {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class Import {
+    public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('import.php');
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( OSCOM_Site_Admin_Application_Languages_Languages::import($_POST['language_import'], $_POST['import_type']) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if ( Languages::import($_POST['language_import'], $_POST['import_type']) ) {
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink());

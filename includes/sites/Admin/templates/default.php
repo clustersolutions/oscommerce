@@ -7,6 +7,10 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Access;
 ?>
 
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
@@ -72,10 +76,10 @@
 ?>
 
 <div id="appsPane">
-  <h4><?php echo osC_Access::getGroupTitle(osC_Access::getGroup(OSCOM::getSiteApplication())); ?></h4>
+  <h4><?php echo Access::getGroupTitle(Access::getGroup(OSCOM::getSiteApplication())); ?></h4>
 
 <?php
-    foreach ( osC_Access::getLevels(osC_Access::getGroup(OSCOM::getSiteApplication())) as $group => $links ) {
+    foreach ( Access::getLevels(Access::getGroup(OSCOM::getSiteApplication())) as $group => $links ) {
       echo '<ul>';
 
       foreach ( $links as $link ) {
@@ -95,8 +99,8 @@
 <div id="appContent">
 
 <?php
-  if ( OSCOM_Registry::get('MessageStack')->exists('header') ) {
-    echo OSCOM_Registry::get('MessageStack')->get('header');
+  if ( Registry::get('MessageStack')->exists('header') ) {
+    echo Registry::get('MessageStack')->get('header');
   }
 
   require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());

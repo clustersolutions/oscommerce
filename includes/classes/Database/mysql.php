@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Database_mysql extends OSCOM_Database {
+  namespace osCommerce\OM\Database;
+
+  class mysql extends \osCommerce\OM\Database {
     var $use_mysqli = false,
         $use_transactions = false,
         $use_foreign_keys = false,

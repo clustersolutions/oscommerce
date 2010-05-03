@@ -8,10 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_TaxClasses extends OSCOM_Site_Admin_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Admin\Application\ZoneGroups;
+
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'taxclasses.png';
-    protected $_sort_order = 800;
+    protected $_icon = 'zonegroups.png';
+    protected $_sort_order = 700;
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');
@@ -22,7 +27,7 @@
 
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
         $this->_page_contents = 'entries.php';
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::get($_GET['id'], 'tax_class_title');
+        $this->_page_title .= ': ' . ZoneGroups::get($_GET['id'], 'geo_zone_name');
       }
     }
   }

@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::get($_GET['id']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\TaxClasses\TaxClasses;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(TaxClasses::get($_GET['id']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -20,15 +24,15 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . $osC_ObjectInfo->getProtected('tax_class_title'); ?></h3>
+  <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('tax_class_title'); ?></h3>
 
-  <form name="tcDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $osC_ObjectInfo->getInt('tax_class_id') . '&action=Delete'); ?>" method="post">
+  <form name="tcDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $OSCOM_ObjectInfo->getInt('tax_class_id') . '&action=Delete'); ?>" method="post">
 
 <?php
-  if ( OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::hasProducts($osC_ObjectInfo->getInt('tax_class_id')) ) {
+  if ( TaxClasses::hasProducts($OSCOM_ObjectInfo->getInt('tax_class_id')) ) {
 ?>
 
-  <p><?php echo '<b>' . sprintf(OSCOM::getDef('delete_warning_tax_class_in_use'), OSCOM_Site_Admin_Application_TaxClasses_TaxClasses::getNumberOfProducts($osC_ObjectInfo->getInt('tax_class_id'))) . '</b>'; ?></p>
+  <p><?php echo '<b>' . sprintf(OSCOM::getDef('delete_warning_tax_class_in_use'), TaxClasses::getNumberOfProducts($OSCOM_ObjectInfo->getInt('tax_class_id'))) . '</b>'; ?></p>
 
   <p><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
 
@@ -38,7 +42,7 @@
 
   <p><?php echo OSCOM::getDef('introduction_delete_tax_class'); ?></p>
 
-  <p><?php echo '<b>' . $osC_ObjectInfo->get('tax_class_title') . ' (' . sprintf(OSCOM::getDef('total_entries'), $osC_ObjectInfo->getInt('total_tax_rates')) . ')</b>'; ?></p>
+  <p><?php echo '<b>' . $OSCOM_ObjectInfo->get('tax_class_title') . ' (' . sprintf(OSCOM::getDef('total_entries'), $OSCOM_ObjectInfo->getInt('total_tax_rates')) . ')</b>'; ?></p>
 
   <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 

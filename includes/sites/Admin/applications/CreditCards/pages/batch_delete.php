@@ -7,6 +7,8 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -26,7 +28,6 @@
 
 <?php
   $Qcc = $OSCOM_Database->query('select id, credit_card_name from :table_credit_cards where id in (":id") order by credit_card_name');
-  $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
   $Qcc->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qcc->execute();
 

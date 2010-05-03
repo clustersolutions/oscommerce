@@ -8,7 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Countries_Countries::get($_GET['id']));
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Countries\Countries;
+  use osCommerce\OM\OSCOM;
+
+  $OSCOM_ObjectInfo = new ObjectInfo(Countries::get($_GET['id']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -20,17 +24,17 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('edit.png') . ' ' . $osC_ObjectInfo->getProtected('countries_name'); ?></h3>
+  <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('countries_name'); ?></h3>
 
   <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=Save'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_country'); ?></p>
 
   <fieldset>
-    <p><label for="countries_name"><?php echo OSCOM::getDef('field_name'); ?></label><?php echo osc_draw_input_field('countries_name', $osC_ObjectInfo->get('countries_name')); ?></p>
-    <p><label for="countries_iso_code_2"><?php echo OSCOM::getDef('field_iso_code_2'); ?></label><?php echo osc_draw_input_field('countries_iso_code_2', $osC_ObjectInfo->get('countries_iso_code_2')); ?></p>
-    <p><label for="countries_iso_code_3"><?php echo OSCOM::getDef('field_iso_code_3'); ?></label><?php echo osc_draw_input_field('countries_iso_code_3', $osC_ObjectInfo->get('countries_iso_code_3')); ?></p>
-    <p><label for="address_format"><?php echo OSCOM::getDef('field_address_format'); ?></label><?php echo osc_draw_textarea_field('address_format', $osC_ObjectInfo->get('address_format')); ?><br /><i>:name</i>, <i>:street_address</i>, <i>:suburb</i>, <i>:city</i>, <i>:postcode</i>, <i>:state</i>, <i>:state_code</i>, <i>:country</i></p>
+    <p><label for="countries_name"><?php echo OSCOM::getDef('field_name'); ?></label><?php echo osc_draw_input_field('countries_name', $OSCOM_ObjectInfo->get('countries_name')); ?></p>
+    <p><label for="countries_iso_code_2"><?php echo OSCOM::getDef('field_iso_code_2'); ?></label><?php echo osc_draw_input_field('countries_iso_code_2', $OSCOM_ObjectInfo->get('countries_iso_code_2')); ?></p>
+    <p><label for="countries_iso_code_3"><?php echo OSCOM::getDef('field_iso_code_3'); ?></label><?php echo osc_draw_input_field('countries_iso_code_3', $OSCOM_ObjectInfo->get('countries_iso_code_3')); ?></p>
+    <p><label for="address_format"><?php echo OSCOM::getDef('field_address_format'); ?></label><?php echo osc_draw_textarea_field('address_format', $OSCOM_ObjectInfo->get('address_format')); ?><br /><i>:name</i>, <i>:street_address</i>, <i>:suburb</i>, <i>:city</i>, <i>:postcode</i>, <i>:state</i>, <i>:state_code</i>, <i>:country</i></p>
   </fieldset>
 
   <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>

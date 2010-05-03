@@ -8,7 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Currencies extends OSCOM_Site_Admin_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Admin\Application\Currencies;
+
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected $_group = 'configuration';
     protected $_icon = 'currencies.png';
     protected $_sort_order = 500;

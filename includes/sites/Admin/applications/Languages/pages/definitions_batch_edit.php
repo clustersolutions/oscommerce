@@ -7,6 +7,10 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -28,9 +32,9 @@
 
 <?php
   foreach ( $_POST['batch'] as $id ) {
-    $osC_ObjectInfo = new osC_ObjectInfo(OSCOM_Site_Admin_Application_Languages_Languages::getDefinition($id));
+    $OSCOM_ObjectInfo = new ObjectInfo(Languages::getDefinition($id));
 
-    echo '<p><label for="def[' . $osC_ObjectInfo->getProtected('definition_key') . ']">' . $osC_ObjectInfo->getProtected('definition_key') . '</label>' . osc_draw_textarea_field('def[' . $osC_ObjectInfo->get('definition_key') . ']', $osC_ObjectInfo->get('definition_value')) . osc_draw_hidden_field('batch[]', $osC_ObjectInfo->getInt('id')) . '</p>';
+    echo '<p><label for="def[' . $OSCOM_ObjectInfo->getProtected('definition_key') . ']">' . $OSCOM_ObjectInfo->getProtected('definition_key') . '</label>' . osc_draw_textarea_field('def[' . $OSCOM_ObjectInfo->get('definition_key') . ']', $OSCOM_ObjectInfo->get('definition_value')) . osc_draw_hidden_field('batch[]', $OSCOM_ObjectInfo->getInt('id')) . '</p>';
   }
 ?>
 

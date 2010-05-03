@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+
   $www_location = 'http://' . $_SERVER['HTTP_HOST'];
 
   if ( isset($_SERVER['REQUEST_URI']) && !empty($_SERVER['REQUEST_URI']) ) {

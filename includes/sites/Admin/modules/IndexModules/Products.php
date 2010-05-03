@@ -8,16 +8,23 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+
+  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+
   require('includes/sites/Admin/applications/products/classes/products.php');
 
-  class OSCOM_Site_Admin_Module_IndexModules_Products extends OSCOM_Site_Admin_Application_Index_IndexModules {
+  class Products extends IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/Products.php');
+      Registry::get('Language')->loadIniFile('modules/IndexModules/Products.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_products_title');
       $this->_title_link = OSCOM::getLink(null, 'Products');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'products') ) {
+      if ( Access::hasAccess(OSCOM::getSite(), 'Products') ) {
         if ( !isset($osC_Currencies) ) {
           if ( !class_exists('osC_Currencies') ) {
             include('includes/classes/currencies.php');
@@ -37,8 +44,7 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qproducts = OSCOM_Registry::get('Database')->query('select products_id, greatest(products_date_added, products_last_modified) as date_last_modified from :table_products where parent_id is null order by date_last_modified desc limit 6');
-        $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
+        $Qproducts = Registry::get('Database')->query('select products_id, greatest(products_date_added, products_last_modified) as date_last_modified from :table_products where parent_id is null order by date_last_modified desc limit 6');
         $Qproducts->execute();
 
         $counter = 0;

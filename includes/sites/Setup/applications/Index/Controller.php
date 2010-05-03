@@ -8,7 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Setup_Application_Index extends OSCOM_Site_Setup_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Setup\Application\Index;
+
+  use osCommerce\OM\Site\Setup\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected function initialize() {
       $this->_page_title = OSCOM::getDef('heading_title');
     }

@@ -8,13 +8,20 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Administrators_Administrators {
+  namespace osCommerce\OM\Site\Admin\Application\Administrators;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\DirectoryListing;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Access;
+
+  class Administrators {
     const ACCESS_MODE_ADD = 'add';
     const ACCESS_MODE_SET = 'set';
     const ACCESS_MODE_REMOVE = 'remove';
 
     public static function get($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qadmin = $OSCOM_Database->query('select * from :table_administrators where id = :id');
       $Qadmin->bindInt(':id', $id);
@@ -36,7 +43,7 @@
     }
 
     public static function getAll($pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -62,7 +69,7 @@
     }
 
     public static function find($search, $pageset = 1) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($pageset) || (floor($pageset) != $pageset) ) {
         $pageset = 1;
@@ -89,7 +96,7 @@
     }
 
     public static function save($id = null, $data, $modules = null) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -194,7 +201,7 @@
     }
 
     public static function delete($id) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $Qdel = $OSCOM_Database->query('delete from :table_administrators where id = :id');
       $Qdel->bindInt(':id', $id);
@@ -205,7 +212,7 @@
     }
 
     public static function setAccessLevels($id, $modules, $mode = self::ACCESS_MODE_ADD) {
-      $OSCOM_Database = OSCOM_Registry::get('Database');
+      $OSCOM_Database = Registry::get('Database');
 
       $error = false;
 
@@ -291,59 +298,35 @@
     }
 
     public static function getAccessModules() {
-      $OSCOM_Language = OSCOM_Registry::get('Language');
+      $OSCOM_Language = Registry::get('Language');
 
       $module_files = array();
 
-      $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications');
+      $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications');
       $DLapps->setIncludeFiles(false);
 
       foreach ( $DLapps->getFiles() as $file ) {
-        if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('OSCOM_' . OSCOM::getSite(), 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
+        if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . OSCOM::getSite(), 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
           $module_files[] = $file['name'];
-        }
-      }
-
-      $DLapps = new OSCOM_DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access'); // HPDL to remove
-      $DLapps->setIncludeDirectories(false);
-
-      foreach ( $DLapps->getFiles() as $file ) {
-        if ( preg_match('/[^A-Z]/', substr($file['name'], 0, 1)) ) {
-          $module_files[] = substr($file['name'], 0, strrpos($file['name'], '.'));
         }
       }
 
       $modules = array();
 
       foreach ( $module_files as $module ) {
-        if ( preg_match('/[A-Z]/', substr($module, 0, 1)) ) {
-          $application_class = 'OSCOM_Site_' . OSCOM::getSite() . '_Application_' . $module;
+        $application_class = 'osCommerce\\OM\\Site\\' . OSCOM::getSite() . '\\Application\\' . $module;
 
-          if ( class_exists($application_class) ) {
-            if ( $module == OSCOM::getSiteApplication() ) {
-              $OSCOM_Application = OSCOM_Registry::get('Application');
-            } else {
-              OSCOM_Registry::get('Language')->loadIniFile($module . '.php');
-              $OSCOM_Application = new $application_class(false);
-            }
-
-            $modules[osC_Access::getGroupTitle($OSCOM_Application->getGroup())][] = array('id' => $module,
-                                                                                          'text' => $OSCOM_Application->getTitle(),
-                                                                                          'icon' => $OSCOM_Application->getIcon());
-          }
-        } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php') ) { // HPDL to remove
-          $module_class = 'osC_Access_' . ucfirst($module);
-
-          if ( !class_exists( $module_class ) ) {
-            OSCOM_Registry::get('Language')->loadIniFile('modules/access/' . $module . '.php');
-            include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/modules/Access/' . $module . '.php');
+        if ( class_exists($application_class) ) {
+          if ( $module == OSCOM::getSiteApplication() ) {
+            $OSCOM_Application = Registry::get('Application');
+          } else {
+            Registry::get('Language')->loadIniFile($module . '.php');
+            $OSCOM_Application = new $application_class(false);
           }
 
-          $module_class = new $module_class();
-
-          $modules[osC_Access::getGroupTitle($module_class->getGroup())][] = array('id' => $module,
-                                                                                   'text' => $module_class->getTitle(),
-                                                                                   'icon' => $module_class->getIcon());
+          $modules[Access::getGroupTitle($OSCOM_Application->getGroup())][] = array('id' => $module,
+                                                                                    'text' => $OSCOM_Application->getTitle(),
+                                                                                    'icon' => $OSCOM_Application->getIcon());
         }
       }
 

@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_DateTime {
+  namespace osCommerce\OM;
+
+  class DateTime {
     const DEFAULT_FORMAT = 'Y-m-d H:i:s';
 
     public static function getNow($format = null) {
@@ -20,7 +22,7 @@
     }
 
     public static function getShort($date = null, $with_time = false) {
-      $OSCOM_Language = OSCOM_Registry::get('Language');
+      $OSCOM_Language = Registry::get('Language');
 
       if ( empty($date) ) {
         $date = self::getNow();
@@ -41,7 +43,7 @@
     }
 
     function getLong($date = null) {
-      $OSCOM_Language = OSCOM_Registry::get('Language');
+      $OSCOM_Language = Registry::get('Language');
 
       if ( empty($date) ) {
         $date = self::getNow();
@@ -70,7 +72,7 @@
         $format = self::DEFAULT_FORMAT;
       }
 
-      $dt = DateTime::createFromFormat($format, $date);
+      $dt = \DateTime::createFromFormat($format, $date);
       $timestamp = $dt->getTimestamp();
 
       return $timestamp;

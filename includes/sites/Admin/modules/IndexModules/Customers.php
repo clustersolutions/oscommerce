@@ -8,14 +8,21 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Module_IndexModules_Customers extends OSCOM_Site_Admin_Application_Index_IndexModules {
+  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+
+  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
+
+  class Customers extends IndexModules {
     public function __construct() {
-      OSCOM_Registry::get('osC_Language')->loadIniFile('modules/IndexModules/Customers.php');
+      Registry::get('Language')->loadIniFile('modules/IndexModules/Customers.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_customers_title');
       $this->_title_link = OSCOM::getLink(null, 'Customers');
 
-      if ( osC_Access::hasAccess(OSCOM::getSite(), 'customers') ) {
+      if ( Access::hasAccess(OSCOM::getSite(), 'Customers') ) {
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
                        '  <thead>' .
                        '    <tr>' .
@@ -26,8 +33,7 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qcustomers = OSCOM_Registry::get('Database')->query('select customers_id, customers_gender, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
-        $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
+        $Qcustomers = Registry::get('Database')->query('select customers_id, customers_gender, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
         $Qcustomers->execute();
 
         $counter = 0;

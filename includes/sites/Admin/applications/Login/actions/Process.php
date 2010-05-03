@@ -8,10 +8,17 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_Login_Action_Process {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\Login\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\Access;
+  use osCommerce\OM\OSCOM;
+
+  class Process {
+    public static function execute(ApplicationAbstract $application) {
       if ( !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
-        $Qadmin = OSCOM_Registry::get('Database')->query('select id, user_name, user_password from :table_administrators where user_name = :user_name limit 1');
+        $Qadmin = Registry::get('Database')->query('select id, user_name, user_password from :table_administrators where user_name = :user_name limit 1');
         $Qadmin->bindValue(':user_name', $_POST['user_name']);
         $Qadmin->execute();
 
@@ -19,7 +26,7 @@
           if ( osc_validate_password($_POST['user_password'], $Qadmin->value('user_password')) ) {
             $_SESSION[OSCOM::getSite()]['id'] = $Qadmin->valueInt('id');
             $_SESSION[OSCOM::getSite()]['username'] = $Qadmin->value('user_name');
-            $_SESSION[OSCOM::getSite()]['access'] = osC_Access::getUserLevels($Qadmin->valueInt('id'));
+            $_SESSION[OSCOM::getSite()]['access'] = Access::getUserLevels($Qadmin->valueInt('id'));
 
             $to_application = OSCOM::getDefaultSiteApplication();
 
@@ -34,7 +41,7 @@
         }
       }
 
-      OSCOM_Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_login_invalid'), 'error');
+      Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_login_invalid'), 'error');
     }
   }
 ?>

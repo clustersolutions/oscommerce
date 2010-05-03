@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Database {
+  namespace osCommerce\OM;
+
+  class Database {
     var $is_connected = false,
         $link,
         $error_reporting = true,
@@ -29,7 +31,7 @@
         $fkeys = array();
 
     public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
-      $class = 'OSCOM_Database_' . $type;
+      $class = 'osCommerce\\OM\\Database\\' . $type;
       $object = new $class($server, $username, $password, $database, $port);
 
       return $object;
@@ -51,16 +53,14 @@
       }
     }
 
-    function &query($query) {
-      $osC_Database_Result = new OSCOM_DatabaseResult($this);
+    function query($query) {
+      $osC_Database_Result = new DatabaseResult($this);
       $osC_Database_Result->setQuery($query);
 
       return $osC_Database_Result;
     }
 
     function setError($error, $error_number = '', $query = '') {
-      global $osC_MessageStack;
-
       if ($this->error_reporting === true) {
         $this->error = $error;
         $this->error_number = $error_number;
@@ -68,8 +68,8 @@
 
         error_log('[MYSQL] ' . $this->error . ' (' . $this->error_number . '): [QUERY] ' . $this->error_query);
 
-        if (isset($osC_MessageStack)) {
-          $osC_MessageStack->add('debug', $this->getError());
+        if ( Registry::exists('MessageStack') ) {
+          Registry::get('MessageStack')->add('debug', $this->getError());
         }
       }
     }
@@ -219,46 +219,6 @@
       }
     }
 
-    function hasCreatePermission($database) {
-      $db_created = false;
-
-      if (empty($database)) {
-        $this->setError(ERROR_DB_NO_DATABASE_SELECTED);
-
-        return false;
-      }
-
-      $this->setErrorReporting(false);
-
-      if ($this->selectDatabase($database) === false) {
-        $this->setErrorReporting(true);
-
-        if ($this->simpleQuery('create database ' . $database)) {
-          $db_created = true;
-        }
-      }
-
-      $this->setErrorReporting(true);
-
-      if ($this->isError() === false) {
-        if ($this->selectDatabase($database)) {
-          if ($this->simpleQuery('create table osCommerceTestTable1536f ( temp_id int )')) {
-            if ($db_created === true) {
-              $this->simpleQuery('drop database ' . $database);
-            } else {
-              $this->simpleQuery('drop table osCommerceTestTable1536f');
-            }
-          }
-        }
-      }
-
-      if ($this->isError()) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-
     function numberOfQueries() {
       return $this->number_of_queries;
     }
@@ -274,7 +234,7 @@
     }
   }
 
-  class OSCOM_DatabaseResult {
+  class DatabaseResult {
     var $db_class,
         $sql_query,
         $query_handler,
@@ -300,8 +260,8 @@
         $logging_changed = array(),
         $_db_tables = array();
 
-    function __construct(&$db_class) {
-      $this->db_class =& $db_class;
+    function __construct($db_class) {
+      $this->db_class = $db_class;
     }
 
     function setQuery($query) {
@@ -437,15 +397,13 @@
     }
 
     function freeResult() {
-      global $osC_Cache;
-
       if ($this->cache_read === false) {
         if (preg_match('/^SELECT/i', $this->sql_query)) {
           $this->db_class->freeResult($this->query_handler);
         }
 
         if (isset($this->cache_key)) {
-          $osC_Cache->write($this->cache_data, $this->cache_key);
+          Registry::get('Cache')->write($this->cache_data, $this->cache_key);
         }
       }
 
@@ -481,11 +439,9 @@
     }
 
     function execute() {
-      global $osC_Cache;
-
       if (isset($this->cache_key)) {
-        if ($osC_Cache->read($this->cache_key, $this->cache_expire)) {
-          $this->cache_data = $osC_Cache->getCache();
+        if ( Registry::get('Cache')->read($this->cache_key, $this->cache_expire)) {
+          $this->cache_data = Registry::get('Cache')->getCache();
 
           $this->cache_read = true;
         }

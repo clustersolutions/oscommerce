@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Admin\Application\Administrators\Administrators;
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
@@ -26,7 +29,6 @@
 
 <?php
   $Qadmins = $OSCOM_Database->query('select id, user_name from :table_administrators where id in (":id") order by user_name');
-  $Qadmins->bindTable(':table_administrators', TABLE_ADMINISTRATORS);
   $Qadmins->bindRaw(':id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
   $Qadmins->execute();
 
@@ -44,7 +46,7 @@
 ?>
 
   <fieldset>
-    <p><?php echo osc_draw_radio_field('mode', array(array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD, 'text' => OSCOM::getDef('add_to')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_REMOVE, 'text' => OSCOM::getDef('remove_from')), array('id' => OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_SET, 'text' => OSCOM::getDef('set_to'))), OSCOM_Site_Admin_Application_Administrators_Administrators::ACCESS_MODE_ADD); ?></p>
+    <p><?php echo osc_draw_radio_field('mode', array(array('id' => Administrators::ACCESS_MODE_ADD, 'text' => OSCOM::getDef('add_to')), array('id' => Administrators::ACCESS_MODE_REMOVE, 'text' => OSCOM::getDef('remove_from')), array('id' => Administrators::ACCESS_MODE_SET, 'text' => OSCOM::getDef('set_to'))), Administrators::ACCESS_MODE_ADD); ?></p>
 
     <p><select name="accessModules" id="modulesList"><option value="-1" disabled="disabled">-- Access Modules --</option><option value="0"><?php echo OSCOM::getDef('global_access'); ?></option></select></p>
 
@@ -57,7 +59,7 @@
 </div>
 
 <script type="text/javascript">
-  var accessModules = <?php echo json_encode(OSCOM_Site_Admin_Application_Administrators_Administrators::getAccessModules()); ?>;
+  var accessModules = <?php echo json_encode(Administrators::getAccessModules()); ?>;
   var deleteAccessModuleIcon = '<?php echo osc_icon('uninstall.png'); ?>';
 
   var $modulesList = $('#modulesList');

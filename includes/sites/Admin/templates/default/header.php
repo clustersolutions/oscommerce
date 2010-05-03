@@ -7,6 +7,9 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Access;
 ?>
 
 <div id="adminMenu">
@@ -18,14 +21,14 @@
     echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>Applications</a>' .
          '    <ul>';
 
-    foreach ( osC_Access::getLevels() as $group => $links ) {
+    foreach ( Access::getLevels() as $group => $links ) {
       $application = current($links);
 
-      echo '      <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . osC_Access::getGroupTitle($group) . '</a>' .
+      echo '      <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . Access::getGroupTitle($group) . '</a>' .
            '        <ul>';
 
       foreach ( $links as $link ) {
-        echo '          <li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $osC_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
+        echo '          <li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
       }
 
       echo '        </ul>' .
@@ -55,18 +58,18 @@
     echo '<ul class="apps" style="float: right;">';
 
     if ( $OSCOM_Application->canLinkTo() ) {
-      if ( osC_Access::isShortcut(OSCOM::getSiteApplication()) ) {
+      if ( Access::isShortcut(OSCOM::getSiteApplication()) ) {
         echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
       } else {
         echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
       }
     }
 
-    if ( osC_Access::hasShortcut() ) {
+    if ( Access::hasShortcut() ) {
       echo '  <li class="shortcuts">';
 
-      foreach ( osC_Access::getShortcuts() as $shortcut ) {
-        echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '">' . $osC_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '</a>';
+      foreach ( Access::getShortcuts() as $shortcut ) {
+        echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '">' . $OSCOM_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '</a>';
       }
 
       echo '  </li>';

@@ -8,10 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_ZoneGroups extends OSCOM_Site_Admin_ApplicationAbstract {
+  namespace osCommerce\OM\Site\Admin\Application\Countries;
+
+  use osCommerce\OM\Site\Admin\ApplicationAbstract;
+  use osCommerce\OM\OSCOM;
+
+  class Controller extends ApplicationAbstract {
     protected $_group = 'configuration';
-    protected $_icon = 'zonegroups.png';
-    protected $_sort_order = 700;
+    protected $_icon = 'countries.png';
+    protected $_sort_order = 600;
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');
@@ -21,8 +26,8 @@
       $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
-        $this->_page_contents = 'entries.php';
-        $this->_page_title .= ': ' . OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::get($_GET['id'], 'geo_zone_name');
+        $this->_page_contents = 'zones.php';
+        $this->_page_title .= ': ' . Countries::get($_GET['id'], 'countries_name');
       }
     }
   }

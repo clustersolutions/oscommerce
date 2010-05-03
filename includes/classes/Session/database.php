@@ -8,11 +8,15 @@
   as published by the Free Software Foundation.
 */
 
+  namespace osCommerce\OM\Session;
+
+  use osCommerce\OM\Registry;
+
 /**
  * The Session_database class stores the session data in the database
  */
 
-  class OSCOM_Session_database extends OSCOM_Session {
+  class database extends \osCommerce\OM\Session {
     protected $_database;
 
 /**
@@ -25,7 +29,7 @@
     public function __construct($name = null) {
       parent::__construct($name);
 
-      $this->_database = OSCOM_Registry::get('Database');
+      $this->_database = Registry::get('Database');
 
       session_set_save_handler(array(&$this, '_custom_open'),
                                array(&$this, '_custom_close'),
@@ -70,7 +74,6 @@
         $Qsession->bindInt(':expiry', time());
       }
 
-      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
       $Qsession->bindValue(':id', $id);
       $Qsession->execute();
 
@@ -91,7 +94,6 @@
 
     public function _custom_write($id, $value) {
       $Qsession = $this->_database->query('replace into :table_sessions values (:id, :expiry, :value)');
-      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
       $Qsession->bindValue(':id', $id);
       $Qsession->bindInt(':expiry', time() + $this->_life_time);
       $Qsession->bindValue(':value', base64_encode($value));
@@ -122,7 +124,6 @@
 // $max_life_time is already added to the time in the _custom_write method
 
       $Qsession = $this->_database->query('delete from :table_sessions where expiry < :expiry');
-      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
       $Qsession->bindInt(':expiry', time());
       $Qsession->execute();
 
@@ -142,7 +143,6 @@
       }
 
       $Qsession = $this->_database->query('delete from :table_sessions where id = :id');
-      $Qsession->bindTable(':table_sessions', TABLE_SESSIONS);
       $Qsession->bindValue(':id', $id);
       $Qsession->execute();
 

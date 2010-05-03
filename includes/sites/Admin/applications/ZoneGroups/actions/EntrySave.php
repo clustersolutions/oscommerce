@@ -8,8 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  class OSCOM_Site_Admin_Application_ZoneGroups_Action_EntrySave {
-    public static function execute(OSCOM_ApplicationAbstract $application) {
+  namespace osCommerce\OM\Site\Admin\Application\ZoneGroups\Action;
+
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Site\Admin\Application\ZoneGroups\ZoneGroups;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+
+  class EntrySave {
+    public static function execute(ApplicationAbstract $application) {
       if ( isset($_GET['zID']) && is_numeric($_GET['zID']) ) {
         $application->setPageContent('entries_edit.php');
       } else {
@@ -21,10 +28,10 @@
                       'country_id' => $_POST['zone_country_id'],
                       'zone_id' => $_POST['zone_id']);
 
-        if ( OSCOM_Site_Admin_Application_ZoneGroups_ZoneGroups::saveEntry((isset($_GET['zID']) && is_numeric($_GET['zID']) ? $_GET['zID'] : null), $data) ) {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        if ( ZoneGroups::saveEntry((isset($_GET['zID']) && is_numeric($_GET['zID']) ? $_GET['zID'] : null), $data) ) {
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
-          OSCOM_Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
+          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
         }
 
         osc_redirect_admin(OSCOM::getLink(null, null, 'id=' . $_GET['id']));
