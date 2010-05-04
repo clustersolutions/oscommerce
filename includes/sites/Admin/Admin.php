@@ -11,7 +11,6 @@
   namespace osCommerce\OM\Site;
 
   use osCommerce\OM\OSCOM;
-  use osCommerce\OM\SiteInterface;
   use osCommerce\OM\Registry;
   use osCommerce\OM\Site\Admin\MessageStack;
   use osCommerce\OM\Cache;
@@ -27,7 +26,7 @@
   require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/html_output.php');
   require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/localization.php');
 
-  class Admin implements SiteInterface {
+  class Admin implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';
     protected static $_guest_applications = array('Index', 'Login');
 

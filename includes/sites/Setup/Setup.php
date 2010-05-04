@@ -10,13 +10,12 @@
 
   namespace osCommerce\OM\Site;
 
-  use osCommerce\OM\SiteInterface;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
   use osCommerce\OM\Site\Setup\Language;
   use osCommerce\OM\Site\Setup\Template;
 
-  class Setup implements SiteInterface {
+  class Setup implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {

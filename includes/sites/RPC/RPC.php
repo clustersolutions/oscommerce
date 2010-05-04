@@ -10,10 +10,9 @@
 
   namespace osCommerce\OM\Site;
 
-  use osCommerce\OM\SiteInterface;
   use osCommerce\OM\OSCOM;
 
-  class RPC implements SiteInterface {
+  class RPC implements \osCommerce\OM\SiteInterface {
     const STATUS_SUCCESS = 1;
     const STATUS_NO_SESSION = -10;
     const STATUS_NO_MODULE = -20;
