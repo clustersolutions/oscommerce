@@ -14,7 +14,7 @@
     static protected $_resource;
 
     public static function initialize() {
-      if ( class_exists('SQLite3', false) ) {
+      if ( class_exists('SQLite3', false) && is_writable(OSCOM::BASE_DIRECTORY . 'work') ) {
         ini_set('display_errors', false);
         ini_set('log_errors', true);
         ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
