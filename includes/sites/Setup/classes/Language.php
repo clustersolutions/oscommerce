@@ -124,5 +124,9 @@
 
       $this->_definitions = array_merge($this->_definitions, $ini_array);
     }
+
+    function getCode() {
+      return $this->_code;
+    }
   }
 ?>

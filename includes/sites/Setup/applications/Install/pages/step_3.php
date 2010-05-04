@@ -152,10 +152,6 @@
                    'DB_SERVER_PERSISTENT_CONNECTIONS = "false"' . "\n" .
                    'STORE_SESSIONS = "database"' . "\n";
 
-  if ( !is_writable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
-    @chmod(OSCOM::BASE_DIRECTORY . 'config.php', 0777);
-  }
-
   if ( is_writable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
     file_put_contents(OSCOM::BASE_DIRECTORY . 'config.php', $file_contents);
 ?>

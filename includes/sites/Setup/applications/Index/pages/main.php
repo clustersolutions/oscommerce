@@ -123,10 +123,6 @@
 
 <?php
   if ( file_exists(OSCOM::BASE_DIRECTORY . 'config.php') && !is_writeable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
-    @chmod(OSCOM::BASE_DIRECTORY . 'config.php', 0777);
-  }
-
-  if ( file_exists(OSCOM::BASE_DIRECTORY . 'config.php') && !is_writeable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
 ?>
 
     <div class="noticeBox">
