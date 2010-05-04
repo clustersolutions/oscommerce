@@ -10,12 +10,11 @@
 
   namespace osCommerce\OM\Site\Admin\Module\IndexModules;
 
-  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Access;
 
-  class Reviews extends IndexModules {
+  class Reviews extends \osCommerce\OM\Site\Admin\IndexModulesAbstract {
     public function __construct() {
       Registry::get('Language')->loadIniFile('modules/IndexModules/Reviews.php');
 

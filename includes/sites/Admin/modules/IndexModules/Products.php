@@ -10,14 +10,13 @@
 
   namespace osCommerce\OM\Site\Admin\Module\IndexModules;
 
-  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Access;
 
   require('includes/sites/Admin/applications/products/classes/products.php');
 
-  class Products extends IndexModules {
+  class Products extends \osCommerce\OM\Site\Admin\IndexModulesAbstract {
     public function __construct() {
       Registry::get('Language')->loadIniFile('modules/IndexModules/Products.php');
 

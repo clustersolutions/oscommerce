@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Index;
+  namespace osCommerce\OM\Site\Admin;
 
-  class IndexModules {
+  abstract class IndexModulesAbstract {
     protected $_title;
     protected $_title_link;
     protected $_data;
@@ -24,11 +24,7 @@
     }
 
     public function hasTitleLink() {
-      if (isset($this->_title_link) && !empty($this->_title_link)) {
-        return true;
-      }
-
-      return false;
+      return isset($this->_title_link) && !empty($this->_title_link);
     }
 
     public function getData() {
@@ -36,11 +32,7 @@
     }
 
     public function hasData() {
-      if (isset($this->_data) && !empty($this->_data)) {
-        return true;
-      }
-
-      return false;
+      return isset($this->_data) && !empty($this->_data);
     }
   }
 ?>

@@ -10,14 +10,13 @@
 
   namespace osCommerce\OM\Site\Admin\Module\IndexModules;
 
-  use osCommerce\OM\Site\Admin\Application\Index\IndexModules;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Access;
   use osCommerce\OM\ErrorHandler;
   use osCommerce\OM\DateTime;
 
-  class ErrorLog extends IndexModules {
+  class ErrorLog extends \osCommerce\OM\Site\Admin\IndexModulesAbstract {
     public function __construct() {
       Registry::get('Language')->loadIniFile('modules/IndexModules/ErrorLog.php');
 
