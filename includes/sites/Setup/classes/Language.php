@@ -125,7 +125,7 @@
       $this->_definitions = array_merge($this->_definitions, $ini_array);
     }
 
-    function getCode() {
+    function getCode($id = null) {
       return $this->_code;
     }
   }
