@@ -8,14 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site;
+  namespace osCommerce\OM\Site\Setup;
 
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
   use osCommerce\OM\Site\Setup\Language;
   use osCommerce\OM\Site\Setup\Template;
 
-  class Setup implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {

@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site;
+  namespace osCommerce\OM\Site\Shop;
 
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
@@ -18,7 +18,7 @@
   use osCommerce\OM\Session;
   use osCommerce\OM\Template;
 
-  class Shop implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'index';
     protected static $_application = 'index';
 

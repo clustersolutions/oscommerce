@@ -10,7 +10,7 @@
 
   namespace osCommerce\OM\Site\Admin\Application\TaxClasses;
 
-  use osCommerce\OM\Site\RPC as OSCOM_Site_RPC;
+  use osCommerce\OM\Site\RPC\Controller as OSCOM_Site_RPC;
 
   class RPC {
     public static function getAll() {

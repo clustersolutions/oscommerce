@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site;
+  namespace osCommerce\OM\Site\RPC;
 
   use osCommerce\OM\OSCOM;
 
-  class RPC implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\SiteInterface {
     const STATUS_SUCCESS = 1;
     const STATUS_NO_SESSION = -10;
     const STATUS_NO_MODULE = -20;
@@ -48,10 +48,9 @@
 
         OSCOM::setSiteApplication($application);
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/' . $site . '.php');
-        call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'initialize'));
+        call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'initialize'));
 
-        if ( !call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'hasAccess'), $application)) {
+        if ( !call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
           echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
           exit;
         }

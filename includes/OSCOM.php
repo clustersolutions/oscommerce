@@ -30,20 +30,18 @@
 
       self::setSite();
 
-      if ( !file_exists(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php') ) {
+      if ( !class_exists('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller') ) {
         trigger_error('Site \'' . self::getSite() . '\' does not exist', E_USER_ERROR);
         exit();
       }
 
-      include(self::BASE_DIRECTORY . 'sites/' . self::getSite() . '/' . self::getSite() . '.php');
-
       self::setSiteApplication();
 
-      call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite(), 'initialize'));
+      call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller', 'initialize'));
     }
 
     public static function siteExists($site) {
-      return file_exists(self::BASE_DIRECTORY . 'sites/' . $site . '/' . $site . '.php');
+      return class_exists('osCommerce\\OM\\Site\\' . $site . '\\Controller');
     }
 
     public static function setSite($site = null) {
@@ -82,7 +80,7 @@
     }
 
     public static function siteApplicationExists($application) {
-      return file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . self::getSite() . '/applications/' . $application . '/Controller.php');
+      return class_exists('osCommerce\\OM\\Site\\' . self::getSite() . '\\Application\\' . $application . '\\Controller');
     }
 
     public static function setSiteApplication($application = null) {
@@ -119,7 +117,7 @@
     }
 
     public static function getDefaultSiteApplication() {
-      return call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite(), 'getDefaultApplication'));
+      return call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller', 'getDefaultApplication'));
     }
 
     public static function autoload($class) {
@@ -141,6 +139,8 @@
             }
           } elseif ( isset($namespace[4]) && ($namespace[4] == 'Module') ) {
             $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/modules/' . implode('/', array_slice($namespace, 5)) . '.php';
+          } elseif ( isset($namespace[4]) && ($namespace[4] == 'Controller') ) {
+            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/Controller.php';
           } else {
             $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/classes/' . implode('/', array_slice($namespace, 4)) . '.php';
           }

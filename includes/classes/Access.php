@@ -88,7 +88,7 @@
         $DLapps->setIncludeFiles(false);
 
         foreach ( $DLapps->getFiles() as $file ) {
-          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) { // HPDL remove preg_match
+          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) { // HPDL remove preg_match
             $applications[] = $file['name'];
           }
         }
@@ -245,7 +245,7 @@
     }
 
     public static function hasAccess($site, $application) {
-      return in_array($application, call_user_func(array('osCommerce\\OM\\Site\\' . $site, 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
+      return in_array($application, call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
     }
   }
 ?>

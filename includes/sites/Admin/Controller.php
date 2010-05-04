@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site;
+  namespace osCommerce\OM\Site\Admin;
 
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
@@ -26,7 +26,7 @@
   require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/html_output.php');
   require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/localization.php');
 
-  class Admin implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';
     protected static $_guest_applications = array('Index', 'Login');
 
