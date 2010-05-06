@@ -13,30 +13,27 @@
   use osCommerce\OM\Registry;
 
 /**
- * The Session_database class stores the session data in the database
+ * The Session\Database class stores the session data in the database
  */
 
-  class database extends \osCommerce\OM\Session {
-    protected $_database;
+  class Database extends \osCommerce\OM\SessionAbstract {
 
 /**
- * Constructor, loads the database based session storage handler
+ * Initialize database based session storage handler
  *
  * @param string $name The name of the session
  * @access public
  */
 
-    public function __construct($name = null) {
-      parent::__construct($name);
+    public function __construct($name) {
+      $this->setName($name);
 
-      $this->_database = Registry::get('Database');
-
-      session_set_save_handler(array(&$this, '_custom_open'),
-                               array(&$this, '_custom_close'),
-                               array(&$this, '_custom_read'),
-                               array(&$this, '_custom_write'),
-                               array(&$this, '_custom_destroy'),
-                               array(&$this, '_custom_gc'));
+      session_set_save_handler(array($this, 'handlerOpen'),
+                               array($this, 'handlerClose'),
+                               array($this, 'handlerRead'),
+                               array($this, 'handlerWrite'),
+                               array($this, 'handlerDestroy'),
+                               array($this, 'handlerClean'));
     }
 
 /**
@@ -45,7 +42,7 @@
  * @access public
  */
 
-    public function _custom_open() {
+    public function handlerOpen() {
       return true;
     }
 
@@ -55,7 +52,7 @@
  * @access public
  */
 
-    public function _custom_close() {
+    public function handlerClose() {
       return true;
     }
 
@@ -66,8 +63,10 @@
  * @access public
  */
 
-    public function _custom_read($id) {
-      $Qsession = $this->_database->query('select value from :table_sessions where id = :id');
+    public function handlerRead($id) {
+      $OSCOM_Database = Registry::get('Database');
+
+      $Qsession = $OSCOM_Database->query('select value from :table_sessions where id = :id');
 
       if ( $this->_life_time > 0 ) {
         $Qsession->appendQuery('and expiry >= :expiry');
@@ -92,8 +91,10 @@
  * @access public
  */
 
-    public function _custom_write($id, $value) {
-      $Qsession = $this->_database->query('replace into :table_sessions values (:id, :expiry, :value)');
+    public function handlerWrite($id, $value) {
+      $OSCOM_Database = Registry::get('Database');
+
+      $Qsession = $OSCOM_Database->query('replace into :table_sessions values (:id, :expiry, :value)');
       $Qsession->bindValue(':id', $id);
       $Qsession->bindInt(':expiry', time() + $this->_life_time);
       $Qsession->bindValue(':value', base64_encode($value));
@@ -109,7 +110,7 @@
  * @access public
  */
 
-    public function _custom_destroy($id) {
+    public function handlerDestroy($id) {
       return $this->delete($id);
     }
 
@@ -120,10 +121,12 @@
  * @access public
  */
 
-    public function _custom_gc($max_life_time) {
+    public function handlerClean($max_life_time) {
 // $max_life_time is already added to the time in the _custom_write method
 
-      $Qsession = $this->_database->query('delete from :table_sessions where expiry < :expiry');
+      $OSCOM_Database = Registry::get('Database');
+
+      $Qsession = $OSCOM_Database->query('delete from :table_sessions where expiry < :expiry');
       $Qsession->bindInt(':expiry', time());
       $Qsession->execute();
 
@@ -138,11 +141,13 @@
  */
 
     public function delete($id = null) {
+      $OSCOM_Database = Registry::get('Database');
+
       if ( empty($id) ) {
         $id = $this->_id;
       }
 
-      $Qsession = $this->_database->query('delete from :table_sessions where id = :id');
+      $Qsession = $OSCOM_Database->query('delete from :table_sessions where id = :id');
       $Qsession->bindValue(':id', $id);
       $Qsession->execute();
 

@@ -1,0 +1,99 @@
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
+  namespace osCommerce\OM\Session;
+
+  use osCommerce\OM\OSCOM;
+
+/**
+ * The Session\File class stores the session data in files
+ */
+
+  class File extends \osCommerce\OM\SessionAbstract {
+
+/**
+ * Holds the file system path where sessions are saved.
+ *
+ * @var string
+ * @access protected
+ */
+
+    protected $_save_path;
+
+/**
+ * Initialize file based session storage handler
+ *
+ * @param string $name The name of the session
+ * @access public
+ */
+
+    public function __construct($name) {
+      $this->setName($name);
+      $this->setSavePath(OSCOM::BASE_DIRECTORY . 'work');
+    }
+
+/**
+ * Deletes an existing session
+ *
+ * @access public
+ */
+
+    public function destroy() {
+      $this->delete();
+
+      parent::destroy();
+    }
+
+/**
+ * Deletes an existing session from the storage handler
+ *
+ * @param string $id The ID of the session
+ * @access public
+ */
+
+    public function delete($id = null) {
+      if ( empty($id) ) {
+        $id = $this->_id;
+      }
+
+      if ( file_exists($this->_save_path . '/' . $id) ) {
+        @unlink($this->_save_path . '/' . $id);
+      }
+    }
+
+/**
+ * Return the session file based storage location
+ *
+ * @access public
+ * @return string
+ */
+
+    public function getSavePath() {
+      return $this->_save_path;
+    }
+
+/**
+ * Sets the storage location for the file based storage handler
+ *
+ * @param string $path The file path to store the session data in
+ * @access public
+ */
+
+    public function setSavePath($path) {
+      if ( substr($path, -1) == '/' ) {
+        $path = substr($path, 0, -1);
+      }
+
+      session_save_path($path);
+
+      $this->_save_path = session_save_path();
+    }
+  }
+?>

@@ -150,7 +150,7 @@
                    'DB_DATABASE_CLASS = "' . str_replace('_', '\\', $_POST['DB_DATABASE_CLASS']) . '"' . "\n" .
                    'DB_TABLE_PREFIX = "' . $_POST['DB_TABLE_PREFIX']. '"' . "\n" .
                    'DB_SERVER_PERSISTENT_CONNECTIONS = "false"' . "\n" .
-                   'STORE_SESSIONS = "database"' . "\n";
+                   'STORE_SESSIONS = "Database"' . "\n";
 
   if ( is_writable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
     file_put_contents(OSCOM::BASE_DIRECTORY . 'config.php', $file_contents);
