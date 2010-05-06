@@ -10,10 +10,6 @@
 
   namespace osCommerce\OM;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\DirectoryListing;
-
 /**
  * The osC_Access manages the permission levels of administrators who have access to the Administration Tool
  */

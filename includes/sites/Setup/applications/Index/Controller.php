@@ -10,10 +10,9 @@
 
   namespace osCommerce\OM\Site\Setup\Application\Index;
 
-  use osCommerce\OM\Site\Setup\ApplicationAbstract;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Site\Setup\ApplicationAbstract {
     protected function initialize() {
       $this->_page_title = OSCOM::getDef('heading_title');
     }

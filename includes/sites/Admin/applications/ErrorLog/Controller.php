@@ -10,10 +10,9 @@
 
   namespace osCommerce\OM\Site\Admin\Application\ErrorLog;
 
-  use osCommerce\OM\Site\Admin\ApplicationAbstract;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Site\Admin\ApplicationAbstract {
     protected $_group = 'tools';
     protected $_icon = 'errorlog.png';
     protected $_sort_order = 10;

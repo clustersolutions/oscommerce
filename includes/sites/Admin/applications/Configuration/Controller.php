@@ -10,10 +10,9 @@
 
   namespace osCommerce\OM\Site\Admin\Application\Configuration;
 
-  use osCommerce\OM\Site\Admin\ApplicationAbstract;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Site\Admin\ApplicationAbstract {
     protected $_group = 'configuration';
     protected $_icon = 'configuration.png';
     protected $_sort_order = 200;

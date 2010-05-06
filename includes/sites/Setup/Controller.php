@@ -12,8 +12,6 @@
 
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Setup\Language;
-  use osCommerce\OM\Site\Setup\Template;
 
   class Controller implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';

@@ -12,13 +12,10 @@
 
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Admin\MessageStack;
   use osCommerce\OM\Cache;
   use osCommerce\OM\Database;
   use osCommerce\OM\Session;
-  use osCommerce\OM\Site\Admin\Language;
   use osCommerce\OM\Access;
-  use osCommerce\OM\Site\Admin\Template;
 
   define('OSC_IN_ADMIN', true);
 

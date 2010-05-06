@@ -10,10 +10,9 @@
 
   namespace osCommerce\OM\Site\Admin\Application\Login;
 
-  use osCommerce\OM\Site\Admin\ApplicationAbstract;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Site\Admin\ApplicationAbstract {
     protected $_link_to = false;
     protected $_icon = 'login.png';
 
