@@ -1,14 +1,19 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_ShoppingCart {
+  namespace osCommerce\OM\Site\Shop;
+
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\DateTime;
+
+  class ShoppingCart {
     protected $_contents = array();
     protected $_sub_total = 0;
     protected $_total = 0;
@@ -70,7 +75,12 @@
     public function synchronizeWithDatabase() {
       global $osC_Database, $osC_Services, $osC_Language, $osC_Customer, $osC_Specials;
 
-      if ( !$osC_Customer->isLoggedOn() ) {
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Language = Registry::get('Language');
+      $OSCOM_Service = Registry::get('Service');
+
+      if ( !$OSCOM_Customer->isLoggedOn() ) {
         return false;
       }
 
@@ -88,17 +98,15 @@
         }
 
         if ( $db_action == 'check' ) {
-          $Qproduct = $osC_Database->query('select item_id, quantity from :table_shopping_carts where customers_id = :customers_id and products_id = :products_id');
-          $Qproduct->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-          $Qproduct->bindInt(':customers_id', $osC_Customer->getID());
+          $Qproduct = $OSCOM_Database->query('select item_id, quantity from :table_shopping_carts where customers_id = :customers_id and products_id = :products_id');
+          $Qproduct->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qproduct->bindInt(':products_id', $data['id']);
           $Qproduct->execute();
 
           if ( $Qproduct->numberOfRows() > 0 ) {
-            $Qupdate = $osC_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
-            $Qupdate->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+            $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
             $Qupdate->bindInt(':quantity', $data['quantity'] + $Qproduct->valueInt('quantity'));
-            $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
+            $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qupdate->bindInt(':item_id', $Qproduct->valueInt('item_id'));
             $Qupdate->execute();
           } else {
@@ -107,16 +115,14 @@
         }
 
         if ( $db_action == 'insert') {
-          $Qid = $osC_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
-          $Qid->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-          $Qid->bindInt(':customers_id', $osC_Customer->getID());
+          $Qid = $OSCOM_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
+          $Qid->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qid->execute();
 
           $db_item_id = $Qid->valueInt('item_id') + 1;
 
-          $Qnew = $osC_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
-          $Qnew->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-          $Qnew->bindInt(':customers_id', $osC_Customer->getID());
+          $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
+          $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qnew->bindInt(':item_id', $db_item_id);
           $Qnew->bindInt(':products_id', $data['id']);
           $Qnew->bindInt(':quantity', $data['quantity']);
@@ -126,10 +132,9 @@
           if ( isset($data['variants']) ) {
             foreach ( $data['variants'] as $variant ) {
               if ( $variant['has_custom_value'] === true ) {
-                $Qnew = $osC_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
-                $Qnew->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
+                $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
                 $Qnew->bindInt(':shopping_carts_item_id', $db_item_id);
-                $Qnew->bindInt(':customers_id', $osC_Customer->getID());
+                $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
                 $Qnew->bindInt(':products_id', $data['id']);
                 $Qnew->bindInt(':products_variants_values_id', $variant['value_id']);
                 $Qnew->bindValue(':products_variants_values_text', $variant['value_title']);
@@ -145,30 +150,26 @@
 
       $_delete_array = array();
 
-      $Qproducts = $osC_Database->query('select sc.item_id, sc.products_id, sc.quantity, sc.date_added, p.parent_id, p.products_price, p.products_model, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status from :table_shopping_carts sc, :table_products p where sc.customers_id = :customers_id and sc.products_id = p.products_id order by sc.date_added desc');
-      $Qproducts->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-      $Qproducts->bindTable(':table_products', TABLE_PRODUCTS);
-      $Qproducts->bindInt(':customers_id', $osC_Customer->getID());
+      $Qproducts = $OSCOM_Database->query('select sc.item_id, sc.products_id, sc.quantity, sc.date_added, p.parent_id, p.products_price, p.products_model, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status from :table_shopping_carts sc, :table_products p where sc.customers_id = :customers_id and sc.products_id = p.products_id order by sc.date_added desc');
+      $Qproducts->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qproducts->execute();
 
       while ( $Qproducts->next() ) {
         if ( $Qproducts->valueInt('products_status') === 1 ) {
-          $Qdesc = $osC_Database->query('select products_name, products_keyword from :table_products_description where products_id = :products_id and language_id = :language_id');
-          $Qdesc->bindTable(':table_products_description', TABLE_PRODUCTS_DESCRIPTION);
+          $Qdesc = $OSCOM_Database->query('select products_name, products_keyword from :table_products_description where products_id = :products_id and language_id = :language_id');
           $Qdesc->bindInt(':products_id', ($Qproducts->valueInt('parent_id') > 0) ? $Qproducts->valueInt('parent_id') : $Qproducts->valueInt('products_id'));
-          $Qdesc->bindInt(':language_id', $osC_Language->getID());
+          $Qdesc->bindInt(':language_id', $OSCOM_Language->getID());
           $Qdesc->execute();
 
-          $Qimage = $osC_Database->query('select image from :table_products_images where products_id = :products_id and default_flag = :default_flag');
-          $Qimage->bindTable(':table_products_images', TABLE_PRODUCTS_IMAGES);
+          $Qimage = $OSCOM_Database->query('select image from :table_products_images where products_id = :products_id and default_flag = :default_flag');
           $Qimage->bindInt(':products_id', ($Qproducts->valueInt('parent_id') > 0) ? $Qproducts->valueInt('parent_id') : $Qproducts->valueInt('products_id'));
           $Qimage->bindInt(':default_flag', 1);
           $Qimage->execute();
 
           $price = $Qproducts->value('products_price');
 
-          if ( $osC_Services->isStarted('specials') ) {
-            if ( $new_price = $osC_Specials->getPrice($Qproducts->valueInt('products_id')) ) {
+          if ( $OSCOM_Service->isStarted('Specials') ) {
+            if ( $new_price = Registry::get('Specials')->getPrice($Qproducts->valueInt('products_id')) ) {
               $price = $new_price;
             }
           }
@@ -184,34 +185,29 @@
                                                                     'quantity' => $Qproducts->valueInt('quantity'),
                                                                     'weight' => $Qproducts->value('products_weight'),
                                                                     'tax_class_id' => $Qproducts->valueInt('products_tax_class_id'),
-                                                                    'date_added' => osC_DateTime::getShort($Qproducts->value('date_added')),
+                                                                    'date_added' => DateTime::getShort($Qproducts->value('date_added')),
                                                                     'weight_class_id' => $Qproducts->valueInt('products_weight_class'));
 
           if ( $Qproducts->valueInt('parent_id') > 0 ) {
-            $Qcheck = $osC_Database->query('select products_status from :table_products where products_id = :products_id');
-            $Qcheck->bindTable(':table_products', TABLE_PRODUCTS);
+            $Qcheck = $OSCOM_Database->query('select products_status from :table_products where products_id = :products_id');
             $Qcheck->bindInt(':products_id', $Qproducts->valueInt('parent_id'));
             $Qcheck->execute();
 
             if ( $Qcheck->valueInt('products_status') === 1 ) {
-              $Qvariant = $osC_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
-              $Qvariant->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-              $Qvariant->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-              $Qvariant->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+              $Qvariant = $OSCOM_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
               $Qvariant->bindInt(':products_id', $Qproducts->valueInt('products_id'));
-              $Qvariant->bindInt(':languages_id', $osC_Language->getID());
-              $Qvariant->bindInt(':languages_id', $osC_Language->getID());
+              $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
+              $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
               $Qvariant->execute();
 
               if ( $Qvariant->numberOfRows() > 0 ) {
                 while ( $Qvariant->next() ) {
-                  $group_title = osC_Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
+                  $group_title = Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
                   $value_title = $Qvariant->value('value_title');
                   $has_custom_value = false;
 
-                  $Qcvv = $osC_Database->query('select products_variants_values_text from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id and products_id = :products_id and products_variants_values_id = :products_variants_values_id');
-                  $Qcvv->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-                  $Qcvv->bindInt(':customers_id', $osC_Customer->getID());
+                  $Qcvv = $OSCOM_Database->query('select products_variants_values_text from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id and products_id = :products_id and products_variants_values_id = :products_variants_values_id');
+                  $Qcvv->bindInt(':customers_id', $OSCOM_Customer->getID());
                   $Qcvv->bindInt(':shopping_carts_item_id', $Qproducts->valueInt('item_id'));
                   $Qcvv->bindInt(':products_id', $Qproducts->valueInt('products_id'));
                   $Qcvv->bindInt(':products_variants_values_id', $Qvariant->valueInt('value_id'));
@@ -245,15 +241,13 @@
           unset($this->_contents[$id]);
         }
 
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id in (":item_id")');
-        $Qdelete->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id in (":item_id")');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindRaw(':item_id', implode('", "', $_delete_array));
         $Qdelete->execute();
 
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id in (":shopping_carts_item_id")');
-        $Qdelete->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id in (":shopping_carts_item_id")');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindRaw(':shopping_carts_item_id', implode('", "', $_delete_array));
         $Qdelete->execute();
       }
@@ -263,17 +257,16 @@
     }
 
     public function reset($reset_database = false) {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
-      if ( ($reset_database === true) && $osC_Customer->isLoggedOn() ) {
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id');
-        $Qdelete->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+      if ( ($reset_database === true) && $OSCOM_Customer->isLoggedOn() ) {
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->execute();
 
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
-        $Qdelete->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->execute();
       }
 
@@ -296,15 +289,16 @@
     }
 
     public function add($product_id, $quantity = null) {
-      global $osC_Database, $osC_Language, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($product_id) ) {
         return false;
       }
 
-      $osC_Product = new osC_Product($product_id);
+      $OSCOM_Product = new Product($product_id);
 
-      if ( $osC_Product->isValid() ) {
+      if ( $OSCOM_Product->isValid() ) {
         if ( $this->exists($product_id) ) {
           $item_id = $this->getBasketID($product_id);
 
@@ -314,11 +308,10 @@
 
           $this->_contents[$item_id]['quantity'] = $quantity;
 
-          if ( $osC_Customer->isLoggedOn() ) {
-            $Qupdate = $osC_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
-            $Qupdate->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+          if ( $OSCOM_Customer->isLoggedOn() ) {
+            $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
             $Qupdate->bindInt(':quantity', $quantity);
-            $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
+            $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qupdate->bindInt(':item_id', $item_id);
             $Qupdate->execute();
           }
@@ -327,10 +320,9 @@
             $quantity = 1;
           }
 
-          if ( $osC_Customer->isLoggedOn() ) {
-            $Qid = $osC_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
-            $Qid->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-            $Qid->bindInt(':customers_id', $osC_Customer->getID());
+          if ( $OSCOM_Customer->isLoggedOn() ) {
+            $Qid = $OSCOM_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
+            $Qid->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qid->execute();
 
             $item_id = $Qid->valueInt('item_id') + 1;
@@ -344,22 +336,21 @@
 
           $this->_contents[$item_id] = array('item_id' => $item_id,
                                              'id' => $product_id,
-                                             'parent_id' => (int)$osC_Product->getData('parent_id'),
-                                             'name' => $osC_Product->getTitle(),
-                                             'model' => $osC_Product->getModel(),
-                                             'keyword' => $osC_Product->getKeyword(),
-                                             'image' => $osC_Product->getImage(),
-                                             'price' => $osC_Product->getPrice(true),
+                                             'parent_id' => (int)$OSCOM_Product->getData('parent_id'),
+                                             'name' => $OSCOM_Product->getTitle(),
+                                             'model' => $OSCOM_Product->getModel(),
+                                             'keyword' => $OSCOM_Product->getKeyword(),
+                                             'image' => $OSCOM_Product->getImage(),
+                                             'price' => $OSCOM_Product->getPrice(true),
                                              'quantity' => $quantity,
-                                             'weight' => $osC_Product->getData('weight'),
-                                             'tax_class_id' => $osC_Product->getData('tax_class_id'),
-                                             'date_added' => osC_DateTime::getShort(osC_DateTime::getNow()),
-                                             'weight_class_id' => $osC_Product->getData('weight_class_id'));
+                                             'weight' => $OSCOM_Product->getData('weight'),
+                                             'tax_class_id' => $OSCOM_Product->getData('tax_class_id'),
+                                             'date_added' => DateTime::getShort(DateTime::getNow()),
+                                             'weight_class_id' => $OSCOM_Product->getData('weight_class_id'));
 
-          if ( $osC_Customer->isLoggedOn() ) {
-            $Qnew = $osC_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
-            $Qnew->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-            $Qnew->bindInt(':customers_id', $osC_Customer->getID());
+          if ( $OSCOM_Customer->isLoggedOn() ) {
+            $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
+            $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qnew->bindInt(':item_id', $item_id);
             $Qnew->bindInt(':products_id', $product_id);
             $Qnew->bindInt(':quantity', $quantity);
@@ -367,20 +358,17 @@
             $Qnew->execute();
           }
 
-          if ( $osC_Product->getData('parent_id') > 0 ) {
-            $Qvariant = $osC_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
-            $Qvariant->bindTable(':table_products_variants', TABLE_PRODUCTS_VARIANTS);
-            $Qvariant->bindTable(':table_products_variants_values', TABLE_PRODUCTS_VARIANTS_VALUES);
-            $Qvariant->bindTable(':table_products_variants_groups', TABLE_PRODUCTS_VARIANTS_GROUPS);
+          if ( $OSCOM_Product->getData('parent_id') > 0 ) {
+            $Qvariant = $OSCOM_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
             $Qvariant->bindInt(':products_id', $product_id);
-            $Qvariant->bindInt(':languages_id', $osC_Language->getID());
-            $Qvariant->bindInt(':languages_id', $osC_Language->getID());
+            $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
+            $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
             $Qvariant->execute();
 
             while ( $Qvariant->next() ) {
-              $group_title = osC_Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
-              $value_title = osC_Variants::getValueTitle($Qvariant->value('module'), $Qvariant->toArray());
-              $has_custom_value = osC_Variants::hasCustomValue($Qvariant->value('module'));
+              $group_title = Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
+              $value_title = Variants::getValueTitle($Qvariant->value('module'), $Qvariant->toArray());
+              $has_custom_value = Variants::hasCustomValue($Qvariant->value('module'));
 
               $this->_contents[$item_id]['variants'][] = array('group_id' => $Qvariant->valueInt('group_id'),
                                                                'value_id' => $Qvariant->valueInt('value_id'),
@@ -388,11 +376,10 @@
                                                                'value_title' => $value_title,
                                                                'has_custom_value' => $has_custom_value);
 
-              if ( $osC_Customer->isLoggedOn() && ($has_custom_value === true) ) {
-                $Qnew = $osC_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
-                $Qnew->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
+              if ( $OSCOM_Customer->isLoggedOn() && ($has_custom_value === true) ) {
+                $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
                 $Qnew->bindInt(':shopping_carts_item_id', $item_id);
-                $Qnew->bindInt(':customers_id', $osC_Customer->getID());
+                $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
                 $Qnew->bindInt(':products_id', $product_id);
                 $Qnew->bindInt(':products_variants_values_id', $Qvariant->valueInt('value_id'));
                 $Qnew->bindValue(':products_variants_values_text', $value_title);
@@ -448,7 +435,8 @@
     }
 
     public function update($item_id, $quantity) {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       if ( !is_numeric($quantity) ) {
         $quantity = $this->getQuantity($item_id) + 1;
@@ -456,11 +444,10 @@
 
       $this->_contents[$item_id]['quantity'] = $quantity;
 
-      if ( $osC_Customer->isLoggedOn() ) {
-        $Qupdate = $osC_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
-        $Qupdate->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
+      if ( $OSCOM_Customer->isLoggedOn() ) {
+        $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
         $Qupdate->bindInt(':quantity', $quantity);
-        $Qupdate->bindInt(':customers_id', $osC_Customer->getID());
+        $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qupdate->bindInt(':item_id', $item_id);
         $Qupdate->execute();
       }
@@ -470,20 +457,19 @@
     }
 
     public function remove($item_id) {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       unset($this->_contents[$item_id]);
 
-      if ( $osC_Customer->isLoggedOn() ) {
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
-        $Qdelete->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+      if ( $OSCOM_Customer->isLoggedOn() ) {
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindInt(':item_id', $item_id);
         $Qdelete->execute();
 
-        $Qdelete = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
-        $Qdelete->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-        $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
+        $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindInt(':shopping_carts_item_id', $item_id);
         $Qdelete->execute();
       }
@@ -497,7 +483,13 @@
       if ( $_is_sorted === false ) {
         $_is_sorted = true;
 
-        uasort($this->_contents, array('osC_ShoppingCart', '_uasortProductsByDateAdded'));
+        uasort($this->_contents, function ($a, $b) {
+          if ( $a['date_added'] == $b['date_added'] ) {
+            return strnatcasecmp($a['name'], $b['name']);
+          }
+
+          return ($a['date_added'] > $b['date_added']) ? -1 : 1;
+        });
       }
 
       return $this->_contents;
@@ -524,7 +516,7 @@
     }
 
     public function getContentType() {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
       $this->_content_type = 'physical';
 
@@ -595,10 +587,9 @@
     }
 
     public function isInStock($item_id) {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
-      $Qstock = $osC_Database->query('select products_quantity from :table_products where products_id = :products_id');
-      $Qstock->bindTable(':table_products', TABLE_PRODUCTS);
+      $Qstock = $OSCOM_Database->query('select products_quantity from :table_products where products_id = :products_id');
       $Qstock->bindInt(':products_id', $this->_contents[$item_id]['id']);
       $Qstock->execute();
 
@@ -621,7 +612,8 @@
 
 /* param $address mixed int for address book entry, or array containing address data */
     public function setShippingAddress($address) {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       $previous_address = false;
 
@@ -629,12 +621,9 @@
         $previous_address = $this->getShippingAddress();
       }
 
-      if ( $osC_Customer->isLoggedOn() && is_numeric($address) ) {
-        $Qaddress = $osC_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
-        $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qaddress->bindTable(':table_zones', TABLE_ZONES);
-        $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
-        $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
+      if ( $OSCOM_Customer->isLoggedOn() && is_numeric($address) ) {
+        $Qaddress = $OSCOM_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
@@ -670,14 +659,14 @@
                                          'suburb' => osc_output_string_protected($address['suburb']),
                                          'city' => osc_output_string_protected($address['city']),
                                          'postcode' => osc_output_string_protected($address['postcode']),
-                                         'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(osC_Address::getZoneName($address['zone_id']))),
+                                         'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(Address::getZoneName($address['zone_id']))),
                                          'zone_id' => (int)$address['zone_id'],
-                                         'zone_code' => osc_output_string_protected(osC_Address::getZoneCode($address['zone_id'])),
+                                         'zone_code' => osc_output_string_protected(Address::getZoneCode($address['zone_id'])),
                                          'country_id' => osc_output_string_protected($address['country_id']),
-                                         'country_title' => osc_output_string_protected(osC_Address::getCountryName($address['country_id'])),
-                                         'country_iso_code_2' => osc_output_string_protected(osC_Address::getCountryIsoCode2($address['country_id'])),
-                                         'country_iso_code_3' => osc_output_string_protected(osC_Address::getCountryIsoCode3($address['country_id'])),
-                                         'format' => osC_Address::getFormat($address['country_id']),
+                                         'country_title' => osc_output_string_protected(Address::getCountryName($address['country_id'])),
+                                         'country_iso_code_2' => osc_output_string_protected(Address::getCountryIsoCode2($address['country_id'])),
+                                         'country_iso_code_3' => osc_output_string_protected(Address::getCountryIsoCode3($address['country_id'])),
+                                         'format' => Address::getFormat($address['country_id']),
                                          'telephone' => osc_output_string_protected($address['telephone']),
                                          'fax' => osc_output_string_protected($address['fax']));
       }
@@ -696,13 +685,13 @@
     }
 
     public function resetShippingAddress() {
-      global $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
 
       $this->_shipping_address = array('zone_id' => STORE_ZONE,
                                        'country_id' => STORE_COUNTRY);
 
-      if ( $osC_Customer->isLoggedOn() && $osC_Customer->hasDefaultAddress() ) {
-        $this->setShippingAddress($osC_Customer->getDefaultAddressID());
+      if ( $OSCOM_Customer->isLoggedOn() && $OSCOM_Customer->hasDefaultAddress() ) {
+        $this->setShippingAddress($OSCOM_Customer->getDefaultAddressID());
       }
     }
 
@@ -738,7 +727,8 @@
 
 /* param $address mixed int for address book entry, or array containing address data */
     public function setBillingAddress($address) {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       $previous_address = false;
 
@@ -746,12 +736,9 @@
         $previous_address = $this->getBillingAddress();
       }
 
-      if ( $osC_Customer->isLoggedOn() && is_numeric($address) ) {
-        $Qaddress = $osC_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
-        $Qaddress->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-        $Qaddress->bindTable(':table_zones', TABLE_ZONES);
-        $Qaddress->bindTable(':table_countries', TABLE_COUNTRIES);
-        $Qaddress->bindInt(':customers_id', $osC_Customer->getID());
+      if ( $OSCOM_Customer->isLoggedOn() && is_numeric($address) ) {
+        $Qaddress = $OSCOM_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
@@ -787,14 +774,14 @@
                                         'suburb' => osc_output_string_protected($address['suburb']),
                                         'city' => osc_output_string_protected($address['city']),
                                         'postcode' => osc_output_string_protected($address['postcode']),
-                                        'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(osC_Address::getZoneName($address['zone_id']))),
+                                        'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(Address::getZoneName($address['zone_id']))),
                                         'zone_id' => (int)$address['zone_id'],
-                                        'zone_code' => osc_output_string_protected(osC_Address::getZoneCode($address['zone_id'])),
+                                        'zone_code' => osc_output_string_protected(Address::getZoneCode($address['zone_id'])),
                                         'country_id' => osc_output_string_protected($address['country_id']),
-                                        'country_title' => osc_output_string_protected(osC_Address::getCountryName($address['country_id'])),
-                                        'country_iso_code_2' => osc_output_string_protected(osC_Address::getCountryIsoCode2($address['country_id'])),
-                                        'country_iso_code_3' => osc_output_string_protected(osC_Address::getCountryIsoCode3($address['country_id'])),
-                                        'format' => osC_Address::getFormat($address['country_id']),
+                                        'country_title' => osc_output_string_protected(Address::getCountryName($address['country_id'])),
+                                        'country_iso_code_2' => osc_output_string_protected(Address::getCountryIsoCode2($address['country_id'])),
+                                        'country_iso_code_3' => osc_output_string_protected(Address::getCountryIsoCode3($address['country_id'])),
+                                        'format' => Address::getFormat($address['country_id']),
                                         'telephone' => osc_output_string_protected($address['telephone']),
                                         'fax' => osc_output_string_protected($address['fax']));
       }
@@ -813,13 +800,13 @@
     }
 
     public function resetBillingAddress() {
-      global $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
 
       $this->_billing_address = array('zone_id' => STORE_ZONE,
                                       'country_id' => STORE_COUNTRY);
 
-      if ( $osC_Customer->isLoggedOn() && $osC_Customer->hasDefaultAddress() ) {
-        $this->setBillingAddress($osC_Customer->getDefaultAddressID());
+      if ( $OSCOM_Customer->isLoggedOn() && $OSCOM_Customer->hasDefaultAddress() ) {
+        $this->setBillingAddress($OSCOM_Customer->getDefaultAddressID());
       }
     }
 
@@ -892,22 +879,21 @@
     }
 
     private function _cleanUp() {
-      global $osC_Database, $osC_Customer;
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
 
       foreach ( $this->_contents as $item_id => $data ) {
         if ( $data['quantity'] < 1 ) {
           unset($this->_contents[$item_id]);
 
-          if ( $osC_Customer->isLoggedOn() ) {
-            $Qdelete = $osC_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
-            $Qdelete->bindTable(':table_shopping_carts', TABLE_SHOPPING_CARTS);
-            $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+          if ( $OSCOM_Customer->isLoggedOn() ) {
+            $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
+            $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qdelete->bindInt(':item_id', $item_id);
             $Qdelete->execute();
 
-            $Qdelete = $osC_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
-            $Qdelete->bindTable(':table_shopping_carts_custom_variants_values', TABLE_SHOPPING_CARTS_CUSTOM_VARIANTS_VALUES);
-            $Qdelete->bindInt(':customers_id', $osC_Customer->getID());
+            $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
+            $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qdelete->bindInt(':shopping_carts_item_id', $item_id);
             $Qdelete->execute();
           }
@@ -916,7 +902,9 @@
     }
 
     private function _calculate($set_shipping = true) {
-      global $osC_Currencies, $osC_Tax, $osC_Weight, $osC_Shipping, $osC_OrderTotal;
+      $OSCOM_Weight = Registry::get('Weight');
+      $OSCOM_Tax = Registry::get('Tax');
+      $OSCOM_Currencies = Registry::get('Currencies');
 
       $this->_sub_total = 0;
       $this->_total = 0;
@@ -932,13 +920,13 @@
 
       if ( $this->hasContents() ) {
         foreach ( $this->_contents as $data ) {
-          $products_weight = $osC_Weight->convert($data['weight'], $data['weight_class_id'], SHIPPING_WEIGHT_UNIT);
+          $products_weight = $OSCOM_Weight->convert($data['weight'], $data['weight_class_id'], SHIPPING_WEIGHT_UNIT);
           $this->_weight += $products_weight * $data['quantity'];
 
-          $tax = $osC_Tax->getTaxRate($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
-          $tax_description = $osC_Tax->getTaxRateDescription($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
+          $tax = $OSCOM_Tax->getTaxRate($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
+          $tax_description = $OSCOM_Tax->getTaxRateDescription($data['tax_class_id'], $this->getTaxingAddress('country_id'), $this->getTaxingAddress('zone_id'));
 
-          $shown_price = $osC_Currencies->addTaxRateToPrice($data['price'], $tax, $data['quantity']);
+          $shown_price = $OSCOM_Currencies->addTaxRateToPrice($data['price'], $tax, $data['quantity']);
 
           $this->_sub_total += $shown_price;
           $this->_total += $shown_price;
@@ -975,34 +963,22 @@
         }
 
         if ( $set_shipping === true ) {
-          if ( !class_exists('osC_Shipping') ) {
-            include('includes/classes/shipping.php');
-          }
-
           if ( !$this->hasShippingMethod() || ($this->getShippingMethod('is_cheapest') === true) ) {
-            $osC_Shipping = new osC_Shipping();
-            $this->setShippingMethod($osC_Shipping->getCheapestQuote(), false);
+            $OSCOM_Shipping = new Shipping();
+            $this->setShippingMethod($OSCOM_Shipping->getCheapestQuote(), false);
           } else {
-            $osC_Shipping = new osC_Shipping($this->getShippingMethod('id'));
-            $this->setShippingMethod($osC_Shipping->getQuote(), false);
+            $OSCOM_Shipping = new Shipping($this->getShippingMethod('id'));
+            $this->setShippingMethod($OSCOM_Shipping->getQuote(), false);
           }
+
+          Registry::set('Shipping', $OSCOM_Shipping, true);
         }
 
-        if ( !class_exists('osC_OrderTotal') ) {
-          include('includes/classes/order_total.php');
-        }
+        $OSCOM_OrderTotal = new OrderTotal();
+        $this->_order_totals = $OSCOM_OrderTotal->getResult();
 
-        $osC_OrderTotal = new osC_OrderTotal();
-        $this->_order_totals = $osC_OrderTotal->getResult();
+        Registry::set('OrderTotal', $OSCOM_OrderTotal, true);
       }
-    }
-
-    static private function _uasortProductsByDateAdded($a, $b) {
-      if ($a['date_added'] == $b['date_added']) {
-        return strnatcasecmp($a['name'], $b['name']);
-      }
-
-      return ($a['date_added'] > $b['date_added']) ? -1 : 1;
     }
   }
 ?>

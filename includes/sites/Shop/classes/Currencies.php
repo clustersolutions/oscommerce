@@ -1,30 +1,28 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Currencies {
-    var $currencies = array();
+  namespace osCommerce\OM\Site\Shop;
 
-// class constructor
-    function osC_Currencies() {
-      global $osC_Database;
+  use osCommerce\OM\Registry;
 
-      $Qcurrencies = $osC_Database->query('select * from :table_currencies');
-      $Qcurrencies->bindTable(':table_currencies', TABLE_CURRENCIES);
+  class Currencies {
+    protected $currencies = array();
+
+    public function __construct() {
+      $OSCOM_Database = Registry::get('Database');
+
+      $Qcurrencies = $OSCOM_Database->query('select * from :table_currencies');
       $Qcurrencies->setCache('currencies');
       $Qcurrencies->execute();
 
-      while ($Qcurrencies->next()) {
+      while ( $Qcurrencies->next() ) {
         $this->currencies[$Qcurrencies->value('code')] = array('id' => $Qcurrencies->valueInt('currencies_id'),
                                                                'title' => $Qcurrencies->value('title'),
                                                                'symbol_left' => $Qcurrencies->value('symbol_left'),
@@ -36,36 +34,33 @@
       $Qcurrencies->freeResult();
     }
 
-// class methods
-    function format($number, $currency_code = '', $currency_value = '') {
-      global $osC_Language;
+    public function format($number, $currency_code = null, $currency_value = null) {
+      $OSCOM_Language = Registry::get('Language');
 
-      if (empty($currency_code) || ($this->exists($currency_code) == false)) {
+      if ( empty($currency_code) || ($this->exists($currency_code) == false) ) {
         $currency_code = (isset($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY);
       }
 
-      if (empty($currency_value) || (is_numeric($currency_value) == false)) {
+      if ( empty($currency_value) || !is_numeric($currency_value) ) {
         $currency_value = $this->currencies[$currency_code]['value'];
       }
 
-      return $this->currencies[$currency_code]['symbol_left'] . number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $osC_Language->getNumericDecimalSeparator(), $osC_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
+      return $this->currencies[$currency_code]['symbol_left'] . number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
     }
 
-    function formatRaw($number, $currency_code = '', $currency_value = '') {
-      if (empty($currency_code) || ($this->exists($currency_code) == false)) {
+    public function formatRaw($number, $currency_code = null, $currency_value = null) {
+      if ( empty($currency_code) || ($this->exists($currency_code) == false) ) {
         $currency_code = (isset($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY);
       }
 
-      if (empty($currency_value) || (is_numeric($currency_value) == false)) {
+      if ( empty($currency_value) || !is_numeric($currency_value) ) {
         $currency_value = $this->currencies[$currency_code]['value'];
       }
 
       return number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
     }
 
-    function addTaxRateToPrice($price, $tax_rate, $quantity = 1) {
-      global $osC_Tax;
-
+    public function addTaxRateToPrice($price, $tax_rate, $quantity = 1) {
       $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_rate > 0) ) {
@@ -75,33 +70,31 @@
       return osc_round($price * $quantity, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
     }
 
-    function displayPrice($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
-      global $osC_Tax;
+    public function displayPrice($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
+      $OSCOM_Tax = Registry::get('Tax');
 
       $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
-        $price += osc_round($price * ($osC_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += osc_round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->format($price * $quantity, $currency_code, $currency_value);
     }
 
-    function displayPriceRaw($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
-      global $osC_Tax;
+    public function displayPriceRaw($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
+      $OSCOM_Tax = Registry::get('Tax');
 
       $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
-        $price += osc_round($price * ($osC_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += osc_round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->formatRaw($price * $quantity, $currency_code, $currency_value);
     }
 
-    function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $force = false, $currency_code = '', $currency_value = '') {
-      global $osC_Tax;
-
+    public function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $force = false, $currency_code = null, $currency_value = null) {
       $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (($force === true) || (DISPLAY_PRICE_WITH_TAX == '1')) && ($tax_rate > 0) ) {
@@ -111,38 +104,34 @@
       return $this->format($price * $quantity, $currency_code, $currency_value);
     }
 
-    function exists($code) {
-      if (isset($this->currencies[$code])) {
-        return true;
-      }
-
-      return false;
+    public function exists($code) {
+      return isset($this->currencies[$code]);
     }
 
-    function decimalPlaces($code) {
-      if ($this->exists($code)) {
+    public function decimalPlaces($code) {
+      if ( $this->exists($code) ) {
         return $this->currencies[$code]['decimal_places'];
       }
 
       return false;
     }
 
-    function value($code) {
-      if ($this->exists($code)) {
+    public function value($code) {
+      if ( $this->exists($code) ) {
         return $this->currencies[$code]['value'];
       }
 
       return false;
     }
 
-    function getData() {
+    public function getData() {
       return $this->currencies;
     }
 
-    function getCode($id = '') {
-      if (is_numeric($id)) {
-        foreach ($this->currencies as $key => $value) {
-          if ($value['id'] == $id) {
+    public function getCode($id = null) {
+      if ( is_numeric($id) ) {
+        foreach ( $this->currencies as $key => $value ) {
+          if ( $value['id'] == $id ) {
             return $key;
           }
         }
@@ -151,8 +140,8 @@
       }
     }
 
-    function getID($code = '') {
-      if (empty($code)) {
+    public function getID($code = null) {
+      if ( empty($code) ) {
         $code = $_SESSION['currency'];
       }
 

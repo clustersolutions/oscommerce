@@ -1,14 +1,18 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Customer {
+  namespace osCommerce\OM\Site\Shop;
+
+  use osCommerce\OM\Registry;
+
+  class Customer {
     protected $_is_logged_on = false;
     protected $_data = array();
 
@@ -85,8 +89,8 @@
     function getCountryID() {
       static $country_id = null;
 
-      if (is_null($country_id)) {
-        if (isset($this->_data['country_id'])) {
+      if ( is_null($country_id) ) {
+        if ( isset($this->_data['country_id']) ) {
           $country_id = $this->_data['country_id'];
         }
       }
@@ -97,8 +101,8 @@
     function getZoneID() {
       static $zone_id = null;
 
-      if (is_null($zone_id)) {
-        if (isset($this->_data['zone_id'])) {
+      if ( is_null($zone_id) ) {
+        if ( isset($this->_data['zone_id']) ) {
           $zone_id = $this->_data['zone_id'];
         }
       }
@@ -109,8 +113,8 @@
     function getDefaultAddressID() {
       static $id = null;
 
-      if (is_null($id)) {
-        if (isset($this->_data['default_address_id'])) {
+      if ( is_null($id) ) {
+        if ( isset($this->_data['default_address_id']) ) {
           $id = $this->_data['default_address_id'];
         }
       }
@@ -119,17 +123,16 @@
     }
 
     function setCustomerData($customer_id = -1) {
-      global $osC_Database;
+      $OSCOM_Database = Registry::get('Database');
 
       $this->_data = array();
 
-      if (is_numeric($customer_id) && ($customer_id > 0)) {
-        $Qcustomer = $osC_Database->query('select customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id from :table_customers where customers_id = :customers_id');
-        $Qcustomer->bindTable(':table_customers', TABLE_CUSTOMERS);
+      if ( is_numeric($customer_id) && ($customer_id > 0) ) {
+        $Qcustomer = $OSCOM_Database->query('select customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id from :table_customers where customers_id = :customers_id');
         $Qcustomer->bindInt(':customers_id', $customer_id);
         $Qcustomer->execute();
 
-        if ($Qcustomer->numberOfRows() === 1) {
+        if ( $Qcustomer->numberOfRows() === 1 ) {
           $this->setIsLoggedOn(true);
           $this->setID($customer_id);
           $this->setGender($Qcustomer->value('customers_gender'));
@@ -137,14 +140,13 @@
           $this->setLastName($Qcustomer->value('customers_lastname'));
           $this->setEmailAddress($Qcustomer->value('customers_email_address'));
 
-          if (is_numeric($Qcustomer->value('customers_default_address_id')) && ($Qcustomer->value('customers_default_address_id') > 0)) {
-            $Qab = $osC_Database->query('select entry_country_id, entry_zone_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
-            $Qab->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
+          if ( is_numeric($Qcustomer->value('customers_default_address_id')) && ($Qcustomer->value('customers_default_address_id') > 0) ) {
+            $Qab = $OSCOM_Database->query('select entry_country_id, entry_zone_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
             $Qab->bindInt(':address_book_id', $Qcustomer->value('customers_default_address_id'));
             $Qab->bindInt(':customers_id', $customer_id);
             $Qab->execute();
 
-            if ($Qab->numberOfRows() === 1) {
+            if ( $Qab->numberOfRows() === 1 ) {
               $this->setCountryID($Qab->value('entry_country_id'));
               $this->setZoneID($Qab->value('entry_zone_id'));
               $this->setDefaultAddressID($Qcustomer->value('customers_default_address_id'));
@@ -157,15 +159,15 @@
         $Qcustomer->freeResult();
       }
 
-      if (sizeof($this->_data) > 0) {
+      if ( sizeof($this->_data) > 0 ) {
         $_SESSION['osC_Customer_data'] = $this->_data;
-      } elseif (isset($_SESSION['osC_Customer_data'])) {
+      } elseif ( isset($_SESSION['osC_Customer_data']) ) {
         $this->reset();
       }
     }
 
     function setIsLoggedOn($state) {
-      if ($state === true) {
+      if ( $state === true ) {
         $this->_is_logged_on = true;
       } else {
         $this->_is_logged_on = false;
@@ -173,7 +175,7 @@
     }
 
     function isLoggedOn() {
-      if ($this->_is_logged_on === true) {
+      if ( $this->_is_logged_on === true ) {
         return true;
       }
 
@@ -181,7 +183,7 @@
     }
 
     function setID($id) {
-      if (is_numeric($id) && ($id > 0)) {
+      if ( is_numeric($id) && ($id > 0) ) {
         $this->_data['id'] = $id;
       } else {
         $this->_data['id'] = false;
@@ -189,7 +191,7 @@
     }
 
     function setDefaultAddressID($id) {
-      if (is_numeric($id) && ($id > 0)) {
+      if ( is_numeric($id) && ($id > 0) ) {
         $this->_data['default_address_id'] = $id;
       } else {
         $this->_data['default_address_id'] = false;
@@ -197,7 +199,7 @@
     }
 
     function hasDefaultAddress() {
-      if (isset($this->_data['default_address_id']) && is_numeric($this->_data['default_address_id'])) {
+      if ( isset($this->_data['default_address_id']) && is_numeric($this->_data['default_address_id']) ) {
         return true;
       }
 
@@ -236,7 +238,7 @@
       $this->_is_logged_on = false;
       $this->_data = array();
 
-      if (isset($_SESSION['osC_Customer_data'])) {
+      if ( isset($_SESSION['osC_Customer_data']) ) {
         unset($_SESSION['osC_Customer_data']);
       }
     }
