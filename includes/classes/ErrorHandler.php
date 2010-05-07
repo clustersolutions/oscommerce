@@ -130,7 +130,7 @@
     }
 
     public static function import($filename) {
-      $error_log = array_reverse(file($filename));
+      $error_log = file($filename);
       unlink($filename);
 
       if ( !is_resource(self::$_resource) ) {

@@ -87,7 +87,7 @@
       if ( isset($application) ) {
         if ( !self::siteApplicationExists($application) ) {
           trigger_error('Application \'' . $application . '\' does not exist for Site \'' . self::getSite() . '\', using default \'' . self::getDefaultSiteApplication() . '\'', E_USER_ERROR);
-          $application = self::getDefaultSiteApplication();
+          $application = null;
         }
       } else {
         if ( !empty($_GET) ) {
@@ -97,19 +97,17 @@
             $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1))));
           }
 
-          if ( empty($requested_application) ) {
-            $application = self::getDefaultSiteApplication();
-          } else {
-            if ( self::siteApplicationExists($requested_application) ) {
-              $application = $requested_application;
-            }
+          if ( !empty($requested_application) && self::siteApplicationExists($requested_application) ) {
+            $application = $requested_application;
           }
         }
       }
 
-      if ( !empty($application) ) {
-        self::$_application = $application;
+      if ( empty($application) ) {
+        $application = self::getDefaultSiteApplication();
       }
+
+      self::$_application = $application;
     }
 
     public static function getSiteApplication() {
@@ -138,7 +136,7 @@
               }
             }
           } elseif ( isset($namespace[4]) && ($namespace[4] == 'Module') ) {
-            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/modules/' . implode('/', array_slice($namespace, 5)) . '.php';
+            $class_file = self::BASE_DIRECTORY . 'sites/' . implode('/', array_slice($namespace, 3)) . '.php';
           } elseif ( isset($namespace[4]) && ($namespace[4] == 'Controller') ) {
             $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/Controller.php';
           } else {

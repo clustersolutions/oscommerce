@@ -38,7 +38,6 @@
       Registry::set('Cache', new Cache());
       Registry::set('Database', Database::initialize());
 
-// set the application parameters
       $Qcfg = Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
       $Qcfg->setCache('configuration');
       $Qcfg->execute();
