@@ -88,4 +88,5 @@
 
 <script type="text/javascript">
   $('#adminMenu .apps').droppy({speed: 0});
+  $('#adminMenu .apps li img').tipsy();
 </script>
