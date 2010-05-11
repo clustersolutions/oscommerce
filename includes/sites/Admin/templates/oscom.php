@@ -48,7 +48,7 @@
 <script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/general.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/datatable.js'); ?>"></script>
 
-<link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/default/stylesheets/general.css'); ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/oscom/stylesheets/general.css'); ?>" />
 
 <script type="text/javascript">
   var pageURL = '<?php echo OSCOM::getLink(); ?>';
@@ -72,7 +72,7 @@
 
 <?php
   if ( $OSCOM_Template->hasPageHeader() ) {
-    include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/header.php');
+    include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/oscom/header.php');
   }
 
   if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
@@ -126,7 +126,7 @@
 ?>
 
 <div id="footer">
-  <?php include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/default/footer.php'); ?>
+  <?php include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/oscom/footer.php'); ?>
 </div>
 
 <?php

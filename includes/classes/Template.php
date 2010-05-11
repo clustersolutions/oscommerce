@@ -167,7 +167,7 @@ class osC_Template extends Template {}
  * @return object
  */
 
-    function &setup($module) {
+    public static function setup($module) {
       $group = basename($_SERVER['SCRIPT_FILENAME']);
 
       if (($pos = strrpos($group, '.')) !== false) {

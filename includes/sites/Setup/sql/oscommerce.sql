@@ -877,7 +877,7 @@ INSERT INTO osc_configuration (configuration_title, configuration_key, configura
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Language', 'DEFAULT_LANGUAGE', 'en_US', 'Default Language', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Order Status For New Orders', 'DEFAULT_ORDERS_STATUS_ID', '1', 'When a new order is created, this order status will be assigned to it.', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Image Group', 'DEFAULT_IMAGE_GROUP_ID', '2', 'Default image group.', '6', '0', now());
-INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Template', 'DEFAULT_TEMPLATE', 'default', 'Default Template', '6', '0', now());
+INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Default Template', 'DEFAULT_TEMPLATE', 'oscom', 'Default Template', '6', '0', now());
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Country of Origin', 'SHIPPING_ORIGIN_COUNTRY', '223', 'Select the country of origin to be used in shipping quotes.', '7', '1', 'osCommerce\\OM\\Site\\Shop\\Address::getCountryName', 'osc_cfg_set_countries_pulldown_menu', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) VALUES ('Postal Code', 'SHIPPING_ORIGIN_ZIP', 'NONE', 'Enter the Postal Code (ZIP) of the Store to be used in shipping quotes.', '7', '2', now());
@@ -5918,7 +5918,7 @@ INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_z
 
 # Templates
 
-INSERT INTO osc_templates VALUES (1, 'osCommerce Default Template', 'default', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
+INSERT INTO osc_templates VALUES (1, 'osCommerce Online Merchant', 'oscom', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
 
 INSERT INTO osc_templates_boxes VALUES (1,'Best Sellers','best_sellers','osCommerce','http://www.oscommerce.com','boxes');
 INSERT INTO osc_templates_boxes VALUES (2,'Categories','categories','osCommerce','http://www.oscommerce.com','boxes');

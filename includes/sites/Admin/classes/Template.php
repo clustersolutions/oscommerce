@@ -14,7 +14,7 @@
 
   class Template extends \osCommerce\OM\Template {
     public function __construct() {
-      $this->set('default');
+      $this->set('oscom');
     }
 
     public function getIcon($size = 16, $icon = null, $title = null) {
