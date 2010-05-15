@@ -12,34 +12,14 @@
 
   use osCommerce\OM\Registry;
   use osCommerce\OM\Site\Shop\CategoryTree;
+  use osCommerce\OM\Site\Shop\Category;
 
   class CategoryPath implements \osCommerce\OM\Site\Shop\ServiceInterface {
     public static function start() {
-      self::process();
-
       Registry::set('CategoryTree', new CategoryTree());
+      Registry::set('Category', new Category());
 
       return true;
-    }
-
-    public static function process($id = null) {
-      global $cPath, $cPath_array, $current_category_id;
-
-      $cPath = '';
-      $cPath_array = array();
-      $current_category_id = 0;
-
-      if ( isset($_GET['cPath']) ) {
-        $cPath = $_GET['cPath'];
-      } elseif ( isset($id) ) {
-        $cPath = Registry::get('CategoryTree')->buildBreadcrumb($id);
-      }
-
-      if ( !empty($cPath) ) {
-        $cPath_array = array_unique(array_filter(explode('_', $cPath), 'is_numeric'));
-        $cPath = implode('_', $cPath_array);
-        $current_category_id = end($cPath_array);
-      }
     }
 
     public static function stop() {

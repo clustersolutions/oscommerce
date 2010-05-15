@@ -17,6 +17,10 @@
  */
 
   class Category {
+    protected $_id;
+    protected $_title;
+    protected $_image;
+    protected $_parent_id;
 
 /**
  * An array containing the category information
@@ -34,11 +38,24 @@
  * @access public
  */
 
-    public function __construct($id) {
+    public function __construct($id = null) {
       $OSCOM_CategoryTree = Registry::get('CategoryTree');
 
-      if ( $OSCOM_CategoryTree->exists($id) ) {
+      if ( !isset($id) && isset($_GET['cPath']) ) {
+        $cPath_array = array_unique(array_filter(explode('_', $_GET['cPath']), 'is_numeric'));
+
+        if ( !empty($cPath_array) ) {
+          $id = end($cPath_array);
+        }
+      }
+
+      if ( isset($id) && $OSCOM_CategoryTree->exists($id) ) {
         $this->_data = $OSCOM_CategoryTree->getData($id);
+
+        $this->_id = $this->_data['id'];
+        $this->_title = $this->_data['name'];
+        $this->_image = $this->_data['image'];
+        $this->_parent_id = $this->_data['parent_id'];
       }
     }
 
@@ -50,7 +67,7 @@
  */
 
     public function getID() {
-      return $this->_data['id'];
+      return $this->_id;
     }
 
 /**
@@ -61,7 +78,7 @@
  */
 
     public function getTitle() {
-      return $this->_data['name'];
+      return $this->_title;
     }
 
 /**
@@ -72,7 +89,7 @@
  */
 
     public function hasImage() {
-      return ( !empty($this->_data['image']) );
+      return ( !empty($this->_image) );
     }
 
 /**
@@ -83,7 +100,7 @@
  */
 
     public function getImage() {
-      return $this->_data['image'];
+      return $this->_image;
     }
 
 /**
@@ -94,7 +111,7 @@
  */
 
     public function hasParent() {
-      return ( $this->_data['parent_id'] > 0 );
+      return ( $this->_parent_id > 0 );
     }
 
 /**
@@ -105,7 +122,7 @@
  */
 
     public function getParent() {
-      return $this->_data['parent_id'];
+      return $this->_parent_id;
     }
 
 /**
@@ -118,7 +135,17 @@
     public function getPath() {
       $OSCOM_CategoryTree = Registry::get('CategoryTree');
 
-      return $OSCOM_CategoryTree->buildBreadcrumb($this->_data['id']);
+      return $OSCOM_CategoryTree->buildBreadcrumb($this->_id);
+    }
+
+    public function getPathArray($id = null) {
+      $cPath_array = explode('_', $this->getPath());
+
+      if ( isset($id) ) {
+        return $cPath_array[$id];
+      }
+
+      return $cPath_array;
     }
 
 /**

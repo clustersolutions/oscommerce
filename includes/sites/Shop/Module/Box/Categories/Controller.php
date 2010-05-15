@@ -25,12 +25,11 @@
     }
 
     public function initialize() {
-      global $cPath;
-
       $OSCOM_CategoryTree = Registry::get('CategoryTree');
+      $OSCOM_Category = Registry::get('Category');
 
       $OSCOM_CategoryTree->reset();
-      $OSCOM_CategoryTree->setCategoryPath($cPath, '<b>', '</b>');
+      $OSCOM_CategoryTree->setCategoryPath($OSCOM_Category->getPath(), '<b>', '</b>');
       $OSCOM_CategoryTree->setParentGroupString('', '');
       $OSCOM_CategoryTree->setParentString('', '-&gt;');
       $OSCOM_CategoryTree->setChildString('', '<br />');

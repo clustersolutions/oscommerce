@@ -16,24 +16,24 @@
     var $visits = array();
 
     public function __construct() {
-      if ( !isset($_SESSION['osC_RecentlyVisited_data']) ) {
-        $_SESSION['osC_RecentlyVisited_data'] = array();
+      if ( !isset($_SESSION['Shop']['RecentlyVisited']) ) {
+        $_SESSION['Shop']['RecentlyVisited'] = array();
       }
 
-      $this->visits =& $_SESSION['osC_RecentlyVisited_data'];
+      $this->visits =& $_SESSION['Shop']['RecentlyVisited'];
     }
 
     function initialize() {
+      $OSCOM_Category = Registry::get('Category');
+
       if ( SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS == '1' ) {
         if ( Registry::exists('Product') && (Registry::get('Product') instanceof Product) ) {
           $this->setProduct(Registry::get('Product')->getMasterID());
         }
       }
 
-      if ( SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES == '1' ) {
-        if ( Registry::exists('Category') && (Registry::get('Category') instanceof Category) ) {
-          $this->setCategory(Registry::get('Category')->getID());
-        }
+      if ( (SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES == '1') && ($OSCOM_Category->getID() > 0) ) {
+        $this->setCategory($OSCOM_Category->getID());
       }
 
       if ( SERVICE_RECENTLY_VISITED_SHOW_SEARCHES == '1' ) {
