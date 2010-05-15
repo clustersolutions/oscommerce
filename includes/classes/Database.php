@@ -681,12 +681,18 @@
     }
 
     function executeRandom() {
+// Automatically bind table names
+      $this->sql_query = str_replace(':table_', DB_TABLE_PREFIX, $this->sql_query);
+
       $this->query_handler = $this->db_class->randomQuery($this->sql_query);
 
       return $this->query_handler;
     }
 
     function executeRandomMulti() {
+// Automatically bind table names
+      $this->sql_query = str_replace(':table_', DB_TABLE_PREFIX, $this->sql_query);
+
       $this->query_handler = $this->db_class->randomQueryMulti($this->sql_query);
 
       return $this->query_handler;

@@ -47,9 +47,8 @@
       $application = 'osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
-      Registry::get('Language')->load(self::$_application);
-
-      Registry::set('Template', Template::setup(self::$_application));
+      Registry::set('Template', new Template());
+      Registry::get('Template')->setApplication(Registry::get('Application'));
     }
 
     public static function getDefaultApplication() {

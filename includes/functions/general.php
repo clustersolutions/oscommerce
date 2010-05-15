@@ -8,6 +8,8 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Registry;
+
 /**
  * Redirect to a URL address
  *
@@ -85,7 +87,7 @@
   function osc_get_all_get_params($exclude = null) {
     $params = '';
 
-    $array = array(OSCOM_Registry::get('Session')->getName(),
+    $array = array(Registry::get('Session')->getName(),
                    'error',
                    'x',
                    'y');

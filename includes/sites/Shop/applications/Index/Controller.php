@@ -17,7 +17,7 @@
     protected function initialize() {}
 
     protected function process() {
-      $this->_page_title = OSCOM::getDef('heading_title');
+      $this->_page_title = sprintf(OSCOM::getDef('index_heading'), STORE_NAME);
     }
   }
 ?>

@@ -8,6 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Registry;
+
 /**
  * Generate an internal URL address for the catalog side
  *
@@ -176,9 +179,9 @@
  */
 
   function osc_draw_image_submit_button($image, $title = null, $parameters = null) {
-    global $osC_Language;
+    $OSCOM_Language = Registry::get('Language');
 
-    $image_submit = '<input type="image" src="' . osc_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '"';
+    $image_submit = '<input type="image" src="' . osc_output_string('includes/languages/' . $OSCOM_Language->getCode() . '/images/buttons/' . $image) . '"';
 
     if (!empty($title)) {
       $image_submit .= ' alt="' . osc_output_string($title) . '" title="' . osc_output_string($title) . '"';
@@ -505,8 +508,8 @@
  */
 
   function osc_draw_hidden_session_id_field() {
-    if (OSCOM_Registry::get('Session')->hasStarted() && !osc_empty(SID)) {
-      return osc_draw_hidden_field(OSCOM_Registry::get('Session')->getName(), OSCOM_Registry::get('Session')->getID());
+    if ( Registry::get('Session')->hasStarted() && !osc_empty(SID) ) {
+      return osc_draw_hidden_field(Registry::get('Session')->getName(), Registry::get('Session')->getID());
     }
   }
 

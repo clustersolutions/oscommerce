@@ -5920,27 +5920,27 @@ INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_z
 
 INSERT INTO osc_templates VALUES (1, 'osCommerce Online Merchant', 'oscom', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
 
-INSERT INTO osc_templates_boxes VALUES (1,'Best Sellers','best_sellers','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (2,'Categories','categories','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (3,'Currencies','currencies','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (4,'Information','information','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (5,'Languages','languages','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (6,'Manufacturer Info','manufacturer_info','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (7,'Manufacturers','manufacturers','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (8,'Order History','order_history','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (9,'Product Notifications','product_notifications','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (10,'Reviews','reviews','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (11,'Search','search','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (12,'Shopping Cart','shopping_cart','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (13,'Specials','specials','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (14,'Tell a Friend','tell_a_friend','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (15,'What\'s New','whats_new','osCommerce','http://www.oscommerce.com','boxes');
-INSERT INTO osc_templates_boxes VALUES (16,'New Products','new_products','osCommerce','http://www.oscommerce.com','content');
-INSERT INTO osc_templates_boxes VALUES (17,'Upcoming Products','upcoming_products','osCommerce','http://www.oscommerce.com','content');
-INSERT INTO osc_templates_boxes VALUES (18,'Recently Visited','recently_visited','osCommerce','http://www.oscommerce.com','content');
-INSERT INTO osc_templates_boxes VALUES (19,'Also Purchased Products','also_purchased_products','osCommerce','http://www.oscommerce.com','content');
-INSERT INTO osc_templates_boxes VALUES (20,'Date Available','date_available','osCommerce','http://www.oscommerce.com','product_attributes');
-INSERT INTO osc_templates_boxes VALUES (21,'Manufacturers','manufacturers','osCommerce','http://www.oscommerce.com','product_attributes');
+INSERT INTO osc_templates_boxes VALUES (1, 'Best Sellers', 'BestSellers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (2, 'Categories', 'Categories', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (3, 'Currencies', 'Currencies', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (4, 'Information', 'Information', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (5, 'Languages', 'Languages', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (6, 'Manufacturer Info', 'ManufacturerInfo', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (7, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (8, 'Order History', 'OrderHistory', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (9, 'Product Notifications', 'ProductNotifications', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (10, 'Reviews', 'Reviews', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (11, 'Search', 'Search', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (12, 'Shopping Cart', 'ShoppingCart', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (13, 'Specials', 'Specials', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (14, 'Tell a Friend', 'TellAFriend', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (15, 'What\'s New', 'WhatsNew', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (16, 'New Products', 'NewProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (17, 'Upcoming Products', 'UpcomingProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (18, 'Recently Visited', 'RecentlyVisited', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (19, 'Also Purchased Products', 'AlsoPurchasedProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (20, 'Date Available', 'DateAvailable', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
+INSERT INTO osc_templates_boxes VALUES (21, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
 
 INSERT INTO osc_templates_boxes_to_pages VALUES (1,2,1,'*','left',100,0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (2,7,1,'*','left',200,0);

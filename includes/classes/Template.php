@@ -10,9 +10,6 @@
 
   namespace osCommerce\OM;
 
-// HPDL following alias to remove
-class osC_Template extends Template {}
-
 /**
  * The Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks
  */
@@ -269,10 +266,6 @@ class osC_Template extends Template {}
  */
 
     function getPageTitle() {
-      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
-        return osc_output_string_protected($this->_page_title);
-      }
-
       return osc_output_string_protected($this->_application->getPageTitle());
     }
 
@@ -301,8 +294,8 @@ class osC_Template extends Template {}
  */
 
     function getBoxModules($group) {
-      if (isset($this->osC_Modules_Boxes) === false) {
-        $this->osC_Modules_Boxes = new osC_Modules('boxes');
+      if ( !isset($this->osC_Modules_Boxes) ) {
+        $this->osC_Modules_Boxes = new Modules('Box');
       }
 
       return $this->osC_Modules_Boxes->getGroup($group);
@@ -316,8 +309,8 @@ class osC_Template extends Template {}
  */
 
     function getContentModules($group) {
-      if (isset($this->osC_Modules_Content) === false) {
-        $this->osC_Modules_Content = new osC_Modules('content');
+      if ( !isset($this->osC_Modules_Content) ) {
+        $this->osC_Modules_Content = new Modules('Content');
       }
 
       return $this->osC_Modules_Content->getGroup($group);
@@ -342,10 +335,6 @@ class osC_Template extends Template {}
  */
 
     function getPageContentsFilename() {
-      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
-        return $this->_page_contents;
-      }
-
       return $this->_application->getPageContent();
     }
 
@@ -399,10 +388,6 @@ class osC_Template extends Template {}
  */
 
     function hasPageTitle() {
-      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
-        return strlen($this->_page_title) > 0;
-      }
-
       return strlen($this->_application->getPageTitle()) > 0;
     }
 
@@ -528,11 +513,6 @@ class osC_Template extends Template {}
  */
 
     function setPageTitle($title) {
-      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
-        $this->_page_title = $title;
-        return true;
-      }
-
       $this->_application->setPageTitle($title);
     }
 
@@ -555,11 +535,6 @@ class osC_Template extends Template {}
  */
 
     function setPageContentsFilename($filename) {
-      if (OSCOM::getSite() == 'Shop') { // HPDL to remove
-        $this->_page_contents = $filename;
-        return true;
-      }
-
       $this->_application->setPageContent($filename);
     }
 
