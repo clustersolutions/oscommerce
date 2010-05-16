@@ -80,12 +80,12 @@
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
-    if ( ($add_session_id === true) && OSCOM_Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+    if ( ($add_session_id === true) && Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
       if (!osc_empty(SID)) {
         $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
-          $_sid = OSCOM_Registry::get('Session')->getName() . '=' . OSCOM_Registry::get('Session')->getID();
+          $_sid = Registry::get('Session')->getName() . '=' . Registry::get('Session')->getID();
         }
       }
     }
@@ -206,9 +206,9 @@
  */
 
   function osc_draw_image_button($image, $title = null, $parameters = null) {
-    global $osC_Language;
+    $OSCOM_Language = Registry::get('Language');
 
-    return osc_image('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image, $title, null, null, $parameters);
+    return osc_image('includes/languages/' . $OSCOM_Language->getCode() . '/images/buttons/' . $image, $title, null, null, $parameters);
   }
 
 /**

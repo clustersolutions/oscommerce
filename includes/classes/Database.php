@@ -806,8 +806,6 @@
     }
 
     function getBatchPagesPullDownMenu($batch_keyword = 'page', $parameters = '') {
-      global $osC_Language;
-
       $number_of_pages = ceil($this->batch_size / $this->batch_rows);
 
       if ( $number_of_pages > 1 ) {
@@ -832,19 +830,17 @@
           }
         }
 
-        $string = '<form action="' . osc_href_link(basename($_SERVER['SCRIPT_FILENAME'])) . '" action="get">' . $hidden_parameter .
-                  sprintf($osC_Language->get('result_set_current_page'), osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onchange="this.form.submit();"'), $number_of_pages) .
+        $string = '<form action="' . OSCOM::getLink(null, null) . '" action="get">' . $hidden_parameter .
+                  sprintf(OSCOM::getDef('result_set_current_page'), osc_draw_pull_down_menu($batch_keyword, $pages_array, $this->batch_number, 'onchange="this.form.submit();"'), $number_of_pages) .
                   osc_draw_hidden_session_id_field() . '</form>';
       } else {
-        $string = sprintf($osC_Language->get('result_set_current_page'), 1, 1);
+        $string = sprintf(OSCOM::getDef('result_set_current_page'), 1, 1);
       }
 
       return $string;
     }
 
     function getBatchPreviousPageLink($batch_keyword = 'page', $parameters = '') {
-      global $osC_Language;
-
       $get_parameter = '';
 
       if ( !empty($parameters) ) {
@@ -863,12 +859,12 @@
         $back_string = osc_icon('nav_back.png');
         $back_grey_string = osc_icon('nav_back_grey.png');
       } else {
-        $back_string = $osC_Language->get('result_set_previous_page');
-        $back_grey_string = $osC_Language->get('result_set_previous_page');
+        $back_string = OSCOM::getDef('result_set_previous_page');
+        $back_grey_string = OSCOM::getDef('result_set_previous_page');
       }
 
       if ( $this->batch_number > 1 ) {
-        $string = osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $back_string);
+        $string = osc_link_object(OSCOM::getLink(null, null, $get_parameter . $batch_keyword . '=' . ($this->batch_number - 1)), $back_string);
       } else {
         $string = $back_grey_string;
       }
@@ -879,8 +875,6 @@
     }
 
     function getBatchNextPageLink($batch_keyword = 'page', $parameters = '') {
-      global $osC_Language;
-
       $number_of_pages = ceil($this->batch_size / $this->batch_rows);
 
       $get_parameter = '';
@@ -901,14 +895,14 @@
         $forward_string = osc_icon('nav_forward.png');
         $forward_grey_string = osc_icon('nav_forward_grey.png');
       } else {
-        $forward_string = $osC_Language->get('result_set_next_page');
-        $forward_grey_string = $osC_Language->get('result_set_next_page');
+        $forward_string = OSCOM::getDef('result_set_next_page');
+        $forward_grey_string = OSCOM::getDef('result_set_next_page');
       }
 
       $string = '&nbsp;';
 
       if ( ( $this->batch_number < $number_of_pages ) && ( $number_of_pages != 1 ) ) {
-        $string .= osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)), $forward_string);
+        $string .= osc_link_object(OSCOM::getLink(null, null, $get_parameter . $batch_keyword . '=' . ($this->batch_number + 1)), $forward_string);
       } else {
         $string .= $forward_grey_string;
       }
