@@ -11,11 +11,10 @@
   namespace osCommerce\OM\Site\Shop\Module\Service;
 
   use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\Banner;
 
   class Banner implements \osCommerce\OM\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Banner', new Banner());
+      Registry::set('Banner', new \osCommerce\OM\Site\Shop\Banner());
 
       $OSCOM_Banner = Registry::get('Banner');
 
