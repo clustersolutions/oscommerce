@@ -95,20 +95,20 @@
       }
 
       if ( !$OSCOM_Database->isError() ) {
-        $services = array('output_compression',
-                          'session',
-                          'language',
-                          'debug',
-                          'currencies',
-                          'core',
-                          'simple_counter',
-                          'category_path',
-                          'breadcrumb',
-                          'whos_online',
+        $services = array('OutputCompression',
+                          'Session',
+                          'Language',
+                          'Debug',
+                          'Currencies',
+                          'Core',
+                          'SimpleCounter',
+                          'CategoryPath',
+                          'Breadcrumb',
+                          'WhosOnline',
   //                        'banner',
-                          'specials',
-                          'reviews',
-                          'recently_visited');
+                          'Specials',
+                          'Reviews',
+                          'RecentlyVisited');
 
         $installed = array();
 

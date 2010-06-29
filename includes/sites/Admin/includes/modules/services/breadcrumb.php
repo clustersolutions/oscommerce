@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_breadcrumb_Admin {
+  class osC_Services_Breadcrumb_Admin {
     var $title,
         $description,
         $uninstallable = true,
         $depends,
         $precedes;
 
-    function osC_Services_breadcrumb_Admin() {
+    function osC_Services_Breadcrumb_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/breadcrumb.php');

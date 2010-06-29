@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_category_path_Admin {
+  class osC_Services_CategoryPath_Admin {
     var $title,
         $description,
         $uninstallable = false,
         $depends,
         $precedes;
 
-    function osC_Services_category_path_Admin() {
+    function osC_Services_CategoryPath_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/category_path.php');

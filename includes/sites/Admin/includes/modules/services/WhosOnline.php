@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_whos_online_Admin {
+  class osC_Services_WhosOnline_Admin {
     var $title,
         $description,
         $uninstallable = true,
-        $depends = array('session', 'core'),
+        $depends = array('Session', 'Core'),
         $precedes;
 
-    function osC_Services_whos_online_Admin() {
+    function osC_Services_WhosOnline_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/whos_online.php');

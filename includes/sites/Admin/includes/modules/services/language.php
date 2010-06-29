@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_language_Admin {
+  class osC_Services_Language_Admin {
     var $title,
         $description,
         $uninstallable = false,
-        $depends = 'session',
+        $depends = 'Session',
         $precedes;
 
-    function osC_Services_language_Admin() {
+    function osC_Services_Language_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/language.php');

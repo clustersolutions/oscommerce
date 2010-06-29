@@ -15,9 +15,7 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Cache;
 
-  include(OSCOM::BASE_DIRECTORY . 'classes/shipping.php');
-
-  class osC_Shipping_Admin extends osC_Shipping {
+  class osC_Shipping_Admin extends \osCommerce\OM\Site\Shop\Shipping {
     var $_group = 'shipping';
 
 // class methods

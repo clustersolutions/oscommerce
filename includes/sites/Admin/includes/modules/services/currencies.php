@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_currencies_Admin {
+  class osC_Services_Currencies_Admin {
     var $title,
         $description,
         $uninstallable = false,
-        $depends = 'language',
+        $depends = 'Language',
         $precedes;
 
-    function osC_Services_currencies_Admin() {
+    function osC_Services_Currencies_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/currencies.php');

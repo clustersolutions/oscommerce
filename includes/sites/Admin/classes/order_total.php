@@ -15,9 +15,7 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Cache;
 
-  include(OSCOM::BASE_DIRECTORY . 'classes/order_total.php');
-
-  class osC_OrderTotal_Admin extends osC_OrderTotal {
+  class osC_OrderTotal_Admin extends \osCommerce\OM\Site\Shop\OrderTotal {
     var $_group = 'order_total';
 
 // class methods

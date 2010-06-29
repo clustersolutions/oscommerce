@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_debug_Admin {
+  class osC_Services_Debug_Admin {
     var $title,
         $description,
         $uninstallable = true,
-        $depends = 'language',
+        $depends = 'Language',
         $precedes;
 
-    function osC_Services_debug_Admin() {
+    function osC_Services_Debug_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/debug.php');

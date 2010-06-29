@@ -12,14 +12,14 @@
   as published by the Free Software Foundation.
 */
 
-  class osC_Services_recently_visited_Admin {
+  class osC_Services_RecentlyVisited_Admin {
     var $title,
         $description,
         $uninstallable = true,
-        $depends = array('session', 'category_path'),
+        $depends = array('Session', 'CategoryPath'),
         $precedes;
 
-    function osC_Services_recently_visited_Admin() {
+    function osC_Services_RecentlyVisited_Admin() {
       global $osC_Language;
 
       $osC_Language->loadIniFile('modules/services/recently_visited.php');
