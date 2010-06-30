@@ -182,7 +182,7 @@
     }
 
     function _parseParameters($array, $additional_exclude = array()) {
-      $exclude = array('x', 'y', OSCOM_Registry::get('Session')->getName());
+      $exclude = array('x', 'y', Registry::get('Session')->getName());
 
       if ( is_array($additional_exclude) && !empty($additional_exclude) ) {
         $exclude = array_merge($exclude, $additional_exclude);

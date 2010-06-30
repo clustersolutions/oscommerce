@@ -19,14 +19,32 @@
       if ( $process === true ) {
         $this->process();
 
-        if ( isset($_GET['action']) && !empty($_GET['action']) ) {
-          $action = osc_sanitize_string(basename($_GET['action']));
+        $action = null;
 
-          if ( class_exists('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action) ) {
-            call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
+        if ( count($_GET) > 1 ) {
+          $requested_action = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1))));
+
+          if ( $requested_action == OSCOM::getSiteApplication() ) {
+            $requested_action = null;
+
+            if ( count($_GET) > 2 ) {
+              $requested_action = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1))));
+            }
+          }
+
+          if ( !empty($requested_action) && self::siteApplicationActionExists($requested_action) ) {
+            $action = $requested_action;
           }
         }
+
+        if ( !empty($action) ) {
+          call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
+        }
       }
+    }
+
+    public function siteApplicationActionExists($action) {
+      return class_exists('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
     }
   }
 ?>

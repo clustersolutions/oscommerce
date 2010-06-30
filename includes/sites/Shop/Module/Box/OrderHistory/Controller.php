@@ -26,6 +26,7 @@
 
     public function initialize() {
       $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
       if ( $OSCOM_Customer->isLoggedOn() ) {

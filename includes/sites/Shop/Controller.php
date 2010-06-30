@@ -44,10 +44,11 @@
       Registry::set('Service', new Service());
       Registry::get('Service')->start();
 
+      Registry::set('Template', new Template());
+
       $application = 'osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
-      Registry::set('Template', new Template());
       Registry::get('Template')->setApplication(Registry::get('Application'));
     }
 

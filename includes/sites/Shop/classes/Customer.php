@@ -242,5 +242,29 @@
         unset($_SESSION['osC_Customer_data']);
       }
     }
+
+// HPDL integrate into class better
+    public function hasProductNotifications() {
+      $OSCOM_Database = Registry::get('Database');
+
+      $Qcheck = $OSCOM_Database->query('select products_id from :table_products_notifications where customers_id = :customers_id limit 1');
+      $Qcheck->bindInt(':customers_id', $this->_data['id']);
+      $Qcheck->execute();
+
+      return ($Qcheck->numberOfRows() === 1);
+    }
+
+// HPDL integrate into class better
+    function getProductNotifications() {
+      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Language = Registry::get('Language');
+
+      $Qproducts = $OSCOM_Database->query('select pd.products_id, pd.products_name from :table_products_description pd, :table_products_notifications pn where pn.customers_id = :customers_id and pn.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
+      $Qproducts->bindInt(':customers_id', $this->_data['id']);
+      $Qproducts->bindInt(':language_id', $OSCOM_Language->getID());
+      $Qproducts->execute();
+
+      return $Qproducts;
+    }
   }
 ?>

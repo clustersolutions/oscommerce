@@ -10,6 +10,7 @@
 
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Mail;
 
 /**
  * Redirect to a URL address
@@ -252,9 +253,9 @@
       return false;
     }
 
-    $osC_Mail = new osC_Mail($to_name, $to_email_address, $from_name, $from_email_address, $subject);
-    $osC_Mail->setBodyPlain($body);
-    $osC_Mail->send();
+    $OSCOM_Mail = new Mail($to_name, $to_email_address, $from_name, $from_email_address, $subject);
+    $OSCOM_Mail->setBodyPlain($body);
+    $OSCOM_Mail->send();
   }
 
 /**

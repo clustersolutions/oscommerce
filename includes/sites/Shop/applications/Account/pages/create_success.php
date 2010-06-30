@@ -1,0 +1,35 @@
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
+  use osCommerce\OM\OSCOM;
+
+  if ( $OSCOM_NavigationHistory->hasSnapshot() ) {
+    $origin_href = $OSCOM_NavigationHistory->getSnapshotURL();
+    $OSCOM_NavigationHistory->resetSnapshot();
+  } else {
+    $origin_href = OSCOM::getLink(null, OSCOM::getDefaultSiteApplication());
+  }
+?>
+
+<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
+
+<h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
+
+<div>
+  <div style="float: left;"><?php echo osc_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $OSCOM_Template->getPageTitle()); ?></div>
+
+  <div style="padding-top: 30px;">
+    <p><?php echo sprintf(OSCOM::getDef('success_account_created'), OSCOM::getLink(null, 'Info', 'Contact')); ?></p>
+  </div>
+</div>
+
+<div class="submitFormButtons" style="text-align: right;">
+  <?php echo osc_link_object($origin_href, osc_draw_image_button('button_continue.gif', OSCOM::getDef('button_continue'))); ?>
+</div>

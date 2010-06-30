@@ -262,7 +262,7 @@
 <div id="pageHeader">
 
 <?php
-    echo osc_link_object(OSCOM::getLink(), osc_image(DIR_WS_IMAGES . 'store_logo.jpg', STORE_NAME), 'id="siteLogo"');
+    echo osc_link_object(OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()), osc_image(DIR_WS_IMAGES . 'store_logo.jpg', STORE_NAME), 'id="siteLogo"');
 ?>
 
   <ul id="navigationIcons">
@@ -278,7 +278,7 @@
   <div id="navigationBar">
 
 <?php
-    if ( $OSCOM_Service->isStarted('breadcrumb') ) {
+    if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
 ?>
 
     <div id="breadcrumbPath">
@@ -293,7 +293,7 @@
     }
 
     if ( $OSCOM_Customer->isLoggedOn() ) {
-      echo osc_link_object(OSCOM::getLink(null, 'Account', 'Logoff', 'SSL'), OSCOM::getDef('sign_out')) . ' &nbsp;|&nbsp; ';
+      echo osc_link_object(OSCOM::getLink(null, 'Account', 'LogOff', 'SSL'), OSCOM::getDef('sign_out')) . ' &nbsp;|&nbsp; ';
     }
 
     echo osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), OSCOM::getDef('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), OSCOM::getDef('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), OSCOM::getDef('checkout'));
