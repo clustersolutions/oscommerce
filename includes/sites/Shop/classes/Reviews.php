@@ -101,7 +101,7 @@
       return $Qcheck->valueInt('total');
     }
 
-    function exists($id = null, $groupped = false) {
+    public static function exists($id = null, $groupped = false) {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 

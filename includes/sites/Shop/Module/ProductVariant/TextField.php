@@ -1,22 +1,20 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Variants_text_field extends osC_Variants_Abstract {
+  namespace osCommerce\OM\Site\Shop\Module\ProductVariant;
+
+  class TextField implements \osCommerce\OM\Site\Shop\ProductVariantInterface {
     const ALLOW_MULTIPLE_VALUES = true;
     const HAS_CUSTOM_VALUE = true;
 
-    static public function parse($data) {
+    public static function parse($data) {
       $string = '<table border="0" cellspacing="0" cellpadding="2">';
 
       $i = 0;
@@ -35,19 +33,19 @@
       return $string;
     }
 
-    static public function getGroupTitle($data) {
+    public static function getGroupTitle($data) {
       return $data['value_title'];
     }
 
-    static public function getValueTitle($data) {
+    public static function getValueTitle($data) {
       return $_POST['variants'][$data['group_id']][$data['value_id']];
     }
 
-    static public function allowsMultipleValues() {
+    public static function allowsMultipleValues() {
       return self::ALLOW_MULTIPLE_VALUES;
     }
 
-    static public function hasCustomValue() {
+    public static function hasCustomValue() {
       return self::HAS_CUSTOM_VALUE;
     }
   }

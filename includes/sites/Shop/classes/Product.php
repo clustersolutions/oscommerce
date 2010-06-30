@@ -522,7 +522,7 @@
       }
     }
 
-    public function checkEntry($id) {
+    public static function checkEntry($id) {
       $OSCOM_Database = Registry::get('Database');
 
       $Qproduct = $OSCOM_Database->query('select p.products_id from :table_products p');

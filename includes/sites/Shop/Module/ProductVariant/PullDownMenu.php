@@ -1,22 +1,20 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Variants_pull_down_menu extends osC_Variants_Abstract {
+  namespace osCommerce\OM\Site\Shop\Module\ProductVariant;
+
+  class PullDownMenu implements \osCommerce\OM\Site\Shop\ProductVariantInterface {
     const ALLOW_MULTIPLE_VALUES = false;
     const HAS_CUSTOM_VALUE = false;
 
-    static public function parse($data) {
+    public static function parse($data) {
       $default_value = null;
 
       foreach ( $data['data'] as $variant ) {
@@ -37,12 +35,20 @@
       return $string;
     }
 
-    static public function allowsMultipleValues() {
+    public static function allowsMultipleValues() {
       return self::ALLOW_MULTIPLE_VALUES;
     }
 
-    static public function hasCustomValue() {
+    public static function hasCustomValue() {
       return self::HAS_CUSTOM_VALUE;
+    }
+
+    public static function getGroupTitle($data) {
+      return $data['group_title'];
+    }
+
+    public static function getValueTitle($data) {
+      return $data['value_title'];
     }
   }
 ?>

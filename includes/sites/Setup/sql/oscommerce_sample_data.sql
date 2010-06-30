@@ -1,9 +1,5 @@
-# $Id$
-#
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2009 osCommerce
+# osCommerce Online Merchant $osCommerce-SIG$
+# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License v2 (1991)
@@ -21,10 +17,10 @@
 #       * Comments should be like these, full line comments.
 #         (don't use inline comments)
 
-INSERT INTO osc_products_variants_groups VALUES (1, 1, 'Size', 1, 'pull_down_menu');
-INSERT INTO osc_products_variants_groups VALUES (2, 1, 'Colour', 2, 'pull_down_menu');
-INSERT INTO osc_products_variants_groups VALUES (3, 1, 'Material', 3, 'radio_buttons');
-INSERT INTO osc_products_variants_groups VALUES (4, 1, 'Text', 4, 'text_field');
+INSERT INTO osc_products_variants_groups VALUES (1, 1, 'Size', 1, 'PullDownMenu');
+INSERT INTO osc_products_variants_groups VALUES (2, 1, 'Colour', 2, 'PullDownMenu');
+INSERT INTO osc_products_variants_groups VALUES (3, 1, 'Material', 3, 'RadioButton');
+INSERT INTO osc_products_variants_groups VALUES (4, 1, 'Text', 4, 'TextField');
 
 INSERT INTO osc_products_variants_values VALUES (1, 1, 1, 'Small', 1);
 INSERT INTO osc_products_variants_values VALUES (2, 1, 1, 'Medium', 2);
