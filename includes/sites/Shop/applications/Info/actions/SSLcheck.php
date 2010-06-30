@@ -8,25 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account;
+  namespace osCommerce\OM\Site\Shop\Application\Info\Action;
 
+  use osCommerce\OM\ApplicationAbstract;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends \osCommerce\OM\Site\Shop\ApplicationAbstract {
-    protected function initialize() {}
-
-    protected function process() {
-      $OSCOM_Language = Registry::get('Language');
+  class SSLcheck {
+    public static function execute(ApplicationAbstract $application) {
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      $OSCOM_Language->load('account');
-
-      $this->_page_title = OSCOM::getDef('account_heading');
+      $application->setPageTitle(OSCOM::getDef('info_ssl_check_heading'));
+      $application->setPageContent('ssl_check.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_my_account'), OSCOM::getLink(null, null, null, 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_ssl_check'), OSCOM::getLink(null, null, 'SSLcheck'));
       }
     }
   }

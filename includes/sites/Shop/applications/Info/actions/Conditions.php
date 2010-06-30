@@ -8,25 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account;
+  namespace osCommerce\OM\Site\Shop\Application\Info\Action;
 
+  use osCommerce\OM\ApplicationAbstract;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
 
-  class Controller extends \osCommerce\OM\Site\Shop\ApplicationAbstract {
-    protected function initialize() {}
-
-    protected function process() {
-      $OSCOM_Language = Registry::get('Language');
+  class Conditions {
+    public static function execute(ApplicationAbstract $application) {
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      $OSCOM_Language->load('account');
-
-      $this->_page_title = OSCOM::getDef('account_heading');
+      $application->setPageTitle(OSCOM::getDef('info_conditions_heading'));
+      $application->setPageContent('conditions.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_my_account'), OSCOM::getLink(null, null, null, 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_conditions'), OSCOM::getLink(null, null, 'Conditions'));
       }
     }
   }

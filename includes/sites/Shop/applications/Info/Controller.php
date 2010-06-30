@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account;
+  namespace osCommerce\OM\Site\Shop\Application\Info;
 
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
@@ -21,12 +21,12 @@
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      $OSCOM_Language->load('account');
+      $OSCOM_Language->load('info');
 
-      $this->_page_title = OSCOM::getDef('account_heading');
+      $this->_page_title = OSCOM::getDef('info_heading');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_my_account'), OSCOM::getLink(null, null, null, 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_information'), OSCOM::getLink());
       }
     }
   }

@@ -59,7 +59,7 @@
           if ( $_SESSION['SESSION_SSL_ID'] != $_SERVER['SSL_SESSION_ID'] ) {
             $OSCOM_Session->destroy();
 
-            osc_redirect(osc_href_link(FILENAME_INFO, 'ssl_check', 'AUTO'));
+            osc_redirect(OSCOM::getLink(null, 'Info', 'SSLcheck', 'AUTO'));
           }
         }
       }
