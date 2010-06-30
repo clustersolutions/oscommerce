@@ -40,8 +40,8 @@
 
       $Qmanufacturers->freeResult();
 
-      $this->_content = '<form name="manufacturers" action="' . OSCOM::getLink(null, '') . '" method="get">' . osc_draw_hidden_field('Index', null) .
-                        osc_draw_pull_down_menu('manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . osc_draw_hidden_session_id_field() .
+      $this->_content = '<form name="manufacturers" action="' . OSCOM::getLink() . '" method="get">' . osc_draw_hidden_field('Index', null) .
+                        osc_draw_pull_down_menu('Manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . osc_draw_hidden_session_id_field() .
                         '</form>';
     }
 

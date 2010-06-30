@@ -18,8 +18,8 @@
 <?php
 // optional Product List Filter
   if ( PRODUCT_LIST_FILTER > 0 ) {
-    if ( isset($_GET['manufacturers']) && !empty($_GET['manufacturers']) ) {
-      $filterlist_sql = "select distinct c.categories_id as id, cd.categories_name as name from :table_products p, :table_products_to_categories p2c, :table_categories c, :table_categories_description cd, :table_templates_boxes tb, :table_product_attributes pa where p.products_status = '1' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id and p2c.categories_id = cd.categories_id and cd.language_id = '" . (int)$OSCOM_Language->getID() . "' and tb.code = 'Manufacturers' and tb.id = pa.id and pa.products_id = p.products_id and pa.value = '" . (int)$_GET['manufacturers'] . "' order by cd.categories_name";
+    if ( isset($_GET['Manufacturers']) && !empty($_GET['Manufacturers']) ) {
+      $filterlist_sql = "select distinct c.categories_id as id, cd.categories_name as name from :table_products p, :table_products_to_categories p2c, :table_categories c, :table_categories_description cd, :table_templates_boxes tb, :table_product_attributes pa where p.products_status = '1' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id and p2c.categories_id = cd.categories_id and cd.language_id = '" . (int)$OSCOM_Language->getID() . "' and tb.code = 'Manufacturers' and tb.id = pa.id and pa.products_id = p.products_id and pa.value = '" . (int)$_GET['Manufacturers'] . "' order by cd.categories_name";
     } else {
       $filterlist_sql = "select distinct m.manufacturers_id as id, m.manufacturers_name as name from :table_products p, :table_products_to_categories p2c, :table_manufacturers m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . $OSCOM_Category->getID() . "' order by m.manufacturers_name";
     }
@@ -28,10 +28,10 @@
     $Qfilterlist->execute();
 
     if ( $Qfilterlist->numberOfRows() > 1 ) {
-      echo '<p><form name="filter" action="' . OSCOM::getLink(null, 'Index') . '" method="get">' . $OSCOM_Language->get('filter_show') . '&nbsp;';
+      echo '<p><form name="filter" action="' . OSCOM::getLink() . '" method="get">' . $OSCOM_Language->get('filter_show') . '&nbsp;';
 
-      if ( isset($_GET['manufacturers']) && !empty($_GET['manufacturers']) ) {
-        echo osc_draw_hidden_field('manufacturers', $_GET['manufacturers']);
+      if ( isset($_GET['Manufacturers']) && !empty($_GET['Manufacturers']) ) {
+        echo osc_draw_hidden_field('Manufacturers', $_GET['Manufacturers']);
 
         $options = array(array('id' => '', 'text' => OSCOM::getDef('filter_all_categories')));
       } else {
@@ -53,8 +53,8 @@
     }
   }
 
-  if ( isset($_GET['manufacturers']) && !empty($_GET['manufacturers']) ) {
-    $OSCOM_Products->setManufacturer($_GET['manufacturers']);
+  if ( isset($_GET['Manufacturers']) && !empty($_GET['Manufacturers']) ) {
+    $OSCOM_Products->setManufacturer($_GET['Manufacturers']);
   }
 
   $Qlisting = $OSCOM_Products->execute();

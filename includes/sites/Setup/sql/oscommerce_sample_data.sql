@@ -80,8 +80,8 @@ INSERT INTO osc_products_images VALUES (2, 2, 'dymo400.png', 1, 1, now());
 INSERT INTO osc_products_images VALUES (3, 5, 'front.png', 1, 1, now());
 INSERT INTO osc_products_images VALUES (4, 5, 'back.png', 0, 2, now());
 
-#INSERT INTO osc_product_attributes VALUES (21, 1, 0, 1);
-#INSERT INTO osc_product_attributes VALUES (21, 2, 0, 2);
+INSERT INTO osc_product_attributes VALUES (21, 1, 0, 1);
+INSERT INTO osc_product_attributes VALUES (21, 2, 0, 2);
 
 #INSERT INTO osc_reviews VALUES (1,19,0,'John doe',5,1,'this has to be one of the funniest movies released for 1999!',now(),null,0,1);
 
