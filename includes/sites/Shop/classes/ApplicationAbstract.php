@@ -39,12 +39,38 @@
 
         if ( !empty($action) ) {
           call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
+
+          $subaction = null;
+
+          if ( count($_GET) > 2 ) {
+            $requested_subaction = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1))));
+
+            if ( $requested_subaction == $action ) {
+              $requested_subaction = null;
+
+              if ( count($_GET) > 3 ) {
+                $requested_subaction = osc_sanitize_string(basename(key(array_slice($_GET, 3, 1))));
+              }
+            }
+
+            if ( !empty($requested_subaction) && self::siteApplicationSubActionExists($action, $requested_subaction) ) {
+              $subaction = $requested_subaction;
+            }
+          }
+
+          if ( !empty($subaction) ) {
+            call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action . '\\' . $subaction, 'execute'), $this);
+          }
         }
       }
     }
 
     public function siteApplicationActionExists($action) {
       return class_exists('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
+    }
+
+    public function siteApplicationSubActionExists($action, $subaction) {
+      return class_exists('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action . '\\' . $subaction);
     }
   }
 ?>

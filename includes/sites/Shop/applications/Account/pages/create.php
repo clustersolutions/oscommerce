@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="create" action="<?php echo OSCOM::getLink(null, null, 'Create', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
+<form name="create" action="<?php echo OSCOM::getLink(null, null, 'Create&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(create);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
@@ -91,9 +91,9 @@
 ?>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
 
-  <?php echo osc_link_object(OSCOM::getLink(null, null, '', 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php echo osc_link_object(OSCOM::getLink(null, null, null, 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
 </div>
 
 </form>

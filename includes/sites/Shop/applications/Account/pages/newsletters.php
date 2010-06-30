@@ -20,7 +20,7 @@
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
-<form name="account_newsletter" action="<?php echo OSCOM::getLink(null, null, 'Newsletters', 'SSL'); ?>" method="post">
+<form name="account_newsletter" action="<?php echo OSCOM::getLink(null, null, 'Newsletters&Process', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('newsletter_subscriptions_heading'); ?></h6>
@@ -40,7 +40,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
 </div>
 
 </form>

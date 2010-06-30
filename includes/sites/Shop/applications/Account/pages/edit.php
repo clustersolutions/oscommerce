@@ -24,7 +24,7 @@
   }
 ?>
 
-<form name="account_edit" action="<?php echo OSCOM::getLink(null, null, 'Edit', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
+<form name="account_edit" action="<?php echo OSCOM::getLink(null, null, 'Edit&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
@@ -65,7 +65,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+  <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
 </div>
 
 </form>

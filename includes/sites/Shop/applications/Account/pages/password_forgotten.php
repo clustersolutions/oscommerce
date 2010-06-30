@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="password_forgotten" action="<?php echo OSCOM::getLink(null, null, 'PasswordForgotten', 'SSL'); ?>" method="post" onsubmit="return check_form(password_forgotten);">
+<form name="password_forgotten" action="<?php echo OSCOM::getLink(null, null, 'PasswordForgotten&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(password_forgotten);">
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('password_forgotten_heading'); ?></h6>
@@ -36,7 +36,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
 
   <?php echo osc_link_object(OSCOM::getLink(null, null, null, 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
 </div>

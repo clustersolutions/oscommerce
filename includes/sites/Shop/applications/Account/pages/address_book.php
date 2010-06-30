@@ -83,7 +83,7 @@
 
 <?php
   if ( $Qaddresses->numberOfRows() < MAX_ADDRESS_BOOK_ENTRIES ) {
-    echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook&New', 'SSL'), osc_draw_image_button('button_add_address.gif', OSCOM::getDef('button_add_address')));
+    echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Create', 'SSL'), osc_draw_image_button('button_add_address.gif', OSCOM::getDef('button_add_address')));
   } else {
     echo sprintf(OSCOM::getDef('address_book_maximum_entries'), MAX_ADDRESS_BOOK_ENTRIES);
   }

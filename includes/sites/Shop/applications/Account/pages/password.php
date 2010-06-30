@@ -21,7 +21,7 @@
   }
 ?>
 
-<form name="account_password" action="<?php echo OSCOM::getLink(null, null, 'Password', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
+<form name="account_password" action="<?php echo OSCOM::getLink(null, null, 'Password&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(account_edit);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
@@ -38,7 +38,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
 
   <?php echo osc_link_object(OSCOM::getLink(null, null, null, 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
 </div>

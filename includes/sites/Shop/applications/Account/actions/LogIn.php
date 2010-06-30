@@ -13,7 +13,6 @@
   use osCommerce\OM\ApplicationAbstract;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Account;
 
   class LogIn {
     public static function execute(ApplicationAbstract $application) {
@@ -33,27 +32,6 @@
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_sign_in'), OSCOM::getLink(null, null, 'LogIn', 'SSL'));
       }
-
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'process') ) {
-        self::_process();
-      }
-    }
-
-    protected static function _process() {
-      $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
-      $OSCOM_MessageStack = Registry::get('MessageStack');
-
-      if ( !empty($_POST['email_address']) && !empty($_POST['password']) && Account::logIn($_POST['email_address'], $_POST['password']) ) {
-        $OSCOM_NavigationHistory->removeCurrentPage();
-
-        if ( $OSCOM_NavigationHistory->hasSnapshot() ) {
-          $OSCOM_NavigationHistory->redirectToSnapshot();
-        } else {
-          osc_redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), '', 'AUTO'));
-        }
-      }
-
-      $OSCOM_MessageStack->add('Login', OSCOM::getDef('error_login_no_match'));
     }
   }
 ?>

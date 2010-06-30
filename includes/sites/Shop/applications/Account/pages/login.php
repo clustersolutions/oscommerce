@@ -16,13 +16,13 @@
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('Login') ) {
-    echo $OSCOM_MessageStack->get('Login');
+  if ( $OSCOM_MessageStack->exists('LogIn') ) {
+    echo $OSCOM_MessageStack->get('LogIn');
   }
 ?>
 
 <div class="moduleBox" style="width: 49%; float: right;">
-  <form name="login" action="<?php echo OSCOM::getLink(null, null, 'LogIn', 'SSL'); ?>" method="post">
+  <form name="login" action="<?php echo OSCOM::getLink(null, null, 'LogIn&Process', 'SSL'); ?>" method="post">
 
   <h6><?php echo OSCOM::getDef('login_returning_customer_heading'); ?></h6>
 
@@ -36,7 +36,7 @@
 
     <p><?php echo sprintf(OSCOM::getDef('login_returning_customer_password_forgotten'), OSCOM::getLink(null, null, 'PasswordForgotten', 'SSL')); ?></p>
 
-    <p align="right"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_login.gif', OSCOM::getDef('button_sign_in')); ?></p>
+    <p align="right"><?php echo osc_draw_image_submit_button('button_login.gif', OSCOM::getDef('button_sign_in')); ?></p>
   </div>
 
   </form>
