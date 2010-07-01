@@ -14,7 +14,7 @@
     const DEFAULT_FORMAT = 'Y-m-d H:i:s';
 
     public static function getNow($format = null) {
-      if ( empty($format) ) {
+      if ( !isset($format) ) {
         $format = self::DEFAULT_FORMAT;
       }
 
@@ -24,7 +24,7 @@
     public static function getShort($date = null, $with_time = false) {
       $OSCOM_Language = Registry::get('Language');
 
-      if ( empty($date) ) {
+      if ( !isset($date) ) {
         $date = self::getNow();
       }
 
@@ -42,10 +42,10 @@
       }
     }
 
-    function getLong($date = null) {
+    public static function getLong($date = null) {
       $OSCOM_Language = Registry::get('Language');
 
-      if ( empty($date) ) {
+      if ( !isset($date) ) {
         $date = self::getNow();
       }
 
@@ -64,11 +64,11 @@
     }
 
     public static function getTimestamp($date = null, $format = null) {
-      if ( empty($date) ) {
+      if ( !isset($date) ) {
         $date = self::getNow($format);
       }
 
-      if ( empty($format) ) {
+      if ( !isset($format) ) {
         $format = self::DEFAULT_FORMAT;
       }
 
@@ -79,24 +79,24 @@
     }
 
     public static function fromUnixTimestamp($timestamp, $format = null) {
-      if ( empty($format) ) {
+      if ( !isset($format) ) {
         $format = self::DEFAULT_FORMAT;
       }
 
       return date($format, $timestamp);
     }
 
-    function isLeapYear($year = '') {
-      if (empty($year)) {
-        $year = $this->year;
+    public static function isLeapYear($year = null) {
+      if ( !isset($year) ) {
+        $year = self::getNow('Y');
       }
 
-      if ($year % 100 == 0) {
-        if ($year % 400 == 0) {
+      if ( $year % 100 == 0 ) {
+        if ( $year % 400 == 0 ) {
           return true;
         }
       } else {
-        if (($year % 4) == 0) {
+        if ( ($year % 4) == 0 ) {
           return true;
         }
       }
@@ -104,7 +104,7 @@
       return false;
     }
 
-    function validate($date_to_check, $format_string, &$date_array) {
+    public static function validate($date_to_check, $format_string, &$date_array) {
       $separator_idx = -1;
 
       $separators = array('-', ' ', '/', '.');
@@ -194,7 +194,7 @@
         return false;
       }
 
-      if ($this->isLeapYear($year)) {
+      if ( self::isLeapYear($year) ) {
         $no_of_days[1] = 29;
       }
 

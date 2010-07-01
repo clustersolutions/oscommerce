@@ -32,7 +32,7 @@
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Image = Registry::get('Image');
 
-      $this->_title_link = OSCOM::getLink(null, 'Products', 'New');
+      $this->_title_link = OSCOM::getLink(null, 'Products', 'All');
 
       $data = array();
 
