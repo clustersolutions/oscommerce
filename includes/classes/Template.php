@@ -622,5 +622,25 @@
     function _getJavascriptBlocks() {
       return implode("\n", $this->_javascript_blocks);
     }
+
+    public function setHasHeader($bool) {
+      $this->_has_header = $bool;
+    }
+
+    public function setHasFooter($bool) {
+      $this->_has_footer = $bool;
+    }
+
+    public function setHasBoxModules($bool) {
+      $this->_has_box_modules = $bool;
+    }
+
+    public function setHasContentModules($bool) {
+      $this->_has_content_modules = $bool;
+    }
+
+    public function setShowDebugMessages($bool) {
+      $this->_show_debug_messages = $bool;
+    }
   }
 ?>

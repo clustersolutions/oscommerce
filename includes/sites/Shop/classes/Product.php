@@ -522,7 +522,17 @@
       }
     }
 
+    public static function checkID($id) {
+      $OSCOM_Session = Registry::get('Session');
+
+      return ( (preg_match('/^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$/', $id) || preg_match('/^[a-zA-Z0-9 -_]*$/', $id)) && ($id != $OSCOM_Session->getName()) );
+    }
+
     public static function checkEntry($id) {
+      if ( self::checkID($id) === false ) {
+        return false;
+      }
+
       $OSCOM_Database = Registry::get('Database');
 
       $Qproduct = $OSCOM_Database->query('select p.products_id from :table_products p');

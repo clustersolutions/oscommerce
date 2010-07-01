@@ -26,41 +26,51 @@
 
       $OSCOM_Language->load('products');
 
+      $requested_product = null;
+      $product_check = false;
+
       if ( count($_GET) > 1 ) {
-        $id = false;
+        $requested_product = basename(key(array_slice($_GET, 1, 1)));
 
-        $requested_product = key(array_slice($_GET, 1, 1));
+        if ( $requested_product == OSCOM::getSiteApplication() ) {
+          unset($requested_product);
 
-        if ( (preg_match('/^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$/', $requested_product) || preg_match('/^[a-zA-Z0-9 -_]*$/', $requested_product)) && ($requested_product != $OSCOM_Session->getName()) ) {
-          $id = $requested_product;
-        }
-
-        if ( ($id !== false) && Product::checkEntry($id) ) {
-          Registry::set('Product', new Product($id));
-          $OSCOM_Product = Registry::get('Product');
-          $OSCOM_Product->incrementCounter();
-
-          $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getTitle());
-          $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getModel());
-
-          if ( $OSCOM_Product->hasTags() ) {
-            $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getTags());
+          if ( count($_GET) > 2 ) {
+            $requested_product = basename(key(array_slice($_GET, 2, 1)));
           }
-
-          $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/Products/info.js');
-
-// HPDL          osC_Services_category_path::process($osC_Product->getCategoryID());
-
-          if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-            $OSCOM_Breadcrumb->add($OSCOM_Product->getTitle(), OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
-          }
-
-          $this->_page_title = $OSCOM_Product->getTitle();
-        } else {
-          $this->_page_title = OSCOM::getDef('product_not_found_heading');
-          $this->_page_contents = 'not_found.php';
         }
-      } else {
+      }
+
+      if ( isset($requested_product) ) {
+        if ( !self::siteApplicationSubActionExists(OSCOM::getSiteApplication(), $requested_product) ) {
+          if ( Product::checkEntry($requested_product) ) {
+            $product_check = true;
+
+            Registry::set('Product', new Product($requested_product));
+            $OSCOM_Product = Registry::get('Product');
+            $OSCOM_Product->incrementCounter();
+
+            $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getTitle());
+            $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getModel());
+
+            if ( $OSCOM_Product->hasTags() ) {
+              $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getTags());
+            }
+
+            $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/Products/info.js');
+
+// HPDL            osC_Services_category_path::process($osC_Product->getCategoryID());
+
+            if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
+              $OSCOM_Breadcrumb->add($OSCOM_Product->getTitle(), OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()));
+            }
+
+            $this->_page_title = $OSCOM_Product->getTitle();
+          }
+        }
+      }
+
+      if ( $product_check === false ) {
         $this->_page_title = OSCOM::getDef('product_not_found_heading');
         $this->_page_contents = 'not_found.php';
       }
