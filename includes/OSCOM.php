@@ -54,7 +54,7 @@
         $site = self::getDefaultSite();
 
         if ( !empty($_GET) ) {
-          $requested_site = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1))));
+          $requested_site = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1, true))));
 
           if ( self::siteExists($requested_site) ) {
             $site = $requested_site;
@@ -91,10 +91,10 @@
         }
       } else {
         if ( !empty($_GET) ) {
-          $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1))));
+          $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 0, 1, true))));
 
           if ( $requested_application == self::getSite() ) {
-            $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1))));
+            $requested_application = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
           }
 
           if ( !empty($requested_application) && self::siteApplicationExists($requested_application) ) {

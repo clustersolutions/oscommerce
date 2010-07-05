@@ -70,16 +70,16 @@
 
         if ( empty($data) ) {
           if ( isset($OSCOM_Product) && ($OSCOM_Product instanceof \osCommerce\OM\Site\Shop\Product) && $OSCOM_Product->isValid() ) {
-            $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews=new&' . $OSCOM_Product->getKeyword()), osc_image(DIR_WS_IMAGES . 'box_write_review.gif', OSCOM::getDef('button_write_review'))) . '</div>' .
-                              osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews=new&' . $OSCOM_Product->getKeyword()), OSCOM::getDef('box_reviews_write')) .
+            $this->_content = '<div style="float: left; width: 55px;">' . osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews&Write&' . $OSCOM_Product->getKeyword()), osc_image(DIR_WS_IMAGES . 'box_write_review.gif', OSCOM::getDef('button_write_review'))) . '</div>' .
+                              osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews&Write&' . $OSCOM_Product->getKeyword()), OSCOM::getDef('box_reviews_write')) .
                               '<div style="clear: both;"></div>';
           }
         } else {
           if ( !empty($data['image']) ) {
-            $this->_content = '<div align="center">' . osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), $OSCOM_Image->show($data['image'], $data['products_name'])) . '</div>';
+            $this->_content = '<div align="center">' . osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews&View=' . $data['reviews_id'] . '&' . $data['products_keyword']), $OSCOM_Image->show($data['image'], $data['products_name'])) . '</div>';
           }
 
-          $this->_content .= osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews=' . $data['reviews_id'] . '&' . $data['products_keyword']), wordwrap(osc_output_string_protected($data['reviews_text']), 15, '&shy;') . ' ..') . '<br /><div align="center">' . osc_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.png' , sprintf(OSCOM::getDef('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
+          $this->_content .= osc_link_object(OSCOM::getLink(null, 'Products', 'Reviews&View=' . $data['reviews_id'] . '&' . $data['products_keyword']), wordwrap(osc_output_string_protected($data['reviews_text']), 15, '&shy;') . ' ..') . '<br /><div align="center">' . osc_image(DIR_WS_IMAGES . 'stars_' . $data['reviews_rating'] . '.png' , sprintf(OSCOM::getDef('box_reviews_stars_rating'), $data['reviews_rating'])) . '</div>';
         }
       }
     }

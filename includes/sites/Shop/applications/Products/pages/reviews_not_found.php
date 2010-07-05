@@ -15,7 +15,7 @@
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
-<p><?php echo OSCOM::getDef('product_not_found'); ?></p>
+<p><?php echo OSCOM::getDef('no_reviews_available'); ?></p>
 
 <div class="submitFormButtons" style="text-align: right;">
   <?php echo osc_link_object(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), osc_draw_image_button('button_continue.gif', OSCOM::getDef('button_continue'))); ?>

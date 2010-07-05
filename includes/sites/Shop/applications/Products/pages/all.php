@@ -14,6 +14,8 @@
   use osCommerce\OM\DateTime;
 ?>
 
+<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
+
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">

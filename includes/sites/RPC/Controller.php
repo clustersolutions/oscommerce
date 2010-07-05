@@ -31,8 +31,8 @@
         echo json_encode(array('rpcStatus' => self::STATUS_NO_MODULE));
         exit;
       } else {
-        $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1))));
-        $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1))));
+        $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
+        $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1,  true))));
 
         if ( !OSCOM::siteExists($site) ) {
           echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));

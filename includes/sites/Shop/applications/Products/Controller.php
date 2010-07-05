@@ -30,13 +30,13 @@
       $product_check = false;
 
       if ( count($_GET) > 1 ) {
-        $requested_product = basename(key(array_slice($_GET, 1, 1)));
+        $requested_product = basename(key(array_slice($_GET, 1, 1, true)));
 
         if ( $requested_product == OSCOM::getSiteApplication() ) {
           unset($requested_product);
 
           if ( count($_GET) > 2 ) {
-            $requested_product = basename(key(array_slice($_GET, 2, 1)));
+            $requested_product = basename(key(array_slice($_GET, 2, 1, true)));
           }
         }
       }

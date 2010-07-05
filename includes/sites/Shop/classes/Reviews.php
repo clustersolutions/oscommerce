@@ -21,6 +21,14 @@
       $this->enableModeration();
     }
 
+    public function isEnabled() {
+      return $this->is_enabled;
+    }
+
+    public function isModerated() {
+      return $this->is_moderated;
+    }
+
     function enableReviews() {
       $OSCOM_Customer = Registry::get('Customer');
 
@@ -124,7 +132,7 @@
       return ($Qcheck->numberOfRows() === 1);
     }
 
-    function getProductID($id) {
+    public static function getProductID($id) {
       $OSCOM_Database = Registry::get('Database');
 
       $Qreview = $OSCOM_Database->query('select products_id from :table_reviews where reviews_id = :reviews_id');
@@ -134,11 +142,11 @@
       return $Qreview->valueInt('products_id');
     }
 
-    function getListing($id = null) {
+    public static function getListing($id = null) {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
-      if ( is_numeric($id) ) {
+      if ( isset($id) && is_numeric($id) ) {
         $Qreviews = $OSCOM_Database->query('select reviews_id, reviews_text, reviews_rating, date_added, customers_name from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1 order by reviews_id desc');
         $Qreviews->bindInt(':products_id', $id);
         $Qreviews->bindInt(':languages_id', $OSCOM_Language->getID());
@@ -154,7 +162,7 @@
       return $Qreviews;
     }
 
-    function getEntry($id) {
+    public static function getEntry($id) {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
@@ -166,7 +174,7 @@
       return $Qreviews;
     }
 
-    function saveEntry($data) {
+    public static function saveEntry($data) {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
