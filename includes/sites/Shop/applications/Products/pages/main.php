@@ -144,7 +144,7 @@
 </div>
 
 <?php
-  if ($OSCOM_Service->isStarted('Reviews') && Reviews::exists(osc_get_product_id($OSCOM_Product->getID()))) {
+  if ($OSCOM_Service->isStarted('Reviews') && Reviews::exists(osc_get_product_id($OSCOM_Product->getID()), true)) {
 ?>
 
 <p><?php echo OSCOM::getDef('number_of_product_reviews') . ' ' . Reviews::getTotal(osc_get_product_id($OSCOM_Product->getID())); ?></p>
