@@ -366,10 +366,12 @@
  * @return array
  */
 
-    function getTemplates() {
+    public static function getTemplates() {
+      $OSCOM_Database = Registry::get('Database');
+
       $templates = array();
 
-      $Qtemplates = Registry::get('Database')->query('select id, code, title from :table_templates');
+      $Qtemplates = $OSCOM_Database->query('select id, code, title from :table_templates');
       $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 
