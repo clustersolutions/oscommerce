@@ -26,8 +26,9 @@
 
     public function initialize() {
       if ( Registry::exists('Product') ) {
-        $OSCOM_Product = Registry::get('Product');
         $OSCOM_Database = Registry::get('Database');
+        $OSCOM_Product = Registry::get('Product');
+        $OSCOM_Language = Registry::get('Language');
         $OSCOM_Image = Registry::get('Image');
 
         $Qorders = $OSCOM_Database->query('select p.products_id, pd.products_name, pd.products_keyword, i.image from :table_orders_products opa, :table_orders_products opb, :table_orders o, :table_products p left join :table_products_images i on (p.products_id = i.products_id and i.default_flag = :default_flag), :table_products_description pd where opa.products_id = :products_id and opa.orders_id = opb.orders_id and opb.products_id != :products_id and opb.products_id = p.products_id and opb.orders_id = o.orders_id and p.products_status = 1 and p.products_id = pd.products_id and pd.language_id = :language_id group by p.products_id order by o.date_purchased desc limit :limit');

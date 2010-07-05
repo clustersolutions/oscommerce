@@ -97,7 +97,7 @@
       }
     }
 
-    function getTotal($id) {
+    public static function getTotal($id) {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
