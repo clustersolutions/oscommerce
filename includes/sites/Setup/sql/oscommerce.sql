@@ -5948,11 +5948,11 @@ INSERT INTO osc_templates_boxes_to_pages VALUES (3, 15, 1, '*', 'left', 300, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (4, 11, 1, '*', 'left', 400, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (5, 4, 1, '*', 'left', 500, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (6, 12, 1, '*', 'right', 100, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (7, 6, 1, 'Products/info', 'right', 200, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (7, 6, 1, 'Products/main', 'right', 200, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (8, 8, 1, '*', 'right', 300, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (9, 1, 1, '*', 'right', 400, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (10, 9, 1, 'Products/info', 'right', 500, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (11, 14, 1, 'Products/info','right', 600, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (10, 9, 1, 'Products/main', 'right', 500, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (11, 14, 1, 'Products/main','right', 600, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (12, 13, 1, '*', 'right', 700, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (13, 10, 1, '*', 'right', 800, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (14, 5, 1, '*', 'right', 900, 0);
@@ -5961,7 +5961,7 @@ INSERT INTO osc_templates_boxes_to_pages VALUES (16, 16, 1, 'Index/category_list
 INSERT INTO osc_templates_boxes_to_pages VALUES (17, 16, 1, 'Index/main','after', 400, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (18, 17, 1, 'Index/main','after', 450, 0);
 INSERT INTO osc_templates_boxes_to_pages VALUES (19, 18, 1, '*', 'after', 500, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (20, 19, 1, 'Products/info', 'after', 100, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (20, 19, 1, 'Products/main', 'after', 100, 0);
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Minimum List Size', 'BOX_BEST_SELLERS_MIN_LIST', '3', 'Minimum amount of products that must be shown in the listing', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_BEST_SELLERS_MAX_LIST', '10', 'Maximum amount of products to show in the listing', '6', '0', now());
