@@ -24,7 +24,7 @@
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('shopping_cart_heading'); ?></h6>
 
-  <form name="shopping_cart" action="<?php echo OSCOM::getLink(null, null, 'action=cart_update', 'SSL'); ?>" method="post">
+  <form name="shopping_cart" action="<?php echo OSCOM::getLink(null, null, 'Update', 'SSL'); ?>" method="post">
 
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">

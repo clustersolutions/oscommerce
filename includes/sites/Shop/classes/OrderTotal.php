@@ -36,7 +36,7 @@
       foreach ( $this->_modules as $module ) {
         $class_name = 'osCommerce\\OM\\Site\\Shop\\Module\\OrderTotal\\' . $module;
 
-        Registry::set('OrderTotal_' . $module, new $class_name());
+        Registry::set('OrderTotal_' . $module, new $class_name(), true);
       }
 
       usort($this->_modules, function ($a, $b) {
@@ -99,7 +99,7 @@
         $has_active = false;
 
         foreach ( $this->_modules as $module ) {
-          if ( $GLOBALS['osC_OrderTotal_' . $module]->isEnabled() ) {
+          if ( Registry::get('OrderTotal_' . $module)->isEnabled() ) {
             $has_active = true;
             break;
           }
