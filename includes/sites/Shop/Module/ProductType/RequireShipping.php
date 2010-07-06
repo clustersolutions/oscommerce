@@ -14,19 +14,30 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Site\Shop\Product;
 
-  class RequireCustomerAccount {
+  class RequireShipping {
     public static function getTitle() {
-      return 'Require Customer Account';
+      return 'Require Shipping';
     }
 
     public static function getDescription() {
-      return 'Require customer account';
+      return 'Require shipping';
     }
 
     public static function isValid(Product $OSCOM_Product) {
+      $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
       $OSCOM_Customer = Registry::get('Customer');
 
-      return $OSCOM_Customer->isLoggedOn();
+      if ( $OSCOM_ShoppingCart->hasShippingAddress() === false ) {
+        if ( $OSCOM_Customer->hasDefaultAddress() ) {
+          $OSCOM_ShoppingCart->setShippingAddress($OSCOM_Customer->getDefaultAddressID());
+          $OSCOM_ShoppingCart->resetShippingMethod();
+        } elseif ( $OSCOM_ShoppingCart->hasBillingAddress() ) {
+          $OSCOM_ShoppingCart->setShippingAddress($OSCOM_ShoppingCart->getBillingAddress());
+          $OSCOM_ShoppingCart->resetShippingMethod();
+        }
+      }
+
+      return $OSCOM_ShoppingCart->hasShippingAddress() && $OSCOM_ShoppingCart->hasShippingMethod();
     }
 
     public static function onFail(Product $OSCOM_Product) {
@@ -34,7 +45,7 @@
 
       $OSCOM_NavigationHistory->setSnapshot();
 
-      osc_redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+      osc_redirect(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'));
     }
   }
 ?>
