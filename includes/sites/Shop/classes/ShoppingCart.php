@@ -12,6 +12,7 @@
 
   use osCommerce\OM\Registry;
   use osCommerce\OM\DateTime;
+  use osCommerce\OM\Site\Shop\ProductVariants;
 
   class ShoppingCart {
     protected $_contents = array();
@@ -202,7 +203,7 @@
 
               if ( $Qvariant->numberOfRows() > 0 ) {
                 while ( $Qvariant->next() ) {
-                  $group_title = Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
+                  $group_title = ProductVariants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
                   $value_title = $Qvariant->value('value_title');
                   $has_custom_value = false;
 
@@ -291,6 +292,7 @@
     public function add($product_id, $quantity = null) {
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Language = Registry::get('Language');
 
       if ( !is_numeric($product_id) ) {
         return false;
@@ -366,9 +368,9 @@
             $Qvariant->execute();
 
             while ( $Qvariant->next() ) {
-              $group_title = Variants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
-              $value_title = Variants::getValueTitle($Qvariant->value('module'), $Qvariant->toArray());
-              $has_custom_value = Variants::hasCustomValue($Qvariant->value('module'));
+              $group_title = ProductVariants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
+              $value_title = ProductVariants::getValueTitle($Qvariant->value('module'), $Qvariant->toArray());
+              $has_custom_value = ProductVariants::hasCustomValue($Qvariant->value('module'));
 
               $this->_contents[$item_id]['variants'][] = array('group_id' => $Qvariant->valueInt('group_id'),
                                                                'value_id' => $Qvariant->valueInt('value_id'),

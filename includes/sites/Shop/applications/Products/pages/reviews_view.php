@@ -29,7 +29,7 @@
 
 <div style="float: right; text-align: center;">
   <?php echo osc_link_object(OSCOM::getLink(null, null, 'Images&' . $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), 'hspace="5" vspace="5"', 'thumbnail'), 'target="_blank" onclick="window.open(\'' . OSCOM::getLink(null, null, 'Images&' . $OSCOM_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($OSCOM_Product->numberOfImages() > 1) ? $OSCOM_Image->getWidth('large') + ($OSCOM_Image->getWidth('thumbnails') * 2) + 70 : $OSCOM_Image->getWidth('large') + 20) . ',height=' . ($OSCOM_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
-  <?php echo '<p>' . osc_link_object(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword() . '&' . osc_get_all_get_params(array('action')) . '&action=cart_add'), osc_draw_image_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart'))) . '</p>'; ?>
+  <?php echo '<p>' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart'))) . '</p>'; ?>
 </div>
 
 <?php

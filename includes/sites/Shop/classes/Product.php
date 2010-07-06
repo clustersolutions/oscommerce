@@ -328,23 +328,21 @@
           }
 
           if ( is_null($module_call) || ($module_call == $module) ) {
-            if ( !class_exists('osC_ProductTypes_Modules_' . $module) ) {
-              include('includes/modules/product_types/modules/' . $module . '.php');
-            }
+            if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module) ) {
+              if ( !call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'isValid'), $this) ) {
+                if ( ($execute_onfail === true) && method_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail') ) {
+                  call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail'), $this);
+                }
 
-            if ( !call_user_func(array('osC_ProductTypes_Modules_' . $module, 'isValid'), $this) ) {
-              if ( ($execute_onfail === true) && method_exists('osC_ProductTypes_Modules_' . $module, 'onFail') ) {
-                call_user_func(array('osC_ProductTypes_Modules_' . $module, 'onFail'), $this);
-              }
+                $return_value = false;
 
-              $return_value = false;
-
-              break;
-            } else {
-              $return_value = true;
-
-              if ( $module_call == $module ) {
                 break;
+              } else {
+                $return_value = true;
+
+                if ( $module_call == $module ) {
+                  break;
+                }
               }
             }
           }

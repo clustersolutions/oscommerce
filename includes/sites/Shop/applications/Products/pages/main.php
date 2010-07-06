@@ -31,7 +31,7 @@
 ?>
 
   <div style="<?php if ( $OSCOM_Product->hasImage() ) { echo 'margin-left: ' . ($OSCOM_Image->getWidth('product_info') + 20) . 'px; '; } ?>min-height: <?php echo $OSCOM_Image->getHeight('product_info'); ?>px;">
-    <form name="cart_quantity" action="<?php echo OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&action=cart_add'); ?>" method="post">
+    <form name="cart_quantity" action="<?php echo OSCOM::getLink(null, 'Checkout', 'Add&' . $OSCOM_Product->getKeyword()); ?>" method="post">
 
     <div style="float: right;">
       <?php echo osc_draw_image_submit_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart')); ?>

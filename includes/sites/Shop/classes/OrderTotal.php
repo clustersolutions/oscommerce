@@ -34,21 +34,17 @@
       $OSCOM_Language->load('modules-order_total');
 
       foreach ( $this->_modules as $module ) {
-        $module_class = 'osC_OrderTotal_' . $module;
+        $class_name = 'osCommerce\\OM\\Site\\Shop\\Module\\OrderTotal\\' . $module;
 
-        if ( !class_exists($module_class) ) {
-          include('includes/modules/order_total/' . $module . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
-        }
-
-        $GLOBALS[$module_class] = new $module_class();
+        Registry::set('OrderTotal_' . $module, new $class_name());
       }
 
       usort($this->_modules, function ($a, $b) {
-        if ( $GLOBALS['osC_OrderTotal_' . $a]->getSortOrder() == $GLOBALS['osC_OrderTotal_' . $b]->getSortOrder() ) {
-          return strnatcasecmp($GLOBALS['osC_OrderTotal_' . $a]->getTitle(), $GLOBALS['osC_OrderTotal_' . $a]->getTitle());
+        if ( Registry::get('OrderTotal_' . $a)->getSortOrder() == Registry::get('OrderTotal_' . $b)->getSortOrder() ) {
+          return strnatcasecmp(Registry::get('OrderTotal_' . $a)->getTitle(), Registry::get('OrderTotal_' . $a)->getTitle());
         }
 
-        return ($GLOBALS['osC_OrderTotal_' . $a]->getSortOrder() < $GLOBALS['osC_OrderTotal_' . $b]->getSortOrder()) ? -1 : 1;
+        return (Registry::get('OrderTotal_' . $a)->getSortOrder() < Registry::get('OrderTotal_' . $b)->getSortOrder()) ? -1 : 1;
       });
     }
 
@@ -76,18 +72,18 @@
       $this->_data = array();
 
       foreach ( $this->_modules as $module ) {
-        $module = 'osC_OrderTotal_' . $module;
+        $OSCOM_OrderTotal_Module = Registry::get('OrderTotal_' . $module);
 
-        if ( $GLOBALS[$module]->isEnabled() ) {
-          $GLOBALS[$module]->process();
+        if ( $OSCOM_OrderTotal_Module->isEnabled() ) {
+          $OSCOM_OrderTotal_Module->process();
 
-          foreach ( $GLOBALS[$module]->output as $output ) {
+          foreach ( $OSCOM_OrderTotal_Module->output as $output ) {
             if ( !empty($output['title']) && !empty($output['text']) ) {
-              $this->_data[] = array('code' => $GLOBALS[$module]->getCode(),
+              $this->_data[] = array('code' => $OSCOM_OrderTotal_Module->getCode(),
                                      'title' => $output['title'],
                                      'text' => $output['text'],
                                      'value' => $output['value'],
-                                     'sort_order' => $GLOBALS[$module]->getSortOrder());
+                                     'sort_order' => $OSCOM_OrderTotal_Module->getSortOrder());
             }
           }
         }
