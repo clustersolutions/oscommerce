@@ -81,7 +81,7 @@
       $this->_sort_by_direction = ($direction == '-') ? '-' : '+';
     }
 
-    function &execute() {
+    function execute() {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_CategoryTree = Registry::get('CategoryTree');

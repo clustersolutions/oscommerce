@@ -126,11 +126,11 @@
       $this->_keywords = implode(' ', $terms_array);
     }
 
-    function &execute() {
+    function execute() {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Language = Registry::get('Language');
-      $OSCOM_CategryTree = Registry::get('CategoryTree');
+      $OSCOM_CategoryTree = Registry::get('CategoryTree');
       $OSCOM_Currencies = Registry::get('Currencies');
 
       $Qlisting = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS distinct p.*, pd.*, m.*, i.image, if(s.status, s.specials_new_products_price, null) as specials_new_products_price, if(s.status, s.specials_new_products_price, p.products_price) as final_price');

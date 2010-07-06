@@ -18,6 +18,7 @@
   class Images {
     public static function execute(ApplicationAbstract $application) {
       $OSCOM_Template = Registry::get('Template');
+      $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
 
 // HPDL
       $OSCOM_Template->setHasHeader(false);
@@ -25,6 +26,8 @@
       $OSCOM_Template->setHasBoxModules(false);
       $OSCOM_Template->setHasContentModules(false);
       $OSCOM_Template->setShowDebugMessages(false);
+
+      $OSCOM_NavigationHistory->removeCurrentPage();
 
       $requested_product = null;
       $product_check = false;
