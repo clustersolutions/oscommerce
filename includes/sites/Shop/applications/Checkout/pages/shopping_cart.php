@@ -46,7 +46,7 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo osc_link_object(OSCOM::getLink(null, null, 'action=cart_remove&item=' . $products['item_id'], 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
+        <td valign="top" width="60"><?php echo osc_link_object(OSCOM::getLink(null, null, 'Delete=' . $products['item_id'], 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
         <td valign="top">
 
 <?php
