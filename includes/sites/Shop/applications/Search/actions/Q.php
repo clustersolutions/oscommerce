@@ -99,7 +99,7 @@
       }
 
       if ( $OSCOM_MessageStack->size('Search') > 0 ) {
-        $application->setPageContent('search.php');
+        $application->setPageContent('main.php');
       }
     }
   }
