@@ -1,31 +1,36 @@
 <?php
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  class osC_Checkout_Success extends osC_Template {
-    protected $_module = 'success';
-    protected $_group = 'checkout';
-    protected $_page_title;
-    protected $_page_contents = 'success.php';
+  namespace osCommerce\OM\Site\Shop\Application\Checkout\Action;
 
-    public function __construct() {
-      global $osC_Services, $osC_Breadcrumb;
+  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Site\Shop\Product;
+  use osCommerce\OM\Site\Shop\Payment;
 
-      $this->_page_title = __('success_heading');
+  class Success {
+    public static function execute(ApplicationAbstract $application) {
+      $OSCOM_Service = Registry::get('Service');
+      $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      if ( $osC_Services->isStarted('breadcrumb') ) {
-        $osC_Breadcrumb->add(__('breadcrumb_checkout_success'), osc_href_link(FILENAME_CHECKOUT, $this->_module, 'SSL'));
+      $application->setPageTitle(OSCOM::getDef('success_heading'));
+      $application->setPageContent('success.php');
+
+      if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout_success'), OSCOM::getLink(null, 'Checkout', 'Success', 'SSL'));
       }
 
-      if ( $_GET[$this->_module] == 'update' ) {
-        $this->_process();
-      }
+//      if ( $_GET[$this->_module] == 'update' ) {
+//        $this->_process();
+//      }
     }
 
     protected function _process() {

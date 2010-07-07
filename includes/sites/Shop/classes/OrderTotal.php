@@ -41,7 +41,7 @@
 
       usort($this->_modules, function ($a, $b) {
         if ( Registry::get('OrderTotal_' . $a)->getSortOrder() == Registry::get('OrderTotal_' . $b)->getSortOrder() ) {
-          return strnatcasecmp(Registry::get('OrderTotal_' . $a)->getTitle(), Registry::get('OrderTotal_' . $a)->getTitle());
+          return strnatcasecmp(Registry::get('OrderTotal_' . $a)->getTitle(), Registry::get('OrderTotal_' . $b)->getTitle());
         }
 
         return (Registry::get('OrderTotal_' . $a)->getSortOrder() < Registry::get('OrderTotal_' . $b)->getSortOrder()) ? -1 : 1;

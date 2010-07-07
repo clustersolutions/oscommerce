@@ -56,22 +56,18 @@
           $OSCOM_Language->load('modules-shipping');
 
           foreach ( $this->_modules as $module ) {
-            $module_class = 'osC_Shipping_' . $module;
+            $module_class = 'osCommerce\\OM\\Site\\Shop\\Module\\Shipping\\' . $module;
 
-            if ( !class_exists($module_class) ) {
-              include('includes/modules/shipping/' . $module . '.' . substr(basename(__FILE__), (strrpos(basename(__FILE__), '.')+1)));
-            }
-
-            $GLOBALS[$module_class] = new $module_class();
-            $GLOBALS[$module_class]->initialize();
+            Registry::set('Shipping_' . $module, new $module_class());
+            Registry::get('Shipping_' . $module)->initialize();
           }
 
           usort($this->_modules, function ($a, $b) {
-            if ( $GLOBALS['osC_Shipping_' . $a]->getSortOrder() == $GLOBALS['osC_Shipping_' . $b]->getSortOrder() ) {
-              return strnatcasecmp($GLOBALS['osC_Shipping_' . $a]->getTitle(), $GLOBALS['osC_Shipping_' . $a]->getTitle());
+            if ( Registry::get('Shipping_' . $a)->getSortOrder() == Registry::get('Shipping_' . $b)->getSortOrder() ) {
+              return strnatcasecmp(Registry::get('Shipping_' . $a)->getTitle(), Registry::get('Shipping_' . $b)->getTitle());
             }
 
-            return ($GLOBALS['osC_Shipping_' . $a]->getSortOrder() < $GLOBALS['osC_Shipping_' . $b]->getSortOrder()) ? -1 : 1;
+            return (Registry::get('Shipping_' . $a)->getSortOrder() < Registry::get('Shipping_' . $b)->getSortOrder()) ? -1 : 1;
           });
         }
       }
@@ -176,7 +172,7 @@
         $has_active = false;
 
         foreach ( $this->_modules as $module ) {
-          if ($GLOBALS['osC_Shipping_' . $module]->isEnabled()) {
+          if (Registry::get('Shipping_' . $module)->isEnabled()) {
             $has_active = true;
             break;
           }
@@ -196,14 +192,14 @@
           $include_quotes[] = 'osC_Shipping_free';
         } else {
           foreach ( $this->_modules as $module ) {
-            if ( $GLOBALS['osC_Shipping_' . $module]->isEnabled() ) {
-              $include_quotes[] = 'osC_Shipping_' . $module;
+            if ( Registry::get('Shipping_' . $module)->isEnabled() ) {
+              $include_quotes[] = $module;
             }
           }
         }
 
         foreach ( $include_quotes as $module ) {
-          $quotes = $GLOBALS[$module]->quote();
+          $quotes = Registry::get('Shipping_' . $module)->quote();
 
           if ( is_array($quotes) ) {
             $this->_quotes[] = $quotes;

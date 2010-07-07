@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2005 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,12 +9,8 @@
 */
 ?>
 
-<!-- box order_history start //-->
-
 <div class="boxNew">
-  <div class="boxTitle"><?php echo $osC_Box->getTitle(); ?></div>
+  <div class="boxTitle"><?php echo $OSCOM_Box->getTitle(); ?></div>
 
-  <div class="boxContents"><?php echo $osC_Box->getContent(); ?></div>
+  <div class="boxContents"><?php echo $OSCOM_Box->getContent(); ?></div>
 </div>
-
-<!-- box order_history end //-->

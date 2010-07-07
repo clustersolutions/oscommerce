@@ -11,17 +11,19 @@
   namespace osCommerce\OM\Site\Shop;
 
   use osCommerce\OM\Registry;
+  use osCommerce\OM\OSCOM;
   use osCommerce\OM\Site\Shop\AddressBook;
   use osCommerce\OM\Site\Shop\Address;
   use osCommerce\OM\DateTime;
 
   class Order {
-    protected $info;
-    protected $totals;
-    protected $products;
-    protected $customer;
-    protected $delivery;
-    protected $content_type;
+// HPDL add getter methods for the following and set as protected
+    public $info;
+    public $totals;
+    public $products;
+    public $customer;
+    public $delivery;
+    public $content_type;
 
     protected $_id;
 
@@ -151,7 +153,7 @@
       $Qorder->bindValue(':billing_address_format', $OSCOM_ShoppingCart->getBillingAddress('format'));
       $Qorder->bindValue(':payment_method', $OSCOM_ShoppingCart->getBillingMethod('title'));
 // HPDL verify payment module class
-      $Qorder->bindValue(':payment_module', $GLOBALS['osC_Payment_' . $OSCOM_ShoppingCart->getBillingMethod('id')]->getCode());
+      $Qorder->bindValue(':payment_module', Registry::get('Payment_' . $OSCOM_ShoppingCart->getBillingMethod('id'))->getCode());
       $Qorder->bindInt(':orders_status', 4);
 // HPDL move currencies to the products level
       $Qorder->bindValue(':currency', $OSCOM_Currencies->getCode());
@@ -438,7 +440,7 @@
       }
     }
 
-    function getListing($limit = null, $page_keyword = 'page') {
+    public static function getListing($limit = null, $page_keyword = 'page') {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Language = Registry::get('Language');

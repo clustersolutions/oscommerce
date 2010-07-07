@@ -108,34 +108,21 @@
 
 </div>
 
-<?php
-  if ( $OSCOM_Application->requireCustomerAccount() ) {
-?>
-
-<div class="submitFormButtons">
-  <span style="float: right;">
-    <?php echo osc_link_object(OSCOM::getLink(null, null, 'Confirmation', 'SSL'), osc_draw_image_button('button_checkout.gif', OSCOM::getDef('button_checkout'))); ?>
-  </span>
-</div>
-
-<?php
-  } else {
-?>
-
 <div class="moduleBox">
-  <form name="checkout" action="<?php echo OSCOM::getLink(null, null, 'action=email', 'SSL'); ?>" method="post">
+  <form name="checkout" action="<?php echo OSCOM::getLink(null, null, 'Confirmation', 'SSL'); ?>" method="post">
 
   <div class="content">
     <div style="float: right;">
       <?php echo osc_draw_image_submit_button('button_checkout.gif', OSCOM::getDef('button_checkout')); ?>
     </div>
 
-    <?php echo 'E-Mail Address: ' . osc_draw_input_field('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . osc_link_object(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order'; ?>
+<?php
+  if ( $OSCOM_Application->requireCustomerAccount() ) {
+    echo 'E-Mail Address: ' . osc_draw_input_field('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . osc_link_object(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order';
+  }
+?>
+
   </div>
 
   </form>
 </div>
-
-<?php
-  }
-?>

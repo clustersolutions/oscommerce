@@ -50,7 +50,7 @@
 
         usort($this->_modules, function ($a, $b) {
           if ( Registry::get('Payment_' . $a)->getSortOrder() == Registry::get('Payment_' . $b)->getSortOrder() ) {
-            return strnatcasecmp(Registry::get('Payment_' . $a)->getTitle(), Registry::get('Payment_' . $a)->getTitle());
+            return strnatcasecmp(Registry::get('Payment_' . $a)->getTitle(), Registry::get('Payment_' . $b)->getTitle());
           }
 
           return (Registry::get('Payment_' . $a)->getSortOrder() < Registry::get('Payment_' . $b)->getSortOrder()) ? -1 : 1;

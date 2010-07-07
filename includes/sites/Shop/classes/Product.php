@@ -314,7 +314,7 @@
       $action_call = $action;
       $module_call = null;
 
-      $return_value = false;
+      $return_value = null;
 
       if ( is_array($action) ) {
         $action_call = $action[0];
@@ -347,6 +347,10 @@
             }
           }
         }
+      }
+
+      if ( !isset($return_value) ) {
+        $return_value = true;
       }
 
       return $return_value;

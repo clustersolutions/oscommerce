@@ -47,7 +47,7 @@
       foreach ( $OSCOM_ShoppingCart->getProducts() as $product ) {
         $OSCOM_Product = new Product($product['id']);
 
-        if ( $OSCOM_Product->isTypeActionAllowed(array('perform_order', 'RequireCustomerAccount'), null, false) ) {
+        if ( $OSCOM_Product->isTypeActionAllowed(array('PerformOrder', 'RequireCustomerAccount'), null, false) ) {
           return true;
         }
       }
