@@ -12,7 +12,7 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Site\Shop\Address;
 
-  $Qentry = AddressBook::getEntry($_GET['AddressBook']);
+  $Qentry = AddressBook::getEntry($_GET['Delete']);
 ?>
 
 <?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
@@ -25,14 +25,14 @@
   }
 ?>
 
-<form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook=' . $_GET['AddressBook'] . '&Delete', 'SSL'); ?>" method="post">
+<form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook&Delete=' . $_GET['Delete'] . '&Process', 'SSL'); ?>" method="post">
 
 <div class="moduleBox">
   <h6><?php echo OSCOM::getDef('address_book_delete_address_title'); ?></h6>
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px;">
-      <?php echo Address::format($_GET['AddressBook'], '<br />'); ?>
+      <?php echo Address::format($_GET['Delete'], '<br />'); ?>
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
@@ -46,7 +46,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_delete.gif', OSCOM::getDef('button_delete')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_delete.gif', OSCOM::getDef('button_delete')); ?></span>
 
   <?php echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook', 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
 </div>

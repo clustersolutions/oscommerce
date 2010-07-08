@@ -22,10 +22,10 @@
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
-      if ( $_GET['AddressBook'] == $OSCOM_Customer->getDefaultAddressID() ) {
+      if ( $_GET['Delete'] == $OSCOM_Customer->getDefaultAddressID() ) {
         $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('warning_primary_address_deletion'), 'warning');
       } else {
-        if ( AddressBook::checkEntry($_GET['AddressBook']) === false ) {
+        if ( AddressBook::checkEntry($_GET['Delete']) === false ) {
           $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_entry_non_existing'), 'error');
         }
       }
@@ -35,23 +35,11 @@
       }
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_address_book_delete_entry'), OSCOM::getLink(null, null, 'AddressBook=' . $_GET['AddressBook'] . '&Delete', 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_address_book_delete_entry'), OSCOM::getLink(null, null, 'AddressBook&Delete=' . $_GET['Delete'], 'SSL'));
       }
 
       $application->setPageTitle(OSCOM::getDef('address_book_delete_entry_heading'));
       $application->setPageContent('address_book_delete.php');
-
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'process') ) {
-        if ( $_GET['AddressBook'] != $OSCOM_Customer->getDefaultAddressID() ) {
-          if ( AddressBook::deleteEntry($_GET['AddressBook']) ) {
-            $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('success_address_book_entry_deleted'), 'success');
-          }
-        } else {
-          $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('warning_primary_address_deletion'), 'warning');
-        }
-
-        osc_redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
-      }
     }
   }
 ?>

@@ -70,7 +70,7 @@
 <?php
     echo osc_draw_label(OSCOM::getDef('field_customer_state'), null, 'state', (ACCOUNT_STATE > 0));
 
-    if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'process') ) {
+    if ( isset($entry_state_has_zones) ) { // HPDL
       if ( $entry_state_has_zones === true ) {
         $Qzones = $OSCOM_Database->query('select zone_name from :table_zones where zone_country_id = :zone_country_id order by zone_name');
         $Qzones->bindInt(':zone_country_id', $_POST['country']);

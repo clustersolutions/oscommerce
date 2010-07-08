@@ -12,7 +12,7 @@
   use osCommerce\OM\OSCOM;
 
   if ( isset($_GET['Edit']) ) {
-    $Qentry = AddressBook::getEntry($_GET['AddressBook']); // HPDL conflict with $osC_oiAddress
+    $Qentry = AddressBook::getEntry($_GET['Edit']); // HPDL conflict with $osC_oiAddress
   } else {
     if ( AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES ) {
       $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_full'));
@@ -32,7 +32,7 @@
   if ( ($OSCOM_Customer->hasDefaultAddress() === false) || (isset($_GET['Create']) && (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry->numberOfRows() === 1)) ) {
 ?>
 
-<form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook=' . $_GET['AddressBook'] . '&' . (isset($_GET['Edit']) ? 'Edit' : 'Create'), 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
+<form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook&' . (isset($_GET['Edit']) ? 'Edit=' . $_GET['Edit'] : 'Create') . '&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
 
 <div class="moduleBox">
   <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
@@ -49,7 +49,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_hidden_field('subaction', 'process') . osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
+  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
 
 <?php
     if ( $OSCOM_NavigationHistory->hasSnapshot() ) {

@@ -64,7 +64,7 @@
 ?>
 
         </td>
-        <td align="right"><?php echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook=' . $Qaddresses->valueInt('address_book_id') . '&Edit', 'SSL'), osc_draw_image_button('small_edit.gif', OSCOM::getDef('button_edit'))) . '&nbsp;' . osc_link_object(OSCOM::getLink(null, null, 'AddressBook=' . $Qaddresses->valueInt('address_book_id') . '&Delete', 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
+        <td align="right"><?php echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Edit=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), osc_draw_image_button('small_edit.gif', OSCOM::getDef('button_edit'))) . '&nbsp;' . osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Delete=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
       </tr>
       <tr>
         <td colspan="2" style="padding: 0px 0px 10px 10px;"><?php echo Address::format($Qaddresses->toArray(), '<br />'); ?></td>
