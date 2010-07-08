@@ -117,7 +117,7 @@
     </div>
 
 <?php
-  if ( $OSCOM_Application->requireCustomerAccount() ) {
+  if ( !$OSCOM_Customer->isLoggedOn() && $OSCOM_Application->requireCustomerAccount() ) {
     echo 'E-Mail Address: ' . osc_draw_input_field('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . osc_link_object(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order';
   }
 ?>
