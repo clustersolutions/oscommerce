@@ -45,7 +45,7 @@
       }
 
       if ( isset($requested_product) ) {
-        if ( !$application->siteApplicationSubActionExists(OSCOM::getSiteApplication(), $requested_product) ) {
+        if ( !$application->siteApplicationActionExists($requested_product) ) {
           if ( Product::checkEntry($requested_product) ) {
             $product_check = true;
 
