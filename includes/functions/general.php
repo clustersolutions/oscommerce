@@ -116,21 +116,6 @@
   }
 
 /**
- * Return a language definition
- *
- * @param string $key The language definition to return
- * @param int $precision The precision to use for the rounding
- * @return string The language definition
- * @access public
- */
-
-  function __($key) {
-    global $osC_Language;
-
-    return $osC_Language->get($key);
-  }
-
-/**
  * Round a number with the wanted precision
  *
  * @param float $number The number to round
