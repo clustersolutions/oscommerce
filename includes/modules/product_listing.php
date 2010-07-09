@@ -160,7 +160,7 @@
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(OSCOM::getLink(null, 'Checkout', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_buy_now.gif', OSCOM::getDef('button_buy_now'))) . '&nbsp;';
+            $lc_text = osc_link_object(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_buy_now.gif', OSCOM::getDef('button_buy_now'))) . '&nbsp;';
             break;
         }
 

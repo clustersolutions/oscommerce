@@ -20,7 +20,7 @@
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
       $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_top'), OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()));
-      $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_shop'), OSCOM::getLink());
+      $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_shop'), OSCOM::getLink('Shop'));
 
       return true;
     }

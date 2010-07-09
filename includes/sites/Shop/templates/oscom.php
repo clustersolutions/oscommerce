@@ -269,8 +269,8 @@
 
 <?php
     echo '<li>' . osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_account.gif', OSCOM::getDef('my_account'))) . '</li>' .
-         '<li>' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_cart.gif', OSCOM::getDef('cart_contents'))) . '</li>' .
-         '<li>' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), osc_image(DIR_WS_IMAGES . 'header_checkout.gif', OSCOM::getDef('checkout'))) . '</li>';
+         '<li>' . osc_link_object(OSCOM::getLink(null, 'Cart'), osc_image(DIR_WS_IMAGES . 'header_cart.gif', OSCOM::getDef('cart_contents'))) . '</li>' .
+         '<li>' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_checkout.gif', OSCOM::getDef('checkout'))) . '</li>';
 ?>
 
   </ul>
@@ -296,7 +296,7 @@
       echo osc_link_object(OSCOM::getLink(null, 'Account', 'LogOff', 'SSL'), OSCOM::getDef('sign_out')) . ' &nbsp;|&nbsp; ';
     }
 
-    echo osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), OSCOM::getDef('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), OSCOM::getDef('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), OSCOM::getDef('checkout'));
+    echo osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), OSCOM::getDef('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Cart'), OSCOM::getDef('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), OSCOM::getDef('checkout'));
 ?>
 
   </div>

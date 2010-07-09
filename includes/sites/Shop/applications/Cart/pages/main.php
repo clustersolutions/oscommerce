@@ -16,8 +16,8 @@
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  if ( $OSCOM_MessageStack->exists('Checkout') ) {
-    echo $OSCOM_MessageStack->get('Checkout');
+  if ( $OSCOM_MessageStack->exists('Cart') ) {
+    echo $OSCOM_MessageStack->get('Cart');
   }
 ?>
 
@@ -109,7 +109,7 @@
 </div>
 
 <div class="moduleBox">
-  <form name="checkout" action="<?php echo OSCOM::getLink(null, null, 'Confirmation', 'SSL'); ?>" method="post">
+  <form name="checkout" action="<?php echo OSCOM::getLink(null, 'Checkout', null, 'SSL'); ?>" method="post">
 
   <div class="content">
     <div style="float: right;">

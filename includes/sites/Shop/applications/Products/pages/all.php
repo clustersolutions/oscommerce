@@ -42,7 +42,7 @@
 
     </td>
     <td valign="top"><?php echo osc_link_object(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), '<b><u>' . $OSCOM_Product->getTitle() . '</u></b>') . '<br />' . OSCOM::getDef('date_added') . ' ' . DateTime::getLong($OSCOM_Product->getDateAdded()) . '<br />' . OSCOM::getDef('manufacturer') . ' ' . $OSCOM_Product->getManufacturer() . '<br /><br />' . OSCOM::getDef('price') . ' ' . $OSCOM_Product->getPriceFormated(); ?></td>
-    <td align="right" valign="middle"><?php echo osc_link_object(OSCOM::getLink(null, 'Checkout', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart'))); ?></td>
+    <td align="right" valign="middle"><?php echo osc_link_object(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart'))); ?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>

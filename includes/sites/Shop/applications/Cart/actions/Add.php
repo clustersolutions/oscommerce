@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Checkout\Action;
+  namespace osCommerce\OM\Site\Shop\Application\Cart\Action;
 
   use osCommerce\OM\ApplicationAbstract;
   use osCommerce\OM\Registry;
@@ -55,7 +55,7 @@
         }
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Checkout'));
+      osc_redirect(OSCOM::getLink(null, 'Cart'));
     }
   }
 ?>
