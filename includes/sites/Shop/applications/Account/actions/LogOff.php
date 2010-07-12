@@ -28,9 +28,9 @@
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_sign_out'));
       }
 
-      $OSCOM_ShoppingCart->reset();
-
       $OSCOM_Customer->reset();
+
+      $OSCOM_ShoppingCart->reset();
     }
   }
 ?>
