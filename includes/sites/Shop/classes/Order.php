@@ -422,8 +422,8 @@
 
 // HPDL
 //        if (is_object($GLOBALS[$payment])) {
-//          $email_order .= __('email_order_payment_method') . "\n" .
-//                          __('email_order_separator') . "\n";
+//          $email_order .= OSCOM::getDef('email_order_payment_method') . "\n" .
+//                          OSCOM::getDef('email_order_separator') . "\n";
 
 //          $email_order .= $osC_ShoppingCart->getBillingMethod('title') . "\n\n";
 //          if (isset($GLOBALS[$payment]->email_footer)) {

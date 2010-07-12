@@ -43,9 +43,11 @@
     public static function onFail(Product $OSCOM_Product) {
       $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
 
-      $OSCOM_NavigationHistory->setSnapshot();
+      if ( !isset($_GET['Shipping']) ) {
+        $OSCOM_NavigationHistory->setSnapshot();
 
-      osc_redirect(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'));
+        osc_redirect(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'));
+      }
     }
   }
 ?>

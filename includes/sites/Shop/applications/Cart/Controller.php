@@ -32,7 +32,7 @@
       }
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout'), OSCOM::getLink(null, null, null, 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout_shopping_cart'), OSCOM::getLink(null, null, null, 'SSL'));
       }
     }
 

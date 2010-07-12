@@ -199,7 +199,7 @@
   if ( $OSCOM_Payment->hasActionURL() ) {
     $form_action_url = $OSCOM_Payment->getActionURL();
   } else {
-    $form_action_url = OSCOM::getLink(null, 'Checkout', 'Process', 'SSL');
+    $form_action_url = OSCOM::getLink(null, null, 'Process', 'SSL');
   }
 
   echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';

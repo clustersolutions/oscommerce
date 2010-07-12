@@ -78,6 +78,10 @@
       return false;
     }
 
+    function hasEmailAddress() {
+      return isset($this->_data['email_address']);
+    }
+
     function getEmailAddress() {
       if ( isset($this->_data['email_address']) ) {
         return $this->_data['email_address'];

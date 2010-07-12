@@ -58,7 +58,7 @@
           foreach ( $this->_modules as $module ) {
             $module_class = 'osCommerce\\OM\\Site\\Shop\\Module\\Shipping\\' . $module;
 
-            Registry::set('Shipping_' . $module, new $module_class());
+            Registry::set('Shipping_' . $module, new $module_class(), true);
             Registry::get('Shipping_' . $module)->initialize();
           }
 

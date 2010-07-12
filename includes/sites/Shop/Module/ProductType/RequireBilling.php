@@ -13,7 +13,6 @@
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Site\Shop\Product;
-  use osCommerce\OM\Site\Shop\Payment;
 
   class RequireBilling {
     public static function getTitle() {
@@ -39,14 +38,15 @@
       }
 
       if ( $OSCOM_ShoppingCart->hasBillingMethod() === false ) {
-        $OSCOM_Payment = new Payment();
+        $OSCOM_Payment = Registry::get('Payment');
 
-        if ( $OSCOM_Payment->numberOfActive() === 1 ) {
-          $OSCOM_PaymentModule = Registry::get('Payment_' . reset($OSCOM_Payment->getActive()));
+        $payment_modules = $OSCOM_Payment->getActive();
+        $payment_module = $payment_modules[0];
 
-          $OSCOM_ShoppingCart->setBillingMethod(array('id' => $OSCOM_PaymentModule->getCode(),
-                                                      'title' => $OSCOM_PaymentModule->getMethodTitle()));
-        }
+        $OSCOM_PaymentModule = Registry::get('Payment_' . $payment_module);
+
+        $OSCOM_ShoppingCart->setBillingMethod(array('id' => $OSCOM_PaymentModule->getCode(),
+                                                    'title' => $OSCOM_PaymentModule->getMethodTitle()));
       }
 
       return $OSCOM_ShoppingCart->hasBillingAddress() && $OSCOM_ShoppingCart->hasBillingMethod();
@@ -55,9 +55,11 @@
     public static function onFail(Product $OSCOM_Product) {
       $OSCOM_NavigationHistory = Registry::get('NavigationHistory');
 
-      $OSOCM_NavigationHistory->setSnapshot();
+      if ( !isset($_GET['Billing']) ) {
+        $OSCOM_NavigationHistory->setSnapshot();
 
-      osc_redirect(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'));
+        osc_redirect(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'));
+      }
     }
   }
 ?>

@@ -226,7 +226,7 @@
             $OSCOM_ShoppingCart->setBillingAddress($address_array);
             $OSCOM_ShoppingCart->resetBillingMethod();
 
-            osc_redirect(OSCOM::getLink(null, null, 'Confirmation', 'SSL'));
+            osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
           }
         }
 // process the selected shipping destination
@@ -236,7 +236,11 @@
           $OSCOM_ShoppingCart->resetBillingMethod();
 
           osc_redirect(OSCOM::getLink(null, null, 'Billing', 'SSL'));
+        } else {
+          osc_redirect(OSCOM::getLink(null, null, 'Billing&Address', 'SSL'));
         }
+      } else {
+        osc_redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
       }
     }
   }

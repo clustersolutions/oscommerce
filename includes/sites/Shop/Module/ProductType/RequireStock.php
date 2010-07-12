@@ -34,7 +34,7 @@
 
       $OSCOM_NavigationHistory->setSnapshot();
 
-      osc_redirect(OSCOM::getLink(null, 'Checkout', null, 'SSL'));
+      osc_redirect(OSCOM::getLink(null, 'Cart', null, 'SSL'));
     }
   }
 ?>

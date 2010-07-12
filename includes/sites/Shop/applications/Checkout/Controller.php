@@ -13,61 +13,74 @@
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Site\Shop\Product;
+  use osCommerce\OM\Site\Shop\Payment;
 
   class Controller extends \osCommerce\OM\Site\Shop\ApplicationAbstract {
     protected function initialize() {}
 
     protected function process() {
-      $OSCOM_Language = Registry::get('Language');
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+      $OSCOM_Customer = Registry::get('Customer');
+      $OSCOM_Language = Registry::get('Language');
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
+      $OSCOM_MessageStack = Registry::get('MessageStack');
 
-      $OSCOM_Language->load('checkout');
-
-      if ( isset($_GET['action']) && ($_GET['action'] == 'email') ) {
-        $this->_processEmailAddress();
-      }
-
-      $this->_page_title = OSCOM::getDef('shopping_cart_heading');
-      $this->_page_contents = 'shopping_cart.php';
-
+// redirect to shopping cart if shopping cart is empty
       if ( !$OSCOM_ShoppingCart->hasContents() ) {
-        $this->_page_contents = 'shopping_cart_empty.php';
+        osc_redirect(OSCOM::getLink(null, 'Cart'));
       }
 
-      if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout'), OSCOM::getLink(null, null, null, 'SSL'));
+// check for e-mail address
+      if ( !$OSCOM_Customer->hasEmailAddress() ) {
+        if ( isset($_POST['email']) && (strlen(trim($_POST['email'])) >= ACCOUNT_EMAIL_ADDRESS) ) {
+          if ( osc_validate_email_address($_POST['email']) ) {
+            $OSCOM_Customer->setEmailAddress(trim($_POST['email']));
+          } else {
+            $OSCOM_MessageStack->add('Cart', OSCOM::getDef('field_customer_email_address_check_error'));
+
+            osc_redirect(OSCOM::getLink(null, 'Cart'));
+          }
+        } else {
+          $OSCOM_MessageStack->add('Cart', sprintf(OSCOM::getDef('field_customer_email_address_error'), ACCOUNT_EMAIL_ADDRESS));
+
+          osc_redirect(OSCOM::getLink(null, 'Cart'));
+        }
       }
-    }
 
-    public function requireCustomerAccount() {
-      $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+      Registry::set('Payment', new Payment());
 
+// check product type perform_order conditions
       foreach ( $OSCOM_ShoppingCart->getProducts() as $product ) {
         $OSCOM_Product = new Product($product['id']);
+        $OSCOM_Product->isTypeActionAllowed('PerformOrder');
+      }
 
-        if ( $OSCOM_Product->isTypeActionAllowed(array('PerformOrder', 'RequireCustomerAccount'), null, false) ) {
-          return true;
+      $OSCOM_Language->load('checkout');
+      $OSCOM_Language->load('order');
+
+      $this->_page_title = OSCOM::getDef('confirmation_heading');
+
+      if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout_confirmation'), OSCOM::getLink(null, 'Checkout', null, 'SSL'));
+      }
+
+      if ( isset($_POST['comments']) && isset($_SESSION['comments']) && empty($_POST['comments']) ) {
+        unset($_SESSION['comments']);
+      } elseif ( !empty($_POST['comments']) ) {
+        $_SESSION['comments'] = osc_sanitize_string($_POST['comments']);
+      }
+
+      if ( DISPLAY_CONDITIONS_ON_CHECKOUT == '1' ) {
+        if ( !isset($_POST['conditions']) || ($_POST['conditions'] != '1') ) {
+          $OSCOM_MessageStack->add('Checkout', OSCOM::getDef('error_conditions_not_accepted'), 'error');
         }
       }
 
-      return false;
-    }
+      $OSCOM_Payment = Registry::get('Payment');
 
-    protected function _processEmailAddress() {
-      global $osC_Customer, $osC_MessageStack;
-
-      if ( isset($_POST['email']) && (strlen(trim($_POST['email'])) >= ACCOUNT_EMAIL_ADDRESS) ) {
-        if ( osc_validate_email_address($_POST['email']) ) {
-          $osC_Customer->setEmailAddress(trim($_POST['email']));
-
-          osc_redirect(osc_href_link(FILENAME_CHECKOUT, 'confirmation', 'SSL'));
-        } else {
-          $osC_MessageStack->add($this->_module, __('field_customer_email_address_check_error'));
-        }
-      } else {
-        $osC_MessageStack->add($this->_module, sprintf(__('field_customer_email_address_error'), ACCOUNT_EMAIL_ADDRESS));
+      if ( $OSCOM_Payment->hasActive() ) {
+        $OSCOM_Payment->pre_confirmation_check();
       }
     }
   }

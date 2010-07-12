@@ -35,7 +35,7 @@
             } else {
               $OSCOM_ShoppingCart->setShippingMethod($quote);
 
-              osc_redirect(OSCOM::getLink(null, null, 'Confirmation', 'SSL'));
+              osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
             }
           } else {
             $OSCOM_ShoppingCart->resetShippingMethod();
@@ -44,7 +44,7 @@
       } else {
         $OSCOM_ShoppingCart->resetShippingMethod();
 
-        osc_redirect(OSCOM::getLink(null, null, 'Confirmation', 'SSL'));
+        osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
       }
     }
   }

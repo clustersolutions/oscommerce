@@ -5901,7 +5901,8 @@ INSERT INTO osc_orders_transactions_status VALUES ( '3', '1', 'Approve');
 INSERT INTO osc_orders_transactions_status VALUES ( '4', '1', 'Inquiry');
 
 INSERT INTO osc_product_types values (1, 'Shippable');
-INSERT INTO osc_product_types_assignments values (1, 1, 'AddToShoppingCart', 'RequireCustomerAccount', 1);
+INSERT INTO osc_product_types_assignments values (1, 1, 'PerformOrder', 'RequireShipping', 100);
+INSERT INTO osc_product_types_assignments values (2, 1, 'PerformOrder', 'RequireBilling', 200);
 
 INSERT INTO osc_products_images_groups values (1, 1, 'Originals', 'originals', 0, 0, 0);
 INSERT INTO osc_products_images_groups values (2, 1, 'Thumbnails', 'thumbnails', 100, 80, 0);

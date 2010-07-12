@@ -45,7 +45,7 @@
         foreach ( $this->_modules as $modules ) {
           $module_class = 'osCommerce\\OM\\Site\\Shop\\Module\\Payment\\' . $modules;
 
-          Registry::set('Payment_' . $modules, new $module_class());
+          Registry::set('Payment_' . $modules, new $module_class(), true);
         }
 
         usort($this->_modules, function ($a, $b) {

@@ -224,7 +224,7 @@
 
             $OSCOM_ShoppingCart->setShippingAddress($address_array);
 
-            osc_redirect(OSCOM::getLink(null, null, 'Confirmation', 'SSL'));
+            osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
           }
         }
 // process the selected shipping destination
@@ -233,7 +233,11 @@
           $OSCOM_ShoppingCart->setShippingAddress($_POST['ab']);
 
           osc_redirect(OSCOM::getLink(null, null, 'Shipping', 'SSL'));
+        } else {
+          osc_redirect(OSCOM::getLink(null, null, 'Shipping&Address', 'SSL'));
         }
+      } else {
+        osc_redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
       }
     }
   }

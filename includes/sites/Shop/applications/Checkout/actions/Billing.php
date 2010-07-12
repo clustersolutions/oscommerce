@@ -26,20 +26,6 @@
 
       global $osC_oiAddress; // HPDL
 
-// redirect to shopping cart if shopping cart is empty
-      if ( !$OSCOM_ShoppingCart->hasContents() ) {
-        osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
-      }
-
-// check product type perform_order conditions
-      foreach ( $OSCOM_ShoppingCart->getProducts() as $product ) {
-        $OSCOM_Product = new Product($product['id']);
-
-        if ( !$OSCOM_Product->isTypeActionAllowed('PerformOrder', 'RequireBilling') ) {
-          osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
-        }
-      }
-
       $application->setPageTitle(OSCOM::getDef('payment_method_heading'));
       $application->setPageContent('billing.php');
 
@@ -62,7 +48,7 @@
         $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_payment.js');
 
 // load all enabled payment modules
-        Registry::set('Payment', new Payment());
+        Registry::set('Payment', new Payment(), true);
         $OSCOM_Payment = Registry::get('Payment');
 
         $OSCOM_Template->addJavascriptBlock($OSCOM_Payment->getJavascriptBlocks());

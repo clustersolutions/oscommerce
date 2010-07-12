@@ -13,19 +13,23 @@
   use osCommerce\OM\ApplicationAbstract;
   use osCommerce\OM\Registry;
   use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Product;
-  use osCommerce\OM\Site\Shop\Payment;
 
   class Success {
     public static function execute(ApplicationAbstract $application) {
+      $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
+
+      $OSCOM_ShoppingCart->reset(true);
+
+// unregister session variables used during checkout
+      unset($_SESSION['comments']);
 
       $application->setPageTitle(OSCOM::getDef('success_heading'));
       $application->setPageContent('success.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout_success'), OSCOM::getLink(null, 'Checkout', 'Success', 'SSL'));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_checkout_success'), OSCOM::getLink(null, null, 'Success', 'SSL'));
       }
 
 //      if ( $_GET[$this->_module] == 'update' ) {

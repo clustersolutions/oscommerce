@@ -23,22 +23,9 @@
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
       $OSCOM_Template = Registry::get('Template');
+      $OSCOM_Customer = Registry::get('Customer');
 
       global $osC_oiAddress; // HPDL
-
-// redirect to shopping cart if shopping cart is empty
-      if ( !$OSCOM_ShoppingCart->hasContents() ) {
-        osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
-      }
-
-// check product type perform_order conditions
-      foreach ( $OSCOM_ShoppingCart->getProducts() as $product ) {
-        $OSCOM_Product = new Product($product['id']);
-
-        if ( !$OSCOM_Product->isTypeActionAllowed('PerformOrder', 'RequireShipping') ) {
-          osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
-        }
-      }
 
       $application->setPageTitle(OSCOM::getDef('shipping_method_heading'));
       $application->setPageContent('shipping.php');
@@ -62,7 +49,7 @@
         $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_shipping.js');
 
 // load all enabled shipping modules
-        Registry::set('Shipping', new ShippingClass());
+        Registry::set('Shipping', new ShippingClass(), true);
       }
     }
   }
