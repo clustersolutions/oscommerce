@@ -1,31 +1,19 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-/**
- * Set the error reporting level to E_ALL and log all errors
+/*
+ * Set default timezone if none exists (PHP 5.3 throws an E_WARNING)
  */
 
-  error_reporting(E_ALL);
-  ini_set('log_errors', true);
-
-  if ( defined('DIR_FS_WORK') ) {
-    ini_set('error_log', DIR_FS_WORK . 'oscommerce_errors.log');
-  } else {
-    $error_log_path = dirname(ini_get('error_log'));
-    if ( file_exists($error_log_path) ) { // checks if the directory exists
-      ini_set('error_log', $error_log_path . '/oscommerce_errors.log');
-    }
+  if ( (strlen(ini_get('date.timezone')) < 1) && function_exists('date_default_timezone_set') ) {
+    date_default_timezone_set(@date_default_timezone_get());
   }
 
 /**
@@ -93,7 +81,7 @@
         @exec('nslookup -type=' . escapeshellarg($type) . ' ' . escapeshellarg($host), $output);
 
         foreach ( $output as $k => $line ) {
-          if ( eregi('^' . $host, $line) ) {
+          if ( preg_match('/^' . $host . '/i', $line) ) {
             return true;
           }
         }

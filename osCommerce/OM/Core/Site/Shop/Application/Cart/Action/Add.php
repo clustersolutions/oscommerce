@@ -1,0 +1,61 @@
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
+  namespace osCommerce\OM\Core\Site\Shop\Application\Cart\Action;
+
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\OSCOM;
+
+  class Add {
+    public static function execute(ApplicationAbstract $application) {
+      $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+
+      $requested_product = null;
+
+      if ( count($_GET) > 2 ) {
+        $requested_product = basename(key(array_slice($_GET, 2, 1, true)));
+
+        if ( $requested_product == 'Add' ) {
+          unset($requested_product);
+
+          if ( count($_GET) > 3 ) {
+            $requested_product = basename(key(array_slice($_GET, 3, 1, true)));
+          }
+        }
+      }
+
+      if ( isset($requested_product) ) {
+        if ( Product::checkEntry($requested_product) ) {
+          $OSCOM_Product = new Product($requested_product);
+
+          if ( $OSCOM_Product->isTypeActionAllowed('AddToShoppingCart') ) {
+            if ( $OSCOM_Product->hasVariants() ) {
+              if ( isset($_POST['variants']) && is_array($_POST['variants']) && !empty($_POST['variants']) ) {
+                if ( $OSCOM_Product->variantExists($_POST['variants']) ) {
+                  $OSCOM_ShoppingCart->add($OSCOM_Product->getProductVariantID($_POST['variants']));
+                } else {
+                  osc_redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
+                }
+              } else {
+                osc_redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
+              }
+            } else {
+              $OSCOM_ShoppingCart->add($OSCOM_Product->getID());
+            }
+          }
+        }
+      }
+
+      osc_redirect(OSCOM::getLink(null, 'Cart'));
+    }
+  }
+?>

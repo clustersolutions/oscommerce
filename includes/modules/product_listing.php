@@ -1,16 +1,15 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Product;
 
 // create column list
   $define_list = array('PRODUCT_LIST_MODEL' => PRODUCT_LIST_MODEL,
@@ -36,7 +35,7 @@
 <div class="listingPageLinks">
   <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
-  <?php echo $Qlisting->getBatchTotalPages($osC_Language->get('result_set_number_of_products')); ?>
+  <?php echo $Qlisting->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
 </div>
 
 <?php
@@ -59,38 +58,38 @@
 
       switch ($column_list[$col]) {
         case 'PRODUCT_LIST_MODEL':
-          $lc_text = $osC_Language->get('listing_model_heading');
+          $lc_text = OSCOM::getDef('listing_model_heading');
           $lc_key = 'model';
           break;
         case 'PRODUCT_LIST_NAME':
-          $lc_text = $osC_Language->get('listing_products_heading');
+          $lc_text = OSCOM::getDef('listing_products_heading');
           $lc_key = 'name';
           break;
         case 'PRODUCT_LIST_MANUFACTURER':
-          $lc_text = $osC_Language->get('listing_manufacturer_heading');
+          $lc_text = OSCOM::getDef('listing_manufacturer_heading');
           $lc_key = 'manufacturer';
           break;
         case 'PRODUCT_LIST_PRICE':
-          $lc_text = $osC_Language->get('listing_price_heading');
+          $lc_text = OSCOM::getDef('listing_price_heading');
           $lc_key = 'price';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_QUANTITY':
-          $lc_text = $osC_Language->get('listing_quantity_heading');
+          $lc_text = OSCOM::getDef('listing_quantity_heading');
           $lc_key = 'quantity';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_WEIGHT':
-          $lc_text = $osC_Language->get('listing_weight_heading');
+          $lc_text = OSCOM::getDef('listing_weight_heading');
           $lc_key = 'weight';
           $lc_align = 'right';
           break;
         case 'PRODUCT_LIST_IMAGE':
-          $lc_text = $osC_Language->get('listing_image_heading');
+          $lc_text = OSCOM::getDef('listing_image_heading');
           $lc_align = 'center';
           break;
         case 'PRODUCT_LIST_BUY_NOW':
-          $lc_text = $osC_Language->get('listing_buy_now_heading');
+          $lc_text = OSCOM::getDef('listing_buy_now_heading');
           $lc_align = 'center';
           break;
       }
@@ -109,7 +108,7 @@
     $rows = 0;
 
     while ($Qlisting->next()) {
-      $osC_Product = new osC_Product($Qlisting->valueInt('products_id'));
+      $OSCOM_Product = new Product($Qlisting->valueInt('products_id'));
 
       $rows++;
 
@@ -121,47 +120,47 @@
         switch ($column_list[$col]) {
           case 'PRODUCT_LIST_MODEL':
             $lc_align = '';
-            $lc_text = '&nbsp;' . $osC_Product->getModel() . '&nbsp;';
+            $lc_text = '&nbsp;' . $OSCOM_Product->getModel() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $osC_Product->getTitle());
+              $lc_text = osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Product->getTitle());
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . ($cPath ? '&cPath=' . $cPath : '')), $osC_Product->getTitle()) . '&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Product->getTitle()) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
             $lc_align = '';
             $lc_text = '&nbsp;';
 
-            if ( $osC_Product->hasManufacturer() ) {
-              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_DEFAULT, 'manufacturers=' . $osC_Product->getManufacturerID()), $osC_Product->getManufacturer()) . '&nbsp;';
+            if ( $OSCOM_Product->hasManufacturer() ) {
+              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Index', 'manufacturers=' . $OSCOM_Product->getManufacturerID()), $OSCOM_Product->getManufacturer()) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_PRICE':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $osC_Product->getPriceFormated() . '&nbsp;';
+            $lc_text = '&nbsp;' . $OSCOM_Product->getPriceFormated() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_QUANTITY':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $osC_Product->getQuantity() . '&nbsp;';
+            $lc_text = '&nbsp;' . $OSCOM_Product->getQuantity() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_WEIGHT':
             $lc_align = 'right';
-            $lc_text = '&nbsp;' . $osC_Product->getWeight() . '&nbsp;';
+            $lc_text = '&nbsp;' . $OSCOM_Product->getWeight() . '&nbsp;';
             break;
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle()));
+              $lc_text = osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle()));
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(osc_href_link(FILENAME_PRODUCTS, $osC_Product->getKeyword() . ($cPath ? '&cPath=' . $cPath : '')), $osC_Image->show($osC_Product->getImage(), $osC_Product->getTitle())) . '&nbsp;';
+              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle())) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), $osC_Product->getKeyword() . '&' . osc_get_all_get_params(array('action')) . '&action=cart_add'), osc_draw_image_button('button_buy_now.gif', $osC_Language->get('button_buy_now'))) . '&nbsp;';
+            $lc_text = osc_link_object(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_buy_now.gif', OSCOM::getDef('button_buy_now'))) . '&nbsp;';
             break;
         }
 
@@ -176,7 +175,7 @@
 
 <?php
   } else {
-    echo $osC_Language->get('no_products_in_category');
+    echo OSCOM::getDef('no_products_in_category');
   }
 ?>
 
@@ -189,7 +188,7 @@
 <div class="listingPageLinks">
   <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
 
-  <?php echo $Qlisting->getBatchTotalPages($osC_Language->get('result_set_number_of_products')); ?>
+  <?php echo $Qlisting->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
 </div>
 
 <?php

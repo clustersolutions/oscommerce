@@ -17,7 +17,7 @@
       global $osC_Database;
 
       $Qmanufacturer = $osC_Database->query('select manufacturers_name from :table_manufacturers where manufacturers_id = :manufacturers_id');
-      $Qmanufacturer->bindTable(':table_manufacturers');
+      $Qmanufacturer->bindTable(':table_manufacturers', TABLE_MANUFACTURERS);
       $Qmanufacturer->bindInt(':manufacturers_id', $value);
       $Qmanufacturer->execute();
 

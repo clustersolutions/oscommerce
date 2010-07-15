@@ -12,10 +12,10 @@
   as published by the Free Software Foundation.
 */
 
+  define('TABLE_ADDRESS_BOOK', DB_TABLE_PREFIX . 'address_book');
   define('TABLE_ADMINISTRATORS', DB_TABLE_PREFIX . 'administrators');
   define('TABLE_ADMINISTRATORS_ACCESS', DB_TABLE_PREFIX . 'administrators_access');
   define('TABLE_ADMINISTRATORS_LOG', DB_TABLE_PREFIX . 'administrators_log');
-  define('TABLE_ADDRESS_BOOK', DB_TABLE_PREFIX . 'address_book');
   define('TABLE_BANNERS', DB_TABLE_PREFIX . 'banners');
   define('TABLE_BANNERS_HISTORY', DB_TABLE_PREFIX . 'banners_history');
   define('TABLE_CATEGORIES', DB_TABLE_PREFIX . 'categories');
@@ -28,6 +28,7 @@
   define('TABLE_CREDIT_CARDS', DB_TABLE_PREFIX . 'credit_cards');
   define('TABLE_CURRENCIES', DB_TABLE_PREFIX . 'currencies');
   define('TABLE_CUSTOMERS', DB_TABLE_PREFIX . 'customers');
+  define('TABLE_FK_RELATIONSHIPS', DB_TABLE_PREFIX . 'fk_relationships');
   define('TABLE_GEO_ZONES', DB_TABLE_PREFIX . 'geo_zones');
   define('TABLE_LANGUAGES', DB_TABLE_PREFIX . 'languages');
   define('TABLE_LANGUAGES_DEFINITIONS', DB_TABLE_PREFIX . 'languages_definitions');
@@ -45,6 +46,8 @@
   define('TABLE_ORDERS_TRANSACTIONS_HISTORY', DB_TABLE_PREFIX . 'orders_transactions_history');
   define('TABLE_ORDERS_TRANSACTIONS_STATUS', DB_TABLE_PREFIX . 'orders_transactions_status');
   define('TABLE_PRODUCT_ATTRIBUTES', DB_TABLE_PREFIX . 'product_attributes');
+  define('TABLE_PRODUCT_TYPES', DB_TABLE_PREFIX . 'product_types');
+  define('TABLE_PRODUCT_TYPES_ASSIGNMENTS', DB_TABLE_PREFIX . 'product_types_assignments');
   define('TABLE_PRODUCTS', DB_TABLE_PREFIX . 'products');
   define('TABLE_PRODUCTS_DESCRIPTION', DB_TABLE_PREFIX . 'products_description');
   define('TABLE_PRODUCTS_IMAGES', DB_TABLE_PREFIX . 'products_images');

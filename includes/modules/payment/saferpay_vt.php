@@ -172,7 +172,7 @@
       global $osC_Language, $osC_MessageStack;
 
       if (isset($_GET['DATA']) && (empty($_GET['DATA']) === false) && isset($_GET['SIGNATURE']) && (empty($_GET['SIGNATURE']) === false)) {
-        if (ereg("^[a-zA-Z0-9]+$", $_GET['SIGNATURE']) && preg_match('/^<IDP\s+([a-zA-Z0-9]+="[a-zA-Z0-9().\s-]*"\s*)*\/>$/', $_GET['DATA'])) {
+        if (preg_match("/^[a-zA-Z0-9]+$/", $_GET['SIGNATURE']) && preg_match('/^<IDP\s+([a-zA-Z0-9]+="[a-zA-Z0-9().\s-]*"\s*)*\/>$/', $_GET['DATA'])) {
           return true;
         }
       }

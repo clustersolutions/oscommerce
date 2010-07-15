@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id: flat.php 421 2006-02-08 17:53:17Z hpdl $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,26 +9,21 @@
 */
 
   class osC_Shipping_free extends osC_Shipping {
-    var $icon;
+    protected $icon;
+    protected $_title;
+    protected $_code = 'free';
+    protected $_status = false;
+    protected $_sort_order;
 
-    var $_title,
-        $_code = 'free',
-        $_status = false,
-        $_sort_order;
-
-// class constructor
-    function osC_Shipping_free() {
-      global $osC_Language;
-
+    public function __construct() {
       $this->icon = '';
 
-      $this->_title = $osC_Language->get('shipping_free_title');
-      $this->_description = $osC_Language->get('shipping_free_description');
+      $this->_title = __('shipping_free_title');
+      $this->_description = __('shipping_free_description');
       $this->_status = (defined('MODULE_SHIPPING_FREE_STATUS') && (MODULE_SHIPPING_FREE_STATUS == 'True') ? true : false);
     }
 
-// class methods
-    function initialize() {
+    public function initialize() {
       global $osC_Database, $osC_ShoppingCart;
 
       if ($osC_ShoppingCart->getTotal() >= MODULE_SHIPPING_FREE_MINIMUM_ORDER) {
@@ -66,13 +57,13 @@
       }
     }
 
-    function quote() {
-      global $osC_Language, $osC_Currencies;
+    public function quote() {
+      global $osC_Currencies;
 
       $this->quotes = array('id' => $this->_code,
                             'module' => $this->_title,
                             'methods' => array(array('id' => $this->_code,
-                                                     'title' => sprintf($osC_Language->get('shipping_free_for_amount'), $osC_Currencies->format(MODULE_SHIPPING_FREE_MINIMUM_ORDER)),
+                                                     'title' => sprintf(__('shipping_free_for_amount'), $osC_Currencies->format(MODULE_SHIPPING_FREE_MINIMUM_ORDER)),
                                                      'cost' => 0)),
                             'tax_class_id' => 0);
 

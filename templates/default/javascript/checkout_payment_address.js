@@ -1,10 +1,6 @@
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2005 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -27,10 +23,10 @@ function selectRowEffect(object, buttonSelect) {
   selected = object;
 
 // one button is not an array
-  if (document.checkout_address.address[0]) {
-    document.checkout_address.address[buttonSelect].checked=true;
+  if (document.checkout_address.ab[0]) {
+    document.checkout_address.ab[buttonSelect].checked=true;
   } else {
-    document.checkout_address.address.checked=true;
+    document.checkout_address.ab.checked=true;
   }
 }
 

@@ -14,7 +14,7 @@
 
   class osC_Actions_notify_remove {
     function execute() {
-      global $osC_Database, $osC_Session, $osC_NavigationHistory, $osC_Customer;
+      global $osC_Database, $osC_NavigationHistory, $osC_Customer;
 
       if (!$osC_Customer->isLoggedOn()) {
         $osC_NavigationHistory->setSnapshot();
@@ -27,7 +27,7 @@
       $id = false;
 
       foreach ($_GET as $key => $value) {
-        if ( (ereg('^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$', $key) || ereg('^[a-zA-Z0-9 -_]*$', $key)) && ($key != $osC_Session->getName()) ) {
+        if ( (preg_match('/^[0-9]+(#?([0-9]+:?[0-9]+)+(;?([0-9]+:?[0-9]+)+)*)*$/', $key) || preg_match('/^[a-zA-Z0-9 -_]*$/', $key)) && ($key != OSCOM_Registry::get('Session')->getName()) ) {
           $id = $key;
         }
 

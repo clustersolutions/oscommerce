@@ -1,16 +1,16 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Mail;
 
 /**
  * Redirect to a URL address
@@ -74,9 +74,9 @@
  */
 
   function osc_sanitize_string($string) {
-    $string = ereg_replace(' +', ' ', trim($string));
-
-    return preg_replace("/[<>]/", '_', $string);
+    $patterns = array ('/ +/', '/[<>]/');
+    $replace = array (' ', '_');
+    return preg_replace($patterns, $replace, trim($string));
   }
 
 /**
@@ -87,11 +87,9 @@
  */
 
   function osc_get_all_get_params($exclude = null) {
-    global $osC_Session;
-
     $params = '';
 
-    $array = array($osC_Session->getName(),
+    $array = array(Registry::get('Session')->getName(),
                    'error',
                    'x',
                    'y');
@@ -154,8 +152,6 @@
  */
 
   function osc_create_sort_heading($key, $heading) {
-    global $osC_Language;
-
     $current = false;
     $direction = false;
 
@@ -173,7 +169,7 @@
       }
     }
 
-    return osc_link_object(osc_href_link(basename($_SERVER['SCRIPT_FILENAME']), osc_get_all_get_params(array('page', 'sort')) . '&sort=' . $key . ($direction == '+' ? '|d' : '')), $heading . (($key == $current) ? $direction : ''), 'title="' . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? sprintf($osC_Language->get('listing_sort_ascendingly'), $heading) : sprintf($osC_Language->get('listing_sort_descendingly'), $heading)) . '" class="productListing-heading"');
+    return osc_link_object(OSCOM::getLink(null, null, osc_get_all_get_params(array('page', 'sort')) . '&sort=' . $key . ($direction == '+' ? '|d' : '')), $heading . (($key == $current) ? $direction : ''), 'title="' . (isset($_GET['sort']) && ($_GET['sort'] == $key) ? sprintf(OSCOM::getDef('listing_sort_ascendingly'), $heading) : sprintf(OSCOM::getDef('listing_sort_descendingly'), $heading)) . '" class="productListing-heading"');
   }
 
 /**
@@ -242,9 +238,9 @@
       return false;
     }
 
-    $osC_Mail = new osC_Mail($to_name, $to_email_address, $from_name, $from_email_address, $subject);
-    $osC_Mail->setBodyPlain($body);
-    $osC_Mail->send();
+    $OSCOM_Mail = new Mail($to_name, $to_email_address, $from_name, $from_email_address, $subject);
+    $OSCOM_Mail->setBodyPlain($body);
+    $OSCOM_Mail->send();
   }
 
 /**
@@ -405,22 +401,22 @@
   function osc_validate_email_address($email_address) {
     $valid_address = true;
 
-    $mail_pat = '^(.+)@(.+)$';
+    $mail_pat = '/^(.+)@(.+)$/i';
     $valid_chars = "[^] \(\)<>@,;:\.\\\"\[]";
     $atom = "$valid_chars+";
     $quoted_user='(\"[^\"]*\")';
     $word = "($atom|$quoted_user)";
-    $user_pat = "^$word(\.$word)*$";
-    $ip_domain_pat='^\[([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\]$';
-    $domain_pat = "^$atom(\.$atom)*$";
+    $user_pat = "/^$word(\.$word)*$/i";
+    $ip_domain_pat='/^\[([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\]$/i';
+    $domain_pat = "/^$atom(\.$atom)*$/i";
 
-    if (eregi($mail_pat, $email_address, $components)) {
+    if (preg_match($mail_pat, $email_address, $components)) {
       $user = $components[1];
       $domain = $components[2];
 // validate user
-      if (eregi($user_pat, $user)) {
+      if (preg_match($user_pat, $user)) {
 // validate domain
-        if (eregi($ip_domain_pat, $domain, $ip_components)) {
+        if (preg_match($ip_domain_pat, $domain, $ip_components)) {
 // this is an IP address
           for ($i=1;$i<=4;$i++) {
             if ($ip_components[$i] > 255) {
@@ -430,7 +426,7 @@
           }
         } else {
 // Domain is a name, not an IP
-          if (eregi($domain_pat, $domain)) {
+          if (preg_match($domain_pat, $domain)) {
 // domain name seems valid, but now make sure that it ends in a valid TLD or ccTLD and that there's a hostname preceding the domain or country.
             $domain_components = explode(".", $domain);
 // Make sure there's a host name preceding the domain.
@@ -439,7 +435,7 @@
             } else {
               $top_level_domain = strtolower($domain_components[sizeof($domain_components)-1]);
 // Allow all 2-letter TLDs (ccTLDs)
-              if (eregi('^[a-z][a-z]$', $top_level_domain) != 1) {
+              if (preg_match('/^[a-z][a-z]$/i', $top_level_domain) != 1) {
                 $tld_pattern = '';
 // Get authorized TLDs from text file
                 $tlds = file(DIR_FS_CATALOG . 'includes/tld.txt');
@@ -448,13 +444,13 @@
                   $words = explode('#', $line);
                   $tld = trim($words[0]);
 // TLDs should be 3 letters or more
-                  if (eregi('^[a-z]{3,}$', $tld) == 1) {
+                  if (preg_match('/^[a-z]{3,}$/i', $tld) == 1) {
                     $tld_pattern .= '^' . $tld . '$|';
                   }
                 }
 // Remove last '|'
                 $tld_pattern = substr($tld_pattern, 0, -1);
-                if (eregi("$tld_pattern", $top_level_domain) == 0) {
+                if (preg_match("/$tld_pattern/i", $top_level_domain) == 0) {
                   $valid_address = false;
                 }
               }

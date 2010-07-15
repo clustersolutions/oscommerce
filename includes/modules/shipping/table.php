@@ -1,11 +1,7 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
@@ -13,27 +9,22 @@
 */
 
   class osC_Shipping_table extends osC_Shipping {
-    var $icon;
+    protected $icon;
+    protected $_title;
+    protected $_code = 'table';
+    protected $_status = false;
+    protected $_sort_order;
 
-    var $_title,
-        $_code = 'table',
-        $_status = false,
-        $_sort_order;
-
-// class constructor
-    function osC_Shipping_table() {
-      global $osC_Language;
-
+    public function __construct() {
       $this->icon = '';
 
-      $this->_title = $osC_Language->get('shipping_table_title');
-      $this->_description = $osC_Language->get('shipping_table_description');
+      $this->_title = __('shipping_table_title');
+      $this->_description = __('shipping_table_description');
       $this->_status = (defined('MODULE_SHIPPING_TABLE_STATUS') && (MODULE_SHIPPING_TABLE_STATUS == 'True') ? true : false);
       $this->_sort_order = (defined('MODULE_SHIPPING_TABLE_SORT_ORDER') ? MODULE_SHIPPING_TABLE_SORT_ORDER : null);
     }
 
-// class methods
-    function initialize() {
+    public function initialize() {
       global $osC_Database, $osC_ShoppingCart;
 
       $this->tax_class = MODULE_SHIPPING_TABLE_TAX_CLASS;
@@ -63,16 +54,32 @@
       }
     }
 
-    function quote() {
-      global $osC_Language, $osC_ShoppingCart, $osC_Weight;
+    public function quote() {
+      global $osC_Currencies, $osC_Tax, $osC_ShoppingCart, $osC_Weight;
+
+      $order_total = 0;
 
       if (MODULE_SHIPPING_TABLE_MODE == 'price') {
-        $order_total = $osC_ShoppingCart->getSubTotal();
+        foreach ( $osC_ShoppingCart->getProducts() as $product ) {
+          $osC_Product = new osC_Product($product['id']);
+
+          if ( $osC_Product->isTypeActionAllowed('apply_shipping_fees') ) {
+            $tax = $osC_Tax->getTaxRate($product['tax_class_id'], $osC_ShoppingCart->getTaxingAddress('country_id'), $osC_ShoppingCart->getTaxingAddress('zone_id'));
+
+            $order_total += $osC_Currencies->addTaxRateToPrice($product['price'], $tax, $product['quantity']);
+          }
+        }
       } else {
-        $order_total = $osC_Weight->convert($osC_ShoppingCart->getWeight(), SHIPPING_WEIGHT_UNIT, MODULE_SHIPPING_TABLE_WEIGHT_UNIT);
+        foreach ( $osC_ShoppingCart->getProducts() as $product ) {
+          $osC_Product = new osC_Product($product['id']);
+
+          if ( $osC_Product->isTypeActionAllowed('apply_shipping_fees') ) {
+            $order_total += $osC_Weight->convert($product['weight'], $product['weight_class_id'], MODULE_SHIPPING_TABLE_WEIGHT_UNIT) * $product['quantity'];
+          }
+        }
       }
 
-      $table_cost = split("[:,]" , MODULE_SHIPPING_TABLE_COST);
+      $table_cost = preg_split("/[:,]/" , MODULE_SHIPPING_TABLE_COST);
       $size = sizeof($table_cost);
       for ($i=0, $n=$size; $i<$n; $i+=2) {
         if ($order_total <= $table_cost[$i]) {
@@ -88,7 +95,7 @@
       $this->quotes = array('id' => $this->_code,
                             'module' => $this->_title,
                             'methods' => array(array('id' => $this->_code,
-                                                     'title' => $osC_Language->get('shipping_table_method'),
+                                                     'title' => __('shipping_table_method'),
                                                      'cost' => $shipping + MODULE_SHIPPING_TABLE_HANDLING)),
                             'tax_class_id' => $this->tax_class);
 

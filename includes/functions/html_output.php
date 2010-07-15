@@ -1,16 +1,15 @@
 <?php
 /*
-  $Id$
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
 /**
  * Generate an internal URL address for the catalog side
@@ -25,7 +24,7 @@
  */
 
   function osc_href_link($page = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_full_address = false) {
-    global $request_type, $osC_Session, $osC_Services;
+    global $request_type, $osC_Services;
 
     if (!in_array($connection, array('NONSSL', 'SSL', 'AUTO'))) {
       $connection = 'NONSSL';
@@ -81,12 +80,12 @@
     }
 
 // Add the session ID when moving from different HTTP and HTTPS servers, or when SID is defined
-    if ( ($add_session_id === true) && $osC_Session->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+    if ( ($add_session_id === true) && Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
       if (!osc_empty(SID)) {
         $_sid = SID;
       } elseif ( (($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL === true)) || (($request_type == 'SSL') && ($connection != 'SSL')) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
-          $_sid = $osC_Session->getName() . '=' . $osC_Session->getID();
+          $_sid = Registry::get('Session')->getName() . '=' . Registry::get('Session')->getID();
         }
       }
     }
@@ -180,9 +179,9 @@
  */
 
   function osc_draw_image_submit_button($image, $title = null, $parameters = null) {
-    global $osC_Language;
+    $OSCOM_Language = Registry::get('Language');
 
-    $image_submit = '<input type="image" src="' . osc_output_string('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image) . '"';
+    $image_submit = '<input type="image" src="' . osc_output_string('includes/languages/' . $OSCOM_Language->getCode() . '/images/buttons/' . $image) . '"';
 
     if (!empty($title)) {
       $image_submit .= ' alt="' . osc_output_string($title) . '" title="' . osc_output_string($title) . '"';
@@ -207,9 +206,9 @@
  */
 
   function osc_draw_image_button($image, $title = null, $parameters = null) {
-    global $osC_Language;
+    $OSCOM_Language = Registry::get('Language');
 
-    return osc_image('includes/languages/' . $osC_Language->getCode() . '/images/buttons/' . $image, $title, null, null, $parameters);
+    return osc_image('includes/languages/' . $OSCOM_Language->getCode() . '/images/buttons/' . $image, $title, null, null, $parameters);
   }
 
 /**
@@ -509,10 +508,8 @@
  */
 
   function osc_draw_hidden_session_id_field() {
-    global $osC_Session;
-
-    if ($osC_Session->hasStarted() && !osc_empty(SID)) {
-      return osc_draw_hidden_field($osC_Session->getName(), $osC_Session->getID());
+    if ( Registry::get('Session')->hasStarted() && !osc_empty(SID) ) {
+      return osc_draw_hidden_field(Registry::get('Session')->getName(), Registry::get('Session')->getID());
     }
   }
 
@@ -593,6 +590,63 @@
 
     return '<label for="' . osc_output_string($for) . '"' . (!empty($access_key) ? ' accesskey="' . osc_output_string($access_key) . '"' : '') . '>' . osc_output_string($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
   }
+
+  function osc_draw_button($params) {
+    static $button_counter = 1;
+
+    $types = array('submit', 'button', 'reset');
+
+    if ( !isset($params['type']) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( !in_array($params['type'], $types) ) {
+      $params['type'] = 'submit';
+    }
+
+    if ( ($params['type'] == 'submit') && isset($params['href']) ) {
+      $params['type'] = 'button';
+    }
+
+    $button = '<button id="button' . $button_counter . '" type="' . osc_output_string($params['type']) . '"';
+
+    if ( isset($params['href']) ) {
+      $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
+    }
+
+    if ( isset($params['params']) ) {
+      $button .= ' ' . $params['params'];
+    }
+
+    $button .= '>' . $params['title'] . '</button><script>$("#button' . $button_counter . '").button(';
+
+    if ( isset($params['icon']) ) {
+      if ( !isset($params['iconpos']) ) {
+        $params['iconpos'] = 'left';
+      }
+
+      if ( $params['iconpos'] == 'left' ) {
+        $button .= '{icons:{primary:"ui-icon-' . $params['icon'] . '"}}';
+      } else {
+        $button .= '{icons:{secondary:"ui-icon-' . $params['icon'] . '"}}';
+      }
+    }
+
+    $button .= ')';
+
+    if ( isset($params['priority']) ) {
+      $button .= '.addClass("ui-priority-' . $params['priority'] . '")';
+    }
+
+    $button .= ';</script>';
+
+    $button_counter++;
+
+    return $button;
+  }
+
+
+
 
 /**
  * Outputs a form pull down menu for a date selection
