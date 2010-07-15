@@ -114,9 +114,9 @@
     $http_catalog .= '/';
   }
 
-  $dir_fs_document_root = realpath(OSCOM::BASE_DIRECTORY . '../') . '/';
+  $dir_fs_document_root = realpath(OSCOM::BASE_DIRECTORY . '../../') . '/';
 
-  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'work');
+  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Work/Cache');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $OSCOM_DirectoryListing->setCheckExtension('cache');
 
@@ -152,8 +152,8 @@
                    'DB_SERVER_PERSISTENT_CONNECTIONS = "false"' . "\n" .
                    'STORE_SESSIONS = "Database"' . "\n";
 
-  if ( is_writable(OSCOM::BASE_DIRECTORY . 'config.php') ) {
-    file_put_contents(OSCOM::BASE_DIRECTORY . 'config.php', $file_contents);
+  if ( is_writable(OSCOM::BASE_DIRECTORY . 'Config/settings.ini') ) {
+    file_put_contents(OSCOM::BASE_DIRECTORY . 'Config/settings.ini', $file_contents);
 ?>
 
     <p><?php echo OSCOM::getDef('text_successful_installation'); ?></p>
@@ -165,7 +165,7 @@
     <form name="install" action="<?php echo OSCOM::getLink(null, null, 'step=3'); ?>" method="post">
 
     <div class="noticeBox">
-      <p><?php echo sprintf(OSCOM::getDef('error_configuration_file_not_writeable'), OSCOM::BASE_DIRECTORY . 'config.php'); ?></p>
+      <p><?php echo sprintf(OSCOM::getDef('error_configuration_file_not_writeable'), OSCOM::BASE_DIRECTORY . 'Config/settings.ini'); ?></p>
 
       <p align="right"><?php echo osc_draw_button(array('icon' => 'refresh', 'title' => OSCOM::getDef('button_retry'))); ?></p>
 

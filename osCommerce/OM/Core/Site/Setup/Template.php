@@ -17,7 +17,7 @@
       $this->set('default');
     }
 
-    public function getTemplates() {
+    public static function getTemplates() {
       return array(array('id' => 0,
                          'code' => 'default'));
     }

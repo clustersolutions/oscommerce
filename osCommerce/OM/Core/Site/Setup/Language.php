@@ -16,12 +16,12 @@
 
   class Language extends \osCommerce\OM\Core\Site\Admin\Language {
     public function __construct() {
-      $DLlang = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
+      $DLlang = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages');
       $DLlang->setIncludeDirectories(false);
       $DLlang->setCheckExtension('xml');
 
       foreach ( $DLlang->getFiles() as $file ) {
-        $lang = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file['name']));
+        $lang = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $file['name']));
 
         if ( !isset($lang['language']) ) { // create root element (simpleXML does not use root element)
           $lang = array('language' => $lang);
@@ -82,21 +82,21 @@
       }
 
       if ( is_null($filename) ) {
-        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
-          $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php');
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '.php') ) {
+          $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '.php');
         } else {
           return array();
         }
       } else {
-        if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code) ) {
+        if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code) ) {
           return array();
         }
 
-        if ( !file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
+        if ( !file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '/' . $filename) ) {
           return array();
         }
 
-        $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
+        $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Languages/' . $language_code . '/' . $filename);
       }
 
       $ini_array = array();

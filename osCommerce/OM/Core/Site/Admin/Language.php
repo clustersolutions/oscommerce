@@ -95,8 +95,8 @@
     public static function extractDefinitions($xml) {
       $definitions = array();
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $xml) ) {
-        $definitions = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $xml));
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $xml) ) {
+        $definitions = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $xml));
 
         if ( !isset($definitions['language']) ) { // create root element (simpleXML does not use root element)
           $definitions = array('language' => $definitions);

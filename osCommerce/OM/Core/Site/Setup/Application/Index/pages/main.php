@@ -41,7 +41,7 @@
         <tr>
           <td><b><?php echo OSCOM::getDef('box_server_php_version'); ?></b></td>
           <td align="right"><?php echo phpversion(); ?></td>
-          <td align="right" width="25"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . ((version_compare(PHP_VERSION, '5.2') === 1) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
+          <td align="right" width="25"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . ((version_compare(PHP_VERSION, '5.3') === 1) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
       </table>
 
@@ -115,7 +115,7 @@
     <h2><?php echo OSCOM::getDef('page_heading_server_requirements'); ?></h2>
 
     <ul>
-      <li>PHP v5.2+ (with MySQL or MySQLi extension)</li>
+      <li>PHP v5.3+ (with MySQL or MySQLi extension)</li>
       <li>MySQL v4.1.13+ or v5.0.7+</li>
     </ul>
 
