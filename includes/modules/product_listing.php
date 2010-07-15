@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Product;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Product;
 
 // create column list
   $define_list = array('PRODUCT_LIST_MODEL' => PRODUCT_LIST_MODEL,
