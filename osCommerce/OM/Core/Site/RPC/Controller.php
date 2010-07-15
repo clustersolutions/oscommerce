@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\RPC;
+  namespace osCommerce\OM\Core\Site\RPC;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
-  class Controller implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\Core\SiteInterface {
     const STATUS_SUCCESS = 1;
     const STATUS_NO_SESSION = -10;
     const STATUS_NO_MODULE = -20;
