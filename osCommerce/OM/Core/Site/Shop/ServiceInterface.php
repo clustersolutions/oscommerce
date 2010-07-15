@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
   interface ServiceInterface {
     public static function start();

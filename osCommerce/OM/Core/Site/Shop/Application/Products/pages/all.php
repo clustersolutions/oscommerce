@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Shop\Products;
-  use osCommerce\OM\Site\Shop\Product;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\DateTime;
+  use osCommerce\OM\Core\Site\Shop\Products;
+  use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\DateTime;
 ?>
 
 <?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>

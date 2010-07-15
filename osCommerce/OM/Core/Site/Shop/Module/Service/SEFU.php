@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  class SEFU implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class SEFU implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
       if ( isset($_SERVER['ORIG_PATH_INFO']) ) {
         if ( isset($_SERVER['PATH_INFO']) && empty($_SERVER['PATH_INFO']) ) {

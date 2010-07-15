@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Shop\Specials;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Specials;
+  use osCommerce\OM\Core\OSCOM;
 
   $Qspecials = Specials::getListing();
 ?>

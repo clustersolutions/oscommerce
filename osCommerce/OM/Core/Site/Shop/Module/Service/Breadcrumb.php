@@ -8,14 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Breadcrumb as BreadcrumbClass;
 
-  class Breadcrumb implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Breadcrumb implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Breadcrumb', new \osCommerce\OM\Site\Shop\Breadcrumb());
+      Registry::set('Breadcrumb', new BreadcrumbClass());
 
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 

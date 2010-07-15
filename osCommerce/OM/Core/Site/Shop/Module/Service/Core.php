@@ -8,17 +8,17 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\Customer;
-  use osCommerce\OM\Site\Shop\Tax;
-  use osCommerce\OM\Site\Shop\Weight;
-  use osCommerce\OM\Site\Shop\ShoppingCart;
-  use osCommerce\OM\Site\Shop\NavigationHistory;
-  use osCommerce\OM\Site\Shop\Image;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Customer;
+  use osCommerce\OM\Core\Site\Shop\Tax;
+  use osCommerce\OM\Core\Site\Shop\Weight;
+  use osCommerce\OM\Core\Site\Shop\ShoppingCart;
+  use osCommerce\OM\Core\Site\Shop\NavigationHistory;
+  use osCommerce\OM\Core\Site\Shop\Image;
 
-  class Core implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Core implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
       Registry::set('Customer', new Customer());
 

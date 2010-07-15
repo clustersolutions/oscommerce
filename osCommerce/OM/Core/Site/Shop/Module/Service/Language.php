@@ -8,14 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Language as LanguageClass;
 
-  class Language implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Language implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Language', new \osCommerce\OM\Language());
+      Registry::set('Language', new LanguageClass());
 
       $OSCOM_Language = Registry::get('Language');
 

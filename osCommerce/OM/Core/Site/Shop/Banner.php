@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\DateTime;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\DateTime;
 
 /**
  * The Banner class manages the banners shown throughout the online store

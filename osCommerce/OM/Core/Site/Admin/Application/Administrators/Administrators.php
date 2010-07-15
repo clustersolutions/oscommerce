@@ -306,7 +306,7 @@
       $DLapps->setIncludeFiles(false);
 
       foreach ( $DLapps->getFiles() as $file ) {
-        if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . OSCOM::getSite(), 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
+        if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite(), 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/' . $file['name'] . '.php') ) { // HPDL remove preg_match
           $module_files[] = $file['name'];
         }
       }
@@ -314,7 +314,7 @@
       $modules = array();
 
       foreach ( $module_files as $module ) {
-        $application_class = 'osCommerce\\OM\\Site\\' . OSCOM::getSite() . '\\Application\\' . $module;
+        $application_class = 'osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . $module;
 
         if ( class_exists($application_class) ) {
           if ( $module == OSCOM::getSiteApplication() ) {

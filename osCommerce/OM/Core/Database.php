@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
   class Database {
     var $is_connected = false,
@@ -31,7 +31,7 @@
         $fkeys = array();
 
     public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
-      $class = 'osCommerce\\OM\\Database\\' . $type;
+      $class = 'osCommerce\\OM\\Core\\Database\\' . $type;
       $object = new $class($server, $username, $password, $database, $port);
 
       return $object;

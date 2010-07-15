@@ -8,16 +8,16 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\MessageStack;
-  use osCommerce\OM\Cache;
-  use osCommerce\OM\Database;
-  use osCommerce\OM\Template;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\MessageStack;
+  use osCommerce\OM\Core\Cache;
+  use osCommerce\OM\Core\Database;
+  use osCommerce\OM\Core\Template;
 
-  class Controller implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\Core\SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {
@@ -46,7 +46,7 @@
 
       Registry::set('Template', new Template());
 
-      $application = 'osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
+      $application = 'osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
       Registry::get('Template')->setApplication(Registry::get('Application'));

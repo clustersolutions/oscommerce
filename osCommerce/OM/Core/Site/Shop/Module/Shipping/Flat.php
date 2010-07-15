@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Shipping;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Shipping;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
-  class Flat extends \osCommerce\OM\Site\Shop\Shipping {
+  class Flat extends \osCommerce\OM\Core\Site\Shop\Shipping {
     protected $icon;
     protected $_title;
     protected $_code = 'Flat';

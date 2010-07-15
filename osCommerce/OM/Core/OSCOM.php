@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
   class OSCOM {
     const TIMESTAMP_START = OSCOM_TIMESTAMP_START;
@@ -35,11 +35,11 @@
 
       self::setSiteApplication();
 
-      call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller', 'initialize'));
+      call_user_func(array('osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Controller', 'initialize'));
     }
 
     public static function siteExists($site) {
-      return class_exists('osCommerce\\OM\\Site\\' . $site . '\\Controller');
+      return class_exists('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller');
     }
 
     public static function setSite($site = null) {
@@ -78,7 +78,7 @@
     }
 
     public static function siteApplicationExists($application) {
-      return class_exists('osCommerce\\OM\\Site\\' . self::getSite() . '\\Application\\' . $application . '\\Controller');
+      return class_exists('osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Application\\' . $application . '\\Controller');
     }
 
     public static function setSiteApplication($application = null) {
@@ -113,7 +113,7 @@
     }
 
     public static function getDefaultSiteApplication() {
-      return call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller', 'getDefaultApplication'));
+      return call_user_func(array('osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Controller', 'getDefaultApplication'));
     }
 
     public static function loadConfig() {

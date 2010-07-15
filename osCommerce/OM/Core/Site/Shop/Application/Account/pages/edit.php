@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Account;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Account;
 
   $Qaccount = Account::getEntry();
 ?>

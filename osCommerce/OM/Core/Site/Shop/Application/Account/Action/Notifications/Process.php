@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account\Action\Notifications;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action\Notifications;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
   class Process {
     public static function execute(ApplicationAbstract $application) {

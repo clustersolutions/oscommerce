@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
-  abstract class ApplicationAbstract extends \osCommerce\OM\ApplicationAbstract {
+  abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
     public function __construct($process = true) {
       $OSCOM_Session = Registry::get('Session');
 
@@ -44,7 +44,7 @@
         }
 
         if ( isset($action) ) {
-          call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
 
           $action_index++;
 
@@ -55,7 +55,7 @@
               $subaction = osc_sanitize_string(basename(key(array_slice($_GET, $i, 1, true))));
 
               if ( $subaction != $OSCOM_Session->getName() && self::siteApplicationActionExists(implode('\\', $action) . '\\' . $subaction) ) {
-                call_user_func(array('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $action) . '\\' . $subaction, 'execute'), $this);
+                call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $action) . '\\' . $subaction, 'execute'), $this);
 
                 $action[] = $subaction;
               } else {
@@ -68,7 +68,7 @@
     }
 
     public function siteApplicationActionExists($action) {
-      return class_exists('osCommerce\\OM\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
+      return class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
     }
   }
 ?>

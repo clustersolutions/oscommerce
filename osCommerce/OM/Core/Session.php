@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
 /**
  * The Session class initializes the session storage handler
@@ -24,13 +24,13 @@
  */
 
     public static function load($name = null) {
-      $class_name = 'osCommerce\\OM\\Session\\' . STORE_SESSIONS;
+      $class_name = 'osCommerce\\OM\\Core\\Session\\' . STORE_SESSIONS;
 
       if ( class_exists($class_name) ) {
         return new $class_name($name);
       }
 
-      trigger_error('Session Handler \'' . $class_name . '\' does not exist, using default \'osCommerce\\OM\\Session\\File\'', E_USER_ERROR);
+      trigger_error('Session Handler \'' . $class_name . '\' does not exist, using default \'osCommerce\\OM\\Core\\Session\\File\'', E_USER_ERROR);
 
       return new Session\File($name);
     }

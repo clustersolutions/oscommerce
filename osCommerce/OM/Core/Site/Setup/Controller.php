@@ -29,7 +29,7 @@
       Registry::set('Language', new Language());
       Registry::set('osC_Language', Registry::get('Language')); // HPDL to remove
 
-      $application = 'osCommerce\\OM\\Site\\Setup\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
+      $application = 'osCommerce\\OM\\Core\\Site\\Setup\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
       Registry::set('Template', new Template());

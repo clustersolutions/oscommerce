@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Payment;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Payment;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\Order;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Order;
 
-  class COD extends \osCommerce\OM\Site\Shop\Payment {
+  class COD extends \osCommerce\OM\Core\Site\Shop\Payment {
     var $_title,
         $_code = 'COD',
         $_status = false,

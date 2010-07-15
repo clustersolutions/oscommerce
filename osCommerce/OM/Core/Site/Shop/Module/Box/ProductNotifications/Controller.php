@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Box\ProductNotifications;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Box\ProductNotifications;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
-  class Controller extends \osCommerce\OM\Modules {
+  class Controller extends \osCommerce\OM\Core\Modules {
     var $_title,
         $_code = 'ProductNotifications',
         $_author_name = 'osCommerce',

@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
   $large_image = $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), 'id="productImageLarge"', 'large');
 ?>

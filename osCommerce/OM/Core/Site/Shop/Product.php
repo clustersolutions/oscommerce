@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
 
   class Product {
     protected $_data = array();
@@ -328,10 +328,10 @@
           }
 
           if ( is_null($module_call) || ($module_call == $module) ) {
-            if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module) ) {
-              if ( !call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'isValid'), $this) ) {
-                if ( ($execute_onfail === true) && method_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail') ) {
-                  call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail'), $this);
+            if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductType\\' . $module) ) {
+              if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductType\\' . $module, 'isValid'), $this) ) {
+                if ( ($execute_onfail === true) && method_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail') ) {
+                  call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductType\\' . $module, 'onFail'), $this);
                 }
 
                 $return_value = false;

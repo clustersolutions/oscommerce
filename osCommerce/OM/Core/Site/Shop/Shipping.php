@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
 
   class Shipping {
     protected $_modules = array();
@@ -56,7 +56,7 @@
           $OSCOM_Language->load('modules-shipping');
 
           foreach ( $this->_modules as $module ) {
-            $module_class = 'osCommerce\\OM\\Site\\Shop\\Module\\Shipping\\' . $module;
+            $module_class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Shipping\\' . $module;
 
             Registry::set('Shipping_' . $module, new $module_class(), true);
             Registry::get('Shipping_' . $module)->initialize();

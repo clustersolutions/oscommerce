@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
 /**
  * The osC_Access manages the permission levels of administrators who have access to the Administration Tool
@@ -84,7 +84,7 @@
         $DLapps->setIncludeFiles(false);
 
         foreach ( $DLapps->getFiles() as $file ) {
-          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) { // HPDL remove preg_match
+          if ( preg_match('/[A-Z]/', substr($file['name'], 0, 1)) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) && file_exists($DLapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) { // HPDL remove preg_match
             $applications[] = $file['name'];
           }
         }
@@ -103,7 +103,7 @@
       $levels = array();
 
       foreach ( $applications as $app ) {
-        $application_class = 'osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $app . '\\Controller';
+        $application_class = 'osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $app . '\\Controller';
 
         if ( class_exists($application_class) ) {
           if ( Registry::exists('Application') && ($app == OSCOM::getSiteApplication()) ) {
@@ -241,7 +241,7 @@
     }
 
     public static function hasAccess($site, $application) {
-      return in_array($application, call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
+      return in_array($application, call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) || isset($_SESSION[$site]['access'][$application]);
     }
   }
 ?>

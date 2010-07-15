@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account\Action;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Order;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Order;
 
   class Orders {
     public static function execute(ApplicationAbstract $application) {

@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
   class Modules {
     var $_modules,
@@ -123,7 +123,7 @@
 
       if ( isset($this->_modules[$group]) ) {
         foreach ( $this->_modules[$group] as $module ) {
-          $class = 'osCommerce\\OM\\Site\\Shop\\Module\\' . $this->_group . '\\' . $module . '\\Controller';
+          $class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\' . $this->_group . '\\' . $module . '\\Controller';
 
           if ( class_exists($class) ) {
             $modules[] = $class;

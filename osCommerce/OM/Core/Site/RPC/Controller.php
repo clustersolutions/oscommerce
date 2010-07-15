@@ -48,9 +48,9 @@
 
         OSCOM::setSiteApplication($application);
 
-        call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'initialize'));
+        call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'initialize'));
 
-        if ( !call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
+        if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
           echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
           exit;
         }
@@ -63,9 +63,9 @@
           exit;
         }
 
-        if ( class_exists('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class) ) {
-          if ( method_exists('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action) ) {
-            call_user_func(array('osCommerce\\OM\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action));
+        if ( class_exists('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class) ) {
+          if ( method_exists('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action) ) {
+            call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\' . $class, $action));
             exit;
           } else {
             echo json_encode(array('rpcStatus' => self::STATUS_ACTION_NONEXISTENT));

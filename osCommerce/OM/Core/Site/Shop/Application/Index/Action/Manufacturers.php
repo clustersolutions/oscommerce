@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Index\Action;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Index\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Manufacturer;
-  use osCommerce\OM\Site\Shop\Products;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Manufacturer;
+  use osCommerce\OM\Core\Site\Shop\Products;
 
   class Manufacturers {
     public static function execute(ApplicationAbstract $application) {

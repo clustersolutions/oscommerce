@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
 // HPDL to delete ///////
   define('PAGE_PARSE_START_TIME', microtime());
@@ -23,13 +23,13 @@
 
   define('OSCOM_BASE_DIRECTORY', dirname(__FILE__) . '/osCommerce/OM/');
 
-  require(OSCOM_BASE_DIRECTORY . 'SplClassLoader.php');
-  $classLoader = new SplClassLoader('osCommerce\OM');
+  require(OSCOM_BASE_DIRECTORY . 'External/SplClassLoader.php');
+  $classLoader = new SplClassLoader('osCommerce\OM\Core');
   $classLoader->register();
 
   OSCOM::initialize();
 
-  require(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/templates/' . Registry::get('Template')->getCode() . '.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/' . Registry::get('Template')->getCode() . '.php');
 
 //  require('includes/application_bottom.php');
 ?>

@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\AddressBook;
-  use osCommerce\OM\Site\Shop\Address;
-  use osCommerce\OM\DateTime;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\DateTime;
 
   class Order {
 // HPDL add getter methods for the following and set as protected

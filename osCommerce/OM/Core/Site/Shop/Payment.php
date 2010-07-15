@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
   class Payment {
     var $selected_module;
@@ -43,7 +43,7 @@
         $OSCOM_Language->load('modules-payment');
 
         foreach ( $this->_modules as $modules ) {
-          $module_class = 'osCommerce\\OM\\Site\\Shop\\Module\\Payment\\' . $modules;
+          $module_class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $modules;
 
           Registry::set('Payment_' . $modules, new $module_class(), true);
         }

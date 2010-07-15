@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
   class Service {
     protected $_services = array();
@@ -47,18 +47,18 @@
     }
 
     public function startService($service) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\Service\\' . $service) ) {
-        if ( call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\Service\\' . $service, 'start')) ) {
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\Service\\' . $service) ) {
+        if ( call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\Service\\' . $service, 'start')) ) {
           $this->_started_services[] = $service;
         }
       } else {
-        trigger_error('\'osCommerce\\OM\\Site\\Shop\\Module\\Service\\' . $service . '\' does not exist', E_USER_ERROR);
+        trigger_error('\'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Service\\' . $service . '\' does not exist', E_USER_ERROR);
       }
     }
 
     public function stopService($service) {
       if ( $this->isStarted($service) ) {
-        call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\Service\\' . $service, 'stop'));
+        call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\Service\\' . $service, 'stop'));
       }
     }
 

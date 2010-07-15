@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Address;
-  use osCommerce\OM\Site\Shop\Tax;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\Site\Shop\Tax;
 
   if ( $OSCOM_Customer->isLoggedOn() ) {
     $Qglobal = $OSCOM_Database->query('select global_product_notifications from :table_customers where customers_id =:customers_id');

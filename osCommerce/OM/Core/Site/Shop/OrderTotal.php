@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
 
   class OrderTotal {
     protected $_modules = array();
@@ -34,7 +34,7 @@
       $OSCOM_Language->load('modules-order_total');
 
       foreach ( $this->_modules as $module ) {
-        $class_name = 'osCommerce\\OM\\Site\\Shop\\Module\\OrderTotal\\' . $module;
+        $class_name = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\OrderTotal\\' . $module;
 
         Registry::set('OrderTotal_' . $module, new $class_name(), true);
       }

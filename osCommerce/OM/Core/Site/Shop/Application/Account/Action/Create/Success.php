@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Account\Action\Create;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Account\Action\Create;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\OSCOM;
 
   class Success {
     public static function execute(ApplicationAbstract $application) {

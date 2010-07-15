@@ -8,15 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Session;
+  namespace osCommerce\OM\Core\Session;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
 
 /**
  * The Session\Database class stores the session data in the database
  */
 
-  class Database extends \osCommerce\OM\SessionAbstract {
+  class Database extends \osCommerce\OM\Core\SessionAbstract {
 
 /**
  * Initialize database based session storage handler

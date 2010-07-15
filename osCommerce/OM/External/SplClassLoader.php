@@ -1,5 +1,4 @@
 <?php
-
 /**
  * SplClassLoader implementation that implements the technical interoperability
  * standards for PHP 5.3 namespaces and class names.
@@ -16,6 +15,7 @@
  * @author Matthew Weier O'Phinney <matthew@zend.com>
  * @author Kris Wallsmith <kris.wallsmith@gmail.com>
  * @author Fabien Potencier <fabien.potencier@symfony-project.org>
+ * @author Harald Ponce de leon <hpdl@oscommerce.com>
  */
 class SplClassLoader
 {
@@ -130,6 +130,8 @@ class SplClassLoader
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
 
+// Only include the file if it exists otherwise class_exists() returns a
+// "file does not exist" error.
             $includeFile = ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
 
             if (file_exists($includeFile)) {

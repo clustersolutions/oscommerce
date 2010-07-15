@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
-  class Debug implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Debug implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_MessageStack = Registry::get('MessageStack');

@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\ProductVariant;
+  namespace osCommerce\OM\Core\Site\Shop\Module\ProductVariant;
 
-  class TextField implements \osCommerce\OM\Site\Shop\ProductVariantInterface {
+  class TextField implements \osCommerce\OM\Core\Site\Shop\ProductVariantInterface {
     const ALLOW_MULTIPLE_VALUES = true;
     const HAS_CUSTOM_VALUE = true;
 

@@ -8,44 +8,44 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
 
   class ProductVariants {
     static public function parse($module, $data) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
-        return call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'parse'), $data);
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
+        return call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'parse'), $data);
       }
     }
 
     static public function getGroupTitle($module, $data) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
-        return call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'getGroupTitle'), $data);
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
+        return call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'getGroupTitle'), $data);
       }
 
       return $data['group_title'];
     }
 
     static public function getValueTitle($module, $data) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
-        return call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'getValueTitle'), $data);
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
+        return call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'getValueTitle'), $data);
       }
 
       return $data['value_title'];
     }
 
     static public function allowsMultipleValues($module) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
-        return call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'allowsMultipleValues'));
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
+        return call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'allowsMultipleValues'));
       }
 
       return false;
     }
 
     static public function hasCustomValue($module) {
-      if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
-        return call_user_func(array('osCommerce\\OM\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'hasCustomValue'));
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module) ) {
+        return call_user_func(array('osCommerce\\OM\\Core\\Site\\Shop\\Module\\ProductVariant\\' . $module, 'hasCustomValue'));
       }
 
       return false;

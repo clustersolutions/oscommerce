@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
 /**
  * The osC_ObjectInfo class wraps an object instance around an array data set

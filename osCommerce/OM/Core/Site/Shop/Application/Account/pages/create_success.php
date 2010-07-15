@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
   if ( $OSCOM_NavigationHistory->hasSnapshot() ) {
     $origin_href = $OSCOM_NavigationHistory->getSnapshotURL();

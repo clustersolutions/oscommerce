@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Products;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Products;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\Product;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\OSCOM;
 
-  class Controller extends \osCommerce\OM\Site\Shop\ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Core\Site\Shop\ApplicationAbstract {
     protected function initialize() {}
 
     protected function process() {

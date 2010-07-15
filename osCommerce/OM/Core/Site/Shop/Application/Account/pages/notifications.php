@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
 // HPDL Should be moved to the customers class!
   $Qglobal = $OSCOM_Database->query('select global_product_notifications from :table_customers where customers_id = :customers_id');

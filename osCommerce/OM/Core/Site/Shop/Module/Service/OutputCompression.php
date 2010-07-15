@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  class OutputCompression implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class OutputCompression implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
       if ( extension_loaded('zlib') ) {
         if ( (int)ini_get('zlib.output_compression') < 1 ) {

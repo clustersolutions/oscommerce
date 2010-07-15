@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Shop\AddressBook;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\OSCOM;
 
   if ( isset($_GET['Edit']) ) {
     $Qentry = AddressBook::getEntry($_GET['Edit']); // HPDL conflict with $osC_oiAddress

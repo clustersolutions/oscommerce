@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop;
+  namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\DateTime;
-  use osCommerce\OM\Site\Shop\ProductVariants;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Site\Shop\ProductVariants;
 
   class ShoppingCart {
     protected $_contents = array();

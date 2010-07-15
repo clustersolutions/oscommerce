@@ -8,13 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Reviews as ReviewsClass;
 
-  class Reviews implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Reviews implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Reviews', new \osCommerce\OM\Site\Shop\Reviews());
+      Registry::set('Reviews', new ReviewsClass());
 
       return true;
     }

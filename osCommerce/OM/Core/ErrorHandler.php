@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
   class ErrorHandler {
     static protected $_resource;
@@ -19,7 +19,7 @@
         ini_set('log_errors', true);
         ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
 
-        set_error_handler(array('osCommerce\\OM\\ErrorHandler', 'execute'));
+        set_error_handler(array('osCommerce\\OM\\Core\\ErrorHandler', 'execute'));
 
         if ( file_exists(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log') ) {
           self::import(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');

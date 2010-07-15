@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Content\NewProducts;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Content\NewProducts;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\Product;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Product;
 
-  class Controller extends \osCommerce\OM\Modules {
+  class Controller extends \osCommerce\OM\Core\Modules {
     var $_title,
         $_code = 'NewProducts',
         $_author_name = 'osCommerce',

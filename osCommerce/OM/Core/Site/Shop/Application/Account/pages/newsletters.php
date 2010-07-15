@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
 // HPDL Should be moved to the customers class!
   $Qnewsletter = $OSCOM_Database->query('select customers_newsletter from :table_customers where customers_id = :customers_id');

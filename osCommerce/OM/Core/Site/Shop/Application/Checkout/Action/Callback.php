@@ -8,17 +8,17 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Checkout\Action;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Checkout\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
+  use osCommerce\OM\Core\ApplicationAbstract;
 
   class Callback {
     public static function execute(ApplicationAbstract $application) {
       if ( isset($_GET['module']) && !empty($_GET['module']) ) {
         $module = osc_sanitize_string($_GET['module']);
 
-        if ( class_exists('osCommerce\\OM\\Site\\Shop\\Module\\Payment\\' . $module) ) {
-          $module = 'osCommerce\\OM\\Site\\Shop\\Module\\Payment\\' . $module;
+        if ( class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $module) ) {
+          $module = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $module;
           $module = new $module();
           $module->callback();
         }

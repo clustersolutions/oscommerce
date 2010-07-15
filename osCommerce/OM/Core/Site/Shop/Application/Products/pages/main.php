@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\ProductVariants;
-  use osCommerce\OM\DateTime;
-  use osCommerce\OM\Site\Shop\Reviews;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\ProductVariants;
+  use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Site\Shop\Reviews;
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>

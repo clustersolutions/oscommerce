@@ -8,13 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Currencies as CurrenciesClass;
 
-  class Currencies implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Currencies implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Currencies', new \osCommerce\OM\Site\Shop\Currencies());
+      Registry::set('Currencies', new CurrenciesClass());
       $OSCOM_Currencies = Registry::get('Currencies');
 
       $OSCOM_Language = Registry::get('Language');

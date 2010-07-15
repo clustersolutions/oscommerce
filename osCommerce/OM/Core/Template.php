@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM;
+  namespace osCommerce\OM\Core;
 
 /**
  * The Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks

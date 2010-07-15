@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Shop\Order;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\DateTime;
-  use osCommerce\OM\Site\Shop\Address;
-  use osCommerce\OM\Site\Shop\Tax;
+  use osCommerce\OM\Core\Site\Shop\Order;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\Site\Shop\Tax;
 
   $order = new Order($_GET['Orders']);
 ?>

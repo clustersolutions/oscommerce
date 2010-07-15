@@ -8,13 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Specials as SpecialsClass;
 
-  class Specials implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Specials implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Specials', new \osCommerce\OM\Site\Shop\Specials());
+      Registry::set('Specials', new SpecialsClass());
 
       $OSCOM_Specials = Registry::get('Specials');
 

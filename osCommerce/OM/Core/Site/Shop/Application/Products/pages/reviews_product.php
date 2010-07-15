@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Reviews;
-  use osCommerce\OM\DateTime;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Reviews;
+  use osCommerce\OM\Core\DateTime;
 ?>
 
 <h1 style="float: right;"><?php echo $OSCOM_Product->getPriceFormated(true); ?></h1>

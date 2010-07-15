@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Shop\Reviews;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\DateTime;
+  use osCommerce\OM\Core\Site\Shop\Reviews;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\DateTime;
 
   $Qreviews = Reviews::getEntry($_GET['View']);
 ?>

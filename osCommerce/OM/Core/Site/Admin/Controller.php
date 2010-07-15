@@ -61,7 +61,7 @@
         osc_redirect_admin(OSCOM::getLink(null, 'Index'));
       }
 
-      $application = 'osCommerce\\OM\\Site\\Admin\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
+      $application = 'osCommerce\\OM\\Core\\Site\\Admin\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
       Registry::set('Template', new Template());

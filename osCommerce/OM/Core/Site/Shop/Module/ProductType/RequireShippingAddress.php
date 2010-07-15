@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\ProductType;
+  namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Product;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Product;
 
   class RequireShippingAddress {
     public static function getTitle() {

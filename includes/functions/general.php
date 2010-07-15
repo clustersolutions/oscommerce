@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Mail;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Mail;
 
 /**
  * Redirect to a URL address

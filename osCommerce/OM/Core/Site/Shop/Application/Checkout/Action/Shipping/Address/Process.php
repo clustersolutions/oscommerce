@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Application\Checkout\Action\Shipping\Address;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Checkout\Action\Shipping\Address;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
 
   class Process {
     public static function execute(ApplicationAbstract $application) {

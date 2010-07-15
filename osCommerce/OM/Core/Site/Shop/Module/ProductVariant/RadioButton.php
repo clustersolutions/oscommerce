@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\ProductVariant;
+  namespace osCommerce\OM\Core\Site\Shop\Module\ProductVariant;
 
-  class RadioButton implements \osCommerce\OM\Site\Shop\ProductVariantInterface {
+  class RadioButton implements \osCommerce\OM\Core\Site\Shop\ProductVariantInterface {
     const ALLOW_MULTIPLE_VALUES = false;
     const HAS_CUSTOM_VALUE = false;
 

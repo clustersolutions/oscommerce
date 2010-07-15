@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Site\Shop\CategoryTree;
-  use osCommerce\OM\Site\Shop\Category;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\CategoryTree;
+  use osCommerce\OM\Core\Site\Shop\Category;
 
-  class CategoryPath implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class CategoryPath implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
       Registry::set('CategoryTree', new CategoryTree());
       Registry::set('Category', new Category());

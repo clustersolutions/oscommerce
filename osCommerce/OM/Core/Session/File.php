@@ -8,15 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Session;
+  namespace osCommerce\OM\Core\Session;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
 /**
  * The Session\File class stores the session data in files
  */
 
-  class File extends \osCommerce\OM\SessionAbstract {
+  class File extends \osCommerce\OM\Core\SessionAbstract {
 
 /**
  * Holds the file system path where sessions are saved.

@@ -32,7 +32,7 @@
 
   foreach ($files as $file) {
     $module = substr($file['name'], 0, strrpos($file['name'], '.'));
-    $module_class = 'osCommerce\\OM\\Site\\Admin\\Module\\IndexModules\\' . $module;
+    $module_class = 'osCommerce\\OM\\Core\\Site\\Admin\\Module\\IndexModules\\' . $module;
 
     $OSCOM_Admin_IndexModule= new $module_class();
 

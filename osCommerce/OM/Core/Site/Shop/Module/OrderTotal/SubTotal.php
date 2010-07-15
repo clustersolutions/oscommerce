@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\OrderTotal;
+  namespace osCommerce\OM\Core\Site\Shop\Module\OrderTotal;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
-  class SubTotal extends \osCommerce\OM\Site\Shop\OrderTotal {
+  class SubTotal extends \osCommerce\OM\Core\Site\Shop\OrderTotal {
     var $output;
 
     var $_title,

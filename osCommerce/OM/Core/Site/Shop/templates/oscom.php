@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 ?>
 
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
@@ -64,7 +64,7 @@
 
       if ( $OSCOM_ContentModule->hasContent() ) { // HPDL move logic elsewhere
         if ( $OSCOM_Template->getCode() == DEFAULT_TEMPLATE ) {
-          include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/Content/' . $OSCOM_ContentModule->getCode() . '/pages/main.php');
+          include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/Content/' . $OSCOM_ContentModule->getCode() . '/pages/main.php');
         } else { //HPDL old
           if (file_exists('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php')) {
             include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
@@ -79,7 +79,7 @@
   }
 
   if ( $OSCOM_Template->getCode() == DEFAULT_TEMPLATE ) {
-    include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
+    include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
   } else { // HPDL old
     if (file_exists('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename())) {
       include('templates/' . $osC_Template->getCode() . '/content/' . $osC_Template->getGroup() . '/' . $osC_Template->getPageContentsFilename());
@@ -103,7 +103,7 @@
 
       if ( $OSCOM_ContentModule->hasContent() ) { // HPDL move logic elsewhere
         if ( $OSCOM_Template->getCode() == DEFAULT_TEMPLATE ) {
-          include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/Content/' . $OSCOM_ContentModule->getCode() . '/pages/main.php');
+          include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/Content/' . $OSCOM_ContentModule->getCode() . '/pages/main.php');
         } else { //HPDL old
           if (file_exists('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php')) {
             include('templates/' . $osC_Template->getCode() . '/modules/content/' . $osC_Box->getCode() . '.php');
@@ -132,7 +132,7 @@
 
       if ( $OSCOM_Box->hasContent() ) { // HPDL move logic elsewhere
         if ( $OSCOM_Template->getCode() == DEFAULT_TEMPLATE ) {
-          include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/Box/' . $OSCOM_Box->getCode() . '/pages/main.php');
+          include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/Box/' . $OSCOM_Box->getCode() . '/pages/main.php');
         } else { //HPDL old
           if (file_exists('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php')) {
             include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');
@@ -191,7 +191,7 @@
 
       if ( $OSCOM_Box->hasContent() ) { // HPDL move logic elsewhere
         if ( $OSCOM_Template->getCode() == DEFAULT_TEMPLATE ) {
-          include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/Box/' . $OSCOM_Box->getCode() . '/pages/main.php');
+          include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/Box/' . $OSCOM_Box->getCode() . '/pages/main.php');
         } else { //HPDL old
           if (file_exists('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php')) {
             include('templates/' . $osC_Template->getCode() . '/modules/boxes/' . $osC_Box->getCode() . '.php');

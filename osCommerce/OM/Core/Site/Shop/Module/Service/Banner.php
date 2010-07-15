@@ -8,13 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Shop\Module\Service;
+  namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Banner as BannerClass;
 
-  class Banner implements \osCommerce\OM\Site\Shop\ServiceInterface {
+  class Banner implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
     public static function start() {
-      Registry::set('Banner', new \osCommerce\OM\Site\Shop\Banner());
+      Registry::set('Banner', new BannerClass());
 
       $OSCOM_Banner = Registry::get('Banner');
 
