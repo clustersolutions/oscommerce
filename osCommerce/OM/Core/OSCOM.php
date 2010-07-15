@@ -117,10 +117,10 @@
     }
 
     public static function loadConfig() {
-      $ini = parse_ini_file('includes/config.php');
+      $ini = parse_ini_file(self::BASE_DIRECTORY . 'Config/settings.ini');
 
-      if ( file_exists('includes/local/config.php') ) {
-        $local = parse_ini_file('includes/local/config.php');
+      if ( file_exists(self::BASE_DIRECTORY . 'Config/local_settings.ini') ) {
+        $local = parse_ini_file(self::BASE_DIRECTORY . 'Config/local_settings.ini');
 
         $ini = array_merge($ini, $local);
       }

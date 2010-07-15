@@ -1,2 +1,2 @@
-includes/work/*
-includes/local/config.php
+osCommerce/OM/Work/*
+osCommerce/OM/Config/local_settings.ini
