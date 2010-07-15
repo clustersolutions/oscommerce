@@ -20,17 +20,15 @@
     protected static $_application;
 
     public static function initialize() {
-      spl_autoload_register('self::autoload');
-
       ErrorHandler::initialize();
 
-      require(self::BASE_DIRECTORY . 'functions/compatibility.php');
-      require(self::BASE_DIRECTORY . 'functions/general.php');
-      require(self::BASE_DIRECTORY . 'functions/html_output.php');
+      require('includes/functions/compatibility.php');
+      require('includes/functions/general.php');
+      require('includes/functions/html_output.php');
 
       self::setSite();
 
-      if ( !class_exists('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller') ) {
+      if ( !self::siteExists(self::getSite()) ) {
         trigger_error('Site \'' . self::getSite() . '\' does not exist', E_USER_ERROR);
         exit();
       }
@@ -118,46 +116,11 @@
       return call_user_func(array('osCommerce\\OM\\Site\\' . self::getSite() . '\\Controller', 'getDefaultApplication'));
     }
 
-    public static function autoload($class) {
-      $namespace = explode('\\', $class);
-
-      $class_file = '';
-
-      if ( ($namespace[0] == 'osCommerce') && ($namespace[1] == 'OM') ) {
-        if ( $namespace[2] == 'Site' ) {
-          if ( isset($namespace[4]) && ($namespace[4] == 'Application') ) {
-            if ( isset($namespace[6]) ) {
-              if ( $namespace[6] == 'Controller' ) {
-                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/Controller.php';
-              } elseif ( $namespace[6] == 'Action' ) {
-                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/actions/' . implode('/', array_slice($namespace, 7)) . '.php';
-              } else {
-                $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/applications/' . $namespace[5] . '/classes/' . implode('/', array_slice($namespace, 6)) . '.php';
-              }
-            }
-          } elseif ( isset($namespace[4]) && ($namespace[4] == 'Module') ) {
-            $class_file = self::BASE_DIRECTORY . 'sites/' . implode('/', array_slice($namespace, 3)) . '.php';
-          } elseif ( isset($namespace[4]) && ($namespace[4] == 'Controller') ) {
-            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/Controller.php';
-          } else {
-            $class_file = self::BASE_DIRECTORY . 'sites/' . $namespace[3] . '/classes/' . implode('/', array_slice($namespace, 4)) . '.php';
-          }
-        } else {
-          $class_file = self::BASE_DIRECTORY . 'classes/' . implode('/', array_slice($namespace, 2)) . '.php';
-        }
-      }
-      if ( !empty($class_file) ) {
-        if ( file_exists($class_file) ) {
-          include($class_file);
-        }
-      }
-    }
-
     public static function loadConfig() {
-      $ini = parse_ini_file(self::BASE_DIRECTORY . 'config.php');
+      $ini = parse_ini_file('includes/config.php');
 
-      if ( file_exists(self::BASE_DIRECTORY . 'local/config.php') ) {
-        $local = parse_ini_file(self::BASE_DIRECTORY . 'local/config.php');
+      if ( file_exists('includes/local/config.php') ) {
+        $local = parse_ini_file('includes/local/config.php');
 
         $ini = array_merge($ini, $local);
       }

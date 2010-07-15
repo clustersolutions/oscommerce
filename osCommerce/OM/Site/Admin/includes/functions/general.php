@@ -312,7 +312,7 @@
       }
 
       if (!function_exists($function_name)) {
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/cfg_parameters/' . $function_name . '.php');
+        include(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/cfg_parameters/' . $function_name . '.php');
       }
 
       if (!empty($function_parameter)) {

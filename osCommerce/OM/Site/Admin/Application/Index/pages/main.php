@@ -12,7 +12,7 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Registry;
 
-  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/Module/IndexModules');
+  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/IndexModules');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $files = $OSCOM_DirectoryListing->getFiles();
 

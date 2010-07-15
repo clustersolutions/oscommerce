@@ -35,21 +35,21 @@
       }
 
       if ( is_null($filename) ) {
-        if ( file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
-          $contents = file(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/languages/' . $language_code . '.php');
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
+          $contents = file(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php');
         } else {
           return array();
         }
       } else {
-        if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSiteApplication() . '/languages/' . $language_code) ) {
+        if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code) ) {
           return array();
         }
 
-        if ( !file_exists(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
+        if ( !file_exists(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
           return array();
         }
 
-        $contents = file(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
+        $contents = file(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
       }
 
       $ini_array = array();

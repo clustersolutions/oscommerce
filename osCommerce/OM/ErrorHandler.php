@@ -59,7 +59,7 @@
     }
 
     public static function connect() {
-      self::$_resource = new \SQLite3(OSCOM::BASE_DIRECTORY . 'work/oscommerce.sqlite3');
+      self::$_resource = new \SQLite3(DIR_FS_WORK . 'oscommerce.sqlite3');
       self::$_resource->exec('create table if not exists error_log ( timestamp int, message text );');
     }
 

@@ -19,9 +19,9 @@
 
   define('OSC_IN_ADMIN', true);
 
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/general.php');
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/html_output.php');
-  require(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/functions/localization.php');
+  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/general.php');
+  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/html_output.php');
+  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/localization.php');
 
   class Controller implements \osCommerce\OM\SiteInterface {
     protected static $_default_application = 'Index';

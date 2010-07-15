@@ -72,7 +72,7 @@
 
 <?php
   if ( $OSCOM_Template->hasPageHeader() ) {
-    include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/oscom/header.php');
+    include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/templates/oscom/header.php');
   }
 
   if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
@@ -106,7 +106,7 @@
     echo Registry::get('MessageStack')->get('header');
   }
 
-  require(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
+  require(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
 ?>
 
 </div>
@@ -126,7 +126,7 @@
 ?>
 
 <div id="footer">
-  <?php include(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/templates/oscom/footer.php'); ?>
+  <?php include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/templates/oscom/footer.php'); ?>
 </div>
 
 <?php

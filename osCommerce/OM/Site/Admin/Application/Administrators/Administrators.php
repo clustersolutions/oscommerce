@@ -302,7 +302,7 @@
 
       $module_files = array();
 
-      $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . OSCOM::getSite() . '/applications');
+      $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Application');
       $DLapps->setIncludeFiles(false);
 
       foreach ( $DLapps->getFiles() as $file ) {

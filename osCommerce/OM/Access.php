@@ -80,7 +80,7 @@
       if ( in_array('*', $applications) ) {
         $applications = array();
 
-        $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'sites/' . $site . '/applications');
+        $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Site/' . $site . '/Application');
         $DLapps->setIncludeFiles(false);
 
         foreach ( $DLapps->getFiles() as $file ) {

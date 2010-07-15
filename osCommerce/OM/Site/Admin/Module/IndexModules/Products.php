@@ -14,7 +14,7 @@
   use osCommerce\OM\OSCOM;
   use osCommerce\OM\Access;
 
-  require('includes/sites/Admin/applications/products/classes/products.php');
+//  require('includes/sites/Admin/applications/products/classes/products.php'); HPDL
 
   class Products extends \osCommerce\OM\Site\Admin\IndexModulesAbstract {
     public function __construct() {
