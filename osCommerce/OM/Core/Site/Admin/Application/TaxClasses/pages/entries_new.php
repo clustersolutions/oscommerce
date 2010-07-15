@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\ObjectInfo;
-  use osCommerce\OM\Site\Admin\Application\ZoneGroups\ZoneGroups;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
+  use osCommerce\OM\Core\OSCOM;
 
   $zones_array = array();
 

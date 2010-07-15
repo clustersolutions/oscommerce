@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\ObjectInfo;
-  use osCommerce\OM\Site\Admin\Application\TaxClasses\TaxClasses;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\Site\Admin\Application\TaxClasses\TaxClasses;
+  use osCommerce\OM\Core\OSCOM;
 
   $OSCOM_ObjectInfo = new ObjectInfo(TaxClasses::getEntry($_GET['rID']));
 ?>

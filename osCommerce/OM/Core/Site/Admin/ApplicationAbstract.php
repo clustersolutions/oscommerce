@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin;
+  namespace osCommerce\OM\Core\Site\Admin;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
-  abstract class ApplicationAbstract extends \osCommerce\OM\ApplicationAbstract {
+  abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
     protected $_link_to = true;
     protected $_group;
     protected $_icon = 'default.png';

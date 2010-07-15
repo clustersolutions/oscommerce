@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Currencies;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Currencies;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Cache;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Cache;
 
   class Currencies {
     public static function get($id, $key = null) {

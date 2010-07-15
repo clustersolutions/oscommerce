@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\ObjectInfo;
-  use osCommerce\OM\Site\Admin\Application\ZoneGroups\ZoneGroups;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Shop\Address;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Address;
 
   $OSCOM_ObjectInfo = new ObjectInfo(ZoneGroups::getEntry($_GET['zID']));
 

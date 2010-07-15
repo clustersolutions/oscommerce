@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
   $services = array(array('id' => 'oanda',
                           'text' => 'Oanda (http://www.oanda.com)'),

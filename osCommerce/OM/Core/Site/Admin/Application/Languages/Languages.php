@@ -8,15 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Languages;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Languages;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Cache;
-  use osCommerce\OM\Site\Admin\Application\Currencies\Currencies;
-  use osCommerce\OM\XML;
-  use osCommerce\OM\DirectoryListing;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Admin\Language;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Cache;
+  use osCommerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
+  use osCommerce\OM\Core\XML;
+  use osCommerce\OM\Core\DirectoryListing;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Language;
 
   class Languages {
     public static function get($id, $key = null) {

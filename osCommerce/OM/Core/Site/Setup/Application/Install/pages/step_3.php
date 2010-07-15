@@ -141,7 +141,7 @@
                    'DIR_FS_WORK = "' . OSCOM::BASE_DIRECTORY . 'work/' . '"' . "\n" .
                    'DIR_FS_DOWNLOAD = "' . $dir_fs_document_root . 'download/"' . "\n" .
                    'DIR_FS_DOWNLOAD_PUBLIC = "' . $dir_fs_document_root . 'pub/"' . "\n" .
-                   'DIR_FS_BACKUP = "' . OSCOM::BASE_DIRECTORY . 'sites/Admin/backups/"' . "\n" .
+                   'DIR_FS_BACKUP = "' . OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/backups/"' . "\n" .
                    'DB_SERVER = "' . $_POST['DB_SERVER'] . '"' . "\n" .
                    'DB_SERVER_USERNAME = "' . $_POST['DB_SERVER_USERNAME'] . '"' . "\n" .
                    'DB_SERVER_PASSWORD = "' . $_POST['DB_SERVER_PASSWORD'] . '"' . "\n" .

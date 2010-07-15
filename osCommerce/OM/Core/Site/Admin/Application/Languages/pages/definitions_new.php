@@ -8,8 +8,8 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Core\OSCOM;
 
   $groups_array = array();
 

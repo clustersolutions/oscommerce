@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\ErrorLog;
+  namespace osCommerce\OM\Core\Site\Admin\Application\ErrorLog;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
-  class Controller extends \osCommerce\OM\Site\Admin\ApplicationAbstract {
+  class Controller extends \osCommerce\OM\Core\Site\Admin\ApplicationAbstract {
     protected $_group = 'tools';
     protected $_icon = 'errorlog.png';
     protected $_sort_order = 10;

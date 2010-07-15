@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\ObjectInfo;
-  use osCommerce\OM\Site\Admin\Application\CreditCards\CreditCards;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\Site\Admin\Application\CreditCards\CreditCards;
+  use osCommerce\OM\Core\OSCOM;
 
   $OSCOM_ObjectInfo = new ObjectInfo(CreditCards::get($_GET['id']));
 ?>

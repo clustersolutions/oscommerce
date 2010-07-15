@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\CreditCards;
+  namespace osCommerce\OM\Core\Site\Admin\Application\CreditCards;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Cache;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Cache;
 
   class CreditCards {
     public static function get($id) {

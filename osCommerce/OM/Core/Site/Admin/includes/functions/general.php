@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
 /**
  * Wrapper function for set_time_limit(), which can't be used in safe_mode
@@ -312,7 +312,7 @@
       }
 
       if (!function_exists($function_name)) {
-        include(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/cfg_parameters/' . $function_name . '.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/cfg_parameters/' . $function_name . '.php');
       }
 
       if (!empty($function_parameter)) {
@@ -348,6 +348,6 @@
   }
 
   function osc_toObjectInfo($array) {
-    return new osCommerce\OM\ObjectInfo($array);
+    return new osCommerce\OM\Core\ObjectInfo($array);
   }
 ?>

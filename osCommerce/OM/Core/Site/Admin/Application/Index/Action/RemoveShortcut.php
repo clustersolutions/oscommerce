@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Index\Action;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Index\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Access;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Access;
 
   class RemoveShortcut {
     public static function execute(ApplicationAbstract $application) {

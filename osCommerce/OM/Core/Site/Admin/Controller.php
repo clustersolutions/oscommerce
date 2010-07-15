@@ -8,22 +8,22 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin;
+  namespace osCommerce\OM\Core\Site\Admin;
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Cache;
-  use osCommerce\OM\Database;
-  use osCommerce\OM\Session;
-  use osCommerce\OM\Access;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Cache;
+  use osCommerce\OM\Core\Database;
+  use osCommerce\OM\Core\Session;
+  use osCommerce\OM\Core\Access;
 
   define('OSC_IN_ADMIN', true);
 
-  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/general.php');
-  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/html_output.php');
-  require(OSCOM::BASE_DIRECTORY . 'Site/Admin/includes/functions/localization.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/general.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/html_output.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/localization.php');
 
-  class Controller implements \osCommerce\OM\SiteInterface {
+  class Controller implements \osCommerce\OM\Core\SiteInterface {
     protected static $_default_application = 'Index';
     protected static $_guest_applications = array('Index', 'Login');
 

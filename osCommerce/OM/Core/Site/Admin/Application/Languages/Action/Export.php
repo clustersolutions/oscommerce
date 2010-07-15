@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
 
   class Export {
     public static function execute(ApplicationAbstract $application) {

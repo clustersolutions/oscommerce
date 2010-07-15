@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Administrators;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Administrators;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\DirectoryListing;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Admin\Access;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\DirectoryListing;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Access;
 
   class Administrators {
     const ACCESS_MODE_ADD = 'add';
@@ -302,7 +302,7 @@
 
       $module_files = array();
 
-      $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Application');
+      $DLapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application');
       $DLapps->setIncludeFiles(false);
 
       foreach ( $DLapps->getFiles() as $file ) {

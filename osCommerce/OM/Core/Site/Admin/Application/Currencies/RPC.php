@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Currencies;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Currencies;
 
-  use osCommerce\OM\Site\RPC\Controller as OSCOM_Site_RPC;
+  use osCommerce\OM\Core\Site\RPC\Controller as OSCOM_Site_RPC;
 
   class RPC {
     public static function getAll() {

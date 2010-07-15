@@ -8,12 +8,12 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Application\Languages\Action;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
 
-  use osCommerce\OM\ApplicationAbstract;
-  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
   class InsertDefinition {
     public static function execute(ApplicationAbstract $application) {

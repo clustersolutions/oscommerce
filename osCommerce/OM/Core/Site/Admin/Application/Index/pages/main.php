@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\DirectoryListing;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
+  use osCommerce\OM\Core\DirectoryListing;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
-  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Module/IndexModules');
+  $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/IndexModules');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $files = $OSCOM_DirectoryListing->getFiles();
 

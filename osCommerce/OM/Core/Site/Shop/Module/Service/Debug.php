@@ -26,8 +26,8 @@
         }
       }
 
-      if ( (SERVICE_DEBUG_CHECK_INSTALLATION_MODULE == '1') && file_exists(OSCOM::BASE_DIRECTORY . 'Site/Setup') ) {
-        $OSCOM_MessageStack->add('debug', sprintf(OSCOM::getDef('warning_install_directory_exists'), OSCOM::BASE_DIRECTORY . 'Site/Setup'), 'warning');
+      if ( (SERVICE_DEBUG_CHECK_INSTALLATION_MODULE == '1') && file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Setup') ) {
+        $OSCOM_MessageStack->add('debug', sprintf(OSCOM::getDef('warning_install_directory_exists'), OSCOM::BASE_DIRECTORY . 'Core/Site/Setup'), 'warning');
       }
 
       if ( (SERVICE_DEBUG_CHECK_CONFIGURATION == '1') && is_writeable(OSCOM::BASE_DIRECTORY . 'config.php') ) {

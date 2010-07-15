@@ -58,7 +58,7 @@
       $OSCOM_Database = Registry::get('Database');
 
       if ( !$OSCOM_Database->isError() ) {
-        $sql_file = OSCOM::BASE_DIRECTORY . 'sites/Setup/sql/oscommerce.sql';
+        $sql_file = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/sql/oscommerce.sql';
 
         $OSCOM_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
       }
@@ -113,7 +113,7 @@
         $installed = array();
 
         foreach ( $services as $service ) {
-          include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/services/' . $service . '.php');
+          include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/services/' . $service . '.php');
           $class = 'osC_Services_' . $service . '_Admin';
           $module = new $class();
           $module->install();
@@ -173,12 +173,12 @@
         $Qs->bindValue(':configuration_value', implode(';', $installed));
         $Qs->execute();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/classes/payment.php');
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/classes/shipping.php');
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/classes/order_total.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/classes/payment.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/classes/shipping.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/classes/order_total.php');
 
         define('DEFAULT_ORDERS_STATUS_ID', 1); // HPDL to remove
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/payment/cod.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/payment/cod.php');
         $module = new \osC_Payment_cod(); // HPDL
         $module->install();
 
@@ -186,23 +186,23 @@
         $Qupdate->bindValue(':configuration_key', 'MODULE_PAYMENT_COD_STATUS');
         $Qupdate->execute();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/shipping/flat.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/shipping/flat.php');
         $module = new \osC_Shipping_flat(); // HPDL
         $module->install();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/sub_total.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/order_total/sub_total.php');
         $module = new \osC_OrderTotal_sub_total(); // HPDL
         $module->install();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/shipping.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/order_total/shipping.php');
         $module = new \osC_OrderTotal_shipping(); // HPDL
         $module->install();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/tax.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/order_total/tax.php');
         $module = new \osC_OrderTotal_tax(); // HPDL
         $module->install();
 
-        include(OSCOM::BASE_DIRECTORY . 'sites/Admin/includes/modules/order_total/total.php');
+        include(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/modules/order_total/total.php');
         $module = new \osC_OrderTotal_total(); // HPDL
         $module->install();
       }
@@ -211,7 +211,7 @@
         $Qinno = $OSCOM_Database->query('show variables like "have_innodb"');
 
         if ( ($Qinno->numberOfRows() === 1) && (strtolower($Qinno->value('Value')) == 'yes') ) {
-          $innodb_sql_file = OSCOM::BASE_DIRECTORY . 'sites/Setup/sql/oscommerce_innodb.sql';
+          $innodb_sql_file = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/sql/oscommerce_innodb.sql';
 
           $OSCOM_Database->importSQL($innodb_sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
         }
@@ -240,7 +240,7 @@
       $OSCOM_Database = Registry::get('Database');
 
       if ( !$OSCOM_Database->isError() ) {
-        $sql_file = OSCOM::BASE_DIRECTORY . 'sites/Setup/sql/oscommerce_sample_data.sql';
+        $sql_file = OSCOM::BASE_DIRECTORY . 'Core/Site/Setup/sql/oscommerce_sample_data.sql';
 
         $OSCOM_Database->importSQL($sql_file, $db['DB_DATABASE'], $db['DB_TABLE_PREFIX']);
       }

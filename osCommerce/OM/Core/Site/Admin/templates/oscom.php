@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Access;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Access;
 ?>
 
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
@@ -72,7 +72,7 @@
 
 <?php
   if ( $OSCOM_Template->hasPageHeader() ) {
-    include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/templates/oscom/header.php');
+    include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/oscom/header.php');
   }
 
   if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
@@ -106,7 +106,7 @@
     echo Registry::get('MessageStack')->get('header');
   }
 
-  require(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename());
 ?>
 
 </div>
@@ -126,7 +126,7 @@
 ?>
 
 <div id="footer">
-  <?php include(OSCOM::BASE_DIRECTORY . 'Site/' . OSCOM::getSite() . '/templates/oscom/footer.php'); ?>
+  <?php include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/oscom/footer.php'); ?>
 </div>
 
 <?php

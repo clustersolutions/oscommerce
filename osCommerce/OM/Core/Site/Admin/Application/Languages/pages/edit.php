@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Site\Admin\Application\Languages\Languages;
-  use osCommerce\OM\Site\Admin\Application\Currencies\Currencies;
-  use osCommerce\OM\ObjectInfo;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
+  use osCommerce\OM\Core\Site\Admin\Application\Currencies\Currencies;
+  use osCommerce\OM\Core\ObjectInfo;
 
   $languages_array = array(array('id' => '0',
                                  'text' => OSCOM::getDef('none')));

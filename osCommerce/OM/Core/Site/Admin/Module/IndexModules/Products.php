@@ -8,15 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin\Module\IndexModules;
+  namespace osCommerce\OM\Core\Site\Admin\Module\IndexModules;
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\Access;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Access;
 
 //  require('includes/sites/Admin/applications/products/classes/products.php'); HPDL
 
-  class Products extends \osCommerce\OM\Site\Admin\IndexModulesAbstract {
+  class Products extends \osCommerce\OM\Core\Site\Admin\IndexModulesAbstract {
     public function __construct() {
       Registry::get('Language')->loadIniFile('modules/IndexModules/Products.php');
 

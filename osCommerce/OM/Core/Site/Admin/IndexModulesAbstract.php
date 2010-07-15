@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Admin;
+  namespace osCommerce\OM\Core\Site\Admin;
 
   abstract class IndexModulesAbstract {
     protected $_title;
