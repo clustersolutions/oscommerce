@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Setup;
+  namespace osCommerce\OM\Core\Site\Setup;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
-  abstract class ApplicationAbstract extends \osCommerce\OM\ApplicationAbstract {
+  abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
     public function __construct() {
       $this->initialize();
 

@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Setup;
+  namespace osCommerce\OM\Core\Site\Setup;
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
-  class Template extends \osCommerce\OM\Template {
+  class Template extends \osCommerce\OM\Core\Template {
     public function __construct() {
       $this->set('default');
     }

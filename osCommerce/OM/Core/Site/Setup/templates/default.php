@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 ?>
 
 <?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>

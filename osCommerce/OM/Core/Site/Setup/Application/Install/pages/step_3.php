@@ -8,10 +8,10 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Registry;
-  use osCommerce\OM\Database;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\DirectoryListing;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Database;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\DirectoryListing;
 
   define('DB_TABLE_PREFIX', $_POST['DB_TABLE_PREFIX']);
 

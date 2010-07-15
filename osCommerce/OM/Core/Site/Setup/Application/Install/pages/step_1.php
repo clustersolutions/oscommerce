@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\OSCOM;
+  use osCommerce\OM\Core\OSCOM;
 
   $www_location = 'http://' . $_SERVER['HTTP_HOST'];
 

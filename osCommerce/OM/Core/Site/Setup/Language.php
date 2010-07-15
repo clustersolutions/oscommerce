@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Site\Setup;
+  namespace osCommerce\OM\Core\Site\Setup;
 
-  use osCommerce\OM\DirectoryListing;
-  use osCommerce\OM\OSCOM;
-  use osCommerce\OM\XML;
+  use osCommerce\OM\Core\DirectoryListing;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\XML;
 
-  class Language extends \osCommerce\OM\Site\Admin\Language {
+  class Language extends \osCommerce\OM\Core\Site\Admin\Language {
     public function __construct() {
       $DLlang = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
       $DLlang->setIncludeDirectories(false);
