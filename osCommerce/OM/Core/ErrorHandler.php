@@ -14,15 +14,15 @@
     static protected $_resource;
 
     public static function initialize() {
-      if ( class_exists('SQLite3', false) && is_writable(OSCOM::BASE_DIRECTORY . 'work') ) {
+      if ( class_exists('SQLite3', false) && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         ini_set('display_errors', false);
         ini_set('log_errors', true);
-        ini_set('error_log', OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
+        ini_set('error_log', OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
 
         set_error_handler(array('osCommerce\\OM\\Core\\ErrorHandler', 'execute'));
 
-        if ( file_exists(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log') ) {
-          self::import(OSCOM::BASE_DIRECTORY . 'work/oscommerce_errors.log');
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt') ) {
+          self::import(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
         }
       }
     }
@@ -59,7 +59,7 @@
     }
 
     public static function connect() {
-      self::$_resource = new \SQLite3(DIR_FS_WORK . 'oscommerce.sqlite3');
+      self::$_resource = new \SQLite3(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3');
       self::$_resource->exec('create table if not exists error_log ( timestamp int, message text );');
     }
 
