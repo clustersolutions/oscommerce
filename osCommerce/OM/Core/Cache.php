@@ -47,7 +47,7 @@
         $key = $this->_key;
       }
 
-      return ( file_put_contents(DIR_FS_WORK . $key . '.cache', serialize($data), LOCK_EX) !== false );
+      return ( file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache', serialize($data), LOCK_EX) !== false );
     }
 
 /**
@@ -62,7 +62,7 @@
     public function read($key, $expire = null) {
       $this->_key = $key;
 
-      $filename = DIR_FS_WORK . $key . '.cache';
+      $filename = OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache';
 
       if ( file_exists($filename) ) {
         $difference = floor((time() - filemtime($filename)) / 60);
@@ -122,11 +122,11 @@
     public static function clear($key) {
       $key_length = strlen($key);
 
-      $d = dir(DIR_FS_WORK);
+      $d = dir(OSCOM::BASE_DIRECTORY . 'Work/Cache/');
 
       while ( ($entry = $d->read()) !== false ) {
         if ( (strlen($entry) >= $key_length) && (substr($entry, 0, $key_length) == $key) ) {
-          @unlink(DIR_FS_WORK . $entry);
+          @unlink(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $entry);
         }
       }
 
