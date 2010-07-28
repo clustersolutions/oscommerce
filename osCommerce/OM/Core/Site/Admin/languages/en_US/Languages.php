@@ -16,6 +16,8 @@ heading_title = Languages
 table_heading_languages = Languages
 table_heading_code = Code
 table_heading_action = Action
+table_heading_key = Key
+table_heading_value = Value
 
 table_heading_definition_groups = Definition Groups
 

@@ -12,5 +12,6 @@ heading_title = Configuration
 table_heading_title = Title
 table_heading_value = Value
 table_heading_action = Action
+table_heading_groups = Groups
 
 introduction_edit_parameter = Please make the necessary changes for this configuration parameter.
