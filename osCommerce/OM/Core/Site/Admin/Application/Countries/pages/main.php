@@ -108,7 +108,7 @@
       newCell.innerHTML = countryLinkIcon + '&nbsp;<a href="' + countryLink.replace('COUNTRYID', parseInt(record.countries_id)) + '" class="parent">' + htmlSpecialChars(record.countries_name) + '</a><span style="float: right;">(' + parseInt(record.total_zones) + ')</span>';
 
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = countryFlag.replace('COUNTRYISOCODE2', htmlSpecialChars(record.countries_iso_code_2)).replace('COUNTRYNAME', htmlSpecialChars(record.countries_name)).replace('COUNTRYNAME', htmlSpecialChars(record.countries_name));
+      newCell.innerHTML = countryFlag.replace('COUNTRYISOCODE2', htmlSpecialChars(record.countries_iso_code_2).toLowerCase()).replace('COUNTRYNAME', htmlSpecialChars(record.countries_name)).replace('COUNTRYNAME', htmlSpecialChars(record.countries_name));
 
       newCell = newRow.insertCell(2);
       newCell.innerHTML = htmlSpecialChars(record.countries_iso_code_2) + '&nbsp;&nbsp;&nbsp;&nbsp;' + htmlSpecialChars(record.countries_iso_code_3);
