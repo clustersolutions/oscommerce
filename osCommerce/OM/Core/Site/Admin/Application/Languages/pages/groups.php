@@ -85,7 +85,8 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + record.content_group;
 
-      $('#row' + record.content_group).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); });
+      $('#row' + record.content_group).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+      }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
       newCell.innerHTML = groupLinkIcon + '&nbsp;<a href="' + groupLink.replace('GROUPCODE', htmlSpecialChars(record.content_group)) + '" class="parent">' + htmlSpecialChars(record.content_group) + '</a><span style="float: right;">(' + parseInt(record.total_entries) + ')</span>';

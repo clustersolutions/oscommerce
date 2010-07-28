@@ -79,7 +79,8 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(rowCounter);
 
-      $('#row' + parseInt(rowCounter)).mouseover( function() { rowOverEffect(this); }).mouseout( function() { rowOutEffect(this); });
+      $('#row' + parseInt(rowCounter)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+      }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
       newCell.innerHTML = htmlSpecialChars(record.date);
