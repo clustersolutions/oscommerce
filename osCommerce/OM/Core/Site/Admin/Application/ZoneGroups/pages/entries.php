@@ -105,7 +105,7 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + parseInt(record.association_id);
 
-      $('#row' + parseInt(record.association_id)).hover( function() { rowOverEffect(this); }, function() { rowOutEffect(this); }).click(function(event) {
+      $('#row' + parseInt(record.association_id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
         if (event.target.type !== 'checkbox') {
           $(':checkbox', this).trigger('click');
         }
