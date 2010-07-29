@@ -16,7 +16,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('people.png') . ' ' . OSCOM::getDef('action_heading_login'); ?></h3>
 
-  <form name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Process'); ?>" method="post">
+  <form name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction'); ?></p>
 
@@ -35,7 +35,7 @@
 </script>
 
 <?php
-  if ( isset($_GET['action']) && ($_GET['action'] == 'Process') && !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
+  if ( isset($_GET['Process']) && !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
 ?>
 
 <script type="text/javascript" src="public/external/jquery/jquery.showPasswordCheckbox.js"></script>
