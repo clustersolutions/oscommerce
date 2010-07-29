@@ -77,7 +77,7 @@
 
     echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . osc_output_string_protected($_SESSION[OSCOM::getSite()]['username']) . '</a>' .
          '    <ul>' .
-         '      <li><a href="' . OSCOM::getLink(null, 'Login', 'action=Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>' .
+         '      <li><a href="' . OSCOM::getLink(null, 'Login', 'Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>' .
          '    </ul>' .
          '  </li>' .
          '</ul>';
