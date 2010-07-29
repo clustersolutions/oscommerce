@@ -13,7 +13,7 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\DirectoryListing;
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Access;
+  use osCommerce\OM\Core\Access;
 
   class Administrators {
     const ACCESS_MODE_ADD = 'add';
