@@ -43,7 +43,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . OSCOM::getDef('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=BatchSaveEntries') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . OSCOM::getDef('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveEntries&id=' . $_GET['id']) . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -74,7 +74,7 @@
   var dataTableName = 'configurationDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getAllEntries'); ?>';
 
-  var configEditLink = '<?php echo OSCOM::getLink(null, null, 'id=' . (int)$_GET['id'] . '&pID=CONFIGID&action=EntrySave'); ?>';
+  var configEditLink = '<?php echo OSCOM::getLink(null, null, 'EntrySave&id=' . (int)$_GET['id'] . '&pID=CONFIGID'); ?>';
   var configEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();

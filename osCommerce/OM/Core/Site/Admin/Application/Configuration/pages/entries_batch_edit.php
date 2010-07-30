@@ -23,7 +23,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . OSCOM::getDef('action_heading_batch_edit_configuration_parameters'); ?></h3>
 
-  <form name="cEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=BatchSaveEntries'); ?>" method="post">
+  <form name="cEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchSaveEntries&Process&id=' . $_GET['id']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_batch_edit_configuration_parameters'); ?></p>
 
@@ -52,7 +52,7 @@
 
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
