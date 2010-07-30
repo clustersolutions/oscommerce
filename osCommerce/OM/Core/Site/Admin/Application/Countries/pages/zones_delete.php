@@ -26,13 +26,13 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('zone_name'); ?></h3>
 
-  <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=' . $_GET['zID'] . '&action=ZoneDelete'); ?>" method="post">
+  <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'ZoneDelete&Process&id=' . $_GET['id'] . '&zID=' . $_GET['zID']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_delete_zone'); ?></p>
 
   <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('zone_name') . '</b>'; ?></p>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -22,7 +22,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_zone'); ?></h3>
 
-  <form name="zNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=ZoneSave'); ?>" method="post">
+  <form name="zNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'ZoneSave&Process&id=' . $_GET['id']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_new_zone'); ?></p>
 
@@ -31,7 +31,7 @@
     <p><label for="zone_code"><?php echo OSCOM::getDef('field_zone_code'); ?></label><?php echo osc_draw_input_field('zone_code'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

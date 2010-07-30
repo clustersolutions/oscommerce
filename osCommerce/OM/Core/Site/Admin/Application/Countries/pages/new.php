@@ -22,7 +22,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_country'); ?></h3>
 
-  <form name="cNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Save'); ?>" method="post">
+  <form name="cNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_new_country'); ?></p>
 
@@ -33,7 +33,7 @@
     <p><label for="address_format"><?php echo OSCOM::getDef('field_address_format'); ?></label><?php echo osc_draw_textarea_field('address_format'); ?><br /><i>:name</i>, <i>:street_address</i>, <i>:suburb</i>, <i>:city</i>, <i>:postcode</i>, <i>:state</i>, <i>:state_code</i>, <i>:country</i></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
