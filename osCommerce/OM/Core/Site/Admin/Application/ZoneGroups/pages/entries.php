@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=EntrySave'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'EntrySave&id=' . $_GET['id']), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -43,7 +43,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=BatchDeleteEntries') . '\';" />'; ?></th>
+      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDeleteEntries&id=' . $_GET['id']) . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -74,10 +74,10 @@
   var dataTableName = 'zoneGroupEntriesDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getAllEntries'); ?>';
 
-  var entryEditLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=ENTRYID&action=EntrySave'); ?>';
+  var entryEditLink = '<?php echo OSCOM::getLink(null, null, 'EntrySave&id=' . $_GET['id'] . '&zID=ENTRYID'); ?>';
   var entryEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var entryDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=ENTRYID&action=EntryDelete'); ?>';
+  var entryDeleteLink = '<?php echo OSCOM::getLink(null, null, 'EntryDelete&id=' . $_GET['id'] . '&zID=ENTRYID'); ?>';
   var entryDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var allCountries = '<?php echo addslashes(OSCOM::getDef('all_countries')); ?>';

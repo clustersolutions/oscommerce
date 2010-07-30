@@ -26,7 +26,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->getProtected('geo_zone_name'); ?></h3>
 
-  <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $OSCOM_ObjectInfo->getInt('geo_zone_id') . '&action=Delete'); ?>" method="post">
+  <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Delete&Process&id=' . $OSCOM_ObjectInfo->getInt('geo_zone_id')); ?>" method="post">
 
 <?php
   if ( ZoneGroups::hasTaxRate($OSCOM_ObjectInfo->getInt('geo_zone_id')) ) {
@@ -44,7 +44,7 @@
 
   <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('geo_zone_name') . ' (' . sprintf(OSCOM::getDef('total_entries'), $OSCOM_ObjectInfo->getInt('total_entries')) . ')</b>'; ?></p>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
 <?php
   }

@@ -11,23 +11,10 @@
   namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\Action;
 
   use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
 
   class Delete {
     public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('delete.php');
-
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( ZoneGroups::delete($_GET['id']) ) {
-          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
-        } else {
-          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
-        }
-
-        osc_redirect_admin(OSCOM::getLink());
-      }
     }
   }
 ?>
