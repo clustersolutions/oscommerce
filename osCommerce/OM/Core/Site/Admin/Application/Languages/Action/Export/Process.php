@@ -8,13 +8,14 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action\Export;
 
   use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
 
-  class DeleteDefinition {
+  class Process {
     public static function execute(ApplicationAbstract $application) {
-      $application->setPageContent('definitions_delete.php');
+      Languages::export($_GET['id'], $_POST['groups'], (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
     }
   }
 ?>

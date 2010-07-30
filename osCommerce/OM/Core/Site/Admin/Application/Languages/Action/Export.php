@@ -11,15 +11,10 @@
   namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
 
   use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
 
   class Export {
     public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('export.php');
-
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        Languages::export($_GET['id'], $_POST['groups'], (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
-      }
     }
   }
 ?>

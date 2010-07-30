@@ -11,23 +11,10 @@
   namespace osCommerce\OM\Core\Site\Admin\Application\Languages\Action;
 
   use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
 
   class Import {
     public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('import.php');
-
-      if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
-        if ( Languages::import($_POST['language_import'], $_POST['import_type']) ) {
-          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
-        } else {
-          Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
-        }
-
-        osc_redirect_admin(OSCOM::getLink());
-      }
     }
   }
 ?>

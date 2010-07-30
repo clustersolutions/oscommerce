@@ -30,7 +30,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_import_language'); ?></h3>
 
-  <form name="lImport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Import'); ?>" method="post">
+  <form name="lImport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Import&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_import_language'); ?></p>
 
@@ -39,7 +39,7 @@
     <p><label for="import_type"><?php echo OSCOM::getDef('field_import_type'); ?></label><br /><?php echo osc_draw_radio_field('import_type', array(array('id' => 'add', 'text' => OSCOM::getDef('only_add_new_records')), array('id' => 'update', 'text' => OSCOM::getDef('only_update_existing_records')), array('id' => 'replace', 'text' => OSCOM::getDef('replace_all'))), 'add', null, '<br />'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-se', 'title' => OSCOM::getDef('button_import'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-se', 'title' => OSCOM::getDef('button_import'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -26,7 +26,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . osc_output_string_protected($_GET['group']); ?></h3>
 
-  <form name="lDefine" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group'] . '&action=EditDefinition'); ?>" method="post">
+  <form name="lDefine" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EditDefinition&Process&id=' . $_GET['id'] . '&group=' . $_GET['group']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_language_definitions'); ?></p>
 
@@ -34,7 +34,7 @@
     <p><label for="def[<?php echo $OSCOM_ObjectInfo->getProtected('definition_key'); ?>]"><?php echo $OSCOM_ObjectInfo->getProtected('definition_key'); ?></label><?php echo osc_draw_textarea_field('def[' . $OSCOM_ObjectInfo->get('definition_key') . ']', $OSCOM_ObjectInfo->get('definition_value')); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
