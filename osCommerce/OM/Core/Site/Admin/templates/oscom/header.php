@@ -59,9 +59,9 @@
 
     if ( $OSCOM_Application->canLinkTo() ) {
       if ( Access::isShortcut(OSCOM::getSiteApplication()) ) {
-        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
       } else {
-        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'action=AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
       }
     }
 
