@@ -26,13 +26,13 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . $OSCOM_ObjectInfo->get('tax_class_title') . ': ' . $OSCOM_ObjectInfo->getProtected('geo_zone_name'); ?></h3>
 
-  <form name="rDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&rID=' . $OSCOM_ObjectInfo->getInt('tax_rates_id') . '&action=EntryDelete'); ?>" method="post">
+  <form name="rDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntryDelete&Process&id=' . $_GET['id'] . '&rID=' . $OSCOM_ObjectInfo->getInt('tax_rates_id')); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_delete_tax_rate'); ?></p>
 
   <p><?php echo '<b>' . $OSCOM_ObjectInfo->getProtected('tax_class_title') . ': ' . $OSCOM_ObjectInfo->getProtected('geo_zone_name') . '</b>'; ?></p>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

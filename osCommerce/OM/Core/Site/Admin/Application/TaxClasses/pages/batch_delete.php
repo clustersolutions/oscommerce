@@ -23,7 +23,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_tax_classes'); ?></h3>
 
-  <form name="tcDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchDelete'); ?>" method="post">
+  <form name="tcDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchDelete&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_batch_delete_tax_classes'); ?></p>
 
@@ -45,7 +45,7 @@
   }
 
   if ( !empty($names_string) ) {
-    $names_string = substr($names_string, 0, -2) . osc_draw_hidden_field('subaction', 'confirm');
+    $names_string = substr($names_string, 0, -2);
   }
 
   echo '<p>' . $names_string . '</p>';

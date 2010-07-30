@@ -31,7 +31,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_tax_rate'); ?></h3>
 
-  <form name="rNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=EntrySave'); ?>" method="post">
+  <form name="rNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntrySave&Process&id=' . $_GET['id']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_new_tax_rate'); ?></p>
 
@@ -42,7 +42,7 @@
     <p><label for="tax_priority"><?php echo OSCOM::getDef('field_tax_rate_priority'); ?></label><?php echo osc_draw_input_field('tax_priority'); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

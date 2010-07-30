@@ -26,7 +26,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('tax_class_title'); ?></h3>
 
-  <form name="tcEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $OSCOM_ObjectInfo->getInt('tax_class_id') . '&action=Save'); ?>" method="post">
+  <form name="tcEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&id=' . $OSCOM_ObjectInfo->getInt('tax_class_id')); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_tax_class'); ?></p>
 
@@ -35,7 +35,7 @@
     <p><label for="tax_class_description"><?php echo OSCOM::getDef('field_description'); ?></label><?php echo osc_draw_input_field('tax_class_description', $OSCOM_ObjectInfo->get('tax_class_description')); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
