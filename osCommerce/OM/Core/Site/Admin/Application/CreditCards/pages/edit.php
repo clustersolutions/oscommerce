@@ -26,7 +26,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('credit_card_name'); ?></h3>
 
-  <form name="ccEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $OSCOM_ObjectInfo->getInt('id') . '&action=Save'); ?>" method="post">
+  <form name="ccEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&id=' . $OSCOM_ObjectInfo->getInt('id')); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_card'); ?></p>
 
@@ -37,7 +37,7 @@
     <p><label for="credit_card_status"><?php echo OSCOM::getDef('field_status'); ?></label><?php echo osc_draw_checkbox_field('credit_card_status', '1', $OSCOM_ObjectInfo->get('credit_card_status')); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
