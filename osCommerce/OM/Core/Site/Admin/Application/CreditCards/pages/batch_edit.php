@@ -22,7 +22,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . OSCOM::getDef('action_heading_batch_edit_cards'); ?></h3>
 
-  <form name="ccEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchSave'); ?>" method="post">
+  <form name="ccEditBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchSave&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_batch_edit_cards'); ?></p>
 
@@ -46,7 +46,7 @@
   echo '<p>' . osc_draw_radio_field('type', array(array('id' => 'activate', 'text' => OSCOM::getDef('activate')), array('id' => 'deactivate', 'text' => OSCOM::getDef('deactivate'))), 'activate') . '</p>';
 ?>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
