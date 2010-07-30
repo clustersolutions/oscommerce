@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=InsertDefinition'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'InsertDefinition&id=' . $_GET['id']), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -70,7 +70,7 @@
   var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=GROUPCODE'); ?>';
   var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
 
-  var groupDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=GROUPCODE&action=DeleteGroup'); ?>';
+  var groupDeleteLink = '<?php echo OSCOM::getLink(null, null, 'DeleteGroup&id=' . $_GET['id'] . '&group=GROUPCODE'); ?>';
   var groupDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();

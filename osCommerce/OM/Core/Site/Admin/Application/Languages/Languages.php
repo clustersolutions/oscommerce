@@ -501,7 +501,7 @@
     public static function getDirectoryListing() {
       $result = array();
 
-      $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages');
+      $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages');
       $OSCOM_DirectoryListing->setIncludeDirectories(false);
       $OSCOM_DirectoryListing->setCheckExtension('xml');
 
@@ -515,8 +515,8 @@
     public static function import($file, $type) {
       $OSCOM_Database = Registry::get('Database');
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'languages/' . $file . '.xml') ) {
-        $source = array('language' => XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'languages/' . $file . '.xml')));
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $file . '.xml') ) {
+        $source = array('language' => XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $file . '.xml')));
 
         $language = array('name' => $source['language']['data']['title'],
                           'code' => $source['language']['data']['code'],
@@ -606,7 +606,7 @@
         }
 
         if ( $error === false ) {
-          $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'languages/' . $file);
+          $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $file);
           $OSCOM_DirectoryListing->setRecursive(true);
           $OSCOM_DirectoryListing->setIncludeDirectories(false);
           $OSCOM_DirectoryListing->setAddDirectoryToFilename(true);

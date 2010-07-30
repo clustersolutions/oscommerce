@@ -24,7 +24,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . osc_output_string_protected($_GET['group']); ?></h3>
 
-  <form name="lDefineBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group'] . '&action=BatchSaveDefinitions'); ?>" method="post">
+  <form name="lDefineBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchSaveDefinitions&Process&id=' . $_GET['id'] . '&group=' . $_GET['group']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_language_definitions'); ?></p>
 
@@ -40,7 +40,7 @@
 
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -33,7 +33,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('export.png') . ' ' . $OSCOM_ObjectInfo->getProtected('name'); ?></h3>
 
-  <form name="lExport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&action=Export'); ?>" method="post">
+  <form name="lExport" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Export&Process&id=' . $_GET['id']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_export_language'); ?></p>
 
@@ -43,7 +43,7 @@
     <p><?php echo osc_draw_checkbox_field('include_data', array(array('id' => '', 'text' => OSCOM::getDef('field_export_with_data'))), true); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-nw', 'title' => OSCOM::getDef('button_export'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-nw', 'title' => OSCOM::getDef('button_export'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

@@ -22,7 +22,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_languages'); ?></h3>
 
-  <form name="lDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=BatchDelete'); ?>" method="post">
+  <form name="lDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchDelete&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_batch_delete_languages'); ?></p>
 
@@ -50,7 +50,7 @@
   echo '<p>' . $names_string . '</p>';
 
   if ( $check_default_flag === false ) {
-    echo '<p>' . osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
+    echo '<p>' . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
   } else {
     echo '<p><b>' . OSCOM::getDef('introduction_delete_language_invalid') . '</b></p>';
 

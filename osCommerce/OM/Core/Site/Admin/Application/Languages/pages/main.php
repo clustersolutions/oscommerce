@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Import'), 'icon' => 'triangle-1-se', 'title' => OSCOM::getDef('button_import'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Import'), 'icon' => 'triangle-1-se', 'title' => OSCOM::getDef('button_import'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -44,7 +44,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -80,13 +80,13 @@
 
   var languageIcon = '<?php echo osc_image('images/worldflags/LANGUAGECODE.png', 'LANGUAGENAME'); ?>';
 
-  var languageEditLink = '<?php echo OSCOM::getLink(null, null, 'id=LANGUAGEID&action=Save'); ?>';
+  var languageEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=LANGUAGEID'); ?>';
   var languageEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var languageExportLink = '<?php echo OSCOM::getLink(null, null, 'id=LANGUAGEID&action=Export'); ?>';
+  var languageExportLink = '<?php echo OSCOM::getLink(null, null, 'Export&id=LANGUAGEID'); ?>';
   var languageExportLinkIcon = '<?php echo osc_icon('export.png'); ?>';
 
-  var languageDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=LANGUAGEID&action=Delete'); ?>';
+  var languageDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&id=LANGUAGEID'); ?>';
   var languageDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var defaultLanguage = '<?php echo DEFAULT_LANGUAGE; ?>';
