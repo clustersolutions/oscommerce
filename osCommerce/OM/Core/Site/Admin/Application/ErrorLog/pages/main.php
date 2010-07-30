@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Delete'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Delete'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
