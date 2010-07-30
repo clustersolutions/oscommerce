@@ -23,13 +23,13 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('title_delete_error_log'); ?></h3>
 
-  <form name="elDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'action=Delete'); ?>" method="post">
+  <form name="elDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Delete&Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_delete_error_log'); ?></p>
 
   <p><?php echo '<b>' . sprintf(OSCOM::getDef('number_of_error_log_file_entries'), number_format(ErrorHandler::getTotalEntries())) . '</b>'; ?></p>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
