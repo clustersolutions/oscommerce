@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=UpdateRates'), 'icon' => 'refresh', 'title' => OSCOM::getDef('button_update_currency_exchange_rates'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'UpdateRates'), 'icon' => 'refresh', 'title' => OSCOM::getDef('button_update_currency_exchange_rates'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -44,7 +44,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -75,10 +75,10 @@
   var dataTableName = 'currenciesDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
 
-  var cEditLink = '<?php echo OSCOM::getLink(null, null, 'id=CID&action=Save'); ?>';
+  var cEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=CID'); ?>';
   var cEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var cDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=CID&action=Delete'); ?>';
+  var cDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&id=CID'); ?>';
   var cDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var defaultCurrency = '<?php echo DEFAULT_CURRENCY; ?>';
