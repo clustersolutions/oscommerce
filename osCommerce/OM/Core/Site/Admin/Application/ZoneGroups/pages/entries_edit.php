@@ -61,7 +61,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('countries_name') . ': ' . $OSCOM_ObjectInfo->getProtected('zone_name'); ?></h3>
 
-  <form name="zEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&zID=' . $OSCOM_ObjectInfo->getInt('association_id') . '&action=EntrySave'); ?>" method="post">
+  <form name="zEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntrySave&Process&id=' . $_GET['id'] . '&zID=' . $OSCOM_ObjectInfo->getInt('association_id')); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_edit_zone_entry'); ?></p>
 
@@ -70,7 +70,7 @@
     <p><label for="zone_id"><?php echo OSCOM::getDef('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array, $OSCOM_ObjectInfo->get('zone_id')); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_hidden_field('subaction', 'confirm') . osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

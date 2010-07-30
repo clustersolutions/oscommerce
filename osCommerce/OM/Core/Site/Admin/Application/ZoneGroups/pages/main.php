@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'action=Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -42,7 +42,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'action=BatchDelete') . '\';" />'; ?></th>
+      <th align="right" colspan="2"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDelete') . '\';" />'; ?></th>
       <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
@@ -76,10 +76,10 @@
   var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID'); ?>';
   var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';
 
-  var groupEditLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID&action=Save'); ?>';
+  var groupEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=GROUPID'); ?>';
   var groupEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
 
-  var groupDeleteLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID&action=Delete'); ?>';
+  var groupDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&id=GROUPID'); ?>';
   var groupDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
