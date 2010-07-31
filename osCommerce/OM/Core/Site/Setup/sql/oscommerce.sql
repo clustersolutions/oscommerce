@@ -2632,7 +2632,7 @@ INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (96,'NYL','
 
 INSERT INTO osc_countries VALUES (97,'Hungary','HU','HUN','');
 
-INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (97,'BA','Baranja megye');
+INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (97,'BA','Baranya megye');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (97,'BC','Békéscsaba');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (97,'BE','Békés megye');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (97,'BK','Bács-Kiskun megye');
