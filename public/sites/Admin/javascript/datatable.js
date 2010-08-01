@@ -1,20 +1,22 @@
 /*
   osCommerce Online Merchant $osCommerce-SIG$
-  Copyright (c) 2009 osCommerce (http://www.oscommerce.com)
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+var batchCurrentPage = 1;
+var batchPages = 1;
+
 var osC_DataTable = function() {
   var initialized = false;
 
-  var batchCurrentPage = moduleParams.page;
+  batchCurrentPage = moduleParams.page;
   var batchTotalRecords = 0;
   var batchFrom = 0;
   var batchTo = 0;
-  var batchPages = 1;
 
   return {
     initialize: function() {
@@ -136,7 +138,7 @@ var osC_DataTable = function() {
             var batchPageLinks;
 
             if ( batchCurrentPage > 1 ) {
-              batchPageLinks = '<a href="#" onclick="osC_DataTable.load(' + (batchCurrentPage - 1) + '); return false;">' + batchIconNavigationBack + '</a>';
+              batchPageLinks = '<a id="batchPrevLink" href="#" onclick="osC_DataTable.load(' + (batchCurrentPage - 1) + '); return false;">' + batchIconNavigationBack + '</a>';
             } else {
               batchPageLinks = batchIconNavigationBackGrey;
             }
@@ -144,7 +146,7 @@ var osC_DataTable = function() {
             batchPageLinks += '&nbsp;';
 
             if ( batchCurrentPage < batchPages ) {
-              batchPageLinks += '<a href="#" onclick="osC_DataTable.load(' + (batchCurrentPage + 1) + '); return false;">' + batchIconNavigationForward + '</a>';
+              batchPageLinks += '<a id="batchNextLink" href="#" onclick="osC_DataTable.load(' + (batchCurrentPage + 1) + '); return false;">' + batchIconNavigationForward + '</a>';
             } else {
               batchPageLinks += batchIconNavigationForwardGrey;
             }
@@ -197,3 +199,15 @@ var osC_DataTable = function() {
     }
   };
 };
+
+$(document.documentElement).keyup(function (event) {
+  if ( event.altKey && (event.keyCode == 37) ) { // alt + left arrow key; go to previous page set
+    if ( batchCurrentPage > 1 ) {
+      $('#batchPrevLink').click();
+    }
+  } else if ( event.altKey && (event.keyCode == 39) ) { // alt + right arrow key; go to next page set
+    if ( batchCurrentPage < batchPages ) {
+      $('#batchNextLink').click();
+    }
+  }
+});
