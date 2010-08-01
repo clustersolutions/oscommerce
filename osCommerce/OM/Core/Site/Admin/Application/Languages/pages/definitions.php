@@ -59,7 +59,7 @@
 </div>
 
 <script type="text/javascript">
-  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule + '_definitions';
 
   var moduleParams = new Object();
   moduleParams.page = 1;
