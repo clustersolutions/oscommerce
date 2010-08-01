@@ -52,7 +52,7 @@
 </div>
 
 <script type="text/javascript">
-  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule + '_groups';
 
   var moduleParams = new Object();
   moduleParams.page = 1;
