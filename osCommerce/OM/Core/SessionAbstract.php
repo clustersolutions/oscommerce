@@ -59,7 +59,7 @@
  * @access protected
  */
 
-    protected $_life_time; // HPDL for Shop use SERVICE_SESSION_EXPIRATION_TIME
+    protected $_life_time;
 
 /**
  * Verify an existing session ID and create or resume the session if the existing session ID is valid
@@ -75,7 +75,7 @@
         $this->_life_time = ini_get('session.gc_maxlifetime');
       }
 
-      session_set_cookie_params($this->_life_time, ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH), ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN));
+      session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH), ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN));
 
       $sane_session_id = true;
 
