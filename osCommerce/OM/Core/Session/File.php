@@ -36,7 +36,7 @@
 
     public function __construct($name) {
       $this->setName($name);
-      $this->setSavePath(OSCOM::BASE_DIRECTORY . 'work');
+      $this->setSavePath(OSCOM::BASE_DIRECTORY . 'Work/Session');
     }
 
 /**
