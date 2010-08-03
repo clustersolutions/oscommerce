@@ -1,49 +1,46 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  include('includes/modules/payment/' . $_GET['module'] . '.php');
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\Site\Admin\Application\PaymentModules\PaymentModules;
+  use osCommerce\OM\Core\OSCOM;
 
-  $osC_Language->injectDefinitions('modules/payment/' . $_GET['module'] . '.xml');
-
-  $module = 'osC_Payment_' . $_GET['module'];
-  $module = new $module();
+  $OSCOM_ObjectInfo = new ObjectInfo(PaymentModules::get($_GET['code']));
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('edit.png') . ' ' . $module->getTitle(); ?></div>
-<div class="infoBoxContent">
-  <form name="mEdit" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&module=' . $module->getCode() . '&action=save'); ?>" method="post">
+<div class="infoBox">
+  <h3><?php echo osc_icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('title'); ?></h3>
 
-  <p><?php echo $osC_Language->get('introduction_edit_payment_module'); ?></p>
+  <form name="pmEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&code=' . $OSCOM_ObjectInfo->get('code')); ?>" method="post">
+
+  <p><?php echo OSCOM::getDef('introduction_edit_payment_module'); ?></p>
+
+  <fieldset>
 
 <?php
   $keys = '';
 
-  foreach ( $module->getKeys() as $key ) {
-    $Qkey = $osC_Database->query('select configuration_title, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_key = :configuration_key');
-    $Qkey->bindTable(':table_configuration', TABLE_CONFIGURATION);
+  foreach ( $OSCOM_ObjectInfo->get('keys') as $key ) {
+    $Qkey = $OSCOM_Database->query('select configuration_title, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_key = :configuration_key');
     $Qkey->bindValue(':configuration_key', $key);
     $Qkey->execute();
 
-    $keys .= '<b>' . $Qkey->value('configuration_title') . '</b><br />' . $Qkey->value('configuration_description') . '<br />';
+    $keys .= '<p><label for="' . $key . '">' . $Qkey->value('configuration_title') . '</label><br />' . $Qkey->value('configuration_description');
 
     if ( !osc_empty($Qkey->value('set_function')) ) {
       $keys .= osc_call_user_func($Qkey->value('set_function'), $Qkey->value('configuration_value'), $key);
@@ -51,15 +48,15 @@
       $keys .= osc_draw_input_field('configuration[' . $key . ']', $Qkey->value('configuration_value'));
     }
 
-    $keys .= '<br /><br />';
+    $keys .= '</p>';
   }
 
-  $keys = substr($keys, 0, strrpos($keys, '<br /><br />'));
+  echo $keys;
 ?>
 
-  <p><?php echo $keys; ?></p>
+  </fieldset>
 
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()) . '\';" class="operationButton" />'; ?></p>
+  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>
