@@ -52,16 +52,15 @@
 </div>
 
 <script type="text/javascript">
-  var moduleParamsCookieName = 'oscadmin_module_' + pageModule + '_groups';
+  var moduleParamsCookieName = 'oscom_admin_' + pageModule;
+  var dataTablePageSetName = 'groups_page';
 
   var moduleParams = new Object();
-  moduleParams.page = 1;
-  moduleParams.search = '';
+  moduleParams[dataTablePageSetName] = 1;
+  moduleParams['search'] = '';
 
   if ( $.cookie(moduleParamsCookieName) != null ) {
-    var p = $.secureEvalJSON($.cookie(moduleParamsCookieName));
-    moduleParams.page = parseInt(p.page);
-    moduleParams.search = String(p.search);
+    moduleParams = $.secureEvalJSON($.cookie(moduleParamsCookieName));
   }
 
   var dataTableName = 'langDefGroupDataTable';
