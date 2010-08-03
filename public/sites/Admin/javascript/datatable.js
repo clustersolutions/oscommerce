@@ -13,7 +13,11 @@ var batchPages = 1;
 var osC_DataTable = function() {
   var initialized = false;
 
-  batchCurrentPage = moduleParams.page;
+  if ( moduleParams[dataTablePageSetName] == null ) {
+    moduleParams[dataTablePageSetName] = 1;
+  }
+
+  batchCurrentPage = moduleParams[dataTablePageSetName];
   var batchTotalRecords = 0;
   var batchFrom = 0;
   var batchTo = 0;
@@ -24,7 +28,7 @@ var osC_DataTable = function() {
       $('#batchPageLinks').html(batchIconNavigationBackGrey + '&nbsp;' + batchIconNavigationForwardGrey);
       $('#batchPullDownMenu').html(batchCurrentPageset.sprintf(1, 1));
 
-      $('#liveSearchField').val(moduleParams.search);
+      $('#liveSearchField').val(moduleParams['search']);
 
       $('#liveSearchField').keyup( function(e) {
         var t = this;
@@ -63,19 +67,19 @@ var osC_DataTable = function() {
       }
 
       if (page == undefined) {
-        page = moduleParams.page;
+        page = moduleParams[dataTablePageSetName];
       }
 
       if (search == undefined) {
-        search = moduleParams.search;
+        search = moduleParams['search'];
       }
 
       page = parseInt(page);
       search = String(search);
 
-      moduleParams.page = page;
+      moduleParams[dataTablePageSetName] = page;
       batchCurrentPage = page;
-      moduleParams.search = search;
+      moduleParams['search'] = search;
 
       $('#batchTotalPages').html(batchIconProgress + '&nbsp;Loading...');
 
