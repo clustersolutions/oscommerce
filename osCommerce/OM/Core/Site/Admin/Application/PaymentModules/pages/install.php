@@ -22,7 +22,7 @@
 <form id="liveSearchForm">
   <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Install'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_install'))); ?></span>
+  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -36,13 +36,12 @@
   <thead>
     <tr>
       <th><?php echo OSCOM::getDef('table_heading_payment_modules'); ?></th>
-      <th><?php echo OSCOM::getDef('table_heading_sort_order'); ?></th>
       <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th colspan="3">&nbsp;</th>
+      <th colspan="2">&nbsp;</th>
     </tr>
   </tfoot>
   <tbody>
@@ -52,12 +51,12 @@
 </form>
 
 <div style="padding: 5px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('uninstall.png') . '&nbsp;' . OSCOM::getDef('icon_uninstall'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('install.png') . '&nbsp;' . OSCOM::getDef('icon_install'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
 <script type="text/javascript">
-  var moduleParamsCookieName = 'oscadmin_module_' + pageModule;
+  var moduleParamsCookieName = 'oscadmin_module_' + pageModule + '_install';
 
   var moduleParams = new Object();
   moduleParams.page = 1;
@@ -70,13 +69,10 @@
   }
 
   var dataTableName = 'paymentModulesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getInstalled'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getUninstalled'); ?>';
 
-  var pmEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&code=PMCODE'); ?>';
-  var pmEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
-
-  var pmUninstallLink = '<?php echo OSCOM::getLink(null, null, 'Uninstall&code=PMCODE'); ?>';
-  var pmUninstallLinkIcon = '<?php echo osc_icon('uninstall.png'); ?>';
+  var pmInstallLink = '<?php echo OSCOM::getLink(null, null, 'Install&Process&code=PMCODE'); ?>';
+  var pmInstallLinkIcon = '<?php echo osc_icon('install.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -90,20 +86,13 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + record.code;
 
-      if ( record.status != true ) {
-        $('#row' + record.code).addClass('deactivatedRow');
-      }
-
       $('#row' + record.code).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);
       newCell.innerHTML = htmlSpecialChars(record.title);
 
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = parseInt(record.sort_order);
-
-      newCell = newRow.insertCell(2);
-      newCell.innerHTML = '<a href="' + pmEditLink.replace('PMCODE', htmlSpecialChars(record.code)) + '">' + pmEditLinkIcon + '</a>&nbsp;<a href="' + pmUninstallLink.replace('PMCODE', htmlSpecialChars(record.code)) + '">' + pmUninstallLinkIcon + '</a>';
+      newCell.innerHTML = '<a href="' + pmInstallLink.replace('PMCODE', htmlSpecialChars(record.code)) + '">' + pmInstallLinkIcon + '</a>';
       newCell.align = 'right';
 
       rowCounter++;
