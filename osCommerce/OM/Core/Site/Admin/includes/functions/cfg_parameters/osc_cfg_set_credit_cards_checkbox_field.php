@@ -1,30 +1,27 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2006 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\Registry;
+
   function osc_cfg_set_credit_cards_checkbox_field($default, $key = null) {
-    global $osC_Database;
+    $OSCOM_Database = Registry::get('Database');
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . '][]';
 
     $cc_array = array();
 
-    $Qcc = $osC_Database->query('select id, credit_card_name from :table_credit_cards where credit_card_status = :credit_card_status order by sort_order, credit_card_name');
-    $Qcc->bindTable(':table_credit_cards', TABLE_CREDIT_CARDS);
+    $Qcc = $OSCOM_Database->query('select id, credit_card_name from :table_credit_cards where credit_card_status = :credit_card_status order by sort_order, credit_card_name');
     $Qcc->bindInt(':credit_card_status', 1);
     $Qcc->execute();
 
-    while ($Qcc->next()) {
+    while ( $Qcc->next() ) {
       $cc_array[] = array('id' => $Qcc->valueInt('id'),
                           'text' => $Qcc->value('credit_card_name'));
     }

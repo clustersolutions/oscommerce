@@ -1,26 +1,25 @@
 <?php
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
 
-  function osc_cfg_use_get_tax_class_title($id) {
-    global $osC_Database, $osC_Language;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
-    if ($id < 1) {
-      return $osC_Language->get('parameter_none');
+  function osc_cfg_use_get_tax_class_title($id) {
+    $OSCOM_Database = Registry::get('Database');
+    $OSCOM_Language = Registry::get('Language');
+
+    if ( $id < 1 ) {
+      return OSCOM::getDef('parameter_none');
     }
 
-    $Qclass = $osC_Database->query('select tax_class_title from :table_tax_class where tax_class_id = :tax_class_id');
-    $Qclass->bindTable(':table_tax_class', TABLE_TAX_CLASS);
+    $Qclass = $OSCOM_Database->query('select tax_class_title from :table_tax_class where tax_class_id = :tax_class_id');
     $Qclass->bindInt(':tax_class_id', $id);
     $Qclass->execute();
 
