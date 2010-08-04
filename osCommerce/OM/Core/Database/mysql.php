@@ -182,6 +182,10 @@
       return $this->_fetch_assoc($resource);
     }
 
+    function getAll($resource) {
+      return $this->_fetch_all($resource);
+    }
+
     function freeResult($resource) {
       return $this->_free_result($resource);
     }
@@ -408,6 +412,20 @@
       }
 
       return mysql_fetch_assoc($resource);
+    }
+
+    function _fetch_all($resource) {
+      if ( $this->use_mysqli === true ) {
+        return mysqli_fetch_all($resource, MYSQLI_ASSOC);
+      }
+
+      $result = array();
+
+      while ( $data = $this->_fetch_assoc($resource) ) {
+        $result[] = $data;
+      }
+
+      return $result;
     }
 
     function _free_result($resource) {
