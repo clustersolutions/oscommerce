@@ -396,6 +396,28 @@
       return $this->result;
     }
 
+    function getAll() {
+      if ($this->cache_read === true) { // HPDL test cached results
+        $this->result = $this->cache_data;
+      } else {
+        if (!isset($this->query_handler)) {
+          $this->execute();
+        }
+
+        $this->result = $this->db_class->getAll($this->query_handler);
+
+        if ( is_null($this->result) ) {
+          $this->result = array();
+        }
+
+        if (isset($this->cache_key)) {
+          $this->cache_data = $this->result;
+        }
+      }
+
+      return $this->result;
+    }
+
     function freeResult() {
       if ($this->cache_read === false) {
         if (preg_match('/^SELECT/i', $this->sql_query)) {
