@@ -31,7 +31,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qcc = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards order by sort_order, credit_card_name');
 
@@ -41,9 +41,7 @@
 
       $Qcc->execute();
 
-      while ( $Qcc->next() ) {
-        $result['entries'][] = $Qcc->toArray();
-      }
+      $result['entries'] = $Qcc->getAll();
 
       $result['total'] = $Qcc->getBatchSize();
 
@@ -57,7 +55,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qcc = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_credit_cards where (credit_card_name like :credit_card_name) order by credit_card_name');
       $Qcc->bindValue(':credit_card_name', '%' . $search . '%');
@@ -68,9 +66,7 @@
 
       $Qcc->execute();
 
-      while ( $Qcc->next() ) {
-        $result['entries'][] = $Qcc->toArray();
-      }
+      $result['entries'] = $Qcc->getAll();
 
       $result['total'] = $Qcc->getBatchSize();
 

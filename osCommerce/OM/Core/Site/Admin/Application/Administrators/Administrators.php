@@ -49,7 +49,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qadmins = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_administrators order by user_name');
 
@@ -59,9 +59,7 @@
 
       $Qadmins->execute();
 
-      while ( $Qadmins->next() ) {
-        $result['entries'][] = $Qadmins->toArray();
-      }
+      $result['entries'] = $Qadmins->getAll();
 
       $result['total'] = $Qadmins->getBatchSize();
 
@@ -75,7 +73,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qadmins = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_administrators where (user_name like :user_name) order by user_name');
       $Qadmins->bindValue(':user_name', '%' . $search . '%');
@@ -86,9 +84,7 @@
 
       $Qadmins->execute();
 
-      while ( $Qadmins->next() ) {
-        $result['entries'][] = $Qadmins->toArray();
-      }
+      $result['entries'] = $Qadmins->getAll();
 
       $result['total'] = $Qadmins->getBatchSize();
 

@@ -62,9 +62,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qlanguages = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_languages order by sort_order, name');
+      $Qlanguages = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS l.*, count(ld.id) as total_definitions from :table_languages l, :table_languages_definitions ld where l.languages_id = ld.languages_id group by l.languages_id order by l.sort_order, l.name');
 
       if ( $pageset !== -1 ) {
         $Qlanguages->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
@@ -72,13 +72,7 @@
 
       $Qlanguages->execute();
 
-      while ( $Qlanguages->next() ) {
-        $Qdef = $OSCOM_Database->query('select count(*) as total_definitions from :table_languages_definitions where languages_id = :languages_id');
-        $Qdef->bindInt(':languages_id', $Qlanguages->valueInt('languages_id'));
-        $Qdef->execute();
-
-        $result['entries'][] = array_merge($Qlanguages->toArray(), $Qdef->toArray());
-      }
+      $result['entries'] = $Qlanguages->getAll();
 
       $result['total'] = $Qlanguages->getBatchSize();
 
@@ -92,9 +86,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qlanguages = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS l.* from :table_languages l left join :table_languages_definitions ld on (l.languages_id = ld.languages_id) where (l.name like :name or l.code like :code or ld.definition_key like :definition_key or ld.definition_value like :definition_value) group by l.languages_id order by l.name');
+      $Qlanguages = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS l.*, count(ld.id) as total_definitions from :table_languages l, :table_languages_definitions ld where l.languages_id = ld.languages_id and (l.name like :name or l.code like :code or ld.definition_key like :definition_key or ld.definition_value like :definition_value) group by l.languages_id order by l.name');
       $Qlanguages->bindValue(':name', '%' . $search . '%');
       $Qlanguages->bindValue(':code', '%' . $search . '%');
       $Qlanguages->bindValue(':definition_key', '%' . $search . '%');
@@ -106,13 +100,7 @@
 
       $Qlanguages->execute();
 
-      while ( $Qlanguages->next() ) {
-        $Qdef = $OSCOM_Database->query('select count(*) as total_definitions from :table_languages_definitions where languages_id = :languages_id');
-        $Qdef->bindInt(':languages_id', $Qlanguages->valueInt('languages_id'));
-        $Qdef->execute();
-
-        $result['entries'][] = array_merge($Qlanguages->toArray(), $Qdef->toArray());
-      }
+      $result['entries'] = $Qlanguages->getAll();
 
       $result['total'] = $Qlanguages->getBatchSize();
 
@@ -122,15 +110,13 @@
     public static function getDefinitionGroup($group) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qgroup = $OSCOM_Database->query('select languages_id, count(*) as total_entries from :table_languages_definitions where content_group = :content_group group by languages_id');
       $Qgroup->bindValue(':content_group', $group);
       $Qgroup->execute();
 
-      while ( $Qgroup->next() ) {
-        $result['entries'][] = $Qgroup->toArray();
-      }
+      $result['entries'] = $Qgroup->getAll();
 
       $result['total'] = $Qgroup->numberOfRows();
 
@@ -140,15 +126,13 @@
     public static function getDefinitionGroups($language_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qgroups = $OSCOM_Database->query('select distinct content_group, count(*) as total_entries from :table_languages_definitions where languages_id = :languages_id group by content_group order by content_group');
       $Qgroups->bindInt(':languages_id', $language_id);
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $result['entries'][] = $Qgroups->toArray();
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->numberOfRows();
 
@@ -165,31 +149,21 @@
 
       $result = false;
 
-      if ( $Qgroup->numberOfRows() === 1 ) {
-        $result = true;
-      }
-
-      return $result;
+      return ( $Qgroup->numberOfRows() === 1 );
     }
 
     public static function findDefinitionGroups($language_id, $search) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qgroups = $OSCOM_Database->query('select distinct content_group from :table_languages_definitions where languages_id = :languages_id and (definition_key like :definition_key or definition_value like :definition_value) group by content_group order by content_group');
+      $Qgroups = $OSCOM_Database->query('select distinct content_group, count(*) as total_entries from :table_languages_definitions where languages_id = :languages_id and (definition_key like :definition_key or definition_value like :definition_value) group by content_group order by content_group');
       $Qgroups->bindInt(':languages_id', $language_id);
       $Qgroups->bindValue(':definition_key', '%' . $search . '%');
       $Qgroups->bindValue(':definition_value', '%' . $search . '%');
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $Qtotal = $OSCOM_Database->query('select count(*) as total_entries from :table_languages_definitions where content_group = :content_group');
-        $Qtotal->bindValue(':content_group', $Qgroups->value('content_group'));
-        $Qtotal->execute();
-
-        $result['entries'][] = array_merge($Qgroups->toArray(), $Qtotal->toArray());
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->numberOfRows();
 
@@ -228,7 +202,7 @@
     public static function getDefinitions($language_id, $group) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qdefs = $OSCOM_Database->query('select * from :table_languages_definitions where languages_id = :languages_id and');
 
@@ -244,9 +218,7 @@
       $Qdefs->bindInt(':languages_id', $language_id);
       $Qdefs->execute();
 
-      while ( $Qdefs->next() ) {
-        $result['entries'][] = $Qdefs->toArray();
-      }
+      $result['entries'] = $Qdefs->getAll();
 
       $result['total'] = $Qdefs->numberOfRows();
 
@@ -256,7 +228,7 @@
     public static function findDefinitions($language_id, $group, $search) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qdefs = $OSCOM_Database->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group and (definition_key like :definition_key or definition_value like :definition_value) order by definition_key');
       $Qdefs->bindInt(':languages_id', $language_id);
@@ -265,9 +237,7 @@
       $Qdefs->bindValue(':definition_value', '%' . $search . '%');
       $Qdefs->execute();
 
-      while ( $Qdefs->next() ) {
-        $result['entries'][] = $Qdefs->toArray();
-      }
+      $result['entries'] = $Qdefs->getAll();
 
       $result['total'] = $Qdefs->numberOfRows();
 

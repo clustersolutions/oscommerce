@@ -36,9 +36,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qclasses = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_tax_class order by tax_class_title');
+      $Qclasses = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS tc.*, count(tr.tax_rates_id) as total_tax_rates from :table_tax_class tc, :table_tax_rates tr where tc.tax_class_id = tr.tax_class_id group by tc.tax_class_id order by tc.tax_class_title');
 
       if ( $pageset !== -1 ) {
         $Qclasses->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
@@ -46,9 +46,7 @@
 
       $Qclasses->execute();
 
-      while ( $Qclasses->next() ) {
-        $result['entries'][] = array_merge($Qclasses->toArray(), array('total_tax_rates' => self::getNumberOfTaxRates($Qclasses->valueInt('tax_class_id'))));
-      }
+      $result['entries'] = $Qclasses->getAll();
 
       $result['total'] = $Qclasses->getBatchSize();
 
@@ -62,9 +60,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qclasses = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS tc.* from :table_tax_class tc, :table_tax_rates tr where tc.tax_class_id = tr.tax_class_id and (tc.tax_class_title like :tax_class_title or tr.tax_description like :tax_description) group by tc.tax_class_id order by tc.tax_class_title');
+      $Qclasses = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS tc.*, count(tr.tax_rates_id) as total_tax_rates from :table_tax_class tc, :table_tax_rates tr where tc.tax_class_id = tr.tax_class_id and (tc.tax_class_title like :tax_class_title or tr.tax_description like :tax_description) group by tc.tax_class_id order by tc.tax_class_title');
       $Qclasses->bindValue(':tax_class_title', '%' . $search . '%');
       $Qclasses->bindValue(':tax_description', '%' . $search . '%');
 
@@ -74,9 +72,7 @@
 
       $Qclasses->execute();
 
-      while ( $Qclasses->next() ) {
-        $result['entries'][] = array_merge($Qclasses->toArray(), array('total_tax_rates' => self::getNumberOfTaxRates($Qclasses->valueInt('tax_class_id'))));
-      }
+      $result['entries'] = $Qclasses->getAll();
 
       $result['total'] = $Qclasses->getBatchSize();
 
@@ -131,15 +127,13 @@
     public static function getAllEntries($tax_class_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qrates = $OSCOM_Database->query('select tr.*, z.geo_zone_id, z.geo_zone_name from :table_tax_rates tr, :table_geo_zones z where tr.tax_class_id = :tax_class_id and tr.tax_zone_id = z.geo_zone_id order by tr.tax_priority, z.geo_zone_name');
       $Qrates->bindInt(':tax_class_id', $tax_class_id);
       $Qrates->execute();
 
-      while ( $Qrates->next() ) {
-        $result['entries'][] = $Qrates->toArray();
-      }
+      $result['entries'] = $Qrates->getAll();
 
       $result['total'] = $Qrates->numberOfRows();
 
@@ -149,16 +143,14 @@
     public static function findEntries($search, $tax_class_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qrates = $OSCOM_Database->query('select tr.*, z.geo_zone_id, z.geo_zone_name from :table_tax_rates tr, :table_geo_zones z where tr.tax_class_id = :tax_class_id and tr.tax_zone_id = z.geo_zone_id and (tr.tax_description like :tax_description) order by tr.tax_priority, z.geo_zone_name');
       $Qrates->bindInt(':tax_class_id', $tax_class_id);
       $Qrates->bindValue(':tax_description', '%' . $search . '%');
       $Qrates->execute();
 
-      while ( $Qrates->next() ) {
-        $result['entries'][] = $Qrates->toArray();
-      }
+      $result['entries'] = $Qrates->getAll();
 
       $result['total'] = $Qrates->numberOfRows();
 
