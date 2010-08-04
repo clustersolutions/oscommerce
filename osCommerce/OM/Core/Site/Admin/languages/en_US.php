@@ -89,6 +89,7 @@ icon_restore = Restore
 icon_reviews = Reviews
 icon_run = Execute
 icon_save = Save
+icon_shortcut_add = Add Shortcut
 icon_statistics = Statistics
 icon_trash = Delete
 icon_uninstall = Uninstall
