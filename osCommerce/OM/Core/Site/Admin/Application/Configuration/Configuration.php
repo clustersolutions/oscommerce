@@ -41,18 +41,12 @@
     public static function getAll() {
       $OSCOM_Database = Registry::get('Database');
 
-      $Qgroups = $OSCOM_Database->query('select configuration_group_id, configuration_group_title from :table_configuration_group where visible = 1 order by sort_order, configuration_group_title');
+      $result = array();
+
+      $Qgroups = $OSCOM_Database->query('select cg.configuration_group_id, cg.configuration_group_title, count(c.configuration_id) as total_entries from :table_configuration_group cg, :table_configuration c where cg.visible = 1 and cg.configuration_group_id = c.configuration_group_id group by cg.configuration_group_id order by cg.sort_order, cg.configuration_group_title');
       $Qgroups->execute();
 
-      $result = array('entries' => array());
-
-      while ( $Qgroups->next() ) {
-        $Qentries = $OSCOM_Database->query('select count(*) as total_entries from :table_configuration where configuration_group_id = :configuration_group_id');
-        $Qentries->bindInt(':configuration_group_id', $Qgroups->valueInt('configuration_group_id'));
-        $Qentries->execute();
-
-        $result['entries'][] = array_merge($Qgroups->toArray(), $Qentries->toArray());
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->numberOfRows();
 
@@ -62,20 +56,14 @@
     public static function find($search) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qgroups = $OSCOM_Database->query('select distinct g.configuration_group_id, g.configuration_group_title from :table_configuration c, :table_configuration_group g where (c.configuration_key like :configuration_key or c.configuration_value like :configuration_value) and c.configuration_group_id = g.configuration_group_id and g.visible = 1 order by g.sort_order, g.configuration_group_title');
+      $Qgroups = $OSCOM_Database->query('select distinct cg.configuration_group_id, cg.configuration_group_title, count(c.configuration_id) as total_entries from :table_configuration_group cg, :table_configuration c where (c.configuration_key like :configuration_key or c.configuration_value like :configuration_value) and c.configuration_group_id = cg.configuration_group_id and cg.visible = 1 group by cg.configuration_group_id order by cg.sort_order, cg.configuration_group_title');
       $Qgroups->bindValue(':configuration_key', '%' . $search . '%');
       $Qgroups->bindValue(':configuration_value', '%' . $search . '%');
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $Qentries = $OSCOM_Database->query('select count(*) as total_entries from :table_configuration where configuration_group_id = :configuration_group_id');
-        $Qentries->bindInt(':configuration_group_id', $Qgroups->valueInt('configuration_group_id'));
-        $Qentries->execute();
-
-        $result['entries'][] = array_merge($Qgroups->toArray(), $Qentries->toArray());
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->numberOfRows();
 

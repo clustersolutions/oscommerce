@@ -54,7 +54,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qcurrencies = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_currencies order by title');
 
@@ -64,9 +64,7 @@
 
       $Qcurrencies->execute();
 
-      while ( $Qcurrencies->next() ) {
-        $result['entries'][] = $Qcurrencies->toArray();
-      }
+      $result['entries'] = $Qcurrencies->getAll();
 
       $result['total'] = $Qcurrencies->getBatchSize();
 
@@ -80,7 +78,7 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qcurrencies = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_currencies where (title like :title or code like :code or symbol_left like :symbol_left or symbol_right like :symbol_right) order by title');
       $Qcurrencies->bindValue(':title', '%' . $search . '%');
@@ -94,9 +92,7 @@
 
       $Qcurrencies->execute();
 
-      while ( $Qcurrencies->next() ) {
-        $result['entries'][] = $Qcurrencies->toArray();
-      }
+      $result['entries'] = $Qcurrencies->getAll();
 
       $result['total'] = $Qcurrencies->getBatchSize();
 

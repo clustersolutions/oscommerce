@@ -40,9 +40,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qcountries = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_countries order by countries_name');
+      $Qcountries = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS c.*, count(z.zone_id) as total_zones from :table_countries c, :table_zones z where c.countries_id = z.zone_country_id group by c.countries_id order by c.countries_name');
 
       if ( $pageset !== -1 ) {
         $Qcountries->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
@@ -50,13 +50,7 @@
 
       $Qcountries->execute();
 
-      while ( $Qcountries->next() ) {
-        $Qzones = $OSCOM_Database->query('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
-        $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('countries_id'));
-        $Qzones->execute();
-
-        $result['entries'][] = array_merge($Qcountries->toArray(), $Qzones->toArray());
-      }
+      $result['entries'] = $Qcountries->getAll();
 
       $result['total'] = $Qcountries->getBatchSize();
 
@@ -70,9 +64,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qcountries = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS c.* from :table_countries c left join :table_zones z on (z.zone_country_id = c.countries_id) where (c.countries_name like :countries_name or c.countries_iso_code_2 like :countries_iso_code_2 or c.countries_iso_code_3 like :countries_iso_code_3 or z.zone_name like :zone_name or z.zone_code like :zone_code) group by c.countries_id order by c.countries_name');
+      $Qcountries = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS c.*, count(z.zone_id) as total_zones from :table_countries c, :table_zones z where (c.countries_name like :countries_name or c.countries_iso_code_2 like :countries_iso_code_2 or c.countries_iso_code_3 like :countries_iso_code_3 or z.zone_name like :zone_name or z.zone_code like :zone_code) and c.countries_id = z.zone_country_id group by c.countries_id order by c.countries_name');
       $Qcountries->bindValue(':countries_name', '%' . $search . '%');
       $Qcountries->bindValue(':countries_iso_code_2', '%' . $search . '%');
       $Qcountries->bindValue(':countries_iso_code_3', '%' . $search . '%');
@@ -85,13 +79,7 @@
 
       $Qcountries->execute();
 
-      while ( $Qcountries->next() ) {
-        $Qzones = $OSCOM_Database->query('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
-        $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('countries_id'));
-        $Qzones->execute();
-
-        $result['entries'][] = array_merge($Qcountries->toArray(), $Qzones->toArray());
-      }
+      $result['entries'] = $Qcountries->getAll();
 
       $result['total'] = $Qcountries->getBatchSize();
 
@@ -101,7 +89,7 @@
     public static function findZones($search, $country_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qzones = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_zones where zone_country_id = :zone_country_id and (zone_name like :zone_name or zone_code like :zone_code) order by zone_name');
       $Qzones->bindInt(':zone_country_id', $country_id);
@@ -109,9 +97,7 @@
       $Qzones->bindValue(':zone_code', '%' . $search . '%');
       $Qzones->execute();
 
-      while ( $Qzones->next() ) {
-        $result['entries'][] = $Qzones->toArray();
-      }
+      $result['entries'] = $Qzones->getAll();
 
       $result['total'] = $Qzones->numberOfRows();
 
@@ -131,15 +117,13 @@
     public static function getAllZones($country_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qzones = $OSCOM_Database->query('select * from :table_zones where zone_country_id = :zone_country_id order by zone_name');
       $Qzones->bindInt(':zone_country_id', $country_id);
       $Qzones->execute();
 
-      while ( $Qzones->next() ) {
-        $result['entries'][] = $Qzones->toArray();
-      }
+      $result['entries'] = $Qzones->getAll();
 
       $result['total'] = $Qzones->numberOfRows();
 

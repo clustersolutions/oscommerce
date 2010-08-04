@@ -37,9 +37,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qgroups = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS * from :table_geo_zones order by geo_zone_name');
+      $Qgroups = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS gz.*, count(z2gz.association_id) as total_entries from :table_geo_zones gz, :table_zones_to_geo_zones z2gz where gz.geo_zone_id = z2gz.geo_zone_id group by gz.geo_zone_id order by gz.geo_zone_name');
 
       if ( $pageset !== -1 ) {
         $Qgroups->setBatchLimit($pageset, MAX_DISPLAY_SEARCH_RESULTS);
@@ -47,9 +47,7 @@
 
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $result['entries'][] = array_merge($Qgroups->toArray(), array('total_entries' => self::numberOfEntries($Qgroups->valueInt('geo_zone_id'))));
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->getBatchSize();
 
@@ -63,9 +61,9 @@
         $pageset = 1;
       }
 
-      $result = array('entries' => array());
+      $result = array();
 
-      $Qgroups = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS gz.* from :table_geo_zones gz, :table_zones_to_geo_zones z2gz, :table_countries c, :table_zones z where gz.geo_zone_id = z2gz.geo_zone_id and z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name like :geo_zone_name or gz.geo_zone_description like :geo_zone_description or c.countries_name like :countries_name or z.zone_name like :zone_name) group by gz.geo_zone_id order by gz.geo_zone_name');
+      $Qgroups = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS gz.*, count(z2gz.association_id) as total_entries from :table_geo_zones gz, :table_zones_to_geo_zones z2gz, :table_countries c, :table_zones z where gz.geo_zone_id = z2gz.geo_zone_id and z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name like :geo_zone_name or gz.geo_zone_description like :geo_zone_description or c.countries_name like :countries_name or z.zone_name like :zone_name) group by gz.geo_zone_id order by gz.geo_zone_name');
       $Qgroups->bindValue(':geo_zone_name', '%' . $search . '%');
       $Qgroups->bindValue(':geo_zone_description', '%' . $search . '%');
       $Qgroups->bindValue(':countries_name', '%' . $search . '%');
@@ -77,9 +75,7 @@
 
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $result['entries'][] = array_merge($Qgroups->toArray(), array('total_entries' => self::numberOfEntries($Qgroups->valueInt('geo_zone_id'))));
-      }
+      $result['entries'] = $Qgroups->getAll();
 
       $result['total'] = $Qgroups->getBatchSize();
 
@@ -168,15 +164,13 @@
     public static function getAllEntries($group_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qentries = $OSCOM_Database->query('select z2gz.*, c.countries_name, z.zone_name from :table_zones_to_geo_zones z2gz left join :table_countries c on (z2gz.zone_country_id = c.countries_id) left join :table_zones z on (z2gz.zone_id = z.zone_id) where z2gz.geo_zone_id = :geo_zone_id order by c.countries_name, z.zone_name');
       $Qentries->bindInt(':geo_zone_id', $group_id);
       $Qentries->execute();
 
-      while ( $Qentries->next() ) {
-        $result['entries'][] = $Qentries->toArray();
-      }
+      $result['entries'] = $Qentries->getAll();
 
       $result['total'] = $Qentries->numberOfRows();
 
@@ -186,7 +180,7 @@
     public static function findEntries($search, $group_id) {
       $OSCOM_Database = Registry::get('Database');
 
-      $result = array('entries' => array());
+      $result = array();
 
       $Qentries = $OSCOM_Database->query('select SQL_CALC_FOUND_ROWS z2gz.*, c.countries_name, z.zone_name from :table_zones_to_geo_zones z2gz, :table_countries c, :table_zones z where z2gz.geo_zone_id = :geo_zone_id and z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (c.countries_name like :countries_name or z.zone_name like :zone_name) order by c.countries_name, z.zone_name');
       $Qentries->bindInt(':geo_zone_id', $group_id);
@@ -194,9 +188,7 @@
       $Qentries->bindValue(':zone_name', '%' . $search . '%');
       $Qentries->execute();
 
-      while ( $Qentries->next() ) {
-        $result['entries'][] = $Qentries->toArray();
-      }
+      $result['entries'] = $Qentries->getAll();
 
       $result['total'] = $Qentries->numberOfRows();
 
