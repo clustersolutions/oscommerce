@@ -611,7 +611,11 @@
     $button = '<button id="button' . $button_counter . '" type="' . osc_output_string($params['type']) . '"';
 
     if ( isset($params['href']) ) {
-      $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
+      if ( isset($params['newwindow']) ) {
+        $button .= ' onclick="window.open(\'' . $params['href'] . '\');"';
+      } else {
+        $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
+      }
     }
 
     if ( isset($params['params']) ) {
