@@ -15,7 +15,7 @@
   class Controller extends \osCommerce\OM\Core\Site\Admin\ApplicationAbstract {
     protected $_group = 'tools';
     protected $_icon = 'serverinfo.png';
-    protected $_sort_order = 1100;
+    protected $_sort_order = 900;
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');

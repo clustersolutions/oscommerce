@@ -45,38 +45,6 @@
   }
 
 /**
- * Retrieve web server and database server information
- *
- * @access public
- */
-
-  function osc_get_system_information() {
-    global $osC_Database;
-
-    $Qdb_date = $osC_Database->query('select now() as datetime');
-    $Qdb_uptime = $osC_Database->query('show status like "Uptime"');
-
-    @list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
-
-    $db_uptime = intval($Qdb_uptime->valueInt('Value') / 3600) . ':' . str_pad(intval(($Qdb_uptime->valueInt('Value') / 60) % 60), 2, '0', STR_PAD_LEFT);
-
-    return array('date' => osC_DateTime::getShort(null, true),
-                 'system' => $system,
-                 'kernel' => $kernel,
-                 'host' => $host,
-                 'ip' => gethostbyname($host),
-                 'uptime' => @exec('uptime'),
-                 'http_server' => $_SERVER['SERVER_SOFTWARE'],
-                 'php' => PHP_VERSION,
-                 'zend' => (function_exists('zend_version') ? zend_version() : ''),
-                 'db_server' => DB_SERVER,
-                 'db_ip' => gethostbyname(DB_SERVER),
-                 'db_version' => 'MySQL ' . $osC_Database->getServerVersion(),
-                 'db_date' => osC_DateTime::getShort($Qdb_date->value('datetime'), true),
-                 'db_uptime' => $db_uptime);
-  }
-
-/**
  * Parse file permissions to a human readable layout
  *
  * @param int $mode The file permission to parse
