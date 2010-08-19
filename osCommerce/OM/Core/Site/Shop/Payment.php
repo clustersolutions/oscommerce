@@ -14,17 +14,14 @@
   use osCommerce\OM\Core\OSCOM;
 
   class Payment {
-    var $selected_module;
+    protected $_modules = array();
 
-    var $_modules = array(),
-        $_group = 'payment',
-        $order_status = DEFAULT_ORDERS_STATUS_ID;
-
-    public function __construct($module = null) {
+    public function __construct() {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qmodules = $OSCOM_Database->query('select code from :table_templates_boxes where modules_group = "payment"');
+      $Qmodules = $OSCOM_Database->query('select code from :table_templates_boxes where modules_group = :modules_group');
+      $Qmodules->bindValue(':modules_group', 'payment');
       $Qmodules->setCache('modules-payment');
       $Qmodules->execute();
 
@@ -34,31 +31,30 @@
 
       $Qmodules->freeResult();
 
-      if ( !empty($this->_modules) ) {
-        if ( !empty($module) && in_array($module, $this->_modules) ) {
-          $this->_modules = array($module);
-          $this->selected_module = 'Payment_' . $module;
+      $OSCOM_Language->load('modules-payment');
+    }
+
+    public function loadAll() {
+      foreach ( $this->_modules as $module ) {
+        $module_class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $module;
+
+        Registry::set('Payment_' . $module, new $module_class(), true);
+      }
+
+      usort($this->_modules, function ($a, $b) {
+        if ( Registry::get('Payment_' . $a)->getSortOrder() == Registry::get('Payment_' . $b)->getSortOrder() ) {
+          return strnatcasecmp(Registry::get('Payment_' . $a)->getTitle(), Registry::get('Payment_' . $b)->getTitle());
         }
 
-        $OSCOM_Language->load('modules-payment');
+        return (Registry::get('Payment_' . $a)->getSortOrder() < Registry::get('Payment_' . $b)->getSortOrder()) ? -1 : 1;
+      });
+    }
 
-        foreach ( $this->_modules as $modules ) {
-          $module_class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $modules;
+    public function load($module) {
+      if ( in_array($module, $this->_modules) ) {
+        $module_class = 'osCommerce\\OM\\Core\\Site\\Shop\\Module\\Payment\\' . $module;
 
-          Registry::set('Payment_' . $modules, new $module_class(), true);
-        }
-
-        usort($this->_modules, function ($a, $b) {
-          if ( Registry::get('Payment_' . $a)->getSortOrder() == Registry::get('Payment_' . $b)->getSortOrder() ) {
-            return strnatcasecmp(Registry::get('Payment_' . $a)->getTitle(), Registry::get('Payment_' . $b)->getTitle());
-          }
-
-          return (Registry::get('Payment_' . $a)->getSortOrder() < Registry::get('Payment_' . $b)->getSortOrder()) ? -1 : 1;
-        });
-
-        if ( !empty($module) && in_array($module, $this->_modules) && isset(Registry::get('Payment_' . $module)->form_action_url) ) {
-          $this->form_action_url = Registry::get('Payment_' . $module)->form_action_url;
-        }
+        Registry::set('PaymentModule', new $module_class(), true);
       }
     }
 
@@ -176,36 +172,10 @@
       return $result;
     }
 
-    function getCode() {
-      return $this->_code;
-    }
-
-    function getTitle() {
-      return $this->_title;
-    }
-
-    function getDescription() {
-      return $this->_description;
-    }
-
-    function getMethodTitle() {
-      return $this->_method_title;
-    }
-
-    function isEnabled() {
-      return $this->_status;
-    }
-
-    function getSortOrder() {
-      return $this->_sort_order;
-    }
-
-    function getJavascriptBlock() {
-    }
-
     function getJavascriptBlocks() {
       $js = '';
-      if (is_array($this->_modules)) {
+
+      if ( is_array($this->_modules) ) {
         $js = '<script type="text/javascript"><!-- ' . "\n" .
               'function check_form() {' . "\n" .
               '  var error = 0;' . "\n" .
@@ -223,8 +193,8 @@
               '    payment_value = document.checkout_payment.payment_method.value;' . "\n" .
               '  }' . "\n\n";
 
-        foreach ($this->_modules as $module) {
-          if (Registry::get('Payment_' . $module)->isEnabled()) {
+        foreach ( $this->_modules as $module ) {
+          if ( Registry::get('Payment_' . $module)->isEnabled() ) {
             $js .= Registry::get('Payment_' . $module)->getJavascriptBlock();
           }
         }
@@ -259,96 +229,32 @@
       return $selection_array;
     }
 
-    function pre_confirmation_check() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          Registry::get($this->selected_module)->pre_confirmation_check();
-        }
-      }
-    }
+    public function hasActive() {
+      $has_active = false;
 
-    function confirmation() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          return Registry::get($this->selected_module)->confirmation();
-        }
-      }
-    }
-
-    function process_button() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          return Registry::get($this->selected_module)->process_button();
-        }
-      }
-    }
-
-    function process() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          return Registry::get($this->selected_module)->process();
-        }
-      }
-    }
-
-    function get_error() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          return Registry::get($this->selected_module)->get_error();
-        }
-      }
-    }
-
-    function hasActionURL() {
-      if (is_array($this->_modules)) {
-        if (Registry::exists($this->selected_module) && is_object(Registry::get($this->selected_module)) && Registry::get($this->selected_module)->isEnabled()) {
-          if (isset(Registry::get($this->selected_module)->form_action_url) && !empty(Registry::get($this->selected_module)->form_action_url)) {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    }
-
-    function getActionURL() {
-      return Registry::get($this->selected_module)->form_action_url;
-    }
-
-    function hasActive() {
-      static $has_active;
-
-      if (isset($has_active) === false) {
-        $has_active = false;
-
-        foreach ($this->_modules as $module) {
-          if (Registry::get('Payment_' . $module)->isEnabled()) {
-            $has_active = true;
-            break;
-          }
+      foreach ( $this->_modules as $module ) {
+        if ( Registry::get('Payment_' . $module)->isEnabled() ) {
+          $has_active = true;
+          break;
         }
       }
 
       return $has_active;
     }
 
-    function numberOfActive() {
-      static $active;
+    public function numberOfActive() {
+      $active = 0;
 
-      if (isset($active) === false) {
-        $active = 0;
-
-        foreach ($this->_modules as $module) {
-          if (Registry::get('Payment_' . $module)->isEnabled()) {
-            $active++;
-          }
+      foreach ( $this->_modules as $module ) {
+        if ( Registry::get('Payment_' . $module)->isEnabled() ) {
+          $active++;
         }
       }
 
       return $active;
     }
 
-    function getActive() {
+    public function getActive() {
       $active = array();
 
       foreach ( $this->_modules as $module ) {

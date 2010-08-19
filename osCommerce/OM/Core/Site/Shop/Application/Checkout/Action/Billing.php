@@ -48,8 +48,8 @@
         $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_payment.js');
 
 // load all enabled payment modules
-        Registry::set('Payment', new Payment(), true);
         $OSCOM_Payment = Registry::get('Payment');
+        $OSCOM_Payment->loadAll();
 
         $OSCOM_Template->addJavascriptBlock($OSCOM_Payment->getJavascriptBlocks());
       }

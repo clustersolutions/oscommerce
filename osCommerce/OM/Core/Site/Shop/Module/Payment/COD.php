@@ -14,14 +14,8 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Order;
 
-  class COD extends \osCommerce\OM\Core\Site\Shop\Payment {
-    var $_title,
-        $_code = 'COD',
-        $_status = false,
-        $_sort_order,
-        $_order_id;
-
-    public function __construct() {
+  class COD extends \osCommerce\OM\Core\Site\Shop\PaymentModuleAbstract {
+    protected function initialize() {
       $OSCOM_Database = Registry::get('Database');
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
 
@@ -60,14 +54,9 @@
       }
     }
 
-    function selection() {
-      return array('id' => $this->_code,
-                   'module' => $this->_method_title);
-    }
-
-    function process() {
+    public function process() {
       $this->_order_id = Order::insert();
-      Order::process($this->_order_id, $this->order_status);
+      Order::process($this->_order_id, $this->_order_status);
     }
   }
 ?>

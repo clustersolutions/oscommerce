@@ -48,8 +48,6 @@
         }
       }
 
-      Registry::set('Payment', new Payment());
-
 // check product type perform_order conditions
       foreach ( $OSCOM_ShoppingCart->getProducts() as $product ) {
         $OSCOM_Product = new Product($product['id']);
@@ -77,10 +75,13 @@
         }
       }
 
-      $OSCOM_Payment = Registry::get('Payment');
+      if ( Registry::exists('Payment') === false ) {
+        Registry::set('Payment', new Payment());
+      }
 
-      if ( $OSCOM_Payment->hasActive() ) {
-        $OSCOM_Payment->pre_confirmation_check();
+      if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+        $OSCOM_Payment = Registry::get('Payment');
+        $OSCOM_Payment->load($OSCOM_ShoppingCart->getBillingMethod('id'));
       }
     }
   }

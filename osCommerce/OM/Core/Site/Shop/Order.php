@@ -153,7 +153,7 @@
       $Qorder->bindValue(':billing_address_format', $OSCOM_ShoppingCart->getBillingAddress('format'));
       $Qorder->bindValue(':payment_method', $OSCOM_ShoppingCart->getBillingMethod('title'));
 // HPDL verify payment module class
-      $Qorder->bindValue(':payment_module', Registry::get('Payment_' . $OSCOM_ShoppingCart->getBillingMethod('id'))->getCode());
+      $Qorder->bindValue(':payment_module', $OSCOM_ShoppingCart->getBillingMethod('id'));
       $Qorder->bindInt(':orders_status', 4);
 // HPDL move currencies to the products level
       $Qorder->bindValue(':currency', $OSCOM_Currencies->getCode());
