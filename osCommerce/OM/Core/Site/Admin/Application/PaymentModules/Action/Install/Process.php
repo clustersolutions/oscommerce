@@ -20,12 +20,12 @@
       $data = osc_sanitize_string(basename($_GET['code']));
 
       if ( PaymentModules::install($data) ) {
-        Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
+        osc_redirect_admin(OSCOM::getLink(null, null, 'Save&code=' . $_GET['code']));
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
-      }
 
-      osc_redirect_admin(OSCOM::getLink());
+        osc_redirect_admin(OSCOM::getLink());
+      }
     }
   }
 ?>
