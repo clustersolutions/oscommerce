@@ -17,63 +17,64 @@
  * The administration side of the Cash On Delivery payment module
  */
 
-  class COD extends \osCommerce\OM\Core\Site\Admin\Payment {
+  class COD extends \osCommerce\OM\Core\Site\Admin\PaymentModuleAbstract {
 
 /**
  * The administrative title of the payment module
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_title;
+    protected $_title;
 
 /**
- * The code of the payment module
+ * The administrative description of the payment module
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_code = 'COD';
+    protected $_description;
 
 /**
  * The developers name
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_author_name = 'osCommerce';
+    protected $_author_name = 'osCommerce';
 
 /**
  * The developers address
  *
  * @var string
- * @access private
+ * @access protected
  */
 
-    var $_author_www = 'http://www.oscommerce.com';
+    protected $_author_www = 'http://www.oscommerce.com';
 
 /**
  * The status of the module
  *
  * @var boolean
- * @access private
+ * @access protected
  */
 
-    var $_status = false;
+    protected $_status = false;
 
 /**
- * Constructor
+ * Initialize module
+ *
+ * @access protected
  */
 
-    public function __construct() {
+    protected function initialize() {
       $this->_title = OSCOM::getDef('payment_cod_title');
       $this->_description = OSCOM::getDef('payment_cod_description');
-      $this->_method_title = OSCOM::getDef('payment_cod_method_title');
       $this->_status = (defined('MODULE_PAYMENT_COD_STATUS') && (MODULE_PAYMENT_COD_STATUS == '1') ? true : false);
-      $this->_sort_order = (defined('MODULE_PAYMENT_COD_SORT_ORDER') ? MODULE_PAYMENT_COD_SORT_ORDER : null);
+      $this->_sort_order = (defined('MODULE_PAYMENT_COD_SORT_ORDER') ? MODULE_PAYMENT_COD_SORT_ORDER : 0);
     }
 
 /**
@@ -84,14 +85,14 @@
  */
 
     public function isInstalled() {
-      return (bool)defined('MODULE_PAYMENT_COD_STATUS');
+      return defined('MODULE_PAYMENT_COD_STATUS');
     }
 
 /**
  * Installs the module
  *
  * @access public
- * @see osC_Payment_Admin::install()
+ * @see \osCommerce\OM\Core\Site\Admin\PaymentModuleAbstract::install()
  */
 
     public function install() {
@@ -113,14 +114,10 @@
  */
 
     public function getKeys() {
-      if ( !isset($this->_keys) ) {
-        $this->_keys = array('MODULE_PAYMENT_COD_STATUS',
-                             'MODULE_PAYMENT_COD_ZONE',
-                             'MODULE_PAYMENT_COD_ORDER_STATUS_ID',
-                             'MODULE_PAYMENT_COD_SORT_ORDER');
-      }
-
-      return $this->_keys;
+      return array('MODULE_PAYMENT_COD_STATUS',
+                   'MODULE_PAYMENT_COD_ZONE',
+                   'MODULE_PAYMENT_COD_ORDER_STATUS_ID',
+                   'MODULE_PAYMENT_COD_SORT_ORDER');
     }
   }
 ?>
