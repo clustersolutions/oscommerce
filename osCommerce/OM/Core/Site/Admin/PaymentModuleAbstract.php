@@ -14,21 +14,47 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Cache;
 
-  class Payment extends \osCommerce\OM\Core\Site\Shop\Payment {
-    var $_group = 'payment';
+  abstract class PaymentModuleAbstract {
+    protected $_code;
+    protected $_title;
+    protected $_description;
+    protected $_author_name;
+    protected $_author_www;
+    protected $_status;
+    protected $_sort_order = 0;
 
-    public function hasKeys() {
-      static $has_keys;
+    abstract protected function initialize();
+    abstract public function isInstalled();
 
-      if ( !isset($has_keys) ) {
-        $has_keys = (count($this->getKeys()) > 0) ? true : false;
-      }
+    public function __construct() {
+      $module_class = explode('\\', get_called_class());
+      $this->_code = end($module_class);
 
-      return $has_keys;
+      $this->initialize();
     }
 
-    public function getPostTransactionActions($history) {
-      return false;
+    public function isEnabled() {
+      return $this->_status;
+    }
+
+    public function getCode() {
+      return $this->_code;
+    }
+
+    public function getTitle() {
+      return $this->_title;
+    }
+
+    public function getSortOrder() {
+      return $this->_sort_order;
+    }
+
+    public function hasKeys() {
+      return (count($this->getKeys()) > 0);
+    }
+
+    public function getKeys() {
+      return array();
     }
 
     public function install() {
@@ -40,12 +66,12 @@
       $Qinstall->bindValue(':code', $this->_code);
       $Qinstall->bindValue(':author_name', $this->_author_name);
       $Qinstall->bindValue(':author_www', $this->_author_www);
-      $Qinstall->bindValue(':modules_group', $this->_group);
+      $Qinstall->bindValue(':modules_group', 'payment');
       $Qinstall->execute();
 
       foreach ( $OSCOM_Language->getAll() as $key => $value ) {
-        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $key . '/modules/' . $this->_group . '/' . $this->_code . '.xml') ) {
-          foreach ( $OSCOM_Language->extractDefinitions($key . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def ) {
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $key . '/modules/payment/' . $this->_code . '.xml') ) {
+          foreach ( $OSCOM_Language->extractDefinitions($key . '/modules/payment/' . $this->_code . '.xml') as $def ) {
             $Qcheck = $OSCOM_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
             $Qcheck->bindValue(':definition_key', $def['key']);
             $Qcheck->bindValue(':content_group', $def['group']);
@@ -75,7 +101,7 @@
 
       $Qdel = $OSCOM_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
       $Qdel->bindValue(':code', $this->_code);
-      $Qdel->bindValue(':modules_group', $this->_group);
+      $Qdel->bindValue(':modules_group', 'payment');
       $Qdel->execute();
 
       if ( $this->hasKeys() ) {
@@ -84,8 +110,8 @@
         $Qdel->execute();
       }
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $OSCOM_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml') ) {
-        foreach ( $OSCOM_Language->extractDefinitions($OSCOM_Language->getCode() . '/modules/' . $this->_group . '/' . $this->_code . '.xml') as $def ) {
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml') ) {
+        foreach ( $OSCOM_Language->extractDefinitions($OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml') as $def ) {
           $Qdel = $OSCOM_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
           $Qdel->bindValue(':definition_key', $def['key']);
           $Qdel->bindValue(':content_group', $def['group']);
