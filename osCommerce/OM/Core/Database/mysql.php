@@ -416,7 +416,15 @@
 
     function _fetch_all($resource) {
       if ( $this->use_mysqli === true ) {
-        return mysqli_fetch_all($resource, MYSQLI_ASSOC);
+        static $can_fetch_all;
+
+        if ( !isset($can_fetch_all) ) {
+          $can_fetch_all = function_exists('mysqli_fetch_all');
+        }
+
+        if ( $can_fetch_all === true ) {
+          return mysqli_fetch_all($resource, MYSQLI_ASSOC);
+        }
       }
 
       $result = array();
