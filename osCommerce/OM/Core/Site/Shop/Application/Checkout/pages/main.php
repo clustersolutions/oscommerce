@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\Site\Shop\Tax;
+
+  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+    echo $OSCOM_PaymentModule->preConfirmationCheck();
+  }
 ?>
 
 <?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
@@ -126,8 +130,8 @@
 </div>
 
 <?php
-  if ( $OSCOM_Payment->hasActive() ) {
-    if ( $confirmation = $OSCOM_Payment->confirmation() ) {
+  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+    if ( $confirmation = $OSCOM_PaymentModule->confirmation() ) {
 ?>
 
 <div class="moduleBox">
@@ -196,16 +200,16 @@
 <div class="submitFormButtons" style="text-align: right;">
 
 <?php
-  if ( $OSCOM_Payment->hasActionURL() ) {
-    $form_action_url = $OSCOM_Payment->getActionURL();
+  if ( $OSCOM_ShoppingCart->hasBillingMethod() && $OSCOM_PaymentModule->hasGateway() ) {
+    $form_action_url = $OSCOM_PaymentModule->getGatewayURL();
   } else {
     $form_action_url = OSCOM::getLink(null, null, 'Process', 'SSL');
   }
 
   echo '<form name="checkout_confirmation" action="' . $form_action_url . '" method="post">';
 
-  if ( $OSCOM_Payment->hasActive() ) {
-    echo $OSCOM_Payment->process_button();
+  if ( $OSCOM_ShoppingCart->hasBillingMethod() ) {
+    echo $OSCOM_PaymentModule->getProcessButton();
   }
 
   echo osc_draw_image_submit_button('button_confirm_order.gif', OSCOM::getDef('button_confirm_order')) . '</form>';
