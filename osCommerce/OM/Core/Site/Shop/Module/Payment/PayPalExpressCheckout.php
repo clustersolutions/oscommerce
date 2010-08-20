@@ -342,7 +342,7 @@
 
       if ( !is_null($cheapest_rate) ) {
         if ( (MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE == '1') && ((MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER != 'Live') || ((MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER == 'Live') && (ENABLE_SSL == true))) ) { // Live server requires SSL to be enabled
-          $params['CALLBACK'] = OSCOM::getRPCLink (null, 'Cart', 'PayPalExpressCheckoutInstantUpdate', 'SSL', false, false);
+          $params['CALLBACK'] = OSCOM::getRPCLink (null, 'Cart', 'PayPal&ExpressCheckoutInstantUpdate', 'SSL', false, false);
           $params['CALLBACKTIMEOUT'] = '5';
         }
 

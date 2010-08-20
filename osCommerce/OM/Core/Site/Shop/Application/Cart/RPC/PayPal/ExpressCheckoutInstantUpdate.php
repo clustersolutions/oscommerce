@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Shop\Application\Cart\RPC;
+  namespace osCommerce\OM\Core\Site\Shop\Application\Cart\RPC\PayPal;
 
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Module\Payment\PayPalExpressCheckout;
   use osCommerce\OM\Core\Site\Shop\Shipping;
 
-  class PayPalExpressCheckoutInstantUpdate {
+  class ExpressCheckoutInstantUpdate {
     public static function execute() {
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
       $OSCOM_Database = Registry::get('Database');
@@ -24,15 +24,6 @@
       $OSCOM_ShoppingCart->reset();
 
       $OSCOM_Payment = new PayPalExpressCheckout();
-
-/* HPDL test data
-$_POST['L_NUMBER0'] = '1';
-$_POST['L_QTY0'] = '1';
-$_POST['SHIPTOCOUNTRY'] = 'US';
-$_POST['SHIPTOCITY'] = 'Beverly Hills';
-$_POST['SHIPTOZIP'] = '90210';
-$_POST['SHIPTOSTATE'] = 'CA';
-*/
 
       if ( $OSCOM_Payment->isEnabled() && (MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE == '1') ) {
         $counter = 0;
