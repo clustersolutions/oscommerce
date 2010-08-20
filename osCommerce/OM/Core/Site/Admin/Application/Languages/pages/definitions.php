@@ -71,7 +71,7 @@
   }
 
   var dataTableName = 'defsDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&group=' . $_GET['group'] . '&action=getDefinitions'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetDefinitions&id=' . $_GET['id'] . '&group=' . $_GET['group']); ?>';
 
   var defEditLink = '<?php echo OSCOM::getLink(null, null, 'EditDefinition&id=' . $_GET['id'] . '&group=' . $_GET['group'] . '&dID=DEFINITIONID'); ?>';
   var defEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

@@ -8,12 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Currencies;
+  namespace osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\RPC;
 
-  use osCommerce\OM\Core\Site\RPC\Controller as OSCOM_Site_RPC;
+  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
+  use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
-  class RPC {
-    public static function getAll() {
+  class GetAll {
+    public static function execute() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
@@ -23,12 +24,12 @@
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = Currencies::find($_GET['search'], $_GET['page']);
+        $result = ZoneGroups::find($_GET['search'], $_GET['page']);
       } else {
-        $result = Currencies::getAll($_GET['page']);
+        $result = ZoneGroups::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

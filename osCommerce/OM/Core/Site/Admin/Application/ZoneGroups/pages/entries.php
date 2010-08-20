@@ -71,7 +71,7 @@
   }
 
   var dataTableName = 'zoneGroupEntriesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getAllEntries'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAllEntries&id=' . $_GET['id']); ?>';
 
   var entryEditLink = '<?php echo OSCOM::getLink(null, null, 'EntrySave&id=' . $_GET['id'] . '&zID=ENTRYID'); ?>';
   var entryEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

@@ -72,7 +72,7 @@
   }
 
   var dataTableName = 'countryDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
 
   var countryLink = '<?php echo OSCOM::getLink(null, null, 'id=COUNTRYID'); ?>';
   var countryLinkIcon = '<?php echo osc_icon('folder.png'); ?>';

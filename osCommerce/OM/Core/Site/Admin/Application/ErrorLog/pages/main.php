@@ -64,7 +64,7 @@
   }
 
   var dataTableName = 'errorLogDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

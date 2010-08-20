@@ -70,7 +70,7 @@
   }
 
   var dataTableName = 'taxClassDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
 
   var classLink = '<?php echo OSCOM::getLink(null, null, 'id=CLASSID'); ?>';
   var classLinkIcon = '<?php echo osc_icon('folder.png'); ?>';

@@ -8,12 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Countries;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Countries\RPC;
 
-  use osCommerce\OM\Core\Site\RPC\Controller as OSCOM_Site_RPC;
+  use osCommerce\OM\Core\Site\Admin\Application\Countries\Countries;
+  use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
-  class RPC {
-    public static function getAll() {
+  class GetAll {
+    public static function execute() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
@@ -28,23 +29,7 @@
         $result = Countries::getAll($_GET['page']);
       }
 
-      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
-
-      echo json_encode($result);
-    }
-
-    public static function getAllZones() {
-      if ( !isset($_GET['search']) ) {
-        $_GET['search'] = '';
-      }
-
-      if ( !empty($_GET['search']) ) {
-        $result = Countries::findZones($_GET['search'], $_GET['id']);
-      } else {
-        $result = Countries::getAllZones($_GET['id']);
-      }
-
-      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }

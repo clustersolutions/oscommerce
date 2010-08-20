@@ -68,7 +68,7 @@
   }
 
   var dataTableName = 'paymentModulesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getUninstalled'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetUninstalled'); ?>';
 
   var pmInstallLink = '<?php echo OSCOM::getLink(null, null, 'Install&Process&code=PMCODE'); ?>';
   var pmInstallLinkIcon = '<?php echo osc_icon('install.png'); ?>';

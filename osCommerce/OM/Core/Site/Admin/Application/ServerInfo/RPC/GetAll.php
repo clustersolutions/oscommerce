@@ -8,12 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\ServerInfo;
+  namespace osCommerce\OM\Core\Site\Admin\Application\ServerInfo\RPC;
 
-  use osCommerce\OM\Core\Site\RPC\Controller as OSCOM_Site_RPC;
+  use osCommerce\OM\Core\Site\Admin\Application\ServerInfo\ServerInfo;
+  use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
-  class RPC {
-    public static function getAll() {
+  class GetAll {
+    public static function execute() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
@@ -24,7 +25,7 @@
         $result = ServerInfo::getAll();
       }
 
-      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
