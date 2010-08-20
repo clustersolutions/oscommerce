@@ -30,78 +30,61 @@
       if ( empty($_GET) ) {
         echo json_encode(array('rpcStatus' => self::STATUS_NO_MODULE));
         exit;
-      } else {
-        $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
-        $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1,  true))));
+      }
 
-        if ( !OSCOM::siteExists($site) ) {
-          echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
-          exit;
-        }
+      $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
+      $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1,  true))));
 
-        OSCOM::setSite($site);
+      if ( !OSCOM::siteExists($site) ) {
+        echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
+        exit;
+      }
 
-        if ( !OSCOM::siteApplicationExists($application) ) {
-          echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
-          exit;
-        }
+      OSCOM::setSite($site);
 
-        OSCOM::setSiteApplication($application);
+      if ( !OSCOM::siteApplicationExists($application) ) {
+        echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
+        exit;
+      }
 
-        call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'initialize'));
+      OSCOM::setSiteApplication($application);
 
-        if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
-          echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
-          exit;
-        }
+      call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'initialize'));
 
-        $action = (isset($_GET['action']) && !empty($_GET['action'])) ? osc_sanitize_string(basename($_GET['action'])) : '';
+      if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
+        echo json_encode(array('rpcStatus' => self::STATUS_NO_ACCESS));
+        exit;
+      }
 
-        if ( empty($action) ) {
-          if ( count($_GET) > 3 ) {
-            $rpc_called = false;
+      if ( count($_GET) < 3 ) {
+        echo json_encode(array('rpcStatus' => self::STATUS_NO_ACTION));
+        exit;
+      }
 
-            $rpc = array('RPC');
+      $rpc_called = false;
 
-            for ( $i = 3, $n = count($_GET); $i < $n; $i++ ) {
-              $subrpc = osc_sanitize_string(basename(key(array_slice($_GET, $i, 1, true))));
+      $rpc = array('RPC');
 
-              if ( self::siteApplicationRPCExists(implode('\\', $rpc) . '\\' . $subrpc) ) {
-                call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\' . implode('\\', $rpc) . '\\' . $subrpc, 'execute'));
+      for ( $i = 3, $n = count($_GET); $i < $n; $i++ ) {
+        $subrpc = osc_sanitize_string(basename(key(array_slice($_GET, $i, 1, true))));
 
-                $rpc[] = $subrpc;
+        if ( self::siteApplicationRPCExists(implode('\\', $rpc) . '\\' . $subrpc) ) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\' . implode('\\', $rpc) . '\\' . $subrpc, 'execute'));
 
-                $rpc_called = true;
-              } else {
-                break;
-              }
-            }
+          $rpc[] = $subrpc;
 
-            if ( $rpc_called === false ) {
-              echo json_encode(array('rpcStatus' => self::STATUS_NO_ACTION));
-              exit;
-            }
-
-            exit;
-          } else {
-            echo json_encode(array('rpcStatus' => self::STATUS_NO_ACTION));
-            exit;
-          }
+          $rpc_called = true;
         } else {
-          if ( class_exists('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\RPC') ) {
-            if ( method_exists('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\RPC', $action) ) {
-              call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Application\\' . $application . '\\RPC', $action));
-              exit;
-            } else {
-              echo json_encode(array('rpcStatus' => self::STATUS_ACTION_NONEXISTENT));
-              exit;
-            }
-          } else {
-            echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
-            exit;
-          }
+          break;
         }
       }
+
+      if ( $rpc_called === false ) {
+        echo json_encode(array('rpcStatus' => self::STATUS_NO_ACTION));
+        exit;
+      }
+
+      exit;
     }
 
     public static function getDefaultApplication() {
