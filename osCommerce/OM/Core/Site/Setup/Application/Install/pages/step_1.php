@@ -59,7 +59,7 @@
 
       $.ajax({
         type: "POST",
-        url: "<?php echo OSCOM::getRPCLink(null, null, 'action=dbImport'); ?>",
+        url: "<?php echo OSCOM::getRPCLink(null, null, 'DBImport'); ?>",
         data: "server=" + dbServer + "&username=" + dbUsername + "&password=" + dbPassword + "&name=" + dbName + "&port=" + dbPort + "&class=" + dbClass + "&import=0&prefix=" + dbPrefix,
         success: handleHttpResponse_DoImport
       });
@@ -90,7 +90,7 @@
 
     $.ajax({
       type: "POST",
-      url: "<?php echo OSCOM::getRPCLink(null, null, 'action=dbCheck'); ?>",
+      url: "<?php echo OSCOM::getRPCLink(null, null, 'DBCheck'); ?>",
       data: "server=" + dbServer + "&username=" + dbUsername + "&password=" + dbPassword + "&name=" + dbName + "&port=" + dbPort + "&class=" + dbClass,
       success: handleHttpResponse
     });

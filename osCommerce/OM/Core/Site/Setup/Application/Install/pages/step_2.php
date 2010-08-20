@@ -50,7 +50,7 @@
 
       $.ajax({
         type: "POST",
-        url: "<?php echo OSCOM::getRPCLink(null, null, 'action=dbImportSample'); ?>",
+        url: "<?php echo OSCOM::getRPCLink(null, null, 'DBImportSample'); ?>",
         data: "server=" + dbServer + "&username=" + dbUsername + "&password=" + dbPassword + "&name=" + dbName + "&port=" + dbPort + "&class=" + dbClass + "&prefix=" + dbPrefix,
         success: handleHttpResponse
       });
