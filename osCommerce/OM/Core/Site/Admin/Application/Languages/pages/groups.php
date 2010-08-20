@@ -64,7 +64,7 @@
   }
 
   var dataTableName = 'langDefGroupDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'id=' . $_GET['id'] . '&action=getDefinitionGroups'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetDefinitionGroups&id=' . $_GET['id']); ?>';
 
   var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=' . $_GET['id'] . '&group=GROUPCODE'); ?>';
   var groupLinkIcon = '<?php echo osc_icon('folder.png'); ?>';

@@ -69,7 +69,7 @@
   }
 
   var dataTableName = 'paymentModulesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getInstalled'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetInstalled'); ?>';
 
   var pmEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&code=PMCODE'); ?>';
   var pmEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

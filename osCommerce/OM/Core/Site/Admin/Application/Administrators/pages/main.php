@@ -70,7 +70,7 @@
   }
 
   var dataTableName = 'administratorsDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'action=getAll'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
 
   var adminEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=ADMINID'); ?>';
   var adminEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';

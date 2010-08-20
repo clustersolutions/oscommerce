@@ -8,27 +8,24 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\CreditCards;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Configuration\RPC;
 
-  use osCommerce\OM\Core\Site\RPC\Controller as OSCOM_Site_RPC;
+  use osCommerce\OM\Core\Site\Admin\Application\Configuration\Configuration;
+  use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
-  class RPC {
-    public static function getAll() {
+  class GetAll {
+    public static function execute() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
 
-      if ( !isset($_GET['page']) || !is_numeric($_GET['page']) ) {
-        $_GET['page'] = 1;
-      }
-
       if ( !empty($_GET['search']) ) {
-        $result = CreditCards::find($_GET['search'], $_GET['page']);
+        $result = Configuration::find($_GET['search']);
       } else {
-        $result = CreditCards::getAll($_GET['page']);
+        $result = Configuration::getAll();
       }
 
-      $result['rpcStatus'] = OSCOM_Site_RPC::STATUS_SUCCESS;
+      $result['rpcStatus'] = RPC::STATUS_SUCCESS;
 
       echo json_encode($result);
     }
