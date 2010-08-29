@@ -74,29 +74,6 @@
   if ( $OSCOM_Template->hasPageHeader() ) {
     include(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/oscom/header.php');
   }
-
-  if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
-?>
-
-<div id="appsPane">
-  <h4><?php echo Access::getGroupTitle(Access::getGroup(OSCOM::getSiteApplication())); ?></h4>
-
-<?php
-    foreach ( Access::getLevels(Access::getGroup(OSCOM::getSiteApplication())) as $group => $links ) {
-      echo '<ul>';
-
-      foreach ( $links as $link ) {
-        echo '<li' . ( $link['module'] == OSCOM::getSiteApplication() ? ' class="selected"' : '') . '>' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;<a href="' . OSCOM::getLink(null, $link['module']) . '">' . $link['title'] . '</a></li>';
-      }
-
-      echo '</ul>';
-    }
-?>
-
-</div>
-
-<?php
-  }
 ?>
 
 <div id="appContent">
@@ -112,16 +89,6 @@
 </div>
 
 <?php
-  if ( isset($_SESSION[OSCOM::getSite()]['id']) && !in_array(OSCOM::getSiteApplication(), array('Index', 'Login')) ) {
-?>
-
-<script type="text/javascript">
-  $('#appContent').css('marginLeft', '190px');
-</script>
-
-<?php
-  }
-
   if ( $OSCOM_Template->hasPageFooter() ) {
 ?>
 
