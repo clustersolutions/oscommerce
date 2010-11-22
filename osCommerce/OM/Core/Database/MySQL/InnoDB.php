@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Database\mysql;
+  namespace osCommerce\OM\Core\Database\MySQL;
 
-  class innodb extends \osCommerce\OM\Core\Database\mysql {
+  class InnoDB extends \osCommerce\OM\Core\Database\MySQL\Standard {
     var $use_transactions = true,
         $use_foreign_keys = true,
         $use_fulltext = false,
