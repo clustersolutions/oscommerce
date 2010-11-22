@@ -20,8 +20,8 @@
 
   $www_location = substr($www_location, 0, strpos($www_location, 'index.php'));
 
-  $db_table_types = array(array('id' => 'mysql', 'text' => 'MySQL - MyISAM (Default)'),
-                          array('id' => 'mysql_innodb', 'text' => 'MySQL - InnoDB (Transaction-Safe)'));
+  $db_table_types = array(array('id' => 'MySQL\\Standard', 'text' => 'MySQL Standard'),
+                          array('id' => 'MySQL\\InnoDB', 'text' => 'MySQL InnoDB'));
 ?>
 
 <script language="javascript" type="text/javascript">

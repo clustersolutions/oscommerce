@@ -307,5 +307,30 @@
     public static function getDef($key) {
       return Registry::get('Language')->get($key);
     }
+
+/**
+ * Execute database queries
+ *
+ * @param string $ns The namespace the database query is stored in
+ * @param string $procedure The name of the database query to execute
+ * @param array $data Parameters passed to the database query
+ * @return mixed The result of the database query
+ * @access public
+ */
+    public static function callDB($procedure, $data, $ns = null) {
+      $OSCOM_Database = Registry::get('Database');
+
+      if ( !isset($ns) ) {
+        $ns = 'osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Application\\' . self::getSiteApplication();
+      }
+
+      $_db = $OSCOM_Database->getDriver();
+
+//      if ( class_exists($ns . '\\SQL\\Microsoft\\SqlServer\\' . $procedure) ) {
+//        $_db = 'Microsoft\\SqlServer';
+//      }
+
+      return call_user_func(array($ns . '\\SQL\\' . $_db . '\\' . $procedure, 'execute'), $data);
+    }
   }
 ?>

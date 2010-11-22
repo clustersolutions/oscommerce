@@ -12,6 +12,7 @@
 
   class Database {
     var $is_connected = false,
+        $driver,
         $link,
         $error_reporting = true,
         $error = false,
@@ -30,11 +31,17 @@
         $logging_transaction_action = false,
         $fkeys = array();
 
-    public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $type = DB_DATABASE_CLASS) {
-      $class = 'osCommerce\\OM\\Core\\Database\\' . $type;
+    public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $driver = DB_DATABASE_CLASS) {
+      $class = 'osCommerce\\OM\\Core\\Database\\' . $driver;
       $object = new $class($server, $username, $password, $database, $port);
 
+      $object->driver = $driver;
+
       return $object;
+    }
+
+    function getDriver() {
+      return $this->driver;
     }
 
     function setConnected($boolean) {
@@ -458,6 +465,10 @@
       }
 
       return $this->affected_rows;
+    }
+
+    function nextResultSet() {
+      $this->db_class->nextResultSet($this->query_handler);
     }
 
     function execute() {
