@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Countries\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Countries\SQL\MySQL\V5;
 
   use osCommerce\OM\Core\Registry;
 
@@ -18,19 +18,14 @@
 
       $result = array();
 
-      $sql_query = 'select SQL_CALC_FOUND_ROWS c.*, count(z.zone_id) as total_zones from :table_countries c left join :table_zones z on (c.countries_id = z.zone_country_id) group by c.countries_id order by c.countries_name';
-
-      if ( $data['batch_pageset'] !== -1 ) {
-        $sql_query .= ' limit :batch_pageset, :batch_max_results';
-      }
-
-      $sql_query .= '; select found_rows();';
-
-      $Qcountries = $OSCOM_Database->prepare($sql_query);
+      $Qcountries = $OSCOM_Database->prepare('CALL CountriesGetAll(:batch_pageset, :batch_max_results)');
 
       if ( $data['batch_pageset'] !== -1 ) {
         $Qcountries->bindInt(':batch_pageset', $OSCOM_Database->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
         $Qcountries->bindInt(':batch_max_results', $data['batch_max_results']);
+      } else {
+        $Qcountries->bindNull(':batch_pageset');
+        $Qcountries->bindNull(':batch_max_results');
       }
 
       $Qcountries->execute();
@@ -40,6 +35,8 @@
       $Qcountries->nextRowset();
 
       $result['total'] = $Qcountries->fetchColumn(0);
+
+      unset($Qcountries);
 
       return $result;
     }

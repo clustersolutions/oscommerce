@@ -17,6 +17,8 @@
   use osCommerce\OM\Core\Session;
   use osCommerce\OM\Core\Access;
 
+  use osCommerce\OM\Core\DatabasePDO;
+
   define('OSC_IN_ADMIN', true);
 
   require(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/general.php');
@@ -37,6 +39,8 @@
       Registry::set('MessageStack', new MessageStack());
       Registry::set('Cache', new Cache());
       Registry::set('Database', Database::initialize());
+
+      Registry::set('PDO', DatabasePDO::initialize());
 
       $Qcfg = Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
       $Qcfg->setCache('configuration');
