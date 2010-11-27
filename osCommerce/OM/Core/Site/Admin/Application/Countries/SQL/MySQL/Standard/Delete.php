@@ -14,14 +14,12 @@
 
   class Delete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
-      $Qcountry = $OSCOM_Database->query('delete from :table_countries where countries_id = :countries_id');
-      $Qcountry->bindInt(':countries_id', $data['id'], false);
-      $Qcountry->setLogging(null, $data['id']);
-      $Qcountry->execute();
+      $Qcountry = $OSCOM_Database->prepare('delete from :table_countries where countries_id = :countries_id');
+      $Qcountry->bindInt(':countries_id', $data['id']);
 
-      return !$OSCOM_Database->isError();
+      return $Qcountry->execute();
     }
   }
 ?>

@@ -14,17 +14,22 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
-      $Qcountries = $OSCOM_Database->query('select * from :table_countries where countries_id = :countries_id');
+      $Qcountries = $OSCOM_Database->prepare('select * from :table_countries where countries_id = :countries_id');
       $Qcountries->bindInt(':countries_id', $data['id']);
       $Qcountries->execute();
 
-      $Qzones = $OSCOM_Database->query('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
+      $Qzones = $OSCOM_Database->prepare('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
       $Qzones->bindInt(':zone_country_id', $data['id']);
       $Qzones->execute();
 
-      return array_merge($Qcountries->toArray(), $Qzones->toArray());
+      $result = array_merge($Qcountries->fetch(), $Qzones->fetch());
+
+      unset($Qzones);
+      unset($Qcountries);
+
+      return $result;
     }
   }
 ?>

@@ -311,26 +311,30 @@
 /**
  * Execute database queries
  *
- * @param string $ns The namespace the database query is stored in
  * @param string $procedure The name of the database query to execute
  * @param array $data Parameters passed to the database query
+ * @param string $ns The namespace the database query is stored in
  * @return mixed The result of the database query
  * @access public
  */
     public static function callDB($procedure, $data, $ns = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
       if ( !isset($ns) ) {
         $ns = 'osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Application\\' . self::getSiteApplication();
       }
 
-      $_db = $OSCOM_Database->getDriver();
+      $db_driver = $OSCOM_Database->getDriver();
 
-//      if ( class_exists($ns . '\\SQL\\Microsoft\\SqlServer\\' . $procedure) ) {
-//        $_db = 'Microsoft\\SqlServer';
-//      }
+      if ( !class_exists($ns . '\\SQL\\' . $db_driver . '\\' . $procedure) ) {
+        if ( $OSCOM_Database->hasDriverParent() && class_exists($ns . '\\SQL\\' . $OSCOM_Database->getDriverParent() . '\\' . $procedure) ) {
+          $db_driver = $OSCOM_Database->getDriverParent();
+        } else {
+          $db_driver = 'SqlBuilder';
+        }
+      }
 
-      return call_user_func(array($ns . '\\SQL\\' . $_db . '\\' . $procedure, 'execute'), $data);
+      return call_user_func(array($ns . '\\SQL\\' . $db_driver . '\\' . $procedure, 'execute'), $data);
     }
   }
 ?>
