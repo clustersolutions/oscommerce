@@ -13,7 +13,7 @@
 
   $groups_array = array();
 
-  foreach ( osc_toObjectInfo(Languages::getDefinitionGroups($_GET['id']))->get('entries') as $value ) {
+  foreach ( osc_toObjectInfo(Languages::getGroups($_GET['id']))->get('entries') as $value ) {
     $groups_array[] = $value['content_group'];
   }
 ?>

@@ -29,10 +29,10 @@
   <form name="zDelete" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Delete&Process&id=' . $OSCOM_ObjectInfo->getInt('geo_zone_id')); ?>" method="post">
 
 <?php
-  if ( ZoneGroups::hasTaxRate($OSCOM_ObjectInfo->getInt('geo_zone_id')) ) {
+  if ( ZoneGroups::hasTaxRates($OSCOM_ObjectInfo->getInt('geo_zone_id')) ) {
 ?>
 
-  <p><?php echo '<b>' . sprintf(OSCOM::getDef('delete_warning_group_in_use_tax_rate'), ZoneGroups::numberOfTaxRates($OSCOM_ObjectInfo->getInt('geo_zone_id'))) . '</b>'; ?></p>
+  <p><?php echo '<b>' . sprintf(OSCOM::getDef('delete_warning_group_in_use_tax_rate'), ZoneGroups::getNumberOfTaxRates($OSCOM_ObjectInfo->getInt('geo_zone_id'))) . '</b>'; ?></p>
 
   <p><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></p>
 

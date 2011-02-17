@@ -14,14 +14,13 @@
 
   class ZoneDelete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
-      $Qzone = $OSCOM_Database->query('delete from :table_zones where zone_id = :zone_id');
-      $Qzone->bindInt(':zone_id', $data['id'], false);
-      $Qzone->setLogging(null, $data['id']);
+      $Qzone = $OSCOM_Database->prepare('delete from :table_zones where zone_id = :zone_id');
+      $Qzone->bindInt(':zone_id', $data['id']);
       $Qzone->execute();
 
-      return !$OSCOM_Database->isError();
+      return ( $Qzone->rowCount() === 1 );
     }
   }
 ?>

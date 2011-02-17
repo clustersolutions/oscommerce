@@ -20,7 +20,10 @@
       $error = false;
 
       foreach ( $_POST['configuration'] as $key => $param ) {
-        if ( !Configuration::saveEntry(array($key => $param)) ) {
+        $data = array('key' => $key,
+                      'value' => $param);
+
+        if ( !Configuration::saveEntry($data) ) {
           $error = true;
           break;
         }

@@ -39,7 +39,7 @@
 
       $Qcountries->nextRowset();
 
-      $result['total'] = $Qcountries->fetchColumn(0);
+      $result['total'] = $Qcountries->fetchColumn();
 
       return $result;
     }

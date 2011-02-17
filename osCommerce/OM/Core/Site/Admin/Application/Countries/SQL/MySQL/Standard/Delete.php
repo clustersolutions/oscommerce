@@ -18,8 +18,9 @@
 
       $Qcountry = $OSCOM_Database->prepare('delete from :table_countries where countries_id = :countries_id');
       $Qcountry->bindInt(':countries_id', $data['id']);
+      $Qcountry->execute();
 
-      return $Qcountry->execute();
+      return ( $Qcountry->rowCount() === 1 );
     }
   }
 ?>

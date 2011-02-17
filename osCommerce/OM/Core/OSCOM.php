@@ -317,12 +317,12 @@
  * @return mixed The result of the database query
  * @access public
  */
-    public static function callDB($procedure, $data, $ns = null) {
+    public static function callDB($procedure, $data = null) {
       $OSCOM_Database = Registry::get('PDO');
 
-      if ( !isset($ns) ) {
-        $ns = 'osCommerce\\OM\\Core\\Site\\' . self::getSite() . '\\Application\\' . self::getSiteApplication();
-      }
+      $call = explode('\\', $procedure);
+      $ns = 'osCommerce\\OM\\Core\\Site\\' . $call[0] . '\\Application\\' . $call[1];
+      $procedure = $call[2];
 
       $db_driver = $OSCOM_Database->getDriver();
 

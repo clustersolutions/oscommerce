@@ -28,15 +28,22 @@
     public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $driver = DB_DATABASE_CLASS, $driver_options = array()) {
       $driver = 'MySQL\\V5'; // HPDL REMOVE
 
+      if ( !isset($driver_options[PDO::ATTR_ERRMODE]) ) {
+        $driver_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_WARNING;
+      }
+
       if ( !isset($driver_options[PDO::ATTR_DEFAULT_FETCH_MODE]) ) {
         $driver_options[PDO::ATTR_DEFAULT_FETCH_MODE] = PDO::FETCH_ASSOC;
+      }
+
+      if ( !isset($driver_options[PDO::ATTR_STATEMENT_CLASS]) ) {
+        $driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\DatabasePDOStatement');
       }
 
       $class = 'osCommerce\\OM\\Core\\DatabasePDO\\' . $driver;
       $object = new $class($server, $username, $password, $database, $port, $driver_options);
 
       $object->_driver = $driver;
-      $object->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('osCommerce\\OM\\Core\\DatabasePDOStatement'));
 
       return $object;
     }

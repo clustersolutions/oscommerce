@@ -17,7 +17,10 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      if ( Languages::import($_POST['language_import'], $_POST['import_type']) ) {
+      $data = array('code' => $_POST['language_import'],
+                    'type' => $_POST['import_type']);
+
+      if ( Languages::import($data) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');

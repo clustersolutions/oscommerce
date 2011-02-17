@@ -17,7 +17,10 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      if ( Configuration::saveEntry($_POST['configuration']) ) {
+      $data = array('key' => key($_POST['configuration']),
+                    'value' => $_POST['configuration'][key($_POST['configuration'])]);
+
+      if ( Configuration::saveEntry($data) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');

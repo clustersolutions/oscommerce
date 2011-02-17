@@ -14,19 +14,17 @@
 
   class ZoneGetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
       $result = array();
 
-      $Qzones = $OSCOM_Database->query('select * from :table_zones where zone_country_id = :zone_country_id order by zone_name');
+      $Qzones = $OSCOM_Database->prepare('select * from :table_zones where zone_country_id = :zone_country_id order by zone_name');
       $Qzones->bindInt(':zone_country_id', $data['country_id']);
       $Qzones->execute();
 
-      $result['entries'] = $Qzones->getAll();
+      $result['entries'] = $Qzones->fetchAll();
 
-      $result['total'] = $Qzones->numberOfRows();
-
-      $Qzones->freeResult();
+      $result['total'] = count($result['entries']);
 
       return $result;
     }
