@@ -14,13 +14,13 @@
 
   class ZoneGet {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_Database = Registry::get('PDO');
 
-      $Qzones = $OSCOM_Database->query('select * from :table_zones where zone_id = :zone_id');
+      $Qzones = $OSCOM_Database->prepare('select * from :table_zones where zone_id = :zone_id');
       $Qzones->bindInt(':zone_id', $data['id']);
       $Qzones->execute();
 
-      return $Qzones->toArray();
+      return $Qzones->fetch();
     }
   }
 ?>

@@ -27,8 +27,9 @@
       $Qcountry->bindValue(':countries_iso_code_2', $data['iso_code_2']);
       $Qcountry->bindValue(':countries_iso_code_3', $data['iso_code_3']);
       $Qcountry->bindValue(':address_format', $data['address_format']);
+      $Qcountry->execute();
 
-      return $Qcountry->execute();
+      return ( ($Qcountry->rowCount() === 1) || !$Qcountry->isError() );
     }
   }
 ?>

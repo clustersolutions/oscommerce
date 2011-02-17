@@ -13,16 +13,16 @@
   use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
   use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
-  class GetDefinitionGroups {
+  class GetGroups {
     public static function execute() {
       if ( !isset($_GET['search']) ) {
         $_GET['search'] = '';
       }
 
       if ( !empty($_GET['search']) ) {
-        $result = Languages::findDefinitionGroups($_GET['id'], $_GET['search']);
+        $result = Languages::findGroups($_GET['id'], $_GET['search']);
       } else {
-        $result = Languages::getDefinitionGroups($_GET['id']);
+        $result = Languages::getGroups($_GET['id']);
       }
 
       $result['rpcStatus'] = RPC::STATUS_SUCCESS;

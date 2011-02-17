@@ -15,7 +15,11 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      Languages::export($_GET['id'], $_POST['groups'], (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
+      $data = array('id' => $_GET['id'],
+                    'groups' => $_POST['groups'],
+                    'include_data' => (isset($_POST['include_data']) && ($_POST['include_data'] == 'on')));
+
+      Languages::export($data);
     }
   }
 ?>

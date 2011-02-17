@@ -56,7 +56,7 @@
       return $xml->outputMemory(true);
     }
 
-    protected static function _write(XMLWriter $xml, $data, $parent = null, $add_to_parent_element = false) {
+    protected static function _write(\XMLWriter $xml, $data, $parent = null, $add_to_parent_element = false) {
       foreach ( $data as $key => $value ) {
         if ( is_array($value) ) {
           if ( is_int($key) ) {

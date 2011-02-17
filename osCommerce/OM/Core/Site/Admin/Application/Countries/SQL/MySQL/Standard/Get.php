@@ -16,20 +16,11 @@
     public static function execute($data) {
       $OSCOM_Database = Registry::get('PDO');
 
-      $Qcountries = $OSCOM_Database->prepare('select * from :table_countries where countries_id = :countries_id');
+      $Qcountries = $OSCOM_Database->prepare('select c.*, count(z.zone_id) as total_zones2 from :table_countries c left join :table_zones z on (c.countries_id = z.zone_country_id) where c.countries_id = :countries_id');
       $Qcountries->bindInt(':countries_id', $data['id']);
       $Qcountries->execute();
 
-      $Qzones = $OSCOM_Database->prepare('select count(*) as total_zones from :table_zones where zone_country_id = :zone_country_id');
-      $Qzones->bindInt(':zone_country_id', $data['id']);
-      $Qzones->execute();
-
-      $result = array_merge($Qcountries->fetch(), $Qzones->fetch());
-
-      unset($Qzones);
-      unset($Qcountries);
-
-      return $result;
+      return $Qcountries->fetch();
     }
   }
 ?>

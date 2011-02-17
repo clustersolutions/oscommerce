@@ -14,6 +14,7 @@
   use \PDOStatement;
 
   class DatabasePDOStatement extends PDOStatement {
+    protected $_is_error = false;
     protected $_binded_params = array();
 
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR) {
@@ -170,17 +171,19 @@
         $input_parameters = null;
       }
 
-      return parent::execute($input_parameters);
+      $this->_is_error = !parent::execute($input_parameters);
+
+      return $this->_is_error;
     }
 
-    public function next() {
+    public function fetch($fetch_style = PDO::FETCH_ASSOC, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0) {
 /*
       if ($this->cache_read === true) {
         list(, $this->result) = each($this->cache_data);
       } else {
 */
 
-        $this->result = $this->fetch();
+        $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 
 /*
         if (isset($this->cache_key)) {
@@ -192,7 +195,15 @@
       return $this->result;
     }
 
+    public function next() {
+      return $this->fetch();
+    }
+
     protected function valueMixed($column, $type = 'string') {
+      if ( !isset($this->result) ) {
+        $this->fetch();
+      }
+
       switch ($type) {
         case 'protected':
           return osc_output_string_protected($this->result[$column]);
@@ -223,6 +234,10 @@
 
     public function valueDecimal($column) {
       return $this->valueMixed($column, 'decimal');
+    }
+
+    public function isError() {
+      return $this->_is_error;
     }
   }
 ?>

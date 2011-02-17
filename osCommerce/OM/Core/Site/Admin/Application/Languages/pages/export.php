@@ -16,7 +16,7 @@
 
   $groups_array = array();
 
-  foreach ( osc_toObjectInfo(Languages::getDefinitionGroups($OSCOM_ObjectInfo->getInt('languages_id')))->get('entries') as $group ) {
+  foreach ( osc_toObjectInfo(Languages::getGroups($OSCOM_ObjectInfo->getInt('languages_id')))->get('entries') as $group ) {
     $groups_array[] = array('id' => $group['content_group'],
                             'text' => $group['content_group']);
   }

@@ -37,11 +37,11 @@
   $names_string = '';
 
   while ( $Qzones->next() ) {
-    if ( ZoneGroups::hasTaxRate($Qzones->valueInt('geo_zone_id')) ) {
+    if ( ZoneGroups::hasTaxRates($Qzones->valueInt('geo_zone_id')) ) {
       $check_tax_zones_flag[] = $Qzones->value('geo_zone_name');
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $Qzones->valueProtected('geo_zone_name') . ' (' . sprintf(OSCOM::getDef('total_entries'), ZoneGroups::numberOfEntries($Qzones->valueInt('geo_zone_id'))) . ')</b>, ';
+    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('geo_zone_id')) . '<b>' . $Qzones->valueProtected('geo_zone_name') . ' (' . sprintf(OSCOM::getDef('total_entries'), ZoneGroups::getNumberOfEntries($Qzones->valueInt('geo_zone_id'))) . ')</b>, ';
   }
 
   if ( !empty($names_string) ) {

@@ -12,7 +12,7 @@
   use osCommerce\OM\Core\Site\Admin\Application\Languages\Languages;
   use osCommerce\OM\Core\OSCOM;
 
-  $OSCOM_ObjectInfo = new ObjectInfo(Languages::getDefinitionGroup($_GET['group']));
+  $OSCOM_ObjectInfo = new ObjectInfo(Languages::getGroup($_GET['group']));
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>

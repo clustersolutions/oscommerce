@@ -17,7 +17,7 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      if ( Languages::deleteDefinitions($_GET['id'], $_GET['group'], array($_GET['dID'])) ) {
+      if ( Languages::deleteDefinition($_GET['dID']) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');

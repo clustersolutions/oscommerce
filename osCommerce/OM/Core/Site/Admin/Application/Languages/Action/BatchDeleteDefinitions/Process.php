@@ -20,7 +20,7 @@
       $error = false;
 
       foreach ( $_POST['batch'] as $id ) {
-        if ( !Languages::deleteDefinitions($_GET['id'], $_GET['group'], $_POST['batch']) ) {
+        if ( !Languages::deleteDefinition($id) ) {
           $error = true;
           break;
         }

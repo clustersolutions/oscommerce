@@ -15,7 +15,7 @@
 
   class DeleteGroup {
     public static function execute(ApplicationAbstract $application) {
-      if ( Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
+      if ( Languages::isGroup($_GET['id'], $_GET['group']) ) {
         $application->setPageContent('groups_delete.php');
       }
     }

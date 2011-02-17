@@ -17,7 +17,11 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      if ( Languages::updateDefinitions($_GET['id'], $_GET['group'], $_POST['def']) ) {
+      $data = array('language_id' => $_GET['id'],
+                    'group' => $_GET['group'],
+                    'definitions' => $_POST['def']);
+
+      if ( Languages::updateDefinition($data) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');

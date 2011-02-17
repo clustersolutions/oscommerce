@@ -28,7 +28,7 @@
         $this->_page_contents = 'groups.php';
         $this->_page_title .= ': ' . Languages::get($_GET['id'], 'name');
 
-        if ( isset($_GET['group']) && Languages::isDefinitionGroup($_GET['id'], $_GET['group']) ) {
+        if ( isset($_GET['group']) && Languages::isGroup($_GET['id'], $_GET['group']) ) {
           $this->_page_contents = 'definitions.php';
           $this->_page_title .= ': ' . $_GET['group'];
         }

@@ -18,10 +18,12 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      $data = array('username' => $_POST['user_name'],
-                    'password' => $_POST['user_password']);
+      $data = array('id' => (isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : null),
+                    'username' => $_POST['user_name'],
+                    'password' => $_POST['user_password'],
+                    'modules' => (isset($_POST['modules']) ? $_POST['modules'] : null));
 
-      switch ( Administrators::save((isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : null), $data, (isset($_POST['modules']) ? $_POST['modules'] : null)) ) {
+      switch ( Administrators::save($data) ) {
         case 1:
           if ( isset($_GET['id']) && is_numeric($_GET['id']) && ($_GET['id'] == $_SESSION[OSCOM::getSite()]['id']) ) {
             $_SESSION[OSCOM::getSite()]['access'] = Access::getUserLevels($_GET['id']);
