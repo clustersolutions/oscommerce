@@ -17,6 +17,7 @@
     protected $_link_to = true;
     protected $_group;
     protected $_icon = 'default.png';
+    protected $_shortcut_callback;
     protected $_title;
     protected $_sort_order;
 
@@ -95,6 +96,10 @@
 
     public function getSortOrder() {
       return $this->_sort_order;
+    }
+
+    public function getShortcutCallback() {
+      return $this->_shortcut_callback;
     }
   }
 ?>
