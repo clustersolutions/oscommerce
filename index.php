@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\Autoloader;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
@@ -21,11 +22,9 @@
 
   error_reporting(E_ALL | E_STRICT);
 
-  define('OSCOM_BASE_DIRECTORY', dirname(__FILE__) . '/osCommerce/OM/');
-
-  require(OSCOM_BASE_DIRECTORY . 'External/SplClassLoader.php');
-  $classLoader = new SplClassLoader('osCommerce\OM\Core');
-  $classLoader->register();
+  require('osCommerce/OM/Core/Autoloader.php');
+  $OSCOM_Autoloader = new Autoloader('osCommerce\OM');
+  $OSCOM_Autoloader->register();
 
   OSCOM::initialize();
 

@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  define('OSCOM_BASE_DIRECTORY', realpath(__DIR__ . '/../') . '/');
+
   class OSCOM {
     const TIMESTAMP_START = OSCOM_TIMESTAMP_START;
     const BASE_DIRECTORY = OSCOM_BASE_DIRECTORY;

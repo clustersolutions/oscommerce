@@ -19,10 +19,10 @@
  */
 class SplClassLoader
 {
-    private $_fileExtension = '.php';
-    private $_namespace;
-    private $_includePath;
-    private $_namespaceSeparator = '\\';
+    protected $_fileExtension = '.php';
+    protected $_namespace;
+    protected $_includePath;
+    protected $_namespaceSeparator = '\\';
 
     /**
      * Creates a new <tt>SplClassLoader</tt> that loads classes of the
@@ -130,7 +130,7 @@ class SplClassLoader
             }
             $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . $this->_fileExtension;
 
-// Only include the file if it exists otherwise class_exists() returns a
+// HPDL; Only include the file if it exists otherwise \class_exists() returns a
 // "file does not exist" error.
             $includeFile = ($this->_includePath !== null ? $this->_includePath . DIRECTORY_SEPARATOR : '') . $fileName;
 
