@@ -10,5 +10,11 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\ErrorLog;
 
-  class ErrorLog extends \osCommerce\OM\Core\ApplicationModelAbstract { }
+  use osCommerce\OM\Core\ErrorHandler;
+
+  class ErrorLog extends \osCommerce\OM\Core\ApplicationModelAbstract {
+    public static function new_errors($lastvisit){
+     return count(ErrorHandler::find('', null, null, $lastvisit));
+    }
+  }
 ?>

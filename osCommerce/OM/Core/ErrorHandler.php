@@ -99,14 +99,14 @@
       return self::$_resource->querySingle('select count(*) from error_log');
     }
 
-    public static function find($search, $limit = null, $offset = null) {
+    public static function find($search, $limit = null, $offset = null, $from = 0) {
       if ( !is_resource(self::$_resource) ) {
         self::connect();
       }
 
       $result = array();
 
-      $query = 'select timestamp, message from error_log where message like "%' . addslashes($search) . '%" order by rowid desc';
+      $query = 'select timestamp, message from error_log where message like "%' . addslashes($search) . '%" and timestamp > '.$from.' order by rowid desc';
 
       if ( !empty($limit) ) {
         $query .= ' limit ' . (int)$limit;

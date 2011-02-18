@@ -16,6 +16,7 @@
     protected $_group = 'tools';
     protected $_icon = 'errorlog.png';
     protected $_sort_order = 10;
+    protected $_shortcut_callback = 'new_errors';
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');

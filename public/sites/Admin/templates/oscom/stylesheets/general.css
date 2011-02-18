@@ -466,3 +466,24 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
   clear: both;
   padding-top: 30px;
 }
+li.shortcuts a{
+ position:relative;
+}
+li.shortcuts a .jewel{
+ position:absolute;
+ top:1px;
+ right:0px;
+ background-color: #F03D25;
+ border: 1px solid #DD3822;
+ border-top: 0;
+ padding: 0px 1px 1px 1px;
+ border-radius: 2px 2px;
+ color:white;
+ font-size:9px;
+ font-weight:bold;
+ line-height:9px;
+ display:none;
+}
+li.shortcuts a .lastvisit{
+ display:none;
+}
