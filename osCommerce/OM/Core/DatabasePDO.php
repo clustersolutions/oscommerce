@@ -26,8 +26,6 @@
     protected $_fkeys = array();
 
     public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $driver = DB_DATABASE_CLASS, $driver_options = array()) {
-      $driver = 'MySQL\\V5'; // HPDL REMOVE
-
       if ( !isset($driver_options[PDO::ATTR_ERRMODE]) ) {
         $driver_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_WARNING;
       }
