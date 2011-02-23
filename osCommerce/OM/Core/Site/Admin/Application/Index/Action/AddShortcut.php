@@ -23,10 +23,9 @@
         $application = osc_sanitize_string($_GET['shortcut']);
 
         if ( OSCOM::siteApplicationExists($application) ) {
-          $Qsc = $OSCOM_Database->query('insert into :table_administrator_shortcuts values (:administrators_id, :module, :lastvisit)');
+          $Qsc = $OSCOM_Database->query('insert into :table_administrator_shortcuts (administrators_id, module, last_viewed) values (:administrators_id, :module, null)');
           $Qsc->bindInt(':administrators_id', $_SESSION[OSCOM::getSite()]['id']);
           $Qsc->bindValue(':module', $application);
-          $Qsc->bindInt(':lastvisit', 0);
           $Qsc->execute();
 
           if ( !$OSCOM_Database->isError() ) {
