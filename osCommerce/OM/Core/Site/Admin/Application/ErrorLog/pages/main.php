@@ -52,6 +52,8 @@
 </div>
 
 <script type="text/javascript">
+  var resetShortcutNotification = true;
+
   var moduleParamsCookieName = 'oscom_admin_' + pageModule;
   var dataTablePageSetName = 'page';
 

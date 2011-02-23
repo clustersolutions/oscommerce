@@ -34,6 +34,7 @@ DROP TABLE IF EXISTS osc_administrator_shortcuts;
 CREATE TABLE osc_administrator_shortcuts (
   administrators_id int unsigned NOT NULL,
   module varchar(255) NOT NULL,
+  last_viewed datetime,
   PRIMARY KEY (administrators_id, module),
   KEY idx_admin_shortcuts_admin_id (administrators_id)
 ) ENGINE=MyISAM;

@@ -69,43 +69,10 @@
       echo '  <li class="shortcuts">';
 
       foreach ( Access::getShortcuts() as $shortcut ) {
-        echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '" id="shortcut-'.$shortcut['module'].'">' . $OSCOM_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '<div class="jewel">0</div></a>';
+        echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '" id="shortcut-' . $shortcut['module'] . '">' . $OSCOM_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '<div class="notBubble"></div></a>';
       }
 
       echo '  </li>';
-      if ( Access::hasShortcutCallback() ) {
-       echo '<script type="text/javascript">
-
-               function updateJewels(){
-		jQuery.ajax({
-		   type: "GET",
-		   url: "index.php?RPC&Admin&Index&ShortcutAjax",
-		   success: function(ret){
-		    ret = jQuery.parseJSON(ret);
-		    jQuery.each(ret, function(key, val) { 
-	             if(jQuery("#shortcut-" + key + " .jewel").html != val && val > 0){
-	              jQuery("#shortcut-" + key + " .jewel").html(val).show();
-	              jQuery("#shortcut-" + key).click(function(){
-		       jQuery.ajax({
-		        type: "GET",
-		        url: "index.php?RPC&Admin&Index&ShortcutAjaxVisit",
-		        data: "module=" + key,
-		        success: function(ret){}
-		       });
-	              });
-	             }
-		    });
-		   }
-		 });
-		}
-
-		jQuery(document).ready(function() {
-		 updateJewels();
-		 setInterval("updateJewels()", 10000);
-		});
-
-       </script>';
-      }
     }
 
     echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . osc_output_string_protected($_SESSION[OSCOM::getSite()]['username']) . '</a>' .
@@ -123,3 +90,39 @@
   $('#adminMenu .apps').droppy({speed: 0});
   $('#adminMenu .apps li img').tipsy();
 </script>
+
+<?php
+  if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
+?>
+
+<script type="text/javascript">
+  function updateShortcutNotifications(resetApplication) {
+    $.ajax({
+      type: 'GET',
+      url: '<?php echo OSCOM::getRPCLink('Admin', 'Index', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication),
+      success: function(ret) {
+        ret = $.parseJSON(ret);
+
+        $.each(ret, function(key, val) {
+          if ( $('#shortcut-' + key + ' .notBubble').html != val ) {
+            if ( val > 0 || val.length > 0 ) {
+              $('#shortcut-' + key + ' .notBubble').html(val).show();
+            } else {
+              $('#shortcut-' + key + ' .notBubble').hide();
+            }
+          }
+        });
+      }
+    });
+  }
+
+  $(document).ready(function() {
+    updateShortcutNotifications(typeof resetShortcutNotification != 'undefined' ? '<?php echo OSCOM::getSiteApplication(); ?>' : null);
+
+    setInterval('updateShortcutNotifications()', 10000);
+  });
+</script>
+
+<?php
+  }
+?>
