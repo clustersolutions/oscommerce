@@ -36,6 +36,8 @@
 
 // HPDL: Check for and include custom version
           if ( strpos($includeFile, 'osCommerce/OM/Core/') !== false ) {
+            $includeFile = realpath(__DIR__ . '/../../../') . '/' . $includeFile;
+
             $custom_includeFile = str_replace('osCommerce/OM/Core/', 'osCommerce/OM/Custom/', $includeFile);
 
             if (file_exists($custom_includeFile)) {

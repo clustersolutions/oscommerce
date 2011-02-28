@@ -14,24 +14,20 @@
 
   class GetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('MSSQL');
+      $OSCOM_Database = Registry::get('PDO');
 
       $result = array();
 
-      $Q = $OSCOM_Database->query('EXEC CountriesGetAll :batch_pageset, :batch_max_results');
-      $Q->bindInt(':batch_pageset', $data['batch_pageset']);
-      $Q->bindInt(':batch_max_results', $data['batch_max_results']);
-      $Q->execute();
+      $Qcountries = $OSCOM_Database->prepare('EXEC CountriesGetAll :batch_pageset, :batch_max_results');
+      $Qcountries->bindInt(':batch_pageset', $data['batch_pageset']);
+      $Qcountries->bindInt(':batch_max_results', $data['batch_max_results']);
+      $Qcountries->execute();
 
-      while ( $Q->next() ) {
-        $result['entries'][] = $Q->toArray();
-      }
+      $result['entries'] = $Qcountries->fetchAll();
 
-      $Q->nextResultSet();
+      $Qcountries->nextRowset();
 
-      $result['total'] = $Q->value('total');
-
-      $Q->freeResult();
+      $result['total'] = $Qcountries->fetchColumn();
 
       return $result;
     }

@@ -42,15 +42,9 @@
 
       Registry::set('PDO', DatabasePDO::initialize());
 
-      $Qcfg = Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-      $Qcfg->setCache('configuration');
-      $Qcfg->execute();
-
-      while ( $Qcfg->next() ) {
-        define($Qcfg->value('cfgKey'), $Qcfg->value('cfgValue'));
+      foreach ( OSCOM::callDB('Admin\GetConfiguration', null, 'Site') as $param ) {
+        define($param['cfgKey'], $param['cfgValue']);
       }
-
-      $Qcfg->freeResult();
 
       Registry::set('Session', Session::load('adminSid'));
       Registry::get('Session')->start();

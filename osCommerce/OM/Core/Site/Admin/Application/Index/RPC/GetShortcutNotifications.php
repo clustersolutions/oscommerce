@@ -10,33 +10,24 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Index\RPC;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Admin\Application\Index\Index;
   use osCommerce\OM\Core\OSCOM;
 
   class GetShortcutNotifications {
     public static function execute() {
-      $OSCOM_Database = Registry::get('Database');
-
       $site = OSCOM::getSite();
 
       $result = array();
 
       if ( isset($_SESSION[$site]['id']) ) {
         if ( isset($_GET['reset']) && !empty($_GET['reset']) && OSCOM::siteApplicationExists($_GET['reset']) ) {
-          $Qreset = $OSCOM_Database->query('update :table_administrator_shortcuts set last_viewed = now() where administrators_id = :administrators_id and module = :module');
-          $Qreset->bindInt(':administrators_id', $_SESSION[$site]['id']);
-          $Qreset->bindValue(':module', $_GET['reset']);
-          $Qreset->execute();
+          Index::updateAppDateOpened($_SESSION[$site]['id'], $_GET['reset']);
         }
 
         $shortcuts = array();
 
-        $Qshortcuts = $OSCOM_Database->query('select module, last_viewed from :table_administrator_shortcuts where administrators_id = :administrators_id');
-        $Qshortcuts->bindInt(':administrators_id', $_SESSION[$site]['id']);
-        $Qshortcuts->execute();
-
-        while ( $Qshortcuts->next() ) {
-          $shortcuts[$Qshortcuts->value('module')] = $Qshortcuts->value('last_viewed');
+        foreach ( Index::getShortcuts($_SESSION[$site]['id']) as $app ) {
+          $shortcuts[$app['module']] = $app['last_viewed'];
         }
 
         foreach ( $_SESSION[$site]['access'] as $module => $data ) {

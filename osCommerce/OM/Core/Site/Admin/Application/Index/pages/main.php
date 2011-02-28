@@ -15,15 +15,9 @@
   $OSCOM_DirectoryListing = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Module/IndexModules');
   $OSCOM_DirectoryListing->setIncludeDirectories(false);
   $files = $OSCOM_DirectoryListing->getFiles();
-
-  $Qonline = Registry::get('Database')->query('select count(*) as total from :table_whos_online where time_last_click >= :time_last_click');
-  $Qonline->bindInt(':time_last_click', (time() - 900));
-  $Qonline->execute();
 ?>
 
 <h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
-
-<p><?php echo osc_link_object(OSCOM::getLink(null, 'OnlineCustomers'), osc_icon('people.png') . '&nbsp;' . sprintf(OSCOM::getDef('total_customers_online'), $Qonline->valueInt('total'))); ?></p>
 
 <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
