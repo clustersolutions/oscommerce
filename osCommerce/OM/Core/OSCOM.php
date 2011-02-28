@@ -319,12 +319,36 @@
  * @return mixed The result of the database query
  * @access public
  */
-    public static function callDB($procedure, $data = null) {
+    public static function callDB($procedure, $data = null, $type = 'Application') {
       $OSCOM_Database = Registry::get('PDO');
 
       $call = explode('\\', $procedure);
-      $ns = 'osCommerce\\OM\\Core\\Site\\' . $call[0] . '\\Application\\' . $call[1];
-      $procedure = $call[2];
+
+      switch ( $type ) {
+        case 'Core':
+
+          $procedure = array_pop($call);
+          $ns = 'osCommerce\\OM\\Core';
+
+          if ( !empty($call) ) {
+            $ns .= '\\' . implode('\\', $call);
+          }
+
+          break;
+
+        case 'Site':
+
+          $ns = 'osCommerce\\OM\\Core\\Site\\' . $call[0];
+          $procedure = $call[1];
+
+          break;
+
+        case 'Application':
+        default:
+
+          $ns = 'osCommerce\\OM\\Core\\Site\\' . $call[0] . '\\Application\\' . $call[1];
+          $procedure = $call[2];
+      }
 
       $db_driver = $OSCOM_Database->getDriver();
 

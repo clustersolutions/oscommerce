@@ -12,7 +12,6 @@
 
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\XML;
-  use osCommerce\OM\Core\Registry;
 
   class Language extends \osCommerce\OM\Core\Language {
     public function __construct() {
@@ -113,13 +112,9 @@
     }
 
     function getData($id, $key = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array('id' => $id);
 
-      $Qlanguage = $OSCOM_Database->query('select * from :table_languages where languages_id = :languages_id');
-      $Qlanguage->bindInt(':languages_id', $id);
-      $Qlanguage->execute();
-
-      $result = $Qlanguage->toArray();
+      $result = OSCOM::callDB('Admin\GetLanguage', $data, 'Site');
 
       if ( empty($key) ) {
         return $result;
@@ -129,35 +124,23 @@
     }
 
     function getID($code = null) {
-      $OSCOM_Database = Registry::get('Database');
-
       if ( empty($code) ) {
         return $this->_languages[$this->_code]['id'];
       }
 
-      $Qlanguage = $OSCOM_Database->query('select languages_id from :table_languages where code = :code');
-      $Qlanguage->bindValue(':code', $code);
-      $Qlanguage->execute();
+      $data = array('code' => $code);
 
-      $result = $Qlanguage->toArray();
+      $result = OSCOM::callDB('Admin\GetLanguageID', $data, 'Site');
 
       return $result['languages_id'];
     }
 
     function getCode($id = null) {
-      $OSCOM_Database = Registry::get('Database');
-
       if ( empty($id) ) {
         return $this->_code;
       }
 
-      $Qlanguage = $OSCOM_Database->query('select code from :table_languages where languages_id = :languages_id');
-      $Qlanguage->bindValue(':languages_id', $id);
-      $Qlanguage->execute();
-
-      $result = $Qlanguage->toArray();
-
-      return $result['code'];
+      return $this->getData($id, 'code');
     }
 
     function showImage($code = null, $width = '16', $height = '10', $parameters = null) {

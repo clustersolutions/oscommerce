@@ -10,7 +10,7 @@
 
   namespace osCommerce\OM\Core\Session;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
 /**
  * The Session\Database class stores the session data in the database
@@ -64,20 +64,16 @@
  */
 
     public function handlerRead($id) {
-      $OSCOM_Database = Registry::get('Database');
-
-      $Qsession = $OSCOM_Database->query('select value from :table_sessions where id = :id');
+      $data = array('id' => $id);
 
       if ( $this->_life_time > 0 ) {
-        $Qsession->appendQuery('and expiry >= :expiry');
-        $Qsession->bindInt(':expiry', time());
+        $data['expiry'] = time();
       }
 
-      $Qsession->bindValue(':id', $id);
-      $Qsession->execute();
+      $result = OSCOM::callDB('Session\Database\Get', $data, 'Core');
 
-      if ( $Qsession->numberOfRows() === 1 ) {
-        return base64_decode($Qsession->value('value'));
+      if ( $result !== false ) {
+        return base64_decode($result['value']);
       }
 
       return false;
@@ -92,15 +88,11 @@
  */
 
     public function handlerWrite($id, $value) {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array('id' => $id,
+                    'expiry' => time() + $this->_life_time,
+                    'value' => base64_encode($value));
 
-      $Qsession = $OSCOM_Database->query('replace into :table_sessions values (:id, :expiry, :value)');
-      $Qsession->bindValue(':id', $id);
-      $Qsession->bindInt(':expiry', time() + $this->_life_time);
-      $Qsession->bindValue(':value', base64_encode($value));
-      $Qsession->execute();
-
-      return ( $Qsession->affectedRows() === 1 );
+      return OSCOM::callDB('Session\Database\Save', $data, 'Core');
     }
 
 /**
@@ -124,13 +116,9 @@
     public function handlerClean($max_life_time) {
 // $max_life_time is already added to the time in the _custom_write method
 
-      $OSCOM_Database = Registry::get('Database');
+      $data = array('expiry' => time());
 
-      $Qsession = $OSCOM_Database->query('delete from :table_sessions where expiry < :expiry');
-      $Qsession->bindInt(':expiry', time());
-      $Qsession->execute();
-
-      return ( $Qsession->affectedRows() > 0 );
+      return OSCOM::callDB('Session\Database\DeleteExpired', $data, 'Core');
     }
 
 /**
@@ -141,17 +129,13 @@
  */
 
     public function delete($id = null) {
-      $OSCOM_Database = Registry::get('Database');
-
       if ( empty($id) ) {
         $id = $this->_id;
       }
 
-      $Qsession = $OSCOM_Database->query('delete from :table_sessions where id = :id');
-      $Qsession->bindValue(':id', $id);
-      $Qsession->execute();
+      $data = array('id' => $id);
 
-      return ( $Qsession->affectedRows() === 1 );
+      return OSCOM::callDB('Session\Database\Delete', $data, 'Core');
     }
   }
 ?>

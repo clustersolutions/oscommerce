@@ -10,8 +10,6 @@
 
   namespace osCommerce\OM\Core\DatabasePDO\Microsoft;
 
-  use \PDO;
-
   class SqlServer extends \osCommerce\OM\Core\DatabasePDO {
     public function __construct($server, $username, $password, $database, $port, $driver_options) {
       $this->_server = $server;

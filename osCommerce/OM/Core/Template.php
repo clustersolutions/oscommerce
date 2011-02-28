@@ -367,19 +367,7 @@
  */
 
     public static function getTemplates() {
-      $OSCOM_Database = Registry::get('Database');
-
-      $templates = array();
-
-      $Qtemplates = $OSCOM_Database->query('select id, code, title from :table_templates');
-      $Qtemplates->setCache('templates');
-      $Qtemplates->execute();
-
-      while ( $Qtemplates->next() ) {
-        $templates[] = $Qtemplates->toArray();
-      }
-
-      return $templates;
+      return OSCOM::callDB('GetTemplates', null, 'Core');
     }
 
 /**

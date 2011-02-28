@@ -20,27 +20,21 @@
 /* Class constructor */
 
     function __construct() {
-      $Qlanguages = Registry::get('Database')->query('select * from :table_languages order by sort_order, name');
-      $Qlanguages->setCache('languages');
-      $Qlanguages->execute();
-
-      while ($Qlanguages->next()) {
-        $this->_languages[$Qlanguages->value('code')] = array('id' => $Qlanguages->valueInt('languages_id'),
-                                                              'code' => $Qlanguages->value('code'),
-                                                              'name' => $Qlanguages->value('name'),
-                                                              'locale' => $Qlanguages->value('locale'),
-                                                              'charset' => $Qlanguages->value('charset'),
-                                                              'date_format_short' => $Qlanguages->value('date_format_short'),
-                                                              'date_format_long' => $Qlanguages->value('date_format_long'),
-                                                              'time_format' => $Qlanguages->value('time_format'),
-                                                              'text_direction' => $Qlanguages->value('text_direction'),
-                                                              'currencies_id' => $Qlanguages->valueInt('currencies_id'),
-                                                              'numeric_separator_decimal' => $Qlanguages->value('numeric_separator_decimal'),
-                                                              'numeric_separator_thousands' => $Qlanguages->value('numeric_separator_thousands'),
-                                                              'parent_id' => $Qlanguages->valueInt('parent_id'));
+      foreach ( OSCOM::callDB('GetLanguages', null, 'Core') as $lang ) {
+        $this->_languages[$lang['code']] = array('id' => (int)$lang['languages_id'],
+                                                 'code' => $lang['code'],
+                                                 'name' => $lang['name'],
+                                                 'locale' => $lang['locale'],
+                                                 'charset' => $lang['charset'],
+                                                 'date_format_short' => $lang['date_format_short'],
+                                                 'date_format_long' => $lang['date_format_long'],
+                                                 'time_format' => $lang['time_format'],
+                                                 'text_direction' => $lang['text_direction'],
+                                                 'currencies_id' => (int)$lang['currencies_id'],
+                                                 'numeric_separator_decimal' => $lang['numeric_separator_decimal'],
+                                                 'numeric_separator_thousands' => $lang['numeric_separator_thousands'],
+                                                 'parent_id' => (int)$lang['parent_id']);
       }
-
-      $Qlanguages->freeResult();
 
       $this->set();
     }
