@@ -26,8 +26,8 @@
   require(OSCOM::BASE_DIRECTORY . 'Core/Site/Admin/includes/functions/localization.php');
 
   class Controller implements \osCommerce\OM\Core\SiteInterface {
-    protected static $_default_application = 'Index';
-    protected static $_guest_applications = array('Index', 'Login');
+    protected static $_default_application = 'Dashboard';
+    protected static $_guest_applications = array('Dashboard', 'Login');
 
     public static function initialize() {
       OSCOM::loadConfig();
