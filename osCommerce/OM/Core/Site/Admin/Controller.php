@@ -56,7 +56,7 @@
       if ( !self::hasAccess(OSCOM::getSiteApplication()) ) {
         Registry::get('MessageStack')->add('header', 'No access.', 'error');
 
-        osc_redirect_admin(OSCOM::getLink(null, 'Index'));
+        osc_redirect_admin(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
       }
 
       $application = 'osCommerce\\OM\\Core\\Site\\Admin\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';

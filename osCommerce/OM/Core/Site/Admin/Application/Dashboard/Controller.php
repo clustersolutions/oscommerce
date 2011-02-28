@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Index;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard;
 
   use osCommerce\OM\Core\OSCOM;
 
