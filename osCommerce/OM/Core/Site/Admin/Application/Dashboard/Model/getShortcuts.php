@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Index\Model;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard\Model;
 
   use osCommerce\OM\Core\OSCOM;
 
@@ -16,7 +16,7 @@
     public static function execute($admin_id) {
       $data = array('admin_id' => $admin_id);
 
-      return OSCOM::callDB('Admin\Index\GetShortcuts', $data);
+      return OSCOM::callDB('Admin\Dashboard\GetShortcuts', $data);
     }
   }
 ?>

@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Index\RPC;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard\RPC;
 
-  use osCommerce\OM\Core\Site\Admin\Application\Index\Index;
+  use osCommerce\OM\Core\Site\Admin\Application\Dashboard\Dashboard;
   use osCommerce\OM\Core\OSCOM;
 
   class GetShortcutNotifications {
@@ -21,12 +21,12 @@
 
       if ( isset($_SESSION[$site]['id']) ) {
         if ( isset($_GET['reset']) && !empty($_GET['reset']) && OSCOM::siteApplicationExists($_GET['reset']) ) {
-          Index::updateAppDateOpened($_SESSION[$site]['id'], $_GET['reset']);
+          Dashboard::updateAppDateOpened($_SESSION[$site]['id'], $_GET['reset']);
         }
 
         $shortcuts = array();
 
-        foreach ( Index::getShortcuts($_SESSION[$site]['id']) as $app ) {
+        foreach ( Dashboard::getShortcuts($_SESSION[$site]['id']) as $app ) {
           $shortcuts[$app['module']] = $app['last_viewed'];
         }
 

@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Index\Model;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard\Model;
 
   use osCommerce\OM\Core\OSCOM;
 
@@ -17,7 +17,7 @@
       $data = array('admin_id' => $admin_id,
                     'application' => $application);
 
-      return OSCOM::callDB('Admin\Index\UpdateAppLastOpened', $data);
+      return OSCOM::callDB('Admin\Dashboard\UpdateAppLastOpened', $data);
     }
   }
 ?>

@@ -14,7 +14,7 @@
 
 <div id="adminMenu">
   <ul class="apps">
-    <li class="shortcuts"><?php echo osc_link_object(OSCOM::getLink(OSCOM::getSite(), 'Index'), osc_image(OSCOM::getPublicSiteLink('images/oscommerce_icon.png'), null, 16, 16)); ?></li>
+    <li class="shortcuts"><?php echo osc_link_object(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), osc_image(OSCOM::getPublicSiteLink('images/oscommerce_icon.png'), null, 16, 16)); ?></li>
 
 <?php
   if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
@@ -59,9 +59,9 @@
 
     if ( $OSCOM_Application->canLinkTo() ) {
       if ( Access::isShortcut(OSCOM::getSiteApplication()) ) {
-        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Dashboard', 'RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_remove.png')) . '</li>';
       } else {
-        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Index', 'AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
+        echo '  <li class="shortcuts">' . osc_link_object(OSCOM::getLink(null, 'Dashboard', 'AddShortcut&shortcut=' . OSCOM::getSiteApplication()), osc_icon('shortcut_add.png')) . '</li>';
       }
     }
 
@@ -99,7 +99,7 @@
   function updateShortcutNotifications(resetApplication) {
     $.ajax({
       type: 'GET',
-      url: '<?php echo OSCOM::getRPCLink('Admin', 'Index', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication),
+      url: '<?php echo OSCOM::getRPCLink('Admin', 'Dashboard', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication),
       success: function(ret) {
         ret = $.parseJSON(ret);
 
