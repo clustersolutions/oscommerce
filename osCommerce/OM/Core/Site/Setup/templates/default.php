@@ -47,7 +47,7 @@
 </div>
 
 <div id="pageContent">
-<?php require(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $OSCOM_Template->getPageContentsFilename()); ?>
+<?php require($OSCOM_Template->getPageContentsFile()); ?>
 </div>
 
 <div id="pageFooter">

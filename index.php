@@ -28,7 +28,7 @@
 
   OSCOM::initialize();
 
-  require(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/' . Registry::get('Template')->getCode() . '.php');
+  require(Registry::get('Template')->getTemplateFile());
 
 //  require('includes/application_bottom.php');
 ?>
