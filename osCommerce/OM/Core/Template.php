@@ -316,6 +316,22 @@
       return $this->osC_Modules_Content->getGroup($group);
     }
 
+    public function getTemplateFile($file = null) {
+      if ( empty($file) ) {
+        $file = $this->getCode() . '.php';
+      } else {
+        $file = $this->getCode() . '/' . $file;
+      }
+
+      $file_location = OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/templates/' . $file;
+
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/templates/' . $file) ) {
+        $file_location = OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/templates/' . $file;
+      }
+
+      return $file_location;
+    }
+
 /**
  * Returns the image of the page
  *
@@ -325,6 +341,16 @@
 
     function getPageImage() {
       return $this->_page_image;
+    }
+
+    public function getPageContentsFile() {
+      $file_location = OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $this->getPageContentsFilename();
+
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $this->getPageContentsFilename()) ) {
+        $file_location = OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $this->getPageContentsFilename();
+      }
+
+      return $file_location;
     }
 
 /**
