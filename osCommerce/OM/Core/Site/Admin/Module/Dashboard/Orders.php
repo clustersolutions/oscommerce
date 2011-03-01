@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\Module\IndexModules;
+  namespace osCommerce\OM\Core\Site\Admin\Module\Dashboard;
 
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
@@ -16,7 +16,7 @@
 
   class Orders extends \osCommerce\OM\Core\Site\Admin\IndexModulesAbstract {
     public function __construct() {
-      Registry::get('Language')->loadIniFile('modules/IndexModules/Orders.php');
+      Registry::get('Language')->loadIniFile('modules/Dashboard/Orders.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_orders_title');
       $this->_title_link = OSCOM::getLink(null, 'Orders');
