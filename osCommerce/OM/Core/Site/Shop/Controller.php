@@ -17,6 +17,8 @@
   use osCommerce\OM\Core\Database;
   use osCommerce\OM\Core\Template;
 
+use osCommerce\OM\Core\DatabasePDO;
+
   class Controller implements \osCommerce\OM\Core\SiteInterface {
     protected static $_default_application = 'Index';
 
@@ -28,6 +30,8 @@
       Registry::set('MessageStack', new MessageStack());
       Registry::set('Cache', new Cache());
       Registry::set('Database', Database::initialize());
+
+      Registry::set('PDO', DatabasePDO::initialize());
 
       $Qcfg = Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
       $Qcfg->setCache('configuration');
