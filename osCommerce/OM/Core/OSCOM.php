@@ -221,7 +221,7 @@
         $link .= $site . '&';
       }
 
-      if ( !empty($application) ) {
+      if ( !empty($application) && ($application != self::getDefaultSiteApplication()) ) {
         $link .= $application . '&';
       }
 
