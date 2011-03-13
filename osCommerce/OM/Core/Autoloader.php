@@ -35,10 +35,10 @@
 // used. Instead, use file_exists() and include()
 
 // HPDL: Check for and include custom version
-          if ( strpos($includeFile, 'osCommerce/OM/Core/') !== false ) {
-            $includeFile = realpath(__DIR__ . '/../../../') . '/' . $includeFile;
+          if ( strpos($includeFile, 'osCommerce' . DIRECTORY_SEPARATOR . 'OM' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR) !== false ) {
+            $includeFile = realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $includeFile;
 
-            $custom_includeFile = str_replace('osCommerce/OM/Core/', 'osCommerce/OM/Custom/', $includeFile);
+            $custom_includeFile = str_replace('osCommerce' . DIRECTORY_SEPARATOR . 'OM' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR, 'osCommerce' . DIRECTORY_SEPARATOR . 'OM' . DIRECTORY_SEPARATOR . 'Custom' . DIRECTORY_SEPARATOR, $includeFile);
 
             if (file_exists($custom_includeFile)) {
               include ($custom_includeFile);
