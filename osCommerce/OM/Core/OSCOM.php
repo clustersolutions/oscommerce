@@ -24,6 +24,8 @@
     public static function initialize() {
       ErrorHandler::initialize();
 
+      self::loadConfig();
+
       require('includes/functions/compatibility.php');
       require('includes/functions/general.php');
       require('includes/functions/html_output.php');

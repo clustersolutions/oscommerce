@@ -30,8 +30,6 @@
     protected static $_guest_applications = array('Dashboard', 'Login');
 
     public static function initialize() {
-      OSCOM::loadConfig();
-
       if ( strlen(DB_SERVER) < 1 ) {
         osc_redirect(OSCOM::getLink('Setup'));
       }
