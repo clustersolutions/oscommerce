@@ -17,7 +17,7 @@
   use osCommerce\OM\Core\Database;
   use osCommerce\OM\Core\Template;
 
-use osCommerce\OM\Core\DatabasePDO;
+  use osCommerce\OM\Core\DatabasePDO;
 
   class Controller implements \osCommerce\OM\Core\SiteInterface {
     protected static $_default_application = 'Index';
