@@ -22,9 +22,9 @@
     protected static $_application;
 
     public static function initialize() {
-      ErrorHandler::initialize();
-
       self::loadConfig();
+
+      ErrorHandler::initialize();
 
       require('includes/functions/compatibility.php');
       require('includes/functions/general.php');
