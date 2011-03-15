@@ -11,6 +11,7 @@
   namespace osCommerce\OM\Core\DatabasePDO\MySQL;
 
   class V5 extends \osCommerce\OM\Core\DatabasePDO\MySQL\Standard {
+    protected $_has_native_fk = true;
     protected $_driver_parent = 'MySQL\\Standard';
   }
 ?>
