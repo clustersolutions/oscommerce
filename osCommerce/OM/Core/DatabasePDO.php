@@ -22,8 +22,6 @@
     protected $_driver;
     protected $_driver_options = array();
     protected $_driver_parent;
-    protected $_has_native_fk = false;
-    protected $_fkeys = array();
 
     public static function initialize($server = DB_SERVER, $username = DB_SERVER_USERNAME, $password = DB_SERVER_PASSWORD, $database = DB_DATABASE, $port = DB_SERVER_PORT, $driver = DB_DATABASE_CLASS, $driver_options = array()) {
       if ( !isset($driver_options[PDO::ATTR_ERRMODE]) ) {
@@ -84,44 +82,6 @@
 
     public function hasDriverParent() {
       return isset($this->_driver_parent);
-    }
-
-    public function hasNativeForeignKeys() {
-      return $this->_has_native_fk;
-    }
-
-    public function hasForeignKeys() {
-      return !empty($this->_fkeys);
-    }
-
-    public function getForeignKeys($table = null) {
-      if ( isset($table) ) {
-        return $this->_fkeys[$table];
-      }
-
-      return $this->_fkeys;
-    }
-
-    public function setupForeignKeys() {
-      if ( empty($this->_fkeys) ) {
-        $Qfk = self::prepare('select * from :table_fk_relationships');
-//        $Qfk->setCache('fk_relationships');
-        $Qfk->execute();
-
-        while ( $Qfk->next() ) {
-          $this->_fkeys[$Qfk->value('to_table')][] = array('from_table' => $Qfk->value('from_table'),
-                                                           'from_field' => $Qfk->value('from_field'),
-                                                           'to_field' => $Qfk->value('to_field'),
-                                                           'on_update' => $Qfk->value('on_update'),
-                                                           'on_delete' => $Qfk->value('on_delete'));
-        }
-
-//        $Qfk->freeResult();
-      }
-    }
-
-    public function hasForeignKey($table) {
-      return isset($this->_fkeys[$table]);
     }
 
     protected function _autoPrefixTables($statement) {
