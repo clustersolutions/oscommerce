@@ -13,6 +13,7 @@
   use \PDO;
 
   class Standard extends \osCommerce\OM\Core\DatabasePDO {
+    protected $_has_native_fk = false;
     protected $_fkeys = array();
 
     public function __construct($server, $username, $password, $database, $port, $driver_options) {
@@ -24,7 +25,9 @@
       $this->_driver_options = $driver_options;
 
 // Override ATTR_STATEMENT_CLASS to automatically handle foreign key constraints
-      $this->_driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\DatabasePDO\\MySQL\\Standard\\PDOStatement', array($this));
+      if ( $this->_has_native_fk === false ) {
+        $this->_driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\DatabasePDO\\MySQL\\Standard\\PDOStatement', array($this));
+      }
 
 // Only one init command can be issued (see http://bugs.php.net/bug.php?id=48859)
       $this->_driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'set session sql_mode="STRICT_ALL_TABLES", names utf8';
@@ -43,7 +46,9 @@
 
       $dbh = parent::__construct($dsn, $this->_username, $this->_password, $this->_driver_options);
 
-      $this->setupForeignKeys();
+      if ( $this->_has_native_fk === false ) {
+        $this->setupForeignKeys();
+      }
 
       return $dbh;
     }
