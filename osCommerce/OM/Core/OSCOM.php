@@ -146,13 +146,15 @@
       }
     }
 
-    protected static function setVersion() {
-      self::$_version = '3.0';
-    }
-
     public static function getVersion() {
       if ( !isset(self::$_version) ) {
-        self::setVersion();
+        $v = trim(file_get_contents(OSCOM::BASE_DIRECTORY . 'version.txt'));
+
+        if ( preg_match('/^(\d+\.)?(\d+\.)?(\d+)$/', $v) ) {
+          self::$_version = $v;
+        } else {
+          trigger_error('Version number is not numeric. Please verify: ' . OSCOM::BASE_DIRECTORY . 'version.txt');
+        }
       }
 
       return self::$_version;
