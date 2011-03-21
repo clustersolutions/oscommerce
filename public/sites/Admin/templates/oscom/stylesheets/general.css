@@ -139,6 +139,10 @@ a:hover {
   zoom: 1; /* IE6/7 fix */
 }
 
+#adminMenu ul.apps li.shortcuts a {
+  position: relative;
+}
+
 #adminMenu ul.apps li.shortcuts a .notBubble {
   position: absolute;
   top: 1px;
