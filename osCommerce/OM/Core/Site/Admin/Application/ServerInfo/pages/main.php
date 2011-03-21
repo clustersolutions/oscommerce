@@ -30,8 +30,6 @@
   <span id="batchPageLinks"></span>
 </div>
 
-<form name="batch" action="#" method="post">
-
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="serverInfoDataTable">
   <thead>
     <tr>
@@ -47,8 +45,6 @@
   <tbody>
   </tbody>
 </table>
-
-</form>
 
 <div style="padding: 2px; min-height: 16px;">
   <span id="dataTableLegend"></span>
