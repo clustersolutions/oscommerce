@@ -23,7 +23,7 @@
   }
 
   if ( !osc_empty($OSCOM_ObjectInfo->get('set_function')) ) {
-    $value_field = osc_call_user_func($OSCOM_ObjectInfo->get('set_function'), $OSCOM_ObjectInfo->get('configuration_value'), $osC_ObjectInfo->get('configuration_key'));
+    $value_field = osc_call_user_func($OSCOM_ObjectInfo->get('set_function'), $OSCOM_ObjectInfo->get('configuration_value'), $OSCOM_ObjectInfo->get('configuration_key'));
   } else {
     $value_field = osc_draw_input_field('configuration[' . $OSCOM_ObjectInfo->get('configuration_key') . ']', $OSCOM_ObjectInfo->get('configuration_value'));
   }
