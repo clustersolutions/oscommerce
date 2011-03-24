@@ -27,7 +27,7 @@
 
 <meta name="generator" value="osCommerce Online Merchant" />
 
-<script type="text/javascript" src="public/external/jquery/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery-1.5.1.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/oscom/stylesheets/general.css'); ?>" />
 
