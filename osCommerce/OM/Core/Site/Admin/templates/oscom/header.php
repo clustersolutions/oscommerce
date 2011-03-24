@@ -96,17 +96,43 @@
 ?>
 
 <script type="text/javascript">
+  var wkn = new Object;
+
+  if ( $.cookie('wkn') ) {
+    wkn = $.secureEvalJSON($.cookie('wkn'));
+  }
+
   function updateShortcutNotifications(resetApplication) {
     $.getJSON('<?php echo OSCOM::getRPCLink('Admin', 'Dashboard', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication), function (data) {
       $.each(data, function(key, val) {
         if ( $('#shortcut-' + key + ' .notBubble').html != val ) {
           if ( val > 0 || val.length > 0 ) {
             $('#shortcut-' + key + ' .notBubble').html(val).show();
+
+            if ( (typeof webkitNotifications != 'undefined') && (webkitNotifications.checkPermission() == 0) ) {
+              if ( typeof wkn[key] == 'undefined' ) {
+                wkn[key] = new Object;
+              }
+
+              if ( wkn[key].value != val ) {
+                wkn[key].value = val;
+                wkn[key].n = webkitNotifications.createNotification('<?php echo OSCOM::getPublicSiteLink('images/applications/32/APPICON.png'); ?>'.replace('APPICON', key), key, val);
+                wkn[key].n.replaceId = key;
+                wkn[key].n.ondisplay = function(event) {
+                  setTimeout(function() {
+                    event.currentTarget.cancel();
+                  }, 5000);
+                };
+                wkn[key].n.show();
+              }
+            }
           } else {
             $('#shortcut-' + key + ' .notBubble').hide();
           }
         }
       });
+
+      $.cookie('wkn', $.toJSON(wkn));
     });
   }
 
