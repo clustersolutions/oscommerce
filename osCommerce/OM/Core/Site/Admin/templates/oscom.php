@@ -40,8 +40,8 @@
 <script type="text/javascript" src="public/external/jquery/tipsy/jquery.tipsy.js"></script>
 <link rel="stylesheet" type="text/css" href="public/external/jquery/tipsy/tipsy.css" />
 
-<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery.ui.all.css" />
-<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.11.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
 
 <script type="text/javascript" src="ext/alexei/sprintf.js"></script>
 

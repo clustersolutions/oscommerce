@@ -29,8 +29,8 @@
 
 <script type="text/javascript" src="public/external/jquery/jquery-1.5.1.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery.ui.all.css" />
-<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.11.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/default/stylesheets/general.css'); ?>" />
 
