@@ -16,7 +16,7 @@
 <div class="infoBox">
   <h3><?php echo osc_icon('people.png') . ' ' . OSCOM::getDef('action_heading_login'); ?></h3>
 
-  <form name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Process'); ?>" method="post">
+  <form id="formLogin" name="login" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Process'); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction'); ?></p>
 
@@ -32,6 +32,14 @@
 
 <script type="text/javascript">
   $('#user_name').focus();
+
+  if (typeof webkitNotifications != 'undefined') {
+    $('#formLogin').submit(function() {
+      if ( webkitNotifications.checkPermission() == 1 ) {
+        webkitNotifications.requestPermission();
+      }
+    });
+  }
 </script>
 
 <?php
