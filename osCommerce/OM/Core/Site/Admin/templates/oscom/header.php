@@ -97,22 +97,16 @@
 
 <script type="text/javascript">
   function updateShortcutNotifications(resetApplication) {
-    $.ajax({
-      type: 'GET',
-      url: '<?php echo OSCOM::getRPCLink('Admin', 'Dashboard', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication),
-      success: function(ret) {
-        ret = $.parseJSON(ret);
-
-        $.each(ret, function(key, val) {
-          if ( $('#shortcut-' + key + ' .notBubble').html != val ) {
-            if ( val > 0 || val.length > 0 ) {
-              $('#shortcut-' + key + ' .notBubble').html(val).show();
-            } else {
-              $('#shortcut-' + key + ' .notBubble').hide();
-            }
+    $.getJSON('<?php echo OSCOM::getRPCLink('Admin', 'Dashboard', 'GetShortcutNotifications&reset=RESETAPP'); ?>'.replace('RESETAPP', resetApplication), function (data) {
+      $.each(data, function(key, val) {
+        if ( $('#shortcut-' + key + ' .notBubble').html != val ) {
+          if ( val > 0 || val.length > 0 ) {
+            $('#shortcut-' + key + ' .notBubble').html(val).show();
+          } else {
+            $('#shortcut-' + key + ' .notBubble').hide();
           }
-        });
-      }
+        }
+      });
     });
   }
 
