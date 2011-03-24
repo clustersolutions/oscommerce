@@ -141,6 +141,23 @@
 
     setInterval('updateShortcutNotifications()', 10000);
   });
+
+  if (window.external.msIsSiteMode()) {
+
+<?php
+    if ( Access::hasShortcut() ) {
+      echo '    window.external.msSiteModeClearJumplist();' . "\n" .
+           '    window.external.msSiteModeCreateJumplist("Shortcuts");' . "\n";
+
+      foreach ( Access::getShortcuts() as $shortcut ) {
+        echo '    window.external.msSiteModeAddJumpListItem("' . $shortcut['title'] . '", "' . OSCOM::getLink(null, $shortcut['module']) . '", "", "self");' . "\n";
+      }
+
+      echo '    window.external.msSiteModeShowJumplist();' . "\n";
+    }
+?>
+
+  }
 </script>
 
 <?php

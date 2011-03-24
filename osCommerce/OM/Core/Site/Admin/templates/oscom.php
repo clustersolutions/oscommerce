@@ -66,6 +66,12 @@
   var taxDecimalPlaces = parseInt('<?php echo TAX_DECIMAL_PLACES; ?>');
 </script>
 
+<meta name="application-name" content="osCommerce Dashboard" />
+<meta name="msapplication-tooltip" content="osCommerce Administration Dashboard" />
+<meta name="msapplication-window" content="width=1024;height=768" />
+<meta name="msapplication-navbutton-color" content="#ff7900" />
+<meta name="msapplication-starturl" content="<?php echo OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'SSL', false); ?>" />
+
 </head>
 
 <body>
