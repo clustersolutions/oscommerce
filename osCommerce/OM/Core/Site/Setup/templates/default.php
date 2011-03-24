@@ -27,7 +27,7 @@
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
 
-<script type="text/javascript" src="public/external/jquery/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery-1.5.1.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery.ui.all.css" />
 <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.custom.min.js"></script>
