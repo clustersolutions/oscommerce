@@ -21,17 +21,17 @@
   var dbPrefix = "<?php echo $_POST['DB_TABLE_PREFIX']; ?>";
 
   var formSubmited = false;
+  var formSuccess = false;
 
   function handleHttpResponse(data) {
-    var result = /\[\[([^|]*?)(?:\|([^|]*?)){0,1}\]\]/.exec(data);
-    result.shift();
-
-    if (result[0] == '1') {
+    if (data.result == true) {
       $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/success.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_imported'); ?></p>');
 
-       $('#installForm').submit();
-     } else {
-      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/failed.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_import_error'); ?></p>'.replace('%s', result[1]));
+      formSuccess = true;
+
+      $('#installForm').submit();
+    } else {
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/failed.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_import_error'); ?></p>'.replace('%s', data.error_message));
 
       formSubmited = false;
     }
@@ -48,13 +48,12 @@
       $('#mBox').css('visibility', 'visible').show();
       $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_importing'); ?></p>');
 
-      $.ajax({
-        type: "POST",
-        url: "<?php echo OSCOM::getRPCLink(null, null, 'DBImportSample'); ?>",
-        data: "server=" + dbServer + "&username=" + dbUsername + "&password=" + dbPassword + "&name=" + dbName + "&port=" + dbPort + "&class=" + dbClass + "&prefix=" + dbPrefix,
-        success: handleHttpResponse
-      });
+      $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBImportSample'); ?>',
+             'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass + '&prefix=' + dbPrefix,
+             handleHttpResponse, 'json');
     } else {
+      formSuccess = true;
+
       $('#installForm').submit();
     }
   }
@@ -88,7 +87,7 @@
   </div>
 
   <div class="contentPane">
-    <form name="install" id="installForm" action="<?php echo OSCOM::getLink(null, null, 'step=3'); ?>" method="post" onsubmit="prepareDB(); return false;">
+    <form name="install" id="installForm" action="<?php echo OSCOM::getLink(null, null, 'step=3'); ?>" method="post">
 
     <h2><?php echo OSCOM::getDef('page_heading_store_settings'); ?></h2>
 
@@ -138,3 +137,13 @@
     </form>
   </div>
 </div>
+
+<script type="text/javascript">
+  $("#installForm").submit(function(e) {
+    if ( formSuccess == false ) {
+      e.preventDefault();
+
+      prepareDB();
+    }
+  });
+</script>
