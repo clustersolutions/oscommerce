@@ -31,10 +31,13 @@
       }
 
       if ( !$OSCOM_Database->isError() ) {
-        echo '[[1]]';
+        $result = array('result' => true);
       } else {
-        echo '[[0|' . $OSCOM_Database->getError() . ']]';
+        $result = array('result' => false,
+                        'error_message' => $OSCOM_Database->getError());
       }
+
+      echo json_encode($result);
     }
   }
 ?>
