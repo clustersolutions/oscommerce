@@ -14,9 +14,9 @@
 
   class GetTotalTaxRates {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qtotal = $OSCOM_Database->prepare('select count(*) as total from :table_tax_rates where tax_zone_id = :tax_zone_id');
+      $Qtotal = $OSCOM_PDO->prepare('select count(*) as total from :table_tax_rates where tax_zone_id = :tax_zone_id');
       $Qtotal->bindInt(':tax_zone_id', $data['tax_zone_id']);
       $Qtotal->execute();
 

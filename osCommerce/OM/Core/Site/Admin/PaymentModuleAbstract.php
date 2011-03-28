@@ -58,36 +58,22 @@
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qinstall = $OSCOM_Database->query('insert into :table_templates_boxes (title, code, author_name, author_www, modules_group) values (:title, :code, :author_name, :author_www, :modules_group)');
-      $Qinstall->bindValue(':title', $this->_title);
-      $Qinstall->bindValue(':code', $this->_code);
-      $Qinstall->bindValue(':author_name', $this->_author_name);
-      $Qinstall->bindValue(':author_www', $this->_author_www);
-      $Qinstall->bindValue(':modules_group', 'payment');
-      $Qinstall->execute();
+      $data = array('title' => $this->_title,
+                    'code' => $this->_code,
+                    'author_name' => $this->_author_name,
+                    'author_www' => $this->_author_www,
+                    'group' => 'Payment');
+
+      OSCOM::callDB('Admin\InsertModule', $data, 'Site');
 
       foreach ( $OSCOM_Language->getAll() as $key => $value ) {
         if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $key . '/modules/payment/' . $this->_code . '.xml') ) {
           foreach ( $OSCOM_Language->extractDefinitions($key . '/modules/payment/' . $this->_code . '.xml') as $def ) {
-            $Qcheck = $OSCOM_Database->query('select id from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id limit 1');
-            $Qcheck->bindValue(':definition_key', $def['key']);
-            $Qcheck->bindValue(':content_group', $def['group']);
-            $Qcheck->bindInt(':languages_id', $value['id']);
-            $Qcheck->execute();
+            $def['id'] = $value['id'];
 
-            if ( $Qcheck->numberOfRows() === 1 ) {
-              $Qdef = $OSCOM_Database->query('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and content_group = :content_group and languages_id = :languages_id');
-            } else {
-              $Qdef = $OSCOM_Database->query('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
-            }
-            $Qdef->bindInt(':languages_id', $value['id']);
-            $Qdef->bindValue(':content_group', $def['group']);
-            $Qdef->bindValue(':definition_key', $def['key']);
-            $Qdef->bindValue(':definition_value', $def['value']);
-            $Qdef->execute();
+            OSCOM::callDB('Admin\InsertLanguageDefinition', $def, 'Site');
           }
         }
       }
@@ -96,26 +82,22 @@
     }
 
     public function remove() {
-      $OSCOM_Database = Registry::get('Database');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qdel = $OSCOM_Database->query('delete from :table_templates_boxes where code = :code and modules_group = :modules_group');
-      $Qdel->bindValue(':code', $this->_code);
-      $Qdel->bindValue(':modules_group', 'payment');
-      $Qdel->execute();
+      $data = array('code' => $this->_code,
+                    'group' => 'Payment');
+
+      OSCOM::callDB('Admin\DeleteModule', $data, 'Site');
 
       if ( $this->hasKeys() ) {
-        $Qdel = $OSCOM_Database->query('delete from :table_configuration where configuration_key in (":configuration_key")');
-        $Qdel->bindRaw(':configuration_key', implode('", "', $this->getKeys()));
-        $Qdel->execute();
+        OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->getKeys(), 'Site');
+
+        Cache::clear('configuration');
       }
 
       if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml') ) {
         foreach ( $OSCOM_Language->extractDefinitions($OSCOM_Language->getCode() . '/modules/payment/' . $this->_code . '.xml') as $def ) {
-          $Qdel = $OSCOM_Database->query('delete from :table_languages_definitions where definition_key = :definition_key and content_group = :content_group');
-          $Qdel->bindValue(':definition_key', $def['key']);
-          $Qdel->bindValue(':content_group', $def['group']);
-          $Qdel->execute();
+          OSCOM::callDB('Admin\DeleteLanguageDefinitions', $def, 'Site');
         }
 
         Cache::clear('languages');

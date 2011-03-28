@@ -14,7 +14,7 @@
 
   class Find {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
@@ -27,14 +27,14 @@
       $sql_query .= '; select found_rows();';
 
 
-      $Qgroups = $OSCOM_Database->prepare($sql_query);
+      $Qgroups = $OSCOM_PDO->prepare($sql_query);
       $Qgroups->bindValue(':geo_zone_name', '%' . $data['keywords'] . '%');
       $Qgroups->bindValue(':geo_zone_description', '%' . $data['keywords'] . '%');
       $Qgroups->bindValue(':countries_name', '%' . $data['keywords'] . '%');
       $Qgroups->bindValue(':zone_name', '%' . $data['keywords'] . '%');
 
       if ( $data['batch_pageset'] !== -1 ) {
-        $Qgroups->bindInt(':batch_pageset', $OSCOM_Database->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
+        $Qgroups->bindInt(':batch_pageset', $OSCOM_PDO->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
         $Qgroups->bindInt(':batch_max_results', $data['batch_max_results']);
       }
 

@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\HTML;
+
 /**
  * The osC_ObjectInfo class wraps an object instance around an array data set
  */
@@ -55,7 +57,7 @@
  */
 
     public function getProtected($key) {
-      return osc_output_string_protected($this->_data[$key]);
+      return HTML::outputProtected($this->_data[$key]);
     }
 
 /**
@@ -100,6 +102,10 @@
 
     public function exists($key) {
       return isset($this->_data[$key]);
+    }
+
+    public static function to($array) {
+      return new static($array);
     }
   }
 ?>

@@ -9,6 +9,7 @@
 */
 
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\HTML;
 
   $www_location = 'http://' . $_SERVER['HTTP_HOST'];
 
@@ -122,7 +123,7 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_web_address') . '<br />' . osc_draw_input_field('HTTP_WWW_ADDRESS', $www_location, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_web_address') . '<br />' . HTML::inputField('HTTP_WWW_ADDRESS', $www_location, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_web_address_description'); ?></td>
       </tr>
     </table>
@@ -133,36 +134,36 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_server') . '<br />' . osc_draw_input_field('DB_SERVER', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_server') . '<br />' . HTML::inputField('DB_SERVER', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_server_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_username') . '<br />' . osc_draw_input_field('DB_SERVER_USERNAME', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_username') . '<br />' . HTML::inputField('DB_SERVER_USERNAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_username_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_password') . '<br />' . osc_draw_input_field('DB_SERVER_PASSWORD', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_password') . '<br />' . HTML::inputField('DB_SERVER_PASSWORD', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_password_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_name') . '<br />' . osc_draw_input_field('DB_DATABASE', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_name') . '<br />' . HTML::inputField('DB_DATABASE', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_name_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_port') . '<br />' . osc_draw_input_field('DB_SERVER_PORT', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_port') . '<br />' . HTML::inputField('DB_SERVER_PORT', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_port_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_type') . '<br />' . osc_draw_pull_down_menu('DB_DATABASE_CLASS', $db_table_types); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_type') . '<br />' . HTML::selectMenu('DB_DATABASE_CLASS', $db_table_types); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_type_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_database_prefix') . '<br />' . osc_draw_input_field('DB_TABLE_PREFIX', 'osc_', 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_database_prefix') . '<br />' . HTML::inputField('DB_TABLE_PREFIX', 'osc_', 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_prefix_description'); ?></td>
       </tr>
     </table>
 
-    <p align="right"><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+    <p align="right"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
     </form>
   </div>

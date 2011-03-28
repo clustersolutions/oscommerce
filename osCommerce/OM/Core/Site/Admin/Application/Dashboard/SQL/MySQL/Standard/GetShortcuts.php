@@ -14,9 +14,9 @@
 
   class GetShortcuts {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qshortcuts = $OSCOM_Database->prepare('select module, last_viewed from :table_administrator_shortcuts where administrators_id = :administrators_id');
+      $Qshortcuts = $OSCOM_PDO->prepare('select module, last_viewed from :table_administrator_shortcuts where administrators_id = :administrators_id');
       $Qshortcuts->bindInt(':administrators_id', $data['admin_id']);
       $Qshortcuts->execute();
 

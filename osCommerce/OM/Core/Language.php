@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\HTML;
+
   class Language {
 
 /* Private variables */
@@ -244,7 +246,7 @@
         $height = 10;
       }
 
-      return osc_image('images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
+      return HTML::image('images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
     }
   }
 ?>

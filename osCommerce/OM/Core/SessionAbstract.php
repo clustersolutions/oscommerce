@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\OSCOM;
+
 /**
  * The Session class manages the session data and custom storage handlers
  */
@@ -75,7 +77,7 @@
         $this->_life_time = ini_get('session.gc_maxlifetime');
       }
 
-      session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_PATH : HTTPS_COOKIE_PATH), ((OSCOM::getRequestType() == 'NONSSL') ? HTTP_COOKIE_DOMAIN : HTTPS_COOKIE_DOMAIN));
+      session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')));
 
       $sane_session_id = true;
 

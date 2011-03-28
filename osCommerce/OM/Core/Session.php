@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\OSCOM;
+
 /**
  * The Session class initializes the session storage handler
  */
@@ -24,7 +26,7 @@
  */
 
     public static function load($name = null) {
-      $class_name = 'osCommerce\\OM\\Core\\Session\\' . STORE_SESSIONS;
+      $class_name = 'osCommerce\\OM\\Core\\Session\\' . OSCOM::getConfig('store_sessions');
 
       if ( class_exists($class_name) ) {
         return new $class_name($name);

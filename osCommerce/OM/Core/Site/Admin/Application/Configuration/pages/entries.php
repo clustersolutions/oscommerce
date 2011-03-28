@@ -8,10 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -20,9 +21,9 @@
 ?>
 
 <form id="liveSearchForm">
-  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -38,13 +39,13 @@
       <th width="35%;"><?php echo OSCOM::getDef('table_heading_title'); ?></th>
       <th><?php echo OSCOM::getDef('table_heading_value'); ?></th>
       <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo '<input type="image" src="' . osc_icon_raw('edit.png') . '" title="' . OSCOM::getDef('icon_edit') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveEntries&id=' . $_GET['id']) . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="3"><?php echo HTML::imageSubmit(HTML::iconRaw('edit.png'), OSCOM::getDef('icon_edit'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveEntries&id=' . $_GET['id']) . '\';"'); ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
   <tbody>
@@ -54,7 +55,7 @@
 </form>
 
 <div style="padding: 2px; min-height: 16px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -74,7 +75,7 @@
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAllEntries&id=' . $_GET['id']); ?>';
 
   var configEditLink = '<?php echo OSCOM::getLink(null, null, 'EntrySave&id=' . (int)$_GET['id'] . '&pID=CONFIGID'); ?>';
-  var configEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var configEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

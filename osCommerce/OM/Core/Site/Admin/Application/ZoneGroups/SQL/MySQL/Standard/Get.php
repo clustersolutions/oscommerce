@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qzones = $OSCOM_Database->prepare('select gz.*, count(z2gz.association_id) as total_entries from :table_geo_zones gz left join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id) where gz.geo_zone_id = :geo_zone_id');
+      $Qzones = $OSCOM_PDO->prepare('select gz.*, count(z2gz.association_id) as total_entries from :table_geo_zones gz left join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id) where gz.geo_zone_id = :geo_zone_id');
       $Qzones->bindInt(':geo_zone_id', $data['id']);
       $Qzones->execute();
 

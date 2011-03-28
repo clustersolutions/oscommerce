@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('MSSQL');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Q = $OSCOM_Database->query('EXEC CountriesGet :countries_id');
+      $Q = $OSCOM_PDO->prepare('EXEC CountriesGet :countries_id');
       $Q->bindInt(':countries_id', $data['id']);
       $Q->execute();
 
@@ -25,8 +25,6 @@
       $Q->nextResultSet();
 
       $result_2 = $Q->toArray();
-
-      $Q->freeResult();
 
       return array_merge($result_1, $result_2);
     }

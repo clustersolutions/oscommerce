@@ -8,10 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -20,9 +21,9 @@
 ?>
 
 <form id="liveSearchForm">
-  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'UpdateRates'), 'icon' => 'refresh', 'title' => OSCOM::getDef('button_update_currency_exchange_rates'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'UpdateRates'), 'icon' => 'refresh', 'title' => OSCOM::getDef('button_update_currency_exchange_rates'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -39,13 +40,13 @@
       <th><?php echo OSCOM::getDef('table_heading_code'); ?></th>
       <th><?php echo OSCOM::getDef('table_heading_value'); ?></th>
       <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="4"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . OSCOM::getDef('icon_trash') . '" onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDelete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="4"><?php echo HTML::imageSubmit(HTML::iconRaw('trash.png'), OSCOM::getDef('icon_trash'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDelete') . '\';"'); ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
   <tbody>
@@ -55,7 +56,7 @@
 </form>
 
 <div style="padding: 2px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . HTML::icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -75,10 +76,10 @@
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
 
   var cEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=CID'); ?>';
-  var cEditLinkIcon = '<?php echo osc_icon('edit.png'); ?>';
+  var cEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
 
   var cDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&id=CID'); ?>';
-  var cDeleteLinkIcon = '<?php echo osc_icon('trash.png'); ?>';
+  var cDeleteLinkIcon = '<?php echo HTML::icon('trash.png'); ?>';
 
   var defaultCurrency = '<?php echo DEFAULT_CURRENCY; ?>';
   var defaultText = '<?php echo addslashes(OSCOM::getDef('default_entry')); ?>';

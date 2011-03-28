@@ -14,9 +14,9 @@
 
   class UpdateRate {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qupdate = $OSCOM_Database->prepare('update :table_currencies set value = :value, last_updated = now() where currencies_id = :currencies_id');
+      $Qupdate = $OSCOM_PDO->prepare('update :table_currencies set value = :value, last_updated = now() where currencies_id = :currencies_id');
       $Qupdate->bindValue(':value', $data['rate']);
       $Qupdate->bindInt(':currencies_id', $data['id']);
       $Qupdate->execute();

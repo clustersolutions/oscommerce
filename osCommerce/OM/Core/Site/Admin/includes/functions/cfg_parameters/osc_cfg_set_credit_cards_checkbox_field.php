@@ -8,16 +8,17 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Registry;
 
   function osc_cfg_set_credit_cards_checkbox_field($default, $key = null) {
-    $OSCOM_Database = Registry::get('Database');
+    $OSCOM_PDO = Registry::get('PDO');
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . '][]';
 
     $cc_array = array();
 
-    $Qcc = $OSCOM_Database->query('select id, credit_card_name from :table_credit_cards where credit_card_status = :credit_card_status order by sort_order, credit_card_name');
+    $Qcc = $OSCOM_PDO->prepare('select id, credit_card_name from :table_credit_cards where credit_card_status = :credit_card_status order by sort_order, credit_card_name');
     $Qcc->bindInt(':credit_card_status', 1);
     $Qcc->execute();
 
@@ -26,6 +27,6 @@
                           'text' => $Qcc->value('credit_card_name'));
     }
 
-    return osc_draw_checkbox_field($name, $cc_array, explode(',', $default), null, '<br />');
+    return HTML::checkboxField($name, $cc_array, explode(',', $default), null, '<br />');
   }
 ?>

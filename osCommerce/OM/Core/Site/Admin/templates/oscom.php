@@ -8,15 +8,15 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\Access;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\Access;
 ?>
 
-<?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" xml:lang="<?php echo $OSCOM_Language->getCode(); ?>">
+<html dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" lang="<?php echo $OSCOM_Language->getCode(); ?>">
 
 <head>
 
@@ -57,11 +57,11 @@
   var batchSize = parseInt('<?php echo MAX_DISPLAY_SEARCH_RESULTS; ?>');
   var batchTotalPagesText = '<?php echo addslashes(OSCOM::getDef('batch_results_number_of_entries')); ?>';
   var batchCurrentPageset = '<?php echo addslashes(OSCOM::getDef('result_set_current_page')); ?>';
-  var batchIconNavigationBack = '<?php echo osc_icon('nav_back.png'); ?>';
-  var batchIconNavigationBackGrey = '<?php echo osc_icon('nav_back_grey.png'); ?>';
-  var batchIconNavigationForward = '<?php echo osc_icon('nav_forward.png'); ?>';
-  var batchIconNavigationForwardGrey = '<?php echo osc_icon('nav_forward_grey.png'); ?>';
-  var batchIconProgress = '<?php echo osc_icon('progress_ani.gif'); ?>';
+  var batchIconNavigationBack = '<?php echo HTML::icon('nav_back.png'); ?>';
+  var batchIconNavigationBackGrey = '<?php echo HTML::icon('nav_back_grey.png'); ?>';
+  var batchIconNavigationForward = '<?php echo HTML::icon('nav_forward.png'); ?>';
+  var batchIconNavigationForwardGrey = '<?php echo HTML::icon('nav_forward_grey.png'); ?>';
+  var batchIconProgress = '<?php echo HTML::icon('progress_ani.gif'); ?>';
 
   var taxDecimalPlaces = parseInt('<?php echo TAX_DECIMAL_PLACES; ?>');
 </script>

@@ -46,7 +46,7 @@
 
       $dbh = parent::__construct($dsn, $this->_username, $this->_password, $this->_driver_options);
 
-      if ( $this->_has_native_fk === false ) {
+      if ( defined('DB_SERVER') && $this->_has_native_fk === false ) {
         $this->setupForeignKeys();
       }
 
@@ -62,8 +62,8 @@
     }
 
     public function setupForeignKeys() {
-      $Qfk = $this->prepare('select * from :table_fk_relationships');
-//      $Qfk->setCache('fk_relationships');
+      $Qfk = $this->query('select * from :table_fk_relationships');
+//      $Qfk->setCache('fk_relationships'); HPDL
       $Qfk->execute();
 
       while ( $Qfk->next() ) {

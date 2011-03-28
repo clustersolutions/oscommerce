@@ -14,9 +14,9 @@
 
   class GetTime {
     public static function execute() {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $result = $OSCOM_Database->query('select now() as datetime')->fetch();
+      $result = $OSCOM_PDO->query('select now() as datetime')->fetch();
 
       return $result['datetime'];
     }

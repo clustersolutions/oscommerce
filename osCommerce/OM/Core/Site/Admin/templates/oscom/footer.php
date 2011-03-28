@@ -19,8 +19,10 @@
   This comment block must be left intact with the displayed
   copyright announcement.
 */
+
+  use osCommerce\OM\Core\OSCOM;
 ?>
 
-<p align="center">osCommerce Online Merchant Copyright &copy; 2000-2010 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty. osCommerce Online Merchant is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License v2 (1991)</a></p>
+<p align="center">osCommerce Online Merchant Copyright &copy; 2000-2011 <a href="http://www.oscommerce.com" target="_blank">osCommerce</a> (<a href="http://www.oscommerce.com/about/copyright" target="_blank">Copyright Policy</a>, <a href="http://www.oscommerce.com/about/trademark" target="_blank">Trademark Policy</a>)<br />osCommerce provides no warranty. osCommerce Online Merchant is redistributable under the <a href="http://www.fsf.org/licenses/gpl.txt" target="_blank">GNU General Public License v2 (1991)</a></p>
 
-<div style="text-align: center; padding: 5px;"><span class="poweredByButton"><a href="http://www.oscommerce.com" target="_blank"><span class="poweredBy">Powered By</span><span class="osCommerce"><?php echo PROJECT_VERSION; ?></span></a></span></div>
+<div style="text-align: center; padding: 5px;"><span class="poweredByButton"><a href="http://www.oscommerce.com" target="_blank"><span class="poweredBy">Powered By</span><span class="osCommerce"><?php echo 'osCommerce Online Merchant v' . OSCOM::getVersion(); ?></span></a></span></div>

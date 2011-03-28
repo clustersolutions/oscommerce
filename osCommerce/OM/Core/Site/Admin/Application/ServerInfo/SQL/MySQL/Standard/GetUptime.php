@@ -14,9 +14,9 @@
 
   class GetUptime {
     public static function execute() {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $result = $OSCOM_Database->query('show status like "Uptime"')->fetch();
+      $result = $OSCOM_PDO->query('show status like "Uptime"')->fetch();
 
       return intval($result['Value'] / 3600) . ':' . str_pad(intval(($result['Value'] / 60) % 60), 2, '0', STR_PAD_LEFT);
     }

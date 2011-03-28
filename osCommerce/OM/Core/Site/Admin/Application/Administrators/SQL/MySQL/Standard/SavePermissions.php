@@ -15,18 +15,18 @@
 
   class SavePermissions { // HPDL Albert would proudly say "Hey, hey, hey, it's a faattt SQL module!"; abstraction needed
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $error = false;
 
-      $OSCOM_Database->beginTransaction();
+      $OSCOM_PDO->beginTransaction();
 
       if ( ($data['mode'] == Administrators::ACCESS_MODE_ADD) || ($data['mode'] == Administrators::ACCESS_MODE_SET) ) {
         foreach ( $data['modules'] as $module ) {
           $execute = true;
 
           if ( $module != '*' ) {
-            $Qcheck = $OSCOM_Database->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
+            $Qcheck = $OSCOM_PDO->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
             $Qcheck->bindInt(':administrators_id', $data['id']);
             $Qcheck->bindValue(':module', '*');
             $Qcheck->execute();
@@ -37,13 +37,13 @@
           }
 
           if ( $execute === true ) {
-            $Qcheck = $OSCOM_Database->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
+            $Qcheck = $OSCOM_PDO->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
             $Qcheck->bindInt(':administrators_id', $data['id']);
             $Qcheck->bindValue(':module', $module);
             $Qcheck->execute();
 
             if ( $Qcheck->fetch() === false ) {
-              $Qinsert = $OSCOM_Database->prepare('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
+              $Qinsert = $OSCOM_PDO->prepare('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
               $Qinsert->bindInt(':administrators_id', $data['id']);
               $Qinsert->bindValue(':module', $module);
               $Qinsert->execute();
@@ -70,7 +70,7 @@
               $sql_query .= ' and module not in ("' . implode('", "', $data['modules']) . '")'; // HPDL create bindRaw()?
             }
 
-            $Qdel = $OSCOM_Database->prepare($sql_query);
+            $Qdel = $OSCOM_PDO->prepare($sql_query);
             $Qdel->bindInt(':administrators_id', $data['id']);
             $Qdel->execute();
 
@@ -83,12 +83,12 @@
       }
 
       if ( $error === false ) {
-        $OSCOM_Database->commit();
+        $OSCOM_PDO->commit();
 
         return true;
       }
 
-      $OSCOM_Database->rollBack();
+      $OSCOM_PDO->rollBack();
 
       return false;
     }

@@ -14,9 +14,9 @@
 
   class UpdateAppLastOpened {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qreset = $OSCOM_Database->prepare('update :table_administrator_shortcuts set last_viewed = now() where administrators_id = :administrators_id and module = :module');
+      $Qreset = $OSCOM_PDO->prepare('update :table_administrator_shortcuts set last_viewed = now() where administrators_id = :administrators_id and module = :module');
       $Qreset->bindInt(':administrators_id', $data['admin_id']);
       $Qreset->bindValue(':module', $data['application']);
       $Qreset->execute();

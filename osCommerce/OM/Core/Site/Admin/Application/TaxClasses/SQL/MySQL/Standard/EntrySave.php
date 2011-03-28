@@ -14,13 +14,13 @@
 
   class EntrySave {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( isset($data['id']) && is_numeric($data['id']) ) {
-        $Qrate = $OSCOM_Database->prepare('update :table_tax_rates set tax_zone_id = :tax_zone_id, tax_priority = :tax_priority, tax_rate = :tax_rate, tax_description = :tax_description, last_modified = now() where tax_rates_id = :tax_rates_id');
+        $Qrate = $OSCOM_PDO->prepare('update :table_tax_rates set tax_zone_id = :tax_zone_id, tax_priority = :tax_priority, tax_rate = :tax_rate, tax_description = :tax_description, last_modified = now() where tax_rates_id = :tax_rates_id');
         $Qrate->bindInt(':tax_rates_id', $data['id']);
       } else {
-        $Qrate = $OSCOM_Database->prepare('insert into :table_tax_rates (tax_zone_id, tax_class_id, tax_priority, tax_rate, tax_description, date_added) values (:tax_zone_id, :tax_class_id, :tax_priority, :tax_rate, :tax_description, now())');
+        $Qrate = $OSCOM_PDO->prepare('insert into :table_tax_rates (tax_zone_id, tax_class_id, tax_priority, tax_rate, tax_description, date_added) values (:tax_zone_id, :tax_class_id, :tax_priority, :tax_rate, :tax_description, now())');
         $Qrate->bindInt(':tax_class_id', $data['tax_class_id']);
       }
 

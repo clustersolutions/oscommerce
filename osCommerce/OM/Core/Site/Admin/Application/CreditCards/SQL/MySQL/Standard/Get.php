@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcc = $OSCOM_Database->prepare('select * from :table_credit_cards where id = :id');
+      $Qcc = $OSCOM_PDO->prepare('select * from :table_credit_cards where id = :id');
       $Qcc->bindInt(':id', $data['id']);
       $Qcc->execute();
 

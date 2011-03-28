@@ -36,7 +36,7 @@
           unset($_SESSION[OSCOM::getSite()]['redirect_origin']);
         }
 
-        osc_redirect_admin(OSCOM::getLink(null, $to_application));
+        OSCOM::redirect(OSCOM::getLink(null, $to_application));
       } else {
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_login_invalid'), 'error');
       }

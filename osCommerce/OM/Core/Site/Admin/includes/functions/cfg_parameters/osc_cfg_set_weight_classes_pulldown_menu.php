@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Site\Shop\Weight;
 
   function osc_cfg_set_weight_classes_pulldown_menu($default, $key = null) {
@@ -20,6 +21,6 @@
                                     'text' => $class['title']);
     }
 
-    return osc_draw_pull_down_menu($name, $weight_class_array, $default);
+    return HTML::selectMenu($name, $weight_class_array, $default);
   }
 ?>

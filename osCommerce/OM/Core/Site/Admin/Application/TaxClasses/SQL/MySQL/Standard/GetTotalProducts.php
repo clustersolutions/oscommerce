@@ -14,9 +14,9 @@
 
   class GetTotalProducts {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qtotal = $OSCOM_Database->prepare('select count(*) as total from :table_products where products_tax_class_id = :products_tax_class_id');
+      $Qtotal = $OSCOM_PDO->prepare('select count(*) as total from :table_products where products_tax_class_id = :products_tax_class_id');
       $Qtotal->bindInt(':products_tax_class_id', $data['id']);
       $Qtotal->execute();
 

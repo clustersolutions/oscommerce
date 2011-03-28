@@ -14,9 +14,9 @@
 
   class GetAdmin {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qadmin = $OSCOM_Database->prepare('select top 1 id, user_name, user_password from :table_administrators where user_name = :user_name');
+      $Qadmin = $OSCOM_PDO->prepare('select top 1 id, user_name, user_password from :table_administrators where user_name = :user_name');
       $Qadmin->bindValue(':user_name', $data['username']);
       $Qadmin->execute();
 

@@ -29,12 +29,12 @@
  */
 
     public static function format($address, $new_line = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $address_format = '';
 
       if ( is_numeric($address) ) {
-        $Qaddress = $OSCOM_Database->query('select ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.address_book_id = :address_book_id and ab.entry_country_id = c.countries_id');
+        $Qaddress = $OSCOM_PDO->prepare('select ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.address_book_id = :address_book_id and ab.entry_country_id = c.countries_id');
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
@@ -113,14 +113,14 @@
  */
 
     public static function getCountries() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       static $countries;
 
       if ( !isset($countries) ) {
         $countries = array();
 
-        $Qcountries = $OSCOM_Database->query('select * from :table_countries order by countries_name');
+        $Qcountries = $OSCOM_PDO->query('select * from :table_countries order by countries_name');
         $Qcountries->execute();
 
         while ( $Qcountries->next() ) {
@@ -144,9 +144,9 @@
  */
 
     public static function getCountryName($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcountry = $OSCOM_Database->query('select countries_name from :table_countries where countries_id = :countries_id');
+      $Qcountry = $OSCOM_PDO->prepare('select countries_name from :table_countries where countries_id = :countries_id');
       $Qcountry->bindInt(':countries_id', $id);
       $Qcountry->execute();
 
@@ -162,9 +162,9 @@
  */
 
     public static function getCountryIsoCode2($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcountry = $OSCOM_Database->query('select countries_iso_code_2 from :table_countries where countries_id = :countries_id');
+      $Qcountry = $OSCOM_PDO->prepare('select countries_iso_code_2 from :table_countries where countries_id = :countries_id');
       $Qcountry->bindInt(':countries_id', $id);
       $Qcountry->execute();
 
@@ -180,9 +180,9 @@
  */
 
     public static function getCountryIsoCode3($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcountry = $OSCOM_Database->query('select countries_iso_code_3 from :table_countries where countries_id = :countries_id');
+      $Qcountry = $OSCOM_PDO->prepare('select countries_iso_code_3 from :table_countries where countries_id = :countries_id');
       $Qcountry->bindInt(':countries_id', $id);
       $Qcountry->execute();
 
@@ -198,9 +198,9 @@
  */
 
     public static function getFormat($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcountry = $OSCOM_Database->query('select address_format from :table_countries where countries_id = :countries_id');
+      $Qcountry = $OSCOM_PDO->prepare('select address_format from :table_countries where countries_id = :countries_id');
       $Qcountry->bindInt(':countries_id', $id);
       $Qcountry->execute();
 
@@ -216,9 +216,9 @@
  */
 
     public static function getZoneName($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qzone = $OSCOM_Database->query('select zone_name from :table_zones where zone_id = :zone_id');
+      $Qzone = $OSCOM_PDO->prepare('select zone_name from :table_zones where zone_id = :zone_id');
       $Qzone->bindInt(':zone_id', $id);
       $Qzone->execute();
 
@@ -234,9 +234,9 @@
  */
 
     public static function getZoneCode($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qzone = $OSCOM_Database->query('select zone_code from :table_zones where zone_id = :zone_id');
+      $Qzone = $OSCOM_PDO->prepare('select zone_code from :table_zones where zone_id = :zone_id');
       $Qzone->bindInt(':zone_id', $id);
       $Qzone->execute();
 
@@ -252,18 +252,25 @@
  */
 
     public static function getZones($id = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $zones_array = array();
 
-      $Qzones = $OSCOM_Database->query('select z.zone_id, z.zone_country_id, z.zone_name, c.countries_name from :table_zones z, :table_countries c where');
+      $sql_query = 'select z.zone_id, z.zone_country_id, z.zone_name, c.countries_name from :table_zones z, :table_countries c where';
 
       if ( !empty($id) ) {
-        $Qzones->appendQuery('z.zone_country_id = :zone_country_id and');
-        $Qzones->bindInt(':zone_country_id', $id);
+        $sql_query .= ' z.zone_country_id = :zone_country_id and';
       }
 
-      $Qzones->appendQuery('z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name');
+      $sql_query .= ' z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name';
+
+      if ( !empty($id) ) {
+        $Qzones = $OSCOM_PDO->prepare($sql_query);
+        $Qzones->bindInt(':zone_country_id', $id);
+      } else {
+        $Qzones = $OSCOM_PDO->query($sql_query);
+      }
+
       $Qzones->execute();
 
       while ( $Qzones->next() ) {

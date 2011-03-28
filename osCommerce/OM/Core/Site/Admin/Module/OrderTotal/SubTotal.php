@@ -11,7 +11,6 @@
   namespace osCommerce\OM\Core\Site\Admin\Module\OrderTotal;
 
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
 
   class SubTotal extends \osCommerce\OM\Core\Site\Admin\OrderTotal {
     var $_title,
@@ -29,25 +28,31 @@
     }
 
     public function isInstalled() {
-      return (bool)defined('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS');
+      return defined('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS');
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
-
       parent::install();
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Sub-Total', 'MODULE_ORDER_TOTAL_SUBTOTAL_STATUS', 'true', 'Do you want to display the order sub-total cost?', '6', '1', 'osc_cfg_set_boolean_value(array(\'true\', \'false\'))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER', '1', 'Sort order of display.', '6', '2', now())");
+      $data = array(array('title' => 'Display Sub-Total',
+                          'key' => 'MODULE_ORDER_TOTAL_SUBTOTAL_STATUS',
+                          'value' => 'true',
+                          'description' => 'Do you want to display the order sub-total cost?',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'true\', \'false\'))'),
+                    array('title' => 'Sort Order',
+                          'key' => 'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER',
+                          'value' => '1',
+                          'description' => 'Sort order of display.',
+                          'group_id' => '6')
+                   );
+
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
     public function getKeys() {
-      if ( !isset($this->_keys) ) {
-        $this->_keys = array('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS',
-                             'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER');
-      }
-
-      return $this->_keys;
+      return array('MODULE_ORDER_TOTAL_SUBTOTAL_STATUS',
+                   'MODULE_ORDER_TOTAL_SUBTOTAL_SORT_ORDER');
     }
   }
 ?>

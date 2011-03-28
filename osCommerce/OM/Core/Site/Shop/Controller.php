@@ -10,28 +10,27 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\MessageStack;
   use osCommerce\OM\Core\Cache;
   use osCommerce\OM\Core\Database;
+  use osCommerce\OM\Core\MessageStack;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\PDO;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Template;
-
-  use osCommerce\OM\Core\DatabasePDO;
 
   class Controller implements \osCommerce\OM\Core\SiteInterface {
     protected static $_default_application = 'Index';
 
     public static function initialize() {
-      if ( strlen(DB_SERVER) < 1 ) {
-        osc_redirect(OSCOM::getLink('Setup'));
-      }
+      require('includes/functions/compatibility.php');
+      require('includes/functions/general.php');
+      require('includes/functions/html_output.php');
 
       Registry::set('MessageStack', new MessageStack());
       Registry::set('Cache', new Cache());
       Registry::set('Database', Database::initialize());
 
-      Registry::set('PDO', DatabasePDO::initialize());
+      Registry::set('PDO', PDO::initialize());
 
       $Qcfg = Registry::get('Database')->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
       $Qcfg->setCache('configuration');

@@ -34,7 +34,7 @@
         $OSCOM_MessageStack->add('debug', sprintf(OSCOM::getDef('warning_config_file_writeable'), OSCOM::BASE_DIRECTORY . 'config.php'), 'warning');
       }
 
-      if ((SERVICE_DEBUG_CHECK_SESSION_DIRECTORY == '1') && (STORE_SESSIONS == '')) {
+      if ( (SERVICE_DEBUG_CHECK_SESSION_DIRECTORY == '1') && (OSCOM::getConfig('store_sessions') == '') ) {
         if (!is_dir(OSCOM_Registry::get('Session')->getSavePath())) {
           $osC_MessageStack->add('debug', sprintf($osC_Language->get('warning_session_directory_non_existent'), OSCOM_Registry::get('Session')->getSavePath()) . ' [' . __CLASS__ . ']', 'warning');
         } elseif (!is_writeable(OSCOM_Registry::get('Session')->getSavePath())) {

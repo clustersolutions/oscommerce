@@ -30,15 +30,17 @@
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array('title' => 'Special Products',
+                    'key' => 'MAX_DISPLAY_SPECIAL_PRODUCTS',
+                    'value' => '9',
+                    'description' => 'Maximum number of products on special to display',
+                    'group_id' => '6');
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Special Products', 'MAX_DISPLAY_SPECIAL_PRODUCTS', '9', 'Maximum number of products on special to display', '6', '0', now())");
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
     public function remove() {
-      $OSCOM_Database = Registry::get('Database');
-
-      $OSCOM_Database->simpleQuery("delete from " . DB_TABLE_PREFIX . "configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
     }
 
     public function keys() {

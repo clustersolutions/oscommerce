@@ -14,11 +14,11 @@
 
   class ZoneGetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qzones = $OSCOM_Database->prepare('select * from :table_zones where zone_country_id = :zone_country_id order by zone_name');
+      $Qzones = $OSCOM_PDO->prepare('select * from :table_zones where zone_country_id = :zone_country_id order by zone_name');
       $Qzones->bindInt(':zone_country_id', $data['country_id']);
       $Qzones->execute();
 

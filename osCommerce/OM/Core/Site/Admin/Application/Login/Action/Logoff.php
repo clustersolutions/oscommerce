@@ -20,7 +20,7 @@
 
       Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_logged_out'), 'success');
 
-      osc_redirect_admin(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
+      OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
     }
   }
 ?>

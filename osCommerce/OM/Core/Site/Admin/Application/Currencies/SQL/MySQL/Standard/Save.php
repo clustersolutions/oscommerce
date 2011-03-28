@@ -14,15 +14,15 @@
 
   class Save {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $OSCOM_Database->beginTransaction();
+      $OSCOM_PDO->beginTransaction();
 
       if ( is_numeric($data['id']) ) {
-        $Qcurrency = $OSCOM_Database->prepare('update :table_currencies set title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_places = :decimal_places, value = :value where currencies_id = :currencies_id');
+        $Qcurrency = $OSCOM_PDO->prepare('update :table_currencies set title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_places = :decimal_places, value = :value where currencies_id = :currencies_id');
         $Qcurrency->bindInt(':currencies_id', $data['id']);
       } else {
-        $Qcurrency = $OSCOM_Database->prepare('insert into :table_currencies (title, code, symbol_left, symbol_right, decimal_places, value) values (:title, :code, :symbol_left, :symbol_right, :decimal_places, :value)');
+        $Qcurrency = $OSCOM_PDO->prepare('insert into :table_currencies (title, code, symbol_left, symbol_right, decimal_places, value) values (:title, :code, :symbol_left, :symbol_right, :decimal_places, :value)');
       }
 
       $Qcurrency->bindValue(':title', $data['title']);
@@ -35,18 +35,18 @@
 
       if ( !$Qcurrency->isError() ) {
         if ( $data['set_default'] === true ) {
-          $Qupdate = $OSCOM_Database->prepare('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+          $Qupdate = $OSCOM_PDO->prepare('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
           $Qupdate->bindValue(':configuration_value', $data['code']);
           $Qupdate->bindValue(':configuration_key', 'DEFAULT_CURRENCY');
           $Qupdate->execute();
         }
 
-        $OSCOM_Database->commit();
+        $OSCOM_PDO->commit();
 
         return true;
       }
 
-      $OSCOM_Database->rollBack();
+      $OSCOM_PDO->rollBack();
 
       return false;
     }

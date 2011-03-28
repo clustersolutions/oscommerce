@@ -14,11 +14,11 @@
 
   class GetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qgroups = $OSCOM_Database->prepare('select cg.configuration_group_id, cg.configuration_group_title, count(c.configuration_id) as total_entries from :table_configuration_group cg, :table_configuration c where cg.visible = 1 and cg.configuration_group_id = c.configuration_group_id group by cg.configuration_group_id order by cg.sort_order, cg.configuration_group_title');
+      $Qgroups = $OSCOM_PDO->query('select cg.configuration_group_id, cg.configuration_group_title, count(c.configuration_id) as total_entries from :table_configuration_group cg, :table_configuration c where cg.visible = 1 and cg.configuration_group_id = c.configuration_group_id group by cg.configuration_group_id order by cg.sort_order, cg.configuration_group_title');
       $Qgroups->execute();
 
       $result['entries'] = $Qgroups->fetchAll();

@@ -14,11 +14,11 @@
 
   class GetAll {
     public static function execute() {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qpm = $OSCOM_Database->prepare('select code from :table_templates_boxes where modules_group = :modules_group order by code');
+      $Qpm = $OSCOM_PDO->prepare('select code from :table_templates_boxes where modules_group = :modules_group order by code');
       $Qpm->bindValue(':modules_group', 'Payment');
       $Qpm->execute();
 

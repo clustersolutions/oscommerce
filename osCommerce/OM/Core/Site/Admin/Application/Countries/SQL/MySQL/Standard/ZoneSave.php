@@ -14,13 +14,13 @@
 
   class ZoneSave {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( isset($data['id']) && is_numeric($data['id']) ) {
-        $Qzone = $OSCOM_Database->prepare('update :table_zones set zone_name = :zone_name, zone_code = :zone_code, zone_country_id = :zone_country_id where zone_id = :zone_id');
+        $Qzone = $OSCOM_PDO->prepare('update :table_zones set zone_name = :zone_name, zone_code = :zone_code, zone_country_id = :zone_country_id where zone_id = :zone_id');
         $Qzone->bindInt(':zone_id', $data['id']);
       } else {
-        $Qzone = $OSCOM_Database->prepare('insert into :table_zones (zone_name, zone_code, zone_country_id) values (:zone_name, :zone_code, :zone_country_id)');
+        $Qzone = $OSCOM_PDO->prepare('insert into :table_zones (zone_name, zone_code, zone_country_id) values (:zone_name, :zone_code, :zone_country_id)');
       }
 
       $Qzone->bindValue(':zone_name', $data['name']);

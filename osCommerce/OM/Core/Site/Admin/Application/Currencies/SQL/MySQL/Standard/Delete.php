@@ -14,14 +14,14 @@
 
   class Delete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcheck = $OSCOM_Database->prepare('select code from :table_currencies where currencies_id = :currencies_id');
+      $Qcheck = $OSCOM_PDO->prepare('select code from :table_currencies where currencies_id = :currencies_id');
       $Qcheck->bindInt(':currencies_id', $data['id']);
       $Qcheck->execute();
 
       if ( $Qcheck->value('code') != DEFAULT_CURRENCY ) {
-        $Qdelete = $OSCOM_Database->prepare('delete from :table_currencies where currencies_id = :currencies_id');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_currencies where currencies_id = :currencies_id');
         $Qdelete->bindInt(':currencies_id', $data['id']);
         $Qdelete->execute();
 

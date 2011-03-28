@@ -10,8 +10,9 @@
 
   namespace osCommerce\OM\Core\Site\Admin;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
   abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
     protected $_link_to = true;
@@ -32,13 +33,13 @@
         $action_index = 1;
 
         if ( count($_GET) > 1 ) {
-          $requested_action = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
+          $requested_action = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
 
           if ( $requested_action == OSCOM::getSiteApplication() ) {
             $requested_action = null;
 
             if ( count($_GET) > 2 ) {
-              $requested_action = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1, true))));
+              $requested_action = HTML::sanitize(basename(key(array_slice($_GET, 2, 1, true))));
 
               $action_index = 2;
             }
@@ -58,7 +59,7 @@
             $action = array($action);
 
             for ( $i = $action_index, $n = count($_GET); $i < $n; $i++ ) {
-              $subaction = osc_sanitize_string(basename(key(array_slice($_GET, $i, 1, true))));
+              $subaction = HTML::sanitize(basename(key(array_slice($_GET, $i, 1, true))));
 
               if ( $subaction != $OSCOM_Session->getName() && self::siteApplicationActionExists(implode('\\', $action) . '\\' . $subaction) ) {
                 call_user_func(array('osCommerce\\OM\\Core\\Site\\Admin\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $action) . '\\' . $subaction, 'execute'), $this);

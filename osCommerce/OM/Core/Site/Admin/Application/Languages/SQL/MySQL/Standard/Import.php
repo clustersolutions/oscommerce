@@ -14,20 +14,20 @@
 
   class Import {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $error = false;
       $add_category_and_product_placeholders = true;
 
-      $OSCOM_Database->beginTransaction();
+      $OSCOM_PDO->beginTransaction();
 
       if ( $data['id'] !== false ) {
         $add_category_and_product_placeholders = false;
 
-        $Qlanguage = $OSCOM_Database->prepare('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, parent_id = :parent_id where languages_id = :languages_id');
+        $Qlanguage = $OSCOM_PDO->prepare('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, parent_id = :parent_id where languages_id = :languages_id');
         $Qlanguage->bindInt(':languages_id', $data['id']);
       } else {
-        $Qlanguage = $OSCOM_Database->prepare('insert into :table_languages (name, code, locale, charset, date_format_short, date_format_long, time_format, text_direction, currencies_id, numeric_separator_decimal, numeric_separator_thousands, parent_id) values (:name, :code, :locale, :charset, :date_format_short, :date_format_long, :time_format, :text_direction, :currencies_id, :numeric_separator_decimal, :numeric_separator_thousands, :parent_id)');
+        $Qlanguage = $OSCOM_PDO->prepare('insert into :table_languages (name, code, locale, charset, date_format_short, date_format_long, time_format, text_direction, currencies_id, numeric_separator_decimal, numeric_separator_thousands, parent_id) values (:name, :code, :locale, :charset, :date_format_short, :date_format_long, :time_format, :text_direction, :currencies_id, :numeric_separator_decimal, :numeric_separator_thousands, :parent_id)');
       }
 
       $Qlanguage->bindValue(':name', $data['name']);
@@ -48,11 +48,11 @@
         $error = true;
       } else {
         if ( $data['id'] === false ) {
-          $data['id'] = $OSCOM_Database->lastInsertId();
+          $data['id'] = $OSCOM_PDO->lastInsertId();
         }
 
         if ( $data['import_type'] == 'replace' ) {
-          $Qdel =  $OSCOM_Database->prepare('delete from :table_languages_definitions where languages_id = :languages_id');
+          $Qdel =  $OSCOM_PDO->prepare('delete from :table_languages_definitions where languages_id = :languages_id');
           $Qdel->bindInt(':languages_id', $data['id']);
           $Qdel->execute();
 
@@ -70,7 +70,7 @@
           if ( $data['import_type'] == 'replace' ) {
             $insert = true;
           } else {
-            $Qcheck = $OSCOM_Database->prepare('select definition_key, content_group from :table_languages_definitions where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
+            $Qcheck = $OSCOM_PDO->prepare('select definition_key, content_group from :table_languages_definitions where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
             $Qcheck->bindValue(':definition_key', $def['key']);
             $Qcheck->bindInt(':languages_id', $data['id']);
             $Qcheck->bindValue(':content_group', $def['group']);
@@ -87,9 +87,9 @@
 
           if ( ($insert === true) || ($update === true) ) {
             if ( $insert === true ) {
-              $Qdef = $OSCOM_Database->prepare('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
+              $Qdef = $OSCOM_PDO->prepare('insert into :table_languages_definitions (languages_id, content_group, definition_key, definition_value) values (:languages_id, :content_group, :definition_key, :definition_value)');
             } else {
-              $Qdef = $OSCOM_Database->prepare('update :table_languages_definitions set content_group = :content_group, definition_key = :definition_key, definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
+              $Qdef = $OSCOM_PDO->prepare('update :table_languages_definitions set content_group = :content_group, definition_key = :definition_key, definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
               $Qdef->bindValue(':definition_key', $def['key']);
               $Qdef->bindValue(':content_group', $def['group']);
             }
@@ -110,12 +110,12 @@
 
       if ( $add_category_and_product_placeholders === true ) {
         if ( $error === false ) {
-          $Qcategories = $OSCOM_Database->prepare('select categories_id, categories_name from :table_categories_description where language_id = :language_id');
+          $Qcategories = $OSCOM_PDO->prepare('select categories_id, categories_name from :table_categories_description where language_id = :language_id');
           $Qcategories->bindInt(':language_id', $data['default_language_id']);
           $Qcategories->execute();
 
           while ( $Qcategories->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_categories_description (categories_id, language_id, categories_name) values (:categories_id, :language_id, :categories_name)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_categories_description (categories_id, language_id, categories_name) values (:categories_id, :language_id, :categories_name)');
             $Qinsert->bindInt(':categories_id', $Qcategories->valueInt('categories_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
             $Qinsert->bindValue(':categories_name', $Qcategories->value('categories_name'));
@@ -129,12 +129,12 @@
         }
 
         if ( $error === false ) {
-          $Qproducts = $OSCOM_Database->prepare('select products_id, products_name, products_description, products_keyword, products_tags, products_url from :table_products_description where language_id = :language_id');
+          $Qproducts = $OSCOM_PDO->prepare('select products_id, products_name, products_description, products_keyword, products_tags, products_url from :table_products_description where language_id = :language_id');
           $Qproducts->bindInt(':language_id', $data['default_language_id']);
           $Qproducts->execute();
 
           while ( $Qproducts->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_products_description (products_id, language_id, products_name, products_description, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_keyword, :products_tags, :products_url)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_description (products_id, language_id, products_name, products_description, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_keyword, :products_tags, :products_url)');
             $Qinsert->bindInt(':products_id', $Qproducts->valueInt('products_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
             $Qinsert->bindValue(':products_name', $Qproducts->value('products_name'));
@@ -152,12 +152,12 @@
         }
 
         if ( $error === false ) {
-          $Qattributes = $OSCOM_Database->prepare('select products_id, value from :table_product_attributes where languages_id = :languages_id');
+          $Qattributes = $OSCOM_PDO->prepare('select products_id, value from :table_product_attributes where languages_id = :languages_id');
           $Qattributes->bindInt(':languages_id', $data['default_language_id']);
           $Qattributes->execute();
 
           while ( $Qattributes->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_product_attributes (products_id, languages_id, value) values (:products_id, :languages_id, :value)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_product_attributes (products_id, languages_id, value) values (:products_id, :languages_id, :value)');
             $Qinsert->bindInt(':products_id', $Qattributes->valueInt('products_id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindValue(':value', $Qattributes->value('value'));
@@ -171,12 +171,12 @@
         }
 
         if ( $error === false ) {
-          $Qgroups = $OSCOM_Database->prepare('select id, title, sort_order, module from :table_products_variants_groups where languages_id = :languages_id');
+          $Qgroups = $OSCOM_PDO->prepare('select id, title, sort_order, module from :table_products_variants_groups where languages_id = :languages_id');
           $Qgroups->bindInt(':languages_id', $data['default_language_id']);
           $Qgroups->execute();
 
           while ( $Qgroups->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_products_variants_groups (id, languages_id, title, sort_order, module) values (:id, :languages_id, :title, :sort_order, :module)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_variants_groups (id, languages_id, title, sort_order, module) values (:id, :languages_id, :title, :sort_order, :module)');
             $Qinsert->bindInt(':id', $Qgroups->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindValue(':title', $Qgroups->value('title'));
@@ -192,12 +192,12 @@
         }
 
         if ( $error === false ) {
-          $Qvalues = $OSCOM_Database->prepare('select id, products_variants_groups_id, title, sort_order from :table_products_variants_values where languages_id = :languages_id');
+          $Qvalues = $OSCOM_PDO->prepare('select id, products_variants_groups_id, title, sort_order from :table_products_variants_values where languages_id = :languages_id');
           $Qvalues->bindInt(':languages_id', $data['default_language_id']);
           $Qvalues->execute();
 
           while ( $Qvalues->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
             $Qinsert->bindInt(':id', $Qvalues->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindInt(':products_variants_groups_id', $Qvalues->valueInt('products_variants_groups_id'));
@@ -213,12 +213,12 @@
         }
 
         if ( $error === false ) {
-          $Qmanufacturers = $OSCOM_Database->prepare('select manufacturers_id, manufacturers_url from :table_manufacturers_info where languages_id = :languages_id');
+          $Qmanufacturers = $OSCOM_PDO->prepare('select manufacturers_id, manufacturers_url from :table_manufacturers_info where languages_id = :languages_id');
           $Qmanufacturers->bindInt(':languages_id', $data['default_language_id']);
           $Qmanufacturers->execute();
 
           while ( $Qmanufacturers->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_manufacturers_info (manufacturers_id, languages_id, manufacturers_url) values (:manufacturers_id, :languages_id, :manufacturers_url)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_manufacturers_info (manufacturers_id, languages_id, manufacturers_url) values (:manufacturers_id, :languages_id, :manufacturers_url)');
             $Qinsert->bindInt(':manufacturers_id', $Qmanufacturers->valueInt('manufacturers_id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindValue(':manufacturers_url', $Qmanufacturers->value('manufacturers_url'));
@@ -232,12 +232,12 @@
         }
 
         if ( $error === false ) {
-          $Qstatus = $OSCOM_Database->prepare('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id');
+          $Qstatus = $OSCOM_PDO->prepare('select orders_status_id, orders_status_name from :table_orders_status where language_id = :language_id');
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
           while ( $Qstatus->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_orders_status (orders_status_id, language_id, orders_status_name) values (:orders_status_id, :language_id, :orders_status_name)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_orders_status (orders_status_id, language_id, orders_status_name) values (:orders_status_id, :language_id, :orders_status_name)');
             $Qinsert->bindInt(':orders_status_id', $Qstatus->valueInt('orders_status_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
             $Qinsert->bindValue(':orders_status_name', $Qstatus->value('orders_status_name'));
@@ -251,12 +251,12 @@
         }
 
         if ( $error === false ) {
-          $Qstatus = $OSCOM_Database->prepare('select id, status_name from :table_orders_transactions_status where language_id = :language_id');
+          $Qstatus = $OSCOM_PDO->prepare('select id, status_name from :table_orders_transactions_status where language_id = :language_id');
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
           while ( $Qstatus->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_orders_transactions_status (id, language_id, status_name) values (:id, :language_id, :status_name)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_orders_transactions_status (id, language_id, status_name) values (:id, :language_id, :status_name)');
             $Qinsert->bindInt(':id', $Qstatus->valueInt('id'));
             $Qinsert->bindInt(':language_id', $data['id']);
             $Qinsert->bindValue(':status_name', $Qstatus->value('status_name'));
@@ -270,12 +270,12 @@
         }
 
         if ( $error === false ) {
-          $Qstatus = $OSCOM_Database->prepare('select id, title, css_key from :table_shipping_availability where languages_id = :languages_id');
+          $Qstatus = $OSCOM_PDO->prepare('select id, title, css_key from :table_shipping_availability where languages_id = :languages_id');
           $Qstatus->bindInt(':languages_id', $data['default_language_id']);
           $Qstatus->execute();
 
           while ( $Qstatus->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_shipping_availability (id, languages_id, title, css_key) values (:id, :languages_id, :title, :css_key)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_shipping_availability (id, languages_id, title, css_key) values (:id, :languages_id, :title, :css_key)');
             $Qinsert->bindInt(':id', $Qstatus->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindValue(':title', $Qstatus->value('title'));
@@ -290,12 +290,12 @@
         }
 
         if ( $error === false ) {
-          $Qstatus = $OSCOM_Database->prepare('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id');
+          $Qstatus = $OSCOM_PDO->prepare('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id');
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
           while ( $Qstatus->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_weight_classes (weight_class_id, weight_class_key, language_id, weight_class_title) values (:weight_class_id, :weight_class_key, :language_id, :weight_class_title)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_weight_classes (weight_class_id, weight_class_key, language_id, weight_class_title) values (:weight_class_id, :weight_class_key, :language_id, :weight_class_title)');
             $Qinsert->bindInt(':weight_class_id', $Qstatus->valueInt('weight_class_id'));
             $Qinsert->bindValue(':weight_class_key', $Qstatus->value('weight_class_key'));
             $Qinsert->bindInt(':language_id', $data['id']);
@@ -310,12 +310,12 @@
         }
 
         if ( $error === false ) {
-          $Qgroup = $OSCOM_Database->prepare('select id, title, code, size_width, size_height, force_size from :table_products_images_groups where language_id = :language_id');
+          $Qgroup = $OSCOM_PDO->prepare('select id, title, code, size_width, size_height, force_size from :table_products_images_groups where language_id = :language_id');
           $Qgroup->bindInt(':language_id', $data['default_language_id']);
           $Qgroup->execute();
 
           while ( $Qgroup->next() ) {
-            $Qinsert = $OSCOM_Database->prepare('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
             $Qinsert->bindInt(':id', $Qgroup->valueInt('id'));
             $Qinsert->bindInt(':language_id', $data['id']);
             $Qinsert->bindValue(':title', $Qgroup->value('title'));
@@ -334,11 +334,11 @@
       }
 
       if ( $error === false ) {
-        $OSCOM_Database->commit();
+        $OSCOM_PDO->commit();
 
         return true;
       } else {
-        $OSCOM_Database->rollBack();
+        $OSCOM_PDO->rollBack();
       }
 
       return false;

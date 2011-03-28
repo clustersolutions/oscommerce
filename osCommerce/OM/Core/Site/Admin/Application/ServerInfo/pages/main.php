@@ -8,10 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -20,9 +21,9 @@
 ?>
 
 <form id="liveSearchForm">
-  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo osc_draw_button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
+  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="Search.." /><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => 'Reset')); ?>
 
-  <span style="float: right;"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, null, 'PHPInfo'), 'icon' => 'info', 'title' => OSCOM::getDef('button_php_info'), 'newwindow' => true)); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'PHPInfo'), 'icon' => 'info', 'title' => OSCOM::getDef('button_php_info'), 'newwindow' => true)); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">

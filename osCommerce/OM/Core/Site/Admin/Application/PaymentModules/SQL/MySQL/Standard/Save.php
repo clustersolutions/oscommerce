@@ -14,14 +14,14 @@
 
   class Save {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $error = false;
 
-      $OSCOM_Database->beginTransaction();
+      $OSCOM_PDO->beginTransaction();
 
       foreach ( $data['configuration'] as $key => $value ) {
-        $Qupdate = $OSCOM_Database->prepare('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
+        $Qupdate = $OSCOM_PDO->prepare('update :table_configuration set configuration_value = :configuration_value where configuration_key = :configuration_key');
         $Qupdate->bindValue(':configuration_value', is_array($data['configuration'][$key]) ? implode(',', $data['configuration'][$key]) : $value);
         $Qupdate->bindValue(':configuration_key', $key);
         $Qupdate->execute();
@@ -33,12 +33,12 @@
       }
 
       if ( $error === false ) {
-        $OSCOM_Database->commit();
+        $OSCOM_PDO->commit();
 
         return true;
       }
 
-      $OSCOM_Database->rollBack();
+      $OSCOM_PDO->rollBack();
 
       return false;
     }

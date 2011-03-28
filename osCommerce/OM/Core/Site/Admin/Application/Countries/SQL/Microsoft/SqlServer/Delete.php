@@ -14,13 +14,13 @@
 
   class Delete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('MSSQL');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Q = $OSCOM_Database->query('delete from :table_countries where countries_id = :countries_id');
+      $Q = $OSCOM_PDO->prepare('delete from :table_countries where countries_id = :countries_id');
       $Q->bindInt(':countries_id', $data['id']);
       $Q->execute();
 
-      return !$OSCOM_Database->isError();
+      return !$Q->isError();
     }
   }
 ?>

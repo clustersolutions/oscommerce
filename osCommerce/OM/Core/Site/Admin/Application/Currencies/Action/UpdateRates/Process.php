@@ -29,7 +29,7 @@
         }
       }
 
-      osc_redirect_admin(OSCOM::getLink());
+      OSCOM::redirect(OSCOM::getLink());
     }
   }
 ?>

@@ -10,31 +10,29 @@
 
   namespace osCommerce\OM\Core\Site\Setup\Application\Install\RPC;
 
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\Database;
+  use osCommerce\OM\Core\Site\Setup\Application\Install\Install;
 
   class DBCheck {
     public static function execute() {
-      $db = array('DB_SERVER' => trim(urldecode($_POST['server'])),
-                  'DB_SERVER_USERNAME' => trim(urldecode($_POST['username'])),
-                  'DB_SERVER_PASSWORD' => trim(urldecode($_POST['password'])),
-                  'DB_DATABASE' => trim(urldecode($_POST['name'])),
-                  'DB_SERVER_PORT' => trim(urldecode($_POST['port'])),
-                  'DB_DATABASE_CLASS' => trim(urldecode(str_replace('_', '\\', $_POST['class'])))
-                 );
+      $data = array('server' => trim(urldecode($_POST['server'])),
+                    'username' => trim(urldecode($_POST['username'])),
+                    'password' => trim(urldecode($_POST['password'])),
+                    'database' => trim(urldecode($_POST['name'])),
+                    'port' => trim(urldecode($_POST['port'])),
+                    'class' => str_replace('_', '\\', trim(urldecode($_POST['class'])))
+                   );
 
-      Registry::set('Database', Database::initialize($db['DB_SERVER'], $db['DB_SERVER_USERNAME'], $db['DB_SERVER_PASSWORD'], $db['DB_DATABASE'], $db['DB_SERVER_PORT'], $db['DB_DATABASE_CLASS']));
-      $OSCOM_Database = Registry::get('Database');
+      try {
+        if ( empty($data['database']) ) {
+          throw new \Exception('Database does not exist.');
+        }
 
-      if ( !$OSCOM_Database->isError() ) {
-        $OSCOM_Database->selectDatabase($db['DB_DATABASE']);
-      }
+        Install::checkDB($data);
 
-      if ( !$OSCOM_Database->isError() ) {
         $result = array('result' => true);
-      } else {
+      } catch ( \Exception $e ) {
         $result = array('result' => false,
-                        'error_message' => $OSCOM_Database->getError());
+                        'error_message' => $e->getMessage());
       }
 
       echo json_encode($result);

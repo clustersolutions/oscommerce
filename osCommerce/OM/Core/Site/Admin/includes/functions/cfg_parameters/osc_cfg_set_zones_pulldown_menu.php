@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Site\Shop\Address;
 
   function osc_cfg_set_zones_pulldown_menu($default, $key = null) {
@@ -21,6 +22,6 @@
                              'group' => $zone['country_name']);
     }
 
-    return osc_draw_pull_down_menu($name, $zones_array, $default);
+    return HTML::selectMenu($name, $zones_array, $default);
   }
 ?>

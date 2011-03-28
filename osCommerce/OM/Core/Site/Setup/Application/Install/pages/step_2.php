@@ -9,6 +9,7 @@
 */
 
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\HTML;
 ?>
 
 <script language="javascript" type="text/javascript">
@@ -20,10 +21,16 @@
   var dbClass = "<?php echo $_POST['DB_DATABASE_CLASS']; ?>";
   var dbPrefix = "<?php echo $_POST['DB_TABLE_PREFIX']; ?>";
 
+  var shopName;
+  var shopOwnerName;
+  var shopOwnerEmail;
+  var adminUsername;
+  var adminPassword;
+
   var formSubmited = false;
   var formSuccess = false;
 
-  function handleHttpResponse(data) {
+  function handleHttpResponse_ImportSample(data) {
     if (data.result == true) {
       $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/success.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_imported'); ?></p>');
 
@@ -37,26 +44,47 @@
     }
   }
 
-  function prepareDB() {
-    if ( $('#DB_INSERT_SAMPLE_DATA').attr('checked') ) {
-      if (formSubmited == true) {
-        return false;
+  function handleHttpResponse(data) {
+    if (data.result == true) {
+      if ( $('#DB_INSERT_SAMPLE_DATA').attr('checked') ) {
+        $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_importing'); ?></p>');
+
+        $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBImportSample'); ?>',
+               'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass + '&prefix=' + dbPrefix,
+               handleHttpResponse_ImportSample, 'json');
+      } else {
+        formSuccess = true;
+
+        $('#installForm').submit();
       }
-
-      formSubmited = true;
-
-      $('#mBox').css('visibility', 'visible').show();
-      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_sample_data_importing'); ?></p>');
-
-      $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBImportSample'); ?>',
-             'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass + '&prefix=' + dbPrefix,
-             handleHttpResponse, 'json');
     } else {
-      formSuccess = true;
+      $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/failed.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_store_configuration_error'); ?></p>'.replace('%s', data.error_message));
 
-      $('#installForm').submit();
+      formSubmited = false;
     }
   }
+
+  function prepareDB() {
+    if (formSubmited == true) {
+      return false;
+    }
+
+    formSubmited = true;
+
+    $('#mBox').css('visibility', 'visible').show();
+    $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_store_configuration'); ?></p>');
+
+    shopName = $('#CFG_STORE_NAME').val();
+    shopOwnerName = $('#CFG_STORE_OWNER_NAME').val();
+    shopOwnerEmail = $('#CFG_STORE_OWNER_EMAIL_ADDRESS').val();
+    adminUsername = $('#CFG_ADMINISTRATOR_USERNAME').val();
+    adminPassword = $('#CFG_ADMINISTRATOR_PASSWORD').val();
+
+    $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBConfigureShop'); ?>',
+           'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass + '&prefix=' + dbPrefix + '&shop_name=' + shopName + '&shop_owner_name=' + shopOwnerName + '&shop_owner_email=' + shopOwnerEmail + '&admin_username=' + adminUsername + '&admin_password=' + adminPassword,
+           handleHttpResponse, 'json');
+  }
+
 </script>
 
 <div class="mainBlock">
@@ -93,42 +121,42 @@
 
     <table border="0" width="99%" cellspacing="0" cellpadding="5" class="inputForm">
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_store_name') . '<br />' . osc_draw_input_field('CFG_STORE_NAME', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_store_name') . '<br />' . HTML::inputField('CFG_STORE_NAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_store_name_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_store_owner_name') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_NAME', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_store_owner_name') . '<br />' . HTML::inputField('CFG_STORE_OWNER_NAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_store_owner_name_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_store_owner_email_address') . '<br />' . osc_draw_input_field('CFG_STORE_OWNER_EMAIL_ADDRESS', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_store_owner_email_address') . '<br />' . HTML::inputField('CFG_STORE_OWNER_EMAIL_ADDRESS', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_store_owner_email_address_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_administrator_username') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_USERNAME', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_administrator_username') . '<br />' . HTML::inputField('CFG_ADMINISTRATOR_USERNAME', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_administrator_username_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_administrator_password') . '<br />' . osc_draw_input_field('CFG_ADMINISTRATOR_PASSWORD', null, 'class="text"'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_administrator_password') . '<br />' . HTML::inputField('CFG_ADMINISTRATOR_PASSWORD', null, 'class="text"'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_administrator_password_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo osc_draw_checkbox_field('DB_INSERT_SAMPLE_DATA', 'true', true) . '&nbsp;' . OSCOM::getDef('param_database_import_sample_data'); ?></td>
+        <td class="inputField"><?php echo HTML::checkboxField('DB_INSERT_SAMPLE_DATA', 'true', true) . '&nbsp;' . OSCOM::getDef('param_database_import_sample_data'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_import_sample_data_description'); ?></td>
       </tr>
     </table>
 
-    <p align="right"><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+    <p align="right"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
 <?php
   foreach ( $_POST as $key => $value ) {
     if ( ($key != 'x') && ($key != 'y') ) {
       if ( is_array($value) ) {
-        for ( $i=0, $n=sizeof($value); $i<$n; $i++ ) {
-          echo osc_draw_hidden_field($key . '[]', $value[$i]);
+        for ( $i=0, $n=count($value); $i<$n; $i++ ) {
+          echo HTML::hiddenField($key . '[]', $value[$i]);
         }
       } else {
-        echo osc_draw_hidden_field($key, $value);
+        echo HTML::hiddenField($key, $value);
       }
     }
   }
