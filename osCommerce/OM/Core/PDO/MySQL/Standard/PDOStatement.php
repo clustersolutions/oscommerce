@@ -8,11 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\DatabasePDO\MySQL\Standard;
+  namespace osCommerce\OM\Core\PDO\MySQL\Standard;
 
   use osCommerce\OM\Core\OSCOM;
 
-  class PDOStatement extends \osCommerce\OM\Core\DatabasePDOStatement {
+  class PDOStatement extends \osCommerce\OM\Core\PDOStatement {
     protected $_pdo;
 
     protected function __construct($pdo) {

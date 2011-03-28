@@ -13,7 +13,7 @@
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\PDO;
 
-  class DatabasePDOStatement extends \PDOStatement {
+  class PDOStatement extends \PDOStatement {
     protected $_is_error = false;
     protected $_binded_params = array();
 

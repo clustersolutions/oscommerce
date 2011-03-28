@@ -10,11 +10,9 @@
 
   namespace osCommerce\OM\Core;
 
-  use \PDO;
-
   use osCommerce\OM\Core\OSCOM;
 
-  class DatabasePDO extends PDO {
+  class PDO extends \PDO {
     protected $_connected = false;
     protected $_server;
     protected $_username;
@@ -59,10 +57,10 @@
       }
 
       if ( !isset($driver_options[PDO::ATTR_STATEMENT_CLASS]) ) {
-        $driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\DatabasePDOStatement');
+        $driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDOStatement');
       }
 
-      $class = 'osCommerce\\OM\\Core\\DatabasePDO\\' . $driver;
+      $class = 'osCommerce\\OM\\Core\\PDO\\' . $driver;
       $object = new $class($server, $username, $password, $database, $port, $driver_options);
 
       $object->_driver = $driver;
