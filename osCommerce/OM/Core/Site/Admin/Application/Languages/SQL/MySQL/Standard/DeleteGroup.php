@@ -14,9 +14,9 @@
 
   class DeleteGroup {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qdel = $OSCOM_Database->prepare('delete from :table_languages_definitions where content_group = :content_group');
+      $Qdel = $OSCOM_PDO->prepare('delete from :table_languages_definitions where content_group = :content_group');
       $Qdel->bindValue(':content_group', $data['group']);
       $Qdel->execute();
 

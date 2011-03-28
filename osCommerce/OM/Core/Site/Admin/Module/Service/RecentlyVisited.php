@@ -30,22 +30,63 @@
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array(array('title' => 'Display latest products',
+                          'key' => 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS',
+                          'value' => '1',
+                          'description' => 'Display recently visited products.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Display product images',
+                          'key' => 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES',
+                          'value' => '1',
+                          'description' => 'Display the product image.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Display product prices',
+                          'key' => 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES',
+                          'value' => '1',
+                          'description' => 'Display the products price.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Maximum products to show',
+                          'key' => 'SERVICE_RECENTLY_VISITED_MAX_PRODUCTS',
+                          'value' => '5',
+                          'description' => 'Maximum number of recently visited products to show',
+                          'group_id' => '6'),
+                    array('title' => 'Display latest categories',
+                          'key' => 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES',
+                          'value' => '1',
+                          'description' => 'Display recently visited categories.',
+                          'group_id' => '6', 
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Maximum categories to show',
+                          'key' => 'SERVICE_RECENTLY_VISITED_MAX_CATEGORIES',
+                          'value' => '3',
+                          'description' => 'Mazimum number of recently visited categories to show',
+                          'group_id' => '6'),
+                    array('title' => 'Display latest searches',
+                          'key' => 'SERVICE_RECENTLY_VISITED_SHOW_SEARCHES',
+                          'value' => '1',
+                          'description' => 'Show recent searches.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Maximum searches to show',
+                          'key' => 'SERVICE_RECENTLY_VISITED_MAX_SEARCHES',
+                          'value' => '3',
+                          'description' => 'Mazimum number of recent searches to display',
+                          'group_id' => '6')
+                   );
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display latest products', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCTS', '1', 'Display recently visited products.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display product images', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES', '1', 'Display the product image.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display product prices', 'SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES', '1', 'Display the products price.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum products to show', 'SERVICE_RECENTLY_VISITED_MAX_PRODUCTS', '5', 'Maximum number of recently visited products to show', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display latest categories', 'SERVICE_RECENTLY_VISITED_SHOW_CATEGORIES', '1', 'Display recently visited categories.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum categories to show', 'SERVICE_RECENTLY_VISITED_MAX_CATEGORIES', '3', 'Mazimum number of recently visited categories to show', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Display latest searches', 'SERVICE_RECENTLY_VISITED_SHOW_SEARCHES', '1', 'Show recent searches.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum searches to show', 'SERVICE_RECENTLY_VISITED_MAX_SEARCHES', '3', 'Mazimum number of recent searches to display', '6', '0', now())");
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
     public function remove() {
-      $OSCOM_Database = Registry::get('Database');
-
-      $OSCOM_Database->simpleQuery("delete from " . DB_TABLE_PREFIX . "configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
     }
 
     public function keys() {

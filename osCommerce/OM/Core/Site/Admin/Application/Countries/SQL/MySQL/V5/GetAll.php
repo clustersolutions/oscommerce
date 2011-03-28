@@ -14,14 +14,14 @@
 
   class GetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qcountries = $OSCOM_Database->prepare('CALL CountriesGetAll(:batch_pageset, :batch_max_results)');
+      $Qcountries = $OSCOM_PDO->prepare('CALL CountriesGetAll(:batch_pageset, :batch_max_results)');
 
       if ( $data['batch_pageset'] !== -1 ) {
-        $Qcountries->bindInt(':batch_pageset', $OSCOM_Database->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
+        $Qcountries->bindInt(':batch_pageset', $OSCOM_PDO->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
         $Qcountries->bindInt(':batch_max_results', $data['batch_max_results']);
       } else {
         $Qcountries->bindNull(':batch_pageset');

@@ -28,7 +28,7 @@ CREATE TABLE osc_address_book (
   KEY idx_address_book_customers_id (customers_id),
   KEY idx_address_book_country_id (entry_country_id),
   KEY idx_address_book_zone_id (entry_zone_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_administrator_shortcuts;
 CREATE TABLE osc_administrator_shortcuts (
@@ -37,7 +37,7 @@ CREATE TABLE osc_administrator_shortcuts (
   last_viewed datetime,
   PRIMARY KEY (administrators_id, module),
   KEY idx_admin_shortcuts_admin_id (administrators_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_administrators;
 CREATE TABLE osc_administrators (
@@ -46,7 +46,7 @@ CREATE TABLE osc_administrators (
   user_password varchar(40) NOT NULL,
   KEY idx_administrators_user_name (user_name),
   PRIMARY KEY (id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_administrators_access;
 CREATE TABLE osc_administrators_access (
@@ -54,7 +54,7 @@ CREATE TABLE osc_administrators_access (
   module varchar(255) NOT NULL,
   PRIMARY KEY (administrators_id, module),
   KEY idx_admin_access_admin_id (administrators_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_administrators_log;
 CREATE TABLE osc_administrators_log (
@@ -71,7 +71,7 @@ CREATE TABLE osc_administrators_log (
   KEY idx_administrators_log_id (id),
   KEY idx_administrators_log_module (module),
   KEY idx_administrators_log_admin_id (administrators_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_banners;
 CREATE TABLE osc_banners (
@@ -90,7 +90,7 @@ CREATE TABLE osc_banners (
   PRIMARY KEY (banners_id),
   KEY idx_banners_group (banners_group),
   KEY idx_banners_expires_date (expires_date)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_banners_history;
 CREATE TABLE osc_banners_history (
@@ -101,7 +101,7 @@ CREATE TABLE osc_banners_history (
   banners_history_date datetime NOT NULL,
   PRIMARY KEY (banners_history_id),
   KEY idx_banners_history_banners_id (banners_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_categories;
 CREATE TABLE osc_categories (
@@ -113,7 +113,7 @@ CREATE TABLE osc_categories (
   last_modified datetime,
   PRIMARY KEY (categories_id),
   KEY idx_categories_parent_id (parent_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_categories_description;
 CREATE TABLE osc_categories_description (
@@ -124,7 +124,7 @@ CREATE TABLE osc_categories_description (
   KEY idx_categories_desc_categories_id (categories_id),
   KEY idx_categories_desc_language_id (language_id),
   KEY idx_categories_desc_categories_name (categories_name)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_configuration;
 CREATE TABLE osc_configuration (
@@ -141,7 +141,7 @@ CREATE TABLE osc_configuration (
   set_function varchar(255) NULL,
   PRIMARY KEY (configuration_id),
   KEY idx_configuration_group_id (configuration_group_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_configuration_group;
 CREATE TABLE osc_configuration_group (
@@ -151,13 +151,13 @@ CREATE TABLE osc_configuration_group (
   sort_order int,
   visible int DEFAULT 1,
   PRIMARY KEY (configuration_group_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_counter;
 CREATE TABLE osc_counter (
   startdate datetime,
   counter int unsigned
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_countries;
 CREATE TABLE osc_countries (
@@ -170,7 +170,7 @@ CREATE TABLE osc_countries (
   KEY idx_countries_name (countries_name),
   KEY idx_countries_iso_2 (countries_iso_code_2),
   KEY idx_countries_iso_3 (countries_iso_code_3)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_credit_cards;
 CREATE TABLE osc_credit_cards (
@@ -180,7 +180,7 @@ CREATE TABLE osc_credit_cards (
   credit_card_status char(1) NOT NULL,
   sort_order int,
   PRIMARY KEY (id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_currencies;
 CREATE TABLE osc_currencies (
@@ -194,7 +194,7 @@ CREATE TABLE osc_currencies (
   last_updated datetime,
   PRIMARY KEY (currencies_id),
   KEY idx_currencies_code (code)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_customers;
 CREATE TABLE osc_customers (
@@ -218,7 +218,7 @@ CREATE TABLE osc_customers (
   global_product_notifications int DEFAULT 0,
   PRIMARY KEY (customers_id),
   KEY idx_customers_default_address_id (customers_default_address_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_fk_relationships;
 CREATE TABLE osc_fk_relationships (
@@ -230,7 +230,7 @@ CREATE TABLE osc_fk_relationships (
   on_update varchar(255) NOT NULL,
   on_delete varchar(255) NOT NULL,
   PRIMARY KEY (fk_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_geo_zones;
 CREATE TABLE osc_geo_zones (
@@ -240,7 +240,7 @@ CREATE TABLE osc_geo_zones (
   last_modified datetime,
   date_added datetime NOT NULL,
   PRIMARY KEY (geo_zone_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_languages;
 CREATE TABLE osc_languages (
@@ -262,7 +262,7 @@ CREATE TABLE osc_languages (
   KEY idx_languages_code (code),
   KEY idx_languages_currencies_id (currencies_id),
   KEY idx_languages_parent_id (parent_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_languages_definitions;
 CREATE TABLE osc_languages_definitions (
@@ -274,7 +274,7 @@ CREATE TABLE osc_languages_definitions (
   PRIMARY KEY (id),
   KEY idx_languages_definitions_languages_id (languages_id),
   KEY idx_languages_definitions_groups (content_group)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_manufacturers;
 CREATE TABLE osc_manufacturers (
@@ -285,7 +285,7 @@ CREATE TABLE osc_manufacturers (
   last_modified datetime,
   PRIMARY KEY (manufacturers_id),
   KEY idx_manufacturers_name (manufacturers_name)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_manufacturers_info;
 CREATE TABLE osc_manufacturers_info (
@@ -297,7 +297,18 @@ CREATE TABLE osc_manufacturers_info (
   PRIMARY KEY (manufacturers_id, languages_id),
   KEY idx_manufacturers_info_id (manufacturers_id),
   KEY idx_manufacturers_info_languages_id (languages_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+DROP TABLE IF EXISTS osc_modules;
+CREATE TABLE osc_modules (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  title varchar(255) NOT NULL,
+  code varchar(255) NOT NULL,
+  author_name varchar(255) NOT NULL,
+  author_www varchar(255),
+  modules_group varchar(255) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_newsletters;
 CREATE TABLE osc_newsletters (
@@ -310,7 +321,7 @@ CREATE TABLE osc_newsletters (
   status int,
   locked int DEFAULT 0,
   PRIMARY KEY (newsletters_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_newsletters_log;
 CREATE TABLE osc_newsletters_log (
@@ -319,7 +330,7 @@ CREATE TABLE osc_newsletters_log (
   date_sent datetime,
   KEY idx_newsletters_log_newsletters_id (newsletters_id),
   KEY idx_newsletters_log_email_address (email_address)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders;
 CREATE TABLE osc_orders (
@@ -375,7 +386,7 @@ CREATE TABLE osc_orders (
   PRIMARY KEY (orders_id),
   KEY idx_orders_customers_id (customers_id),
   KEY idx_orders_status (orders_status)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_products;
 CREATE TABLE osc_orders_products (
@@ -390,7 +401,7 @@ CREATE TABLE osc_orders_products (
   PRIMARY KEY (orders_products_id),
   KEY idx_orders_products_orders_id (orders_id),
   KEY idx_orders_products_products_id (products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_products_download;
 CREATE TABLE osc_orders_products_download (
@@ -403,7 +414,7 @@ CREATE TABLE osc_orders_products_download (
   PRIMARY KEY (orders_products_download_id),
   KEY idx_orders_products_download_orders_id (orders_id),
   KEY idx_orders_products_download_products_id (orders_products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_products_variants;
 CREATE TABLE osc_orders_products_variants (
@@ -415,7 +426,7 @@ CREATE TABLE osc_orders_products_variants (
   PRIMARY KEY (id),
   KEY idx_orders_products_variants_orders_id (orders_id),
   KEY idx_orders_products_variants_products_id (orders_products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_status;
 CREATE TABLE osc_orders_status (
@@ -425,7 +436,7 @@ CREATE TABLE osc_orders_status (
   PRIMARY KEY (orders_status_id, language_id),
   KEY idx_orders_status_language_id (language_id),
   KEY idx_orders_status_name (orders_status_name)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_status_history;
 CREATE TABLE osc_orders_status_history (
@@ -438,7 +449,7 @@ CREATE TABLE osc_orders_status_history (
   PRIMARY KEY (orders_status_history_id),
   KEY idx_orders_status_history_orders_id (orders_id),
   KEY idx_orders_status_history_orders_status_id (orders_status_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_total;
 CREATE TABLE osc_orders_total (
@@ -451,7 +462,7 @@ CREATE TABLE osc_orders_total (
   sort_order int NOT NULL,
   PRIMARY KEY (orders_total_id),
   KEY idx_orders_total_orders_id (orders_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_transactions_history;
 CREATE TABLE osc_orders_transactions_history (
@@ -463,7 +474,7 @@ CREATE TABLE osc_orders_transactions_history (
   date_added datetime,
   PRIMARY KEY (id),
   KEY idx_orders_transactions_history_orders_id (orders_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_orders_transactions_status;
 CREATE TABLE osc_orders_transactions_status (
@@ -473,7 +484,7 @@ CREATE TABLE osc_orders_transactions_status (
   PRIMARY KEY (id, language_id),
   KEY idx_orders_transactions_status_name (status_name),
   KEY idx_orders_transactions_status_language_id (language_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_product_attributes;
 CREATE TABLE osc_product_attributes (
@@ -484,7 +495,7 @@ CREATE TABLE osc_product_attributes (
   KEY idx_pa_id_products_id (id, products_id),
   KEY idx_pa_products_id (products_id),
   KEY idx_pa_languages_id (languages_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_product_types;
 CREATE TABLE osc_product_types (
@@ -492,7 +503,7 @@ CREATE TABLE osc_product_types (
   title varchar(255) NOT NULL,
   PRIMARY KEY (id),
   KEY idx_product_types_title (title)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_product_types_assignments;
 CREATE TABLE osc_product_types_assignments (
@@ -504,7 +515,7 @@ CREATE TABLE osc_product_types_assignments (
   PRIMARY KEY (id),
   KEY idx_product_types_assignments_types_id (types_id),
   KEY idx_product_types_assignments_actions (action)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products;
 CREATE TABLE osc_products (
@@ -530,7 +541,7 @@ CREATE TABLE osc_products (
   KEY idx_products_tax_class_id (products_tax_class_id),
   KEY idx_products_manufacturers_id (manufacturers_id),
   KEY idx_products_types_id (products_types_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_description;
 CREATE TABLE osc_products_description (
@@ -547,7 +558,7 @@ CREATE TABLE osc_products_description (
   KEY idx_products_language_id (language_id),
   KEY idx_products_name (products_name),
   KEY idx_products_description_keyword (products_keyword)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_images;
 CREATE TABLE osc_products_images (
@@ -559,7 +570,7 @@ CREATE TABLE osc_products_images (
   date_added datetime NOT NULL,
   PRIMARY KEY (id),
   KEY idx_products_images_products_id (products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_images_groups;
 CREATE TABLE osc_products_images_groups (
@@ -572,7 +583,7 @@ CREATE TABLE osc_products_images_groups (
   force_size tinyint(1) DEFAULT 0,
   PRIMARY KEY (id, language_id),
   KEY idx_products_images_groups_language_id (language_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_notifications;
 CREATE TABLE osc_products_notifications (
@@ -582,7 +593,7 @@ CREATE TABLE osc_products_notifications (
   PRIMARY KEY (products_id, customers_id),
   KEY idx_products_notifications_products_id (products_id),
   KEY idx_products_notifications_customers_id (customers_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_to_categories;
 CREATE TABLE osc_products_to_categories (
@@ -591,7 +602,7 @@ CREATE TABLE osc_products_to_categories (
   PRIMARY KEY (products_id, categories_id),
   KEY idx_p2c_products_id (products_id),
   KEY idx_p2c_categories_id (categories_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_variants;
 CREATE TABLE osc_products_variants (
@@ -601,7 +612,7 @@ CREATE TABLE osc_products_variants (
   PRIMARY KEY (products_id, products_variants_values_id),
   KEY idx_products_variants_products_id (products_id),
   KEY idx_products_variants_values_id (products_variants_values_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_variants_groups;
 CREATE TABLE osc_products_variants_groups (
@@ -612,7 +623,7 @@ CREATE TABLE osc_products_variants_groups (
   module varchar(255) NOT NULL,
   PRIMARY KEY (id, languages_id),
   KEY idx_products_variants_groups_languages_id (languages_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_products_variants_values;
 CREATE TABLE osc_products_variants_values (
@@ -624,7 +635,7 @@ CREATE TABLE osc_products_variants_values (
   PRIMARY KEY (id, languages_id),
   KEY idx_products_variants_values_languages_id (languages_id),
   KEY idx_products_variants_values_groups_id (products_variants_groups_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_reviews;
 CREATE TABLE osc_reviews (
@@ -643,7 +654,7 @@ CREATE TABLE osc_reviews (
   KEY idx_reviews_products_id (products_id),
   KEY idx_reviews_customers_id (customers_id),
   KEY idx_reviews_languages_id (languages_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_sessions;
 CREATE TABLE osc_sessions (
@@ -651,7 +662,7 @@ CREATE TABLE osc_sessions (
   expiry int unsigned NOT NULL,
   value text NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_shipping_availability;
 CREATE TABLE osc_shipping_availability (
@@ -661,7 +672,7 @@ CREATE TABLE osc_shipping_availability (
   css_key varchar(255),
   PRIMARY KEY (id, languages_id),
   KEY idx_shipping_availability_languages_id (languages_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_shopping_carts;
 CREATE TABLE osc_shopping_carts (
@@ -673,7 +684,7 @@ CREATE TABLE osc_shopping_carts (
   KEY idx_sc_customers_id (customers_id),
   KEY idx_sc_customers_id_products_id (customers_id, products_id),
   KEY idx_sc_products_id (products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_shopping_carts_custom_variants_values;
 CREATE TABLE osc_shopping_carts_custom_variants_values (
@@ -686,7 +697,7 @@ CREATE TABLE osc_shopping_carts_custom_variants_values (
   KEY idx_sccvv_customers_id (customers_id),
   KEY idx_sccvv_products_id (products_id),
   KEY idx_sccvv_products_variants_values_id (products_variants_values_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_specials;
 CREATE TABLE osc_specials (
@@ -701,7 +712,7 @@ CREATE TABLE osc_specials (
   status int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (specials_id),
   KEY idx_specials_products_id (products_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_tax_class;
 CREATE TABLE osc_tax_class (
@@ -711,7 +722,7 @@ CREATE TABLE osc_tax_class (
   last_modified datetime,
   date_added datetime NOT NULL,
   PRIMARY KEY (tax_class_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_tax_rates;
 CREATE TABLE osc_tax_rates (
@@ -726,7 +737,7 @@ CREATE TABLE osc_tax_rates (
   PRIMARY KEY (tax_rates_id),
   KEY idx_tax_rates_zone_id (tax_zone_id),
   KEY idx_tax_rates_class_id (tax_class_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_templates;
 CREATE TABLE osc_templates (
@@ -739,7 +750,7 @@ CREATE TABLE osc_templates (
   css_based tinyint,
   medium varchar(255),
   PRIMARY KEY (id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_templates_boxes;
 CREATE TABLE osc_templates_boxes (
@@ -750,7 +761,7 @@ CREATE TABLE osc_templates_boxes (
   author_www varchar(255),
   modules_group varchar(255) NOT NULL,
   PRIMARY KEY (id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_templates_boxes_to_pages;
 CREATE TABLE osc_templates_boxes_to_pages (
@@ -765,7 +776,7 @@ CREATE TABLE osc_templates_boxes_to_pages (
   KEY (templates_boxes_id, templates_id, content_page, boxes_group),
   KEY idx_tb2p_templates_boxes_id (templates_boxes_id),
   KEY idx_tb2p_templates_id (templates_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_weight_classes;
 CREATE TABLE osc_weight_classes (
@@ -775,7 +786,7 @@ CREATE TABLE osc_weight_classes (
   weight_class_title varchar(255) NOT NULL,
   PRIMARY KEY (weight_class_id, language_id),
   KEY idx_weight_classes_language_id (language_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_weight_classes_rules;
 CREATE TABLE osc_weight_classes_rules (
@@ -785,7 +796,7 @@ CREATE TABLE osc_weight_classes_rules (
   PRIMARY KEY (weight_class_from_id, weight_class_to_id),
   KEY idx_weight_class_from_id (weight_class_from_id),
   KEY idx_weight_class_to_id (weight_class_to_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_whos_online;
 CREATE TABLE osc_whos_online (
@@ -799,7 +810,7 @@ CREATE TABLE osc_whos_online (
   KEY idx_whos_online_customer_id (customer_id),
   KEY idx_whos_online_full_name (full_name),
   KEY idx_whos_online_time_last_click (time_last_click)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_zones;
 CREATE TABLE osc_zones (
@@ -811,7 +822,7 @@ CREATE TABLE osc_zones (
   KEY idx_zones_country_id (zone_country_id),
   KEY idx_zones_code (zone_code),
   KEY idx_zones_name (zone_name)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_zones_to_geo_zones;
 CREATE TABLE osc_zones_to_geo_zones (
@@ -825,7 +836,7 @@ CREATE TABLE osc_zones_to_geo_zones (
   KEY idx_z2gz_zone_country_id (zone_country_id),
   KEY idx_z2gz_zone_id (zone_id),
   KEY idx_z2gz_geo_zone_id (geo_zone_id)
-) ENGINE=MyISAM;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

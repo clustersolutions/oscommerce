@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qgroup = $OSCOM_Database->prepare('select cg.*, count(c.configuration_id) as total_entries from :table_configuration_group cg left join :table_configuration c on (cg.configuration_group_id = c.configuration_group_id) where cg.configuration_group_id = :configuration_group_id');
+      $Qgroup = $OSCOM_PDO->prepare('select cg.*, count(c.configuration_id) as total_entries from :table_configuration_group cg left join :table_configuration c on (cg.configuration_group_id = c.configuration_group_id) where cg.configuration_group_id = :configuration_group_id');
       $Qgroup->bindInt(':configuration_group_id', $data['id']);
       $Qgroup->execute();
 

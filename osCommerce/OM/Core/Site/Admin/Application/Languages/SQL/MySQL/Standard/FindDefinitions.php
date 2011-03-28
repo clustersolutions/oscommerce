@@ -14,11 +14,11 @@
 
   class FindDefinitions {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qdefs = $OSCOM_Database->prepare('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group and (definition_key like :definition_key or definition_value like :definition_value) order by definition_key');
+      $Qdefs = $OSCOM_PDO->prepare('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group and (definition_key like :definition_key or definition_value like :definition_value) order by definition_key');
       $Qdefs->bindInt(':languages_id', $data['id']);
       $Qdefs->bindValue(':content_group', $data['group']);
       $Qdefs->bindValue(':definition_key', '%' . $data['keywords'] . '%');

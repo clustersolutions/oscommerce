@@ -14,9 +14,9 @@
 
   class UpdateDefinition {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qupdate = $OSCOM_Database->prepare('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
+      $Qupdate = $OSCOM_PDO->prepare('update :table_languages_definitions set definition_value = :definition_value where definition_key = :definition_key and languages_id = :languages_id and content_group = :content_group');
       $Qupdate->bindValue(':definition_value', $data['value']);
       $Qupdate->bindValue(':definition_key', $data['key']);
       $Qupdate->bindInt(':languages_id', $data['language_id']);

@@ -14,7 +14,11 @@
 
   class Save {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
+
+      if ( !isset($data['id']) ) {
+        $data['id'] = null;
+      }
 
       $error = false;
 
@@ -26,7 +30,7 @@
 
       $sql_query .= ' limit 1';
 
-      $Qcheck = $OSCOM_Database->prepare($sql_query);
+      $Qcheck = $OSCOM_PDO->prepare($sql_query);
       $Qcheck->bindValue(':user_name', $data['username']);
 
       if ( is_numeric($data['id']) ) {
@@ -36,7 +40,7 @@
       $Qcheck->execute();
 
       if ( $Qcheck->fetch() === false ) {
-        $OSCOM_Database->beginTransaction();
+        $OSCOM_PDO->beginTransaction();
 
         if ( is_numeric($data['id']) ) {
           $sql_query = 'update :table_administrators set user_name = :user_name';
@@ -50,7 +54,7 @@
           $sql_query = 'insert into :table_administrators (user_name, user_password) values (:user_name, :user_password)';
         }
 
-        $Qadmin = $OSCOM_Database->prepare($sql_query);
+        $Qadmin = $OSCOM_PDO->prepare($sql_query);
 
         if ( is_numeric($data['id']) ) {
           if ( !empty($data['password']) ) {
@@ -67,7 +71,7 @@
 
         if ( !$Qadmin->isError() ) {
           if ( !is_numeric($data['id']) ) {
-            $data['id'] = $OSCOM_Database->lastInsertId();
+            $data['id'] = $OSCOM_PDO->lastInsertId();
           }
         } else {
           $error = true;
@@ -80,13 +84,13 @@
             }
 
             foreach ( $data['modules'] as $module ) {
-              $Qcheck = $OSCOM_Database->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
+              $Qcheck = $OSCOM_PDO->prepare('select administrators_id from :table_administrators_access where administrators_id = :administrators_id and module = :module limit 1');
               $Qcheck->bindInt(':administrators_id', $data['id']);
               $Qcheck->bindValue(':module', $module);
               $Qcheck->execute();
 
               if ( $Qcheck->fetch() === false ) {
-                $Qinsert = $OSCOM_Database->prepare('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
+                $Qinsert = $OSCOM_PDO->prepare('insert into :table_administrators_access (administrators_id, module) values (:administrators_id, :module)');
                 $Qinsert->bindInt(':administrators_id', $data['id']);
                 $Qinsert->bindValue(':module', $module);
                 $Qinsert->execute();
@@ -107,7 +111,7 @@
             $sql_query .= ' and module not in ("' . implode('", "', $data['modules']) . '")'; // HPDL create bindRaw()?
           }
 
-          $Qdel = $OSCOM_Database->prepare($sql_query);
+          $Qdel = $OSCOM_PDO->prepare($sql_query);
           $Qdel->bindInt(':administrators_id', $data['id']);
           $Qdel->execute();
 
@@ -117,11 +121,11 @@
         }
 
         if ( $error === false ) {
-          $OSCOM_Database->commit();
+          $OSCOM_PDO->commit();
 
           return 1;
         } else {
-          $OSCOM_Database->rollBack();
+          $OSCOM_PDO->rollBack();
 
           return -1;
         }

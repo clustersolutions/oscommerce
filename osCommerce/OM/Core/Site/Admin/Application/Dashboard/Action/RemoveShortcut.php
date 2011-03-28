@@ -10,16 +10,17 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Dashboard\Action;
 
-  use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\Dashboard\Dashboard;
   use osCommerce\OM\Core\Access;
+  use osCommerce\OM\Core\ApplicationAbstract;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Admin\Application\Dashboard\Dashboard;
 
   class RemoveShortcut {
     public static function execute(ApplicationAbstract $application) {
       if ( !empty($_GET['shortcut']) ) {
-        $application = osc_sanitize_string($_GET['shortcut']);
+        $application = HTML::sanitize($_GET['shortcut']);
 
         if ( OSCOM::siteApplicationExists($application) ) {
           if ( Dashboard::deleteShortcut($_SESSION[OSCOM::getSite()]['id'], $application) ) {
@@ -27,12 +28,12 @@
 
             Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_success_shortcut_removed'), 'success');
 
-            osc_redirect_admin(OSCOM::getLink(null, $application));
+            OSCOM::redirect(OSCOM::getLink(null, $application));
           }
         }
       }
 
-      osc_redirect_admin(OSCOM::getLink());
+      OSCOM::redirect(OSCOM::getLink());
     }
   }
 ?>

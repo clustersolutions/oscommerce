@@ -31,14 +31,14 @@
 
           Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
 
-          osc_redirect_admin(OSCOM::getLink());
+          OSCOM::redirect(OSCOM::getLink());
 
           break;
 
         case -1:
           Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
 
-          osc_redirect_admin(OSCOM::getLink());
+          OSCOM::redirect(OSCOM::getLink());
 
           break;
 

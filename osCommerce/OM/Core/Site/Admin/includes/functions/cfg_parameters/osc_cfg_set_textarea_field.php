@@ -8,9 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
+
   function osc_cfg_set_textarea_field($default, $key = null) {
     $name = (!empty($key) ? 'configuration[' . $key . ']' : 'configuration_value');
 
-    return osc_draw_textarea_field($name, $default, 35, 5);
+    return HTML::textareaField($name, $default, 35, 5);
   }
 ?>

@@ -14,9 +14,9 @@
 
   class EntryDelete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qrate = $OSCOM_Database->prepare('delete from :table_tax_rates where tax_rates_id = :tax_rates_id');
+      $Qrate = $OSCOM_PDO->prepare('delete from :table_tax_rates where tax_rates_id = :tax_rates_id');
       $Qrate->bindInt(':tax_rates_id', $data['id']);
       $Qrate->execute();
 

@@ -14,11 +14,11 @@
 
   class GetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qcountries = $OSCOM_Database->prepare('EXEC CountriesGetAll :batch_pageset, :batch_max_results');
+      $Qcountries = $OSCOM_PDO->prepare('EXEC CountriesGetAll :batch_pageset, :batch_max_results');
       $Qcountries->bindInt(':batch_pageset', $data['batch_pageset']);
       $Qcountries->bindInt(':batch_max_results', $data['batch_max_results']);
       $Qcountries->execute();

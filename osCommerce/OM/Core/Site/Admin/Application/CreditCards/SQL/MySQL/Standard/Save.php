@@ -14,13 +14,13 @@
 
   class Save {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( isset($data['id']) && is_numeric($data['id']) ) {
-        $Qcc = $OSCOM_Database->prepare('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
+        $Qcc = $OSCOM_PDO->prepare('update :table_credit_cards set credit_card_name = :credit_card_name, pattern = :pattern, credit_card_status = :credit_card_status, sort_order = :sort_order where id = :id');
         $Qcc->bindInt(':id', $data['id']);
       } else {
-        $Qcc = $OSCOM_Database->prepare('insert into :table_credit_cards (credit_card_name, pattern, credit_card_status, sort_order) values (:credit_card_name, :pattern, :credit_card_status, :sort_order)');
+        $Qcc = $OSCOM_PDO->prepare('insert into :table_credit_cards (credit_card_name, pattern, credit_card_status, sort_order) values (:credit_card_name, :pattern, :credit_card_status, :sort_order)');
       }
 
       $Qcc->bindValue(':credit_card_name', $data['name']);

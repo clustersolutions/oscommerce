@@ -14,9 +14,9 @@
 
   class EntryDelete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qentry = $OSCOM_Database->prepare('delete from :table_zones_to_geo_zones where association_id = :association_id');
+      $Qentry = $OSCOM_PDO->prepare('delete from :table_zones_to_geo_zones where association_id = :association_id');
       $Qentry->bindInt(':association_id', $data['id']);
       $Qentry->execute();
 

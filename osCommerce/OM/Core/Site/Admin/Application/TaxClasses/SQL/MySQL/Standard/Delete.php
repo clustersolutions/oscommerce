@@ -14,9 +14,9 @@
 
   class Delete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qclass = $OSCOM_Database->prepare('delete from :table_tax_class where tax_class_id = :tax_class_id');
+      $Qclass = $OSCOM_PDO->prepare('delete from :table_tax_class where tax_class_id = :tax_class_id');
       $Qclass->bindInt(':tax_class_id', $data['id']);
       $Qclass->execute();
 

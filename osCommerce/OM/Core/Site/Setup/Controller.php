@@ -17,15 +17,6 @@
     protected static $_default_application = 'Index';
 
     public static function initialize() {
-      define('OSCOM_BOOTSTRAP_FILE', 'index.php');
-      define('HTTP_SERVER', '');
-      define('HTTP_COOKIE_PATH', '');
-      define('HTTP_COOKIE_DOMAIN', '');
-      define('DIR_WS_HTTP_CATALOG', '');
-      define('DIR_WS_IMAGES', '');
-      define('DB_SERVER_PERSISTENT_CONNECTIONS', false);
-      define('DIR_FS_WORK', OSCOM::BASE_DIRECTORY . 'work/');
-
       Registry::set('Language', new Language());
       Registry::set('osC_Language', Registry::get('Language')); // HPDL to remove
 

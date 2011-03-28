@@ -14,7 +14,7 @@
 
   class Find {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
@@ -26,12 +26,12 @@
 
       $sql_query .= '; select found_rows();';
 
-      $Qclasses = $OSCOM_Database->prepare($sql_query);
+      $Qclasses = $OSCOM_PDO->prepare($sql_query);
       $Qclasses->bindValue(':tax_class_title', '%' . $data['keywords'] . '%');
       $Qclasses->bindValue(':tax_description', '%' . $data['keywords'] . '%');
 
       if ( $data['batch_pageset'] !== -1 ) {
-        $Qclasses->bindInt(':batch_pageset', $OSCOM_Database->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
+        $Qclasses->bindInt(':batch_pageset', $OSCOM_PDO->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
         $Qclasses->bindInt(':batch_max_results', $data['batch_max_results']);
       }
 

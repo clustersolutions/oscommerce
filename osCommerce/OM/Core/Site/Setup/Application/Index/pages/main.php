@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
@@ -138,6 +139,6 @@
 
     <p><?php echo OSCOM::getDef('text_installation_type'); ?></p>
 
-    <p align="center"><?php echo osc_draw_button(array('href' => OSCOM::getLink(null, 'Install'), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_new_install'))); ?></p>
+    <p align="center"><?php echo HTML::button(array('href' => OSCOM::getLink(null, 'Install'), 'priority' => 'primary', 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_new_install'))); ?></p>
   </div>
 </div>

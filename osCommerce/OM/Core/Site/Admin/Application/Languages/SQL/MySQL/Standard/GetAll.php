@@ -14,7 +14,7 @@
 
   class GetAll {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
@@ -26,10 +26,10 @@
 
       $sql_query .= '; select found_rows();';
 
-      $Qlanguages = $OSCOM_Database->prepare($sql_query);
+      $Qlanguages = $OSCOM_PDO->prepare($sql_query);
 
       if ( $data['batch_pageset'] !== -1 ) {
-        $Qlanguages->bindInt(':batch_pageset', $OSCOM_Database->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
+        $Qlanguages->bindInt(':batch_pageset', $OSCOM_PDO->getBatchFrom($data['batch_pageset'], $data['batch_max_results']));
         $Qlanguages->bindInt(':batch_max_results', $data['batch_max_results']);
       }
 

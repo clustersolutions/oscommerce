@@ -14,9 +14,9 @@
 
   class EntrySave {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qupdate = $OSCOM_Database->prepare('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
+      $Qupdate = $OSCOM_PDO->prepare('update :table_configuration set configuration_value = :configuration_value, last_modified = now() where configuration_key = :configuration_key');
       $Qupdate->bindValue(':configuration_value', $data['value']);
       $Qupdate->bindValue(':configuration_key', $data['key']);
       $Qupdate->execute();

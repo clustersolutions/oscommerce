@@ -14,9 +14,9 @@
 
   class ZoneGet {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qzones = $OSCOM_Database->prepare('select * from :table_zones where zone_id = :zone_id');
+      $Qzones = $OSCOM_PDO->prepare('select * from :table_zones where zone_id = :zone_id');
       $Qzones->bindInt(':zone_id', $data['id']);
       $Qzones->execute();
 

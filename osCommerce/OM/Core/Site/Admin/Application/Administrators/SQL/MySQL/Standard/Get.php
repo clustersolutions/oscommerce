@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qadmin = $OSCOM_Database->prepare('select * from :table_administrators where id = :id');
+      $Qadmin = $OSCOM_PDO->prepare('select * from :table_administrators where id = :id');
       $Qadmin->bindInt(':id', $data['id']);
       $Qadmin->execute();
 
@@ -24,7 +24,7 @@
 
       $result['access_modules'] = array();
 
-      $Qaccess = $OSCOM_Database->prepare('select module from :table_administrators_access where administrators_id = :administrators_id');
+      $Qaccess = $OSCOM_PDO->prepare('select module from :table_administrators_access where administrators_id = :administrators_id');
       $Qaccess->bindInt(':administrators_id', $data['id']);
       $Qaccess->execute();
 

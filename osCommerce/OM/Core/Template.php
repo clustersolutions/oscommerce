@@ -10,6 +10,9 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
+
 /**
  * The Template class defines or adds elements to the page output such as the page title, page content, and javascript blocks
  */
@@ -173,7 +176,7 @@
 
       if (empty($_GET) === false) {
         $first_array = array_slice($_GET, 0, 1);
-        $_module = osc_sanitize_string(basename(key($first_array)));
+        $_module = HTML::sanitize(basename(key($first_array)));
 
         if (file_exists('includes/content/' . $group . '/' . $_module . '.php')) {
           $module = $_module;
@@ -266,7 +269,7 @@
  */
 
     function getPageTitle() {
-      return osc_output_string_protected($this->_application->getPageTitle());
+      return HTML::outputProtected($this->_application->getPageTitle());
     }
 
 /**

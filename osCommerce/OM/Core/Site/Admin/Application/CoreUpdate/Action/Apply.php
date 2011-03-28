@@ -20,7 +20,7 @@
       if ( !isset($_GET['v']) || !CoreUpdate::packageExists($_GET['v']) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_select_version_to_view'), 'error');
 
-        osc_redirect_admin(OSCOM::getLink());
+        OSCOM::redirect(OSCOM::getLink());
       }
 
       if ( CoreUpdate::localPackageExists() && (CoreUpdate::getPackageInfo('version_to') != $_GET['v']) ) {
@@ -30,7 +30,7 @@
       if ( !CoreUpdate::localPackageExists() && !CoreUpdate::downloadPackage($_GET['v']) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_local_update_package_does_not_exist'), 'error');
 
-        osc_redirect_admin(OSCOM::getLink());
+        OSCOM::redirect(OSCOM::getLink());
       }
 
       $application->setPageContent('package_contents.php');

@@ -10,13 +10,14 @@
 
   namespace osCommerce\OM\Core;
 
-  use osCommerce\OM\Core\DatabasePDO;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\PDO;
 
   class ErrorHandler {
     static protected $_dbh;
 
     public static function initialize() {
-      if ( in_array('sqlite', DatabasePDO::getAvailableDrivers()) && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
+      if ( in_array('sqlite', PDO::getAvailableDrivers()) && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         ini_set('display_errors', false);
         ini_set('log_errors', true);
         ini_set('error_log', OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
@@ -64,7 +65,7 @@
     }
 
     public static function connect() {
-      self::$_dbh = DatabasePDO::initialize(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3', null, null, null, null, 'SQLite3');
+      self::$_dbh = PDO::initialize(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3', null, null, null, null, 'SQLite3');
 
       self::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
     }

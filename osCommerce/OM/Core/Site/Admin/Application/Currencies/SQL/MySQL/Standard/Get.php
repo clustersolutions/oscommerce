@@ -14,7 +14,7 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $sql_query = 'select * from :table_currencies where';
 
@@ -26,7 +26,7 @@
 
       $sql_query .= ' limit 1';
 
-      $Qcurrency = $OSCOM_Database->prepare($sql_query);
+      $Qcurrency = $OSCOM_PDO->prepare($sql_query);
 
       if ( is_numeric($data['id']) ) {
         $Qcurrency->bindInt(':currencies_id', $data['id']);

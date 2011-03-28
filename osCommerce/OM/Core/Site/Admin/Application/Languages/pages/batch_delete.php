@@ -8,10 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -20,7 +21,7 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_languages'); ?></h3>
+  <h3><?php echo HTML::icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_languages'); ?></h3>
 
   <form name="lDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchDelete&Process'); ?>" method="post">
 
@@ -29,8 +30,7 @@
 <?php
   $check_default_flag = false;
 
-  $Qlanguages = $OSCOM_Database->query('select languages_id, name, code from :table_languages where languages_id in (":languages_id") order by name');
-  $Qlanguages->bindRaw(':languages_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
+  $Qlanguages = $OSCOM_PDO->query('select languages_id, name, code from :table_languages where languages_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by name');
   $Qlanguages->execute();
 
   $names_string = '';
@@ -40,7 +40,7 @@
       $check_default_flag = true;
     }
 
-    $names_string .= osc_draw_hidden_field('batch[]', $Qlanguages->valueInt('languages_id')) . '<b>' . $Qlanguages->value('name') . ' (' . $Qlanguages->value('code') . ')</b>, ';
+    $names_string .= HTML::hiddenField('batch[]', $Qlanguages->valueInt('languages_id')) . '<b>' . $Qlanguages->value('name') . ' (' . $Qlanguages->value('code') . ')</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -50,11 +50,11 @@
   echo '<p>' . $names_string . '</p>';
 
   if ( $check_default_flag === false ) {
-    echo '<p>' . osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
+    echo '<p>' . HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))) . '</p>';
   } else {
     echo '<p><b>' . OSCOM::getDef('introduction_delete_language_invalid') . '</b></p>';
 
-    echo '<p>' . osc_draw_button(array('href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . '</p>';
+    echo '<p>' . HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'primary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))) . '</p>';
   }
 ?>
 

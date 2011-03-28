@@ -14,9 +14,9 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qclasses = $OSCOM_Database->prepare('select tc.*, count(tr.tax_rates_id) as total_tax_rates from :table_tax_class tc left join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where tc.tax_class_id = :tax_class_id');
+      $Qclasses = $OSCOM_PDO->prepare('select tc.*, count(tr.tax_rates_id) as total_tax_rates from :table_tax_class tc left join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where tc.tax_class_id = :tax_class_id');
       $Qclasses->bindInt(':tax_class_id', $data['id']);
       $Qclasses->execute();
 

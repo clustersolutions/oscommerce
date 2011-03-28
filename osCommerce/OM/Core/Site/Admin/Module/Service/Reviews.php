@@ -30,17 +30,30 @@
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array(array('title' => 'New Reviews',
+                          'key' => 'MAX_DISPLAY_NEW_REVIEWS',
+                          'value' => '6',
+                          'description' => 'Maximum number of new reviews to display',
+                          'group_id' => '6'),
+                    array('title' => 'Review Level',
+                          'key' => 'SERVICE_REVIEW_ENABLE_REVIEWS',
+                          'value' => '1',
+                          'description' => 'Customer level required to write a review.',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'0\', \'1\', \'2\'))'),
+                    array('title' => 'Moderate Reviews',
+                          'key' => 'SERVICE_REVIEW_ENABLE_MODERATION',
+                          'value' => '-1',
+                          'description' => 'Should reviews be approved by store admin.',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'-1\', \'0\', \'1\'))')
+                   );
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('New Reviews', 'MAX_DISPLAY_NEW_REVIEWS', '6', 'Maximum number of new reviews to display', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Review Level', 'SERVICE_REVIEW_ENABLE_REVIEWS', '1', 'Customer level required to write a review.', '6', '0', 'osc_cfg_set_boolean_value(array(\'0\', \'1\', \'2\'))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Moderate Reviews', 'SERVICE_REVIEW_ENABLE_MODERATION', '-1', 'Should reviews be approved by store admin.', '6', '0', 'osc_cfg_set_boolean_value(array(\'-1\', \'0\', \'1\'))', now())");
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
     public function remove() {
-      $OSCOM_Database = Registry::get('Database');
-
-      $OSCOM_Database->simpleQuery("delete from " . DB_TABLE_PREFIX . "configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
     }
 
     public function keys() {

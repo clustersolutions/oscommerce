@@ -14,9 +14,9 @@
 
   class SetStatus {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcc = $OSCOM_Database->prepare('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
+      $Qcc = $OSCOM_PDO->prepare('update :table_credit_cards set credit_card_status = :credit_card_status where id = :id');
       $Qcc->bindInt(':credit_card_status', ($data['status'] === true) ? 1 : 0);
       $Qcc->bindInt(':id', $data['id']);
       $Qcc->execute();

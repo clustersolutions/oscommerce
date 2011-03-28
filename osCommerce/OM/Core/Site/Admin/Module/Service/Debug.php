@@ -30,24 +30,81 @@
     }
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
+      $data = array(array('title' => 'Page Execution Time Log File',
+                          'key' => 'SERVICE_DEBUG_EXECUTION_TIME_LOG',
+                          'value' => '',
+                          'description' => 'Location of the page execution time log file (eg, /www/log/page_parse.log).',
+                          'group_id' => '6'),
+                    array('title' => 'Show The Page Execution Time',
+                          'key' => 'SERVICE_DEBUG_EXECUTION_DISPLAY',
+                          'value' => '1',
+                          'description' => 'Show the page execution time.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Log Database Queries',
+                          'key' => 'SERVICE_DEBUG_LOG_DB_QUERIES',
+                          'value' => '-1',
+                          'description' => 'Log all database queries in the page execution time log file.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Show Database Queries',
+                          'key' => 'SERVICE_DEBUG_OUTPUT_DB_QUERIES',
+                          'value' => '-1',
+                          'description' => 'Show all database queries made.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Language Locale',
+                          'key' => 'SERVICE_DEBUG_CHECK_LOCALE',
+                          'value' => '1',
+                          'description' => 'Show a warning message if the set language locale does not exist on the server.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Installation Module',
+                          'key' => 'SERVICE_DEBUG_CHECK_INSTALLATION_MODULE',
+                          'value' => '1',
+                          'description' => 'Show a warning message if the installation module exists.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Configuration File',
+                          'key' => 'SERVICE_DEBUG_CHECK_CONFIGURATION',
+                          'value' => '1',
+                          'description' => 'Show a warning if the configuration file is writeable.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Sessions Directory',
+                          'key' => 'SERVICE_DEBUG_CHECK_SESSION_DIRECTORY',
+                          'value' => '1',
+                          'description' => 'Show a warning if the file-based session directory does not exist.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Sessions Auto Start',
+                          'key' => 'SERVICE_DEBUG_CHECK_SESSION_AUTOSTART',
+                          'value' => '1',
+                          'description' => 'Show a warning if PHP is configured to automatically start sessions.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Check Download Directory',
+                          'key' => 'SERVICE_DEBUG_CHECK_DOWNLOAD_DIRECTORY',
+                          'value' => '1',
+                          'description' => 'Show a warning if the digital product download directory does not exist.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))')
+                   );
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Page Execution Time Log File', 'SERVICE_DEBUG_EXECUTION_TIME_LOG', '', 'Location of the page execution time log file (eg, /www/log/page_parse.log).', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Show The Page Execution Time', 'SERVICE_DEBUG_EXECUTION_DISPLAY', '1', 'Show the page execution time.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Log Database Queries', 'SERVICE_DEBUG_LOG_DB_QUERIES', '-1', 'Log all database queries in the page execution time log file.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Show Database Queries', 'SERVICE_DEBUG_OUTPUT_DB_QUERIES', '-1', 'Show all database queries made.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Check Language Locale', 'SERVICE_DEBUG_CHECK_LOCALE', '1', 'Show a warning message if the set language locale does not exist on the server.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check Installation Module', 'SERVICE_DEBUG_CHECK_INSTALLATION_MODULE', '1', 'Show a warning message if the installation module exists.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check Configuration File', 'SERVICE_DEBUG_CHECK_CONFIGURATION', '1', 'Show a warning if the configuration file is writeable.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check Sessions Directory', 'SERVICE_DEBUG_CHECK_SESSION_DIRECTORY', '1', 'Show a warning if the file-based session directory does not exist.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check Sessions Auto Start', 'SERVICE_DEBUG_CHECK_SESSION_AUTOSTART', '1', 'Show a warning if PHP is configured to automatically start sessions.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) VALUES ('Check Download Directory', 'SERVICE_DEBUG_CHECK_DOWNLOAD_DIRECTORY', '1', 'Show a warning if the digital product download directory does not exist.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
     public function remove() {
-      $OSCOM_Database = Registry::get('Database');
-
-      $OSCOM_Database->simpleQuery("delete from " . DB_TABLE_PREFIX . "configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      OSCOM::callDB('Admin\DeleteConfigurationParameters', $this->keys(), 'Site');
     }
 
     public function keys() {

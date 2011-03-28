@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Site\Shop\Address;
 
   function osc_cfg_set_countries_pulldown_menu($default, $key = null) {
@@ -20,6 +21,6 @@
                                  'text' => $country['name']);
     }
 
-    return osc_draw_pull_down_menu($name, $countries_array, $default);
+    return HTML::selectMenu($name, $countries_array, $default);
   }
 ?>

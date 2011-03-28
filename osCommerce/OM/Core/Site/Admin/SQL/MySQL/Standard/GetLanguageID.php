@@ -14,9 +14,9 @@
 
   class GetLanguageID {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qlanguage = $OSCOM_Database->prepare('select languages_id from :table_languages where code = :code');
+      $Qlanguage = $OSCOM_PDO->prepare('select languages_id from :table_languages where code = :code');
       $Qlanguage->bindValue(':code', $data['code']);
       $Qlanguage->execute();
 

@@ -8,7 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\ZoneGroups\ZoneGroups;
   use osCommerce\OM\Core\Site\Shop\Address;
 
   $countries_array = array(array('id' => '',
@@ -35,11 +37,11 @@
 
     SelectedCountry = theForm.zone_country_id.options[theForm.zone_country_id.selectedIndex].value;
 
-<?php echo osc_js_zone_list('SelectedCountry', 'theForm', 'zone_id'); ?>
+<?php echo ZoneGroups::getJSList('SelectedCountry', 'theForm', 'zone_id'); ?>
   }
 </script>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -48,18 +50,18 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_zone_entry'); ?></h3>
+  <h3><?php echo HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_zone_entry'); ?></h3>
 
   <form name="zeNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntrySave&Process&id=' . $_GET['id']); ?>" method="post">
 
   <p><?php echo OSCOM::getDef('introduction_new_zone_entry'); ?></p>
 
   <fieldset>
-    <p><label for="zone_country_id"><?php echo OSCOM::getDef('field_country'); ?></label><?php echo osc_draw_pull_down_menu('zone_country_id', $countries_array, null, 'onchange="update_zone(this.form);"'); ?></p>
-    <p><label for="zone_id"><?php echo OSCOM::getDef('field_zone'); ?></label><?php echo osc_draw_pull_down_menu('zone_id', $zones_array); ?></p>
+    <p><label for="zone_country_id"><?php echo OSCOM::getDef('field_country'); ?></label><?php echo HTML::selectMenu('zone_country_id', $countries_array, null, 'onchange="update_zone(this.form);"'); ?></p>
+    <p><label for="zone_id"><?php echo OSCOM::getDef('field_zone'); ?></label><?php echo HTML::selectMenu('zone_id', $zones_array); ?></p>
   </fieldset>
 
-  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

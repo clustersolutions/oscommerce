@@ -11,6 +11,7 @@
   namespace osCommerce\OM\Core\Site\RPC;
 
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\HTML;
 
   class Controller implements \osCommerce\OM\Core\SiteInterface {
     const STATUS_SUCCESS = 1;
@@ -26,14 +27,15 @@
     public static function initialize() {
       header('Cache-Control: no-cache, must-revalidate');
       header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+      header('Content-Type: application/json; charset=utf-8');
 
       if ( empty($_GET) ) {
         echo json_encode(array('rpcStatus' => self::STATUS_NO_MODULE));
         exit;
       }
 
-      $site = osc_sanitize_string(basename(key(array_slice($_GET, 1, 1, true))));
-      $application = osc_sanitize_string(basename(key(array_slice($_GET, 2, 1,  true))));
+      $site = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
+      $application = HTML::sanitize(basename(key(array_slice($_GET, 2, 1,  true))));
 
       if ( !OSCOM::siteExists($site) ) {
         echo json_encode(array('rpcStatus' => self::STATUS_CLASS_NONEXISTENT));
@@ -66,7 +68,7 @@
       $rpc = array('RPC');
 
       for ( $i = 3, $n = count($_GET); $i < $n; $i++ ) {
-        $subrpc = osc_sanitize_string(basename(key(array_slice($_GET, $i, 1, true))));
+        $subrpc = HTML::sanitize(basename(key(array_slice($_GET, $i, 1, true))));
 
         if ( self::siteApplicationRPCExists(implode('\\', $rpc) . '\\' . $subrpc) ) {
           call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\' . implode('\\', $rpc) . '\\' . $subrpc, 'execute'));

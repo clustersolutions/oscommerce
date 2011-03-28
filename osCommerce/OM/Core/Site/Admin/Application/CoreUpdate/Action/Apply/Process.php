@@ -20,7 +20,7 @@
       if ( !CoreUpdate::localPackageExists() || (CoreUpdate::getPackageInfo('version_from') != OSCOM::getVersion()) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_wrong_version_to_update_from'), 'error');
 
-        osc_redirect_admin(OSCOM::getLink());
+        OSCOM::redirect(OSCOM::getLink());
       }
 
       if ( CoreUpdate::canApplyPackage() ) {
@@ -34,10 +34,10 @@
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_check_target_permissions'), 'error');
 
-        osc_redirect_admin(OSCOM::getLink(null, null, 'Apply&v=' . $_GET['v']));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'Apply&v=' . $_GET['v']));
       }
 
-      osc_redirect_admin(OSCOM::getLink());
+      OSCOM::redirect(OSCOM::getLink());
     }
   }
 ?>

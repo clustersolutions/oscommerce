@@ -8,16 +8,16 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
-  $Qzones = $OSCOM_Database->query('select zone_id, zone_name from :table_zones where zone_id in (":zone_id") order by zone_name');
-  $Qzones->bindRaw(':zone_id', implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))));
+  $Qzones = $OSCOM_PDO->query('select zone_id, zone_name from :table_zones where zone_id in ("' . implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . '") order by zone_name');
   $Qzones->execute();
 
   $names_string = '';
 
   while ( $Qzones->next() ) {
-    $names_string .= osc_draw_hidden_field('batch[]', $Qzones->valueInt('zone_id')) . '<b>' . $Qzones->valueProtected('zone_name') . '</b>, ';
+    $names_string .= HTML::hiddenField('batch[]', $Qzones->valueInt('zone_id')) . '<b>' . $Qzones->valueProtected('zone_name') . '</b>, ';
   }
 
   if ( !empty($names_string) ) {
@@ -25,7 +25,7 @@
   }
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . osc_link_object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -34,7 +34,7 @@
 ?>
 
 <div class="infoBox">
-  <h3><?php echo osc_icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_zones'); ?></h3>
+  <h3><?php echo HTML::icon('trash.png') . ' ' . OSCOM::getDef('action_heading_batch_delete_zones'); ?></h3>
 
   <form name="cDeleteBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchDeleteZones&Process&id=' . $_GET['id']); ?>" method="post">
 
@@ -42,7 +42,7 @@
 
   <p><?php echo $names_string; ?></p>
 
-  <p><?php echo osc_draw_button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . osc_draw_button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
 
   </form>
 </div>

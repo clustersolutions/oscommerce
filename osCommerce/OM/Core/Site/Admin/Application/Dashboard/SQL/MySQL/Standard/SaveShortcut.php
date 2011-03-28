@@ -14,9 +14,9 @@
 
   class SaveShortcut {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qsc = $OSCOM_Database->prepare('insert into :table_administrator_shortcuts (administrators_id, module, last_viewed) values (:administrators_id, :module, null)');
+      $Qsc = $OSCOM_PDO->prepare('insert into :table_administrator_shortcuts (administrators_id, module, last_viewed) values (:administrators_id, :module, null)');
       $Qsc->bindInt(':administrators_id', $data['admin_id']);
       $Qsc->bindValue(':module', $data['application']);
       $Qsc->execute();

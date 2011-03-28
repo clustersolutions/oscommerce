@@ -14,11 +14,11 @@
 
   class ZoneFind {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
-      $Qzones = $OSCOM_Database->prepare('select * from :table_zones where zone_country_id = :zone_country_id and (zone_name like :zone_name or zone_code like :zone_code) order by zone_name');
+      $Qzones = $OSCOM_PDO->prepare('select * from :table_zones where zone_country_id = :zone_country_id and (zone_name like :zone_name or zone_code like :zone_code) order by zone_name');
       $Qzones->bindInt(':zone_country_id', $data['country_id']);
       $Qzones->bindValue(':zone_name', '%' . $data['keywords'] . '%');
       $Qzones->bindValue(':zone_code', '%' . $data['keywords'] . '%');

@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Login\Model;
 
+  use osCommerce\OM\Core\Hash;
   use osCommerce\OM\Core\OSCOM;
 
   class isValidCredentials {
@@ -17,7 +18,7 @@
       $result = OSCOM::callDB('Admin\Login\GetAdmin', array('username' => $data['username']));
 
       if ( !empty($result) ) {
-        return osc_validate_password($data['password'], $result['user_password']);
+        return Hash::validate($data['password'], $result['user_password']);
       }
 
       return false;

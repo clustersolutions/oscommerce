@@ -14,13 +14,13 @@
 
   class Save {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('MSSQL');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( isset($data['id']) ) {
-        $Q = $OSCOM_Database->query('update osc_countries set countries_name = :countries_name, countries_iso_code_2 = :countries_iso_code_2, countries_iso_code_3 = :countries_iso_code_3, address_format = :address_format where countries_id = :countries_id');
+        $Q = $OSCOM_PDO->prepare('update :table_countries set countries_name = :countries_name, countries_iso_code_2 = :countries_iso_code_2, countries_iso_code_3 = :countries_iso_code_3, address_format = :address_format where countries_id = :countries_id');
         $Q->bindInt(':countries_id', $data['id']);
       } else {
-        $Q = $OSCOM_Database->query('insert into osc_countries (countries_name, countries_iso_code_2, countries_iso_code_3, address_format) values (:countries_name, :countries_iso_code_2, :countries_iso_code_3, :address_format)');
+        $Q = $OSCOM_PDO->prepare('insert into :table_countries (countries_name, countries_iso_code_2, countries_iso_code_3, address_format) values (:countries_name, :countries_iso_code_2, :countries_iso_code_3, :address_format)');
       }
 
       $Q->bindValue(':countries_name', $data['name']);
@@ -29,7 +29,7 @@
       $Q->bindValue(':address_format', $data['address_format']);
       $Q->execute();
 
-      return !$OSCOM_Database->isError();
+      return !$Q->isError();
     }
   }
 ?>

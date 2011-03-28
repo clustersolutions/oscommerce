@@ -10,12 +10,13 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Administrators\Model;
 
+  use osCommerce\OM\Core\Hash;
   use osCommerce\OM\Core\OSCOM;
 
   class save {
     public static function execute($data) {
       if ( !empty($data['password']) ) {
-        $data['password'] = osc_encrypt_string(trim($data['password']));
+        $data['password'] = Hash::get(trim($data['password']));
       }
 
       return OSCOM::callDB('Admin\Administrators\Save', $data);

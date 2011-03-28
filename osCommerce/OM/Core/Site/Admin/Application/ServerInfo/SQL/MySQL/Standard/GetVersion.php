@@ -14,9 +14,9 @@
 
   class GetVersion {
     public static function execute() {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $result = $OSCOM_Database->query('select version() as version')->fetch();
+      $result = $OSCOM_PDO->query('select version() as version')->fetch();
 
       return 'MySQL v' . $result['version'];
     }

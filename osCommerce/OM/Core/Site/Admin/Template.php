@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Admin;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
   class Template extends \osCommerce\OM\Core\Template {
@@ -18,11 +19,11 @@
     }
 
     public function getIcon($size = 16, $icon = null, $title = null) {
-      if ( empty($icon) ) {
+      if ( !isset($icon) ) {
         $icon = $this->_application->getIcon();
       }
 
-      return '<img src="' . OSCOM::getPublicSiteLink('images/applications/' . (int)$size . '/' . $icon) . '" border="0" alt="" title="' . osc_output_string_protected($title) . '" width="' . (int)$size . '" height="' . (int)$size . '" />';
+      return HTML::image(OSCOM::getPublicSiteLink('images/applications/' . $size . '/' . $icon), $title, $size, $size);
     }
   }
 ?>

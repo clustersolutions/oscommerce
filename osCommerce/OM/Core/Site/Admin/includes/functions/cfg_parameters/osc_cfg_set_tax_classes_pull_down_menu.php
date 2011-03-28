@@ -8,19 +8,20 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\OSCOM;
 
   function osc_cfg_set_tax_classes_pull_down_menu($default, $key = null) {
     $OSCOM_Language = Registry::get('Language');
-    $OSCOM_Database = Registry::get('Database');
+    $OSCOM_PDO = Registry::get('PDO');
 
     $name = (empty($key)) ? 'configuration_value' : 'configuration[' . $key . ']';
 
     $tax_class_array = array(array('id' => '0',
                                    'text' => OSCOM::getDef('parameter_none')));
 
-    $Qclasses = $OSCOM_Database->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
+    $Qclasses = $OSCOM_PDO->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
     $Qclasses->execute();
 
     while ( $Qclasses->next() ) {
@@ -28,6 +29,6 @@
                                  'text' => $Qclasses->value('tax_class_title'));
     }
 
-    return osc_draw_pull_down_menu($name, $tax_class_array, $default);
+    return HTML::selectMenu($name, $tax_class_array, $default);
   }
 ?>

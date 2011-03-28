@@ -10,7 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
-  use \PDO;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\PDO;
 
   class DatabasePDOStatement extends \PDOStatement {
     protected $_is_error = false;
@@ -77,7 +78,7 @@
 
       switch ($type) {
         case 'protected':
-          return osc_output_string_protected($this->result[$column]);
+          return HTML::outputProtected($this->result[$column]);
           break;
         case 'int':
           return (int)$this->result[$column];

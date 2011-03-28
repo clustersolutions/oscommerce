@@ -14,9 +14,9 @@
 
   class EntryGet {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcfg = $OSCOM_Database->prepare('select * from :table_configuration where configuration_id = :configuration_id');
+      $Qcfg = $OSCOM_PDO->prepare('select * from :table_configuration where configuration_id = :configuration_id');
       $Qcfg->bindInt(':configuration_id', $data['id']);
       $Qcfg->execute();
 

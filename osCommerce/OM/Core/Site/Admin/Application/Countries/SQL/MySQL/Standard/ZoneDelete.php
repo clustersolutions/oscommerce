@@ -14,9 +14,9 @@
 
   class ZoneDelete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qzone = $OSCOM_Database->prepare('delete from :table_zones where zone_id = :zone_id');
+      $Qzone = $OSCOM_PDO->prepare('delete from :table_zones where zone_id = :zone_id');
       $Qzone->bindInt(':zone_id', $data['id']);
       $Qzone->execute();
 

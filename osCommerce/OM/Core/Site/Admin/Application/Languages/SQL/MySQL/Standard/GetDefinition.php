@@ -14,9 +14,9 @@
 
   class GetDefinition {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qdef = $OSCOM_Database->prepare('select * from :table_languages_definitions where id = :id');
+      $Qdef = $OSCOM_PDO->prepare('select * from :table_languages_definitions where id = :id');
       $Qdef->bindInt(':id', $data['id']);
       $Qdef->execute();
 

@@ -14,7 +14,7 @@
 
   class GetDefinitions {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $result = array();
 
@@ -28,7 +28,7 @@
 
       $sql_query .= ' order by content_group, definition_key';
 
-      $Qdefs = $OSCOM_Database->prepare($sql_query);
+      $Qdefs = $OSCOM_PDO->prepare($sql_query);
 
       if ( !is_array($data['group']) ) {
         $Qdefs->bindValue(':content_group', $data['group']);

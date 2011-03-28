@@ -143,24 +143,6 @@
       return $this->getData($id, 'code');
     }
 
-    function showImage($code = null, $width = '16', $height = '10', $parameters = null) {
-      if ( empty($code) ) {
-        $code = $this->_code;
-      }
-
-      $image_code = strtolower(substr($code, 3));
-
-      if ( !is_numeric($width) ) {
-        $width = 16;
-      }
-
-      if ( !is_numeric($height) ) {
-        $height = 10;
-      }
-
-      return osc_image('images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
-    }
-
     function isDefined($key) {
       return isset($this->_definitions[$key]);
     }

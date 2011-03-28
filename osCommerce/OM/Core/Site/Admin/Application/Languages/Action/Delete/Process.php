@@ -23,7 +23,7 @@
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
       }
 
-      osc_redirect_admin(OSCOM::getLink());
+      OSCOM::redirect(OSCOM::getLink());
     }
   }
 ?>
