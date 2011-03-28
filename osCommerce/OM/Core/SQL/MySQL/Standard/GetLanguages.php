@@ -14,9 +14,9 @@
 
   class GetLanguages {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qlanguages = $OSCOM_Database->prepare('select * from :table_languages order by sort_order, name');
+      $Qlanguages = $OSCOM_PDO->query('select * from :table_languages order by sort_order, name');
 // HPDL     $Qlanguages->setCache('languages');
       $Qlanguages->execute();
 

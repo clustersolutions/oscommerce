@@ -14,9 +14,9 @@
 
   class GetTemplates {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qtemplates = $OSCOM_Database->prepare('select id, code, title from :table_templates');
+      $Qtemplates = $OSCOM_PDO->query('select id, code, title from :table_templates');
 // HPDL      $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 
