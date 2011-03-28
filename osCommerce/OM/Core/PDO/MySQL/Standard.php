@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\DatabasePDO\MySQL;
+  namespace osCommerce\OM\Core\PDO\MySQL;
 
   use \PDO;
 
   use osCommerce\OM\Core\OSCOM;
 
-  class Standard extends \osCommerce\OM\Core\DatabasePDO {
+  class Standard extends \osCommerce\OM\Core\PDO {
     protected $_has_native_fk = false;
     protected $_fkeys = array();
 
@@ -28,7 +28,7 @@
 
 // Override ATTR_STATEMENT_CLASS to automatically handle foreign key constraints
       if ( $this->_has_native_fk === false ) {
-        $this->_driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\DatabasePDO\\MySQL\\Standard\\PDOStatement', array($this));
+        $this->_driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
       }
 
 // Only one init command can be issued (see http://bugs.php.net/bug.php?id=48859)

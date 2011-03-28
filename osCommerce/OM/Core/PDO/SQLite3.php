@@ -8,9 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\DatabasePDO;
+  namespace osCommerce\OM\Core\PDO;
 
-  class SQLite3 extends \osCommerce\OM\Core\DatabasePDO {
+  class SQLite3 extends \osCommerce\OM\Core\PDO {
     public function __construct($server, $username, $password, $database, $port, $driver_options) {
       $this->_server = $server;
       $this->_username = $username;
