@@ -12,6 +12,8 @@
 
   use \PDO;
 
+  use osCommerce\OM\Core\OSCOM;
+
   class Standard extends \osCommerce\OM\Core\DatabasePDO {
     protected $_has_native_fk = false;
     protected $_fkeys = array();
@@ -46,7 +48,7 @@
 
       $dbh = parent::__construct($dsn, $this->_username, $this->_password, $this->_driver_options);
 
-      if ( defined('DB_SERVER') && $this->_has_native_fk === false ) {
+      if ( (OSCOM::getSite() != 'Setup') && $this->_has_native_fk === false ) {
         $this->setupForeignKeys();
       }
 
