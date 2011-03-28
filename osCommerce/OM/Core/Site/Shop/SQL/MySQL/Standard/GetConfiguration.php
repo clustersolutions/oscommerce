@@ -8,7 +8,7 @@
   as published by the Free Software Foundation.
 */
 
-  namespace osCommerce\OM\Core\Site\Admin\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Shop\SQL\MySQL\Standard;
 
   use osCommerce\OM\Core\Registry;
 

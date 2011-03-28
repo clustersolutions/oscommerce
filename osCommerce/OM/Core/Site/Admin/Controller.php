@@ -26,7 +26,7 @@
       Registry::set('Cache', new Cache());
       Registry::set('PDO', PDO::initialize());
 
-      foreach ( OSCOM::callDB('Admin\GetConfiguration', null, 'Site') as $param ) {
+      foreach ( OSCOM::callDB('Shop\GetConfiguration', null, 'Site') as $param ) {
         define($param['cfgKey'], $param['cfgValue']);
       }
 
