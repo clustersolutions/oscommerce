@@ -17,7 +17,7 @@
       $OSCOM_PDO = Registry::get('PDO');
 
       $Qtemplates = $OSCOM_PDO->query('select id, code, title from :table_templates');
-// HPDL      $Qtemplates->setCache('templates');
+      $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 
       return $Qtemplates->fetchAll();

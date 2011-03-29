@@ -17,7 +17,7 @@
       $OSCOM_PDO = Registry::get('PDO');
 
       $Qlanguages = $OSCOM_PDO->query('select * from :table_languages order by sort_order, name');
-// HPDL     $Qlanguages->setCache('languages');
+      $Qlanguages->setCache('languages');
       $Qlanguages->execute();
 
       return $Qlanguages->fetchAll();
