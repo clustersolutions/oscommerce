@@ -12,10 +12,15 @@
 
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\PDO;
+  use osCommerce\OM\Core\Registry;
 
   class PDOStatement extends \PDOStatement {
     protected $_is_error = false;
     protected $_binded_params = array();
+    protected $_cache_key;
+    protected $_cache_expire;
+    protected $_cache_data;
+    protected $_cache_read = false;
 
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR) {
       $this->_binded_params[$parameter] = array('value' => $value,
@@ -39,36 +44,65 @@
     }
 
     public function execute($input_parameters = array()) {
-      if ( empty($input_parameters) ) {
-        $input_parameters = null;
+      if ( isset($this->_cache_key) ) {
+        if ( Registry::get('Cache')->read($this->_cache_key, $this->_cache_expire) ) {
+          $this->_cache_data = Registry::get('Cache')->getCache();
+
+          $this->_cache_read = true;
+        }
       }
 
-      $this->_is_error = !parent::execute($input_parameters);
+      if ($this->_cache_read === false) {
+        if ( empty($input_parameters) ) {
+          $input_parameters = null;
+        }
 
-      return $this->_is_error;
+        $this->_is_error = !parent::execute($input_parameters);
+      }
     }
 
     public function fetch($fetch_style = PDO::FETCH_ASSOC, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0) {
-/*
-      if ($this->cache_read === true) {
-        list(, $this->result) = each($this->cache_data);
+      if ( $this->_cache_read === true ) {
+        list(, $this->result) = each($this->_cache_data);
       } else {
-*/
-
         $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 
-/*
-        if (isset($this->cache_key)) {
-          $this->cache_data[] = $this->result;
+        if ( isset($this->_cache_key) ) {
+          $this->_cache_data[] = $this->result;
         }
       }
-*/
 
       return $this->result;
     }
 
     public function next() {
       return $this->fetch();
+    }
+
+    public function fetchAll($fetch_style = PDO::FETCH_ASSOC, $fetch_argument = null, $ctor_args = array()) {
+      if ( $this->_cache_read === true ) {
+        $this->result = $this->_cache_data;
+      } else {
+// fetchAll() fails if second argument is passed in a fetch style that does not
+// use the optional argument
+        if ( in_array($fetch_style, array(PDO::FETCH_COLUMN, PDO::FETCH_CLASS, PDO::FETCH_FUNC)) ) {
+          $this->result = parent::fetchAll($fetch_style, $fetch_argument, $ctor_args);
+        } else {
+          $this->result = parent::fetchAll($fetch_style);
+        }
+
+        if ( isset($this->_cache_key) ) {
+          $this->_cache_data = $this->result;
+        }
+      }
+
+      return $this->result;
+    }
+
+
+    public function setCache($key, $expire = 0) {
+      $this->_cache_key = $key;
+      $this->_cache_expire = $expire;
     }
 
     protected function valueMixed($column, $type = 'string') {
@@ -110,6 +144,14 @@
 
     public function isError() {
       return $this->_is_error;
+    }
+
+    public function __destruct() {
+      if ( $this->_cache_read === false ) {
+        if ( isset($this->_cache_key) ) {
+          Registry::get('Cache')->write($this->_cache_data, $this->_cache_key);
+        }
+      }
     }
   }
 ?>
