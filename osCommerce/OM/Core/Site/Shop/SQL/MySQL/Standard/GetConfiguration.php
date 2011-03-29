@@ -17,7 +17,7 @@
       $OSCOM_PDO = Registry::get('PDO');
 
       $Qcfg = $OSCOM_PDO->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
-//      $Qcfg->setCache('configuration'); HPDL
+      $Qcfg->setCache('configuration');
       $Qcfg->execute();
 
       return $Qcfg->fetchAll();
