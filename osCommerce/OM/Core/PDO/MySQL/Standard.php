@@ -65,7 +65,7 @@
 
     public function setupForeignKeys() {
       $Qfk = $this->query('select * from :table_fk_relationships');
-//      $Qfk->setCache('fk_relationships'); HPDL
+      $Qfk->setCache('fk_relationships');
       $Qfk->execute();
 
       while ( $Qfk->next() ) {
@@ -75,8 +75,6 @@
                                                          'on_update' => $Qfk->value('on_update'),
                                                          'on_delete' => $Qfk->value('on_delete'));
       }
-
-//      $Qfk->freeResult();
     }
 
     public function hasForeignKey($table) {
