@@ -385,5 +385,48 @@
 
       return call_user_func(array($ns . '\\SQL\\' . $db_driver . '\\' . $procedure, 'execute'), $data);
     }
+
+/**
+ * Set a cookie
+ *
+ * @param string $name The name of the cookie
+ * @param string $value The value of the cookie
+ * @param int $expire Unix timestamp of when the cookie should expire
+ * @param string $path The path on the server for which the cookie will be available on
+ * @param string $domain The The domain that the cookie is available on
+ * @param boolean $secure Indicates whether the cookie should only be sent over a secure HTTPS connection
+ * @param boolean $httpOnly Indicates whether the cookie should only accessible over the HTTP protocol
+ * @since v3.0.0
+ */
+
+    public static function setCookie($name, $value = null, $expires = 0, $path = null, $domain = null, $secure = false, $httpOnly = false) {
+      if ( !isset($path) ) {
+        $path = (static::getRequestType() == 'NONSSL') ? static::getConfig('http_cookie_path') : static::getConfig('https_cookie_path');
+      }
+
+      if ( !isset($domain) ) {
+        $domain = (static::getRequestType() == 'NONSSL') ? static::getConfig('http_cookie_domain') : static::getConfig('https_cookie_domain');
+      }
+
+      header('Set-Cookie: ' . $name . '=' . urlencode($value) . '; expires=' . date('D, d-M-Y H:i:s T', $expires) . '; path=' . $path . '; domain=' . $domain . (($secure === true) ? ' secure;' : '') . (($httpOnly === true) ? ' httponly;' : ''));
+    }
+
+/**
+ * Get the IP address of the client
+ *
+ * @since v3.0.0
+ */
+
+    public static function getIPAddress() {
+      if ( isset($_SERVER['HTTP_X_FORWARDED_FOR']) ) {
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+      } elseif ( isset($_SERVER['HTTP_CLIENT_IP']) ) {
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+      } else {
+        $ip = $_SERVER['REMOTE_ADDR'];
+      }
+
+      return $ip;
+    }
   }
 ?>
