@@ -24,7 +24,7 @@
     $Qclasses = $OSCOM_PDO->query('select tax_class_id, tax_class_title from :table_tax_class order by tax_class_title');
     $Qclasses->execute();
 
-    while ( $Qclasses->next() ) {
+    while ( $Qclasses->fetch() ) {
       $tax_class_array[] = array('id' => $Qclasses->valueInt('tax_class_id'),
                                  'text' => $Qclasses->value('tax_class_title'));
     }

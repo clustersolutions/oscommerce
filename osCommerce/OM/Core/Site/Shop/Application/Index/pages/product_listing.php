@@ -8,10 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -24,32 +23,34 @@
       $filterlist_sql = "select distinct m.manufacturers_id as id, m.manufacturers_name as name from :table_products p, :table_products_to_categories p2c, :table_manufacturers m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . $OSCOM_Category->getID() . "' order by m.manufacturers_name";
     }
 
-    $Qfilterlist = $OSCOM_Database->query($filterlist_sql);
+    $Qfilterlist = $OSCOM_PDO->query($filterlist_sql);
     $Qfilterlist->execute();
 
-    if ( $Qfilterlist->numberOfRows() > 1 ) {
+    $filter_result = $Qfilterlist->fetchAll();
+
+    if ( count($filter_result) > 1 ) {
       echo '<p><form name="filter" action="' . OSCOM::getLink() . '" method="get">' . $OSCOM_Language->get('filter_show') . '&nbsp;';
 
       if ( isset($_GET['Manufacturers']) && !empty($_GET['Manufacturers']) ) {
-        echo osc_draw_hidden_field('Manufacturers', $_GET['Manufacturers']);
+        echo HTML::hiddenField('Manufacturers', $_GET['Manufacturers']);
 
         $options = array(array('id' => '', 'text' => OSCOM::getDef('filter_all_categories')));
       } else {
-        echo osc_draw_hidden_field('cPath', $OSCOM_Category->getPath());
+        echo HTML::hiddenField('cPath', $OSCOM_Category->getPath());
 
         $options = array(array('id' => '', 'text' => OSCOM::getDef('filter_all_manufacturers')));
       }
 
       if ( isset($_GET['sort']) ) {
-        echo osc_draw_hidden_field('sort', $_GET['sort']);
+        echo HTML::hiddenField('sort', $_GET['sort']);
       }
 
-      while ( $Qfilterlist->next() ) {
-        $options[] = array('id' => $Qfilterlist->valueInt('id'), 'text' => $Qfilterlist->value('name'));
+      foreach ( $filter_result as $f ) {
+        $options[] = array('id' => $f['id'], 'text' => $f['name']);
       }
 
-      echo osc_draw_pull_down_menu('filter', $options, (isset($_GET['filter']) ? $_GET['filter'] : null), 'onchange="this.form.submit()"') .
-           osc_draw_hidden_session_id_field() . '</form></p>' . "\n";
+      echo HTML::selectMenu('filter', $options, (isset($_GET['filter']) ? $_GET['filter'] : null), 'onchange="this.form.submit()"') .
+           HTML::hiddenSessionIDField() . '</form></p>' . "\n";
     }
   }
 
@@ -57,7 +58,7 @@
     $OSCOM_Products->setManufacturer($_GET['Manufacturers']);
   }
 
-  $Qlisting = $OSCOM_Products->execute();
+  $products_listing = $OSCOM_Products->execute();
 
   require('includes/modules/product_listing.php');
 ?>

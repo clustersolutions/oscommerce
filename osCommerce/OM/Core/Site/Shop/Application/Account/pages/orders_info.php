@@ -8,16 +8,15 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\Site\Shop\Order;
-  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\Site\Shop\Order;
   use osCommerce\OM\Core\Site\Shop\Tax;
 
   $order = new Order($_GET['Orders']);
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -133,7 +132,9 @@
 <?php
   $Qstatus = $order->getStatusListing();
 
-  if ( $Qstatus->numberOfRows() > 0 ) {
+  $status = $Qstatus->fetchAll();
+
+  if ( count($status) > 0 ) {
 ?>
 
 <div class="moduleBox">
@@ -143,11 +144,11 @@
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
 
 <?php
-    while ( $Qstatus->next() ) {
+    foreach ( $status as $s ) {
       echo '    <tr>' . "\n" .
-           '      <td valign="top" width="70">' . DateTime::getShort($Qstatus->value('date_added')) . '</td>' . "\n" .
-           '      <td valign="top" width="70">' . $Qstatus->value('orders_status_name') . '</td>' . "\n" .
-           '      <td valign="top">' . (!osc_empty($Qstatus->valueProtected('comments')) ? nl2br($Qstatus->valueProtected('comments')) : '&nbsp;') . '</td>' . "\n" .
+           '      <td valign="top" width="70">' . DateTime::getShort($s['date_added']) . '</td>' . "\n" .
+           '      <td valign="top" width="70">' . $s['orders_status_name'] . '</td>' . "\n" .
+           '      <td valign="top">' . (strlen(HTML::outputProtected($s['comments'])) > 0 ? nl2br(HTML::outputProtected($s['comments'])) : '&nbsp;') . '</td>' . "\n" .
            '    </tr>' . "\n";
     }
 ?>
@@ -167,5 +168,5 @@
 
 
 <div class="submitFormButtons">
-  <?php echo osc_link_object(OSCOM::getLink(null, null, 'Orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Orders' . (isset($_GET['page']) ? '&page=' . $_GET['page'] : ''), 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
 </div>

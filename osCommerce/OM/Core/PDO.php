@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
   class PDO extends \PDO {
@@ -201,6 +202,114 @@
       }
 
       return !$error;
+    }
+
+    public static function getBatchTotalPages($text, $pageset_number = 1, $total) {
+      $pageset_number = (is_numeric($pageset_number) ? $pageset_number : 1);
+
+      if ( $total < 1 ) {
+        $from = 0;
+      } else {
+        $from = max(($pageset_number * MAX_DISPLAY_SEARCH_RESULTS) - MAX_DISPLAY_SEARCH_RESULTS, 1);
+      }
+
+      $to = min($pageset_number * MAX_DISPLAY_SEARCH_RESULTS, $total);
+
+      return sprintf($text, $from, $to, $total);
+    }
+
+    public static function getBatchPageLinks($batch_keyword = 'page', $total, $parameters = '', $with_pull_down_menu = true) {
+      $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
+      $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);
+
+      if ( $number_of_pages > 1 ) {
+        $string = static::getBatchPreviousPageLink($batch_keyword, $parameters);
+
+        if ( $with_pull_down_menu === true ) {
+          $string .= static::getBatchPagesPullDownMenu($batch_keyword, $total, $parameters);
+        }
+
+        $string .= static::getBatchNextPageLink($batch_keyword, $total, $parameters);
+      } else {
+        $string = sprintf(OSCOM::getDef('result_set_current_page'), 1, 1);
+      }
+
+      return $string;
+    }
+
+    public static function getBatchPagesPullDownMenu($batch_keyword = 'page', $total, $parameters = null) {
+      $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
+      $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);
+
+      $pages_array = array();
+
+      for ( $i = 1; $i <= $number_of_pages; $i++ ) {
+        $pages_array[] = array('id' => $i,
+                               'text' => $i);
+      }
+
+      $hidden_parameter = '';
+
+      if ( !empty($parameters) ) {
+        $parameters = explode('&', $parameters);
+
+        foreach ( $parameters as $parameter ) {
+          $keys = explode('=', $parameter, 2);
+
+          if ( $keys[0] != $batch_keyword ) {
+            $hidden_parameter .= HTML::hiddenField($keys[0], (isset($keys[1]) ? $keys[1] : ''));
+          }
+        }
+      }
+
+      $string = '<form action="' . OSCOM::getLink(null, null) . '" action="get">' . $hidden_parameter .
+                sprintf(OSCOM::getDef('result_set_current_page'), HTML::selectMenu($batch_keyword, $pages_array, $batch_number, 'onchange="this.form.submit();"'), $number_of_pages) .
+                HTML::hiddenSessionIDField() . '</form>';
+
+      return $string;
+    }
+
+    public static function getBatchPreviousPageLink($batch_keyword = 'page', $parameters = null) {
+      $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
+
+      if ( !empty($parameters) ) {
+        $parameters .= '&';
+      }
+
+      $back_string = HTML::icon('nav_back.png', OSCOM::getDef('result_set_previous_page'));
+      $back_grey_string = HTML::icon('nav_back_grey.png', OSCOM::getDef('result_set_previous_page'));
+
+      if ( $batch_number > 1 ) {
+        $string = HTML::link(OSCOM::getLink(null, null, $parameters . $batch_keyword . '=' . ($batch_number - 1)), $back_string);
+      } else {
+        $string = $back_grey_string;
+      }
+
+      $string .= '&nbsp;';
+
+      return $string;
+    }
+
+    public static function getBatchNextPageLink($batch_keyword = 'page', $total, $parameters = null) {
+      $batch_number = (isset($_GET[$batch_keyword]) && is_numeric($_GET[$batch_keyword]) ? $_GET[$batch_keyword] : 1);
+      $number_of_pages = ceil($total / MAX_DISPLAY_SEARCH_RESULTS);
+
+      if ( !empty($parameters) ) {
+        $parameters .= '&';
+      }
+
+      $forward_string = HTML::icon('nav_forward.png', OSCOM::getDef('result_set_next_page'));
+      $forward_grey_string = HTML::icon('nav_forward_grey.png', OSCOM::getDef('result_set_next_page'));
+
+      $string = '&nbsp;';
+
+      if ( ( $batch_number < $number_of_pages ) && ( $number_of_pages != 1 ) ) {
+        $string .= HTML::link(OSCOM::getLink(null, null, $parameters . $batch_keyword . '=' . ($batch_number + 1)), $forward_string);
+      } else {
+        $string .= $forward_grey_string;
+      }
+
+      return $string;
     }
 
     protected function _autoPrefixTables($statement) {

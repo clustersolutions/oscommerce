@@ -21,7 +21,7 @@
 
       $OSCOM_PaymentModule->process();
 
-      osc_redirect(OSCOM::getLink(null, null, 'Success', 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, null, 'Success', 'SSL'));
     }
   }
 ?>

@@ -10,8 +10,8 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Product;
 
   class RequireCustomerAccount {
@@ -34,7 +34,7 @@
 
       $OSCOM_NavigationHistory->setSnapshot();
 
-      osc_redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
     }
   }
 ?>

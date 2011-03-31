@@ -68,7 +68,7 @@
       $Qfk->setCache('fk_relationships');
       $Qfk->execute();
 
-      while ( $Qfk->next() ) {
+      while ( $Qfk->fetch() ) {
         $this->_fkeys[$Qfk->value('to_table')][] = array('from_table' => $Qfk->value('from_table'),
                                                          'from_field' => $Qfk->value('from_field'),
                                                          'to_field' => $Qfk->value('to_field'),

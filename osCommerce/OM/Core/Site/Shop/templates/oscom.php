@@ -8,14 +8,14 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 ?>
 
-<?php echo '<?xml version="1.0" encoding="utf-8"?>'; // short_open_tag compatibility ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!doctype html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" xml:lang="<?php echo $OSCOM_Language->getCode(); ?>">
+<html dir="<?php echo $OSCOM_Language->getTextDirection(); ?>" lang="<?php echo $OSCOM_Language->getCode(); ?>">
 
 <head>
 
@@ -28,6 +28,9 @@
 <meta name="generator" value="osCommerce Online Merchant" />
 
 <script type="text/javascript" src="public/external/jquery/jquery-1.5.1.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/start/jquery-ui-1.8.11.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/oscom/stylesheets/general.css'); ?>" />
 
@@ -262,18 +265,26 @@
 <div id="pageHeader">
 
 <?php
-    echo osc_link_object(OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()), osc_image(DIR_WS_IMAGES . 'store_logo.jpg', STORE_NAME), 'id="siteLogo"');
+    echo HTML::link(OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()), HTML::image(OSCOM::getPublicSiteLink('images/store_logo.png'), STORE_NAME), 'id="siteLogo"');
 ?>
 
-  <ul id="navigationIcons">
+  <div id="navigationIcons">
 
 <?php
-    echo '<li>' . osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_account.gif', OSCOM::getDef('my_account'))) . '</li>' .
-         '<li>' . osc_link_object(OSCOM::getLink(null, 'Cart'), osc_image(DIR_WS_IMAGES . 'header_cart.gif', OSCOM::getDef('cart_contents'))) . '</li>' .
-         '<li>' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), osc_image(DIR_WS_IMAGES . 'header_checkout.gif', OSCOM::getDef('checkout'))) . '</li>';
+    echo HTML::button(array('title' => OSCOM::getDef('cart_contents') . ($OSCOM_ShoppingCart->numberOfItems() > 0 ? ' (' . $OSCOM_ShoppingCart->numberOfItems() . ')' : ''), 'icon' => 'cart', 'href' => OSCOM::getLink(null, 'Cart'))) .
+         HTML::button(array('title' => OSCOM::getDef('checkout'), 'icon' => 'triangle-1-e', 'href' => OSCOM::getLink(null, 'Checkout', null, 'SSL'))) .
+         HTML::button(array('title' => OSCOM::getDef('my_account'), 'icon' => 'person', 'href' => OSCOM::getLink(null, 'Account', null, 'SSL')));
+
+    if ( $OSCOM_Customer->isLoggedOn() ) {
+      echo HTML::button(array('title' => OSCOM::getDef('sign_out'), 'href' => OSCOM::getLink(null, 'Account', 'LogOff', 'SSL')));
+    }
 ?>
 
-  </ul>
+  </div>
+
+  <script type="text/javascript">
+    $('#navigationIcons').buttonset();
+  </script>
 
   <div id="navigationBar">
 
@@ -291,12 +302,6 @@
 
 <?php
     }
-
-    if ( $OSCOM_Customer->isLoggedOn() ) {
-      echo osc_link_object(OSCOM::getLink(null, 'Account', 'LogOff', 'SSL'), OSCOM::getDef('sign_out')) . ' &nbsp;|&nbsp; ';
-    }
-
-    echo osc_link_object(OSCOM::getLink(null, 'Account', null, 'SSL'), OSCOM::getDef('my_account')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Cart'), OSCOM::getDef('cart_contents')) . ' &nbsp;|&nbsp; ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), OSCOM::getDef('checkout'));
 ?>
 
   </div>

@@ -8,12 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\Site\Shop\AddressBook;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -39,7 +38,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('current_billing_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('current_billing_address_title') . '</b>'; ?>
     </div>
 
     <?php echo OSCOM::getDef('selected_billing_destination'); ?>
@@ -59,7 +58,7 @@
 
   <div class="content">
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b>'; ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo OSCOM::getDef('select_another_billing_destination'); ?></p>
@@ -74,7 +73,7 @@
 
       $Qaddresses = AddressBook::getListing();
 
-      while ( $Qaddresses->next() ) {
+      while ( $Qaddresses->fetch() ) {
 ?>
 
       <tr>
@@ -92,7 +91,7 @@
 
             <td width="10">&nbsp;</td>
             <td colspan="2"><b><?php echo $Qaddresses->valueProtected('firstname') . ' ' . $Qaddresses->valueProtected('lastname'); ?></b></td>
-            <td align="right"><?php echo osc_draw_radio_field('ab', $Qaddresses->valueInt('address_book_id'), (string)$OSCOM_ShoppingCart->getBillingAddress('id')); ?></td>
+            <td align="right"><?php echo HTML::radioField('ab', $Qaddresses->valueInt('address_book_id'), (string)$OSCOM_ShoppingCart->getBillingAddress('id')); ?></td>
             <td width="10">&nbsp;</td>
           </tr>
           <tr>
@@ -147,7 +146,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
     </div>
 
     <?php echo '<b>' . OSCOM::getDef('continue_checkout_procedure_title') . '</b><br />' . OSCOM::getDef('continue_checkout_procedure_to_payment'); ?>

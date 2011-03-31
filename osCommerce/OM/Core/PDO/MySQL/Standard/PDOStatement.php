@@ -40,12 +40,12 @@
 
               $Qchild->execute();
 
-              while ( $Qchild->next() ) {
+              while ( $Qchild->fetch() ) {
                 $Qcheck = $this->_pdo->prepare('select ' . $fk['from_field'] . ' from ' . $db_table_prefix .  $fk['from_table'] . ' where ' . $fk['from_field'] . ' = "' . $Qchild->value($fk['to_field']) . '" limit 1');
                 $Qcheck->execute();
 
                 if ( count($Qcheck->fetchAll()) === 1 ) {
-//                  $this->db_class->setError('RESTRICT constraint condition from table ' . $db_table_prefix .  $fk['from_table'], null, $this->sql_query);
+                  trigger_error('RESTRICT constraint condition from table ' . $db_table_prefix .  $fk['from_table']);
 
                   return false;
                 }
@@ -62,7 +62,7 @@
 
             $Qparent->execute();
 
-            while ( $Qparent->next() ) {
+            while ( $Qparent->fetch() ) {
               if ( $fk['on_delete'] == 'cascade' ) {
                 $Qdel = $this->_pdo->prepare('delete from ' . $db_table_prefix . $fk['from_table'] . ' where ' . $fk['from_field'] . ' = :' . $fk['from_field']);
                 $Qdel->bindValue(':' . $fk['from_field'], $Qparent->value($fk['to_field']));
@@ -91,12 +91,12 @@
 
               $Qchild->execute();
 
-              while ( $Qchild->next() ) {
+              while ( $Qchild->fetch() ) {
                 $Qcheck = $this->_pdo->prepare('select ' . $fk['from_field'] . ' from ' . $db_table_prefix .  $fk['from_table'] . ' where ' . $fk['from_field'] . ' = "' . $Qchild->value($fk['to_field']) . '" limit 1');
                 $Qcheck->execute();
 
                 if ( count($Qcheck->fetchAll()) === 1 ) {
-//                  $this->db_class->setError('RESTRICT constraint condition from table ' . $db_table_prefix .  $fk['from_table'], null, $this->sql_query);
+                  trigger_error('RESTRICT constraint condition from table ' . $db_table_prefix .  $fk['from_table']);
 
                   return false;
                 }
@@ -117,7 +117,7 @@
 
               $Qparent->execute();
 
-              while ( $Qparent->next() ) {
+              while ( $Qparent->fetch() ) {
                 if ( ($fk['on_update'] == 'cascade') || ($fk['on_update'] == 'set_null') ) {
                   $on_update_value = '';
 

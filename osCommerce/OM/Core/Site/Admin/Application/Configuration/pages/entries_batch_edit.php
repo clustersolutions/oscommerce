@@ -35,7 +35,7 @@
   $Qcfg = $OSCOM_PDO->query('select configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, use_function, set_function from :table_configuration where configuration_id in (' . implode(',', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . ')');
   $Qcfg->execute();
 
-  while ( $Qcfg->next() ) {
+  while ( $Qcfg->fetch() ) {
     if ( strlen($Qcfg->value('set_function') > 0 ) ) {
       $value_field = Configuration::callUserFunc($Qcfg->value('set_function'), $Qcfg->value('configuration_value'), $Qcfg->value('configuration_key'));
     } else {

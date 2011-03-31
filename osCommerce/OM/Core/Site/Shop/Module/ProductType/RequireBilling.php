@@ -10,10 +10,10 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Payment;
+  use osCommerce\OM\Core\Site\Shop\Product;
 
   class RequireBilling {
     public static function getTitle() {
@@ -66,7 +66,7 @@
       if ( !isset($_GET['Billing']) ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'));
       }
     }
   }

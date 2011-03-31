@@ -25,10 +25,10 @@
     }
 
     public function getTitle($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qweight = $OSCOM_Database->query('select weight_class_title from :table_weight_classes where weight_class_id = :weight_class_id and language_id = :language_id');
+      $Qweight = $OSCOM_PDO->prepare('select weight_class_title from :table_weight_classes where weight_class_id = :weight_class_id and language_id = :language_id');
       $Qweight->bindInt(':weight_class_id', $id);
       $Qweight->bindInt(':language_id', $OSCOM_Language->getID());
       $Qweight->execute();
@@ -37,30 +37,26 @@
     }
 
     public function prepareRules() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qrules = $OSCOM_Database->query('select r.weight_class_from_id, r.weight_class_to_id, r.weight_class_rule from :table_weight_classes_rules r, :table_weight_classes c where c.weight_class_id = r.weight_class_from_id');
+      $Qrules = $OSCOM_PDO->query('select r.weight_class_from_id, r.weight_class_to_id, r.weight_class_rule from :table_weight_classes_rules r, :table_weight_classes c where c.weight_class_id = r.weight_class_from_id');
       $Qrules->setCache('weight-rules');
       $Qrules->execute();
 
-      while ( $Qrules->next() ) {
+      while ( $Qrules->fetch() ) {
         $this->weight_classes[$Qrules->valueInt('weight_class_from_id')][$Qrules->valueInt('weight_class_to_id')] = $Qrules->value('weight_class_rule');
       }
 
-      $Qrules->freeResult();
-
-      $Qclasses = $OSCOM_Database->query('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id');
+      $Qclasses = $OSCOM_PDO->prepare('select weight_class_id, weight_class_key, weight_class_title from :table_weight_classes where language_id = :language_id');
       $Qclasses->bindInt(':language_id', $OSCOM_Language->getID());
       $Qclasses->setCache('weight-classes');
       $Qclasses->execute();
 
-      while ( $Qclasses->next() ) {
+      while ( $Qclasses->fetch() ) {
         $this->weight_classes[$Qclasses->valueInt('weight_class_id')]['key'] = $Qclasses->value('weight_class_key');
         $this->weight_classes[$Qclasses->valueInt('weight_class_id')]['title'] = $Qclasses->value('weight_class_title');
       }
-
-      $Qclasses->freeResult();
     }
 
     public function convert($value, $unit_from, $unit_to) {
@@ -80,16 +76,16 @@
     }
 
     public function getClasses() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
       $weight_class_array = array();
 
-      $Qclasses = $OSCOM_Database->query('select weight_class_id, weight_class_title from :table_weight_classes where language_id = :language_id order by weight_class_title');
+      $Qclasses = $OSCOM_PDO->prepare('select weight_class_id, weight_class_title from :table_weight_classes where language_id = :language_id order by weight_class_title');
       $Qclasses->bindInt(':language_id', $OSCOM_Language->getID());
       $Qclasses->execute();
 
-      while ( $Qclasses->next() ) {
+      while ( $Qclasses->fetch() ) {
         $weight_class_array[] = array('id' => $Qclasses->valueInt('weight_class_id'),
                                       'title' => $Qclasses->value('weight_class_title'));
       }

@@ -17,19 +17,17 @@
     protected $_modules = array();
 
     public function __construct() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qmodules = $OSCOM_Database->query('select code from :table_templates_boxes where modules_group = :modules_group');
-      $Qmodules->bindValue(':modules_group', 'payment');
+      $Qmodules = $OSCOM_PDO->prepare('select code from :table_modules where modules_group = :modules_group');
+      $Qmodules->bindValue(':modules_group', 'Payment');
       $Qmodules->setCache('modules-payment');
       $Qmodules->execute();
 
-      while ( $Qmodules->next() ) {
+      while ( $Qmodules->fetch() ) {
         $this->_modules[] = $Qmodules->value('code');
       }
-
-      $Qmodules->freeResult();
 
       $OSCOM_Language->load('modules-payment');
     }

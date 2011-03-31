@@ -8,21 +8,18 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <div>
-  <div style="float: left;"><?php echo osc_image(DIR_WS_IMAGES . 'table_background_man_on_board.gif', $OSCOM_Template->getPageTitle()); ?></div>
-
   <div style="padding-top: 30px;">
     <p><?php echo OSCOM::getDef('sign_out_text'); ?></p>
   </div>
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_link_object(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), osc_draw_image_button('button_continue.gif', OSCOM::getDef('button_continue'))); ?>
+  <?php echo HTML::button(array('href' => OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()), 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
 </div>

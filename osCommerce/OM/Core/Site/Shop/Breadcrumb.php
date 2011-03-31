@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
+  use osCommerce\OM\Core\HTML;
+
 /**
  * The Breadcrumb class handles the breadcrumb navigation path
  */
@@ -54,7 +56,7 @@
 
     public function add($title, $link = null) {
       if ( !empty($link) ) {
-        $title = osc_link_object($link, $title);
+        $title = HTML::link($link, $title);
       }
 
       $this->_path[] = $title;

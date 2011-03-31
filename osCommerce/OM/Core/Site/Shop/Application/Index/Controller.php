@@ -21,7 +21,7 @@
     protected function process() {
       $OSCOM_Category = Registry::get('Category');
       $OSCOM_Service = Registry::get('Service');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
@@ -29,17 +29,15 @@
 
       if ( $OSCOM_Category->getID() > 0 ) {
         if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-          $Qcategories = $OSCOM_Database->query('select categories_id, categories_name from :table_categories_description where categories_id in (:categories_id) and language_id = :language_id');
-          $Qcategories->bindRaw(':categories_id', implode(',', $OSCOM_Category->getPathArray()));
+          $Qcategories = $OSCOM_PDO->prepare('select categories_id, categories_name from :table_categories_description where categories_id in (' . implode(',', $OSCOM_Category->getPathArray()) . ') and language_id = :language_id');
           $Qcategories->bindInt(':language_id', $OSCOM_Language->getID());
           $Qcategories->execute();
 
           $categories = array();
-          while ( $Qcategories->next() ) {
+
+          while ( $Qcategories->fetch() ) {
             $categories[$Qcategories->value('categories_id')] = $Qcategories->valueProtected('categories_name');
           }
-
-          $Qcategories->freeResult();
 
           for ( $i=0, $n=sizeof($OSCOM_Category->getPathArray()); $i<$n; $i++ ) {
             $OSCOM_Breadcrumb->add($categories[$OSCOM_Category->getPathArray($i)], OSCOM::getLink(null, 'Index', 'cPath=' . implode('_', array_slice($OSCOM_Category->getPathArray(), 0, ($i+1)))));
@@ -49,23 +47,23 @@
         $this->_page_title = $OSCOM_Category->getTitle();
 
         if ( $OSCOM_Category->hasImage() ) {
-          $this->_page_image = 'categories/' . $OSCOM_Category->getImage();
+//HPDL          $this->_page_image = 'categories/' . $OSCOM_Category->getImage();
         }
 
-        $Qproducts = $OSCOM_Database->query('select products_id from :table_products_to_categories where categories_id = :categories_id limit 1');
+        $Qproducts = $OSCOM_PDO->prepare('select products_id from :table_products_to_categories where categories_id = :categories_id limit 1');
         $Qproducts->bindInt(':categories_id', $OSCOM_Category->getID());
         $Qproducts->execute();
 
-        if ( $Qproducts->numberOfRows() > 0 ) {
+        if ( count($Qproducts->fetchAll()) > 0 ) {
           $this->_page_contents = 'product_listing.php';
 
           $this->_process();
         } else {
-          $Qparent = $OSCOM_Database->query('select categories_id from :table_categories where parent_id = :parent_id limit 1');
+          $Qparent = $OSCOM_PDO->prepare('select categories_id from :table_categories where parent_id = :parent_id limit 1');
           $Qparent->bindInt(':parent_id', $OSCOM_Category->getID());
           $Qparent->execute();
 
-          if ( $Qparent->numberOfRows() > 0 ) {
+          if ( count($Qparent->fetchAll()) > 0 ) {
             $this->_page_contents = 'category_listing.php';
           } else {
             $this->_page_contents = 'product_listing.php';

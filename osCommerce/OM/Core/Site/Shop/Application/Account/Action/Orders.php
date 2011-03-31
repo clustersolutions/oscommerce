@@ -26,7 +26,7 @@
       if ( $OSCOM_Customer->isLoggedOn() === false ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
       }
 
       $application->setPageTitle(OSCOM::getDef('orders_heading'));
@@ -44,7 +44,7 @@
 
       if ( is_numeric($_GET['Orders']) ) {
         if ( Order::getCustomerID($_GET['Orders']) !== $OSCOM_Customer->getID() ) {
-          osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+          OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
         }
 
         $application->setPageTitle(sprintf(OSCOM::getDef('order_information_heading'), $_GET['Orders']));

@@ -10,27 +10,27 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
   class Image {
     protected $_groups;
 
     public function __construct() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
       $this->_groups = array();
 
-      $Qgroups = $OSCOM_Database->query('select * from :table_products_images_groups where language_id = :language_id');
+      $Qgroups = $OSCOM_PDO->prepare('select * from :table_products_images_groups where language_id = :language_id');
       $Qgroups->bindInt(':language_id', $OSCOM_Language->getID());
       $Qgroups->setCache('images_groups-' . $OSCOM_Language->getID());
       $Qgroups->execute();
 
-      while ( $Qgroups->next() ) {
-        $this->_groups[$Qgroups->valueInt('id')] = $Qgroups->toArray();
+      foreach ( $Qgroups->fetchAll() as $group ) {
+        $this->_groups[(int)$group['id']] = $group;
       }
-
-      $Qgroups->freeResult();
     }
 
     public function getID($code) {
@@ -76,16 +76,20 @@
       if ( empty($image) ) {
         $image = 'pixel_trans.gif';
       } else {
-        $image = 'products/' . $this->_groups[$group_id]['code'] . '/' . $image;
+        $image = $this->_groups[$group_id]['code'] . '/' . $image;
       }
 
-      return osc_image(DIR_WS_IMAGES . $image, $title, $width, $height, $parameters);
+      $url = (OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('product_images_http_server') . OSCOM::getConfig('product_images_dir_ws_http_server') : OSCOM::getConfig('product_images_http_server') . OSCOM::getConfig('product_images_dir_ws_http_server');
+
+      return HTML::image($url . $image, $title, $width, $height, $parameters);
     }
 
     public function getAddress($image, $group = 'default') {
       $group_id = $this->getID($group);
 
-      return DIR_WS_IMAGES . 'products/' . $this->_groups[$group_id]['code'] . '/' . $image;
+      $url = (OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('product_images_http_server') . OSCOM::getConfig('product_images_dir_ws_http_server') : OSCOM::getConfig('product_images_http_server') . OSCOM::getConfig('product_images_dir_ws_http_server');
+
+      return $url . $this->_groups[$group_id]['code'] . '/' . $image;
     }
   }
 ?>

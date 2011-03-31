@@ -8,14 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
 
   $Qentry = AddressBook::getEntry($_GET['Delete']);
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -36,7 +35,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('selected_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('selected_address_title') . '</b>'; ?>
     </div>
 
     <?php echo OSCOM::getDef('address_book_delete_address_description'); ?>
@@ -46,9 +45,9 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_delete.gif', OSCOM::getDef('button_delete')); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
 
-  <?php echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook', 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook', 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
 </div>
 
 </form>

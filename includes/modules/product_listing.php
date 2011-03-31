@@ -8,8 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\PDO;
   use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\Site\Shop\Products;
 
 // create column list
   $define_list = array('PRODUCT_LIST_MODEL' => PRODUCT_LIST_MODEL,
@@ -24,18 +27,18 @@
   asort($define_list);
 
   $column_list = array();
-  reset($define_list);
-  while (list($key, $value) = each($define_list)) {
+
+  foreach ( $define_list as $key => $value ) {
     if ($value > 0) $column_list[] = $key;
   }
 
-  if ( ($Qlisting->numberOfRows() > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
+  if ( (count($products_listing['entries']) > 0) && ( (PREV_NEXT_BAR_LOCATION == '1') || (PREV_NEXT_BAR_LOCATION == '3') ) ) {
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo PDO::getBatchPageLinks('page', $products_listing['total'], OSCOM::getAllGET('page')); ?></span>
 
-  <?php echo $Qlisting->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
+  <?php echo PDO::getBatchTotalPages(OSCOM::getDef('result_set_number_of_products'), (isset($_GET['page']) ? $_GET['page'] : 1), $products_listing['total']); ?>
 </div>
 
 <?php
@@ -45,7 +48,7 @@
 <div>
   
 <?php
-  if ($Qlisting->numberOfRows() > 0) {
+  if ( count($products_listing['entries']) > 0 ) {
 ?>
 
   <table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -95,7 +98,7 @@
       }
 
       if ($lc_key !== false) {
-        $lc_text = osc_create_sort_heading($lc_key, $lc_text);
+        $lc_text = Products::getListingSortLink($lc_key, $lc_text);
       }
 
       echo '      <td align="' . $lc_align . '" class="productListing-heading">&nbsp;' . $lc_text . '&nbsp;</td>' . "\n";
@@ -107,8 +110,8 @@
 <?php
     $rows = 0;
 
-    while ($Qlisting->next()) {
-      $OSCOM_Product = new Product($Qlisting->valueInt('products_id'));
+    foreach ( $products_listing['entries'] as $p ) {
+      $OSCOM_Product = new Product($p['products_id']);
 
       $rows++;
 
@@ -125,9 +128,9 @@
           case 'PRODUCT_LIST_NAME':
             $lc_align = '';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Product->getTitle());
+              $lc_text = HTML::link(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Product->getTitle());
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Product->getTitle()) . '&nbsp;';
+              $lc_text = '&nbsp;' . HTML::link(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Product->getTitle()) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_MANUFACTURER':
@@ -135,7 +138,7 @@
             $lc_text = '&nbsp;';
 
             if ( $OSCOM_Product->hasManufacturer() ) {
-              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Index', 'manufacturers=' . $OSCOM_Product->getManufacturerID()), $OSCOM_Product->getManufacturer()) . '&nbsp;';
+              $lc_text = '&nbsp;' . HTML::link(OSCOM::getLink(null, 'Index', 'Manufacturers=' . $OSCOM_Product->getManufacturerID()), $OSCOM_Product->getManufacturer()) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_PRICE':
@@ -153,14 +156,14 @@
           case 'PRODUCT_LIST_IMAGE':
             $lc_align = 'center';
             if (isset($_GET['manufacturers'])) {
-              $lc_text = osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle()));
+              $lc_text = HTML::link(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . '&manufacturers=' . $_GET['manufacturers']), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle()));
             } else {
-              $lc_text = '&nbsp;' . osc_link_object(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle())) . '&nbsp;';
+              $lc_text = '&nbsp;' . HTML::link(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword() . ($OSCOM_Category->getID() > 0 ? '&cPath=' . $OSCOM_Category->getPath() : '')), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle())) . '&nbsp;';
             }
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = osc_link_object(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_buy_now.gif', OSCOM::getDef('button_buy_now'))) . '&nbsp;';
+            $lc_text = HTML::link(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), HTML::imageSubmit('button_buy_now.gif', OSCOM::getDef('button_buy_now'))) . '&nbsp;';
             break;
         }
 
@@ -182,13 +185,13 @@
 </div>
 
 <?php
-  if ( ($Qlisting->numberOfRows() > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
+  if ( (count($products_listing['entries']) > 0) && ((PREV_NEXT_BAR_LOCATION == '2') || (PREV_NEXT_BAR_LOCATION == '3')) ) {
 ?>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qlisting->getBatchPageLinks('page', osc_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></span>
+  <span style="float: right;"><?php echo PDO::getBatchPageLinks('page', $products_listing['total'], OSCOM::getAllGET('page')); ?></span>
 
-  <?php echo $Qlisting->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
+  <?php echo PDO::getBatchTotalPages(OSCOM::getDef('result_set_number_of_products'), (isset($_GET['page']) ? $_GET['page'] : 1), $products_listing['total']); ?>
 </div>
 
 <?php

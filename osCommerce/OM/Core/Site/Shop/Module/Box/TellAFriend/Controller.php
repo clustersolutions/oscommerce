@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Box\TellAFriend;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
@@ -29,7 +30,7 @@
 
       if ( isset($OSCOM_Product) && ($OSCOM_Product instanceof \osCommerce\OM\Site\Shop\Product) && $OSCOM_Product->isValid() ) { // HPDL && ($osC_Template->getModule() != 'tell_a_friend')) {
         $this->_content = '<form name="tell_a_friend" action="' . OSCOM::getLink(null, null, 'TellAFriend&' . $OSCOM_Product->getKeyword()) . '" method="post">' . "\n" .
-                          osc_draw_input_field('to_email_address', null, 'style="width: 80%;"') . '&nbsp;' . osc_draw_image_submit_button('button_tell_a_friend.gif', OSCOM::getDef('box_tell_a_friend_text')) . '<br />' . OSCOM::getDef('box_tell_a_friend_text') . "\n" .
+                          HTML::inputField('to_email_address', null, 'style="width: 80%;"') . '&nbsp;' . HTML::imageSubmit('button_tell_a_friend.gif', OSCOM::getDef('box_tell_a_friend_text')) . '<br />' . OSCOM::getDef('box_tell_a_friend_text') . "\n" .
                           '</form>' . "\n";
       }
     }

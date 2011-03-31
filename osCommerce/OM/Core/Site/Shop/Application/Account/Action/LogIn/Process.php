@@ -26,7 +26,7 @@
         if ( $OSCOM_NavigationHistory->hasSnapshot() ) {
           $OSCOM_NavigationHistory->redirectToSnapshot();
         } else {
-          osc_redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'AUTO'));
+          OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'AUTO'));
         }
       }
 

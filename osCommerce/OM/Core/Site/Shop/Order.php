@@ -10,11 +10,13 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\AddressBook;
-  use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Mail;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Address;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\Site\Shop\Products;
 
   class Order {
 // HPDL add getter methods for the following and set as protected
@@ -46,13 +48,13 @@
     }
 
     function getStatusID($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qorder = $OSCOM_Database->query('select orders_status from :table_orders where orders_id = :orders_id');
+      $Qorder = $OSCOM_PDO->prepare('select orders_status from :table_orders where orders_id = :orders_id');
       $Qorder->bindInt(':orders_id', $id);
       $Qorder->execute();
 
-      if ( $Qorder->numberOfRows() ) {
+      if ( $Qorder->fetch() !== false ) {
         return $Qorder->valueInt('orders_status');
       }
 
@@ -60,14 +62,14 @@
     }
 
     function remove($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcheck = $OSCOM_Database->query('select orders_status from :table_orders where orders_id = :orders_id');
+      $Qcheck = $OSCOM_PDO->prepare('select orders_status from :table_orders where orders_id = :orders_id');
       $Qcheck->bindInt(':orders_id', $id);
       $Qcheck->execute();
 
       if ( $Qcheck->valueInt('orders_status') === 4 ) {
-        $Qdel = $OSCOM_Database->query('delete from :table_orders where orders_id = :orders_id');
+        $Qdel = $OSCOM_PDO->prepare('delete from :table_orders where orders_id = :orders_id');
         $Qdel->bindInt(':orders_id', $id);
         $Qdel->execute();
       }
@@ -81,7 +83,7 @@
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Currencies = Registry::get('Currencies');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Tax = Registry::get('Tax');
 
       if ( isset($_SESSION['prepOrderID']) ) {
@@ -110,7 +112,7 @@
                                   'entry_telephone' => $OSCOM_ShoppingCart->getShippingAddress('telephone'));
       }
 
-      $Qorder = $OSCOM_Database->query('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_state_code, customers_country, customers_country_iso2, customers_country_iso3, customers_telephone, customers_email_address, customers_address_format, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_state_code, delivery_country, delivery_country_iso2, delivery_country_iso3, delivery_address_format, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_state_code, billing_country, billing_country_iso2, billing_country_iso3, billing_address_format, payment_method, payment_module, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_state_code, :customers_country, :customers_country_iso2, :customers_country_iso3, :customers_telephone, :customers_email_address, :customers_address_format, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_state_code, :delivery_country, :delivery_country_iso2, :delivery_country_iso3, :delivery_address_format, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_state_code, :billing_country, :billing_country_iso2, :billing_country_iso3, :billing_address_format, :payment_method, :payment_module, now(), :orders_status, :currency, :currency_value)');
+      $Qorder = $OSCOM_PDO->prepare('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_state_code, customers_country, customers_country_iso2, customers_country_iso3, customers_telephone, customers_email_address, customers_address_format, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_state_code, delivery_country, delivery_country_iso2, delivery_country_iso3, delivery_address_format, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_state_code, billing_country, billing_country_iso2, billing_country_iso3, billing_address_format, payment_method, payment_module, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_state_code, :customers_country, :customers_country_iso2, :customers_country_iso3, :customers_telephone, :customers_email_address, :customers_address_format, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_state_code, :delivery_country, :delivery_country_iso2, :delivery_country_iso3, :delivery_address_format, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_state_code, :billing_country, :billing_country_iso2, :billing_country_iso3, :billing_address_format, :payment_method, :payment_module, now(), :orders_status, :currency, :currency_value)');
       $Qorder->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qorder->bindValue(':customers_name', $OSCOM_Customer->getName());
       $Qorder->bindValue(':customers_company', $customer_address['entry_company']);
@@ -126,7 +128,7 @@
       $Qorder->bindValue(':customers_telephone', $customer_address['entry_telephone']);
       $Qorder->bindValue(':customers_email_address', $OSCOM_Customer->getEmailAddress());
       $Qorder->bindValue(':customers_address_format', Address::getFormat($customer_address['entry_country_id']));
-      $Qorder->bindValue(':customers_ip_address', osc_get_ip_address());
+      $Qorder->bindValue(':customers_ip_address', OSCOM::getIPAddress());
       $Qorder->bindValue(':delivery_name', $OSCOM_ShoppingCart->getShippingAddress('firstname') . ' ' . $OSCOM_ShoppingCart->getShippingAddress('lastname'));
       $Qorder->bindValue(':delivery_company', $OSCOM_ShoppingCart->getShippingAddress('company'));
       $Qorder->bindValue(':delivery_street_address', $OSCOM_ShoppingCart->getShippingAddress('street_address'));
@@ -160,10 +162,10 @@
       $Qorder->bindValue(':currency_value', $OSCOM_Currencies->value($OSCOM_Currencies->getCode()));
       $Qorder->execute();
 
-      $insert_id = $OSCOM_Database->nextID();
+      $insert_id = $OSCOM_PDO->lastInsertId();
 
       foreach ( $OSCOM_ShoppingCart->getOrderTotals() as $module ) {
-        $Qtotals = $OSCOM_Database->query('insert into :table_orders_total (orders_id, title, text, value, class, sort_order) values (:orders_id, :title, :text, :value, :class, :sort_order)');
+        $Qtotals = $OSCOM_PDO->prepare('insert into :table_orders_total (orders_id, title, text, value, class, sort_order) values (:orders_id, :title, :text, :value, :class, :sort_order)');
         $Qtotals->bindInt(':orders_id', $insert_id);
         $Qtotals->bindValue(':title', $module['title']);
         $Qtotals->bindValue(':text', $module['text']);
@@ -173,7 +175,7 @@
         $Qtotals->execute();
       }
 
-      $Qstatus = $OSCOM_Database->query('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');
+      $Qstatus = $OSCOM_PDO->prepare('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');
       $Qstatus->bindInt(':orders_id', $insert_id);
       $Qstatus->bindInt(':orders_status_id', 4);
       $Qstatus->bindInt(':customer_notified', '0');
@@ -181,9 +183,9 @@
       $Qstatus->execute();
 
       foreach ( $OSCOM_ShoppingCart->getProducts() as $products ) {
-        $Qproducts = $OSCOM_Database->query('insert into :table_orders_products (orders_id, products_id, products_model, products_name, products_price, products_tax, products_quantity) values (:orders_id, :products_id, :products_model, :products_name, :products_price, :products_tax, :products_quantity)');
+        $Qproducts = $OSCOM_PDO->prepare('insert into :table_orders_products (orders_id, products_id, products_model, products_name, products_price, products_tax, products_quantity) values (:orders_id, :products_id, :products_model, :products_name, :products_price, :products_tax, :products_quantity)');
         $Qproducts->bindInt(':orders_id', $insert_id);
-        $Qproducts->bindInt(':products_id', osc_get_product_id($products['id']));
+        $Qproducts->bindInt(':products_id', Products::getProductID($products['id']));
         $Qproducts->bindValue(':products_model', $products['model']);
         $Qproducts->bindValue(':products_name', $products['name']);
         $Qproducts->bindValue(':products_price', $products['price']);
@@ -191,27 +193,23 @@
         $Qproducts->bindInt(':products_quantity', $products['quantity']);
         $Qproducts->execute();
 
-        $order_products_id = $OSCOM_Database->nextID();
+        $order_products_id = $OSCOM_PDO->lastInsertId();
 
         if ( $OSCOM_ShoppingCart->isVariant($products['item_id']) ) {
           foreach ( $OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant ) {
 /* HPDL
             if (DOWNLOAD_ENABLED == '1') {
-              $Qattributes = $osC_Database->query('select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount, pad.products_attributes_filename from :table_products_options popt, :table_products_options_values poval, :table_products_attributes pa left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_id = popt.products_options_id and pa.options_values_id = :options_values_id and pa.options_values_id = poval.products_options_values_id and popt.language_id = :popt_language_id and poval.language_id = :poval_language_id');
-              $Qattributes->bindTable(':table_products_options', TABLE_PRODUCTS_OPTIONS);
-              $Qattributes->bindTable(':table_products_options_values', TABLE_PRODUCTS_OPTIONS_VALUES);
-              $Qattributes->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-              $Qattributes->bindTable(':table_products_attributes_download', TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD);
+              $Qattributes = $OSCOM_PDO->prepare('select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount, pad.products_attributes_filename from :table_products_options popt, :table_products_options_values poval, :table_products_attributes pa left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where pa.products_id = :products_id and pa.options_id = :options_id and pa.options_id = popt.products_options_id and pa.options_values_id = :options_values_id and pa.options_values_id = poval.products_options_values_id and popt.language_id = :popt_language_id and poval.language_id = :poval_language_id');
               $Qattributes->bindInt(':products_id', $products['id']);
               $Qattributes->bindInt(':options_id', $attributes['options_id']);
               $Qattributes->bindInt(':options_values_id', $attributes['options_values_id']);
-              $Qattributes->bindInt(':popt_language_id', $osC_Language->getID());
-              $Qattributes->bindInt(':poval_language_id', $osC_Language->getID());
+              $Qattributes->bindInt(':popt_language_id', $OSCOM_Language->getID());
+              $Qattributes->bindInt(':poval_language_id', $OSCOM_Language->getID());
               $Qattributes->execute();
             }
 */
 
-            $Qvariant = $OSCOM_Database->query('insert into :table_orders_products_variants (orders_id, orders_products_id, group_title, value_title) values (:orders_id, :orders_products_id, :group_title, :value_title)');
+            $Qvariant = $OSCOM_PDO->prepare('insert into :table_orders_products_variants (orders_id, orders_products_id, group_title, value_title) values (:orders_id, :orders_products_id, :group_title, :value_title)');
             $Qvariant->bindInt(':orders_id', $insert_id);
             $Qvariant->bindInt(':orders_products_id', $order_products_id);
             $Qvariant->bindValue(':group_title', $variant['group_title']);
@@ -220,8 +218,7 @@
 
 /*HPDL
             if ((DOWNLOAD_ENABLED == '1') && (strlen($Qattributes->value('products_attributes_filename')) > 0)) {
-              $Qopd = $osC_Database->query('insert into :table_orders_products_download (orders_id, orders_products_id, orders_products_filename, download_maxdays, download_count) values (:orders_id, :orders_products_id, :orders_products_filename, :download_maxdays, :download_count)');
-              $Qopd->bindTable(':table_orders_products_download', TABLE_ORDERS_PRODUCTS_DOWNLOAD);
+              $Qopd = $OSCOM_PDO->prepare('insert into :table_orders_products_download (orders_id, orders_products_id, orders_products_filename, download_maxdays, download_count) values (:orders_id, :orders_products_id, :orders_products_filename, :download_maxdays, :download_count)');
               $Qopd->bindInt(':orders_id', $insert_id);
               $Qopd->bindInt(':orders_products_id', $order_products_id);
               $Qopd->bindValue(':orders_products_filename', $Qattributes->value('products_attributes_filename'));
@@ -240,42 +237,39 @@
     }
 
     public static function process($order_id, $status_id = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      if ( !is_numeric($status_id) ) {
+      if ( !is_numeric($status_id) || ($status_id < 1) ) {
         $status_id = DEFAULT_ORDERS_STATUS_ID;
       }
 
-      $Qstatus = $OSCOM_Database->query('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');
+      $Qstatus = $OSCOM_PDO->prepare('insert into :table_orders_status_history (orders_id, orders_status_id, date_added, customer_notified, comments) values (:orders_id, :orders_status_id, now(), :customer_notified, :comments)');
       $Qstatus->bindInt(':orders_id', $order_id);
       $Qstatus->bindInt(':orders_status_id', $status_id);
       $Qstatus->bindInt(':customer_notified', (SEND_EMAILS == '1') ? '1' : '0');
       $Qstatus->bindValue(':comments', '');
       $Qstatus->execute();
 
-      $Qupdate = $OSCOM_Database->query('update :table_orders set orders_status = :orders_status where orders_id = :orders_id');
+      $Qupdate = $OSCOM_PDO->prepare('update :table_orders set orders_status = :orders_status where orders_id = :orders_id');
       $Qupdate->bindInt(':orders_status', $status_id);
       $Qupdate->bindInt(':orders_id', $order_id);
       $Qupdate->execute();
 
-      $Qproducts = $OSCOM_Database->query('select products_id, products_quantity from :table_orders_products where orders_id = :orders_id');
+      $Qproducts = $OSCOM_PDO->prepare('select products_id, products_quantity from :table_orders_products where orders_id = :orders_id');
       $Qproducts->bindInt(':orders_id', $order_id);
       $Qproducts->execute();
 
-      while ( $Qproducts->next() ) {
+      while ( $Qproducts->fetch() ) {
         if (STOCK_LIMITED == '1') {
 
 /********** HPDL ; still uses logic from the shopping cart class
           if (DOWNLOAD_ENABLED == '1') {
-            $Qstock = $osC_Database->query('select products_quantity, pad.products_attributes_filename from :table_products p left join :table_products_attributes pa on (p.products_id = pa.products_id) left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where p.products_id = :products_id');
-            $Qstock->bindTable(':table_products', TABLE_PRODUCTS);
-            $Qstock->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-            $Qstock->bindTable(':table_products_attributes_download', TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD);
+            $Qstock = $OSCOM_PDO->prepare('select products_quantity, pad.products_attributes_filename from :table_products p left join :table_products_attributes pa on (p.products_id = pa.products_id) left join :table_products_attributes_download pad on (pa.products_attributes_id = pad.products_attributes_id) where p.products_id = :products_id');
             $Qstock->bindInt(':products_id', $Qproducts->valueInt('products_id'));
 
 // Will work with only one option for downloadable products otherwise, we have to build the query dynamically with a loop
-            if ($osC_ShoppingCart->hasAttributes($products['id'])) {
-              $products_attributes = $osC_ShoppingCart->getAttributes($products['id']);
+            if ($OSCOM_ShoppingCart->hasAttributes($products['id'])) {
+              $products_attributes = $OSCOM_ShoppingCart->getAttributes($products['id']);
               $products_attributes = array_shift($products_attributes);
 
               $Qstock->appendQuery('and pa.options_id = :options_id and pa.options_values_id = :options_values_id');
@@ -284,27 +278,27 @@
             }
           } else {
 ************/
-            $Qstock = $OSCOM_Database->query('select products_quantity from :table_products where products_id = :products_id');
+            $Qstock = $OSCOM_PDO->prepare('select products_quantity from :table_products where products_id = :products_id');
             $Qstock->bindInt(':products_id', $Qproducts->valueInt('products_id'));
 // HPDL          }
 
           $Qstock->execute();
 
-          if ( $Qstock->numberOfRows() > 0 ) {
+          if ( $Qstock->fetch() !== false ) {
             $stock_left = $Qstock->valueInt('products_quantity');
 
 // do not decrement quantities if products_attributes_filename exists
 // HPDL            if ((DOWNLOAD_ENABLED == '-1') || ((DOWNLOAD_ENABLED == '1') && (strlen($Qstock->value('products_attributes_filename')) < 1))) {
               $stock_left = $stock_left - $Qproducts->valueInt('products_quantity');
 
-              $Qupdate = $OSCOM_Database->query('update :table_products set products_quantity = :products_quantity where products_id = :products_id');
+              $Qupdate = $OSCOM_PDO->prepare('update :table_products set products_quantity = :products_quantity where products_id = :products_id');
               $Qupdate->bindInt(':products_quantity', $stock_left);
               $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
               $Qupdate->execute();
 // HPDL            }
 
             if ( (STOCK_ALLOW_CHECKOUT == '-1') && ($stock_left < 1) ) {
-              $Qupdate = $OSCOM_Database->query('update :table_products set products_status = 0 where products_id = :products_id');
+              $Qupdate = $OSCOM_PDO->prepare('update :table_products set products_status = 0 where products_id = :products_id');
               $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
               $Qupdate->execute();
             }
@@ -312,7 +306,7 @@
         }
 
 // Update products_ordered (for bestsellers list)
-        $Qupdate = $OSCOM_Database->query('update :table_products set products_ordered = products_ordered + :products_ordered where products_id = :products_id');
+        $Qupdate = $OSCOM_PDO->prepare('update :table_products set products_ordered = products_ordered + :products_ordered where products_id = :products_id');
         $Qupdate->bindInt(':products_ordered', $Qproducts->valueInt('products_quantity'));
         $Qupdate->bindInt(':products_id', $Qproducts->valueInt('products_id'));
         $Qupdate->execute();
@@ -324,51 +318,51 @@
     }
 
     public static function sendEmail($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Currencies = Registry::get('Currencies');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qorder = $OSCOM_Database->query('select * from :table_orders where orders_id = :orders_id limit 1');
+      $Qorder = $OSCOM_PDO->prepare('select * from :table_orders where orders_id = :orders_id limit 1');
       $Qorder->bindInt(':orders_id', $id);
       $Qorder->execute();
 
-      if ( $Qorder->numberOfRows() === 1 ) {
+      if ( $Qorder->fetch() !== false ) {
         $email_order = STORE_NAME . "\n" .
                        OSCOM::getDef('email_order_separator') . "\n" .
                        sprintf(OSCOM::getDef('email_order_order_number'), $id) . "\n" .
-                       sprintf(OSCOM::getDef('email_order_invoice_url'), OSCOM::getLink(null, null, 'Orders=' . $id, 'SSL', false, true, true)) . "\n" .
+                       sprintf(OSCOM::getDef('email_order_invoice_url'), OSCOM::getLink('Shop', 'Account', 'Orders=' . $id, 'SSL', false, true, true)) . "\n" .
                        sprintf(OSCOM::getDef('email_order_date_ordered'), DateTime::getLong()) . "\n\n" .
                        OSCOM::getDef('email_order_products') . "\n" .
                        OSCOM::getDef('email_order_separator') . "\n";
 
-        $Qproducts = $OSCOM_Database->query('select orders_products_id, products_model, products_name, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id order by orders_products_id');
+        $Qproducts = $OSCOM_PDO->prepare('select orders_products_id, products_model, products_name, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id order by orders_products_id');
         $Qproducts->bindInt(':orders_id', $id);
         $Qproducts->execute();
 
-        while ( $Qproducts->next() ) {
+        while ( $Qproducts->fetch() ) {
           $email_order .= $Qproducts->valueInt('products_quantity') . ' x ' . $Qproducts->value('products_name') . ' (' . $Qproducts->value('products_model') . ') = ' . $OSCOM_Currencies->displayPriceWithTaxRate($Qproducts->value('products_price'), $Qproducts->value('products_tax'), $Qproducts->valueInt('products_quantity'), false, $Qorder->value('currency'), $Qorder->value('currency_value')) . "\n";
 
-          $Qvariants = $OSCOM_Database->query('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
+          $Qvariants = $OSCOM_PDO->prepare('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
           $Qvariants->bindInt(':orders_id', $id);
           $Qvariants->bindInt(':orders_products_id', $Qproducts->valueInt('orders_products_id'));
           $Qvariants->execute();
 
-          while ( $Qvariants->next() ) {
+          while ( $Qvariants->fetch() ) {
             $email_order .= "\t" . $Qvariants->value('group_title') . ': ' . $Qvariants->value('value_title') . "\n";
           }
         }
 
         $email_order .= OSCOM::getDef('email_order_separator') . "\n";
 
-        $Qtotals = $OSCOM_Database->query('select title, text from :table_orders_total where orders_id = :orders_id order by sort_order');
+        $Qtotals = $OSCOM_PDO->prepare('select title, text from :table_orders_total where orders_id = :orders_id order by sort_order');
         $Qtotals->bindInt(':orders_id', $id);
         $Qtotals->execute();
 
-        while ( $Qtotals->next() ) {
+        while ( $Qtotals->fetch() ) {
           $email_order .= strip_tags($Qtotals->value('title') . ' ' . $Qtotals->value('text')) . "\n";
         }
 
-        if ( !osc_empty($Qorder->value('delivery_name')) && !osc_empty($Qorder->value('delivery_street_address')) ) {
+        if ( (strlen($Qorder->value('delivery_name')) > 0) && (strlen($Qorder->value('delivery_street_address')) > 0) ) {
           $address = array('name' => $Qorder->value('delivery_name'),
                            'company' => $Qorder->value('delivery_company'),
                            'street_address' => $Qorder->value('delivery_street_address'),
@@ -404,7 +398,7 @@
                         OSCOM::getDef('email_order_separator') . "\n" .
                         Address::format($address) . "\n\n";
 
-        $Qstatus = $OSCOM_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
+        $Qstatus = $OSCOM_PDO->prepare('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
         $Qstatus->bindInt(':orders_status_id', $Qorder->valueInt('orders_status'));
         $Qstatus->bindInt(':language_id', $OSCOM_Language->getID());
         $Qstatus->execute();
@@ -412,11 +406,11 @@
         $email_order .= sprintf(OSCOM::getDef('email_order_status'), $Qstatus->value('orders_status_name')) . "\n" .
                         OSCOM::getDef('email_order_separator') . "\n";
 
-        $Qstatuses = $OSCOM_Database->query('select date_added, comments from :table_orders_status_history where orders_id = :orders_id and comments != "" order by orders_status_history_id');
+        $Qstatuses = $OSCOM_PDO->prepare('select date_added, comments from :table_orders_status_history where orders_id = :orders_id and comments != "" order by orders_status_history_id');
         $Qstatuses->bindInt(':orders_id', $id);
         $Qstatuses->execute();
 
-        while ( $Qstatuses->next() ) {
+        while ( $Qstatuses->fetch() ) {
           $email_order .= DateTime::getLong($Qstatuses->value('date_added')) . "\n\t" . wordwrap(str_replace("\n", "\n\t", $Qstatuses->value('comments')), 60, "\n\t", 1) . "\n\n";
         }
 
@@ -425,62 +419,79 @@
 //          $email_order .= OSCOM::getDef('email_order_payment_method') . "\n" .
 //                          OSCOM::getDef('email_order_separator') . "\n";
 
-//          $email_order .= $osC_ShoppingCart->getBillingMethod('title') . "\n\n";
+//          $email_order .= $OSCOM_ShoppingCart->getBillingMethod('title') . "\n\n";
 //          if (isset($GLOBALS[$payment]->email_footer)) {
 //            $email_order .= $GLOBALS[$payment]->email_footer . "\n\n";
 //          }
 //        }
 
-        osc_email($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), OSCOM::getDef('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        $oEmail = new Mail($Qorder->value('customers_name'), $Qorder->value('customers_email_address'), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, OSCOM::getDef('email_order_subject'));
+        $oEmail->setBodyPlain($email_order);
+        $oEmail->send();
 
 // send emails to other people
         if ( SEND_EXTRA_ORDER_EMAILS_TO != '' ) {
-          osc_email('', SEND_EXTRA_ORDER_EMAILS_TO, OSCOM::getDef('email_order_subject'), $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+          $oEmail = new Mail('', SEND_EXTRA_ORDER_EMAILS_TO, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, OSCOM::getDef('email_order_subject'));
+          $oEmail->setBodyPlain($email_order);
+          $oEmail->send();
         }
       }
     }
 
     public static function getListing($limit = null, $page_keyword = 'page') {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qorders = $OSCOM_Database->query('select o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc');
+      $result = array();
+
+      $sql_query = 'select SQL_CALC_FOUND_ROWS o.orders_id, o.date_purchased, o.delivery_name, o.delivery_country, o.billing_name, o.billing_country, ot.text as order_total, s.orders_status_name from :table_orders o, :table_orders_total ot, :table_orders_status s where o.customers_id = :customers_id and o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by orders_id desc';
+
+      if ( is_numeric($limit) ) {
+        $sql_query .= ' limit :batch_pageset, :batch_max_results';
+      }
+
+      $sql_query .= '; select found_rows();';
+
+      $Qorders = $OSCOM_PDO->prepare($sql_query);
       $Qorders->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qorders->bindInt(':language_id', $OSCOM_Language->getID());
 
       if ( is_numeric($limit) ) {
-        $Qorders->setBatchLimit(isset($_GET[$page_keyword]) && is_numeric($_GET[$page_keyword]) ? $_GET[$page_keyword] : 1, $limit);
+        $Qorders->bindInt(':batch_pageset', $OSCOM_PDO->getBatchFrom((isset($_GET[$page_keyword]) && is_numeric($_GET[$page_keyword]) ? $_GET[$page_keyword] : 1), $limit));
+        $Qorders->bindInt(':batch_max_results', $limit);
       }
 
       $Qorders->execute();
 
-      return $Qorders;
+      $result['entries'] = $Qorders->fetchAll();
+
+      $Qorders->nextRowset();
+
+      $result['total'] = $Qorders->fetchColumn();
+
+      return $result;
     }
 
     function getStatusListing($id = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
       if ( ($id === null) && isset($this) ) {
         $id = $this->_id;
       }
 
-      $Qstatus = $OSCOM_Database->query('select os.orders_status_name, osh.date_added, osh.comments from :table_orders_status os, :table_orders_status_history osh where osh.orders_id = :orders_id and osh.orders_status_id = os.orders_status_id and os.language_id = :language_id order by osh.date_added');
+      $Qstatus = $OSCOM_PDO->prepare('select os.orders_status_name, osh.date_added, osh.comments from :table_orders_status os, :table_orders_status_history osh where osh.orders_id = :orders_id and osh.orders_status_id = os.orders_status_id and os.language_id = :language_id order by osh.date_added');
       $Qstatus->bindInt(':orders_id', $id);
       $Qstatus->bindInt(':language_id', $OSCOM_Language->getID());
 
       return $Qstatus;
     }
 
-    function getCustomerID($id = null) {
-      $OSCOM_Database = Registry::get('Database');
+    public static function getCustomerID($id) {
+      $OSCOM_PDO = Registry::get('PDO');
 
-      if ( ($id === null) && isset($this) ) {
-        $id = $this->_id;
-      }
-
-      $Qcustomer = $OSCOM_Database->query('select customers_id from :table_orders where orders_id = :orders_id');
+      $Qcustomer = $OSCOM_PDO->prepare('select customers_id from :table_orders where orders_id = :orders_id');
       $Qcustomer->bindInt(':orders_id', $id);
       $Qcustomer->execute();
 
@@ -489,13 +500,13 @@
 
     public static function numberOfEntries() {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       static $total_entries;
 
       if ( is_numeric($total_entries) === false ) {
         if ( $OSCOM_Customer->isLoggedOn() ) {
-          $Qorders = $OSCOM_Database->query('select count(*) as total from :table_orders where customers_id = :customers_id');
+          $Qorders = $OSCOM_PDO->prepare('select count(*) as total from :table_orders where customers_id = :customers_id');
           $Qorders->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qorders->execute();
 
@@ -508,14 +519,10 @@
       return $total_entries;
     }
 
-    function numberOfProducts($id = null) {
-      $OSCOM_Database = Registry::get('Database');
+    public static function numberOfProducts($id) {
+      $OSCOM_PDO = Registry::get('PDO');
 
-      if ( ($id === null) && isset($this) ) {
-        $id = $this->_id;
-      }
-
-      $Qproducts = $OSCOM_Database->query('select count(*) as total from :table_orders_products where orders_id = :orders_id');
+      $Qproducts = $OSCOM_PDO->prepare('select count(*) as total from :table_orders_products where orders_id = :orders_id');
       $Qproducts->bindInt(':orders_id', $id);
       $Qproducts->execute();
 
@@ -523,42 +530,48 @@
     }
 
     function exists($id, $customer_id = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qorder = $OSCOM_Database->query('select orders_id from :table_orders where orders_id = :orders_id');
+      $sql_query = 'select orders_id from :table_orders where orders_id = :orders_id';
 
       if ( isset($customer_id) && is_numeric($customer_id) ) {
-        $Qorder->appendQuery('and customers_id = :customers_id');
+        $sql_query .= ' and customers_id = :customers_id';
+      }
+
+      $sql_query .= ' limit 1';
+
+      $Qorder = $OSCOM_PDO->prepare($sql_query);
+
+      if ( isset($customer_id) && is_numeric($customer_id) ) {
         $Qorder->bindInt(':customers_id', $customer_id);
       }
 
-      $Qorder->appendQuery('limit 1');
       $Qorder->bindInt(':orders_id', $id);
       $Qorder->execute();
 
-      return ($Qorder->numberOfRows() === 1);
+      return ( $Qorder->fetch() !== false );
     }
 
     function query($order_id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qorder = $OSCOM_Database->query('select * from :table_orders where orders_id = :orders_id');
+      $Qorder = $OSCOM_PDO->prepare('select * from :table_orders where orders_id = :orders_id');
       $Qorder->bindInt(':orders_id', $order_id);
       $Qorder->execute();
 
-      $Qtotals = $OSCOM_Database->query('select title, text, class from :table_orders_total where orders_id = :orders_id order by sort_order');
+      $Qtotals = $OSCOM_PDO->prepare('select title, text, class from :table_orders_total where orders_id = :orders_id order by sort_order');
       $Qtotals->bindInt(':orders_id', $order_id);
       $Qtotals->execute();
 
       $shipping_method_string = '';
       $order_total_string = '';
 
-      while ( $Qtotals->next() ) {
+      while ( $Qtotals->fetch() ) {
         $this->totals[] = array('title' => $Qtotals->value('title'),
                                 'text' => $Qtotals->value('text'));
 
-        if ( $Qtotals->value('class') == 'shipping' ) {
+        if ( $Qtotals->value('class') == 'Shipping' ) {
           $shipping_method_string = strip_tags($Qtotals->value('title'));
 
           if ( substr($shipping_method_string, -1) == ':' ) {
@@ -566,12 +579,12 @@
           }
         }
 
-        if ( $Qtotals->value('class') == 'total' ) {
+        if ( $Qtotals->value('class') == 'Total' ) {
           $order_total_string = strip_tags($Qtotals->value('text'));
         }
       }
 
-      $Qstatus = $OSCOM_Database->query('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
+      $Qstatus = $OSCOM_PDO->prepare('select orders_status_name from :table_orders_status where orders_status_id = :orders_status_id and language_id = :language_id');
       $Qstatus->bindInt(':orders_status_id', $Qorder->valueInt('orders_status'));
       $Qstatus->bindInt(':language_id', $OSCOM_Language->getID());
       $Qstatus->execute();
@@ -631,13 +644,13 @@
                              'country_iso3' => $Qorder->value('billing_country_iso3'),
                              'format' => $Qorder->value('billing_address_format'));
 
-      $Qproducts = $OSCOM_Database->query('select orders_products_id, products_id, products_name, products_model, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id');
+      $Qproducts = $OSCOM_PDO->prepare('select orders_products_id, products_id, products_name, products_model, products_price, products_tax, products_quantity from :table_orders_products where orders_id = :orders_id');
       $Qproducts->bindInt(':orders_id', $order_id);
       $Qproducts->execute();
 
       $index = 0;
 
-      while ( $Qproducts->next() ) {
+      while ( $Qproducts->fetch() ) {
         $subindex = 0;
 
         $this->products[$index] = array('qty' => $Qproducts->valueInt('products_quantity'),
@@ -647,18 +660,16 @@
                                         'tax' => $Qproducts->value('products_tax'),
                                         'price' => $Qproducts->value('products_price'));
 
-        $Qvariants = $OSCOM_Database->query('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
+        $Qvariants = $OSCOM_PDO->prepare('select group_title, value_title from :table_orders_products_variants where orders_id = :orders_id and orders_products_id = :orders_products_id order by id');
         $Qvariants->bindInt(':orders_id', $order_id);
         $Qvariants->bindInt(':orders_products_id', $Qproducts->valueInt('orders_products_id'));
         $Qvariants->execute();
 
-        if ( $Qvariants->numberOfRows() ) {
-          while ( $Qvariants->next() ) {
-            $this->products[$index]['attributes'][$subindex] = array('option' => $Qvariants->value('group_title'),
-                                                                     'value' => $Qvariants->value('value_title'));
+        while ( $Qvariants->fetch() ) {
+          $this->products[$index]['attributes'][$subindex] = array('option' => $Qvariants->value('group_title'),
+                                                                   'value' => $Qvariants->value('value_title'));
 
-            $subindex++;
-          }
+          $subindex++;
         }
 
         $this->info['tax_groups']["{$this->products[$index]['tax']}"] = '1';

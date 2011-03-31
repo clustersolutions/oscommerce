@@ -114,7 +114,7 @@
           $Qcategories->bindInt(':language_id', $data['default_language_id']);
           $Qcategories->execute();
 
-          while ( $Qcategories->next() ) {
+          while ( $Qcategories->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_categories_description (categories_id, language_id, categories_name) values (:categories_id, :language_id, :categories_name)');
             $Qinsert->bindInt(':categories_id', $Qcategories->valueInt('categories_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
@@ -133,7 +133,7 @@
           $Qproducts->bindInt(':language_id', $data['default_language_id']);
           $Qproducts->execute();
 
-          while ( $Qproducts->next() ) {
+          while ( $Qproducts->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_description (products_id, language_id, products_name, products_description, products_keyword, products_tags, products_url) values (:products_id, :language_id, :products_name, :products_description, :products_keyword, :products_tags, :products_url)');
             $Qinsert->bindInt(':products_id', $Qproducts->valueInt('products_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
@@ -156,7 +156,7 @@
           $Qattributes->bindInt(':languages_id', $data['default_language_id']);
           $Qattributes->execute();
 
-          while ( $Qattributes->next() ) {
+          while ( $Qattributes->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_product_attributes (products_id, languages_id, value) values (:products_id, :languages_id, :value)');
             $Qinsert->bindInt(':products_id', $Qattributes->valueInt('products_id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
@@ -175,7 +175,7 @@
           $Qgroups->bindInt(':languages_id', $data['default_language_id']);
           $Qgroups->execute();
 
-          while ( $Qgroups->next() ) {
+          while ( $Qgroups->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_variants_groups (id, languages_id, title, sort_order, module) values (:id, :languages_id, :title, :sort_order, :module)');
             $Qinsert->bindInt(':id', $Qgroups->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
@@ -196,7 +196,7 @@
           $Qvalues->bindInt(':languages_id', $data['default_language_id']);
           $Qvalues->execute();
 
-          while ( $Qvalues->next() ) {
+          while ( $Qvalues->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_variants_values (id, languages_id, products_variants_groups_id, title, sort_order) values (:id, :languages_id, :products_variants_groups_id, :title, :sort_order)');
             $Qinsert->bindInt(':id', $Qvalues->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
@@ -217,7 +217,7 @@
           $Qmanufacturers->bindInt(':languages_id', $data['default_language_id']);
           $Qmanufacturers->execute();
 
-          while ( $Qmanufacturers->next() ) {
+          while ( $Qmanufacturers->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_manufacturers_info (manufacturers_id, languages_id, manufacturers_url) values (:manufacturers_id, :languages_id, :manufacturers_url)');
             $Qinsert->bindInt(':manufacturers_id', $Qmanufacturers->valueInt('manufacturers_id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
@@ -236,7 +236,7 @@
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
-          while ( $Qstatus->next() ) {
+          while ( $Qstatus->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_orders_status (orders_status_id, language_id, orders_status_name) values (:orders_status_id, :language_id, :orders_status_name)');
             $Qinsert->bindInt(':orders_status_id', $Qstatus->valueInt('orders_status_id'));
             $Qinsert->bindInt(':language_id', $data['id']);
@@ -255,7 +255,7 @@
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
-          while ( $Qstatus->next() ) {
+          while ( $Qstatus->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_orders_transactions_status (id, language_id, status_name) values (:id, :language_id, :status_name)');
             $Qinsert->bindInt(':id', $Qstatus->valueInt('id'));
             $Qinsert->bindInt(':language_id', $data['id']);
@@ -274,7 +274,7 @@
           $Qstatus->bindInt(':languages_id', $data['default_language_id']);
           $Qstatus->execute();
 
-          while ( $Qstatus->next() ) {
+          while ( $Qstatus->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_shipping_availability (id, languages_id, title, css_key) values (:id, :languages_id, :title, :css_key)');
             $Qinsert->bindInt(':id', $Qstatus->valueInt('id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
@@ -294,7 +294,7 @@
           $Qstatus->bindInt(':language_id', $data['default_language_id']);
           $Qstatus->execute();
 
-          while ( $Qstatus->next() ) {
+          while ( $Qstatus->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_weight_classes (weight_class_id, weight_class_key, language_id, weight_class_title) values (:weight_class_id, :weight_class_key, :language_id, :weight_class_title)');
             $Qinsert->bindInt(':weight_class_id', $Qstatus->valueInt('weight_class_id'));
             $Qinsert->bindValue(':weight_class_key', $Qstatus->value('weight_class_key'));
@@ -314,7 +314,7 @@
           $Qgroup->bindInt(':language_id', $data['default_language_id']);
           $Qgroup->execute();
 
-          while ( $Qgroup->next() ) {
+          while ( $Qgroup->fetch() ) {
             $Qinsert = $OSCOM_PDO->prepare('insert into :table_products_images_groups (id, language_id, title, code, size_width, size_height, force_size) values (:id, :language_id, :title, :code, :size_width, :size_height, :force_size)');
             $Qinsert->bindInt(':id', $Qgroup->valueInt('id'));
             $Qinsert->bindInt(':language_id', $data['id']);

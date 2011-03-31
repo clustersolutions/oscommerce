@@ -18,7 +18,7 @@
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $OSCOM_MessageStack = Registry::get('MessageStack');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
       global $entry_state_has_zones; // HPDL (used in template)
@@ -82,27 +82,27 @@
       }
 
       if ( ACCOUNT_STATE >= 0 ) {
-        $Qcheck = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id limit 1');
+        $Qcheck = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id limit 1');
         $Qcheck->bindInt(':zone_country_id', $_POST['country']);
         $Qcheck->execute();
 
-        $entry_state_has_zones = ($Qcheck->numberOfRows() > 0);
+        $entry_state_has_zones = ($Qcheck->fetch() !== false);
 
         if ( $entry_state_has_zones === true ) {
-          $Qzone = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_code like :zone_code');
+          $Qzone = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_code like :zone_code');
           $Qzone->bindInt(':zone_country_id', $_POST['country']);
           $Qzone->bindValue(':zone_code', $_POST['state']);
           $Qzone->execute();
 
-          if ( $Qzone->numberOfRows() === 1 ) {
+          if ( $Qzone->fetch() !== false ) {
             $data['zone_id'] = $Qzone->valueInt('zone_id');
           } else {
-            $Qzone = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_name like :zone_name');
+            $Qzone = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_name like :zone_name');
             $Qzone->bindInt(':zone_country_id', $_POST['country']);
             $Qzone->bindValue(':zone_name', $_POST['state'] . '%');
             $Qzone->execute();
 
-            if ( $Qzone->numberOfRows() === 1 ) {
+            if ( $Qzone->fetch() !== false ) {
               $data['zone_id'] = $Qzone->valueInt('zone_id');
             } else {
               $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('field_customer_state_select_pull_down_error'));
@@ -154,7 +154,7 @@
           $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('success_address_book_entry_updated'), 'success');
         }
 
-        osc_redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
       }
     }
   }

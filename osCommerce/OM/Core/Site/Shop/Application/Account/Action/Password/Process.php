@@ -32,7 +32,7 @@
           if ( Account::savePassword(trim($_POST['password_new'])) ) {
             $OSCOM_MessageStack->add('Account', OSCOM::getDef('success_password_updated'), 'success');
 
-            osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+            OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
           } else {
             $OSCOM_MessageStack->add('Password', sprintf(OSCOM::getDef('field_customer_password_new_error'), ACCOUNT_PASSWORD));
           }

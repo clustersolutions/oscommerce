@@ -25,7 +25,7 @@
       if ( $OSCOM_Customer->isLoggedOn() === false ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'LogIn', 'SSL'));
       }
 
       $application->setPageTitle(OSCOM::getDef('address_book_heading'));

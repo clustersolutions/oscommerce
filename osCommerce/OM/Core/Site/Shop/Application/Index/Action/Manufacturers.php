@@ -11,8 +11,8 @@
   namespace osCommerce\OM\Core\Site\Shop\Application\Index\Action;
 
   use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Manufacturer;
   use osCommerce\OM\Core\Site\Shop\Products;
 
@@ -51,7 +51,7 @@
           }
         }
       } else {
-        osc_redirect(OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()));
+        OSCOM::redirect(OSCOM::getLink(OSCOM::getDefaultSite(), OSCOM::getDefaultSiteApplication()));
       }
     }
   }

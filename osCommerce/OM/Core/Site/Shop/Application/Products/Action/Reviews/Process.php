@@ -56,7 +56,7 @@
       if ( ($OSCOM_Customer->isLoggedOn() === false) && (SERVICE_REVIEW_ENABLE_REVIEWS == 1) ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
       }
 
       Registry::set('Product', new Product($requested_product));
@@ -97,7 +97,7 @@
 
         Reviews::saveEntry($data);
 
-        osc_redirect(OSCOM::getLink(null, null, 'Reviews&' . $OSCOM_Product->getID()));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'Reviews&' . $OSCOM_Product->getID()));
       }
 
       $application->setPageTitle($OSCOM_Product->getTitle());

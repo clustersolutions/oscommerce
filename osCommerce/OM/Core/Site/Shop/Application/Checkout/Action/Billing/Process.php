@@ -25,7 +25,7 @@
           $OSCOM_ShoppingCart->setBillingMethod(array('id' => Registry::get('Payment_' . $_POST['payment_method'])->getCode(),
                                                       'title' => Registry::get('Payment_' . $_POST['payment_method'])->getMethodTitle()));
 
-          osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+          OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
         }
       }
     }

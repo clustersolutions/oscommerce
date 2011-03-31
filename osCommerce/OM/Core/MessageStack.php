@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\HTML;
+
 /**
  * The MessageStack class manages information messages to be displayed.
  * Messages shown are automatically removed from the stack.
@@ -151,14 +153,12 @@
               break;
 
             case 'success':
+            default:
               $bullet_image = 'success.gif';
               break;
-
-            default:
-              $bullet_image = 'bullet_default.gif';
           }
 
-          $result .= '<li style="list-style-image: url(\'' . DIR_WS_IMAGES . 'icons/' . $bullet_image . '\')">' . osc_output_string($message['text']) . '</li>';
+          $result .= '<li style="list-style-image: url(\'' . HTML::iconRaw($bullet_image) . '\')">' . HTML::output($message['text']) . '</li>';
         }
 
         $result .= '</ul></div>';
@@ -188,7 +188,7 @@
         $result = '';
 
         foreach ( $this->_data[$group] as $message ) {
-          $result .= osc_output_string($message['text']) . "\n";
+          $result .= HTML::output($message['text']) . "\n";
         }
 
         unset($this->_data[$group]);

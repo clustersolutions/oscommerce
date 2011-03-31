@@ -8,11 +8,10 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -32,7 +31,7 @@
   <h6><?php echo OSCOM::getDef('order_conditions_title'); ?></h6>
 
   <div class="content">
-    <?php echo sprintf(OSCOM::getDef('order_conditions_description'), OSCOM::getLink(null, 'Info', 'Conditions', 'AUTO')) . '<br /><br />' . osc_draw_checkbox_field('conditions', array(array('id' => 1, 'text' => OSCOM::getDef('order_conditions_acknowledge'))), false); ?>
+    <?php echo sprintf(OSCOM::getDef('order_conditions_description'), OSCOM::getLink(null, 'Info', 'Conditions', 'AUTO')) . '<br /><br />' . HTML::checkboxField('conditions', array(array('id' => 1, 'text' => OSCOM::getDef('order_conditions_acknowledge'))), false); ?>
   </div>
 </div>
 
@@ -49,10 +48,10 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('billing_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('billing_address_title') . '</b>'; ?>
     </div>
 
-    <?php echo OSCOM::getDef('choose_billing_destination'). '<br /><br />' . osc_link_object(OSCOM::getLink(null, null, 'Billing&Address', 'SSL'), osc_draw_image_button('button_change_address.gif', OSCOM::getDef('button_change_address'))); ?>
+    <?php echo OSCOM::getDef('choose_billing_destination'). '<br /><br />' . HTML::button(array('href' => OSCOM::getLink(null, null, 'Billing&Address', 'SSL'), 'icon' => 'home', 'title' => OSCOM::getDef('button_change_address'))); ?>
 
     <div style="clear: both;"></div>
   </div>
@@ -70,7 +69,7 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b>'; ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo OSCOM::getDef('choose_payment_method'); ?></p>
@@ -110,13 +109,13 @@
 ?>
 
             <td colspan="3"><?php echo '<b>' . $selection[$i]['module'] . '</b>'; ?></td>
-            <td align="right"><?php echo osc_draw_radio_field('payment_method', $selection[$i]['id'], ($OSCOM_ShoppingCart->hasBillingMethod() ? $OSCOM_ShoppingCart->getBillingMethod('id') : null)); ?></td>
+            <td align="right"><?php echo HTML::radioField('payment_method', $selection[$i]['id'], ($OSCOM_ShoppingCart->hasBillingMethod() ? $OSCOM_ShoppingCart->getBillingMethod('id') : null)); ?></td>
 
 <?php
     } else {
 ?>
 
-            <td colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . osc_draw_hidden_field('payment_method', $selection[$i]['id']); ?></td>
+            <td colspan="4"><?php echo '<b>' . $selection[$i]['module'] . '</b>' . HTML::hiddenField('payment_method', $selection[$i]['id']); ?></td>
 
 <?php
   }
@@ -183,7 +182,7 @@
   <h6><?php echo OSCOM::getDef('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
+    <?php echo HTML::textareaField('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
   </div>
 </div>
 
@@ -192,7 +191,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
     </div>
 
     <?php echo '<b>' . OSCOM::getDef('continue_checkout_procedure_title') . '</b><br />' . OSCOM::getDef('continue_checkout_procedure_to_confirmation'); ?>

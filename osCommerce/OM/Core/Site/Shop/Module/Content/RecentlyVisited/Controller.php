@@ -10,8 +10,9 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Content\RecentlyVisited;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
   class Controller extends \osCommerce\OM\Core\Modules {
     var $_title,
@@ -42,16 +43,16 @@
             $this->_content .= '<li style="padding-bottom: 15px;">';
 
             if ( SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_IMAGES == '1' ) {
-              $this->_content .= '<span style="float: left; width: ' . ($OSCOM_Image->getWidth('mini') + 10) . 'px; text-align: center;">' . osc_link_object(OSCOM::getLink(null, 'Products', $product['keyword']), $OSCOM_Image->show($product['image'], $product['name'], null, 'mini')) . '</span>';
+              $this->_content .= '<span style="float: left; width: ' . ($OSCOM_Image->getWidth('mini') + 10) . 'px; text-align: center;">' . HTML::link(OSCOM::getLink(null, 'Products', $product['keyword']), $OSCOM_Image->show($product['image'], $product['name'], null, 'mini')) . '</span>';
             }
 
-            $this->_content .= '<div style="float: left;">' . osc_link_object(OSCOM::getLink(null, 'Products', $product['keyword']), $product['name']) . '<br />';
+            $this->_content .= '<div style="float: left;">' . HTML::link(OSCOM::getLink(null, 'Products', $product['keyword']), $product['name']) . '<br />';
 
             if ( SERVICE_RECENTLY_VISITED_SHOW_PRODUCT_PRICES == '1' ) {
               $this->_content .= $product['price'] . '&nbsp;';
             }
 
-            $this->_content .= '<i>(' . sprintf(OSCOM::getDef('recently_visited_item_in_category'), osc_link_object(OSCOM::getLink(null, 'Index', 'cPath=' . $product['category_path']), $product['category_name'])) . ')</i></div>' .
+            $this->_content .= '<i>(' . sprintf(OSCOM::getDef('recently_visited_item_in_category'), HTML::link(OSCOM::getLink(null, 'Index', 'cPath=' . $product['category_path']), $product['category_name'])) . ')</i></div>' .
                                '<div style="clear: both;"></div>' .
                                '</li>';
           }
@@ -66,10 +67,10 @@
                              '        <ol style="list-style: none; margin: 0; padding: 0;">';
 
           foreach ( $OSCOM_RecentlyVisited->getCategories() as $category ) {
-            $this->_content .= '<li>' . osc_link_object(OSCOM::getLink(null, 'Index', 'cPath=' . $category['path']), $category['name']);
+            $this->_content .= '<li>' . HTML::link(OSCOM::getLink(null, 'Index', 'cPath=' . $category['path']), $category['name']);
 
             if ( !empty($category['parent_id']) ) {
-              $this->_content .= '&nbsp;<i>(' . sprintf(OSCOM::getDef('recently_visited_item_in_category'), osc_link_object(OSCOM::getLink(null, 'Index', 'cPath=' . $category['parent_id']), $category['parent_name'])) . ')</i>';
+              $this->_content .= '&nbsp;<i>(' . sprintf(OSCOM::getDef('recently_visited_item_in_category'), HTML::link(OSCOM::getLink(null, 'Index', 'cPath=' . $category['parent_id']), $category['parent_name'])) . ')</i>';
             }
 
             $this->_content .= '</li>';
@@ -85,7 +86,7 @@
                              '        <ol style="list-style: none; margin: 0; padding: 0;">';
 
           foreach ( $OSCOM_RecentlyVisited->getSearches() as $searchphrase ) {
-            $this->_content .= '<li>' . osc_link_object(OSCOM::getLink(null, 'Search', 'keywords=' . $searchphrase['keywords']), osc_output_string_protected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
+            $this->_content .= '<li>' . HTML::link(OSCOM::getLink(null, 'Search', 'keywords=' . $searchphrase['keywords']), HTML::outputProtected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
           }
 
           $this->_content .= '      </ol>' .

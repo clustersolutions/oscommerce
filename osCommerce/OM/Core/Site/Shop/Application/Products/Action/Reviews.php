@@ -21,7 +21,7 @@
       $OSCOM_Breadcrumb = Registry::get('Breadcrumb');
 
       if ( $OSCOM_Service->isStarted('Reviews') === false ) {
-        osc_redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
+        OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
       }
 
       $application->setPageTitle(OSCOM::getDef('reviews_heading'));

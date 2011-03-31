@@ -11,8 +11,10 @@
   namespace osCommerce\OM\Core\Site\Shop\Application\Products\Action\TellAFriend;
 
   use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\Mail;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Product;
 
   class Process {
@@ -26,7 +28,7 @@
       if ( (ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($OSCOM_Customer->isLoggedOn() === false) ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
       }
 
       $requested_product = null;
@@ -63,7 +65,7 @@
         $OSCOM_MessageStack->add('TellAFriend', OSCOM::getDef('error_tell_a_friend_customers_name_empty'));
       }
 
-      if ( !osc_validate_email_address($_POST['from_email_address']) ) {
+      if ( !filter_var($_POST['from_email_address']. FILTER_VALIDATE_EMAIL) ) {
         $OSCOM_MessageStack->add('TellAFriend', OSCOM::getDef('error_tell_a_friend_invalid_customers_email_address'));
       }
 
@@ -71,26 +73,28 @@
         $OSCOM_MessageStack->add('TellAFriend', OSCOM::getDef('error_tell_a_friend_friends_name_empty'));
       }
 
-      if ( !osc_validate_email_address($_POST['to_email_address']) ) {
+      if ( !filter_var($_POST['to_email_address'], FILTER_VALIDATE_EMAIL) ) {
         $OSCOM_MessageStack->add('TellAFriend', OSCOM::getDef('error_tell_a_friend_invalid_friends_email_address'));
       }
 
       if ( $OSCOM_MessageStack->size('TellAFriend') < 1 ) {
-        $email_subject = sprintf(OSCOM::getDef('email_tell_a_friend_subject'), osc_sanitize_string($_POST['from_name']), STORE_NAME);
-        $email_body = sprintf(OSCOM::getDef('email_tell_a_friend_intro'), osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['from_name']), $OSCOM_Product->getTitle(), STORE_NAME) . "\n\n";
+        $email_subject = sprintf(OSCOM::getDef('email_tell_a_friend_subject'), HTML::sanitize($_POST['from_name']), STORE_NAME);
+        $email_body = sprintf(OSCOM::getDef('email_tell_a_friend_intro'), HTML::sanitize($_POST['to_name']), HTML::sanitize($_POST['from_name']), $OSCOM_Product->getTitle(), STORE_NAME) . "\n\n";
 
         if ( !empty($_POST['message']) ) {
-          $email_body .= osc_sanitize_string($_POST['message']) . "\n\n";
+          $email_body .= HTML::sanitize($_POST['message']) . "\n\n";
         }
 
         $email_body .= sprintf(OSCOM::getDef('email_tell_a_friend_link'), OSCOM::getLink(null, null, $OSCOM_Product->getKeyword(), 'NONSSL', false)) . "\n\n" .
                        sprintf(OSCOM::getDef('email_tell_a_friend_signature'), STORE_NAME . "\n" . HTTP_SERVER . DIR_WS_CATALOG . "\n");
 
-        osc_email(osc_sanitize_string($_POST['to_name']), osc_sanitize_string($_POST['to_email_address']), $email_subject, $email_body, osc_sanitize_string($_POST['from_name']), osc_sanitize_string($_POST['from_email_address']));
+        $pEmail = new Mail(HTML::sanitize($_POST['to_name']), HTML::sanitize($_POST['to_email_address']), HTML::sanitize($_POST['from_name']), HTML::sanitize($_POST['from_email_address']), $email_subject);
+        $pEmail->setBodyPlain($email_body);
+        $pEmail->send();
 
-        $OSCOM_MessageStack->add('header', sprintf(OSCOM::getDef('success_tell_a_friend_email_sent'), $OSCOM_Product->getTitle(), osc_output_string_protected($_POST['to_name'])), 'success');
+        $OSCOM_MessageStack->add('header', sprintf(OSCOM::getDef('success_tell_a_friend_email_sent'), $OSCOM_Product->getTitle(), HTML::outputProtected($_POST['to_name'])), 'success');
 
-        osc_redirect(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()));
+        OSCOM::redirect(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()));
       }
 
       $application->setPageTitle($OSCOM_Product->getTitle());

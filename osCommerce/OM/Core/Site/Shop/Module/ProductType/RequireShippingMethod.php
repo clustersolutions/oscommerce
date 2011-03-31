@@ -10,8 +10,8 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\ProductType;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Product;
 
   class RequireShippingMethod {
@@ -35,7 +35,7 @@
       if ( !isset($_GET['Shipping']) ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'));
       }
     }
   }

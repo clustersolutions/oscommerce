@@ -8,15 +8,14 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
 // HPDL Should be moved to the customers class!
-  $Qnewsletter = $OSCOM_Database->query('select customers_newsletter from :table_customers where customers_id = :customers_id');
+  $Qnewsletter = $OSCOM_PDO->prepare('select customers_newsletter from :table_customers where customers_id = :customers_id');
   $Qnewsletter->bindInt(':customers_id', $OSCOM_Customer->getID());
   $Qnewsletter->execute();
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -28,8 +27,8 @@
   <div class="content">
     <table border="0" width="100%" cellspacing="0" cellpadding="2">
       <tr>
-        <td width="30"><?php echo osc_draw_checkbox_field('newsletter_general', '1', $Qnewsletter->value('customers_newsletter')); ?></td>
-        <td><b><?php echo osc_draw_label(OSCOM::getDef('newsletter_general'), 'newsletter_general'); ?></b></td>
+        <td width="30"><?php echo HTML::checkboxField('newsletter_general', '1', $Qnewsletter->value('customers_newsletter')); ?></td>
+        <td><b><?php echo HTML::label(OSCOM::getDef('newsletter_general'), 'newsletter_general'); ?></b></td>
       </tr>
       <tr>
         <td width="30">&nbsp;</td>
@@ -40,7 +39,7 @@
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
 </div>
 
 </form>

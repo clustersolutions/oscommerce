@@ -7,10 +7,12 @@
   it under the terms of the GNU General Public License v2 (1991)
   as published by the Free Software Foundation.
 */
+
+  use osCommerce\OM\Core\HTML;
 ?>
 
 <div class="boxNew">
-  <div class="boxTitle"><?php echo osc_link_object($OSCOM_Box->getTitleLink(), $OSCOM_Box->getTitle()); ?></div>
+  <div class="boxTitle"><?php echo HTML::link($OSCOM_Box->getTitleLink(), $OSCOM_Box->getTitle()); ?></div>
 
   <div class="boxContents"><?php echo $OSCOM_Box->getContent(); ?></div>
 </div>

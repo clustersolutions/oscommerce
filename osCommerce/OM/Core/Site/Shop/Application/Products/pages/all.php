@@ -8,13 +8,13 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\Site\Shop\Products;
-  use osCommerce\OM\Core\Site\Shop\Product;
-  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\PDO;
+  use osCommerce\OM\Core\Site\Shop\Product;
+  use osCommerce\OM\Core\Site\Shop\Products;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -24,11 +24,11 @@
   $OSCOM_Products = new Products();
   $OSCOM_Products->setSortBy('date_added', '-');
 
-  $Qproducts = $OSCOM_Products->execute();
+  $products_listing = $OSCOM_Products->execute();
 
-  if ( $Qproducts->numberOfRows() > 0 ) {
-    while ( $Qproducts->next() ) {
-      $OSCOM_Product = new Product($Qproducts->valueInt('products_id'));
+  if ( $products_listing['total'] > 0 ) {
+    foreach ( $products_listing['entries'] as $p ) {
+      $OSCOM_Product = new Product($p['products_id']);
 ?>
 
   <tr>
@@ -36,13 +36,13 @@
 
 <?php
       if ( $OSCOM_Product->hasImage() ) {
-        echo osc_link_object(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle()));
+        echo HTML::link(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle()));
       }
 ?>
 
     </td>
-    <td valign="top"><?php echo osc_link_object(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), '<b><u>' . $OSCOM_Product->getTitle() . '</u></b>') . '<br />' . OSCOM::getDef('date_added') . ' ' . DateTime::getLong($OSCOM_Product->getDateAdded()) . '<br />' . OSCOM::getDef('manufacturer') . ' ' . $OSCOM_Product->getManufacturer() . '<br /><br />' . OSCOM::getDef('price') . ' ' . $OSCOM_Product->getPriceFormated(); ?></td>
-    <td align="right" valign="middle"><?php echo osc_link_object(OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), osc_draw_image_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart'))); ?></td>
+    <td valign="top"><?php echo HTML::link(OSCOM::getLink(null, null, $OSCOM_Product->getKeyword()), '<b><u>' . $OSCOM_Product->getTitle() . '</u></b>') . '<br />' . OSCOM::getDef('date_added') . ' ' . DateTime::getLong($OSCOM_Product->getDateAdded()) . '<br />' . OSCOM::getDef('manufacturer') . ' ' . $OSCOM_Product->getManufacturer() . '<br /><br />' . OSCOM::getDef('price') . ' ' . $OSCOM_Product->getPriceFormated(); ?></td>
+    <td align="right" valign="middle"><?php echo HTML::button(array('href' => OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), 'icon' => 'cart', 'title' => OSCOM::getDef('button_add_to_cart'))); ?></td>
   </tr>
   <tr>
     <td colspan="3">&nbsp;</td>
@@ -67,7 +67,7 @@
 </table>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qproducts->getBatchPageLinks('page', 'new'); ?></span>
+  <span style="float: right;"><?php echo PDO::getBatchPageLinks('page', $products_listing['total'], OSCOM::getAllGET('page')); ?></span>
 
-  <?php echo $Qproducts->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
+  <?php echo PDO::getBatchTotalPages(OSCOM::getDef('result_set_number_of_products'), (isset($_GET['page']) ? $_GET['page'] : 1), $products_listing['total']); ?>
 </div>

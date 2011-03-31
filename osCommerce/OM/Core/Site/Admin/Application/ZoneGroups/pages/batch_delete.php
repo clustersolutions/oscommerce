@@ -36,7 +36,7 @@
 
   $names_string = '';
 
-  while ( $Qzones->next() ) {
+  while ( $Qzones->fetch() ) {
     if ( ZoneGroups::hasTaxRates($Qzones->valueInt('geo_zone_id')) ) {
       $check_tax_zones_flag[] = $Qzones->value('geo_zone_name');
     }

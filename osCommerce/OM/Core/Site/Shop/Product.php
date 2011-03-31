@@ -11,78 +11,79 @@
   namespace osCommerce\OM\Core\Site\Shop;
 
   use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Products;
 
   class Product {
     protected $_data = array();
 
     public function __construct($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_Service = Registry::get('Service');
 
       if ( !empty($id) ) {
         if ( is_numeric($id) ) {
-          $Qproduct = $OSCOM_Database->query('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_types_id as type_id, products_weight as weight, products_weight_class as weight_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+          $Qproduct = $OSCOM_PDO->prepare('select products_id as id, parent_id, products_quantity as quantity, products_price as price, products_model as model, products_tax_class_id as tax_class_id, products_types_id as type_id, products_weight as weight, products_weight_class as weight_class_id, products_date_added as date_added, manufacturers_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
           $Qproduct->bindInt(':products_id', $id);
           $Qproduct->bindInt(':products_status', 1);
           $Qproduct->execute();
 
-          if ( $Qproduct->numberOfRows() === 1 ) {
-            $this->_data = $Qproduct->toArray();
+          $result = $Qproduct->fetch();
 
-            $this->_data['master_id'] = $Qproduct->valueInt('id');
-            $this->_data['has_children'] = $Qproduct->valueInt('has_children');
+          if ( !empty($result) ) {
+            $this->_data = $result;
 
-            if ( $Qproduct->valueInt('parent_id') > 0 ) {
-              $Qmaster = $OSCOM_Database->query('select products_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
-              $Qmaster->bindInt(':products_id', $Qproduct->valueInt('parent_id'));
+            $this->_data['master_id'] = $result['id'];
+
+            if ( $result['parent_id'] > 0 ) {
+              $Qmaster = $OSCOM_PDO->prepare('select products_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
+              $Qmaster->bindInt(':products_id', $result['parent_id']);
               $Qmaster->bindInt(':products_status', 1);
               $Qmaster->execute();
 
-              if ( $Qmaster->numberOfRows() === 1 ) {
-                $this->_data['master_id'] = $Qmaster->valueInt('products_id');
-                $this->_data['has_children'] = $Qmaster->valueInt('has_children');
+              $result = $Qmaster->fetch();
+
+              if ( !empty($result) ) {
+                $this->_data['master_id'] = $result['products_id'];
+                $this->_data['has_children'] = $result['has_children'];
               } else { // master product is disabled so invalidate the product variant
                 $this->_data = array();
               }
             }
 
             if ( !empty($this->_data) ) {
-              $Qdesc = $OSCOM_Database->query('select products_name as name, products_description as description, products_keyword as keyword, products_tags as tags, products_url as url from :table_products_description where products_id = :products_id and language_id = :language_id');
+              $Qdesc = $OSCOM_PDO->prepare('select products_name as name, products_description as description, products_keyword as keyword, products_tags as tags, products_url as url from :table_products_description where products_id = :products_id and language_id = :language_id');
               $Qdesc->bindInt(':products_id', $this->_data['master_id']);
               $Qdesc->bindInt(':language_id', $OSCOM_Language->getID());
               $Qdesc->execute();
 
-              $this->_data = array_merge($this->_data, $Qdesc->toArray());
+              $this->_data = array_merge($this->_data, $Qdesc->fetch());
             }
           }
         } else {
-          $Qproduct = $OSCOM_Database->query('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_types_id as type_id, p.products_weight as weight, p.products_weight_class as weight_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
+          $Qproduct = $OSCOM_PDO->prepare('select p.products_id as id, p.parent_id, p.products_quantity as quantity, p.products_price as price, p.products_model as model, p.products_tax_class_id as tax_class_id, p.products_types_id as type_id, p.products_weight as weight, p.products_weight_class as weight_class_id, p.products_date_added as date_added, p.manufacturers_id, p.has_children, pd.products_name as name, pd.products_description as description, pd.products_keyword as keyword, pd.products_tags as tags, pd.products_url as url from :table_products p, :table_products_description pd where pd.products_keyword = :products_keyword and pd.language_id = :language_id and pd.products_id = p.products_id and p.products_status = :products_status');
           $Qproduct->bindValue(':products_keyword', $id);
           $Qproduct->bindInt(':language_id', $OSCOM_Language->getID());
           $Qproduct->bindInt(':products_status', 1);
           $Qproduct->execute();
 
-          if ( $Qproduct->numberOfRows() === 1 ) {
-            $this->_data = $Qproduct->toArray();
+          $result = $Qproduct->fetch();
 
-            $this->_data['master_id'] = $Qproduct->valueInt('id');
-            $this->_data['has_children'] = $Qproduct->valueInt('has_children');
+          if ( !empty($result) ) {
+            $this->_data = $result;
+
+            $this->_data['master_id'] = $result['id'];
           }
         }
 
         if ( !empty($this->_data) ) {
-          $this->_data['images'] = array();
-
-          $Qimages = $OSCOM_Database->query('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
+          $Qimages = $OSCOM_PDO->prepare('select id, image, default_flag from :table_products_images where products_id = :products_id order by sort_order');
           $Qimages->bindInt(':products_id', $this->_data['master_id']);
           $Qimages->execute();
 
-          while ( $Qimages->next() ) {
-            $this->_data['images'][] = $Qimages->toArray();
-          }
+          $this->_data['images'] = $Qimages->fetchAll();
 
-          $Qcategory = $OSCOM_Database->query('select categories_id from :table_products_to_categories where products_id = :products_id limit 1');
+          $Qcategory = $OSCOM_PDO->prepare('select categories_id from :table_products_to_categories where products_id = :products_id limit 1');
           $Qcategory->bindInt(':products_id', $this->_data['master_id']);
           $Qcategory->execute();
 
@@ -91,24 +92,24 @@
           if ( $this->_data['type_id'] > 0 ) {
             $this->_data['type_assignments'] = array();
 
-            $Qtypes = $OSCOM_Database->query('select action, module from :table_product_types_assignments where types_id = :types_id order by action, sort_order, module');
+            $Qtypes = $OSCOM_PDO->prepare('select action, module from :table_product_types_assignments where types_id = :types_id order by action, sort_order, module');
             $Qtypes->bindInt(':types_id', $this->_data['type_id']);
             $Qtypes->execute();
 
-            while ( $Qtypes->next() ) {
+            while ( $Qtypes->fetch() ) {
               $this->_data['type_assignments'][$Qtypes->value('action')][] = $Qtypes->value('module');
             }
           }
 
-          if ( $this->_data['has_children'] === 1 ) {
+          if ( (int)$this->_data['has_children'] === 1 ) {
             $this->_data['variants'] = array();
 
-            $Qsubproducts = $OSCOM_Database->query('select * from :table_products where parent_id = :parent_id and products_status = :products_status');
+            $Qsubproducts = $OSCOM_PDO->prepare('select * from :table_products where parent_id = :parent_id and products_status = :products_status');
             $Qsubproducts->bindInt(':parent_id', $this->_data['master_id']);
             $Qsubproducts->bindInt(':products_status', 1);
             $Qsubproducts->execute();
 
-            while ( $Qsubproducts->next() ) {
+            while ( $Qsubproducts->fetch() ) {
               $this->_data['variants'][$Qsubproducts->valueInt('products_id')]['data'] = array('price' => $Qsubproducts->value('products_price'),
                                                                                                'tax_class_id' => $Qsubproducts->valueInt('products_tax_class_id'),
                                                                                                'model' => $Qsubproducts->value('products_model'),
@@ -117,13 +118,13 @@
                                                                                                'weight_class_id' => $Qsubproducts->valueInt('products_weight_class'),
                                                                                                'availability_shipping' => 1);
 
-              $Qvariants = $OSCOM_Database->query('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title, pvv.sort_order as value_sort_order from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
+              $Qvariants = $OSCOM_PDO->prepare('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title, pvv.sort_order as value_sort_order from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
               $Qvariants->bindInt(':products_id', $Qsubproducts->valueInt('products_id'));
               $Qvariants->bindInt(':languages_id', $OSCOM_Language->getID());
               $Qvariants->bindInt(':languages_id', $OSCOM_Language->getID());
               $Qvariants->execute();
 
-              while ( $Qvariants->next() ) {
+              while ( $Qvariants->fetch() ) {
                 $this->_data['variants'][$Qsubproducts->valueInt('products_id')]['values'][$Qvariants->valueInt('group_id')][$Qvariants->valueInt('value_id')] = array('value_id' => $Qvariants->valueInt('value_id'),
                                                                                                                                                                        'group_title' => $Qvariants->value('group_title'),
                                                                                                                                                                        'value_title' => $Qvariants->value('value_title'),
@@ -136,17 +137,17 @@
 
           $this->_data['attributes'] = array();
 
-          $Qattributes = $OSCOM_Database->query('select tb.code, pa.value from :table_product_attributes pa, :table_templates_boxes tb where pa.products_id = :products_id and pa.languages_id in (0, :languages_id) and pa.id = tb.id');
+          $Qattributes = $OSCOM_PDO->prepare('select tb.code, pa.value from :table_product_attributes pa, :table_templates_boxes tb where pa.products_id = :products_id and pa.languages_id in (0, :languages_id) and pa.id = tb.id');
           $Qattributes->bindInt(':products_id', $this->_data['master_id']);
           $Qattributes->bindInt(':languages_id', $OSCOM_Language->getID());
           $Qattributes->execute();
 
-          while ( $Qattributes->next() ) {
+          while ( $Qattributes->fetch() ) {
             $this->_data['attributes'][$Qattributes->value('code')] = $Qattributes->value('value');
           }
 
           if ( $OSCOM_Service->isStarted('Reviews') ) {
-            $Qavg = $OSCOM_Database->query('select avg(reviews_rating) as rating from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1');
+            $Qavg = $OSCOM_PDO->prepare('select avg(reviews_rating) as rating from :table_reviews where products_id = :products_id and languages_id = :languages_id and reviews_status = 1');
             $Qavg->bindInt(':products_id', $this->_data['master_id']);
             $Qavg->bindInt(':languages_id', $OSCOM_Language->getID());
             $Qavg->execute();
@@ -535,36 +536,45 @@
         return false;
       }
 
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qproduct = $OSCOM_Database->query('select p.products_id from :table_products p');
+      $sql_query = 'select p.products_id from :table_products p';
 
       if ( is_numeric($id) ) {
-        $Qproduct->appendQuery('where p.products_id = :products_id');
+        $sql_query .= ' where p.products_id = :products_id';
+      } else {
+        $sql_query .= ', :table_products_description pd where pd.products_keyword = :products_keyword and pd.products_id = p.products_id';
+      }
+
+      $sql_query .= ' and p.products_status = 1 limit 1';
+
+      $Qproduct = $OSCOM_PDO->prepare($sql_query);
+
+      if ( is_numeric($id) ) {
         $Qproduct->bindInt(':products_id', $id);
       } else {
-        $Qproduct->appendQuery(', :table_products_description pd where pd.products_keyword = :products_keyword and pd.products_id = p.products_id');
         $Qproduct->bindValue(':products_keyword', $id);
       }
 
-      $Qproduct->appendQuery('and p.products_status = 1 limit 1');
       $Qproduct->execute();
 
-      return ( $Qproduct->numberOfRows() === 1 );
+      $result = $Qproduct->fetch();
+
+      return ( ($result !== false) && (count($result) === 1) );
     }
 
     public function incrementCounter() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qupdate = $OSCOM_Database->query('update :table_products_description set products_viewed = products_viewed+1 where products_id = :products_id and language_id = :language_id');
-      $Qupdate->bindInt(':products_id', osc_get_product_id($this->_data['id']));
+      $Qupdate = $OSCOM_PDO->prepare('update :table_products_description set products_viewed = products_viewed+1 where products_id = :products_id and language_id = :language_id');
+      $Qupdate->bindInt(':products_id', Products::getProductID($this->_data['id']));
       $Qupdate->bindInt(':language_id', $OSCOM_Language->getID());
       $Qupdate->execute();
     }
 
     public function numberOfImages() {
-      return sizeof($this->_data['images']);
+      return count($this->_data['images']);
     }
   }
 ?>

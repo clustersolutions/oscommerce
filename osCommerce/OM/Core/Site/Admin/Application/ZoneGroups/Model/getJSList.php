@@ -23,7 +23,7 @@
       $Qcountries = $OSCOM_PDO->query('select distinct zone_country_id from :table_zones order by zone_country_id');
       $Qcountries->execute();
 
-      while ( $Qcountries->next() ) {
+      while ( $Qcountries->fetch() ) {
         if ( $num_country == 1 ) {
           $output_string .= '  if (' . $country . ' == "' . $Qcountries->valueInt('zone_country_id') . '") {' . "\n";
         } else {
@@ -36,7 +36,7 @@
         $Qzones->bindInt(':zone_country_id', $Qcountries->valueInt('zone_country_id'));
         $Qzones->execute();
 
-        while ( $Qzones->next() ) {
+        while ( $Qzones->fetch() ) {
           if ( $num_state == '1' ) {
             $output_string .= '    ' . $form . '.' . $field . '.options[0] = new Option("' . OSCOM::getDef('all_zones') . '", "");' . "\n";
           }

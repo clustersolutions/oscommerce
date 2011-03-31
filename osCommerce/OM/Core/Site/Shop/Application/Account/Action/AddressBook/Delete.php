@@ -31,7 +31,7 @@
       }
 
       if ( $OSCOM_MessageStack->size('AddressBook') > 0 ) {
-        osc_redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
       }
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {

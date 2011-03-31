@@ -28,7 +28,7 @@
         }
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Cart'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart'));
     }
   }
 ?>

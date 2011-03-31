@@ -33,7 +33,7 @@
 
   $names_string = '';
 
-  while ( $Qentries->next() ) {
+  while ( $Qentries->fetch() ) {
     $names_string .= HTML::hiddenField('batch[]', $Qentries->valueInt('tax_rates_id')) . '<b>' . $Qentries->valueProtected('tax_description') . '</b>, ';
   }
 

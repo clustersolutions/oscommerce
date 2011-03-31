@@ -10,8 +10,9 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\Registry;
 
 /**
  * The Banner class manages the banners shown throughout the online store
@@ -78,12 +79,12 @@
  */
 
     public function activateAll() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qbanner = $OSCOM_Database->query('select banners_id, date_scheduled from :table_banners where date_scheduled != ""');
+      $Qbanner = $OSCOM_PDO->query('select banners_id, date_scheduled from :table_banners where date_scheduled != ""');
       $Qbanner->execute();
 
-      while ( $Qbanner->next() ) {
+      while ( $Qbanner->fetch() ) {
         if ( DateTime::getNow() >= $Qbanner->value('date_scheduled') ) {
           $this->activate($Qbanner->valueInt('banners_id'));
         }
@@ -109,17 +110,17 @@
  */
 
     public function expireAll() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qbanner = $OSCOM_Database->query('select b.banners_id, b.expires_date, b.expires_impressions, sum(bh.banners_shown) as banners_shown from :table_banners b, :table_banners_history bh where b.status = 1 and b.banners_id = bh.banners_id group by b.banners_id');
+      $Qbanner = $OSCOM_PDO->query('select b.banners_id, b.expires_date, b.expires_impressions, sum(bh.banners_shown) as banners_shown from :table_banners b, :table_banners_history bh where b.status = 1 and b.banners_id = bh.banners_id group by b.banners_id');
       $Qbanner->execute();
 
-      while ( $Qbanner->next() ) {
-        if ( !osc_empty($Qbanner->value('expires_date')) ) {
+      while ( $Qbanner->fetch() ) {
+        if ( strlen($Qbanner->value('expires_date')) > 0 ) {
           if ( DateTime::getNow() >= $Qbanner->value('expires_date') ) {
             $this->expire($Qbanner->valueInt('banners_id'));
           }
-        } elseif ( !osc_empty($Qbanner->valueInt('expires_impressions')) ) {
+        } elseif ( strlen($Qbanner->valueInt('expires_impressions')) > 0 ) {
           if ( ($Qbanner->valueInt('expires_impressions') > 0) && ($Qbanner->valueInt('banners_shown') >= $Qbanner->valueInt('expires_impressions')) ) {
             $this->expire($Qbanner->valueInt('banners_id'));
           }
@@ -136,9 +137,9 @@
  */
 
     public function isActive($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qbanner = $OSCOM_Database->query('select status from :table_banners where banners_id = :banners_id');
+      $Qbanner = $OSCOM_PDO->prepare('select status from :table_banners where banners_id = :banners_id');
       $Qbanner->bindInt(':banners_id', $id);
       $Qbanner->execute();
 
@@ -155,20 +156,24 @@
  */
 
     public function exists($group) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qbanner = $OSCOM_Database->query('select banners_id from :table_banners where status = 1 and banners_group = :banners_group');
+      $sql_query = 'select banners_id from :table_banners where status = 1 and banners_group = :banners_group';
 
-      if ( ($this->_show_duplicates_in_group === false) && (sizeof($this->_shown_ids) > 0) ) {
-        $Qbanner->appendQuery('and banners_id not in (:banner_ids)');
-        $Qbanner->bindRaw(':banner_ids', implode(',', $this->_shown_ids));
+      if ( ($this->_show_duplicates_in_group === false) && (count($this->_shown_ids) > 0) ) {
+        $sql_query .= ' and banners_id not in (' . implode(',', $this->_shown_ids) . ')';
       }
 
-      $Qbanner->bindValue(':banners_group', $group);
-      $Qbanner->executeRandom();
+      $sql_query .= ' order by rand() limit 1';
 
-      if ( $Qbanner->numberOfRows() > 0 ) {
-        $this->_exists_id = $Qbanner->valueInt('banners_id');
+      $Qbanner = $OSCOM_PDO->prepare($sql_query);
+      $Qbanner->bindValue(':banners_group', $group);
+      $Qbanner->execute();
+
+      $result = $Qbanner->fetch();
+
+      if ( $result !== false ) {
+        $this->_exists_id = $result['banners_id'];
 
         return true;
       }
@@ -186,7 +191,7 @@
  */
 
     public function display($id = null) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $banner_string = '';
 
@@ -196,21 +201,24 @@
         unset($this->_exists_id);
       }
 
-      $Qbanner = $OSCOM_Database->query('select * from :table_banners where banners_id = :banners_id and status = 1');
+      $Qbanner = $OSCOM_PDO->prepare('select * from :table_banners where banners_id = :banners_id and status = 1');
       $Qbanner->bindInt(':banners_id', $id);
       $Qbanner->execute();
 
-      if ( $Qbanner->numberOfRows() > 0 ) {
-        if ( !osc_empty($Qbanner->value('banners_html_text')) ) {
-          $banner_string = $Qbanner->value('banners_html_text');
+      $result = $Qbanner->fetch();
+
+      if ( $result !== false ) {
+        if ( !empty($result['banners_html_text']) ) {
+          $banner_string = $result['banners_html_text'];
         } else {
-          $banner_string = osc_link_object(osc_href_link(FILENAME_REDIRECT, 'action=banner&goto=' . $Qbanner->valueInt('banners_id')), osc_image(DIR_WS_IMAGES . $Qbanner->value('banners_image'), $Qbanner->value('banners_title')), 'target="_blank"');
+// HPDL create Redirect action; fix banner image location
+          $banner_string = HTML::link(OSCOM::getLink('Shop', 'Index', 'Redirect&action=banner&goto=' . (int)$result['banners_id']), HTML::image('public/' . $Qbanner->value('banners_image'), $Qbanner->value('banners_title')), 'target="_blank"');
         }
 
-        $this->_updateDisplayCount($Qbanner->valueInt('banners_id'));
+        $this->_updateDisplayCount($result['banners_id']);
 
         if ( $this->_show_duplicates_in_group === false ) {
-          $this->_shown_ids[] = $Qbanner->valueInt('banners_id');
+          $this->_shown_ids[] = $result['banners_id'];
         }
       }
 
@@ -227,16 +235,18 @@
  */
 
     public function getURL($id, $increment_click_flag = false) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $url = '';
 
-      $Qbanner = $OSCOM_Database->query('select banners_url from :table_banners where banners_id = :banners_id and status = 1');
+      $Qbanner = $OSCOM_PDO->prepare('select banners_url from :table_banners where banners_id = :banners_id and status = 1');
       $Qbanner->bindInt(':banners_id', $id);
       $Qbanner->execute();
 
-      if ( $Qbanner->numberOfRows() > 0 ) {
-        $url = $Qbanner->value('banners_url');
+      $result = $Qbanner->fetch();
+
+      if ( $result !== false ) {
+        $url = $result['banners_url'];
 
         if ( $increment_click_flag === true ) {
           $this->_updateClickCount($id);
@@ -256,18 +266,18 @@
  */
 
     private function _setStatus($id, $active_flag) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( $active_flag === true ) {
-        $Qbanner = $OSCOM_Database->query('update :table_banners set status = 1, date_status_change = now(), date_scheduled = NULL where banners_id = :banners_id');
+        $Qbanner = $OSCOM_PDO->prepare('update :table_banners set status = 1, date_status_change = now(), date_scheduled = NULL where banners_id = :banners_id');
       } else {
-        $Qbanner = $OSCOM_Database->query('update :table_banners set status = 0, date_status_change = now() where banners_id = :banners_id');
+        $Qbanner = $OSCOM_PDO->prepare('update :table_banners set status = 0, date_status_change = now() where banners_id = :banners_id');
       }
 
       $Qbanner->bindInt(':banners_id', $id);
       $Qbanner->execute();
 
-      return ( $Qbanner->affectedRows() === 1 );
+      return ( $Qbanner->rowCount() === 1 );
     }
 
 /**
@@ -278,16 +288,18 @@
  */
 
     private function _updateDisplayCount($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcheck = $OSCOM_Database->query('select count(*) as count from :table_banners_history where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
+      $Qcheck = $OSCOM_PDO->prepare('select count(*) as count from :table_banners_history where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
       $Qcheck->bindInt(':banners_id', $id);
       $Qcheck->execute();
 
-      if ( $Qcheck->valueInt('count') > 0 ) {
-        $Qbanner = $OSCOM_Database->query('update :table_banners_history set banners_shown = banners_shown + 1 where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
+      $result = $Qcheck->fetch();
+
+      if ( ($result !== false) && ($result['count'] > 0) ) {
+        $Qbanner = $OSCOM_PDO->prepare('update :table_banners_history set banners_shown = banners_shown + 1 where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
       } else {
-        $Qbanner = $OSCOM_Database->query('insert into :table_banners_history (banners_id, banners_shown, banners_history_date) values (:banners_id, 1, now())');
+        $Qbanner = $OSCOM_PDO->prepare('insert into :table_banners_history (banners_id, banners_shown, banners_history_date) values (:banners_id, 1, now())');
       }
 
       $Qbanner->bindInt(':banners_id', $id);
@@ -302,16 +314,18 @@
  */
 
     private function _updateClickCount($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcheck = $OSCOM_Database->query('select count(*) as count from :table_banners_history where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
+      $Qcheck = $OSCOM_PDO->prepare('select count(*) as count from :table_banners_history where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
       $Qcheck->bindInt(':banners_id', $id);
       $Qcheck->execute();
 
-      if ( $Qcheck->valueInt('count') > 0 ) {
-        $Qbanner = $OSCOM_Database->query('update :table_banners_history set banners_clicked = banners_clicked + 1 where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
+      $result = $Qcheck->fetch();
+
+      if ( ($result !== false) && ($result['count'] > 0) ) {
+        $Qbanner = $OSCOM_PDO->prepare('update :table_banners_history set banners_clicked = banners_clicked + 1 where banners_id = :banners_id and date_format(banners_history_date, "%Y%m%d") = date_format(now(), "%Y%m%d")');
       } else {
-        $Qbanner = $OSCOM_Database->query('insert into :table_banners_history (banners_id, banners_clicked, banners_history_date) values (:banners_id, 1, now())');
+        $Qbanner = $OSCOM_PDO->prepare('insert into :table_banners_history (banners_id, banners_clicked, banners_history_date) values (:banners_id, 1, now())');
       }
 
       $Qbanner->bindInt(':banners_id', $id);

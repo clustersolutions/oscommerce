@@ -35,7 +35,7 @@
 
   $names_string = '';
 
-  while ( $Qcurrencies->next() ) {
+  while ( $Qcurrencies->fetch() ) {
     if ( $Qcurrencies->value('code') == DEFAULT_CURRENCY ) {
       $check_default_flag = true;
     }

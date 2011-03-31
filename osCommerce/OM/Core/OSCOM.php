@@ -343,7 +343,7 @@
  * @return mixed The result of the database query
  */
     public static function callDB($procedure, $data = null, $type = 'Application') {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $call = explode('\\', $procedure);
 
@@ -373,11 +373,11 @@
           $procedure = $call[2];
       }
 
-      $db_driver = $OSCOM_Database->getDriver();
+      $db_driver = $OSCOM_PDO->getDriver();
 
       if ( !class_exists($ns . '\\SQL\\' . $db_driver . '\\' . $procedure) ) {
-        if ( $OSCOM_Database->hasDriverParent() && class_exists($ns . '\\SQL\\' . $OSCOM_Database->getDriverParent() . '\\' . $procedure) ) {
-          $db_driver = $OSCOM_Database->getDriverParent();
+        if ( $OSCOM_PDO->hasDriverParent() && class_exists($ns . '\\SQL\\' . $OSCOM_PDO->getDriverParent() . '\\' . $procedure) ) {
+          $db_driver = $OSCOM_PDO->getDriverParent();
         } else {
           $db_driver = 'SqlBuilder';
         }
@@ -427,6 +427,47 @@
       }
 
       return $ip;
+    }
+
+/**
+ * Get all parameters in the GET scope
+ *
+ * @param array $exclude A list of parameters to exclude
+ * @return string
+ * @since v3.0.0
+ */
+
+    public static function getAllGET($exclude = null) {
+      if ( !is_array($exclude) ) {
+        if ( !empty($exclude) ) {
+          $exclude = array($exclude);
+        } else {
+          $exclude = array();
+        }
+      }
+
+      $params = '';
+
+      $array = array(static::getSite(),
+                     static::getSiteApplication(),
+                     Registry::get('Session')->getName(),
+                     'error',
+                     'x',
+                     'y');
+
+      $exclude = array_merge($exclude, $array);
+
+      foreach ( $_GET as $key => $value ) {
+        if ( !in_array($key, $exclude) ) {
+          $params .= $key . (!empty($value) ? '=' . $value : '') . '&';
+        }
+      }
+
+      if ( !empty($params) ) {
+        $params = substr($params, 0, -1);
+      }
+
+      return $params;
     }
   }
 ?>

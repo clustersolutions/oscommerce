@@ -96,24 +96,94 @@
  */
 
     public function install() {
-      $OSCOM_Database = Registry::get('Database');
-
       parent::install();
 
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Enable PayPal Express Checkout', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_STATUS', '-1', 'Do you want to accept PayPal Express Checkout payments?', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Seller Account', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_SELLER_ACCOUNT', '', 'The email address of the seller account if no API credentials has been setup.', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('API Username', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_USERNAME', '', 'The username to use for the PayPal API service', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('API Password', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_PASSWORD', '', 'The password to use for the PayPal API service', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('API Signature', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_SIGNATURE', '', 'The signature to use for the PayPal API service', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Transaction Server', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER', 'Live', 'Use the live or testing (sandbox) gateway server to process transactions?', '6', '0', 'osc_cfg_set_boolean_value(array(\'Live\', \'Sandbox\'))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Transaction Method', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_METHOD', 'Sale', 'The processing method to use for each transaction.', '6', '0', 'osc_cfg_set_boolean_value(array(\'Authorization\', \'Sale\'))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('PayPal Account Optional', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ACCOUNT_OPTIONAL', '-1', 'This must also be enabled in your PayPal account, in Profile > Website Payment Preferences.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('PayPal Instant Update', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE', '1', 'Support PayPal shipping and tax calculations on the PayPal.com site during Express Checkout.', '6', '0', 'osc_cfg_use_get_boolean_value', 'osc_cfg_set_boolean_value(array(1, -1))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('PayPal Checkout Image', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_IMAGE', 'Static', 'Use static or dynamic Express Checkout image buttons. Dynamic images are used with PayPal campaigns.', '6', '0', 'osc_cfg_set_boolean_value(array(\'Static\', \'Dynamic\'))', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Debug E-Mail Address', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_DEBUG_EMAIL', '', 'All parameters of an invalid transaction will be sent to this email address.', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Payment Zone', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ZONE', '0', 'If a zone is selected, only enable this payment method for that zone.', '6', '0', 'osc_cfg_use_get_zone_class_title', 'osc_cfg_set_zone_classes_pull_down_menu', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort order of display.', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0', now())");
-      $OSCOM_Database->simpleQuery("insert into " . DB_TABLE_PREFIX . "configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, use_function, date_added) values ('Set Order Status', 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ORDER_STATUS_ID', '0', 'Set the status of orders made with this payment module to this value', '6', '0', 'osc_cfg_set_order_statuses_pull_down_menu', 'osc_cfg_use_get_order_status_title', now())");
+      $data = array(array('title' => 'Enable PayPal Express Checkout',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_STATUS',
+                          'value' => '-1',
+                          'description' => 'Do you want to accept PayPal Express Checkout payments?',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'Seller Account',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_SELLER_ACCOUNT',
+                          'value' => '',
+                          'description' => 'The email address of the seller account if no API credentials has been setup.',
+                          'group_id' => '6'),
+                    array('title' => 'API Username',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_USERNAME',
+                          'value' => '',
+                          'description' => 'The username to use for the PayPal API service',
+                          'group_id' => '6'),
+                    array('title' => 'API Password',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_PASSWORD',
+                          'value' => '',
+                          'description' => 'The password to use for the PayPal API service',
+                          'group_id' => '6'),
+                    array('title' => 'API Signature',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_API_SIGNATURE',
+                          'value' => '',
+                          'description' => 'The signature to use for the PayPal API service',
+                          'group_id' => '6'),
+                    array('title' => 'Transaction Server',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER',
+                          'value' => 'Live',
+                          'description' => 'Use the live or testing (sandbox) gateway server to process transactions?',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'Live\', \'Sandbox\'))'),
+                    array('title' => 'Transaction Method',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_METHOD',
+                          'value' => 'Sale',
+                          'description' => 'The processing method to use for each transaction.',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'Authorization\', \'Sale\'))'),
+                    array('title' => 'PayPal Account Optional',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ACCOUNT_OPTIONAL',
+                          'value' => '-1',
+                          'description' => 'This must also be enabled in your PayPal account, in Profile > Website Payment Preferences.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'PayPal Instant Update',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_INSTANT_UPDATE',
+                          'value' => '1',
+                          'description' => 'Support PayPal shipping and tax calculations on the PayPal.com site during Express Checkout.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_boolean_value',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(1, -1))'),
+                    array('title' => 'PayPal Checkout Image',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_IMAGE',
+                          'value' => 'Static',
+                          'description' => 'Use static or dynamic Express Checkout image buttons. Dynamic images are used with PayPal campaigns.',
+                          'group_id' => '6',
+                          'set_function' => 'osc_cfg_set_boolean_value(array(\'Static\', \'Dynamic\'))'),
+                    array('title' => 'Debug E-Mail Address',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_DEBUG_EMAIL',
+                          'value' => '',
+                          'description' => 'All parameters of an invalid transaction will be sent to this email address.',
+                          'group_id' => '6'),
+                    array('title' => 'Payment Zone',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ZONE',
+                          'value' => '0',
+                          'description' => 'If a zone is selected, only enable this payment method for that zone.',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_zone_class_title',
+                          'set_function' => 'osc_cfg_set_zone_classes_pull_down_menu'),
+                    array('title' => 'Sort order of display.',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_SORT_ORDER',
+                          'value' => '0',
+                          'description' => 'Sort order of display. Lowest is displayed first.',
+                          'group_id' => '6'),
+                    array('title' => 'Set Order Status',
+                          'key' => 'MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ORDER_STATUS_ID',
+                          'value' => '0',
+                          'description' => 'Set the status of orders made with this payment module to this value',
+                          'group_id' => '6',
+                          'use_function' => 'osc_cfg_use_get_order_status_title',
+                          'set_function' => 'osc_cfg_set_order_statuses_pull_down_menu')
+                   );
+
+      OSCOM::callDB('Admin\InsertConfigurationParameters', $data, 'Site');
     }
 
 /**

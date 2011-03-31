@@ -43,10 +43,10 @@
                 if ( $OSCOM_Product->variantExists($_POST['variants']) ) {
                   $OSCOM_ShoppingCart->add($OSCOM_Product->getProductVariantID($_POST['variants']));
                 } else {
-                  osc_redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
+                  OSCOM::redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
                 }
               } else {
-                osc_redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
+                OSCOM::redirect(OSCOM::getLink(null, 'Products', $OSCOM_Product->getKeyword()));
               }
             } else {
               $OSCOM_ShoppingCart->add($OSCOM_Product->getID());
@@ -55,7 +55,7 @@
         }
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Cart'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart'));
     }
   }
 ?>

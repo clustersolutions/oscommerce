@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Payment;
 
+  use osCommerce\OM\Core\Mail;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\Order;
@@ -17,7 +18,7 @@
 
   class PayPalExpressCheckout extends \osCommerce\OM\Core\Site\Shop\PaymentModuleAbstract {
     protected function initialize() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
 
       $this->_api_version = '60.0';
@@ -35,12 +36,12 @@
         if ( (int)MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ZONE > 0 ) {
           $check_flag = false;
 
-          $Qcheck = $OSCOM_Database->query('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
+          $Qcheck = $OSCOM_PDO->prepare('select zone_id from :table_zones_to_geo_zones where geo_zone_id = :geo_zone_id and zone_country_id = :zone_country_id order by zone_id');
           $Qcheck->bindInt(':geo_zone_id', MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_ZONE);
           $Qcheck->bindInt(':zone_country_id', $OSCOM_ShoppingCart->getBillingAddress('country_id'));
           $Qcheck->execute();
 
-          while ( $Qcheck->next() ) {
+          while ( $Qcheck->fetch() ) {
             if ( $Qcheck->valueInt('zone_id') < 1 ) {
               $check_flag = true;
               break;
@@ -96,7 +97,7 @@
       $response_array = $this->doExpressCheckoutPayment($params);
 
       if (($response_array['ACK'] != 'Success') && ($response_array['ACK'] != 'SuccessWithWarning')) {
-        osc_redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
       }
 
       $this->_order_id = Order::insert();
@@ -358,21 +359,19 @@
       $response_array = $this->setExpressCheckout($params);
 
       if ( ($response_array['ACK'] == 'Success') || ($response_array['ACK'] == 'SuccessWithWarning') ) {
-        osc_redirect($paypal_url . '&token=' . $response_array['TOKEN'] . '&useraction=commit');
+        OSCOM::redirect($paypal_url . '&token=' . $response_array['TOKEN'] . '&useraction=commit');
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
     }
 
     protected function cancelExpressCheckout() {
       unset($_SESSION['Shop']['PM']['PAYPAL']);
 
-      osc_redirect(OSCOM::getLink(null, 'Cart', null, 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart', null, 'SSL'));
     }
 
     protected function retrieveExpressCheckout() {
-      $OSCOM_Database = Registry::get('Database');
-
       $response_array = $this->getExpressCheckoutDetails($_GET['token']);
 
       if ( ($response_array['ACK'] == 'Success') || ($response_array['ACK'] == 'SuccessWithWarning') ) {
@@ -381,10 +380,10 @@
         $_SESSION['Shop']['PM']['PAYPAL']['EC']['PAYERSTATUS'] = $response_array['PAYERSTATUS'];
         $_SESSION['Shop']['PM']['PAYPAL']['EC']['ADDRESSSTATUS'] = $response_array['ADDRESSSTATUS'];
 
-        osc_redirect(OSCOM::getLink(null, null, 'Process', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'Process', 'SSL'));
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart', 'error_message=' . stripslashes($response_array['L_LONGMESSAGE0']), 'SSL'));
     }
 
     protected function sendDebugEmail() {
@@ -401,7 +400,9 @@
           $email_body .= $key . '=' . $value . "\n";
         }
 
-        osc_email('', MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_DEBUG_EMAIL, 'PayPal Express Debug E-Mail', $email_body, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
+        $email = new Mail(null, MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_DEBUG_EMAIL, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS, 'PayPal Express Debug E-Mail');
+        $email->setBodyPlain($email_body);
+        $email->send();
       }
     }
   }

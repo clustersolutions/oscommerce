@@ -8,9 +8,11 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Shop\ProductVariants;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\Products;
+  use osCommerce\OM\Core\Site\Shop\ProductVariants;
   use osCommerce\OM\Core\Site\Shop\Reviews;
 ?>
 
@@ -23,7 +25,7 @@
 ?>
 
   <div style="float: left; text-align: center; padding: 0 10px 10px 0; width: <?php echo $OSCOM_Image->getWidth('product_info'); ?>px;">
-    <?php echo osc_link_object(OSCOM::getLink(null, 'Products', 'Images&' . $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), null, 'product_info'), 'target="_blank" onclick="window.open(\'' . OSCOM::getLink(null, 'Products', 'Images&' . $OSCOM_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($OSCOM_Product->numberOfImages() > 1) ? $OSCOM_Image->getWidth('large') + ($OSCOM_Image->getWidth('thumbnails') * 2) + 70 : $OSCOM_Image->getWidth('large') + 20) . ',height=' . ($OSCOM_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
+    <?php echo HTML::link(OSCOM::getLink(null, 'Products', 'Images&' . $OSCOM_Product->getKeyword()), $OSCOM_Image->show($OSCOM_Product->getImage(), $OSCOM_Product->getTitle(), null, 'product_info'), 'target="_blank" onclick="window.open(\'' . OSCOM::getLink(null, 'Products', 'Images&' . $OSCOM_Product->getKeyword()) . '\', \'popUp\', \'toolbar=0,scrollbars=1,location=0,statusbar=0,menubar=0,resizable=1,width=' . (($OSCOM_Product->numberOfImages() > 1) ? $OSCOM_Image->getWidth('large') + ($OSCOM_Image->getWidth('thumbnails') * 2) + 70 : $OSCOM_Image->getWidth('large') + 20) . ',height=' . ($OSCOM_Image->getHeight('large') + 20) . '\'); return false;"'); ?>
   </div>
 
 <?php
@@ -34,13 +36,13 @@
     <form name="cart_quantity" action="<?php echo OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()); ?>" method="post">
 
     <div style="float: right;">
-      <?php echo osc_draw_image_submit_button('button_in_cart.gif', OSCOM::getDef('button_add_to_cart')); ?>
+      <?php echo HTML::button(array('icon' => 'cart', 'title' => OSCOM::getDef('button_add_to_cart'))); ?>
     </div>
 
     <table border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td class="productInfoKey">Price:</td>
-        <td class="productInfoValue"><span id="productInfoPrice"><?php echo $OSCOM_Product->getPriceFormated(true); ?></span> (plus <?php echo osc_link_object(OSCOM::getLink(null, 'Info', 'Shipping'), 'shipping'); ?>)</td>
+        <td class="productInfoValue"><span id="productInfoPrice"><?php echo $OSCOM_Product->getPriceFormated(true); ?></span> (plus <?php echo HTML::link(OSCOM::getLink(null, 'Info', 'Shipping'), 'shipping'); ?>)</td>
       </tr>
 
 <?php
@@ -144,10 +146,10 @@
 </div>
 
 <?php
-  if ($OSCOM_Service->isStarted('Reviews') && Reviews::exists(osc_get_product_id($OSCOM_Product->getID()), true)) {
+  if ($OSCOM_Service->isStarted('Reviews') && Reviews::exists(Products::getProductID($OSCOM_Product->getID()), true)) {
 ?>
 
-<p><?php echo OSCOM::getDef('number_of_product_reviews') . ' ' . Reviews::getTotal(osc_get_product_id($OSCOM_Product->getID())); ?></p>
+<p><?php echo OSCOM::getDef('number_of_product_reviews') . ' ' . Reviews::getTotal(Products::getProductID($OSCOM_Product->getID())); ?></p>
 
 <?php
   }
@@ -165,7 +167,7 @@
 
 <?php
   if ( $OSCOM_Service->isStarted('Reviews')) {
-    echo osc_link_object(OSCOM::getLink(null, null, 'Reviews&' . osc_get_all_get_params()), osc_draw_image_button('button_reviews.gif', OSCOM::getDef('button_reviews')));
+    echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Reviews&' . OSCOM::getAllGET()), 'icon' => 'comment', 'title' => OSCOM::getDef('button_reviews')));
   }
 ?>
 

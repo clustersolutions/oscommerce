@@ -25,7 +25,7 @@
       if ( AddressBook::checkEntry($_GET['Edit']) === false ) {
         $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_entry_non_existing'), 'error');
 
-        osc_redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
       }
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {

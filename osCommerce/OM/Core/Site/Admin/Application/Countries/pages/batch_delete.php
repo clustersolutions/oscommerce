@@ -16,7 +16,7 @@
 
   $names_string = '';
 
-  while ( $Qcountries->next() ) {
+  while ( $Qcountries->fetch() ) {
     $names_string .= HTML::hiddenField('batch[]', $Qcountries->valueInt('countries_id')) . '<b>' . $Qcountries->valueProtected('countries_name') . '</b>, ';
   }
 

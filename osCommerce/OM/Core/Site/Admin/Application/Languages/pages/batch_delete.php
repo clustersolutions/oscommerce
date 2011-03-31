@@ -35,7 +35,7 @@
 
   $names_string = '';
 
-  while ( $Qlanguages->next() ) {
+  while ( $Qlanguages->fetch() ) {
     if ( $Qlanguages->value('code') == DEFAULT_LANGUAGE ) {
       $check_default_flag = true;
     }
