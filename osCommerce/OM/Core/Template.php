@@ -160,43 +160,6 @@
 
     protected $_show_debug_messages = true;
 
-/**
- * Setup the template class with the requested page module
- *
- * @param string $module The default page module to setup
- * @return object
- */
-
-    public static function setup($module) {
-      $group = basename($_SERVER['SCRIPT_FILENAME']);
-
-      if (($pos = strrpos($group, '.')) !== false) {
-        $group = substr($group, 0, $pos);
-      }
-
-      if (empty($_GET) === false) {
-        $first_array = array_slice($_GET, 0, 1);
-        $_module = HTML::sanitize(basename(key($first_array)));
-
-        if (file_exists('includes/content/' . $group . '/' . $_module . '.php')) {
-          $module = $_module;
-        }
-      }
-
-      include('includes/content/' . $group . '/' . $module . '.php');
-
-      $_page_module_name = 'osC_' . ucfirst($group) . '_' . ucfirst($module);
-      $object = new $_page_module_name();
-
-      if ( isset($_GET['action']) && !empty($_GET['action']) ) {
-        include('includes/classes/actions.php');
-
-        osC_Actions::parse($_GET['action']);
-      }
-
-      return $object;
-    }
-
     public function setApplication(ApplicationAbstract $application) {
       $this->_application = $application;
     }
