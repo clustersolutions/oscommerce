@@ -8,10 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -24,7 +23,7 @@
       $category_links = array_reverse($OSCOM_Category->getPathArray());
 
       for( $i=0, $n=sizeof($category_links); $i<$n; $i++ ) {
-        $Qcategories = $OSCOM_Database->query('select count(*) as total from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id');
+        $Qcategories = $OSCOM_PDO->prepare('select count(*) as total from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id');
         $Qcategories->bindInt(':parent_id', $category_links[$i]);
         $Qcategories->bindInt(':language_id', $OSCOM_Language->getID());
         $Qcategories->execute();
@@ -32,7 +31,7 @@
         if ( $Qcategories->valueInt('total') < 1 ) {
           // do nothing, go through the loop
         } else {
-          $Qcategories = $OSCOM_Database->query('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
+          $Qcategories = $OSCOM_PDO->prepare('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
           $Qcategories->bindInt(':parent_id', $category_links[$i]);
           $Qcategories->bindInt(':language_id', $OSCOM_Language->getID());
           $Qcategories->execute();
@@ -41,22 +40,23 @@
         }
       }
     } else {
-      $Qcategories = $OSCOM_Database->query('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
+      $Qcategories = $OSCOM_PDO->prepare('select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from :table_categories c, :table_categories_description cd where c.parent_id = :parent_id and c.categories_id = cd.categories_id and cd.language_id = :language_id order by sort_order, cd.categories_name');
       $Qcategories->bindInt(':parent_id', $OSCOM_Category->getID());
       $Qcategories->bindInt(':language_id', $OSCOM_Language->getID());
       $Qcategories->execute();
     }
 
-    $number_of_categories = $Qcategories->numberOfRows();
+    $result = $Qcategories->fetchAll();
+    $number_of_categories = count($result);
+
+    $width = (int)(100 / MAX_DISPLAY_CATEGORIES_PER_ROW) . '%';
 
     $rows = 0;
 
-    while ( $Qcategories->next() ) {
+    foreach ( $result as $c ) {
       $rows++;
 
-      $width = (int)(100 / MAX_DISPLAY_CATEGORIES_PER_ROW) . '%';
-
-      echo '    <td align="center" class="smallText" width="' . $width . '" valign="top">' . osc_link_object(OSCOM::getLink(null, 'Index', 'cPath=' . $OSCOM_CategoryTree->buildBreadcrumb($Qcategories->valueInt('categories_id'))), osc_image(DIR_WS_IMAGES . 'categories/' . $Qcategories->value('categories_image'), $Qcategories->value('categories_name')) . '<br />' . $Qcategories->value('categories_name')) . '</td>' . "\n";
+      echo '    <td align="center" class="smallText" width="' . $width . '" valign="top">' . HTML::link(OSCOM::getLink(null, 'Index', 'cPath=' . $OSCOM_CategoryTree->buildBreadcrumb($c['categories_id'])), HTML::image('public/categories/' . $c['categories_image'], $c['categories_name']) . '<br />' . $c['categories_name']) . '</td>' . "\n";
 
       if ( (($rows / MAX_DISPLAY_CATEGORIES_PER_ROW) == floor($rows / MAX_DISPLAY_CATEGORIES_PER_ROW)) && ($rows != $number_of_categories) ) {
         echo '  </tr>' . "\n" .

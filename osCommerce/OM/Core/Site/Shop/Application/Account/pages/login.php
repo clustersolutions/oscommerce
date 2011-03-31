@@ -8,10 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -30,13 +29,13 @@
     <p><?php echo OSCOM::getDef('login_returning_customer_text'); ?></p>
 
     <ol>
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_email_address'), 'email_address') . osc_draw_input_field('email_address'); ?></li>
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_password'), 'password') . osc_draw_password_field('password'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_email_address'), 'email_address') . HTML::inputField('email_address'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_password'), 'password') . HTML::passwordField('password'); ?></li>
     </ol>
 
     <p><?php echo sprintf(OSCOM::getDef('login_returning_customer_password_forgotten'), OSCOM::getLink(null, null, 'PasswordForgotten', 'SSL')); ?></p>
 
-    <p align="right"><?php echo osc_draw_image_submit_button('button_login.gif', OSCOM::getDef('button_sign_in')); ?></p>
+    <p align="right"><?php echo HTML::button(array('icon' => 'key', 'title' => OSCOM::getDef('button_sign_in'))); ?></p>
   </div>
 
   </form>
@@ -50,6 +49,6 @@
   <div class="content">
     <p><?php echo OSCOM::getDef('login_new_customer_text'); ?></p>
 
-    <p align="right"><?php echo osc_link_object(OSCOM::getLink(null, null, 'Create', 'SSL'), osc_draw_image_button('button_continue.gif', OSCOM::getDef('button_continue'))); ?></p>
+    <p align="right"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Create', 'SSL'), 'icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></p>
   </div>
 </div>

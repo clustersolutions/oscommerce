@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Box\ShoppingCart;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
@@ -36,7 +37,7 @@
         foreach ( $OSCOM_ShoppingCart->getProducts() as $products ) {
           $this->_content .= '  <tr>' .
                              '    <td align="right" valign="top">' . $products['quantity'] . '&nbsp;x&nbsp;</td>' .
-                             '    <td valign="top">' . osc_link_object(OSCOM::getLink(null, 'Products', $products['keyword']), $products['name']) . '</td>' .
+                             '    <td valign="top">' . HTML::link(OSCOM::getLink(null, 'Products', $products['keyword']), $products['name']) . '</td>' .
                              '  </tr>';
         }
 

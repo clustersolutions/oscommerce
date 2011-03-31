@@ -10,8 +10,9 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
 /**
  * The Address class handles address related functions such as the format and country and zone information
@@ -38,7 +39,7 @@
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
-        $address = $Qaddress->toArray();
+        $address = $Qaddress->fetch();
       }
 
       $firstname = $lastname = '';
@@ -83,19 +84,19 @@
                           '/\:state_code\b/',
                           '/\:country\b/');
 
-      $replace_array = array(osc_output_string_protected($firstname . ' ' . $lastname),
-                             osc_output_string_protected($address['street_address']),
-                             osc_output_string_protected($address['suburb']),
-                             osc_output_string_protected($address['city']),
-                             osc_output_string_protected($address['postcode']),
-                             osc_output_string_protected($state),
-                             osc_output_string_protected($state_code),
-                             osc_output_string_protected($country));
+      $replace_array = array(HTML::outputProtected($firstname . ' ' . $lastname),
+                             HTML::outputProtected($address['street_address']),
+                             HTML::outputProtected($address['suburb']),
+                             HTML::outputProtected($address['city']),
+                             HTML::outputProtected($address['postcode']),
+                             HTML::outputProtected($state),
+                             HTML::outputProtected($state_code),
+                             HTML::outputProtected($country));
 
       $formated = preg_replace($find_array, $replace_array, $address_format);
 
       if ( (ACCOUNT_COMPANY > -1) && !empty($address['company']) ) {
-        $formated = osc_output_string_protected($address['company']) . "\n" . $formated;
+        $formated = HTML::outputProtected($address['company']) . "\n" . $formated;
       }
 
       if ( !empty($new_line) ) {
@@ -123,7 +124,7 @@
         $Qcountries = $OSCOM_PDO->query('select * from :table_countries order by countries_name');
         $Qcountries->execute();
 
-        while ( $Qcountries->next() ) {
+        while ( $Qcountries->fetch() ) {
           $countries[] = array('id' => $Qcountries->valueInt('countries_id'),
                                'name' => $Qcountries->value('countries_name'),
                                'iso_2' => $Qcountries->value('countries_iso_code_2'),
@@ -273,7 +274,7 @@
 
       $Qzones->execute();
 
-      while ( $Qzones->next() ) {
+      while ( $Qzones->fetch() ) {
         $zones_array[] = array('id' => $Qzones->valueInt('zone_id'),
                                'name' => $Qzones->value('zone_name'),
                                'country_id' => $Qzones->valueInt('zone_country_id'),

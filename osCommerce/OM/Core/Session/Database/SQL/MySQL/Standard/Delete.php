@@ -14,9 +14,9 @@
 
   class Delete {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qsession = $OSCOM_Database->prepare('delete from :table_sessions where id = :id');
+      $Qsession = $OSCOM_PDO->prepare('delete from :table_sessions where id = :id');
       $Qsession->bindValue(':id', $data['id']);
       $Qsession->execute();
 

@@ -22,7 +22,7 @@
     $Qcc->bindInt(':credit_card_status', 1);
     $Qcc->execute();
 
-    while ( $Qcc->next() ) {
+    while ( $Qcc->fetch() ) {
       $cc_array[] = array('id' => $Qcc->valueInt('id'),
                           'text' => $Qcc->value('credit_card_name'));
     }

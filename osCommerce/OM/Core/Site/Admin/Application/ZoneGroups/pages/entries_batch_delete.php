@@ -33,7 +33,7 @@
 
   $names_string = '';
 
-  while ( $Qentries->next() ) {
+  while ( $Qentries->fetch() ) {
     $names_string .= HTML::hiddenField('batch[]', $Qentries->valueInt('association_id')) . '<b>' . (($Qentries->valueInt('zone_country_id') > 0) ? $Qentries->value('countries_name') : OSCOM::getDef('all_countries')) . ': ' . (($Qentries->valueInt('zone_id') > 0) ? $Qentries->value('zone_name') : OSCOM::getDef('all_zones')) . '</b>, ';
   }
 

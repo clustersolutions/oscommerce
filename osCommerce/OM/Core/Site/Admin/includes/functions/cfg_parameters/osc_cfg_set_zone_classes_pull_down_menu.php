@@ -23,7 +23,7 @@
     $Qzones = $OSCOM_PDO->query('select geo_zone_id, geo_zone_name from :table_geo_zones order by geo_zone_name');
     $Qzones->execute();
 
-    while ( $Qzones->next() ) {
+    while ( $Qzones->fetch() ) {
       $zone_class_array[] = array('id' => $Qzones->valueInt('geo_zone_id'),
                                   'text' => $Qzones->value('geo_zone_name'));
     }

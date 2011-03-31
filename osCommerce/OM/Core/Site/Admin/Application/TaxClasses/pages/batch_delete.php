@@ -36,7 +36,7 @@
 
   $names_string = '';
 
-  while ( $Qclasses->next() ) {
+  while ( $Qclasses->fetch() ) {
     if ( TaxClasses::hasProducts($Qclasses->valueInt('tax_class_id')) ) {
       $check_tax_classes_flag[] = $Qclasses->value('tax_class_title');
     }

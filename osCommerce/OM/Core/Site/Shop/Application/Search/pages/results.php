@@ -8,12 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
-  $Qlisting = $OSCOM_Search->execute();
+  $products_listing = $OSCOM_Search->execute();
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -22,5 +21,5 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php echo osc_link_object(OSCOM::getLink(), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(array('href' => OSCOM::getLink(), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
 </div>

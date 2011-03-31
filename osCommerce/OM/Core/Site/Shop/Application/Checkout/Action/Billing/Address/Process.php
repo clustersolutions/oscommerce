@@ -18,7 +18,7 @@
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $OSCOM_MessageStack = Registry::get('MessageStack');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
 
@@ -106,27 +106,27 @@
         }
 
         if ( ACCOUNT_STATE > -1 ) {
-          $Qcheck = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id limit 1');
+          $Qcheck = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id limit 1');
           $Qcheck->bindInt(':zone_country_id', $_POST['country']);
           $Qcheck->execute();
 
-          $entry_state_has_zones = ($Qcheck->numberOfRows() > 0);
+          $entry_state_has_zones = ($Qcheck->fetch() !== false);
 
           if ( $entry_state_has_zones === true ) {
-            $Qzone = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_code like :zone_code');
+            $Qzone = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_code like :zone_code');
             $Qzone->bindInt(':zone_country_id', $_POST['country']);
             $Qzone->bindValue(':zone_code', $_POST['state']);
             $Qzone->execute();
 
-            if ( $Qzone->numberOfRows() === 1 ) {
+            if ( $Qzone->fetch() !== false ) {
               $address_array['zone_id'] = $Qzone->valueInt('zone_id');
             } else {
-              $Qzone = $OSCOM_Database->query('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_name like :zone_name');
+              $Qzone = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_name like :zone_name');
               $Qzone->bindInt(':zone_country_id', $_POST['country']);
               $Qzone->bindValue(':zone_name', $_POST['state'] . '%');
               $Qzone->execute();
 
-              if ( $Qzone->numberOfRows() === 1 ) {
+              if ( $Qzone->fetch() !== false ) {
                 $address_array['zone_id'] = $Qzone->valueInt('zone_id');
               } else {
                 $OSCOM_MessageStack->add('CheckoutAddress', OSCOM::getDef('field_customer_state_select_pull_down_error'));
@@ -177,7 +177,7 @@
 
         if ( $error === false ) {
           if ( $OSCOM_Customer->isLoggedOn() ) {
-            $Qab = $OSCOM_Database->query('insert into :table_address_book (customers_id, entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:customers_id, :entry_gender, :entry_company, :entry_firstname, :entry_lastname, :entry_street_address, :entry_suburb, :entry_postcode, :entry_city, :entry_state, :entry_country_id, :entry_zone_id, :entry_telephone, :entry_fax)');
+            $Qab = $OSCOM_PDO->prepare('insert into :table_address_book (customers_id, entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:customers_id, :entry_gender, :entry_company, :entry_firstname, :entry_lastname, :entry_street_address, :entry_suburb, :entry_postcode, :entry_city, :entry_state, :entry_country_id, :entry_zone_id, :entry_telephone, :entry_fax)');
             $Qab->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qab->bindValue(':entry_gender', (isset($address_array['gender']) ? $address_array['gender'] : ''));
             $Qab->bindValue(':entry_company', (isset($address_array['company']) ? $address_array['company'] : ''));
@@ -194,11 +194,11 @@
             $Qab->bindValue(':entry_fax', (isset($address_array['fax']) ? $address_array['fax'] : ''));
             $Qab->execute();
 
-            if ( $Qab->affectedRows() === 1 ) {
-              $address_book_id = $OSCOM_Database->nextID();
+            if ( $Qab->rowCount() === 1 ) {
+              $address_book_id = $OSCOM_PDO->lastInsertId();
 
               if ( !$OSCOM_Customer->hasDefaultAddress() ) {
-                $Qcustomer = $OSCOM_Database->query('update :table_customers set customers_default_address_id = :customers_default_address_id where customers_id = :customers_id');
+                $Qcustomer = $OSCOM_PDO->prepare('update :table_customers set customers_default_address_id = :customers_default_address_id where customers_id = :customers_id');
                 $Qcustomer->bindInt(':customers_default_address_id', $address_book_id);
                 $Qcustomer->bindInt(':customers_id', $OSCOM_Customer->getID());
                 $Qcustomer->execute();
@@ -211,7 +211,7 @@
               $OSCOM_ShoppingCart->setBillingAddress($address_book_id);
               $OSCOM_ShoppingCart->resetBillingMethod();
 
-              osc_redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
+              OSCOM::redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
             } else {
               $OSCOM_MessageStack->add('CheckoutAddress', 'Error inserting into address book table.');
             }
@@ -226,7 +226,7 @@
             $OSCOM_ShoppingCart->setBillingAddress($address_array);
             $OSCOM_ShoppingCart->resetBillingMethod();
 
-            osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+            OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
           }
         }
 // process the selected shipping destination
@@ -235,12 +235,12 @@
           $OSCOM_ShoppingCart->setBillingAddress($_POST['ab']);
           $OSCOM_ShoppingCart->resetBillingMethod();
 
-          osc_redirect(OSCOM::getLink(null, null, 'Billing', 'SSL'));
+          OSCOM::redirect(OSCOM::getLink(null, null, 'Billing', 'SSL'));
         } else {
-          osc_redirect(OSCOM::getLink(null, null, 'Billing&Address', 'SSL'));
+          OSCOM::redirect(OSCOM::getLink(null, null, 'Billing&Address', 'SSL'));
         }
       } else {
-        osc_redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, 'Confirm', 'SSL'));
       }
     }
   }

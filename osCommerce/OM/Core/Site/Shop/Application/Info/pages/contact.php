@@ -8,10 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -30,7 +29,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('contact_store_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('contact_store_address_title') . '</b>'; ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo OSCOM::getDef('contact'); ?></p>
@@ -44,15 +43,15 @@
 <div class="moduleBox">
   <div class="content">
     <ol>
-      <li><?php echo osc_draw_label(OSCOM::getDef('contact_name_title'), 'name') . osc_draw_input_field('name'); ?></li>
-      <li><?php echo osc_draw_label(OSCOM::getDef('contact_email_address_title'), 'email') . osc_draw_input_field('email'); ?></li>
-      <li><?php echo osc_draw_label(OSCOM::getDef('contact_enquiry_title'), 'enquiry') . osc_draw_textarea_field('enquiry', null, 50, 15); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('contact_name_title'), 'name') . HTML::inputField('name'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('contact_email_address_title'), 'email') . HTML::inputField('email'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('contact_enquiry_title'), 'enquiry') . HTML::textareaField('enquiry', null, 50, 15); ?></li>
     </ol>
   </div>
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
 </div>
 
 </form>

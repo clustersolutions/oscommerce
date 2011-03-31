@@ -58,6 +58,10 @@
         }
 
         $this->_is_error = !parent::execute($input_parameters);
+
+        if ( $this->_is_error === true ) {
+          trigger_error($this->queryString);
+        }
       }
     }
 
@@ -73,10 +77,6 @@
       }
 
       return $this->result;
-    }
-
-    public function next() {
-      return $this->fetch();
     }
 
     public function fetchAll($fetch_style = PDO::FETCH_ASSOC, $fetch_argument = null, $ctor_args = array()) {
@@ -99,6 +99,13 @@
       return $this->result;
     }
 
+    public function toArray() {
+      if ( !isset($this->result) ) {
+        $this->fetch();
+      }
+
+      return $this->result;
+    }
 
     public function setCache($key, $expire = 0) {
       $this->_cache_key = $key;

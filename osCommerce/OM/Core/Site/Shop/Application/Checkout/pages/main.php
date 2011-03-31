@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\Site\Shop\Tax;
@@ -16,8 +17,6 @@
     echo $OSCOM_PaymentModule->preConfirmationCheck();
   }
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -30,14 +29,14 @@
 <?php
   if ( $OSCOM_ShoppingCart->hasShippingAddress() ) {
 ?>
-          <p><?php echo '<b>' . OSCOM::getDef('order_delivery_address_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Shipping&Address', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . OSCOM::getDef('order_delivery_address_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Shipping&Address', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo Address::format($OSCOM_ShoppingCart->getShippingAddress(), '<br />'); ?></p>
 
 <?php
     if ( $OSCOM_ShoppingCart->hasShippingMethod() ) {
 ?>
 
-          <p><?php echo '<b>' . OSCOM::getDef('order_shipping_method_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . OSCOM::getDef('order_shipping_method_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Shipping', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $OSCOM_ShoppingCart->getShippingMethod('title'); ?></p>
 
 <?php
@@ -45,10 +44,10 @@
   }
 ?>
 
-          <p><?php echo '<b>' . OSCOM::getDef('order_billing_address_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Billing&Address', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . OSCOM::getDef('order_billing_address_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Billing&Address', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo Address::format($OSCOM_ShoppingCart->getBillingAddress(), '<br />'); ?></p>
 
-          <p><?php echo '<b>' . OSCOM::getDef('order_payment_method_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
+          <p><?php echo '<b>' . OSCOM::getDef('order_payment_method_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Billing', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></p>
           <p><?php echo $OSCOM_ShoppingCart->getBillingMethod('title'); ?></p>
         </td>
         <td width="70%" valign="top">
@@ -60,7 +59,7 @@
 ?>
 
               <tr>
-                <td colspan="2"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
+                <td colspan="2"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Cart', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
                 <td align="right"><b><?php echo OSCOM::getDef('order_tax_title'); ?></b></td>
                 <td align="right"><b><?php echo OSCOM::getDef('order_total_title'); ?></b></td>
               </tr>
@@ -70,7 +69,7 @@
 ?>
 
               <tr>
-                <td colspan="3"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
+                <td colspan="3"><?php echo '<b>' . OSCOM::getDef('order_products_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Cart', null, 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></td>
               </tr>
 
 <?php
@@ -186,10 +185,10 @@
 ?>
 
 <div class="moduleBox">
-  <h6><?php echo '<b>' . OSCOM::getDef('order_comments_title') . '</b> ' . osc_link_object(OSCOM::getLink(null, 'Checkout', 'Payment', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></h6>
+  <h6><?php echo '<b>' . OSCOM::getDef('order_comments_title') . '</b> ' . HTML::link(OSCOM::getLink(null, 'Checkout', 'Payment', 'SSL'), '<span class="orderEdit">' . OSCOM::getDef('order_text_edit_title') . '</span>'); ?></h6>
 
   <div class="content">
-    <?php echo nl2br(osc_output_string_protected($_SESSION['comments'])) . osc_draw_hidden_field('comments', $_SESSION['comments']); ?>
+    <?php echo nl2br(HTML::outputProtected($_SESSION['comments'])) . HTML::hiddenField('comments', $_SESSION['comments']); ?>
   </div>
 </div>
 
@@ -212,7 +211,7 @@
     echo $OSCOM_PaymentModule->getProcessButton();
   }
 
-  echo osc_draw_image_submit_button('button_confirm_order.gif', OSCOM::getDef('button_confirm_order')) . '</form>';
+  echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_confirm_order'))) . '</form>';
 ?>
 
 </div>

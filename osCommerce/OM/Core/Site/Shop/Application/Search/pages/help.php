@@ -8,6 +8,7 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
 
@@ -30,6 +31,6 @@ div#pageBlockLeft {
   <div class="content">
     <p><?php echo OSCOM::getDef('search_help'); ?></p>
 
-    <p align="right"><?php echo osc_link_object('javascript:window.close();', OSCOM::getDef('close_window')); ?></p>
+    <p align="right"><?php echo HTML::link('javascript:window.close();', OSCOM::getDef('close_window')); ?></p>
   </div>
 </div>

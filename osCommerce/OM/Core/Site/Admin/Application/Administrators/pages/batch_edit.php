@@ -34,7 +34,7 @@
 
   $names_string = '';
 
-  while ( $Qadmins->next() ) {
+  while ( $Qadmins->fetch() ) {
     $names_string .= HTML::hiddenField('batch[]', $Qadmins->valueInt('id')) . '<b>' . $Qadmins->valueProtected('user_name') . '</b>, ';
   }
 

@@ -8,10 +8,9 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -46,11 +45,11 @@
 ?>
 
       <tr>
-        <td valign="top" width="60"><?php echo osc_link_object(OSCOM::getLink(null, null, 'Delete=' . $products['item_id'], 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
+        <td valign="top" width="60"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Delete=' . $products['item_id'], 'SSL'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></td>
         <td valign="top">
 
 <?php
-      echo osc_link_object(OSCOM::getLink(null, 'Products', $products['keyword']), '<b>' . $products['name'] . '</b>');
+      echo HTML::link(OSCOM::getLink(null, 'Products', $products['keyword']), '<b>' . $products['name'] . '</b>');
 
       if ( (STOCK_CHECK == '1') && ($OSCOM_ShoppingCart->isInStock($products['item_id']) === false) ) {
         echo '<span class="markProductOutOfStock">' . STOCK_MARK_PRODUCT_OUT_OF_STOCK . '</span>';
@@ -66,7 +65,7 @@
 ?>
 
         </td>
-        <td valign="top"><?php echo osc_draw_input_field('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?> <a href="#" onclick="document.shopping_cart.submit(); return false;">update</a></td>
+        <td valign="top"><?php echo HTML::inputField('products[' . $products['item_id'] . ']', $products['quantity'], 'size="4"'); ?> <a href="#" onclick="document.shopping_cart.submit(); return false;">update</a></td>
         <td valign="top" align="right"><?php echo '<b>' . $OSCOM_Currencies->displayPrice($products['price'], $products['tax_class_id'], $products['quantity']) . '</b>'; ?></td>
       </tr>
 
@@ -113,12 +112,12 @@
 
   <div class="content">
     <div style="float: right;">
-      <?php echo osc_draw_image_submit_button('button_checkout.gif', OSCOM::getDef('button_checkout')); ?>
+      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_checkout'))); ?>
     </div>
 
 <?php
   if ( !$OSCOM_Customer->isLoggedOn() && $OSCOM_Application->requireCustomerAccount() ) {
-    echo 'E-Mail Address: ' . osc_draw_input_field('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . osc_link_object(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order';
+    echo 'E-Mail Address: ' . HTML::inputField('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . HTML::link(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order';
   }
 ?>
 

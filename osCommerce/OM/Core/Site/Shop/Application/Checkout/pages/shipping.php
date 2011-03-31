@@ -8,11 +8,10 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -27,10 +26,10 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('current_shipping_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('current_shipping_address_title') . '</b>'; ?>
     </div>
 
-    <?php echo OSCOM::getDef('choose_shipping_destination'). '<br /><br />' . osc_link_object(OSCOM::getLink(null, null, 'Shipping&Address', 'SSL'), osc_draw_image_button('button_change_address.gif', OSCOM::getDef('button_change_address'))); ?>
+    <?php echo OSCOM::getDef('choose_shipping_destination'). '<br /><br />' . HTML::button(array('href' => OSCOM::getLink(null, null, 'Shipping&Address', 'SSL'), 'icon' => 'home', 'title' => OSCOM::getDef('button_change_address'))); ?>
 
     <div style="clear: both;"></div>
   </div>
@@ -50,7 +49,7 @@
 ?>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_east_south.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('please_select') . '</b>'; ?>
     </div>
 
     <p style="margin-top: 0px;"><?php echo OSCOM::getDef('choose_shipping_method'); ?></p>
@@ -101,11 +100,11 @@
           if ( ($OSCOM_Shipping->numberOfQuotes() > 1) || (count($quotes['methods']) > 1) ) {
 ?>
             <td><?php echo $OSCOM_Currencies->displayPrice($methods['cost'], $quotes['tax_class_id']); ?></td>
-            <td align="right"><?php echo osc_draw_radio_field('shipping_mod_sel', $quotes['id'] . '_' . $methods['id'], $OSCOM_ShoppingCart->getShippingMethod('id')); ?></td>
+            <td align="right"><?php echo HTML::radioField('shipping_mod_sel', $quotes['id'] . '_' . $methods['id'], $OSCOM_ShoppingCart->getShippingMethod('id')); ?></td>
 <?php
           } else {
 ?>
-            <td align="right" colspan="2"><?php echo $OSCOM_Currencies->displayPrice($methods['cost'], $quotes['tax_class_id']) . osc_draw_hidden_field('shipping_mod_sel', $quotes['id'] . '_' . $methods['id']); ?></td>
+            <td align="right" colspan="2"><?php echo $OSCOM_Currencies->displayPrice($methods['cost'], $quotes['tax_class_id']) . HTML::hiddenField('shipping_mod_sel', $quotes['id'] . '_' . $methods['id']); ?></td>
 <?php
           }
 ?>
@@ -134,7 +133,7 @@
   <h6><?php echo OSCOM::getDef('add_comment_to_order_title'); ?></h6>
 
   <div class="content">
-    <?php echo osc_draw_textarea_field('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
+    <?php echo HTML::textareaField('comments', (isset($_SESSION['comments']) ? $_SESSION['comments'] : null), null, null, 'style="width: 98%;"'); ?>
   </div>
 </div>
 
@@ -143,7 +142,7 @@
 <div class="moduleBox">
   <div class="content">
     <div style="float: right;">
-      <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
     </div>
 
     <?php echo '<b>' . OSCOM::getDef('continue_checkout_procedure_title') . '</b><br />' . OSCOM::getDef('continue_checkout_procedure_to_payment'); ?>

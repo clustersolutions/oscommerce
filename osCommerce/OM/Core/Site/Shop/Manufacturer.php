@@ -16,14 +16,16 @@
     protected $_data = array();
 
     public function __construct($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qmanufacturer = $OSCOM_Database->query('select manufacturers_id as id, manufacturers_name as name, manufacturers_image as image from :table_manufacturers where manufacturers_id = :manufacturers_id');
+      $Qmanufacturer = $OSCOM_PDO->prepare('select manufacturers_id as id, manufacturers_name as name, manufacturers_image as image from :table_manufacturers where manufacturers_id = :manufacturers_id');
       $Qmanufacturer->bindInt(':manufacturers_id', $id);
       $Qmanufacturer->execute();
 
-      if ( $Qmanufacturer->numberOfRows() === 1 ) {
-        $this->_data = $Qmanufacturer->toArray();
+      $result = $Qmanufacturer->fetch();
+
+      if ( $result !== false ) {
+        $this->_data = $result;
       }
     }
 

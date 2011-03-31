@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\ProductVariant;
 
+  use osCommerce\OM\Core\HTML;
+
   class PullDownMenu implements \osCommerce\OM\Core\Site\Shop\ProductVariantInterface {
     const ALLOW_MULTIPLE_VALUES = false;
     const HAS_CUSTOM_VALUE = false;
@@ -28,7 +30,7 @@
       $string = '<table border="0" cellspacing="0" cellpadding="2">' .
                 '  <tr>' .
                 '    <td width="100">' . $data['title'] . ':</td>' .
-                '    <td>' . osc_draw_pull_down_menu('variants[' . $data['group_id'] . ']', $data['data'], $default_value, 'onchange="refreshVariants();" id="variants_' . $data['group_id'] . '"') . '</td>' .
+                '    <td>' . HTML::selectMenu('variants[' . $data['group_id'] . ']', $data['data'], $default_value, 'onchange="refreshVariants();" id="variants_' . $data['group_id'] . '"') . '</td>' .
                 '  </tr>' .
                 '</table>';
 

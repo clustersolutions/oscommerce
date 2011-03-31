@@ -32,12 +32,12 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qcustomers = Registry::get('Database')->query('select customers_id, customers_gender, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
+        $Qcustomers = Registry::get('PDO')->query('select customers_id, customers_gender, customers_lastname, customers_firstname, customers_status, date_account_created from :table_customers order by date_account_created desc limit 6');
         $Qcustomers->execute();
 
         $counter = 0;
 
-        while ( $Qcustomers->next() ) {
+        while ( $Qcustomers->fetch() ) {
           $customer_icon = osc_icon('people.png');
 
           if ( ACCOUNT_GENDER > -1 ) {

@@ -33,13 +33,13 @@
                        '  </thead>' .
                        '  <tbody>';
 
-        $Qorders = Registry::get('Database')->query('select o.orders_id, o.customers_name, greatest(o.date_purchased, ifnull(o.last_modified, "1970-01-01")) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
+        $Qorders = Registry::get('PDO')->prepare('select o.orders_id, o.customers_name, greatest(o.date_purchased, ifnull(o.last_modified, "1970-01-01")) as date_last_modified, s.orders_status_name, ot.text as order_total from :table_orders o, :table_orders_total ot, :table_orders_status s where o.orders_id = ot.orders_id and ot.class = "total" and o.orders_status = s.orders_status_id and s.language_id = :language_id order by date_last_modified desc limit 6');
         $Qorders->bindInt(':language_id', Registry::get('Language')->getID());
         $Qorders->execute();
 
         $counter = 0;
 
-        while ( $Qorders->next() ) {
+        while ( $Qorders->fetch() ) {
           $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
                           '      <td>' . osc_link_object(OSCOM::getLink(null, 'Orders', 'oID=' . $Qorders->valueInt('orders_id') . '&action=save'), osc_icon('orders.png') . '&nbsp;' . $Qorders->valueProtected('customers_name')) . '</td>' .
                           '      <td>' . strip_tags($Qorders->value('order_total')) . '</td>' .

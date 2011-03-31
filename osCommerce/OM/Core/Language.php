@@ -13,15 +13,11 @@
   use osCommerce\OM\Core\HTML;
 
   class Language {
+    protected $_code,
+              $_languages = array(),
+              $_definitions = array();
 
-/* Private variables */
-    var $_code,
-        $_languages = array(),
-        $_definitions = array();
-
-/* Class constructor */
-
-    function __construct() {
+    public function __construct() {
       foreach ( OSCOM::callDB('GetLanguages', null, 'Core') as $lang ) {
         $this->_languages[$lang['code']] = array('id' => (int)$lang['languages_id'],
                                                  'code' => $lang['code'],
@@ -41,10 +37,8 @@
       $this->set();
     }
 
-/* Public methods */
-
-    function load($key, $language_code = null) {
-      if ( is_null($language_code) ) {
+    public function load($key, $language_code = null) {
+      if ( !isset($language_code) ) {
         $language_code = $this->_code;
       }
 
@@ -52,28 +46,23 @@
         $this->load($key, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
       }
 
-      $Qdef = Registry::get('Database')->query('select * from :table_languages_definitions where languages_id = :languages_id and content_group = :content_group');
-      $Qdef->bindInt(':languages_id', $this->getData('id', $language_code));
-      $Qdef->bindValue(':content_group', $key);
-      $Qdef->setCache('languages-' . $language_code . '-' . $key);
-      $Qdef->execute();
+      $def_data = array('language_id' => $this->getData('id', $language_code),
+                        'group' => $key);
 
-      while ($Qdef->next()) {
-        $this->_definitions[$Qdef->value('definition_key')] = $Qdef->value('definition_value');
+      foreach ( OSCOM::callDB('GetLanguageDefinitions', $def_data, 'Core') as $def ) {
+        $this->_definitions[$def['definition_key']] = $def['definition_value'];
       }
-
-      $Qdef->freeResult();
     }
 
-    function get($key) {
-      if (isset($this->_definitions[$key])) {
+    public function get($key) {
+      if ( isset($this->_definitions[$key]) ) {
         return $this->_definitions[$key];
       }
 
       return $key;
     }
 
-    function set($code = null) {
+    public function set($code = null) {
       $this->_code = $code;
 
       if ( empty($this->_code) ) {
@@ -101,8 +90,8 @@
       }
     }
 
-    function getBrowserSetting() {
-      if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    public function getBrowserSetting() {
+      if ( isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) ) {
         $browser_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
         $languages = array('ar' => 'ar([-_][[:alpha:]]{2})?|arabic',
@@ -143,9 +132,9 @@
                            'tw' => 'zh[-_]tw|chinese traditional',
                            'zh' => 'zh|chinese simplified');
 
-        foreach ($browser_languages as $browser_language) {
-          foreach ($languages as $key => $value) {
-            if (preg_match('/^(' . $value . ')(;q=[0-9]\\.[0-9])?$/i', $browser_language) && $this->exists($key)) {
+        foreach ( $browser_languages as $browser_language ) {
+          foreach ( $languages as $key => $value ) {
+            if ( preg_match('/^(' . $value . ')(;q=[0-9]\\.[0-9])?$/i', $browser_language) && $this->exists($key) ) {
               return $key;
             }
           }
@@ -155,84 +144,84 @@
       return false;
     }
 
-    function exists($code) {
+    public function exists($code) {
       return array_key_exists($code, $this->_languages);
     }
 
-    function getAll() {
+    public function getAll() {
       return $this->_languages;
     }
 
-    function getData($key, $language = '') {
-      if (empty($language)) {
+    public function getData($key, $language = null) {
+      if ( !isset($language) ) {
         $language = $this->_code;
       }
 
       return $this->_languages[$language][$key];
     }
 
-    function getCodeFromID($id) {
-      foreach ($this->_languages as $code => $lang) {
-        if ($lang['id'] == $id) {
+    public function getCodeFromID($id) {
+      foreach ( $this->_languages as $code => $lang ) {
+        if ( $lang['id'] == $id ) {
           return $code;
         }
       }
     }
 
-    function getID() {
+    public function getID() {
       return $this->_languages[$this->_code]['id'];
     }
 
-    function getName() {
+    public function getName() {
       return $this->_languages[$this->_code]['name'];
     }
 
-    function getCode() {
+    public function getCode() {
       return $this->_code;
     }
 
-    function getLocale() {
+    public function getLocale() {
       return $this->_languages[$this->_code]['locale'];
     }
 
-    function getCharacterSet() {
+    public function getCharacterSet() {
       return $this->_languages[$this->_code]['charset'];
     }
 
-    function getDateFormatShort($with_time = false) {
-      if ($with_time === true) {
+    public function getDateFormatShort($with_time = false) {
+      if ( $with_time === true ) {
         return $this->_languages[$this->_code]['date_format_short'] . ' ' . $this->getTimeFormat();
       }
 
       return $this->_languages[$this->_code]['date_format_short'];
     }
 
-    function getDateFormatLong() {
+    public function getDateFormatLong() {
       return $this->_languages[$this->_code]['date_format_long'];
     }
 
-    function getTimeFormat() {
+    public function getTimeFormat() {
       return $this->_languages[$this->_code]['time_format'];
     }
 
-    function getTextDirection() {
+    public function getTextDirection() {
       return $this->_languages[$this->_code]['text_direction'];
     }
 
-    function getCurrencyID() {
+    public function getCurrencyID() {
       return $this->_languages[$this->_code]['currencies_id'];
     }
 
-    function getNumericDecimalSeparator() {
+    public function getNumericDecimalSeparator() {
       return $this->_languages[$this->_code]['numeric_separator_decimal'];
     }
 
-    function getNumericThousandsSeparator() {
+    public function getNumericThousandsSeparator() {
       return $this->_languages[$this->_code]['numeric_separator_thousands'];
     }
 
-    function showImage($code = null, $width = '16', $height = '10', $parameters = null) {
-      if ( empty($code) ) {
+    public function showImage($code = null, $width = 16, $height = 10, $parameters = null) {
+      if ( !isset($code) ) {
         $code = $this->_code;
       }
 

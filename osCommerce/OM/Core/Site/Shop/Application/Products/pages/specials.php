@@ -8,28 +8,28 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\Site\Shop\Specials;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\PDO;
+  use osCommerce\OM\Core\Site\Shop\Specials;
 
-  $Qspecials = Specials::getListing();
+  $specials_listing = Specials::getListing();
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <div style="overflow: auto;">
 
 <?php
-  while ( $Qspecials->next() ) {
+  foreach ( $specials_listing['entries'] as $s ) {
     echo '<span style="width: 33%; float: left; text-align: center;">';
 
-    if ( !osc_empty($Qspecials->value('image')) ) {
-      echo osc_link_object(OSCOM::getLink(null, null, $Qspecials->value('products_keyword')), $OSCOM_Image->show($Qspecials->value('image'), $Qspecials->value('products_name'))) . '<br />';
+    if ( !empty($s['image']) ) {
+      echo HTML::link(OSCOM::getLink(null, null, $s['products_keyword']), $OSCOM_Image->show($s['image'], $s['products_name'])) . '<br />';
     }
 
-    echo osc_link_object(OSCOM::getLink(null, null, $Qspecials->value('products_keyword')), $Qspecials->value('products_name')) . '<br />' .
-         '<s>' . $OSCOM_Currencies->displayPrice($Qspecials->value('products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</s> <span class="productSpecialPrice">' . $OSCOM_Currencies->displayPrice($Qspecials->value('specials_new_products_price'), $Qspecials->valueInt('products_tax_class_id')) . '</span>' .
+    echo HTML::link(OSCOM::getLink(null, null, $s['products_keyword']), $s['products_name']) . '<br />' .
+         '<s>' . $OSCOM_Currencies->displayPrice($s['products_price'], $s['products_tax_class_id']) . '</s> <span class="productSpecialPrice">' . $OSCOM_Currencies->displayPrice($s['specials_new_products_price'], $s['products_tax_class_id']) . '</span>' .
          '</span>' . "\n";
   }
 ?>
@@ -37,7 +37,7 @@
 </div>
 
 <div class="listingPageLinks">
-  <span style="float: right;"><?php echo $Qspecials->getBatchPageLinks(); ?></span>
+  <span style="float: right;"><?php echo PDO::getBatchPageLinks('page', $specials_listing['total'], OSCOM::getAllGET('page')); ?></span>
 
-  <?php echo $Qspecials->getBatchTotalPages(OSCOM::getDef('result_set_number_of_products')); ?>
+  <?php echo PDO::getBatchTotalPages(OSCOM::getDef('result_set_number_of_products'), (isset($_GET['page']) ? $_GET['page'] : 1), $specials_listing['total']); ?>
 </div>

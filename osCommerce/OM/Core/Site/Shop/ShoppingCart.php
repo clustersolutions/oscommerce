@@ -10,8 +10,10 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Hash;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Shop\ProductVariants;
 
   class ShoppingCart {
@@ -74,10 +76,8 @@
     }
 
     public function synchronizeWithDatabase() {
-      global $osC_Database, $osC_Services, $osC_Language, $osC_Customer, $osC_Specials;
-
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_Service = Registry::get('Service');
 
@@ -99,13 +99,13 @@
         }
 
         if ( $db_action == 'check' ) {
-          $Qproduct = $OSCOM_Database->query('select item_id, quantity from :table_shopping_carts where customers_id = :customers_id and products_id = :products_id');
+          $Qproduct = $OSCOM_PDO->prepare('select item_id, quantity from :table_shopping_carts where customers_id = :customers_id and products_id = :products_id');
           $Qproduct->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qproduct->bindInt(':products_id', $data['id']);
           $Qproduct->execute();
 
-          if ( $Qproduct->numberOfRows() > 0 ) {
-            $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
+          if ( $Qproduct->fetch() !== false ) {
+            $Qupdate = $OSCOM_PDO->prepare('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
             $Qupdate->bindInt(':quantity', $data['quantity'] + $Qproduct->valueInt('quantity'));
             $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qupdate->bindInt(':item_id', $Qproduct->valueInt('item_id'));
@@ -116,24 +116,23 @@
         }
 
         if ( $db_action == 'insert') {
-          $Qid = $OSCOM_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
+          $Qid = $OSCOM_PDO->prepare('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
           $Qid->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qid->execute();
 
           $db_item_id = $Qid->valueInt('item_id') + 1;
 
-          $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
+          $Qnew = $OSCOM_PDO->prepare('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, now())');
           $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qnew->bindInt(':item_id', $db_item_id);
           $Qnew->bindInt(':products_id', $data['id']);
           $Qnew->bindInt(':quantity', $data['quantity']);
-          $Qnew->bindRaw(':date_added', 'now()');
           $Qnew->execute();
 
           if ( isset($data['variants']) ) {
             foreach ( $data['variants'] as $variant ) {
               if ( $variant['has_custom_value'] === true ) {
-                $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
+                $Qnew = $OSCOM_PDO->prepare('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
                 $Qnew->bindInt(':shopping_carts_item_id', $db_item_id);
                 $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
                 $Qnew->bindInt(':products_id', $data['id']);
@@ -151,18 +150,18 @@
 
       $_delete_array = array();
 
-      $Qproducts = $OSCOM_Database->query('select sc.item_id, sc.products_id, sc.quantity, sc.date_added, p.parent_id, p.products_price, p.products_model, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status from :table_shopping_carts sc, :table_products p where sc.customers_id = :customers_id and sc.products_id = p.products_id order by sc.date_added desc');
+      $Qproducts = $OSCOM_PDO->prepare('select sc.item_id, sc.products_id, sc.quantity, sc.date_added, p.parent_id, p.products_price, p.products_model, p.products_tax_class_id, p.products_weight, p.products_weight_class, p.products_status from :table_shopping_carts sc, :table_products p where sc.customers_id = :customers_id and sc.products_id = p.products_id order by sc.date_added desc');
       $Qproducts->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qproducts->execute();
 
-      while ( $Qproducts->next() ) {
+      while ( $Qproducts->fetch() ) {
         if ( $Qproducts->valueInt('products_status') === 1 ) {
-          $Qdesc = $OSCOM_Database->query('select products_name, products_keyword from :table_products_description where products_id = :products_id and language_id = :language_id');
+          $Qdesc = $OSCOM_PDO->prepare('select products_name, products_keyword from :table_products_description where products_id = :products_id and language_id = :language_id');
           $Qdesc->bindInt(':products_id', ($Qproducts->valueInt('parent_id') > 0) ? $Qproducts->valueInt('parent_id') : $Qproducts->valueInt('products_id'));
           $Qdesc->bindInt(':language_id', $OSCOM_Language->getID());
           $Qdesc->execute();
 
-          $Qimage = $OSCOM_Database->query('select image from :table_products_images where products_id = :products_id and default_flag = :default_flag');
+          $Qimage = $OSCOM_PDO->prepare('select image from :table_products_images where products_id = :products_id and default_flag = :default_flag');
           $Qimage->bindInt(':products_id', ($Qproducts->valueInt('parent_id') > 0) ? $Qproducts->valueInt('parent_id') : $Qproducts->valueInt('products_id'));
           $Qimage->bindInt(':default_flag', 1);
           $Qimage->execute();
@@ -181,7 +180,7 @@
                                                                     'model' => $Qproducts->value('products_model'),
                                                                     'name' => $Qdesc->value('products_name'),
                                                                     'keyword' => $Qdesc->value('products_keyword'),
-                                                                    'image' => ($Qimage->numberOfRows() === 1) ? $Qimage->value('image') : '',
+                                                                    'image' => ($Qimage->fetch() !== false) ? $Qimage->value('image') : '',
                                                                     'price' => $price,
                                                                     'quantity' => $Qproducts->valueInt('quantity'),
                                                                     'weight' => $Qproducts->value('products_weight'),
@@ -190,37 +189,39 @@
                                                                     'weight_class_id' => $Qproducts->valueInt('products_weight_class'));
 
           if ( $Qproducts->valueInt('parent_id') > 0 ) {
-            $Qcheck = $OSCOM_Database->query('select products_status from :table_products where products_id = :products_id');
+            $Qcheck = $OSCOM_PDO->prepare('select products_status from :table_products where products_id = :products_id');
             $Qcheck->bindInt(':products_id', $Qproducts->valueInt('parent_id'));
             $Qcheck->execute();
 
             if ( $Qcheck->valueInt('products_status') === 1 ) {
-              $Qvariant = $OSCOM_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
+              $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
               $Qvariant->bindInt(':products_id', $Qproducts->valueInt('products_id'));
               $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
               $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
               $Qvariant->execute();
 
-              if ( $Qvariant->numberOfRows() > 0 ) {
-                while ( $Qvariant->next() ) {
-                  $group_title = ProductVariants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
-                  $value_title = $Qvariant->value('value_title');
+              $variants = $Qvariant->fetchAll();
+
+              if ( count($variants) > 0 ) {
+                foreach ( $variants as $v ) {
+                  $group_title = ProductVariants::getGroupTitle($v['module'], $v);
+                  $value_title = $v['value_title'];
                   $has_custom_value = false;
 
-                  $Qcvv = $OSCOM_Database->query('select products_variants_values_text from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id and products_id = :products_id and products_variants_values_id = :products_variants_values_id');
+                  $Qcvv = $OSCOM_PDO->prepare('select products_variants_values_text from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id and products_id = :products_id and products_variants_values_id = :products_variants_values_id');
                   $Qcvv->bindInt(':customers_id', $OSCOM_Customer->getID());
                   $Qcvv->bindInt(':shopping_carts_item_id', $Qproducts->valueInt('item_id'));
                   $Qcvv->bindInt(':products_id', $Qproducts->valueInt('products_id'));
-                  $Qcvv->bindInt(':products_variants_values_id', $Qvariant->valueInt('value_id'));
+                  $Qcvv->bindInt(':products_variants_values_id', $v['value_id']);
                   $Qcvv->execute();
 
-                  if ( $Qcvv->numberOfRows() === 1 ) {
+                  if ( $Qcvv->fetch() !== false ) {
                     $value_title = $Qcvv->value('products_variants_values_text');
                     $has_custom_value = true;
                   }
 
-                  $this->_contents[$Qproducts->valueInt('item_id')]['variants'][] = array('group_id' => $Qvariant->valueInt('group_id'),
-                                                                                          'value_id' => $Qvariant->valueInt('value_id'),
+                  $this->_contents[$Qproducts->valueInt('item_id')]['variants'][] = array('group_id' => $v['group_id'],
+                                                                                          'value_id' => $v['value_id'],
                                                                                           'group_title' => $group_title,
                                                                                           'value_title' => $value_title,
                                                                                           'has_custom_value' => $has_custom_value);
@@ -242,14 +243,12 @@
           unset($this->_contents[$id]);
         }
 
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id in (":item_id")');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts where customers_id = :customers_id and item_id in ("' . implode('", "', $_delete_array) . '")');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
-        $Qdelete->bindRaw(':item_id', implode('", "', $_delete_array));
         $Qdelete->execute();
 
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id in (":shopping_carts_item_id")');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id in ("' . implode('", "', $_delete_array) . '")');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
-        $Qdelete->bindRaw(':shopping_carts_item_id', implode('", "', $_delete_array));
         $Qdelete->execute();
       }
 
@@ -259,14 +258,14 @@
 
     public function reset($reset_database = false) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( ($reset_database === true) && $OSCOM_Customer->isLoggedOn() ) {
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts where customers_id = :customers_id');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->execute();
 
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->execute();
       }
@@ -291,7 +290,7 @@
 
     public function add($product_id, $quantity = null) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
       if ( !is_numeric($product_id) ) {
@@ -311,7 +310,7 @@
           $this->_contents[$item_id]['quantity'] = $quantity;
 
           if ( $OSCOM_Customer->isLoggedOn() ) {
-            $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
+            $Qupdate = $OSCOM_PDO->prepare('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
             $Qupdate->bindInt(':quantity', $quantity);
             $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qupdate->bindInt(':item_id', $item_id);
@@ -323,7 +322,7 @@
           }
 
           if ( $OSCOM_Customer->isLoggedOn() ) {
-            $Qid = $OSCOM_Database->query('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
+            $Qid = $OSCOM_PDO->prepare('select max(item_id) as item_id from :table_shopping_carts where customers_id = :customers_id');
             $Qid->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qid->execute();
 
@@ -351,23 +350,22 @@
                                              'weight_class_id' => $OSCOM_Product->getData('weight_class_id'));
 
           if ( $OSCOM_Customer->isLoggedOn() ) {
-            $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, :date_added)');
+            $Qnew = $OSCOM_PDO->prepare('insert into :table_shopping_carts (customers_id, item_id, products_id, quantity, date_added) values (:customers_id, :item_id, :products_id, :quantity, now())');
             $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qnew->bindInt(':item_id', $item_id);
             $Qnew->bindInt(':products_id', $product_id);
             $Qnew->bindInt(':quantity', $quantity);
-            $Qnew->bindRaw(':date_added', 'now()');
             $Qnew->execute();
           }
 
           if ( $OSCOM_Product->getData('parent_id') > 0 ) {
-            $Qvariant = $OSCOM_Database->query('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
+            $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
             $Qvariant->bindInt(':products_id', $product_id);
             $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
             $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
             $Qvariant->execute();
 
-            while ( $Qvariant->next() ) {
+            while ( $Qvariant->fetch() ) {
               $group_title = ProductVariants::getGroupTitle($Qvariant->value('module'), $Qvariant->toArray());
               $value_title = ProductVariants::getValueTitle($Qvariant->value('module'), $Qvariant->toArray());
               $has_custom_value = ProductVariants::hasCustomValue($Qvariant->value('module'));
@@ -379,7 +377,7 @@
                                                                'has_custom_value' => $has_custom_value);
 
               if ( $OSCOM_Customer->isLoggedOn() && ($has_custom_value === true) ) {
-                $Qnew = $OSCOM_Database->query('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
+                $Qnew = $OSCOM_PDO->prepare('insert into :table_shopping_carts_custom_variants_values (shopping_carts_item_id, customers_id, products_id, products_variants_values_id, products_variants_values_text) values (:shopping_carts_item_id, :customers_id, :products_id, :products_variants_values_id, :products_variants_values_text)');
                 $Qnew->bindInt(':shopping_carts_item_id', $item_id);
                 $Qnew->bindInt(':customers_id', $OSCOM_Customer->getID());
                 $Qnew->bindInt(':products_id', $product_id);
@@ -438,7 +436,7 @@
 
     public function update($item_id, $quantity) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( !is_numeric($quantity) ) {
         $quantity = $this->getQuantity($item_id) + 1;
@@ -447,7 +445,7 @@
       $this->_contents[$item_id]['quantity'] = $quantity;
 
       if ( $OSCOM_Customer->isLoggedOn() ) {
-        $Qupdate = $OSCOM_Database->query('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
+        $Qupdate = $OSCOM_PDO->prepare('update :table_shopping_carts set quantity = :quantity where customers_id = :customers_id and item_id = :item_id');
         $Qupdate->bindInt(':quantity', $quantity);
         $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qupdate->bindInt(':item_id', $item_id);
@@ -460,17 +458,17 @@
 
     public function remove($item_id) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       unset($this->_contents[$item_id]);
 
       if ( $OSCOM_Customer->isLoggedOn() ) {
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindInt(':item_id', $item_id);
         $Qdelete->execute();
 
-        $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
+        $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
         $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qdelete->bindInt(':shopping_carts_item_id', $item_id);
         $Qdelete->execute();
@@ -510,7 +508,7 @@
     }
 
     public function generateCartID($length = 5) {
-      return osc_create_random_string($length, 'digits');
+      return Hash::getRandomString($length, 'digits');
     }
 
     public function getCartID() {
@@ -518,7 +516,7 @@
     }
 
     public function getContentType() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $this->_content_type = 'physical';
 
@@ -527,9 +525,7 @@
 /* HPDL
           if (isset($data['attributes'])) {
             foreach ($data['attributes'] as $value) {
-              $Qcheck = $osC_Database->query('select count(*) as total from :table_products_attributes pa, :table_products_attributes_download pad where pa.products_id = :products_id and pa.options_values_id = :options_values_id and pa.products_attributes_id = pad.products_attributes_id');
-              $Qcheck->bindTable(':table_products_attributes', TABLE_PRODUCTS_ATTRIBUTES);
-              $Qcheck->bindTable(':table_products_attributes_download', TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD);
+              $Qcheck = $OSCOM_PDO->prepare('select count(*) as total from :table_products_attributes pa, :table_products_attributes_download pad where pa.products_id = :products_id and pa.options_values_id = :options_values_id and pa.products_attributes_id = pad.products_attributes_id');
               $Qcheck->bindInt(':products_id', $products_id);
               $Qcheck->bindInt(':options_values_id', $value['options_values_id']);
               $Qcheck->execute();
@@ -589,9 +585,9 @@
     }
 
     public function isInStock($item_id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qstock = $OSCOM_Database->query('select products_quantity from :table_products where products_id = :products_id');
+      $Qstock = $OSCOM_PDO->prepare('select products_quantity from :table_products where products_id = :products_id');
       $Qstock->bindInt(':products_id', $this->_contents[$item_id]['id']);
       $Qstock->execute();
 
@@ -615,7 +611,7 @@
 /* param $address mixed int for address book entry, or array containing address data */
     public function setShippingAddress($address) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $previous_address = false;
 
@@ -624,12 +620,12 @@
       }
 
       if ( $OSCOM_Customer->isLoggedOn() && is_numeric($address) ) {
-        $Qaddress = $OSCOM_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress = $OSCOM_PDO->prepare('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
         $Qaddress->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
-        if ( $Qaddress->numberOfRows() === 1 ) {
+        if ( $Qaddress->fetch() !== false ) {
           $this->_shipping_address = array('id' => (int)$address,
                                            'firstname' => $Qaddress->valueProtected('entry_firstname'),
                                            'lastname' => $Qaddress->valueProtected('entry_lastname'),
@@ -639,7 +635,7 @@
                                            'suburb' => $Qaddress->valueProtected('entry_suburb'),
                                            'city' => $Qaddress->valueProtected('entry_city'),
                                            'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                           'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                           'state' => (strlen($Qaddress->valueProtected('entry_state')) > 0) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
                                            'zone_id' => $Qaddress->valueInt('entry_zone_id'),
                                            'zone_code' => $Qaddress->value('zone_code'),
                                            'country_id' => $Qaddress->valueInt('entry_country_id'),
@@ -653,24 +649,24 @@
         }
       } else {
         $this->_shipping_address = array('id' => 0,
-                                         'firstname' => osc_output_string_protected($address['firstname']),
-                                         'lastname' => osc_output_string_protected($address['lastname']),
-                                         'gender' => osc_output_string_protected($address['gender']),
-                                         'company' => osc_output_string_protected($address['company']),
-                                         'street_address' => osc_output_string_protected($address['street_address']),
-                                         'suburb' => osc_output_string_protected($address['suburb']),
-                                         'city' => osc_output_string_protected($address['city']),
-                                         'postcode' => osc_output_string_protected($address['postcode']),
-                                         'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(Address::getZoneName($address['zone_id']))),
+                                         'firstname' => HTML::outputProtected($address['firstname']),
+                                         'lastname' => HTML::outputProtected($address['lastname']),
+                                         'gender' => HTML::outputProtected($address['gender']),
+                                         'company' => HTML::outputProtected($address['company']),
+                                         'street_address' => HTML::outputProtected($address['street_address']),
+                                         'suburb' => HTML::outputProtected($address['suburb']),
+                                         'city' => HTML::outputProtected($address['city']),
+                                         'postcode' => HTML::outputProtected($address['postcode']),
+                                         'state' => (isset($address['state']) && !empty($address['state']) ? HTML::outputProtected($address['state']) : HTML::outputProtected(Address::getZoneName($address['zone_id']))),
                                          'zone_id' => (int)$address['zone_id'],
-                                         'zone_code' => osc_output_string_protected(Address::getZoneCode($address['zone_id'])),
-                                         'country_id' => osc_output_string_protected($address['country_id']),
-                                         'country_title' => osc_output_string_protected(Address::getCountryName($address['country_id'])),
-                                         'country_iso_code_2' => osc_output_string_protected(Address::getCountryIsoCode2($address['country_id'])),
-                                         'country_iso_code_3' => osc_output_string_protected(Address::getCountryIsoCode3($address['country_id'])),
+                                         'zone_code' => HTML::outputProtected(Address::getZoneCode($address['zone_id'])),
+                                         'country_id' => HTML::outputProtected($address['country_id']),
+                                         'country_title' => HTML::outputProtected(Address::getCountryName($address['country_id'])),
+                                         'country_iso_code_2' => HTML::outputProtected(Address::getCountryIsoCode2($address['country_id'])),
+                                         'country_iso_code_3' => HTML::outputProtected(Address::getCountryIsoCode3($address['country_id'])),
                                          'format' => Address::getFormat($address['country_id']),
-                                         'telephone' => osc_output_string_protected($address['telephone']),
-                                         'fax' => osc_output_string_protected($address['fax']));
+                                         'telephone' => HTML::outputProtected($address['telephone']),
+                                         'fax' => HTML::outputProtected($address['fax']));
       }
 
       if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_shipping_address['id']) || ($previous_address['country_id'] != $this->_shipping_address['country_id']) || ($previous_address['zone_id'] != $this->_shipping_address['zone_id']) || ($previous_address['state'] != $this->_shipping_address['state']) || ($previous_address['postcode'] != $this->_shipping_address['postcode']) ) ) {
@@ -730,7 +726,7 @@
 /* param $address mixed int for address book entry, or array containing address data */
     public function setBillingAddress($address) {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $previous_address = false;
 
@@ -739,12 +735,12 @@
       }
 
       if ( $OSCOM_Customer->isLoggedOn() && is_numeric($address) ) {
-        $Qaddress = $OSCOM_Database->query('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
+        $Qaddress = $OSCOM_PDO->prepare('select ab.*, z.zone_code, z.zone_name, c.countries_name, c.countries_iso_code_2, c.countries_iso_code_3, c.address_format from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id) left join :table_countries c on (ab.entry_country_id = c.countries_id) where ab.customers_id = :customers_id and ab.address_book_id = :address_book_id');
         $Qaddress->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qaddress->bindInt(':address_book_id', $address);
         $Qaddress->execute();
 
-        if ( $Qaddress->numberOfRows() === 1 ) {
+        if ( $Qaddress->fetch() !== false ) {
           $this->_billing_address = array('id' => (int)$address,
                                           'firstname' => $Qaddress->valueProtected('entry_firstname'),
                                           'lastname' => $Qaddress->valueProtected('entry_lastname'),
@@ -754,7 +750,7 @@
                                           'suburb' => $Qaddress->valueProtected('entry_suburb'),
                                           'city' => $Qaddress->valueProtected('entry_city'),
                                           'postcode' => $Qaddress->valueProtected('entry_postcode'),
-                                          'state' => (!osc_empty($Qaddress->valueProtected('entry_state'))) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
+                                          'state' => (strlen($Qaddress->valueProtected('entry_state')) > 0) ? $Qaddress->valueProtected('entry_state') : $Qaddress->valueProtected('zone_name'),
                                           'zone_id' => $Qaddress->valueInt('entry_zone_id'),
                                           'zone_code' => $Qaddress->value('zone_code'),
                                           'country_id' => $Qaddress->valueInt('entry_country_id'),
@@ -768,24 +764,24 @@
         }
       } else {
         $this->_billing_address = array('id' => 0,
-                                        'firstname' => osc_output_string_protected($address['firstname']),
-                                        'lastname' => osc_output_string_protected($address['lastname']),
-                                        'gender' => osc_output_string_protected($address['gender']),
-                                        'company' => osc_output_string_protected($address['company']),
-                                        'street_address' => osc_output_string_protected($address['street_address']),
-                                        'suburb' => osc_output_string_protected($address['suburb']),
-                                        'city' => osc_output_string_protected($address['city']),
-                                        'postcode' => osc_output_string_protected($address['postcode']),
-                                        'state' => (isset($address['state']) && !empty($address['state']) ? osc_output_string_protected($address['state']) : osc_output_string_protected(Address::getZoneName($address['zone_id']))),
+                                        'firstname' => HTML::outputProtected($address['firstname']),
+                                        'lastname' => HTML::outputProtected($address['lastname']),
+                                        'gender' => HTML::outputProtected($address['gender']),
+                                        'company' => HTML::outputProtected($address['company']),
+                                        'street_address' => HTML::outputProtected($address['street_address']),
+                                        'suburb' => HTML::outputProtected($address['suburb']),
+                                        'city' => HTML::outputProtected($address['city']),
+                                        'postcode' => HTML::outputProtected($address['postcode']),
+                                        'state' => (isset($address['state']) && !empty($address['state']) ? HTML::outputProtected($address['state']) : HTML::outputProtected(Address::getZoneName($address['zone_id']))),
                                         'zone_id' => (int)$address['zone_id'],
-                                        'zone_code' => osc_output_string_protected(Address::getZoneCode($address['zone_id'])),
-                                        'country_id' => osc_output_string_protected($address['country_id']),
-                                        'country_title' => osc_output_string_protected(Address::getCountryName($address['country_id'])),
-                                        'country_iso_code_2' => osc_output_string_protected(Address::getCountryIsoCode2($address['country_id'])),
-                                        'country_iso_code_3' => osc_output_string_protected(Address::getCountryIsoCode3($address['country_id'])),
+                                        'zone_code' => HTML::outputProtected(Address::getZoneCode($address['zone_id'])),
+                                        'country_id' => HTML::outputProtected($address['country_id']),
+                                        'country_title' => HTML::outputProtected(Address::getCountryName($address['country_id'])),
+                                        'country_iso_code_2' => HTML::outputProtected(Address::getCountryIsoCode2($address['country_id'])),
+                                        'country_iso_code_3' => HTML::outputProtected(Address::getCountryIsoCode3($address['country_id'])),
                                         'format' => Address::getFormat($address['country_id']),
-                                        'telephone' => osc_output_string_protected($address['telephone']),
-                                        'fax' => osc_output_string_protected($address['fax']));
+                                        'telephone' => HTML::outputProtected($address['telephone']),
+                                        'fax' => HTML::outputProtected($address['fax']));
       }
 
       if ( is_array($previous_address) && ( ($previous_address['id'] != $this->_billing_address['id']) || ($previous_address['country_id'] != $this->_billing_address['country_id']) || ($previous_address['zone_id'] != $this->_billing_address['zone_id']) || ($previous_address['state'] != $this->_billing_address['state']) || ($previous_address['postcode'] != $this->_billing_address['postcode']) ) ) {
@@ -882,19 +878,19 @@
 
     private function _cleanUp() {
       $OSCOM_Customer = Registry::get('Customer');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       foreach ( $this->_contents as $item_id => $data ) {
         if ( $data['quantity'] < 1 ) {
           unset($this->_contents[$item_id]);
 
           if ( $OSCOM_Customer->isLoggedOn() ) {
-            $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
+            $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts where customers_id = :customers_id and item_id = :item_id');
             $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qdelete->bindInt(':item_id', $item_id);
             $Qdelete->execute();
 
-            $Qdelete = $OSCOM_Database->query('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
+            $Qdelete = $OSCOM_PDO->prepare('delete from :table_shopping_carts_custom_variants_values where customers_id = :customers_id and shopping_carts_item_id = :shopping_carts_item_id');
             $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
             $Qdelete->bindInt(':shopping_carts_item_id', $item_id);
             $Qdelete->execute();

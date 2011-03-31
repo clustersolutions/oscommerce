@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
   class NavigationHistory {
@@ -31,44 +32,19 @@
     }
 
     public function addCurrentPage() {
-      global $request_type, $cPath;
-
       $set = 'true';
 
       for ( $i=0, $n=sizeof($this->_data); $i<$n; $i++ ) {
         if ( $this->_data[$i]['page'] == basename($_SERVER['SCRIPT_FILENAME']) ) {
-          if ( isset($cPath) ) {
-            if ( !isset($this->_data[$i]['get']['cPath']) ) {
-              continue;
-            } else {
-              if ( $this->_data[$i]['get']['cPath'] == $cPath ) {
-                array_splice($this->_data, ($i+1));
-                $set = 'false';
-                break;
-              } else {
-                $old_cPath = explode('_', $this->_data[$i]['get']['cPath']);
-                $new_cPath = explode('_', $cPath);
-
-                for ( $j=0, $n2=sizeof($old_cPath); $j<$n2; $j++ ) {
-                  if ( $old_cPath[$j] != $new_cPath[$j] ) {
-                    array_splice($this->_data, ($i));
-                    $set = 'true';
-                    break 2;
-                  }
-                }
-              }
-            }
-          } else {
-            array_splice($this->_data, $i);
-            $set = 'true';
-            break;
-          }
+          array_splice($this->_data, $i);
+          $set = 'true';
+          break;
         }
       }
 
       if ( $set == 'true' ) {
         $this->_data[] = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
-                               'mode' => $request_type,
+                               'mode' => OSCOM::getRequestType(),
                                'get' => $_GET,
                                'post' => $_POST);
 
@@ -109,7 +85,7 @@
 
       $back = sizeof($this->_data) - $back;
 
-      return osc_href_link($this->_data[$back]['page'], $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
+      return OSCOM::getLink(null, null, $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
     }
 
     function setSnapshot($page = '') {
@@ -144,9 +120,9 @@
 
     function getSnapshotURL($auto_mode = false) {
       if ( $this->hasSnapshot() ) {
-        $target = osc_href_link($this->_snapshot['page'], $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+        $target = OSCOM::getLink(null, null, $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       } else {
-        $target = osc_href_link(FILENAME_DEFAULT, null, ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+        $target = OSCOM::getLink(null, null, null, ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       }
 
       return $target;
@@ -157,7 +133,7 @@
 
       $this->resetSnapshot();
 
-      osc_redirect($target);
+      OSCOM::redirect($target);
     }
 
     function resetPath() {

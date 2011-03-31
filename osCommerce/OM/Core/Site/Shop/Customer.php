@@ -30,7 +30,7 @@
 
     public function getID() {
       if ( isset($this->_data['id']) && is_numeric($this->_data['id']) ) {
-        return $this->_data['id'];
+        return (int)$this->_data['id'];
       }
 
       return 0;
@@ -127,16 +127,16 @@
     }
 
     function setCustomerData($customer_id = -1) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $this->_data = array();
 
       if ( is_numeric($customer_id) && ($customer_id > 0) ) {
-        $Qcustomer = $OSCOM_Database->query('select customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id from :table_customers where customers_id = :customers_id');
+        $Qcustomer = $OSCOM_PDO->prepare('select customers_gender, customers_firstname, customers_lastname, customers_email_address, customers_default_address_id from :table_customers where customers_id = :customers_id');
         $Qcustomer->bindInt(':customers_id', $customer_id);
         $Qcustomer->execute();
 
-        if ( $Qcustomer->numberOfRows() === 1 ) {
+        if ( $Qcustomer->fetch() !== false ) {
           $this->setIsLoggedOn(true);
           $this->setID($customer_id);
           $this->setGender($Qcustomer->value('customers_gender'));
@@ -145,22 +145,18 @@
           $this->setEmailAddress($Qcustomer->value('customers_email_address'));
 
           if ( is_numeric($Qcustomer->value('customers_default_address_id')) && ($Qcustomer->value('customers_default_address_id') > 0) ) {
-            $Qab = $OSCOM_Database->query('select entry_country_id, entry_zone_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+            $Qab = $OSCOM_PDO->prepare('select entry_country_id, entry_zone_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
             $Qab->bindInt(':address_book_id', $Qcustomer->value('customers_default_address_id'));
             $Qab->bindInt(':customers_id', $customer_id);
             $Qab->execute();
 
-            if ( $Qab->numberOfRows() === 1 ) {
+            if ( $Qab->fetch() !== false ) {
               $this->setCountryID($Qab->value('entry_country_id'));
               $this->setZoneID($Qab->value('entry_zone_id'));
               $this->setDefaultAddressID($Qcustomer->value('customers_default_address_id'));
-
-              $Qab->freeResult();
             }
           }
         }
-
-        $Qcustomer->freeResult();
       }
 
       if ( sizeof($this->_data) > 0 ) {
@@ -249,21 +245,21 @@
 
 // HPDL integrate into class better
     public function hasProductNotifications() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcheck = $OSCOM_Database->query('select products_id from :table_products_notifications where customers_id = :customers_id limit 1');
+      $Qcheck = $OSCOM_PDO->prepare('select products_id from :table_products_notifications where customers_id = :customers_id limit 1');
       $Qcheck->bindInt(':customers_id', $this->_data['id']);
       $Qcheck->execute();
 
-      return ($Qcheck->numberOfRows() === 1);
+      return ( $Qcheck->fetch() !== false );
     }
 
 // HPDL integrate into class better
     function getProductNotifications() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qproducts = $OSCOM_Database->query('select pd.products_id, pd.products_name from :table_products_description pd, :table_products_notifications pn where pn.customers_id = :customers_id and pn.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
+      $Qproducts = $OSCOM_PDO->prepare('select pd.products_id, pd.products_name from :table_products_description pd, :table_products_notifications pn where pn.customers_id = :customers_id and pn.products_id = pd.products_id and pd.language_id = :language_id order by pd.products_name');
       $Qproducts->bindInt(':customers_id', $this->_data['id']);
       $Qproducts->bindInt(':language_id', $OSCOM_Language->getID());
       $Qproducts->execute();

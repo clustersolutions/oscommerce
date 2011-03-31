@@ -10,6 +10,8 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Application\Cart\RPC;
 
+  use osCommerce\OM\Core\OSCOM;
+
   class PayPal {
     public static function execute() {
 // List of safe IP-Addresses found here:
@@ -71,7 +73,7 @@
                         '66.135.197.164'
                        );
 
-      if ( !in_array(osc_get_ip_address(), $firewall) ) {
+      if ( !in_array(OSCOM::getIPAddress(), $firewall) ) {
         exit;
       }
     }

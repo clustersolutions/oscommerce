@@ -25,7 +25,7 @@
     $Qstatuses->bindInt(':language_id', $OSCOM_Language->getID());
     $Qstatuses->execute();
 
-    while ( $Qstatuses->next() ) {
+    while ( $Qstatuses->fetch() ) {
       $statuses_array[] = array('id' => $Qstatuses->valueInt('orders_status_id'),
                                 'text' => $Qstatuses->value('orders_status_name'));
     }

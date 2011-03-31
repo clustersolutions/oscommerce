@@ -10,6 +10,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
@@ -63,7 +64,7 @@
     public function __construct() {
       $OSCOM_Cache = Registry::get('Cache');
       $OSCOM_Language = Registry::get('Language');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( SERVICES_CATEGORY_PATH_CALCULATE_PRODUCT_COUNT == '1' ) {
         $this->_show_total_products = true;
@@ -72,11 +73,11 @@
       if ( $OSCOM_Cache->read('category_tree-' . $OSCOM_Language->getCode(), 720) ) {
         $this->_data = $OSCOM_Cache->getCache();
       } else {
-        $Qcategories = $OSCOM_Database->query('select c.categories_id, c.parent_id, c.categories_image, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id order by c.parent_id, c.sort_order, cd.categories_name');
+        $Qcategories = $OSCOM_PDO->prepare('select c.categories_id, c.parent_id, c.categories_image, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id = cd.categories_id and cd.language_id = :language_id order by c.parent_id, c.sort_order, cd.categories_name');
         $Qcategories->bindInt(':language_id', $OSCOM_Language->getID());
         $Qcategories->execute();
 
-        while ( $Qcategories->next() ) {
+        while ( $Qcategories->fetch() ) {
           $this->_data[$Qcategories->valueInt('parent_id')][$Qcategories->valueInt('categories_id')] = array('name' => $Qcategories->value('categories_name'),
                                                                                                              'image' => $Qcategories->value('categories_image'),
                                                                                                              'count' => 0);
@@ -150,7 +151,7 @@
             $link_title = $category['name'];
           }
 
-          $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . osc_link_object(OSCOM::getLink(null, 'Index', 'cPath=' . $category_link), $link_title);
+          $result .= str_repeat($this->spacer_string, $this->spacer_multiplier * $level) . HTML::link(OSCOM::getLink(null, 'Index', 'cPath=' . $category_link), $link_title);
 
           if ( $this->_show_total_products === true ) {
             $result .= $this->category_product_count_start_string . $category['count'] . $this->category_product_count_end_string;
@@ -315,21 +316,28 @@
  */
 
     protected function _calculateProductTotals($filter_active = true) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $totals = array();
 
-      $Qtotals = $OSCOM_Database->query('select p2c.categories_id, count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.products_id = p.products_id');
+      $sql_query = 'select p2c.categories_id, count(*) as total from :table_products p, :table_products_to_categories p2c where p2c.products_id = p.products_id';
 
       if ( $filter_active === true ) {
-        $Qtotals->appendQuery('and p.products_status = :products_status');
-        $Qtotals->bindInt(':products_status', 1);
+        $sql_query .= ' and p.products_status = :products_status';
       }
 
-      $Qtotals->appendQuery('group by p2c.categories_id');
+      $sql_query .= ' group by p2c.categories_id';
+
+      if ( $filter_active === true ) {
+        $Qtotals = $OSCOM_PDO->prepare($sql_query);
+        $Qtotals->bindInt(':products_status', 1);
+      } else {
+        $Qtotals = $OSCOM_PDO->query($sql_query);
+      }
+
       $Qtotals->execute();
 
-      while ( $Qtotals->next() ) {
+      while ( $Qtotals->fetch() ) {
         $totals[$Qtotals->valueInt('categories_id')] = $Qtotals->valueInt('total');
       }
 

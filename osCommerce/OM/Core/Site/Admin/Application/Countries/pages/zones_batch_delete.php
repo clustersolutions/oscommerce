@@ -16,7 +16,7 @@
 
   $names_string = '';
 
-  while ( $Qzones->next() ) {
+  while ( $Qzones->fetch() ) {
     $names_string .= HTML::hiddenField('batch[]', $Qzones->valueInt('zone_id')) . '<b>' . $Qzones->valueProtected('zone_name') . '</b>, ';
   }
 

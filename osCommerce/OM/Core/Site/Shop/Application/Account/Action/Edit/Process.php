@@ -51,7 +51,7 @@
       }
 
       if ( isset($_POST['email_address']) && (strlen(trim($_POST['email_address'])) >= ACCOUNT_EMAIL_ADDRESS) ) {
-        if ( osc_validate_email_address($_POST['email_address']) ) {
+        if ( filter_var($_POST['email_address'], FILTER_VALIDATE_EMAIL) ) {
           if ( Account::checkDuplicateEntry($_POST['email_address']) === false ) {
             $data['email_address'] = $_POST['email_address'];
           } else {
@@ -78,7 +78,7 @@
           $OSCOM_MessageStack->add('Account', OSCOM::getDef('success_account_updated'), 'success');
         }
 
-        osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
       }
     }
   }

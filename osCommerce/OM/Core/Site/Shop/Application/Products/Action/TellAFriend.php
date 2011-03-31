@@ -25,7 +25,7 @@
       if ( (ALLOW_GUEST_TO_TELL_A_FRIEND == '-1') && ($OSCOM_Customer->isLoggedOn() === false) ) {
         $OSCOM_NavigationHistory->setSnapshot();
 
-        osc_redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
       }
 
       $requested_product = null;

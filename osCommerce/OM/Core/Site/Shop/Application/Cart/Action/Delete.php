@@ -22,7 +22,7 @@
         $OSCOM_ShoppingCart->remove($_GET['Delete']);
       }
 
-      osc_redirect(OSCOM::getLink(null, 'Cart'));
+      OSCOM::redirect(OSCOM::getLink(null, 'Cart'));
     }
   }
 ?>

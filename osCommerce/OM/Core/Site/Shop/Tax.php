@@ -18,7 +18,7 @@
 
     public function getTaxRate($class_id, $country_id = -1, $zone_id = -1) {
       $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( ($country_id == -1) && ($zone_id == -1) ) {
         $country_id = $OSCOM_ShoppingCart->getTaxingAddress('country_id');
@@ -26,17 +26,19 @@
       }
 
       if ( !isset($this->tax_rates[$class_id][$country_id][$zone_id]['rate']) ) {
-        $Qtax = $OSCOM_Database->query('select sum(tax_rate) as tax_rate from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
+        $Qtax = $OSCOM_PDO->prepare('select sum(tax_rate) as tax_rate from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
         $Qtax->bindInt(':zone_country_id', $country_id);
         $Qtax->bindInt(':zone_id', $zone_id);
         $Qtax->bindInt(':tax_class_id', $class_id);
         $Qtax->execute();
 
-        if ( $Qtax->numberOfRows() ) {
+        $tax_rates = $Qtax->fetchAll();
+
+        if ( count($tax_rates) > 0 ) {
           $tax_multiplier = 1.0;
 
-          while ( $Qtax->next() ) {
-            $tax_multiplier *= 1.0 + ($Qtax->value('tax_rate') / 100);
+          foreach ( $tax_rates as $tr ) {
+            $tax_multiplier *= 1.0 + ($tr['tax_rate'] / 100);
           }
 
           $tax_rate = ($tax_multiplier - 1.0) * 100;
@@ -51,20 +53,22 @@
     }
 
     public function getTaxRateDescription($class_id, $country_id, $zone_id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       if ( !isset($this->tax_rates[$class_id][$country_id][$zone_id]['description']) ) {
-        $Qtax = $OSCOM_Database->query('select tax_description from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
+        $Qtax = $OSCOM_PDO->prepare('select tax_description from :table_tax_rates tr left join :table_zones_to_geo_zones za on (tr.tax_zone_id = za.geo_zone_id) left join :table_geo_zones tz on (tz.geo_zone_id = tr.tax_zone_id) where (za.zone_country_id is null or za.zone_country_id = 0 or za.zone_country_id = :zone_country_id) and (za.zone_id is null or za.zone_id = 0 or za.zone_id = :zone_id) and tr.tax_class_id = :tax_class_id group by tr.tax_priority');
         $Qtax->bindInt(':zone_country_id', $country_id);
         $Qtax->bindInt(':zone_id', $zone_id);
         $Qtax->bindInt(':tax_class_id', $class_id);
         $Qtax->execute();
 
-        if ( $Qtax->numberOfRows() ) {
+        $tax_rates = $Qtax->fetchAll();
+
+        if ( count($tax_rates) > 0 ) {
           $tax_description = '';
 
-          while ( $Qtax->next() ) {
-            $tax_description .= $Qtax->value('tax_description') . ' + ';
+          foreach ( $tax_rates as $tr ) {
+            $tax_description .= $tr['tax_description'] . ' + ';
           }
 
           $this->tax_rates[$class_id][$country_id][$zone_id]['description'] = substr($tax_description, 0, -3);
@@ -79,7 +83,7 @@
     public function calculate($price, $tax_rate) {
       $OSCOM_Currencies = Registry::get('Currencies');
 
-      return osc_round($price * $tax_rate / 100, $OSCOM_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      return round($price * $tax_rate / 100, $OSCOM_Currencies->currencies[DEFAULT_CURRENCY]['decimal_places']);
     }
 
     public function displayTaxRateValue($value, $padding = null) {

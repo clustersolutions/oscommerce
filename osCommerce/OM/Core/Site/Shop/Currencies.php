@@ -16,13 +16,13 @@
     protected $currencies = array();
 
     public function __construct() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcurrencies = $OSCOM_Database->query('select * from :table_currencies');
+      $Qcurrencies = $OSCOM_PDO->query('select * from :table_currencies');
       $Qcurrencies->setCache('currencies');
       $Qcurrencies->execute();
 
-      while ( $Qcurrencies->next() ) {
+      while ( $Qcurrencies->fetch() ) {
         $this->currencies[$Qcurrencies->value('code')] = array('id' => $Qcurrencies->valueInt('currencies_id'),
                                                                'title' => $Qcurrencies->value('title'),
                                                                'symbol_left' => $Qcurrencies->value('symbol_left'),
@@ -30,8 +30,6 @@
                                                                'decimal_places' => $Qcurrencies->valueInt('decimal_places'),
                                                                'value' => $Qcurrencies->valueDecimal('value'));
       }
-
-      $Qcurrencies->freeResult();
     }
 
     public function format($number, $currency_code = null, $currency_value = null) {
@@ -45,7 +43,7 @@
         $currency_value = $this->currencies[$currency_code]['value'];
       }
 
-      return $this->currencies[$currency_code]['symbol_left'] . number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
+      return $this->currencies[$currency_code]['symbol_left'] . number_format(round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->currencies[$currency_code]['symbol_right'];
     }
 
     public function formatRaw($number, $currency_code = null, $currency_value = null) {
@@ -57,26 +55,26 @@
         $currency_value = $this->currencies[$currency_code]['value'];
       }
 
-      return number_format(osc_round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
+      return number_format(round($number * $currency_value, $this->currencies[$currency_code]['decimal_places']), $this->currencies[$currency_code]['decimal_places'], '.', '');
     }
 
     public function addTaxRateToPrice($price, $tax_rate, $quantity = 1) {
-      $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_rate > 0) ) {
-        $price += osc_round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
-      return osc_round($price * $quantity, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      return round($price * $quantity, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
     }
 
     public function displayPrice($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
       $OSCOM_Tax = Registry::get('Tax');
 
-      $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
-        $price += osc_round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->format($price * $quantity, $currency_code, $currency_value);
@@ -85,20 +83,20 @@
     public function displayPriceRaw($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
       $OSCOM_Tax = Registry::get('Tax');
 
-      $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
-        $price += osc_round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += round($price * ($OSCOM_Tax->getTaxRate($tax_class_id) / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->formatRaw($price * $quantity, $currency_code, $currency_value);
     }
 
     public function displayPriceWithTaxRate($price, $tax_rate, $quantity = 1, $force = false, $currency_code = null, $currency_value = null) {
-      $price = osc_round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+      $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (($force === true) || (DISPLAY_PRICE_WITH_TAX == '1')) && ($tax_rate > 0) ) {
-        $price += osc_round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
+        $price += round($price * ($tax_rate / 100), $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
       }
 
       return $this->format($price * $quantity, $currency_code, $currency_value);

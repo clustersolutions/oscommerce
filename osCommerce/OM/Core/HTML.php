@@ -565,5 +565,141 @@
 
       return $field;
     }
+
+/**
+ * Generate a form hidden field containing the session name and ID if SID is not empty
+ *
+ * @return string
+ * @since v3.0.0
+ */
+
+    public static function hiddenSessionIDField() {
+      $OSCOM_Session = Registry::get('Session');
+
+      if ( $OSCOM_Session->hasStarted() && (strlen(SID) > 0) ) {
+        return static::hiddenField($OSCOM_Session->getName(), $OSCOM_Session->getID());
+      }
+    }
+
+/**
+ * Generate a label for form field elements
+ *
+ * @param string $text The text to use as the form field label
+ * @param string $for The ID of the form field element to assign the label to
+ * @param string $access_key The access key to use for the form field element
+ * @param bool $required A flag to show if the form field element requires input or not
+ * @return string
+ * @since v3.0.0
+ */
+
+    public static function label($text, $for, $access_key = null, $required = false) {
+      if ( !is_bool($required) ) {
+        $required = false;
+      }
+
+      return '<label for="' . static::output($for) . '"' . (!empty($access_key) ? ' accesskey="' . static::output($access_key) . '"' : '') . '>' . static::output($text) . ($required === true ? '<em>*</em>' : '') . '</label>';
+    }
+
+/**
+ * Generate a form pull down menu for a date selection
+ *
+ * @param string $name The base name of the date pull down menu fields
+ * @param array $value An array containing the year, month, and date values for the default date (year, month, date)
+ * @param boolean $default_today Default to todays date if no default value is used
+ * @param boolean $show_days Show the days in a pull down menu
+ * @param boolean $use_month_names Show the month names in the month pull down menu
+ * @param int $year_range_start The start of the years range to use for the year pull down menu
+ * @param int $year_range_end The end of the years range to use for the year pull down menu
+ * @return string
+ * @since v3.0.0
+ */
+
+    public static function dateSelectMenu($name, $value = null, $default_today = true, $show_days = true, $use_month_names = true, $year_range_start = 0, $year_range_end = 1) {
+      $year = date('Y');
+
+      if ( !is_bool($default_today) ) {
+        $default_today = true;
+      }
+
+      if ( !is_bool($show_days) ) {
+        $show_days = true;
+      }
+
+      if ( !is_bool($use_month_names) ) {
+        $use_month_names = true;
+      }
+
+      if ( !is_numeric($year_range_start) ) {
+        $year_range_start = 0;
+      }
+
+      if ( !is_numeric($year_range_end) ) {
+        $year_range_end = 1;
+      }
+
+      if ( !is_array($value) ) {
+        $value = array();
+      }
+
+      if ( !isset($value['year']) || !is_numeric($value['year']) || ($value['year'] < ($year - $year_range_start)) || ($value['year'] > ($year + $year_range_end)) ) {
+        if ( $default_today === true ) {
+          $value['year'] = $year;
+        } else {
+          $value['year'] = $year - $year_range_start;
+        }
+      }
+
+      if ( !isset($value['month']) || !is_numeric($value['month']) || ($value['month'] < 1) || ($value['month'] > 12) ) {
+        if ( $default_today === true ) {
+          $value['month'] = date('n');
+        } else {
+          $value['month'] = 1;
+        }
+      }
+
+      if ( !isset($value['date']) || !is_numeric($value['date']) || ($value['date'] < 1) || ($value['date'] > 31) ) {
+        if ( $default_today === true ) {
+          $value['date'] = date('j');
+        } else {
+          $value['date'] = 1;
+        }
+      }
+
+      $params = '';
+
+      $days_select_string = '';
+
+      if ( $show_days === true ) {
+        $params = 'onchange="updateDatePullDownMenu(this.form, \'' . $name . '\');"';
+
+        $days_in_month = ($default_today === true) ? date('t') : 31;
+
+        $days_array = array();
+        for ( $i=1; $i<=$days_in_month; $i++ ) {
+          $days_array[] = array('id' => $i,
+                                'text' => $i);
+        }
+
+        $days_select_string = static::selectMenu($name . '_days', $days_array, $value['date']);
+      }
+
+      $months_array = array();
+      for ( $i=1; $i<=12; $i++ ) {
+        $months_array[] = array('id' => $i,
+                                'text' => (($use_month_names === true) ? strftime('%B', mktime(0, 0, 0, $i, 1)) : $i));
+      }
+
+      $months_select_string = static::selectMenu($name . '_months', $months_array, $value['month'], $params);
+
+      $years_array = array();
+      for ( $i = ($year - $year_range_start); $i <= ($year + $year_range_end); $i++ ) {
+        $years_array[] = array('id' => $i,
+                               'text' => $i);
+      }
+
+      $years_select_string = static::selectMenu($name . '_years', $years_array, $value['year'], $params);
+
+      return $days_select_string . $months_select_string . $years_select_string;
+    }
   }
 ?>

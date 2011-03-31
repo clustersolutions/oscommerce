@@ -10,8 +10,9 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Box\Manufacturers;
 
-  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
   class Controller extends \osCommerce\OM\Core\Modules {
     var $_title,
@@ -25,32 +26,30 @@
     }
 
     public function initialize() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qmanufacturers = $OSCOM_Database->query('select manufacturers_id as id, manufacturers_name as text from :table_manufacturers order by manufacturers_name');
+      $Qmanufacturers = $OSCOM_PDO->query('select manufacturers_id as id, manufacturers_name as text from :table_manufacturers order by manufacturers_name');
       $Qmanufacturers->setCache('manufacturers');
       $Qmanufacturers->execute();
 
       $manufacturers_array = array(array('id' => '',
                                          'text' => OSCOM::getDef('pull_down_default')));
 
-      while ( $Qmanufacturers->next() ) {
-        $manufacturers_array[] = $Qmanufacturers->toArray();
+      foreach ( $Qmanufacturers->fetchAll() as $m ) {
+        $manufacturers_array[] = $m;
       }
 
-      $Qmanufacturers->freeResult();
-
-      $this->_content = '<form name="manufacturers" action="' . OSCOM::getLink() . '" method="get">' . osc_draw_hidden_field('Index', null) .
-                        osc_draw_pull_down_menu('Manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . osc_draw_hidden_session_id_field() .
+      $this->_content = '<form name="manufacturers" action="' . OSCOM::getLink() . '" method="get">' . HTML::hiddenField('Index', null) .
+                        HTML::selectMenu('Manufacturers', $manufacturers_array, null, 'onchange="this.form.submit();" size="' . BOX_MANUFACTURERS_LIST_SIZE . '" style="width: 100%"') . HTML::hiddenSessionIDField() .
                         '</form>';
     }
 
     function install() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
 
       parent::install();
 
-      $OSCOM_Database->simpleQuery("insert into :table_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Manufacturers List Size', 'BOX_MANUFACTURERS_LIST_SIZE', '1', 'The size of the manufacturers pull down menu listing.', '6', '0', now())");
+      $OSCOM_PDO->exec("insert into :table_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Manufacturers List Size', 'BOX_MANUFACTURERS_LIST_SIZE', '1', 'The size of the manufacturers pull down menu listing.', '6', '0', now())");
     }
 
     function getKeys() {

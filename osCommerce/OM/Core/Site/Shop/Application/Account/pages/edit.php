@@ -8,13 +8,12 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Account;
 
   $Qaccount = Account::getEntry();
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -40,32 +39,32 @@
                           array('id' => 'f', 'text' => OSCOM::getDef('gender_female')));
 ?>
 
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_gender'), 'fake', null, (ACCOUNT_GENDER > 0)) . osc_draw_radio_field('gender', $gender_array, $Qaccount->value('customers_gender')); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), 'fake', null, (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array, $Qaccount->value('customers_gender')); ?></li>
 
 <?php
   }
 ?>
 
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_first_name'), 'firstname', null, true) . ' ' . osc_draw_input_field('firstname', $Qaccount->value('customers_firstname')); ?></li>
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_last_name'), 'lastname', null, true) . ' ' . osc_draw_input_field('lastname', $Qaccount->value('customers_lastname')); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_first_name'), 'firstname', null, true) . ' ' . HTML::inputField('firstname', $Qaccount->value('customers_firstname')); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_last_name'), 'lastname', null, true) . ' ' . HTML::inputField('lastname', $Qaccount->value('customers_lastname')); ?></li>
 
 <?php
   if ( ACCOUNT_DATE_OF_BIRTH == '1' ) {
 ?>
 
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . osc_draw_date_pull_down_menu('dob', array('year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')), false, null, null, date('Y')-1901, -5); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_date_of_birth'), 'dob_days', null, true) . ' ' . HTML::dateSelectMenu('dob', array('year' => $Qaccount->value('customers_dob_year'), 'month' => $Qaccount->value('customers_dob_month'), 'date' => $Qaccount->value('customers_dob_date')), false, null, null, date('Y')-1901, -5); ?></li>
 
 <?php
   }
 ?>
 
-      <li><?php echo osc_draw_label(OSCOM::getDef('field_customer_email_address'), 'email_address', null, true) . ' ' . osc_draw_input_field('email_address', $Qaccount->value('customers_email_address')); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_email_address'), 'email_address', null, true) . ' ' . HTML::inputField('email_address', $Qaccount->value('customers_email_address')); ?></li>
     </ol>
   </div>
 </div>
 
 <div class="submitFormButtons" style="text-align: right;">
-  <?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?>
+  <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?>
 </div>
 
 </form>

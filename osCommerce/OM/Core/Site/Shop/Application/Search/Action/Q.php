@@ -25,7 +25,7 @@
       $application->setPageContent('results.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
-        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_search_results'), OSCOM::getLink(null, null, osc_get_all_get_params()));
+        $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_search_results'), OSCOM::getLink(null, null, OSCOM::getAllGET()));
       }
 
       if ( isset($_GET['datefrom_days']) && is_numeric($_GET['datefrom_days']) && isset($_GET['datefrom_months']) && is_numeric($_GET['datefrom_months']) && isset($_GET['datefrom_years']) && is_numeric($_GET['datefrom_years']) ) {

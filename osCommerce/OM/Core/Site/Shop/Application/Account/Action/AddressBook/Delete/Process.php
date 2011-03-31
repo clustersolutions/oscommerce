@@ -23,7 +23,7 @@
         $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('success_address_book_entry_deleted'), 'success');
       }
 
-      osc_redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, null, 'AddressBook', 'SSL'));
     }
   }
 ?>

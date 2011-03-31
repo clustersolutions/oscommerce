@@ -8,12 +8,11 @@
   as published by the Free Software Foundation.
 */
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\Site\Shop\AddressBook;
 ?>
-
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
@@ -32,7 +31,7 @@
     </div>
 
     <div style="float: right; padding: 0px 0px 10px 20px; text-align: center;">
-      <?php echo '<b>' . OSCOM::getDef('primary_address_title') . '</b><br />' . osc_image(DIR_WS_IMAGES . 'arrow_south_east.gif'); ?>
+      <?php echo '<b>' . OSCOM::getDef('primary_address_title') . '</b>'; ?>
     </div>
 
     <?php echo OSCOM::getDef('primary_address_description'); ?>
@@ -50,7 +49,9 @@
 <?php
   $Qaddresses = AddressBook::getListing();
 
-  while ( $Qaddresses->next() ) {
+  $counter = 0;
+
+  while ( $Qaddresses->fetch() ) {
 ?>
 
       <tr class="moduleRow" onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);">
@@ -64,13 +65,14 @@
 ?>
 
         </td>
-        <td align="right"><?php echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Edit=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), osc_draw_image_button('small_edit.gif', OSCOM::getDef('button_edit'))) . '&nbsp;' . osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Delete=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), osc_draw_image_button('small_delete.gif', OSCOM::getDef('button_delete'))); ?></td>
+        <td align="right"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook&Edit=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), 'title' => OSCOM::getDef('button_edit'))) . '&nbsp;' . HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook&Delete=' . $Qaddresses->valueInt('address_book_id'), 'SSL'), 'title' => OSCOM::getDef('button_delete'))); ?></td>
       </tr>
       <tr>
         <td colspan="2" style="padding: 0px 0px 10px 10px;"><?php echo Address::format($Qaddresses->toArray(), '<br />'); ?></td>
       </tr>
 
 <?php
+    $counter++;
   }
 ?>
 
@@ -82,8 +84,8 @@
   <span style="float: right;">
 
 <?php
-  if ( $Qaddresses->numberOfRows() < MAX_ADDRESS_BOOK_ENTRIES ) {
-    echo osc_link_object(OSCOM::getLink(null, null, 'AddressBook&Create', 'SSL'), osc_draw_image_button('button_add_address.gif', OSCOM::getDef('button_add_address')));
+  if ( $counter < MAX_ADDRESS_BOOK_ENTRIES ) {
+    echo HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook&Create', 'SSL'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_add_address')));
   } else {
     echo sprintf(OSCOM::getDef('address_book_maximum_entries'), MAX_ADDRESS_BOOK_ENTRIES);
   }
@@ -91,5 +93,5 @@
 
   </span>
 
-  <?php echo osc_link_object(OSCOM::getLink(null, null, null, 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php echo HTML::button(array('href' => OSCOM::getLink(null, null, null, 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
 </div>

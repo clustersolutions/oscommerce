@@ -16,7 +16,7 @@
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_MessageStack = Registry::get('MessageStack');
 
@@ -27,24 +27,24 @@
       }
 
 // HPDL Should be moved to the customers class!
-      $Qnewsletter = $OSCOM_Database->query('select customers_newsletter from :table_customers where customers_id = :customers_id');
+      $Qnewsletter = $OSCOM_PDO->prepare('select customers_newsletter from :table_customers where customers_id = :customers_id');
       $Qnewsletter->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qnewsletter->execute();
 
       if ( $newsletter_general !== $Qnewsletter->valueInt('customers_newsletter') ) {
         $newsletter_general = (($Qnewsletter->value('customers_newsletter') == '1') ? '0' : '1');
 
-        $Qupdate = $OSCOM_Database->query('update :table_customers set customers_newsletter = :customers_newsletter where customers_id = :customers_id');
+        $Qupdate = $OSCOM_PDO->prepare('update :table_customers set customers_newsletter = :customers_newsletter where customers_id = :customers_id');
         $Qupdate->bindInt(':customers_newsletter', $newsletter_general);
         $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qupdate->execute();
 
-        if ( $Qupdate->affectedRows() === 1 ) {
+        if ( $Qupdate->rowCount() === 1 ) {
           $OSCOM_MessageStack->add('Account', OSCOM::getDef('success_newsletter_updated'), 'success');
         }
       }
 
-      osc_redirect(OSCOM::getLink(null, null, null, 'SSL'));
+      OSCOM::redirect(OSCOM::getLink(null, null, null, 'SSL'));
     }
   }
 ?>

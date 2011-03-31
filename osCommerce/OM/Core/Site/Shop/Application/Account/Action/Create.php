@@ -24,7 +24,7 @@
 // redirect the customer to a friendly cookies-must-be-enabled page if cookies
 // are disabled (or the session has not started)
       if ( $OSCOM_Session->hasStarted() === false ) {
-        osc_redirect(OSCOM::getLink(null, 'Info', 'Cookies'));
+        OSCOM::redirect(OSCOM::getLink(null, 'Info', 'Cookies'));
       }
 
       $application->setPageTitle(OSCOM::getDef('create_account_heading'));

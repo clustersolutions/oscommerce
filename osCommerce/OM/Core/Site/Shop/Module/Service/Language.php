@@ -32,7 +32,7 @@
 
       header('Content-Type: text/html; charset=' . $OSCOM_Language->getCharacterSet());
 
-      osc_setlocale(LC_TIME, explode(',', $OSCOM_Language->getLocale()));
+      setlocale(LC_TIME, explode(',', $OSCOM_Language->getLocale()));
 
       return true;
     }

@@ -33,7 +33,7 @@
 
   $names_string = '';
 
-  while ($Qcc->next()) {
+  while ($Qcc->fetch()) {
     $names_string .= HTML::hiddenField('batch[]', $Qcc->valueInt('id')) . '<b>' . $Qcc->valueProtected('credit_card_name') . '</b>, ';
   }
 

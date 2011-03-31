@@ -26,10 +26,10 @@
  */
 
     public static function getListing() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
-      $Qaddresses = $OSCOM_Database->query('select ab.address_book_id, ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.customers_id = :customers_id and ab.entry_country_id = c.countries_id order by ab.entry_firstname, ab.entry_lastname');
+      $Qaddresses = $OSCOM_PDO->prepare('select ab.address_book_id, ab.entry_firstname as firstname, ab.entry_lastname as lastname, ab.entry_company as company, ab.entry_street_address as street_address, ab.entry_suburb as suburb, ab.entry_city as city, ab.entry_postcode as postcode, ab.entry_state as state, ab.entry_zone_id as zone_id, ab.entry_country_id as country_id, z.zone_code as zone_code, c.countries_name as country_title from :table_address_book ab left join :table_zones z on (ab.entry_zone_id = z.zone_id), :table_countries c where ab.customers_id = :customers_id and ab.entry_country_id = c.countries_id order by ab.entry_firstname, ab.entry_lastname');
       $Qaddresses->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qaddresses->execute();
 
@@ -45,10 +45,10 @@
  */
 
     public static function getEntry($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
-      $Qentry = $OSCOM_Database->query('select entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_zone_id, entry_country_id, entry_telephone, entry_fax from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+      $Qentry = $OSCOM_PDO->prepare('select entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_zone_id, entry_country_id, entry_telephone, entry_fax from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
       $Qentry->bindInt(':address_book_id', $id);
       $Qentry->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qentry->execute();
@@ -65,15 +65,15 @@
  */
 
     public static function checkEntry($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
-      $Qentry = $OSCOM_Database->query('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+      $Qentry = $OSCOM_PDO->prepare('select address_book_id from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
       $Qentry->bindInt(':address_book_id', $id);
       $Qentry->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qentry->execute();
 
-      return ( $Qentry->numberOfRows() === 1 );
+      return ( $Qentry->fetch() !== false );
     }
 
 /**
@@ -84,7 +84,7 @@
  */
 
     public static function numberOfEntries() {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
       static $total_entries;
@@ -93,7 +93,7 @@
         $total_entries = 0;
 
         if ( $OSCOM_Customer->isLoggedOn() ) {
-          $Qaddresses = $OSCOM_Database->query('select count(*) as total from :table_address_book where customers_id = :customers_id');
+          $Qaddresses = $OSCOM_PDO->prepare('select count(*) as total from :table_address_book where customers_id = :customers_id');
           $Qaddresses->bindInt(':customers_id', $OSCOM_Customer->getID());
           $Qaddresses->execute();
 
@@ -114,17 +114,17 @@
  */
 
     public static function saveEntry($data, $id = '') {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
       $updated_record = false;
 
       if ( is_numeric($id) ) {
-        $Qab = $OSCOM_Database->query('update :table_address_book set customers_id = :customers_id, entry_gender = :entry_gender, entry_company = :entry_company, entry_firstname = :entry_firstname, entry_lastname = :entry_lastname, entry_street_address = :entry_street_address, entry_suburb = :entry_suburb, entry_postcode = :entry_postcode, entry_city = :entry_city, entry_state = :entry_state, entry_country_id = :entry_country_id, entry_zone_id = :entry_zone_id, entry_telephone = :entry_telephone, entry_fax = :entry_fax where address_book_id = :address_book_id and customers_id = :customers_id');
+        $Qab = $OSCOM_PDO->prepare('update :table_address_book set customers_id = :customers_id, entry_gender = :entry_gender, entry_company = :entry_company, entry_firstname = :entry_firstname, entry_lastname = :entry_lastname, entry_street_address = :entry_street_address, entry_suburb = :entry_suburb, entry_postcode = :entry_postcode, entry_city = :entry_city, entry_state = :entry_state, entry_country_id = :entry_country_id, entry_zone_id = :entry_zone_id, entry_telephone = :entry_telephone, entry_fax = :entry_fax where address_book_id = :address_book_id and customers_id = :customers_id');
         $Qab->bindInt(':address_book_id', $id);
         $Qab->bindInt(':customers_id', $OSCOM_Customer->getID());
       } else {
-        $Qab = $OSCOM_Database->query('insert into :table_address_book (customers_id, entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:customers_id, :entry_gender, :entry_company, :entry_firstname, :entry_lastname, :entry_street_address, :entry_suburb, :entry_postcode, :entry_city, :entry_state, :entry_country_id, :entry_zone_id, :entry_telephone, :entry_fax)');
+        $Qab = $OSCOM_PDO->prepare('insert into :table_address_book (customers_id, entry_gender, entry_company, entry_firstname, entry_lastname, entry_street_address, entry_suburb, entry_postcode, entry_city, entry_state, entry_country_id, entry_zone_id, entry_telephone, entry_fax) values (:customers_id, :entry_gender, :entry_company, :entry_firstname, :entry_lastname, :entry_street_address, :entry_suburb, :entry_postcode, :entry_city, :entry_state, :entry_country_id, :entry_zone_id, :entry_telephone, :entry_fax)');
       }
 
       $Qab->bindInt(':customers_id', $OSCOM_Customer->getID());
@@ -143,13 +143,13 @@
       $Qab->bindValue(':entry_fax', (ACCOUNT_FAX > -1) ? $data['fax'] : '');
       $Qab->execute();
 
-      if ( $Qab->affectedRows() === 1 ) {
+      if ( $Qab->rowCount() === 1 ) {
         $updated_record = true;
       }
 
       if ( isset($data['primary']) && ($data['primary'] === true) ) {
         if ( !is_numeric($id) ) {
-          $id = $OSCOM_Database->nextID();
+          $id = $OSCOM_PDO->lastInsertId();
         }
 
         if ( self::setPrimaryAddress($id) ) {
@@ -179,16 +179,16 @@
  */
 
     public static function setPrimaryAddress($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
       if ( is_numeric($id) && ($id > 0) ) {
-        $Qupdate = $OSCOM_Database->query('update :table_customers set customers_default_address_id = :customers_default_address_id where customers_id = :customers_id');
+        $Qupdate = $OSCOM_PDO->prepare('update :table_customers set customers_default_address_id = :customers_default_address_id where customers_id = :customers_id');
         $Qupdate->bindInt(':customers_default_address_id', $id);
         $Qupdate->bindInt(':customers_id', $OSCOM_Customer->getID());
         $Qupdate->execute();
 
-        return ( $Qupdate->affectedRows() === 1 );
+        return ( $Qupdate->rowCount() === 1 );
       }
 
       return false;
@@ -203,15 +203,15 @@
  */
 
     public static function deleteEntry($id) {
-      $OSCOM_Database = Registry::get('Database');
+      $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
 
-      $Qdelete = $OSCOM_Database->query('delete from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
+      $Qdelete = $OSCOM_PDO->prepare('delete from :table_address_book where address_book_id = :address_book_id and customers_id = :customers_id');
       $Qdelete->bindInt(':address_book_id', $id);
       $Qdelete->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qdelete->execute();
 
-      return ( $Qdelete->affectedRows() === 1 );
+      return ( $Qdelete->rowCount() === 1 );
     }
   }
 ?>

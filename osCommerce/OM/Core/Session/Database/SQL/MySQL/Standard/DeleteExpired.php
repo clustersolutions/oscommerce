@@ -14,9 +14,9 @@
 
   class DeleteExpired {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
-      $Qsession = $OSCOM_Database->prepare('delete from :table_sessions where expiry < :expiry');
+      $Qsession = $OSCOM_PDO->prepare('delete from :table_sessions where expiry < :expiry');
       $Qsession->bindInt(':expiry', $data['expiry']);
       $Qsession->execute();
 

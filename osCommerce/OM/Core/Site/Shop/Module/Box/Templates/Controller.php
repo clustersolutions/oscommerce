@@ -10,9 +10,10 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Box\Templates;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Template;
   use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Template;
 
   class Controller extends \osCommerce\OM\Core\Modules {
     var $_title,
@@ -36,16 +37,16 @@
       }
 
       if ( count($data) > 1 ) {
-        $hidden_get_variables = '';
+        $hidden_get_params = '';
 
         foreach ( $_GET as $key => $value ) {
           if ( ($key != 'template') && ($key != $OSCOM_Session->getName()) && ($key != 'x') && ($key != 'y') ) {
-            $hidden_get_variables .= osc_draw_hidden_field($key, $value);
+            $hidden_get_params .= HTML::hiddenField($key, $value);
           }
         }
 
         $this->_content = '<form name="templates" action="' . OSCOM::getLink(null, null, null, 'AUTO', false) . '" method="get">' .
-                          $hidden_get_variables . osc_draw_pull_down_menu('template', $data, $_SESSION['template']['code'], 'onchange="this.form.submit();" style="width: 100%"') . osc_draw_hidden_session_id_field() .
+                          $hidden_get_params . HTML::selectMenu('template', $data, $_SESSION['template']['code'], 'onchange="this.form.submit();" style="width: 100%"') . HTML::hiddenSessionIDField() .
                           '</form>';
       }
     }

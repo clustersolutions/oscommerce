@@ -8,8 +8,9 @@
   as published by the Free Software Foundation.
 */
 
-  use osCommerce\OM\Core\Site\Shop\AddressBook;
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Shop\AddressBook;
 
   if ( isset($_GET['Edit']) ) {
     $Qentry = AddressBook::getEntry($_GET['Edit']); // HPDL conflict with $osC_oiAddress
@@ -20,8 +21,6 @@
   }
 ?>
 
-<?php echo osc_image(DIR_WS_IMAGES . $OSCOM_Template->getPageImage(), $OSCOM_Template->getPageTitle(), HEADING_IMAGE_WIDTH, HEADING_IMAGE_HEIGHT, 'id="pageIcon"'); ?>
-
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
@@ -29,7 +28,7 @@
     echo $OSCOM_MessageStack->get('AddressBook');
   }
 
-  if ( ($OSCOM_Customer->hasDefaultAddress() === false) || (isset($_GET['Create']) && (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry->numberOfRows() === 1)) ) {
+  if ( ($OSCOM_Customer->hasDefaultAddress() === false) || (isset($_GET['Create']) && (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry !== false)) ) {
 ?>
 
 <form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook&' . (isset($_GET['Edit']) ? 'Edit=' . $_GET['Edit'] : 'Create') . '&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
@@ -49,7 +48,7 @@
 </div>
 
 <div class="submitFormButtons">
-  <span style="float: right;"><?php echo osc_draw_image_submit_button('button_continue.gif', OSCOM::getDef('button_continue')); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_continue'))); ?></span>
 
 <?php
     if ( $OSCOM_NavigationHistory->hasSnapshot() ) {
@@ -60,7 +59,7 @@
       $back_link = OSCOM::getLink(null, null, 'AddressBook', 'SSL');
     }
 
-    echo osc_link_object($back_link, osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back')));
+    echo HTML::button(array('href' => $back_link, 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back')));
 ?>
 
 </div>
@@ -72,7 +71,7 @@
 ?>
 
 <div class="submitFormButtons">
-  <?php osc_link_object(OSCOM::getLink(null, null, 'AddressBook', 'SSL'), osc_draw_image_button('button_back.gif', OSCOM::getDef('button_back'))); ?>
+  <?php HTML::button(array('href' => OSCOM::getLink(null, null, 'AddressBook', 'SSL'), 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?>
 </div>
 
 <?php

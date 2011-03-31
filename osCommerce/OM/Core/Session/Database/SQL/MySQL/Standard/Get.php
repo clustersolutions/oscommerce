@@ -14,7 +14,7 @@
 
   class Get {
     public static function execute($data) {
-      $OSCOM_Database = Registry::get('PDO');
+      $OSCOM_PDO = Registry::get('PDO');
 
       $sql_query = 'select value from :table_sessions where id = :id';
 
@@ -22,7 +22,7 @@
         $sql_query .= ' and expiry >= :expiry';
       }
 
-      $Qsession = $OSCOM_Database->prepare($sql_query);
+      $Qsession = $OSCOM_PDO->prepare($sql_query);
       $Qsession->bindValue(':id', $data['id']);
 
       if ( isset($data['expiry']) ) {
