@@ -6,7 +6,7 @@
  */
 
 body {
-  margin: 20px;
+  margin: 0 20px 20px 20px;
   background: #FFFFFF;
   font-family: Verdana, Arial, sans-serif;
   font-size: 11px;
@@ -15,12 +15,10 @@ body {
 }
 
 #pageHeader {
-  background: #f7f7f5;
-  border: 1px #b3b6b0 solid;
 }
 
 #pageContent {
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
 #pageFooter {
