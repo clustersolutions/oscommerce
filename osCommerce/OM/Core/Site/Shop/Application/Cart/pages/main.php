@@ -108,18 +108,21 @@
 <div class="moduleBox">
   <form name="checkout" action="<?php echo OSCOM::getLink(null, 'Checkout', null, 'SSL'); ?>" method="post">
 
-  <div class="content">
-    <div style="float: right;">
-      <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_checkout'))); ?>
-    </div>
+  <div style="float: right;">
+    <?php echo HTML::button(array('icon' => 'triangle-1-e', 'title' => OSCOM::getDef('button_checkout'))); ?>
+  </div>
 
 <?php
   if ( !$OSCOM_Customer->isLoggedOn() && $OSCOM_Application->requireCustomerAccount() ) {
-    echo 'E-Mail Address: ' . HTML::inputField('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . HTML::link(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order';
-  }
 ?>
 
+  <div class="content">
+    <?php echo 'E-Mail Address: ' . HTML::inputField('email', $OSCOM_Customer->getEMailAddress()) . ' or ' . HTML::link(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'), 'Sign-In') . ' to process this order'; ?>
   </div>
+
+<?php
+  }
+?>
 
   </form>
 </div>
