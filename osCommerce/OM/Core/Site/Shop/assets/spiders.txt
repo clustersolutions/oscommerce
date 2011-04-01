@@ -1,4 +1,3 @@
-$Id$
 almaden.ibm.com
 appie 1.1
 architext

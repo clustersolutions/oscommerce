@@ -32,7 +32,7 @@
         $spider_flag = false;
 
         if ( !empty($user_agent) ) {
-          $spiders = file('includes/spiders.txt');
+          $spiders = file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/spiders.txt');
 
           foreach ( $spiders as $spider ) {
             if ( !empty($spider) ) {
