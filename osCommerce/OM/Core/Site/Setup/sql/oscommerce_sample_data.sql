@@ -1,21 +1,7 @@
-# osCommerce Online Merchant $osCommerce-SIG$
-# Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+# osCommerce Online Merchant
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License v2 (1991)
-# as published by the Free Software Foundation.
-#
-# NOTE: * Please make any modifications to this file by hand!
-#       * DO NOT use a mysqldump created file for new changes!
-#       * Please take note of the table structure, and use this
-#         structure as a standard for future modifications!
-#       * Any tables you add here should be added in admin/backup.php
-#         and in catalog/install/includes/functions/database.php
-#       * To see the 'diff'erence between MySQL databases, use
-#         the mysqldiff perl script located in the extras
-#         directory of the 'catalog' module.
-#       * Comments should be like these, full line comments.
-#         (don't use inline comments)
+# @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+# @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
 INSERT INTO osc_products_variants_groups VALUES (1, 1, 'Size', 1, 'PullDownMenu');
 INSERT INTO osc_products_variants_groups VALUES (2, 1, 'Colour', 2, 'PullDownMenu');
