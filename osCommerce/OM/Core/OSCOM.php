@@ -268,11 +268,16 @@
  *
  * @param string $url The object location from the public/sites/SITE/ directory.
  * @param string $parameters Parameters to add to the link. Example: key1=value1&key2=value2
+ * @param string $site Get a public link from a specific Site
  * @return string The URL address.
  */
 
-    public static function getPublicSiteLink($url, $parameters = null) {
-      $link = 'public/sites/' . static::getSite() . '/' . $url;
+    public static function getPublicSiteLink($url, $parameters = null, $site = null) {
+      if ( !isset($site) ) {
+        $site = static::getSite();
+      }
+
+      $link = 'public/sites/' . $site . '/' . $url;
 
       if ( !empty($parameters) ) {
         $link .= '?' . $parameters;

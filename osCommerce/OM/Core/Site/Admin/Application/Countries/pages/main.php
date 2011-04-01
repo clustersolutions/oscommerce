@@ -78,7 +78,7 @@
   var countryLink = '<?php echo OSCOM::getLink(null, null, 'id=COUNTRYID'); ?>';
   var countryLinkIcon = '<?php echo HTML::icon('folder.png'); ?>';
 
-  var countryFlag = '<?php echo HTML::image('images/worldflags/COUNTRYISOCODE2.png', 'COUNTRYNAME'); ?>';
+  var countryFlag = '<?php echo HTML::image(OSCOM::getPublicSiteLink('images/worldflags/COUNTRYISOCODE2.png', null, 'Shop'), 'COUNTRYNAME'); ?>';
 
   var countryEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=COUNTRYID'); ?>';
   var countryEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';

@@ -78,7 +78,7 @@
   var languageLink = '<?php echo OSCOM::getLink(null, null, 'id=LANGUAGEID'); ?>';
   var languageLinkIcon = '<?php echo HTML::icon('folder.png'); ?>';
 
-  var languageIcon = '<?php echo HTML::image('images/worldflags/LANGUAGECODE.png', 'LANGUAGENAME'); ?>';
+  var languageIcon = '<?php echo HTML::image(OSCOM::getPublicSiteLink('images/worldflags/LANGUAGECODE.png', null, 'Shop'), 'LANGUAGENAME'); ?>';
 
   var languageEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=LANGUAGEID'); ?>';
   var languageEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';

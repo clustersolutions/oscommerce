@@ -235,7 +235,7 @@
         $height = 10;
       }
 
-      return HTML::image('images/worldflags/' . $image_code . '.png', $this->_languages[$code]['name'], $width, $height, $parameters);
+      return HTML::image(OSCOM::getPublicSiteLink('images/worldflags/' . $image_code . '.png', null, 'Shop'), $this->_languages[$code]['name'], $width, $height, $parameters);
     }
   }
 ?>
