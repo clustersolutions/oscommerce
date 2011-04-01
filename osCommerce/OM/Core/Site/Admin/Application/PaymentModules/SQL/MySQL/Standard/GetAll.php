@@ -18,7 +18,7 @@
 
       $result = array();
 
-      $Qpm = $OSCOM_PDO->prepare('select code from :table_templates_boxes where modules_group = :modules_group order by code');
+      $Qpm = $OSCOM_PDO->prepare('select code from :table_modules where modules_group = :modules_group order by code');
       $Qpm->bindValue(':modules_group', 'Payment');
       $Qpm->execute();
 

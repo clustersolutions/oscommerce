@@ -134,8 +134,6 @@
                 $error = true;
               }
             }
-
-            $Qzone->freeResult();
           } else {
             if ( isset($_POST['state']) && ((ACCOUNT_STATE == 0) || (strlen(trim($_POST['state'])) >= ACCOUNT_STATE)) ) {
               $address_array['state'] = trim($_POST['state']);
