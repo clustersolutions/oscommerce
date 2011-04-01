@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Payment;
 
+  use osCommerce\OM\Core\HttpRequest;
   use osCommerce\OM\Core\Mail;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
@@ -105,8 +106,6 @@
     }
 
     protected function setExpressCheckout($parameters) {
-      $OSCOM_Payment = Registry::get('Payment');
-
       if ( MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER == 'Live' ) {
         $api_url = 'https://api-3t.paypal.com/nvp';
       } else {
@@ -143,7 +142,7 @@
 
       $post_string = substr($post_string, 0, -1);
 
-      $response = $OSCOM_Payment->sendTransactionToGateway($api_url, $post_string);
+      $response = HttpRequest::getResponse(array('url' => $api_url, 'parameters' => $post_string));
 
       $response_array = array();
       parse_str($response, $response_array);
@@ -156,8 +155,6 @@
     }
 
     protected function getExpressCheckoutDetails($token) {
-      $OSCOM_Payment = Registry::get('Payment');
-
       if ( MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER == 'Live' ) {
         $api_url = 'https://api-3t.paypal.com/nvp';
       } else {
@@ -184,7 +181,7 @@
 
       $post_string = substr($post_string, 0, -1);
 
-      $response = $OSCOM_Payment->sendTransactionToGateway($api_url, $post_string);
+      $response = HttpRequest::getResponse(array('url' => $api_url, 'parameters' => $post_string));
 
       $response_array = array();
       parse_str($response, $response_array);
@@ -197,8 +194,6 @@
     }
 
     protected function doExpressCheckoutPayment($parameters) {
-      $OSCOM_Payment = Registry::get('Payment');
-
       if ( MODULE_PAYMENT_PAYPAL_EXPRESS_CHECKOUT_TRANSACTION_SERVER == 'Live' ) {
         $api_url = 'https://api-3t.paypal.com/nvp';
       } else {
@@ -230,7 +225,7 @@
 
       $post_string = substr($post_string, 0, -1);
 
-      $response = $OSCOM_Payment->sendTransactionToGateway($api_url, $post_string);
+      $response = HttpRequest::getResponse(array('url' => $api_url, 'parameters' => $post_string));
 
       $response_array = array();
       parse_str($response, $response_array);
