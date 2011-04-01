@@ -29,3 +29,26 @@ http://forums.oscommerce.com
 
 We look forward to working with you in improving and extending osCommerce
 Online Merchant!
+
+To install osCommerce Online Merchant v3.0, copy the contents of the release
+package to your public html directory. The "osCommerce" directory can be added
+to the PHP include directory and be moved outside of the public html directory.
+
+The Setup Site will first load to setup and configure a new installation. Once
+installed and configured, the Shop and Admin Sites can be reached with:
+
+http://demo.oscommerce.com/index.php (for Shop)
+http://demo.oscommerce.com/index.php?Admin (for Admin)
+
+Please note that the Setup Site is still reachable and should be deleted. This
+can be performed by deleting the following directory:
+
+osCommerce/OM/Core/Site/Setup
+
+For customizations, please copy the file with the same directory structure to
+the custom namespace located at:
+
+osCommerce/OM/Custom
+
+The Custom directory can mimick the Core directory to override core files with
+customizations.
