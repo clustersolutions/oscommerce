@@ -161,7 +161,7 @@
             break;
           case 'PRODUCT_LIST_BUY_NOW':
             $lc_align = 'center';
-            $lc_text = HTML::button(array('title' => OSCOM::getDef('button_buy_now'), 'href' => OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword())));
+            $lc_text = HTML::button(array('href' => OSCOM::getLink(null, 'Cart', 'Add&' . $OSCOM_Product->getKeyword()), 'icon' => 'cart', 'title' => OSCOM::getDef('button_buy_now')));
             break;
         }
 
