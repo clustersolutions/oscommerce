@@ -28,7 +28,7 @@
       $application->setPageTitle(OSCOM::getDef('shipping_address_heading'));
       $application->setPageContent('shipping_address.php');
 
-      $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_shipping_address.js');
+      $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/checkout_shipping_address.js'));
       $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
