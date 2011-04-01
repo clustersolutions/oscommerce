@@ -87,12 +87,16 @@
           <td align="right" width="25"></td>
         </tr>
         <tr>
-          <td><?php echo OSCOM::getDef('box_server_mysqli'); ?></td>
-          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (extension_loaded('mysqli') ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
+          <td><?php echo OSCOM::getDef('box_server_pdo_mysql'); ?></td>
+          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (extension_loaded('pdo_mysql') ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
-          <td><?php echo OSCOM::getDef('box_server_sqlite3'); ?></td>
-          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (extension_loaded('sqlite3') ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
+          <td><?php echo OSCOM::getDef('box_server_pdo_sqlite'); ?></td>
+          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (extension_loaded('pdo_sqlite') ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
+        </tr>
+        <tr>
+          <td><?php echo OSCOM::getDef('box_server_phar'); ?></td>
+          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (extension_loaded('phar') ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_gd'); ?></td>
