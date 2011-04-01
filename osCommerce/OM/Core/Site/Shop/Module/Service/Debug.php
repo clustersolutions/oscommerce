@@ -59,7 +59,7 @@
       $OSCOM_MessageStack = Registry::get('MessageStack');
       $OSCOM_Template = Registry::get('Template');
 
-      $time_start = explode(' ', PAGE_PARSE_START_TIME);
+      $time_start = explode(' ', OSCOM_TIMESTAMP_START);
       $time_end = explode(' ', microtime());
       $parse_time = number_format(($time_end[1] + $time_end[0] - ($time_start[1] + $time_start[0])), 3);
 

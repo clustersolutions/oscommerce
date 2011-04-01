@@ -89,8 +89,6 @@
     }
 
     function setSnapshot($page = '') {
-      global $request_type;
-
       if ( is_array($page) ) {
         $this->_snapshot = array('page' => $page['page'],
                                  'mode' => $page['mode'],
@@ -98,7 +96,7 @@
                                  'post' => $page['post']);
       } else {
         $this->_snapshot = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
-                                 'mode' => $request_type,
+                                 'mode' => OSCOM::getRequestType(),
                                  'get' => $_GET,
                                  'post' => $_POST);
       }
