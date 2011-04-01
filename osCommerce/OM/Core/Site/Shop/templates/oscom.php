@@ -290,12 +290,15 @@
     if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
 ?>
 
-    <div id="breadcrumbPath">
-
+    <div id="breadcrumbPath" class="ui-widget">
+      <div class="ui-widget-header">
+        <span style="padding-left: 5px;">
 <?php
       echo $OSCOM_Breadcrumb->getPath();
 ?>
 
+        </span>
+      </div>
     </div>
 
 <?php
