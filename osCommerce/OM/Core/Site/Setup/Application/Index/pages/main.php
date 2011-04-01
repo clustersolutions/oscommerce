@@ -118,7 +118,7 @@
     <h2><?php echo OSCOM::getDef('page_heading_server_requirements'); ?></h2>
 
     <ul>
-      <li>PHP v5.3+ (with MySQL or MySQLi extension)</li>
+      <li>PHP v5.3+ (with PDO MySQL extension)</li>
       <li>MySQL v4.1.13+ or v5.0.7+</li>
     </ul>
 
