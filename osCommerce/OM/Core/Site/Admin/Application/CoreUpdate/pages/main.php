@@ -45,7 +45,7 @@
 </table>
 
 <div style="padding: 5px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('folder_contents.png', OSCOM::getDef('icon_view_contents')) . '&nbsp;' . OSCOM::getDef('icon_view_contents'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('newsletters.png', OSCOM::getDef('icon_view_announcement')) . '&nbsp;' . OSCOM::getDef('icon_view_announcement') . ' ' . HTML::icon('folder_contents.png', OSCOM::getDef('icon_view_contents')) . '&nbsp;' . OSCOM::getDef('icon_view_contents'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -63,6 +63,8 @@
 
   var dataTableName = 'coreUpdateDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAvailablePackages'); ?>';
+
+  var announcementIcon = '<?php echo HTML::icon('newsletters.png', OSCOM::getDef('icon_view_announcement')); ?>';
 
   var updateInstallLink = '<?php echo OSCOM::getLink(null, null, 'Apply&v=VCODE'); ?>';
   var updateInstallLinkIcon = '<?php echo HTML::icon('folder_contents.png', OSCOM::getDef('icon_view_contents')); ?>';
@@ -87,11 +89,23 @@
       var newCell = newRow.insertCell(1);
       newCell.innerHTML = htmlSpecialChars(record.date);
 
-      newCell = newRow.insertCell(2);
-      if ( record.update_package ) {
-        newCell.innerHTML = '<a href="' + updateInstallLink.replace('VCODE', htmlSpecialChars(record.version)) + '">' + updateInstallLinkIcon + '</a>';
-        newCell.align = 'right';
+      var actions = '';
+
+      if ( record.announcement ) {
+        actions += '<a href="' + record.announcement + '" target="_blank">' + announcementIcon + '</a>';
       }
+
+      if ( record.update_package ) {
+        if ( record.announcement ) {
+          actions += '&nbsp;'
+        }
+
+        actions += '<a href="' + updateInstallLink.replace('VCODE', htmlSpecialChars(record.version)) + '">' + updateInstallLinkIcon + '</a>';
+      }
+
+      newCell = newRow.insertCell(2);
+      newCell.innerHTML = actions;
+      newCell.align = 'right';
 
       rowCounter++;
     }
