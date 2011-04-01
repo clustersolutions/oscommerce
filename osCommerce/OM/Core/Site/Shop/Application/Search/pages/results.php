@@ -17,7 +17,7 @@
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
 
 <?php
-  require('includes/modules/product_listing.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/Products/pages/product_listing.php');
 ?>
 
 <div class="submitFormButtons">

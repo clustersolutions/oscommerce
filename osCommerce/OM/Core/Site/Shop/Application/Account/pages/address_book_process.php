@@ -41,7 +41,7 @@
   <div class="content">
 
 <?php
-    include('includes/modules/address_book_details.php');
+    include(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/Account/pages/address_book_details.php');
 ?>
 
   </div>

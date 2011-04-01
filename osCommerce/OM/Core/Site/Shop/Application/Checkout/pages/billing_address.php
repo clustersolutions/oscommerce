@@ -132,7 +132,7 @@
     <?php echo OSCOM::getDef('new_billing_address'); ?>
 
     <div style="margin: 10px 30px 10px 30px;">
-      <?php require('includes/modules/address_book_details.php'); ?>
+      <?php require(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/Account/pages/address_book_details.php'); ?>
     </div>
   </div>
 </div>
