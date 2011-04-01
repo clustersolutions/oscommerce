@@ -66,7 +66,7 @@
       }
 
       if ( !isset($_COOKIE[OSCOM::getSite()]['language']) || ($_COOKIE[OSCOM::getSite()]['language'] != $this->_code) ) {
-        osc_setcookie(OSCOM::getSite() . '[language]', $this->_code, time()+60*60*24*90);
+        OSCOM::setCookie(OSCOM::getSite() . '[language]', $this->_code, time()+60*60*24*90);
       }
     }
 

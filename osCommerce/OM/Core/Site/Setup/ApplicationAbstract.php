@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core\Site\Setup;
 
+  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
   abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
@@ -15,7 +16,7 @@
       $this->initialize();
 
       if ( isset($_GET['action']) && !empty($_GET['action']) ) {
-        $action = osc_sanitize_string(basename($_GET['action']));
+        $action = HTML::sanitize(basename($_GET['action']));
 
         if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action) ) {
           call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);

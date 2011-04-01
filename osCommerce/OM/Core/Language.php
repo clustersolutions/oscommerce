@@ -9,6 +9,7 @@
   namespace osCommerce\OM\Core;
 
   use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
 
   class Language {
     protected $_code,
@@ -80,7 +81,7 @@
       }
 
       if ( !isset($_COOKIE['language']) || ($_COOKIE['language'] != $this->_code) ) {
-        osc_setcookie('language', $this->_code, time()+60*60*24*90);
+        OSCOM::setCookie('language', $this->_code, time()+60*60*24*90);
       }
 
       if ( !isset($_SESSION['language']) || ($_SESSION['language'] != $this->_code) ) {
