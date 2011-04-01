@@ -90,7 +90,7 @@
       }
 
       if ( $sane_session_id === false ) {
-        osc_redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'NONSSL', false));
+        OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'NONSSL', false));
       } else {
         if ( session_start() ) {
           register_shutdown_function(array($this, 'close'));
