@@ -27,7 +27,7 @@
 
       $this->_page_title = OSCOM::getDef('search_heading');
 
-//HPDL      $OSCOM_Template->addJavascriptPhpFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/search/search.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/search.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_search'), OSCOM::getLink());

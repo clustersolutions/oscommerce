@@ -102,7 +102,7 @@
 
       $application->setPageTitle($OSCOM_Product->getTitle());
       $application->setPageContent('reviews_write.php');
-      $OSCOM_Template->addJavascriptPhpFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/products/reviews_new.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/reviews_new.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb')) {
         $OSCOM_Breadcrumb->add($OSCOM_Product->getTitle(), OSCOM::getLink(null, null, 'Reviews&' . $OSCOM_Product->getKeyword()));

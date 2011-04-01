@@ -1,6 +1,18 @@
-<script type="text/javascript"><!--
+<?php
+/*
+  osCommerce Online Merchant $osCommerce-SIG$
+  Copyright (c) 2010 osCommerce (http://www.oscommerce.com)
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License v2 (1991)
+  as published by the Free Software Foundation.
+*/
+
+  use osCommerce\OM\Core\OSCOM;
+?>
+<script type="text/javascript">
 function check_form() {
-    var error_message = "<?php echo $GLOBALS['osC_Language']->get('js_error'); ?>";
+  var error_message = "<?php echo OSCOM::getDef('js_error'); ?>";
   var error_found = false;
   var error_field;
   var keywords = document.advanced_search.keywords.value;
@@ -27,7 +39,7 @@ function check_form() {
 
   if ((dfrom.length > 0) && (dto.length > 0)) {
     if (dfrom > dto) {
-      error_message = error_message + "* <?php echo $GLOBALS['osC_Language']->get('error_search_to_date_less_than_from_date'); ?>\n";
+      error_message = error_message + "* <?php echo OSCOM::getDef('error_search_to_date_less_than_from_date'); ?>\n";
       error_field = document.advanced_search.dateto_days;
       error_found = true;
     }
@@ -36,7 +48,7 @@ function check_form() {
   if (pfrom.length > 0) {
     pfrom_float = parseFloat(pfrom);
     if (isNaN(pfrom_float)) {
-      error_message = error_message + "* <?php echo $GLOBALS['osC_Language']->get('error_search_price_from_not_numeric'); ?>\n";
+      error_message = error_message + "* <?php echo OSCOM::getDef('error_search_price_from_not_numeric'); ?>\n";
       error_field = document.advanced_search.pfrom;
       error_found = true;
     }
@@ -47,7 +59,7 @@ function check_form() {
   if (pto.length > 0) {
     pto_float = parseFloat(pto);
     if (isNaN(pto_float)) {
-      error_message = error_message + "* <?php echo $GLOBALS['osC_Language']->get('error_search_price_to_not_numeric'); ?>\n";
+      error_message = error_message + "* <?php echo OSCOM::getDef('error_search_price_to_not_numeric'); ?>\n";
       error_field = document.advanced_search.pto;
       error_found = true;
     }
@@ -57,7 +69,7 @@ function check_form() {
 
   if ( (pfrom.length > 0) && (pto.length > 0) ) {
     if ( (!isNaN(pfrom_float)) && (!isNaN(pto_float)) && (pto_float < pfrom_float) ) {
-      error_message = error_message + "* <?php echo $GLOBALS['osC_Language']->get('error_search_price_to_less_than_price_from'); ?>\n";
+      error_message = error_message + "* <?php echo OSCOM::getDef('error_search_price_to_less_than_price_from'); ?>\n";
       error_field = document.advanced_search.pto;
       error_found = true;
     }
@@ -75,4 +87,4 @@ function check_form() {
 function popupWindow(url) {
   window.open(url,'popupWindow','toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=yes,resizable=yes,copyhistory=no,width=450,height=280,screenX=150,screenY=150,top=150,left=150')
 }
-//--></script>
+</script>

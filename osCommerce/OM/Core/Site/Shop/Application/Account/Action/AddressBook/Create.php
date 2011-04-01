@@ -29,7 +29,7 @@
       $application->setPageTitle(OSCOM::getDef('address_book_add_entry_heading'));
       $application->setPageContent('address_book_process.php');
 
-      $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
 
       if ( AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES ) {
         $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_full'));

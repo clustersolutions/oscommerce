@@ -31,7 +31,7 @@
       $application->setPageTitle(OSCOM::getDef('account_edit_heading'));
       $application->setPageContent('edit.php');
 
-      $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_edit_account'), OSCOM::getLink(null, null, 'Edit', 'SSL'));
