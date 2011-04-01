@@ -43,7 +43,7 @@
 <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.11.custom.css" />
 <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
 
-<script type="text/javascript" src="ext/alexei/sprintf.js"></script>
+<script type="text/javascript" src="public/external/alexei/sprintf.js"></script>
 
 <script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/general.js'); ?>"></script>
 <script type="text/javascript" src="<?php echo OSCOM::getPublicSiteLink('javascript/datatable.js'); ?>"></script>
