@@ -28,7 +28,7 @@
       $this->_title_link = OSCOM::getLink(null, 'Search');
 
       $this->_content = '<form name="search" action="' . OSCOM::getLink() . '" method="get">' . HTML::hiddenField('Search', null) .
-                        HTML::inputField('Q', null, 'style="width: 80%;" maxlength="30"') . '&nbsp;' . HTML::hiddenSessionIDField() . HTML::submitImage('button_quick_find.gif', OSCOM::getDef('box_search_heading')) . '<br />' . sprintf(OSCOM::getDef('box_search_text'), OSCOM::getLink(null, 'Search')) .
+                        HTML::inputField('Q', null, 'style="width: 80%;" maxlength="30"') . '&nbsp;' . HTML::hiddenSessionIDField() . HTML::button(array('icon' => 'search', 'title' => OSCOM::getDef('box_search_heading'))) .
                         '</form>';
     }
   }
