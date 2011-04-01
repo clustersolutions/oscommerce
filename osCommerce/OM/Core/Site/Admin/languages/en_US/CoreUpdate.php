@@ -19,6 +19,7 @@ action_heading_apply = Core Update: Update from v%s to v%s
 
 button_apply_update = Apply Update
 
+icon_view_announcement = View Announcement
 icon_view_contents = View Contents
 
 ms_error_select_version_to_view = Error: Please select an available package version to view.
