@@ -10,13 +10,6 @@
 
   use osCommerce\OM\Core\Autoloader;
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Registry;
-
-// HPDL to delete ///////
-  define('PAGE_PARSE_START_TIME', microtime());
-  define('PROJECT_VERSION', 'osCommerce Online Merchant $osCommerce-SIG$');
-  $request_type = (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) ? 'SSL' : 'NONSSL';
-////////////////////
 
   define('OSCOM_TIMESTAMP_START', microtime());
 
@@ -28,7 +21,5 @@
 
   OSCOM::initialize();
 
-  require(Registry::get('Template')->getTemplateFile());
-
-//  require('includes/application_bottom.php');
+  require($OSCOM_Template->getTemplateFile());
 ?>
