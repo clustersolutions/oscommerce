@@ -28,7 +28,7 @@
           $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
 
           if ( !empty($user_agent) ) {
-            $spiders = file('includes/spiders.txt');
+            $spiders = file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/spiders.txt');
 
             foreach ( $spiders as $spider ) {
               if ( !empty($spider) ) {
