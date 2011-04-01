@@ -42,7 +42,7 @@
                           'value' => 'PHP v' . PHP_VERSION . ' / Zend v' . zend_version()),
                     array('key' => 'db_server',
                           'title' => OSCOM::getDef('field_database_host'),
-                          'value' => DB_SERVER . ' (' . gethostbyname(DB_SERVER) . ')'),
+                          'value' => OSCOM::getConfig('db_server') . ' (' . gethostbyname(OSCOM::getConfig('db_server')) . ')'),
                     array('key' => 'db_version',
                           'title' => OSCOM::getDef('field_database_version'),
                           'value' => $db_version),
