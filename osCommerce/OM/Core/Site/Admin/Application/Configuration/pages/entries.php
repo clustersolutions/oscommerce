@@ -44,7 +44,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo HTML::imageSubmit(HTML::iconRaw('edit.png'), OSCOM::getDef('icon_edit'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveEntries&id=' . $_GET['id']) . '\';"'); ?></th>
+      <th align="right" colspan="3"><?php echo HTML::submitImage(HTML::iconRaw('edit.png'), OSCOM::getDef('icon_edit'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveEntries&id=' . $_GET['id']) . '\';"'); ?></th>
       <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
