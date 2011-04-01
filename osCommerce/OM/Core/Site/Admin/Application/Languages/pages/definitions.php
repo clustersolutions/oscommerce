@@ -44,7 +44,7 @@
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><?php echo HTML::imageSubmit(HTML::iconRaw('edit.png'), OSCOM::getDef('icon_edit'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveDefinitions&id=' . $_GET['id'] . '&group=' . $_GET['group']) . '\';"') . '&nbsp;' . HTML::imageSubmit(HTML::iconRaw('trash.png'), OSCOM::getDef('icon_trash'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDeleteDefinitions&id=' . $_GET['id'] . '&group=' . $_GET['group']) . '\';"'); ?></th>
+      <th align="right" colspan="3"><?php echo HTML::submitImage(HTML::iconRaw('edit.png'), OSCOM::getDef('icon_edit'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchSaveDefinitions&id=' . $_GET['id'] . '&group=' . $_GET['group']) . '\';"') . '&nbsp;' . HTML::submitImage(HTML::iconRaw('trash.png'), OSCOM::getDef('icon_trash'), 'onclick="document.batch.action=\'' . OSCOM::getLink(null, null, 'BatchDeleteDefinitions&id=' . $_GET['id'] . '&group=' . $_GET['group']) . '\';"'); ?></th>
       <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>

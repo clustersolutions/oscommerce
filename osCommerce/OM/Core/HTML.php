@@ -167,7 +167,7 @@
  * @since 3.0.0
  */
 
-    public static function imageSubmit($image, $title = null, $parameters = null) {
+    public static function submitImage($image, $title = null, $parameters = null) {
       $submit = '<input type="image" src="' . static::output($image) . '"';
 
       if (!empty($title)) {
