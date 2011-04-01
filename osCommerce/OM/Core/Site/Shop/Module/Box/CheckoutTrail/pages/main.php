@@ -7,8 +7,8 @@
  */
 ?>
 
-<div class="boxNew">
-  <div class="boxTitle"><?php echo $OSCOM_Box->getTitle(); ?></div>
+<div class="ui-widget boxNew">
+  <div class="ui-widget-header boxTitle"><?php echo $OSCOM_Box->getTitle(); ?></div>
 
-  <div class="boxContents"><?php echo $OSCOM_Box->getContent(); ?></div>
+  <div class="ui-widget-content boxContents"><?php echo $OSCOM_Box->getContent(); ?></div>
 </div>
