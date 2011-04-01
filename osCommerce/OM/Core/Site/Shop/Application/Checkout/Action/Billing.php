@@ -38,14 +38,14 @@
         $application->setPageTitle(OSCOM::getDef('payment_address_heading'));
         $application->setPageContent('billing_address.php');
 
-        $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_payment_address.js');
+        $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/checkout_payment_address.js'));
         $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
 
         if ( !$OSCOM_Customer->isLoggedOn() ) {
           $osC_oiAddress = new ObjectInfo($OSCOM_ShoppingCart->getBillingAddress());
         }
       } else {
-        $OSCOM_Template->addJavascriptFilename('templates/' . $OSCOM_Template->getCode() . '/javascript/checkout_payment.js');
+        $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/checkout_payment.js'));
 
 // load all enabled payment modules
         $OSCOM_Payment = Registry::get('Payment');
