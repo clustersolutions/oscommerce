@@ -35,11 +35,11 @@
 
   <body>
 
-    <div id="pageHeader" class="round">
+    <div id="pageHeader">
       <div>
         <div style="float: right; padding-top: 40px; padding-right: 15px; color: #000000; font-weight: bold;"><a href="http://www.oscommerce.com" target="_blank">osCommerce Website</a> &nbsp;|&nbsp; <a href="http://www.oscommerce.com/support" target="_blank">Support</a></div>
 
-        <a href="<?php echo OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()); ?>"><img src="<?php echo OSCOM::getPublicSiteLink('images/oscommerce_logo-silver.jpg'); ?>" border="0" width="250" height="50" alt="" title="osCommerce Online Merchant v3.0" style="margin: 10px 10px 0px 10px;" /></a>
+        <a href="<?php echo OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()); ?>"><img src="<?php echo OSCOM::getPublicSiteLink('images/oscommerce.png'); ?>" border="0" alt="" title="osCommerce Online Merchant v3.0" style="margin: 10px 10px 0px 10px;" /></a>
       </div>
     </div>
 
