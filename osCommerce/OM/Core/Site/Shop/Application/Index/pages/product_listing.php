@@ -60,5 +60,5 @@
 
   $products_listing = $OSCOM_Products->execute();
 
-  require('includes/modules/product_listing.php');
+  require(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Application/Products/pages/product_listing.php');
 ?>
