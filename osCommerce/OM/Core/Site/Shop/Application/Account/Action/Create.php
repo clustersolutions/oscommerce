@@ -34,7 +34,7 @@
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_create_account'), OSCOM::getLink(null, null, 'Create', 'SSL'));
       }
 
-      $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
     }
   }
 ?>

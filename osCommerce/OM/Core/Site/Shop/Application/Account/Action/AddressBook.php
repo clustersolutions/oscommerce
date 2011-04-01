@@ -39,7 +39,7 @@
         $application->setPageTitle(OSCOM::getDef('address_book_add_entry_heading'));
         $application->setPageContent('address_book_process.php');
 
-        $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+        $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
       }
     }
   }

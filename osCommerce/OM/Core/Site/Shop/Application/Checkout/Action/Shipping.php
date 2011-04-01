@@ -40,7 +40,7 @@
         $application->setPageContent('shipping_address.php');
 
         $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/checkout_shipping_address.js'));
-        $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+        $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
 
         if ( !$OSCOM_Customer->isLoggedOn() ) {
           $osC_oiAddress = new ObjectInfo($OSCOM_ShoppingCart->getShippingAddress());

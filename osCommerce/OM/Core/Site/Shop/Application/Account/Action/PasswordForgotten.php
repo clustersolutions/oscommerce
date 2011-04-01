@@ -23,7 +23,7 @@
       $application->setPageTitle(OSCOM::getDef('password_forgotten_heading'));
       $application->setPageContent('password_forgotten.php');
 
-      $OSCOM_Template->addJavascriptPhpFilename('includes/form_check.js.php');
+      $OSCOM_Template->addJavascriptPhpFilename(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/assets/form_check.js.php');
 
       if ( $OSCOM_Service->isStarted('Breadcrumb') ) {
         $OSCOM_Breadcrumb->add(OSCOM::getDef('breadcrumb_password_forgotten'), OSCOM::getLink(null, null, 'PasswordForgotten', 'SSL'));
