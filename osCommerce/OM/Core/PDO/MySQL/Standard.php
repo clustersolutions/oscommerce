@@ -8,8 +8,6 @@
 
   namespace osCommerce\OM\Core\PDO\MySQL;
 
-  use \PDO;
-
   use osCommerce\OM\Core\OSCOM;
 
   class Standard extends \osCommerce\OM\Core\PDO {
@@ -26,11 +24,10 @@
 
 // Override ATTR_STATEMENT_CLASS to automatically handle foreign key constraints
       if ( $this->_has_native_fk === false ) {
-        $this->_driver_options[PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
+        $this->_driver_options[self::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
       }
 
-// Only one init command can be issued (see http://bugs.php.net/bug.php?id=48859)
-      $this->_driver_options[PDO::MYSQL_ATTR_INIT_COMMAND] = 'set session sql_mode="STRICT_ALL_TABLES", names utf8';
+      $this->_driver_options[self::MYSQL_ATTR_INIT_COMMAND] = 'set names utf8';
 
       return $this->connect();
     }
