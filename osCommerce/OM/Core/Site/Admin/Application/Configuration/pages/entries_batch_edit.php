@@ -34,7 +34,7 @@
   $Qcfg->execute();
 
   while ( $Qcfg->fetch() ) {
-    if ( strlen($Qcfg->value('set_function') > 0 ) ) {
+    if ( strlen($Qcfg->value('set_function')) > 0 ) {
       $value_field = Configuration::callUserFunc($Qcfg->value('set_function'), $Qcfg->value('configuration_value'), $Qcfg->value('configuration_key'));
     } else {
       $value_field = HTML::inputField('configuration[' . $Qcfg->value('configuration_key') . ']', $Qcfg->value('configuration_value'));
