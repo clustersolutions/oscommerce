@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\DateTime;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
@@ -19,7 +20,7 @@
  * @param string $string The string to parse and output
  * @param array $translate An array containing the characters to parse
  * @return string
- * @since 3.0.0
+ * @since v3.0.0
  */
 
     public static function output($string, $translate = null) {
@@ -64,7 +65,7 @@
  * @param string $element The element to link to
  * @param string $parameters Additional parameters for the a href tag
  * @return string
- * @since 3.0.0
+ * @since v3.0.0
  */
 
     public static function link($url, $element, $parameters = null) {
@@ -80,7 +81,7 @@
  * @param int $height The height of the image
  * @param string $parameters Additional parameters for the image
  * @return string
- * @since 3.0.0
+ * @since v3.0.0
  */
 
     public static function image($image, $title = null, $width = 0, $height = 0, $parameters = null) {
@@ -162,7 +163,7 @@
  * @param string $title The title of the image button
  * @param string $parameters Additional parameters for the image
  * @return string
- * @since 3.0.0
+ * @since v3.0.0
  */
 
     public static function submitImage($image, $title = null, $parameters = null) {
@@ -180,6 +181,14 @@
 
       return $submit;
     }
+
+/**
+ * Generate a jQuery UI button
+ * 
+ * @param array $params types(submit, button, reset), href, newwindow, params, title, icon, iconpos(left, right), priority(primary, secondary)
+ * @return string
+ * @since v3.0.0
+ */
 
     public static function button($params) {
       static $button_counter = 1;
@@ -698,6 +707,33 @@
       $years_select_string = static::selectMenu($name . '_years', $years_array, $value['year'], $params);
 
       return $days_select_string . $months_select_string . $years_select_string;
+    }
+
+/**
+ * Generate a time zone selection menu
+ * 
+ * @param $name string The name of the selection field
+ * @param $default The default value
+ * @return string
+ * @since v3.0.1
+ */
+
+    public static function timeZoneSelectMenu($name, $default = null) {
+      if ( !isset($default) ) {
+        $default = date_default_timezone_get();
+      }
+
+      $result = array();
+
+      foreach ( DateTime::getTimeZones() as $zone => $zones_array ) {
+        foreach ( $zones_array as $key => $value ) {
+          $result[] = array('id' => $key,
+                        'text' => $value,
+                        'group' => $zone);
+        }
+      }
+
+      return HTML::selectMenu($name, $result, $default);
     }
   }
 ?>

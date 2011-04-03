@@ -66,6 +66,7 @@
 [OSCOM]
 bootstrap_file = "index.php"
 default_site = "Shop"
+time_zone = "{$_POST['CFG_TIME_ZONE']}"
 
 [Admin]
 enable_ssl = "false"

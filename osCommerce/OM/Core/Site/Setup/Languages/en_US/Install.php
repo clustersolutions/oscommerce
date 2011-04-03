@@ -43,6 +43,9 @@ param_administrator_username_description = The administrator username to use for
 param_administrator_password = Administrator Password
 param_administrator_password_description = The password to use for the administrator account.
 
+param_time_zone = Time Zone
+param_time_zone_description = The time zone to use for dates.
+
 param_database_import_sample_data = Import Sample Data
 param_database_import_sample_data_description = Inserting sample data into the database is recommended for first time installations.
 
