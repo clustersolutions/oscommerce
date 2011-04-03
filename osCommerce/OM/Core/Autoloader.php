@@ -8,7 +8,7 @@
 
   namespace {
     if ( !class_exists('SplClassLoader') ) {
-      include('osCommerce/OM/External/SplClassLoader.php');
+      include(__DIR__ . '/../External/SplClassLoader.php');
     }
   }
 
