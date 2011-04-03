@@ -12,23 +12,21 @@
     static private $_data = array();
 
     static public function get($key) {
-      if ( substr($key, 0, 4) == 'osC_' ) { // HPDL to delete
-      } elseif ( substr($key, 0, 6) != 'OSCOM_' ) {
+      if ( substr($key, 0, 6) != 'OSCOM_' ) {
         $key = 'OSCOM_' . $key;
       }
 
       if ( !self::exists($key) ) {
         trigger_error('OSCOM_Registry::get - ' . $key . ' is not registered');
 
-        return $GLOBALS[$key]; // HPDL to delete; return false
+        return false;
       }
 
       return self::$_data[$key];
     }
 
     static public function set($key, $value, $force = false) {
-      if ( substr($key, 0, 4) == 'osC_' ) { // HPDL to delete
-      } elseif ( substr($key, 0, 6) != 'OSCOM_' ) {
+      if ( substr($key, 0, 6) != 'OSCOM_' ) {
         $key = 'OSCOM_' . $key;
       }
 
@@ -38,12 +36,11 @@
         return false;
       }
 
-      $GLOBALS[$key] = self::$_data[$key] = $value; // HPDL remove GLOBALS alias?
+      $GLOBALS[$key] = self::$_data[$key] = $value; // GLOBALS used in template files
     }
 
     static public function exists($key) {
-      if ( substr($key, 0, 4) == 'osC_' ) { // HPDL to delete
-      } elseif ( substr($key, 0, 6) != 'OSCOM_' ) {
+      if ( substr($key, 0, 6) != 'OSCOM_' ) {
         $key = 'OSCOM_' . $key;
       }
 
