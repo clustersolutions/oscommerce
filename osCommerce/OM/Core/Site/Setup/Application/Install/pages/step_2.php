@@ -139,7 +139,7 @@
         <td class="inputDescription"><?php echo OSCOM::getDef('param_administrator_password_description'); ?></td>
       </tr>
       <tr>
-        <td class="inputField"><?php echo OSCOM::getDef('param_time_zone') . '<br />' . HTML::timeZoneSelectMenu('CFG_TIME_ZONE'); ?></td>
+        <td class="inputField"><?php echo OSCOM::getDef('param_time_zone') . '<br />' . HTML::timeZoneSelectMenu('CFG_TIME_ZONE', (ini_get('date.timezone') ?: null)); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_time_zone_description'); ?></td>
       </tr>
       <tr>
