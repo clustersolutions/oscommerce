@@ -8,9 +8,10 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\DateTime;
   use osCommerce\OM\Core\ErrorHandler;
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\Registry;
 
   define('OSCOM_BASE_DIRECTORY', realpath(__DIR__ . '/../') . '/');
 
@@ -26,6 +27,8 @@
 
     public static function initialize() {
       static::loadConfig();
+
+      DateTime::setTimeZone();
 
       ErrorHandler::initialize();
 

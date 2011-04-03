@@ -9,7 +9,16 @@
   namespace osCommerce\OM\Core;
 
   class DateTime {
+
+/**
+ * @since v3.0.0
+ */
+
     const DEFAULT_FORMAT = 'Y-m-d H:i:s';
+
+/**
+ * @since v3.0.0
+ */
 
     public static function getNow($format = null) {
       if ( !isset($format) ) {
@@ -18,6 +27,10 @@
 
       return date($format);
     }
+
+/**
+ * @since v3.0.0
+ */
 
     public static function getShort($date = null, $with_time = false) {
       $OSCOM_Language = Registry::get('Language');
@@ -40,6 +53,10 @@
       }
     }
 
+/**
+ * @since v3.0.0
+ */
+
     public static function getLong($date = null) {
       $OSCOM_Language = Registry::get('Language');
 
@@ -61,6 +78,10 @@
       }
     }
 
+/**
+ * @since v3.0.0
+ */
+
     public static function getTimestamp($date = null, $format = null) {
       if ( !isset($date) ) {
         $date = self::getNow($format);
@@ -76,6 +97,10 @@
       return $timestamp;
     }
 
+/**
+ * @since v3.0.0
+ */
+
     public static function fromUnixTimestamp($timestamp, $format = null) {
       if ( !isset($format) ) {
         $format = self::DEFAULT_FORMAT;
@@ -83,6 +108,10 @@
 
       return date($format, $timestamp);
     }
+
+/**
+ * @since v3.0.0
+ */
 
     public static function isLeapYear($year = null) {
       if ( !isset($year) ) {
@@ -101,6 +130,10 @@
 
       return false;
     }
+
+/**
+ * @since v3.0.0
+ */
 
     public static function validate($date_to_check, $format_string, &$date_array) {
       $separator_idx = -1;
@@ -203,6 +236,48 @@
       $date_array = array($year, $month, $day);
 
       return true;
+    }
+
+/**
+ * Set the time zone to use for dates.
+ * 
+ * @param string $time_zone An optional time zone to set to
+ * @param string $site The Site to retrieve the time zone from
+ * @return boolean
+ * @since v3.0.1
+ */
+
+    public static function setTimeZone($time_zone = null, $site = 'OSCOM') {
+      if ( !isset($time_zone) ) {
+        if ( OSCOM::configExists('time_zone', $site) ) {
+          $time_zone = OSCOM::getConfig('time_zone', $site);
+        } else {
+          $time_zone = date_default_timezone_get();
+        }
+      }
+
+      return date_default_timezone_set($time_zone);
+    }
+
+/**
+ * Return an array of available time zones.
+ * 
+ * @return array
+ * @since v3.0.1
+ */
+
+    public static function getTimeZones() {
+      $result = array();
+
+      foreach ( \DateTimeZone::listIdentifiers() as $id ) {
+        $tz_string = str_replace('_', ' ', $id);
+
+        $id_array = explode('/', $tz_string, 2);
+
+        $result[$id_array[0]][$id] = isset($id_array[1]) ? $id_array[1] : $id_array[0];
+      }
+
+      return $result;
     }
   }
 ?>

@@ -139,6 +139,10 @@
         <td class="inputDescription"><?php echo OSCOM::getDef('param_administrator_password_description'); ?></td>
       </tr>
       <tr>
+        <td class="inputField"><?php echo OSCOM::getDef('param_time_zone') . '<br />' . HTML::timeZoneSelectMenu('CFG_TIME_ZONE'); ?></td>
+        <td class="inputDescription"><?php echo OSCOM::getDef('param_time_zone_description'); ?></td>
+      </tr>
+      <tr>
         <td class="inputField"><?php echo HTML::checkboxField('DB_INSERT_SAMPLE_DATA', 'true', true) . '&nbsp;' . OSCOM::getDef('param_database_import_sample_data'); ?></td>
         <td class="inputDescription"><?php echo OSCOM::getDef('param_database_import_sample_data_description'); ?></td>
       </tr>
