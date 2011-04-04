@@ -33,6 +33,7 @@
 <script type="text/javascript" src="public/external/jquery/jquery.tinysort.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.ocupload-1.1.2.packed.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.hoverIntent.minified.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.droppy.js"></script>
 
 <script type="text/javascript" src="public/external/jquery/tipsy/jquery.tipsy.js"></script>

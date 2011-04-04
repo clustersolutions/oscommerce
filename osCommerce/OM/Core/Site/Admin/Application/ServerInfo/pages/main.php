@@ -19,7 +19,7 @@
 ?>
 
 <form id="liveSearchForm">
-  <input type="text" id="liveSearchField" name="search" class="searchField fieldTitleAsDefault" title="<?php echo OSCOM::getDef('text_search') ?>" /><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
+  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
 
   <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'PHPInfo'), 'icon' => 'info', 'title' => OSCOM::getDef('button_php_info'), 'newwindow' => true)); ?></span>
 </form>
