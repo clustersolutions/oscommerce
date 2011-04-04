@@ -48,9 +48,7 @@ button_ok = OK
 button_orders_invoice = Invoice
 button_orders_packaging_slip = Packaging Slip
 button_reject = Reject
-
 button_reset = Reset
-
 button_restore = Restore
 button_retry = Retry
 button_save = Save
@@ -61,7 +59,7 @@ button_update = Update
 button_update_currency_exchange_rates = Update Currency Exchange Rates
 button_upload = Upload
 
-text_search = Search..
+placeholder_search = Search..
 
 icon_banner_preview = Preview
 icon_checkbox_ticked =

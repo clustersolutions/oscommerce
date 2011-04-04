@@ -172,24 +172,6 @@ function flagCheckboxes(element) {
   }
 }
 
-$(document).ready(function() {
-  $('.fieldTitleAsDefault').focus(function(srcc) {
-    if ( $(this).val() == $(this)[0].title ) {
-      $(this).removeClass('fieldDefaultText');
-      $(this).val('');
-    }
-  });
-
-  $('.fieldTitleAsDefault').blur(function() {
-    if ( $(this).val() == '') {
-      $(this).addClass('fieldDefaultText');
-      $(this).val($(this)[0].title);
-    }
-  });
-
-  $('.fieldTitleAsDefault').blur();        
-});
-
 function htmlSpecialChars(string) {
   return $('<span>').text(string).html();
 };
@@ -235,3 +217,7 @@ function displayTaxRateValue(value, padding) {
 
   return value + '%';
 }
+
+$(function() {
+  $('input, textarea').placeholder();
+});

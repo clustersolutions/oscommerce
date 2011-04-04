@@ -339,11 +339,6 @@ form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid blac
   -webkit-border-bottom-left-radius: 8px;
 }
 
-.fieldDefaultText {
-  color: #a1a1a1;
-  font-style: italic;
-}
-
 /* attributes */
 .attributes-odd { background-color: #f4f7fd; }
 .attributes-even { background-color: #fff; }
