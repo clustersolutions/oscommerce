@@ -402,6 +402,7 @@
  * @param string $domain The The domain that the cookie is available on
  * @param boolean $secure Indicates whether the cookie should only be sent over a secure HTTPS connection
  * @param boolean $httpOnly Indicates whether the cookie should only accessible over the HTTP protocol
+ * @return boolean
  * @since v3.0.0
  */
 
@@ -414,7 +415,7 @@
         $domain = (static::getRequestType() == 'NONSSL') ? static::getConfig('http_cookie_domain') : static::getConfig('https_cookie_domain');
       }
 
-      header('Set-Cookie: ' . $name . '=' . urlencode($value) . '; expires=' . date('D, d-M-Y H:i:s T', $expires) . '; path=' . $path . '; domain=' . $domain . (($secure === true) ? ' secure;' : '') . (($httpOnly === true) ? ' httponly;' : ''));
+      return setcookie($name, $value, $expires, $path, $domain, $secure, $httpOnly);
     }
 
 /**
