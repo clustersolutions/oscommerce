@@ -20,17 +20,15 @@
       $db_uptime = OSCOM::callDB('Admin\ServerInfo\GetUptime');
       $db_version = OSCOM::callDB('Admin\ServerInfo\GetVersion');
 
-      @list($system, $host, $kernel) = preg_split('/[\s,]+/', @exec('uname -a'), 5);
-
       $data = array(array('key' => 'date',
                           'title' => OSCOM::getDef('field_server_date'),
                           'value' => DateTime::getShort(null, true)),
                     array('key' => 'system',
                           'title' => OSCOM::getDef('field_server_operating_system'),
-                          'value' => $system . ' ' . $kernel),
+                          'value' => php_uname('s') . ' ' . php_uname('r')),
                     array('key' => 'host',
                           'title' => OSCOM::getDef('field_server_host'),
-                          'value' => $host . ' (' . gethostbyname($host) . ')'),
+                          'value' => php_uname('n') . ' (' . gethostbyname(php_uname('n')) . ')'),
                     array('key' => 'uptime',
                           'title' => OSCOM::getDef('field_server_up_time'),
                           'value' => @exec('uptime')),
