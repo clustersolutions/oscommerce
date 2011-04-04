@@ -17,13 +17,13 @@
 
 <?php
   if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
-    echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>Applications</a>' .
+    echo '  <li><a href="#">Applications &#9662;</a>' .
          '    <ul>';
 
     foreach ( Access::getLevels() as $group => $links ) {
       $application = current($links);
 
-      echo '      <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span class="ui-icon ui-icon-triangle-1-e" style="float: right;"></span>' . Access::getGroupTitle($group) . '</a>' .
+      echo '      <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span style="float: right;">&#9656;</span>' . Access::getGroupTitle($group) . '</a>' .
            '        <ul>';
 
       foreach ( $links as $link ) {
@@ -39,7 +39,7 @@
   }
 
   echo '  <li><a href="' . OSCOM::getLink('Shop', 'Index', null, 'NONSSL', false) . '" target="_blank">' . OSCOM::getDef('header_title_online_catalog') . '</a></li>' .
-       '  <li><a href="http://www.oscommerce.com" target="_blank"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . OSCOM::getDef('header_title_help') . '</a>' .
+       '  <li><a href="http://www.oscommerce.com" target="_blank">' . OSCOM::getDef('header_title_help') . ' &#9662;</a>' .
        '    <ul>' .
        '      <li><a href="http://www.oscommerce.com" target="_blank">osCommerce Support Site</a></li>' .
        '      <li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
@@ -74,7 +74,7 @@
       echo '  </li>';
     }
 
-    echo '  <li><a href="#"><span class="ui-icon ui-icon-triangle-1-s" style="float: right;"></span>' . HTML::outputProtected($_SESSION[OSCOM::getSite()]['username']) . '</a>' .
+    echo '  <li><a href="#">' . HTML::outputProtected($_SESSION[OSCOM::getSite()]['username']) . ' &#9662;</a>' .
          '    <ul>' .
          '      <li><a href="' . OSCOM::getLink(null, 'Login', 'Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>' .
          '    </ul>' .
