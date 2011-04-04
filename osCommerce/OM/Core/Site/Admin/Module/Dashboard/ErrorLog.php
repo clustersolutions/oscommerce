@@ -46,6 +46,10 @@
 
             $counter++;
           }
+        } elseif ( !is_writable(OSCOM::BASE_DIRECTORY . 'Work/Database/') ) {
+          $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');">' .
+                          '      <td colspan="2">' . HTML::icon('cross.png') . '&nbsp;' . sprintf(OSCOM::getDef('admin_dashboard_module_errorlog_not_writable'), OSCOM::BASE_DIRECTORY . 'Work/Database/') . '</td>' .
+                          '    </tr>';
         } else {
           $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');">' .
                           '      <td colspan="2">' . HTML::icon('tick.png') . '&nbsp;' . OSCOM::getDef('admin_dashboard_module_errorlog_no_errors_found') . '</td>' .

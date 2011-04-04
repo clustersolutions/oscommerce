@@ -15,11 +15,14 @@
     static protected $_dbh;
 
     public static function initialize() {
-      if ( in_array('sqlite', PDO::getAvailableDrivers()) && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
-        ini_set('display_errors', false);
+      ini_set('display_errors', false);
+
+      if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         ini_set('log_errors', true);
         ini_set('error_log', OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
+      }
 
+      if ( in_array('sqlite', PDO::getAvailableDrivers()) && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Database/') ) {
         set_error_handler(array('osCommerce\\OM\\Core\\ErrorHandler', 'execute'));
 
         if ( file_exists(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt') ) {
@@ -29,8 +32,8 @@
     }
 
     public static function execute($errno, $errstr, $errfile, $errline) {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return false;
       }
 
       switch ($errno) {
@@ -65,12 +68,12 @@
     public static function connect() {
       self::$_dbh = PDO::initialize(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3', null, null, null, null, 'SQLite3');
 
-      self::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
+      return self::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
     }
 
     public static function getAll($limit = null, $pageset = null) {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return array();
       }
 
       $query = 'select timestamp, message from error_log order by rowid desc';
@@ -89,8 +92,8 @@
     }
 
     public static function getTotalEntries() {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return 0;
       }
 
       $result = self::$_dbh->query('select count(*) as total from error_log')->fetch();
@@ -99,8 +102,8 @@
     }
 
     public static function find($search, $limit = null, $pageset = null) {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return array();
       }
 
       $query = 'select timestamp, message from error_log where message like :message order by rowid desc';
@@ -123,8 +126,8 @@
     }
 
     public static function getTotalFindEntries($search) {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return 0;
       }
 
       $Qlogs = self::$_dbh->prepare('select count(*) as total from error_log where message like :message');
@@ -137,12 +140,12 @@
     }
 
     public static function import($filename) {
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return false;
+      }
+
       $error_log = file($filename);
       unlink($filename);
-
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
-      }
 
       foreach ( $error_log as $error ) {
         if ( preg_match('/^\[([0-9]{2})-([A-Za-z]{3})-([0-9]{4}) ([0-9]{2}):([0-5][0-9]):([0-5][0-9])\] (.*)$/', $error) ) {
@@ -158,8 +161,8 @@
     }
 
     public static function clear() {
-      if ( !is_resource(self::$_dbh) ) {
-        self::connect();
+      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+        return false;
       }
 
       self::$_dbh->exec('drop table if exists error_log');
