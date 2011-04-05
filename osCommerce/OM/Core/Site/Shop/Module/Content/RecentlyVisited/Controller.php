@@ -84,7 +84,7 @@
                              '        <ol style="list-style: none; margin: 0; padding: 0;">';
 
           foreach ( $OSCOM_RecentlyVisited->getSearches() as $searchphrase ) {
-            $this->_content .= '<li>' . HTML::link(OSCOM::getLink(null, 'Search', 'keywords=' . $searchphrase['keywords']), HTML::outputProtected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
+            $this->_content .= '<li>' . HTML::link(OSCOM::getLink(null, 'Search', 'Q=' . $searchphrase['keywords']), HTML::outputProtected($searchphrase['keywords'])) . ' <i>(' . number_format($searchphrase['results']) . ' results)</i></li>';
           }
 
           $this->_content .= '      </ol>' .

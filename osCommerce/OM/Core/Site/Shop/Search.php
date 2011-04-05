@@ -11,14 +11,58 @@
   use osCommerce\OM\Core\Registry;
 
   class Search extends Products {
-    var $_period_min_year,
-        $_period_max_year,
-        $_date_from,
-        $_date_to,
-        $_price_from,
-        $_price_to,
-        $_keywords,
-        $_number_of_results;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_period_min_year;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_period_max_year;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_date_from;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_date_to;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_price_from;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_price_to;
+
+/**
+ * @since v3.0.0
+ */
+
+    protected $_keywords;
+
+/**
+ * @since v3.0.1
+ */
+
+    protected $_result;
+
+/**
+ * @since v3.0.0
+ */
 
     public function __construct() {
       $OSCOM_PDO = Registry::get('PDO');
@@ -30,39 +74,75 @@
       $this->_period_max_year = $Qproducts->valueInt('max_year');
     }
 
-    function getMinYear() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getMinYear() {
       return $this->_period_min_year;
     }
 
-    function getMaxYear() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getMaxYear() {
       return $this->_period_max_year;
     }
 
-    function getDateFrom() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getDateFrom() {
       return $this->_date_from;
     }
 
-    function getDateTo() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getDateTo() {
       return $this->_date_to;
     }
 
-    function getPriceFrom() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getPriceFrom() {
       return $this->_price_from;
     }
 
-    function getPriceTo() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getPriceTo() {
       return $this->_price_to;
     }
 
-    function getKeywords() {
+/**
+ * @since v3.0.0
+ */
+
+    public function getKeywords() {
       return $this->_keywords;
     }
 
-    function getNumberOfResults() {
-      return $this->_number_of_results;
+/**
+ * @since v3.0.0
+ */
+
+    public function getNumberOfResults() {
+      return $this->_result['total'];
     }
 
-    function hasDateSet($flag = null) {
+/**
+ * @since v3.0.0
+ */
+
+    public function hasDateSet($flag = null) {
       if ($flag == 'from') {
         return isset($this->_date_from);
       } elseif ($flag == 'to') {
@@ -72,7 +152,11 @@
       return isset($this->_date_from) && isset($this->_date_to);
     }
 
-    function hasPriceSet($flag = null) {
+/**
+ * @since v3.0.0
+ */
+
+    public function hasPriceSet($flag = null) {
       if ($flag == 'from') {
         return isset($this->_price_from);
       } elseif ($flag == 'to') {
@@ -82,27 +166,51 @@
       return isset($this->_price_from) && isset($this->_price_to);
     }
 
-    function hasKeywords() {
+/**
+ * @since v3.0.0
+ */
+
+    public function hasKeywords() {
       return isset($this->_keywords) && !empty($this->_keywords);
     }
 
-    function setDateFrom($timestamp) {
+/**
+ * @since v3.0.0
+ */
+
+    public function setDateFrom($timestamp) {
       $this->_date_from = $timestamp;
     }
 
-    function setDateTo($timestamp) {
+/**
+ * @since v3.0.0
+ */
+
+    public function setDateTo($timestamp) {
       $this->_date_to = $timestamp;
     }
 
-    function setPriceFrom($price) {
+/**
+ * @since v3.0.0
+ */
+
+    public function setPriceFrom($price) {
       $this->_price_from = $price;
     }
 
-    function setPriceTo($price) {
+/**
+ * @since v3.0.0
+ */
+
+    public function setPriceTo($price) {
       $this->_price_to = $price;
     }
 
-    function setKeywords($keywords) {
+/**
+ * @since v3.0.0
+ */
+
+    public function setKeywords($keywords) {
       $terms = explode(' ', trim($keywords));
 
       $terms_array = array();
@@ -124,7 +232,11 @@
       $this->_keywords = implode(' ', $terms_array);
     }
 
-    function execute() {
+/**
+ * @since v3.0.0
+ */
+
+    public function execute() {
       $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Customer = Registry::get('Customer');
       $OSCOM_Language = Registry::get('Language');
@@ -165,7 +277,7 @@
 
           $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (' . implode(',', $OSCOM_CategoryTree->getChildren($this->_category, $subcategories_array)) . ')';
         } else {
-          $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = :language_id and p2c.categories_id = :categories_id';
+          $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = :language_id_c and p2c.categories_id = :categories_id';
         }
       }
 
@@ -175,16 +287,16 @@
 
       if ( $this->hasKeywords() ) {
         foreach ( explode(' ', $this->_keywords) as $keyword ) {
-          $sql_query .= ' and (pd.products_name like :keyword or pd.products_description like :keyword)';
+          $sql_query .= ' and (pd.products_name like :keyword_name or pd.products_description like :keyword_description)';
         }
       }
 
       if ( $this->hasDateSet('from') ) {
-        $sql_query .= ' and p.products_date_added >= :products_date_added';
+        $sql_query .= ' and p.products_date_added >= :products_date_added_from';
       }
 
       if ( $this->hasDateSet('to') ) {
-        $sql_query .= ' and p.products_date_added <= :products_date_added';
+        $sql_query .= ' and p.products_date_added <= :products_date_added_to';
       }
 
       if ( DISPLAY_PRICE_WITH_TAX == '1' ) {
@@ -239,7 +351,7 @@
 
       if ( $this->hasCategory() ) {
         if ( !$this->isRecursive() ) {
-          $Qlisting->bindInt(':language_id', $OSCOM_Language->getID());
+          $Qlisting->bindInt(':language_id_c', $OSCOM_Language->getID());
           $Qlisting->bindInt(':categories_id', $this->_category);
         }
       }
@@ -250,17 +362,17 @@
 
       if ( $this->hasKeywords() ) {
         foreach ( explode(' ', $this->_keywords) as $keyword ) {
-          $Qlisting->bindValue(':keyword', '%' . $keyword . '%');
-          $Qlisting->bindValue(':keyword', '%' . $keyword . '%');
+          $Qlisting->bindValue(':keyword_name', '%' . $keyword . '%');
+          $Qlisting->bindValue(':keyword_description', '%' . $keyword . '%');
         }
       }
 
       if ( $this->hasDateSet('from') ) {
-        $Qlisting->bindValue(':products_date_added', date('Y-m-d H:i:s', $this->_date_from));
+        $Qlisting->bindValue(':products_date_added_from', date('Y-m-d H:i:s', $this->_date_from));
       }
 
       if ( $this->hasDateSet('to') ) {
-        $Qlisting->bindValue(':products_date_added', date('Y-m-d H:i:s', $this->_date_to));
+        $Qlisting->bindValue(':products_date_added_to', date('Y-m-d H:i:s', $this->_date_to));
       }
 
 
@@ -292,9 +404,19 @@
 
       $result['total'] = $Qlisting->fetchColumn();
 
-      $this->_number_of_results = $result['total'];
+      $this->_result = $result;
+    }
 
-      return $result;
+/**
+ * @since v3.0.1
+ */
+
+    public function getResult() {
+      if ( !isset($this->_result) ) {
+        $this->execute();
+      }
+
+      return $this->_result;
     }
   }
 ?>
