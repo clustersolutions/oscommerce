@@ -9,7 +9,7 @@
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
-  $products_listing = $OSCOM_Search->execute();
+  $products_listing = $OSCOM_Search->getResult();
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
