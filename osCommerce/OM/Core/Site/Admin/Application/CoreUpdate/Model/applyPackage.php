@@ -9,6 +9,7 @@
   namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Model;
 
   use \Phar;
+  use \RecursiveIteratorIterator;
   use osCommerce\OM\Core\OSCOM;
 
   class applyPackage {
@@ -17,7 +18,20 @@
 
       try {
         $phar = new Phar(OSCOM::BASE_DIRECTORY . 'Work/CoreUpdate/update.phar');
-        $phar->extractTo(realpath(OSCOM::BASE_DIRECTORY . '../../'), null, true);
+
+// loop through each file individually as extractTo() does not work with
+// directories (see http://bugs.php.net/bug.php?id=54289)
+        foreach ( new RecursiveIteratorIterator($phar) as $iteration ) {
+          if ( ($pos = strpos($iteration->getPathName(), 'update.phar')) !== false ) {
+            $file = substr($iteration->getPathName(), $pos+12);
+
+            if ( substr($file, 0, 14) == 'osCommerce/OM/' ) {
+              $phar->extractTo(realpath(OSCOM::BASE_DIRECTORY . '../../'), $file, true);
+            } elseif ( substr($file, 0, 7) == 'public/' ) {
+              $phar->extractTo(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../'), $file, true);
+            }
+          }
+        }
       } catch ( \Exception $e ) {
 // ignore when file permissions from the phar archive cannot be set to the
 // extracted files
