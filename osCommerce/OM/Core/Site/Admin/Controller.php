@@ -61,6 +61,14 @@
       if (function_exists('ini_get') && ((bool)ini_get('file_uploads') == false) ) {
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_uploads_disabled'), 'warning');
       }
+
+      if ( !OSCOM::configExists('time_zone', 'OSCOM') ) {
+        Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_time_zone_not_defined'), 'warning');
+      }
+
+      if ( !OSCOM::configExists('dir_fs_public', 'OSCOM') || !file_exists(OSCOM::getConfig('dir_fs_public', 'OSCOM')) ) {
+        Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_dir_fs_public_not_defined'), 'warning');
+      }
     }
 
     public static function getDefaultApplication() {

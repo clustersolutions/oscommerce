@@ -103,6 +103,8 @@ ms_success_upload_file_saved = Success: The file uploaded has been saved success
 
 ms_warning_upload_no_file = Warning: No file uploaded.
 ms_warning_uploads_disabled = Warning: File uploads are disabled in the php.ini configuration file.
+ms_warning_time_zone_not_defined = Warning: Missing time_zone configuration parameter. Please read http://www.oscommerce.info/confluence/x/C4BH
+ms_warning_dir_fs_public_not_defined = Warning: Missing dir_fs_public configuration parameter. Please read http://www.oscommerce.info/confluence/x/C4BH
 
 ms_error_action_not_performed = Error: There was a problem performing the action.
 ms_error_no_default_currency = Error: There is currently no default currency defined.
