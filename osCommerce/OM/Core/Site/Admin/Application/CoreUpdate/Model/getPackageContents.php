@@ -11,7 +11,6 @@
   use \Phar;
   use \RecursiveIteratorIterator;
   use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\DirectoryListing;
 
   class getPackageContents {
     public static function execute() {
