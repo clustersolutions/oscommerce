@@ -68,6 +68,8 @@ function refreshVariants() {
   }
 
   document.getElementById('productInfoPrice').innerHTML = price;
-  document.getElementById('productInfoAvailability').innerHTML = availability;
+  if(document.getElementById('productInfoAvailability') != undefined) {
+    document.getElementById('productInfoAvailability').innerHTML = availability;
+  }
   document.getElementById('productInfoModel').innerHTML = model;
 }
