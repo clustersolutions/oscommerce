@@ -7,7 +7,7 @@ administration_title = osCommerce Administration Tool
 
 header_title_help = Help
 header_title_oscommerce_support_site = osCommerce Support Site
-header_title_online_catalog = Online Catalog
+header_title_online_catalog = Online Shop
 header_title_languages = Languages
 header_title_logoff = Logoff
 
