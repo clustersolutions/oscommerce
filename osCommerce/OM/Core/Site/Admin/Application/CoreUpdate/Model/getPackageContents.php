@@ -29,7 +29,6 @@
 
       if ( $phar_can_open === true ) {
         $update_pkg = array();
-        $core_fs = array();
 
         foreach ( new RecursiveIteratorIterator($phar) as $iteration ) {
           if ( ($pos = strpos($iteration->getPathName(), 'update.phar')) !== false ) {
@@ -39,25 +38,24 @@
 
         natcasesort($update_pkg);
 
-        $DL = new DirectoryListing(OSCOM::BASE_DIRECTORY);
-        $DL->setRecursive(true);
-        $DL->setIncludeDirectories(false);
-        $DL->setAddDirectoryToFilename(true);
-        $DL->setStats(false);
-
-        foreach ( $DL->getFiles() as $file ) {
-          $core_fs[] = 'osCommerce/OM/' . $file['name'];
-        }
-
         $counter = 0;
 
-        foreach ( $update_pkg as $update_file ) {
-          $result['entries'][] = array('key' => $counter,
-                                       'name' => $update_file,
-                                       'exists' => in_array($update_file, $core_fs),
-                                       'writable' => self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '/../../') . '/' . $update_file));
+        foreach ( $update_pkg as $file ) {
+          if ( substr($file, 0, 14) == 'osCommerce/OM/' ) {
+            $result['entries'][] = array('key' => $counter,
+                                         'name' => $file,
+                                         'exists' => file_exists(realpath(OSCOM::BASE_DIRECTORY . '/../../') . '/' . $file),
+                                         'writable' => self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '/../../') . '/' . $file));
 
-          $counter++;
+            $counter++;
+          } elseif ( substr($file, 0, 7) == 'public/' ) {
+            $result['entries'][] = array('key' => $counter,
+                                         'name' => $file,
+                                         'exists' => file_exists(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file),
+                                         'writable' => self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file));
+
+            $counter++;
+          }
         }
       }
 
