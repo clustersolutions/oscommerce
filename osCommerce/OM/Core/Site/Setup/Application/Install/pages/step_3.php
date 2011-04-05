@@ -67,6 +67,7 @@
 bootstrap_file = "index.php"
 default_site = "Shop"
 time_zone = "{$_POST['CFG_TIME_ZONE']}"
+dir_fs_public = "{$dir_fs_document_root}public/"
 
 [Admin]
 enable_ssl = "false"
