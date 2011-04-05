@@ -85,7 +85,7 @@
       $stack = array('text' => $message,
                      'type' => $type);
 
-      if ( !in_array($stack, $this->_data[$group]) ) {
+      if ( !array_key_exists($group, $this->_data) || !in_array($stack, $this->_data[$group]) ) {
         $this->_data[$group][] = $stack;
       }
     }
