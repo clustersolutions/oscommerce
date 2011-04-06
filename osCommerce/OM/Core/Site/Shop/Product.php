@@ -26,24 +26,19 @@
           $Qproduct->bindInt(':products_status', 1);
           $Qproduct->execute();
 
-          $result = $Qproduct->fetch();
+          if ( $Qproduct->fetch() !== false ) {
+            $this->_data = $Qproduct->toArray();
 
-          if ( !empty($result) ) {
-            $this->_data = $result;
+            $this->_data['master_id'] = $Qproduct->valueInt('id');
 
-            $this->_data['master_id'] = $result['id'];
-
-            if ( $result['parent_id'] > 0 ) {
+            if ( $Qproduct->valueInt('parent_id') > 0 ) {
               $Qmaster = $OSCOM_PDO->prepare('select products_id, has_children from :table_products where products_id = :products_id and products_status = :products_status');
-              $Qmaster->bindInt(':products_id', $result['parent_id']);
+              $Qmaster->bindInt(':products_id', $Qproduct->valueInt('parent_id'));
               $Qmaster->bindInt(':products_status', 1);
               $Qmaster->execute();
 
-              $result = $Qmaster->fetch();
-
-              if ( !empty($result) ) {
-                $this->_data['master_id'] = $result['products_id'];
-                $this->_data['has_children'] = $result['has_children'];
+              if ( $Qmaster->fetch() !== false ) {
+                $this->_data['master_id'] = $Qmaster->valueInt('products_id');
               } else { // master product is disabled so invalidate the product variant
                 $this->_data = array();
               }
@@ -65,12 +60,10 @@
           $Qproduct->bindInt(':products_status', 1);
           $Qproduct->execute();
 
-          $result = $Qproduct->fetch();
+          if ( $Qproduct->fetch() !== false ) {
+            $this->_data = $Qproduct->toArray();
 
-          if ( !empty($result) ) {
-            $this->_data = $result;
-
-            $this->_data['master_id'] = $result['id'];
+            $this->_data['master_id'] = $Qproduct->valueInt('id');
           }
         }
 
@@ -116,10 +109,10 @@
                                                                                                'weight_class_id' => $Qsubproducts->valueInt('products_weight_class'),
                                                                                                'availability_shipping' => 1);
 
-              $Qvariants = $OSCOM_PDO->prepare('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title, pvv.sort_order as value_sort_order from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id order by pvg.sort_order, pvg.title');
+              $Qvariants = $OSCOM_PDO->prepare('select pv.default_combo, pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title, pvv.sort_order as value_sort_order from :table_products_variants pv, :table_products_variants_groups pvg, :table_products_variants_values pvv where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id_pvv and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id_pvg order by pvg.sort_order, pvg.title');
               $Qvariants->bindInt(':products_id', $Qsubproducts->valueInt('products_id'));
-              $Qvariants->bindInt(':languages_id', $OSCOM_Language->getID());
-              $Qvariants->bindInt(':languages_id', $OSCOM_Language->getID());
+              $Qvariants->bindInt(':languages_id_pvv', $OSCOM_Language->getID());
+              $Qvariants->bindInt(':languages_id_pvg', $OSCOM_Language->getID());
               $Qvariants->execute();
 
               while ( $Qvariants->fetch() ) {
