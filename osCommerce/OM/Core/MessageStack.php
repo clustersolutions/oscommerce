@@ -14,6 +14,8 @@
  * The MessageStack class manages information messages to be displayed.
  * Messages shown are automatically removed from the stack.
  * Core message types: info, success, warning, error
+ * 
+ * @since v3.0.0
  */
 
   class MessageStack {
@@ -22,7 +24,7 @@
  * The storage handler for the messages
  *
  * @var array
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_data = array();
@@ -31,7 +33,7 @@
  * Constructor, registers a shutdown function to store the remaining messages
  * in the session
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function __construct() {
@@ -41,7 +43,7 @@
 /**
  * Loads messages stored in the session into the stack
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function loadFromSession() {
@@ -59,7 +61,7 @@
 /**
  * Stores remaining messages in the session
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function saveInSession() {
@@ -74,18 +76,18 @@
  * @param string $group The group the message belongs to
  * @param string $message The message information text
  * @param string $type The type of message: info, error, warning, success
- * @access public
+ * @since v3.0.0
  */
 
     public function add($group = null, $message, $type = 'error') {
-      if ( empty($group) ) {
+      if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
       $stack = array('text' => $message,
                      'type' => $type);
 
-      if ( !array_key_exists($group, $this->_data) || !in_array($stack, $this->_data[$group]) ) {
+      if ( !$this->exists($group) || !in_array($stack, $this->_data[$group]) ) {
         $this->_data[$group][] = $stack;
       }
     }
@@ -93,7 +95,7 @@
 /**
  * Reset the message stack
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function reset() {
@@ -104,21 +106,21 @@
  * Checks to see if a group in the stack contains messages
  *
  * @param string $group The name of the group to check
- * @access public
+ * @since v3.0.0
  */
 
     public function exists($group = null) {
-      if ( empty($group) ) {
+      if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
-      return ( isset($this->_data[$group]) && !empty($this->_data[$group]) );
+      return array_key_exists($group, $this->_data);
     }
 
 /**
  * Checks to see if the message stack contains messages
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function hasContent() {
@@ -131,11 +133,11 @@
  * class.
  *
  * @param string $group The name of the group to get the messages from
- * @access public
+ * @since v3.0.0
  */
 
     public function get($group = null) {
-      if ( empty($group) ) {
+      if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
@@ -176,11 +178,11 @@
  * line character.
  *
  * @param string $group The name of the group to get the messages from
- * @access public
+ * @since v3.0.0
  */
 
     public function getRaw($group = null) {
-      if ( empty($group) ) {
+      if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
@@ -202,7 +204,7 @@
 /**
  * Get the message stack array data set
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function getAll() {
@@ -213,18 +215,18 @@
  * Get the number of messages belonging to a group
  *
  * @param string $group The name of the group to check
- * @access public
+ * @since v3.0.0
  */
 
     public function size($group = null) {
-      if ( empty($group) ) {
+      if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
       $size = 0;
 
       if ( $this->exists($group) ) {
-        $size = sizeof($this->_data[$group]);
+        $size = count($this->_data[$group]);
       }
 
       return $size;
