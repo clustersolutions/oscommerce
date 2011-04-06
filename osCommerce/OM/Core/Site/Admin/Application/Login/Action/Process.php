@@ -8,11 +8,11 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Login\Action;
 
-  use osCommerce\OM\Core\ApplicationAbstract;
-  use osCommerce\OM\Core\Site\Admin\Application\Login\Login;
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Access;
+  use osCommerce\OM\Core\ApplicationAbstract;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Admin\Application\Login\Login;
 
   class Process {
     public static function execute(ApplicationAbstract $application) {
@@ -20,6 +20,8 @@
                     'password' => $_POST['user_password']);
 
       if ( Login::isValidCredentials($data) ) {
+        Registry::get('Session')->recreate();
+
         $admin = Login::getAdmin($data['username']);
 
         $_SESSION[OSCOM::getSite()]['id'] = (int)$admin['id'];
