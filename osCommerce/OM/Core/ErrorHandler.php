@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\DateTime;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\PDO;
 
@@ -73,7 +74,7 @@
         self::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
 
         $result = true;
-      } catch ( Exception $e ) {
+      } catch ( \Exception $e ) {
         trigger_error($e->getMessage());
       }
 
