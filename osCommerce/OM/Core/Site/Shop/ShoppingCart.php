@@ -416,7 +416,7 @@
 
     public function exists($product_id) {
       foreach ( $this->_contents as $product ) {
-        if ( $product['id'] === $product_id ) {
+        if ( $product['id'] == $product_id ) {
           if ( isset($product['variants']) ) {
             foreach ( $product['variants'] as $variant ) {
               if ( $variant['has_custom_value'] === true ) {
