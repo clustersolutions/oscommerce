@@ -55,7 +55,7 @@
               $OSCOM_Template->addPageTags('keywords', $OSCOM_Product->getTags());
             }
 
-            $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/Products/info.js'));
+            $OSCOM_Template->addJavascriptFilename(OSCOM::getPublicSiteLink('javascript/products/info.js'));
 
 // HPDL            osC_Services_category_path::process($osC_Product->getCategoryID());
 
