@@ -26,8 +26,8 @@
       if ( $phar_can_open === true ) {
         $result = $phar->getMetadata();
 
-        if ( !empty($key) && isset($result[$key]) ) {
-          $result = $result[$key];
+        if ( isset($key) ) {
+          $result = $result[$key] ?: null;
         }
 
         return $result;
