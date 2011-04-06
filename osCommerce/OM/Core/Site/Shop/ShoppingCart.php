@@ -192,10 +192,10 @@
             $Qcheck->execute();
 
             if ( $Qcheck->valueInt('products_status') === 1 ) {
-              $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
+              $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id_pvv and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id_pvg');
               $Qvariant->bindInt(':products_id', $Qproducts->valueInt('products_id'));
-              $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
-              $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
+              $Qvariant->bindInt(':languages_id_pvv', $OSCOM_Language->getID());
+              $Qvariant->bindInt(':languages_id_pvg', $OSCOM_Language->getID());
               $Qvariant->execute();
 
               $variants = $Qvariant->fetchAll();
@@ -357,10 +357,10 @@
           }
 
           if ( $OSCOM_Product->getData('parent_id') > 0 ) {
-            $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id');
+            $Qvariant = $OSCOM_PDO->prepare('select pvg.id as group_id, pvg.title as group_title, pvg.module, pvv.id as value_id, pvv.title as value_title from :table_products_variants pv, :table_products_variants_values pvv, :table_products_variants_groups pvg where pv.products_id = :products_id and pv.products_variants_values_id = pvv.id and pvv.languages_id = :languages_id_pvv and pvv.products_variants_groups_id = pvg.id and pvg.languages_id = :languages_id_pvg');
             $Qvariant->bindInt(':products_id', $product_id);
-            $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
-            $Qvariant->bindInt(':languages_id', $OSCOM_Language->getID());
+            $Qvariant->bindInt(':languages_id_pvv', $OSCOM_Language->getID());
+            $Qvariant->bindInt(':languages_id_pvg', $OSCOM_Language->getID());
             $Qvariant->execute();
 
             while ( $Qvariant->fetch() ) {
