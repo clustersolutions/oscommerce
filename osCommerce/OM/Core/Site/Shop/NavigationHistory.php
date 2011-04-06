@@ -11,17 +11,35 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.0
+ */
+
   class NavigationHistory {
+
+/**
+ * @since v3.0.0
+ */
+
     protected $_data = array();
+
+/**
+ * @since v3.0.0
+ */
+
     protected $_snapshot = array();
 
+/**
+ * @since v3.0.0
+ */
+
     public function __construct($add_current_page = false) {
-      if ( isset($_SESSION['osC_NavigationHistory_data']) && is_array($_SESSION['osC_NavigationHistory_data']) && !empty($_SESSION['osC_NavigationHistory_data']) ) {
-        $this->_data =& $_SESSION['osC_NavigationHistory_data'];
+      if ( isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']) && is_array($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']) && !empty($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']) ) {
+        $this->_data =& $_SESSION[OSCOM::getSite()]['NavigationHistory']['data'];
       }
 
-      if ( isset($_SESSION['osC_NavigationHistory_snapshot']) && is_array($_SESSION['osC_NavigationHistory_snapshot']) && !empty($_SESSION['osC_NavigationHistory_snapshot']) ) {
-        $this->_snapshot =& $_SESSION['osC_NavigationHistory_snapshot'];
+      if ( isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']) && is_array($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']) && !empty($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']) ) {
+        $this->_snapshot =& $_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot'];
       }
 
       if ( $add_current_page === true ) {
@@ -29,94 +47,138 @@
       }
     }
 
+/**
+ * @since v3.0.0
+ */
+
     public function addCurrentPage() {
-      $set = 'true';
+      $action_counter = 0;
+      $application_key = null;
+      $action = array();
+
+      foreach ( $_GET as $key => $value ) {
+        if ( !isset($application_key) && ($key == OSCOM::getSiteApplication()) ) {
+          $application_key = $action_counter;
+
+          $action_counter++;
+
+          continue;
+        }
+
+        $action[] = array($key => $value);
+
+        if ( $this->siteApplicationActionExists(implode('\\', array_keys($action))) === false ) {
+          array_pop($action);
+
+          break;
+        }
+
+        $action_counter++;
+      }
+
+      $action_get = http_build_query($action);
 
       for ( $i=0, $n=sizeof($this->_data); $i<$n; $i++ ) {
-        if ( $this->_data[$i]['page'] == basename($_SERVER['SCRIPT_FILENAME']) ) {
+        if ( ($this->_data[$i]['application'] == OSCOM::getSiteApplication()) && ($this->_data[$i]['action'] == $action_get) ) {
           array_splice($this->_data, $i);
-          $set = 'true';
           break;
         }
       }
 
-      if ( $set == 'true' ) {
-        $this->_data[] = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
-                               'mode' => OSCOM::getRequestType(),
-                               'get' => $_GET,
-                               'post' => $_POST);
+      $this->_data[] = array('application' => OSCOM::getSiteApplication(),
+                             'action' => $action_get,
+                             'mode' => OSCOM::getRequestType(),
+                             'get' => array_slice($_GET, $action_counter),
+                             'post' => $_POST);
 
-        if ( !isset($_SESSION['osC_NavigationHistory_data']) ) {
-          $_SESSION['osC_NavigationHistory_data'] = $this->_data;
-        }
+      if ( !isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']) ) {
+        $_SESSION[OSCOM::getSite()]['NavigationHistory']['data'] = $this->_data;
       }
     }
 
-    function removeCurrentPage() {
-      $last_entry_position = sizeof($this->_data) - 1;
+/**
+ * @since v3.0.0
+ */
 
-      if ( $this->_data[$last_entry_position]['page'] == basename($_SERVER['SCRIPT_FILENAME']) ) {
-        unset($this->_data[$last_entry_position]);
+    public function removeCurrentPage() {
+      array_pop($this->_data);
 
-        if ( sizeof($this->_data) > 0 ) {
-          if ( !isset($_SESSION['osC_NavigationHistory_data']) ) {
-            $_SESSION['osC_NavigationHistory_data'] = $this->_data;
-          }
-        } else {
-          $this->resetPath();
-        }
+      if ( empty($this->_data) ) {
+        $this->resetPath();
       }
     }
 
-    function hasPath($back = 1) {
+/**
+ * @since v3.0.0
+ */
+
+    public function hasPath($back = 1) {
       if ( (is_numeric($back) === false) || (is_numeric($back) && ($back < 1)) ) {
         $back = 1;
       }
 
-      return isset($this->_data[sizeof($this->_data) - $back]);
+      return isset($this->_data[count($this->_data) - $back]);
     }
 
-    function getPathURL($back = 1, $exclude = array()) {
+/**
+ * @since v3.0.0
+ */
+
+    public function getPathURL($back = 1, $exclude = array()) {
       if ( (is_numeric($back) === false) || (is_numeric($back) && ($back < 1)) ) {
         $back = 1;
       }
 
-      $back = sizeof($this->_data) - $back;
+      $back = count($this->_data) - $back;
 
-      return OSCOM::getLink(null, null, $this->_parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
+      return OSCOM::getLink(null, $this->_data[$back]['application'], $this->_data[$back]['action'] . '&' . $this->parseParameters($this->_data[$back]['get'], $exclude), $this->_data[$back]['mode']);
     }
 
-    function setSnapshot($page = '') {
-      if ( is_array($page) ) {
-        $this->_snapshot = array('page' => $page['page'],
+/**
+ * @since v3.0.0
+ */
+
+    public function setSnapshot($page = null) {
+      if ( isset($page) && is_array($page) ) {
+        $this->_snapshot = array('application' => $page['application'],
+                                 'action' => $page['action'],
                                  'mode' => $page['mode'],
                                  'get' => $page['get'],
                                  'post' => $page['post']);
       } else {
-        $this->_snapshot = array('page' => basename($_SERVER['SCRIPT_FILENAME']),
-                                 'mode' => OSCOM::getRequestType(),
-                                 'get' => $_GET,
-                                 'post' => $_POST);
+        $this->_snapshot = $this->_data[count($this->_data) - 1];
       }
 
-      if ( !isset($_SESSION['osC_NavigationHistory_snapshot']) ) {
-        $_SESSION['osC_NavigationHistory_snapshot'] = $this->_snapshot;
+      if ( !isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']) ) {
+        $_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot'] = $this->_snapshot;
       }
     }
 
-    function hasSnapshot() {
+/**
+ * @since v3.0.0
+ */
+
+    public function hasSnapshot() {
       return !empty($this->_snapshot);
     }
 
-    function getSnapshot($key) {
+/**
+ * @since v3.0.0
+ */
+
+    public function getSnapshot($key) {
       if ( isset($this->_snapshot[$key]) ) {
         return $this->_snapshot[$key];
       }
     }
 
-    function getSnapshotURL($auto_mode = false) {
+/**
+ * @since v3.0.0
+ */
+
+    public function getSnapshotURL($auto_mode = false) {
       if ( $this->hasSnapshot() ) {
-        $target = OSCOM::getLink(null, null, $this->_parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
+        $target = OSCOM::getLink(null, $this->_snapshot['application'], $this->_snapshot['action'] . '&' . $this->parseParameters($this->_snapshot['get']), ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       } else {
         $target = OSCOM::getLink(null, null, null, ($auto_mode === true) ? 'AUTO' : $this->_snapshot['mode']);
       }
@@ -124,7 +186,11 @@
       return $target;
     }
 
-    function redirectToSnapshot() {
+/**
+ * @since v3.0.0
+ */
+
+    public function redirectToSnapshot() {
       $target = $this->getSnapshotURL(true);
 
       $this->resetSnapshot();
@@ -132,28 +198,48 @@
       OSCOM::redirect($target);
     }
 
-    function resetPath() {
+/**
+ * @since v3.0.0
+ */
+
+    public function resetPath() {
       $this->_data = array();
 
-      if ( isset($_SESSION['osC_NavigationHistory_data']) ) {
-        unset($_SESSION['osC_NavigationHistory_data']);
+      if ( isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']) ) {
+        unset($_SESSION[OSCOM::getSite()]['NavigationHistory']['data']);
       }
     }
 
-    function resetSnapshot() {
+/**
+ * @since v3.0.0
+ */
+
+    public function resetSnapshot() {
       $this->_snapshot = array();
 
-      if ( isset($_SESSION['osC_NavigationHistory_snapshot']) ) {
-        unset($_SESSION['osC_NavigationHistory_snapshot']);
+      if ( isset($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']) ) {
+        unset($_SESSION[OSCOM::getSite()]['NavigationHistory']['snapshot']);
       }
     }
 
-    function reset() {
+/**
+ * @since v3.0.0
+ */
+
+    public function reset() {
       $this->resetPath();
       $this->resetSnapshot();
+
+      if ( isset($_SESSION[OSCOM::getSite()]['NavigationHistory']) ) {
+        unset($_SESSION[OSCOM::getSite()]['NavigationHistory']);
+      }
     }
 
-    function _parseParameters($array, $additional_exclude = array()) {
+/**
+ * @since v3.0.1
+ */
+
+    protected function parseParameters($array, $additional_exclude = array()) {
       $exclude = array('x', 'y', Registry::get('Session')->getName());
 
       if ( is_array($additional_exclude) && !empty($additional_exclude) ) {
@@ -173,6 +259,14 @@
       }
 
       return $string;
+    }
+
+/**
+ * @since v3.0.1
+ */
+
+    protected function siteApplicationActionExists($action) {
+      return class_exists('osCommerce\\OM\\Core\\Site\\Shop\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
     }
   }
 ?>
