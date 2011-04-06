@@ -19,7 +19,7 @@
 
       $OSCOM_PDO->beginTransaction();
 
-      if ( $data['id'] !== false ) {
+      if ( isset($data['id']) ) {
         $add_category_and_product_placeholders = false;
 
         $Qlanguage = $OSCOM_PDO->prepare('update :table_languages set name = :name, code = :code, locale = :locale, charset = :charset, date_format_short = :date_format_short, date_format_long = :date_format_long, time_format = :time_format, text_direction = :text_direction, currencies_id = :currencies_id, numeric_separator_decimal = :numeric_separator_decimal, numeric_separator_thousands = :numeric_separator_thousands, parent_id = :parent_id where languages_id = :languages_id');
@@ -45,7 +45,7 @@
       if ( $Qlanguage->isError() ) {
         $error = true;
       } else {
-        if ( $data['id'] === false ) {
+        if ( !isset($data['id']) ) {
           $data['id'] = $OSCOM_PDO->lastInsertId();
         }
 
@@ -150,12 +150,13 @@
         }
 
         if ( $error === false ) {
-          $Qattributes = $OSCOM_PDO->prepare('select products_id, value from :table_product_attributes where languages_id = :languages_id');
+          $Qattributes = $OSCOM_PDO->prepare('select id, products_id, value from :table_product_attributes where languages_id = :languages_id');
           $Qattributes->bindInt(':languages_id', $data['default_language_id']);
           $Qattributes->execute();
 
           while ( $Qattributes->fetch() ) {
-            $Qinsert = $OSCOM_PDO->prepare('insert into :table_product_attributes (products_id, languages_id, value) values (:products_id, :languages_id, :value)');
+            $Qinsert = $OSCOM_PDO->prepare('insert into :table_product_attributes (id, products_id, languages_id, value) values (:id, :products_id, :languages_id, :value)');
+            $Qinsert->bindInt(':id', $Qattributes->valueInt('id'));
             $Qinsert->bindInt(':products_id', $Qattributes->valueInt('products_id'));
             $Qinsert->bindInt(':languages_id', $data['id']);
             $Qinsert->bindValue(':value', $Qattributes->value('value'));
