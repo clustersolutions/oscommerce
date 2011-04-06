@@ -16,8 +16,8 @@
 
       $result = OSCOM::callDB('Admin\Administrators\Get', $data);
 
-      if ( !empty($key) && isset($result[$key]) ) {
-        $result = $result[$key];
+      if ( isset($key) ) {
+        $result = $result[$key] ?: null;
       }
 
       return $result;

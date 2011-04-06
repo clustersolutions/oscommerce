@@ -24,8 +24,8 @@
         $result['zone_name'] = OSCOM::getDef('all_zones');
       }
 
-      if ( !empty($key) && isset($result[$key]) ) {
-        $result = $result[$key];
+      if ( isset($key) ) {
+        $result = $result[$key] ?: null;
       }
 
       return $result;
