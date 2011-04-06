@@ -81,6 +81,14 @@
     public function displayPriceRaw($price, $tax_class_id, $quantity = 1, $currency_code = null, $currency_value = null) {
       $OSCOM_Tax = Registry::get('Tax');
 
+      if ( !isset($currency_code) ) {
+        $currency_code = DEFAULT_CURRENCY;
+      }
+
+      if ( !isset($currency_value) ) {
+        $currency_value = $this->currencies[DEFAULT_CURRENCY]['value'];
+      }
+
       $price = round($price, $this->currencies[DEFAULT_CURRENCY]['decimal_places']);
 
       if ( (DISPLAY_PRICE_WITH_TAX == '1') && ($tax_class_id > 0) ) {
