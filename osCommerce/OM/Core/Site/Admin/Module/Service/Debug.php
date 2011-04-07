@@ -8,21 +8,12 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class Debug {
-    var $title,
-        $description,
-        $uninstallable = true,
-        $depends = 'Language',
-        $precedes;
+  class Debug extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $depends = 'Language';
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/debug.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_debug_title');
       $this->description = OSCOM::getDef('services_debug_description');
     }

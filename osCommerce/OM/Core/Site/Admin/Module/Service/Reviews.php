@@ -8,21 +8,10 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class Reviews {
-    var $title,
-        $description,
-        $uninstallable = true,
-        $depends,
-        $precedes;
-
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/reviews.php');
-
+  class Reviews extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_reviews_title');
       $this->description = OSCOM::getDef('services_reviews_description');
     }

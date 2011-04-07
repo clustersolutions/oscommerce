@@ -8,35 +8,15 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class Core {
-    var $title,
-        $description,
-        $uninstallable = false,
-        $depends = 'Currencies',
-        $precedes;
+  class Core extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $uninstallable = false;
+    var $depends = 'Currencies';
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/core.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_core_title');
       $this->description = OSCOM::getDef('services_core_description');
-    }
-
-    public function install() {
-      return false;
-    }
-
-    public function remove() {
-      return false;
-    }
-
-    public function keys() {
-      return false;
     }
   }
 ?>

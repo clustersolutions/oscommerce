@@ -8,21 +8,12 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class WhosOnline {
-    var $title,
-        $description,
-        $uninstallable = true,
-        $depends = array('Session', 'Core'),
-        $precedes;
+  class WhosOnline extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $depends = array('Session', 'Core');
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/whos_online.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_whos_online_title');
       $this->description = OSCOM::getDef('services_whos_online_description');
     }
