@@ -13,11 +13,119 @@
   use osCommerce\OM\Core\OSCOM;
 
   class applyPackage {
+    protected $_to_version;
+
     public static function execute() {
       $phar_can_open = true;
 
       try {
         $phar = new Phar(OSCOM::BASE_DIRECTORY . 'Work/CoreUpdate/update.phar');
+
+        $meta = $phar->getMetadata();
+
+        self::$_to_version = $meta['version_to'];
+
+// reset the log
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt') && is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt') ) {
+          unlink(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt');
+        }
+
+// first delete files before extracting new files
+        if ( isset($meta['delete']) ) {
+          foreach ( $meta['delete'] as $file ) {
+            if ( substr($file, 0, 14) == 'osCommerce/OM/' ) {
+              if ( file_exists(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+                if ( is_dir(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+// first delete files inside
+                  $DL = new DirectoryListing(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  $DL->setRecursive(true);
+                  $DL->setAddDirectoryToFilename(true);
+                  $DL->setIncludeDirectories(false);
+
+                  foreach ( $DL->getFiles() as $f ) {
+                    if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']) ) {
+                      self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
+                    } else {
+                      self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
+                    }
+                  }
+
+// then empty directories inside
+                  $DL = new DirectoryListing(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  $DL->setRecursive(true);
+                  $DL->setAddDirectoryToFilename(true);
+                  $DL->setIncludeFiles(false);
+
+                  foreach ( $DL->getFiles() as $f ) {
+                    if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']) ) {
+                      self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
+                    } else {
+                      self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
+                    }
+                  }
+
+// lastly the (now) empty directory itself
+                  if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+                    self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  } else {
+                    self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  }
+                } else {
+                  if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+                    self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  } else {
+                    self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+                  }
+                }
+              }
+            } elseif ( substr($file, 0, 7) == 'public/' ) {
+              if ( file_exists(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+                if ( is_dir(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+// first delete files inside
+                  $DL = new DirectoryListing(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  $DL->setRecursive(true);
+                  $DL->setAddDirectoryToFilename(true);
+                  $DL->setIncludeDirectories(false);
+
+                  foreach ( $DL->getFiles() as $f ) {
+                    if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']) ) {
+                      self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
+                    } else {
+                      self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
+                    }
+                  }
+
+// then empty directories inside
+                  $DL = new DirectoryListing(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  $DL->setRecursive(true);
+                  $DL->setAddDirectoryToFilename(true);
+                  $DL->setIncludeFiles(false);
+
+                  foreach ( $DL->getFiles() as $f ) {
+                    if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']) ) {
+                      self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
+                    } else {
+                      self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
+                    }
+                  }
+
+// lastly the (now) empty directory itself
+                  if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+                    self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  } else {
+                    self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  }
+                } else {
+                  if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+                    self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  } else {
+                    self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+                  }
+                }
+              }
+            }
+          }
+        }
 
 // loop through each file individually as extractTo() does not work with
 // directories (see http://bugs.php.net/bug.php?id=54289)
@@ -26,9 +134,17 @@
             $file = substr($iteration->getPathName(), $pos+12);
 
             if ( substr($file, 0, 14) == 'osCommerce/OM/' ) {
-              $phar->extractTo(realpath(OSCOM::BASE_DIRECTORY . '../../'), $file, true);
+              if ( $phar->extractTo(realpath(OSCOM::BASE_DIRECTORY . '../../'), $file, true) ) {
+                self::log('Extracted: ' . $file);
+              } else {
+                self::log('*** Could Not Extract: ' . $file);
+              }
             } elseif ( substr($file, 0, 7) == 'public/' ) {
-              $phar->extractTo(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../'), $file, true);
+              if ( $phar->extractTo(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../'), $file, true) ) {
+                self::log('Extracted: ' . $file);
+              } else {
+                self::log('*** Could Not Extract: ' . $file);
+              }
             }
           }
         }
@@ -44,6 +160,12 @@
       }
 
       return $phar_can_open;
+    }
+
+    protected static function log($message) {
+      if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
+        file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt', $message . "\n", FILE_APPEND);
+      }
     }
   }
 ?>
