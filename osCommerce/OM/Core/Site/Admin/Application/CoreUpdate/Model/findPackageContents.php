@@ -15,7 +15,7 @@
       $result = CoreUpdate::getPackageContents();
 
       foreach ( $result['entries'] as $k => $v ) {
-        if ( strpos($v['name'], $search) === false ) {
+        if ( stripos($v['name'], $search) === false ) {
           unset($result['entries'][$k]);
         }
       }
