@@ -34,8 +34,8 @@
   <thead>
     <tr>
       <th><?php echo OSCOM::getDef('table_heading_files'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_file_replace'); ?></th>
-      <th width="150"><?php echo OSCOM::getDef('table_heading_file_writable'); ?></th>
+      <th width="100"><?php echo OSCOM::getDef('table_heading_file_writable'); ?></th>
+      <th width="100"><?php echo OSCOM::getDef('table_heading_file_custom'); ?></th>
     </tr>
   </thead>
   <tfoot>
@@ -48,7 +48,7 @@
 </table>
 
 <div style="padding: 2px; min-height: 16px;">
-  <span id="dataTableLegend"></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> <span style="background-color: #ceffc8; padding: 1px 10px 1px 10px;">' . OSCOM::getDef('legend_new') . '</span> <span style="background-color: #ffebc8; padding: 1px 10px 1px 10px;">' . OSCOM::getDef('legend_modified') . '</span> <span style="background-color: #ffc8c8; padding: 1px 10px 1px 10px;">' . OSCOM::getDef('legend_to_delete') . '</span>'; ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
@@ -69,6 +69,7 @@
 
   var checkboxTickedIcon = '<?php echo HTML::icon('checkbox_ticked.gif'); ?>';
   var checkboxCrossedIcon = '<?php echo HTML::icon('checkbox_crossed.gif'); ?>';
+  var checkboxIcon = '<?php echo HTML::icon('checkbox.gif'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -88,12 +89,20 @@
       newCell.innerHTML = htmlSpecialChars(record.name);
 
       var newCell = newRow.insertCell(1);
-      newCell.innerHTML = record.exists == true ? checkboxTickedIcon : checkboxCrossedIcon;
+      newCell.innerHTML = record.writable == true ? checkboxTickedIcon : checkboxCrossedIcon;
       newCell.align = 'center';
 
       var newCell = newRow.insertCell(2);
-      newCell.innerHTML = record.writable == true ? checkboxTickedIcon : checkboxCrossedIcon;
+      newCell.innerHTML = record.custom == true ? checkboxTickedIcon : checkboxIcon;
       newCell.align = 'center';
+
+      if ( record.to_delete == true ) {
+        $(newRow).children().css('backgroundColor', '#ffc8c8');
+      } else if ( record.exists == true ) {
+        $(newRow).children().css('backgroundColor', '#ffebc8');
+      } else if ( record.exists == false ) {
+        $(newRow).children().css('backgroundColor', '#ceffc8');
+      }
 
       rowCounter++;
     }

@@ -12,8 +12,12 @@ table_heading_release_date = Date
 table_heading_action = Action
 
 table_heading_files = Files
-table_heading_file_replace = Replace
 table_heading_file_writable = Writable
+table_heading_file_custom = Custom
+
+legend_new = NEW
+legend_modified = MODIFIED
+legend_to_delete = TO DELETE
 
 action_heading_apply = Core Update: Update from v%s to v%s
 
