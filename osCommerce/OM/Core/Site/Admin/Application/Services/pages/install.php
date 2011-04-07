@@ -21,7 +21,7 @@
 <form id="liveSearchForm">
   <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
 
-  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Install'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_install'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(), 'priority' => 'secondary', 'icon' => 'triangle-1-w', 'title' => OSCOM::getDef('button_back'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -50,13 +50,13 @@
 </form>
 
 <div style="padding: 5px;">
-  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . HTML::icon('uninstall.png') . '&nbsp;' . OSCOM::getDef('icon_uninstall'); ?></span>
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('install.png') . '&nbsp;' . OSCOM::getDef('icon_install'); ?></span>
   <span id="batchPullDownMenu"></span>
 </div>
 
 <script type="text/javascript">
   var moduleParamsCookieName = 'oscom_admin_' + pageModule;
-  var dataTablePageSetName = 'page';
+  var dataTablePageSetName = 'install_page';
 
   var moduleParams = new Object();
   moduleParams[dataTablePageSetName] = 1;
@@ -67,13 +67,10 @@
   }
 
   var dataTableName = 'servicesDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetInstalled'); ?>';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetUninstalled'); ?>';
 
-  var smEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&code=SMCODE'); ?>';
-  var smEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
-
-  var smUninstallLink = '<?php echo OSCOM::getLink(null, null, 'Uninstall&code=SMCODE'); ?>';
-  var smUninstallLinkIcon = '<?php echo HTML::icon('uninstall.png'); ?>';
+  var smInstallLink = '<?php echo OSCOM::getLink(null, null, 'Install&Process&code=SMCODE'); ?>';
+  var smInstallLinkIcon = '<?php echo HTML::icon('install.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();
@@ -92,22 +89,8 @@
       var newCell = newRow.insertCell(0);
       newCell.innerHTML = htmlSpecialChars(record.title);
 
-      var actions = '';
-
-      if ( record.has_keys == true ) {
-        actions += '<a href="' + smEditLink.replace('SMCODE', htmlSpecialChars(record.code)) + '">' + smEditLinkIcon + '</a>';
-      } else {
-        actions += '<span style="padding: 8px;"></span>';
-      }
-
-      if ( record.uninstallable == true ) {
-        actions += '&nbsp;<a href="' + smUninstallLink.replace('SMCODE', htmlSpecialChars(record.code)) + '">' + smUninstallLinkIcon + '</a>';
-      } else {
-        actions += '&nbsp;<span style="padding: 8px;"></span>';
-      }
-
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = actions;
+      newCell.innerHTML = '<a href="' + smInstallLink.replace('SMCODE', htmlSpecialChars(record.code)) + '">' + smInstallLinkIcon + '</a>';
       newCell.align = 'right';
 
       rowCounter++;

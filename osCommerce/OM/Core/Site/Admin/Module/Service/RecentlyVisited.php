@@ -8,21 +8,12 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class RecentlyVisited {
-    var $title,
-        $description,
-        $uninstallable = true,
-        $depends = array('Session', 'CategoryPath'),
-        $precedes;
+  class RecentlyVisited extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $depends = array('Session', 'CategoryPath');
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/recently_visited.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_recently_visited_title');
       $this->description = OSCOM::getDef('services_recently_visited_description');
     }

@@ -8,21 +8,12 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class Session {
-    var $title,
-        $description,
-        $uninstallable = false,
-        $depends,
-        $precedes;
+  class Session extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $uninstallable = false;
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/session.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_session_title');
       $this->description = OSCOM::getDef('services_session_description');
     }

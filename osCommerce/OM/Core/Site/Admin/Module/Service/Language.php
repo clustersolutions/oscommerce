@@ -8,35 +8,15 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class Language {
-    var $title,
-        $description,
-        $uninstallable = false,
-        $depends = 'Session',
-        $precedes;
+  class Language extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $uninstallable = false;
+    var $depends = 'Session';
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/language.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_language_title');
       $this->description = OSCOM::getDef('services_language_description');
-    }
-
-    public function install() {
-      return false;
-    }
-
-    public function remove() {
-      return false;
-    }
-
-    public function keys() {
-      return false;
     }
   }
 ?>

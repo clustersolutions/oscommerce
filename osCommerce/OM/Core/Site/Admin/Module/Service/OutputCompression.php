@@ -8,21 +8,12 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
-  class OutputCompression {
-    var $title,
-        $description,
-        $uninstallable = true,
-        $depends,
-        $precedes = 'Session';
+  class OutputCompression extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
+    var $precedes = 'Session';
 
-    public function __construct() {
-      $OSCOM_Language = Registry::get('Language');
-
-      $OSCOM_Language->loadIniFile('modules/services/output_compression.php');
-
+    protected function initialize() {
       $this->title = OSCOM::getDef('services_output_compression_title');
       $this->description = OSCOM::getDef('services_output_compression_description');
     }
