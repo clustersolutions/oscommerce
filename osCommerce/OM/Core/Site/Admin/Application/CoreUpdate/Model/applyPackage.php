@@ -10,10 +10,11 @@
 
   use \Phar;
   use \RecursiveIteratorIterator;
+  use osCommerce\OM\Core\DirectoryListing;
   use osCommerce\OM\Core\OSCOM;
 
   class applyPackage {
-    protected $_to_version;
+    protected static $_to_version;
 
     public static function execute() {
       $phar_can_open = true;
@@ -57,7 +58,7 @@
                   $DL->setIncludeFiles(false);
 
                   foreach ( $DL->getFiles() as $f ) {
-                    if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']) ) {
+                    if ( rmdir(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']) ) {
                       self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
                     } else {
                       self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file . '/' . $f['name']);
@@ -65,7 +66,7 @@
                   }
 
 // lastly the (now) empty directory itself
-                  if ( unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+                  if ( rmdir(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
                     self::log('Deleted: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
                   } else {
                     self::log('*** Could Not Delete: ' . realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
@@ -102,7 +103,7 @@
                   $DL->setIncludeFiles(false);
 
                   foreach ( $DL->getFiles() as $f ) {
-                    if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']) ) {
+                    if ( rmdir(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']) ) {
                       self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
                     } else {
                       self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file . '/' . $f['name']);
@@ -110,7 +111,7 @@
                   }
 
 // lastly the (now) empty directory itself
-                  if ( unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+                  if ( rmdir(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
                     self::log('Deleted: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
                   } else {
                     self::log('*** Could Not Delete: ' . realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
@@ -149,14 +150,9 @@
           }
         }
       } catch ( \Exception $e ) {
-// ignore when file permissions from the phar archive cannot be set to the
-// extracted files
-// HPDL look for a more elegant solution
-        if ( strpos($e->getMessage(), 'setting file permissions failed') === false ) {
-          $phar_can_open = false;
+        $phar_can_open = false;
 
-          trigger_error($e->getMessage());
-        }
+        trigger_error($e->getMessage());
       }
 
       return $phar_can_open;
