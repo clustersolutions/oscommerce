@@ -1,111 +1,64 @@
 <?php
-/*
-  $Id: $
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\Customers\Customers;
 
-  Copyright (c) 2007 osCommerce
+  $new_customer = true;
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
-?>
-
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
-
-<?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
-  }
-?>
-
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_customer'); ?></div>
-<div class="infoBoxContent">
-  <form name="customers" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&action=save'); ?>" method="post">
-
-  <table border="0" width="100%" cellspacing="0" cellpadding="2">
-
-<?php
   if ( ACCOUNT_GENDER > -1 ) {
-    $gender_array = array(array('id' => 'm', 'text' => $osC_Language->get('gender_male')),
-                          array('id' => 'f', 'text' => $osC_Language->get('gender_female')));
-?>
-
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_gender'); ?></td>
-      <td width="70%"><?php echo osc_draw_radio_field('gender', $gender_array); ?></td>
-    </tr>
-
-<?php
+    $gender_array = array(array('id' => 'm', 'text' => OSCOM::getDef('gender_male')),
+                          array('id' => 'f', 'text' => OSCOM::getDef('gender_female')));
   }
 ?>
 
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_first_name'); ?></td>
-      <td width="70%"><?php echo osc_draw_input_field('firstname'); ?></td>
-    </tr>
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_last_name'); ?></td>
-      <td width="70%"><?php echo osc_draw_input_field('lastname'); ?></td>
-    </tr>
+<script>
+$(function() {
+  $('#cEditForm input, #cEditForm select, #cEditForm textarea, #cEditForm fileupload').safetynet();
+});
+</script>
+
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( ACCOUNT_DATE_OF_BIRTH == '1' ) {
-?>
-
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_date_of_birth'); ?></td>
-      <td width="70%"><?php echo osc_draw_date_pull_down_menu('dob', null, false, null, null, date('Y')-1901, -5); ?></td>
-    </tr>
-
-<?php
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_email_address'); ?></td>
-      <td width="70%"><?php echo osc_draw_input_field('email_address'); ?></td>
-    </tr>
-
-<?php
-  if ( ACCOUNT_NEWSLETTER == '1' ) {
-?>
-
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_newsletter_subscription'); ?></td>
-      <td width="70%"><?php echo osc_draw_checkbox_field('newsletter'); ?></td>
-    </tr>
-
-<?php
-  }
-?>
-
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_password'); ?></td>
-      <td width="70%"><?php echo osc_draw_password_field('password'); ?></td>
-    </tr>
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_password_confirmation'); ?></td>
-      <td width="70%"><?php echo osc_draw_password_field('confirmation'); ?></td>
-    </tr>
-    <tr>
-      <td colspan="2">&nbsp;</td>
-    </tr>
-    <tr>
-      <td width="30%"><?php echo $osC_Language->get('field_status'); ?></td>
-      <td width="70%"><?php echo osc_draw_checkbox_field('status', 'on', true); ?></td>
-    </tr>
-  </table>
-
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" class="operationButton" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page']) . '\';" />'; ?></p>
-
-  </form>
+<div id="sectionMenuContainer" style="float: left; padding-bottom: 10px;">
+  <span class="ui-widget-header ui-corner-all" style="padding: 10px 4px;">
+    <span id="sectionMenu"><?php echo HTML::radioField('sections', array(array('id' => 'personal', 'text' => OSCOM::getDef('section_personal')), array('id' => 'password', 'text' => OSCOM::getDef('section_password')), array('id' => 'addressBook', 'text' => OSCOM::getDef('section_address_book')), array('id' => 'newsletters', 'text' => OSCOM::getDef('section_newsletters')), array('id' => 'map', 'text' => OSCOM::getDef('section_map')), array('id' => 'social', 'text' => OSCOM::getDef('section_social'))), (isset($_GET['tabIndex']) ? $_GET['tabIndex'] : null), null, ''); ?></span>
+  </span>
 </div>
+
+<script>
+$(function() {
+  $('#sectionMenu').buttonsetTabs();
+});
+</script>
+
+<form id="cEditForm" name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process'); ?>" method="post">
+
+<div id="formButtons" style="float: right;"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink() . '\';"')); ?></div>
+
+<div style="clear: both;"></div>
+
+<?php
+// HPDL Modularize, zack zack!
+  include('section_personal.php');
+  include('section_password.php');
+  include('section_addressBook.php');
+  include('section_newsletters.php');
+  include('section_map.php');
+  include('section_social.php');
+?>
+
+</form>
