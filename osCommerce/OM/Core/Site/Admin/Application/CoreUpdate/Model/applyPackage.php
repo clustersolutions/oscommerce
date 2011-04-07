@@ -135,12 +135,20 @@
             $file = substr($iteration->getPathName(), $pos+12);
 
             if ( substr($file, 0, 14) == 'osCommerce/OM/' ) {
+              if ( file_exists(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) ) {
+                unlink(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file);
+              }
+
               if ( $phar->extractTo(realpath(OSCOM::BASE_DIRECTORY . '../../'), $file, true) ) {
                 self::log('Extracted: ' . $file);
               } else {
                 self::log('*** Could Not Extract: ' . $file);
               }
             } elseif ( substr($file, 0, 7) == 'public/' ) {
+              if ( file_exists(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) ) {
+                unlink(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file);
+              }
+
               if ( $phar->extractTo(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../'), $file, true) ) {
                 self::log('Extracted: ' . $file);
               } else {
