@@ -1,130 +1,181 @@
 <?php
-/*
-  $Id$
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2007 osCommerce
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->size($osC_Template->getModule()) > 0 ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<form name="search" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT); ?>" method="get"><?php echo osc_draw_hidden_field($osC_Template->getModule()); ?>
+<form id="liveSearchForm">
+  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
 
-<p align="right">
-
-<?php
-  echo $osC_Language->get('operation_title_search') . ' ' . osc_draw_input_field('search') . '<input type="submit" value="GO" class="operationButton" />' .
-       '<input type="button" value="' . $osC_Language->get('button_insert') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&search=' . $_GET['search'] . '&action=save') . '\';" class="infoBoxButton" />';
-?>
-
-</p>
-
+  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Save'), 'icon' => 'plus', 'title' => OSCOM::getDef('button_insert'))); ?></span>
 </form>
 
-<?php
-  $Qcustomers = $osC_Database->query('select c.customers_id, c.customers_gender, c.customers_lastname, c.customers_firstname, c.customers_email_address, c.customers_status, c.customers_ip_address, c.date_account_created, c.date_account_last_modified, c.date_last_logon, c.number_of_logons, a.entry_country_id from :table_customers c left join :table_address_book a on (c.customers_id = a.customers_id and c.customers_default_address_id = a.address_book_id)');
-  $Qcustomers->bindTable(':table_customers', TABLE_CUSTOMERS);
-  $Qcustomers->bindTable(':table_address_book', TABLE_ADDRESS_BOOK);
-
-  if ( !empty($_GET['search']) ) {
-    $Qcustomers->appendQuery('where c.customers_lastname like :customers_lastname or c.customers_firstname like :customers_firstname or c.customers_email_address like :customers_email_address');
-    $Qcustomers->bindValue(':customers_lastname', '%' . $_GET['search'] . '%');
-    $Qcustomers->bindValue(':customers_firstname', '%' . $_GET['search'] . '%');
-    $Qcustomers->bindValue(':customers_email_address', '%' . $_GET['search'] . '%');
-  }
-
-  $Qcustomers->appendQuery('order by c.customers_lastname, c.customers_firstname');
-  $Qcustomers->setBatchLimit($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS);
-  $Qcustomers->execute();
-?>
-
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td><?php echo $Qcustomers->getBatchTotalPages($osC_Language->get('batch_results_number_of_entries')); ?></td>
-    <td align="right"><?php echo $Qcustomers->getBatchPageLinks('page', $osC_Template->getModule(), false); ?></td>
-  </tr>
-</table>
+<div style="padding: 20px 5px 5px 5px; height: 16px;">
+  <span id="batchTotalPages"></span>
+  <span id="batchPageLinks"></span>
+</div>
 
 <form name="batch" action="#" method="post">
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">
+<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="customerDataTable">
   <thead>
     <tr>
-      <th width="20">&nbsp;</th>
-      <th><?php echo $osC_Language->get('table_heading_last_name'); ?></th>
-      <th><?php echo $osC_Language->get('table_heading_first_name'); ?></th>
-      <th><?php echo $osC_Language->get('table_heading_date_created'); ?></th>
-      <th width="150"><?php echo $osC_Language->get('table_heading_action'); ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_customers'); ?></th>
+      <th><?php echo OSCOM::getDef('table_heading_date_created'); ?></th>
+      <th width="150"><?php echo OSCOM::getDef('table_heading_action'); ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="5"><?php echo '<input type="image" src="' . osc_icon_raw('trash.png') . '" title="' . $osC_Language->get('icon_trash') . '" onclick="document.batch.action=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&page=' . $_GET['page'] . '&action=batchDelete') . '\';" />'; ?></th>
-      <th align="center" width="20"><?php echo osc_draw_checkbox_field('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
+      <th align="right" colspan="3"><?php echo '<a href="#" onclick="$(\'#dialogBatchDeleteConfirm\').dialog(\'open\'); return false;">' . HTML::icon('trash.png') . '</a>'; ?></th>
+      <th align="center" width="20"><?php echo HTML::checkboxField('batchFlag', null, null, 'onclick="flagCheckboxes(this);"'); ?></th>
     </tr>
   </tfoot>
   <tbody>
-
-<?php
-  while ( $Qcustomers->next() ) {
-    $customer_icon = osc_icon('people.png');
-
-    if ( ACCOUNT_GENDER > -1 ) {
-      switch ( $Qcustomers->value('customers_gender') ) {
-        case 'm':
-          $customer_icon = osc_icon('user_male.png');
-
-          break;
-
-        case 'f':
-          $customer_icon = osc_icon('user_female.png');
-
-          break;
-      }
-    }
-?>
-
-    <tr onmouseover="rowOverEffect(this);" onmouseout="rowOutEffect(this);" <?php echo (($Qcustomers->valueInt('customers_status') !== 1) ? 'class="deactivatedRow"' : '') ?>>
-      <td align="center"><?php echo $customer_icon; ?></td>
-      <td onclick="document.getElementById('batch<?php echo $Qcustomers->valueInt('customers_id'); ?>').checked = !document.getElementById('batch<?php echo $Qcustomers->valueInt('customers_id'); ?>').checked;"><?php echo $Qcustomers->valueProtected('customers_lastname'); ?></td>
-      <td><?php echo $Qcustomers->valueProtected('customers_firstname'); ?></td>
-      <td><?php echo osC_DateTime::getShort($Qcustomers->value('date_account_created')); ?></td>
-      <td align="right">
-
-<?php
-    echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), osc_icon('edit.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&search=' . $_GET['search'] . '&page=' . $_GET['page'] . '&cID=' . $Qcustomers->valueInt('customers_id') . '&action=delete'), osc_icon('trash.png')) . '&nbsp;' .
-         osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, 'orders&cID=' . $Qcustomers->valueInt('customers_id')), osc_icon('orders.png'));
-?>
-
-      </td>
-      <td align="center"><?php echo osc_draw_checkbox_field('batch[]', $Qcustomers->valueInt('customers_id'), null, 'id="batch' . $Qcustomers->valueInt('customers_id') . '"'); ?></td>
-    </tr>
-
-<?php
-    }
-?>
-
   </tbody>
 </table>
 
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
-  <tr>
-    <td style="opacity: 0.5; filter: alpha(opacity=50);"><?php echo '<b>' . $osC_Language->get('table_action_legend') . '</b> ' . osc_icon('edit.png') . '&nbsp;' . $osC_Language->get('icon_edit') . '&nbsp;&nbsp;' . osc_icon('trash.png') . '&nbsp;' . $osC_Language->get('icon_trash') . '&nbsp;&nbsp;' . osc_icon('orders.png') . '&nbsp;' . $osC_Language->get('icon_orders'); ?></td>
-    <td align="right"><?php echo $Qcustomers->getBatchPagesPullDownMenu('page', $osC_Template->getModule()); ?></td>
-  </tr>
-</table>
+</form>
+
+<div style="padding: 2px;">
+  <span id="dataTableLegend"><?php echo '<b>' . OSCOM::getDef('table_action_legend') . '</b> ' . HTML::icon('edit.png') . '&nbsp;' . OSCOM::getDef('icon_edit') . '&nbsp;&nbsp;' . HTML::icon('trash.png') . '&nbsp;' . OSCOM::getDef('icon_trash'); ?></span>
+  <span id="batchPullDownMenu"></span>
+</div>
+
+<script type="text/javascript">
+  var moduleParamsCookieName = 'oscom_admin_' + pageModule;
+  var dataTablePageSetName = 'page';
+
+  var moduleParams = new Object();
+  moduleParams[dataTablePageSetName] = 1;
+  moduleParams['search'] = '';
+
+  if ( $.cookie(moduleParamsCookieName) != null ) {
+    moduleParams = $.secureEvalJSON($.cookie(moduleParamsCookieName));
+  }
+
+  var dataTableName = 'customerDataTable';
+  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
+
+  var customerEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&id=CUSTOMERID'); ?>';
+  var customerEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
+
+  var customerDeleteLinkIcon = '<?php echo HTML::icon('trash.png'); ?>';
+
+  var customerGenderMaleIcon = '<?php echo HTML::icon('user_male.png'); ?>';
+  var customerGenderFemaleIcon = '<?php echo HTML::icon('user_female.png'); ?>';
+
+  var showCustomerGender = '<?php echo ACCOUNT_GENDER; ?>';
+
+  var osC_DataTable = new osC_DataTable();
+  osC_DataTable.load();
+
+  function feedDataTable(data) {
+    var rowCounter = 0;
+
+    for ( var r in data.entries ) {
+      var record = data.entries[r];
+
+      var customerGenderIcon = '';
+
+      if ( (showCustomerGender == '0') || (showCustomerGender == '1') ) {
+        if ( record.customers_gender == 'm' ) {
+          customerGenderIcon = customerGenderMaleIcon;
+        } else if ( record.customers_gender == 'f' ) {
+          customerGenderIcon = customerGenderFemaleIcon;
+        } else {
+          customerGenderIcon = '<span style="padding: 16px 16px 0 0;"></span>';
+        }
+
+        customerGenderIcon += ' ';
+      }
+
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row' + parseInt(record.customers_id);
+
+      if ( parseInt(record.customers_status) != 1 ) {
+        $('#row' + parseInt(record.customers_id)).addClass('deactivatedRow');
+      }
+
+      $('#row' + parseInt(record.customers_id)).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).click(function(event) {
+        if (event.target.type !== 'checkbox') {
+          $(':checkbox', this).trigger('click');
+        }
+      }).css('cursor', 'pointer');
+
+      var newCell = newRow.insertCell(0);
+      newCell.innerHTML = customerGenderIcon + htmlSpecialChars(record.customers_lastname) + ', ' + htmlSpecialChars(record.customers_firstname);
+
+      newCell = newRow.insertCell(1);
+      newCell.innerHTML = htmlSpecialChars(record.date_account_created);
+
+      newCell = newRow.insertCell(2);
+      newCell.innerHTML = '<a href="' + customerEditLink.replace('CUSTOMERID', parseInt(record.customers_id)) + '">' + customerEditLinkIcon + '</a>&nbsp;<a href="#" onclick="$(\'#dialogDeleteConfirm\').data(\'id\', ' + parseInt(record.customers_id) + ').dialog(\'open\'); return false;">' + customerDeleteLinkIcon + '</a>';
+      newCell.align = 'right';
+
+      newCell = newRow.insertCell(3);
+      newCell.innerHTML = '<input type="checkbox" name="batch[]" value="' + parseInt(record.customers_id) + '" id="batch' + parseInt(record.customers_id) + '" />';
+      newCell.align = 'center';
+
+      rowCounter++;
+    }
+  }
+</script>
+
+<div id="dialogDeleteConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_delete_customer_title')); ?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_delete_customer_desc'); ?></p>
+</div>
+
+<div id="dialogBatchDeleteConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_batch_delete_customer_title')); ?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_batch_delete_customer_desc'); ?></p>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  $('#dialogDeleteConfirm').dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    buttons: {
+      '<?php echo addslashes(OSCOM::getDef('button_delete')); ?>': function() {
+        window.location.href='<?php echo OSCOM::getLink(null, null, 'Delete&Process&id=CUSTOMERID'); ?>'.replace('CUSTOMERID', $(this).data('id'));
+      },
+      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+        $(this).dialog('close');
+      }
+    }
+  });
+});
+
+$(function() {
+  $('#dialogBatchDeleteConfirm').dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    buttons: {
+      '<?php echo addslashes(OSCOM::getDef('button_delete')); ?>': function() {
+        document.batch.action='<?php echo OSCOM::getLink(null, null, 'BatchDelete&Process'); ?>';
+        document.batch.submit();
+      },
+      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+        $(this).dialog('close');
+      }
+    }
+  });
+});
+</script>
