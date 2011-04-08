@@ -109,5 +109,16 @@
 
       rowCounter++;
     }
+
+    if ( (rowCounter == 0) && (moduleParams['search'] == '') ) {
+      var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
+      newRow.id = 'row0';
+
+      $('#row0').hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).css('cursor', 'pointer');
+
+      var newCell = newRow.insertCell(0);
+      newCell.colSpan = 3;
+      newCell.innerHTML = '<?php echo HTML::icon('tick.png') . ' '; ?>' + htmlSpecialChars("<?php echo OSCOM::getDef('up_to_date'); ?>");
+    }
   }
 </script>
