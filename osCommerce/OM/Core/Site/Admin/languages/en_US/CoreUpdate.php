@@ -26,6 +26,8 @@ button_apply_update = Apply Update
 icon_view_announcement = View Announcement
 icon_view_contents = View Contents
 
+up_to_date = This installation is up to date!
+
 ms_error_select_version_to_view = Error: Please select an available package version to view.
 ms_error_local_update_package_does_not_exist = Error: Cannot download and save the update package. Please verify the osCommerce/OM/Work/CoreUpdate directory permissions and try again.
 ms_error_wrong_version_to_update_from = Error: Please verify the package to update from.
