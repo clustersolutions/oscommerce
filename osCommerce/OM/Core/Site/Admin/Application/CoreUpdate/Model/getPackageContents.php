@@ -51,7 +51,7 @@
             $result['entries'][] = array('key' => $counter,
                                          'name' => $file,
                                          'exists' => file_exists(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file),
-                                         'writable' => self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file),
+                                         'writable' => self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $file) && self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . dirname($file)),
                                          'custom' => $custom,
                                          'to_delete' => false);
 
@@ -60,7 +60,7 @@
             $result['entries'][] = array('key' => $counter,
                                          'name' => $file,
                                          'exists' => file_exists(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file),
-                                         'writable' => self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file),
+                                         'writable' => self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $file) && self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . dirname($file)),
                                          'custom' => false,
                                          'to_delete' => false);
 
@@ -115,9 +115,9 @@
           $custom = false;
 
           if ( substr($d, 0, 14) == 'osCommerce/OM/' ) {
-            $writable = self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $d);
+            $writable = self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . $d) && self::isWritable(realpath(OSCOM::BASE_DIRECTORY . '../../') . '/' . dirname($d));
           } elseif ( substr($d, 0, 7) == 'public/' ) {
-            $writable = self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $d);
+            $writable = self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . $d) && self::isWritable(realpath(OSCOM::getConfig('dir_fs_public', 'OSCOM') . '../') . '/' . dirname($d));
           }
 
           $result['entries'][] = array('key' => $counter,
