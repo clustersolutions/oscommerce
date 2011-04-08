@@ -43,37 +43,6 @@
 
             if ( file_exists($directory . $file) ) {
               if ( is_dir($directory . $file) ) {
-// first delete files inside
-                $DL = new DirectoryListing($directory . $file);
-                $DL->setRecursive(true);
-                $DL->setAddDirectoryToFilename(true);
-                $DL->setIncludeDirectories(false);
-
-                foreach ( $DL->getFiles() as $f ) {
-                  if ( rename($directory . $file . '/' . $f['name'], $directory . $file . '/' . dirname($f['name']) . '/.CU_' . basename($f['name'])) ) {
-                    $pro_hart[] = array('type' => 'file',
-                                        'where' => $directory,
-                                        'path' => $file . '/' . dirname($f['name']) . '/.CU_' . basename($f['name']),
-                                        'log' => true);
-                  }
-                }
-
-// then empty directories inside
-                $DL = new DirectoryListing($directory . $file);
-                $DL->setRecursive(true);
-                $DL->setAddDirectoryToFilename(true);
-                $DL->setIncludeFiles(false);
-
-                foreach ( $DL->getFiles() as $f ) {
-                  if ( rename($directory . $file . '/' . $f['name'], $directory . $file . '/' . dirname($f['name']) . '/.CU_' . basename($f['name'])) ) {
-                    $pro_hart[] = array('type' => 'directory',
-                                        'where' => $directory,
-                                        'path' => $file . '/' . dirname($f['name']) . '/.CU_' . basename($f['name']),
-                                        'log' => true);
-                  }
-                }
-
-// lastly the (now) empty directory itself
                 if ( rename($directory . $file, $directory . dirname($file) . '/.CU_' . basename($file)) ) {
                   $pro_hart[] = array('type' => 'directory',
                                       'where' => $directory,
@@ -121,7 +90,7 @@
 
         foreach ( array_reverse($pro_hart, true) as $mess ) {
           if ( $mess['type'] == 'directory' ) {
-            if ( rmdir($mess['where'] . $mess['path']) ) {
+            if ( self::rmdir_r($mess['where'] . $mess['path']) ) {
               if ( $mess['log'] === true ) {
                 self::log('Deleted: ' . str_replace('/.CU_', '/', $mess['path']));
               }
@@ -154,7 +123,7 @@
         foreach ( array_reverse($pro_hart, true) as $mess ) {
           if ( $mess['type'] == 'directory' ) {
             if ( file_exists($mess['where'] . str_replace('/.CU_', '/', $mess['path'])) ) {
-              rmdir($mess['where'] . str_replace('/.CU_', '/', $mess['path']));
+              self::rmdir_r($mess['where'] . str_replace('/.CU_', '/', $mess['path']));
             }
           } else {
             if ( file_exists($mess['where'] . str_replace('/.CU_', '/', $mess['path'])) ) {
@@ -183,6 +152,20 @@
       if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt', '[' . DateTime::getNow('d-M-Y H:i:s') . '] ' . $message . "\n", FILE_APPEND);
       }
+    }
+
+    protected static function rmdir_r($dir) {
+      foreach ( scandir($dir) as $file ) {
+        if ( !in_array($file, array('.', '..')) ) {
+          if ( is_dir($dir . '/' . $file) ) {
+            self::rmdir_r($dir . '/' . $file);
+          } else {
+            unlink($dir . '/' . $file);
+          }
+        }
+      }
+
+      return rmdir($dir);
     }
   }
 ?>
