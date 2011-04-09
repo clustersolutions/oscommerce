@@ -100,6 +100,7 @@ icon_unlocked = Unlocked
 icon_update = Update
 icon_user_female = Female
 icon_user_male = Male
+icon_progress_ani = Loading...
 
 ms_success_action_performed = Success: The action was successfully performed.
 ms_success_upload_file_saved = Success: The file uploaded has been saved successfully.
