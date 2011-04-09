@@ -20,6 +20,15 @@
       $db_uptime = OSCOM::callDB('Admin\ServerInfo\GetUptime');
       $db_version = OSCOM::callDB('Admin\ServerInfo\GetVersion');
 
+      $uptime = '---';
+
+      $php_ini = ini_get('disable_functions');
+      $find = strstr($php_ini, 'exec');
+
+      if ( !$find ) {
+         $uptime = @exec('uptime');
+      }
+
       $data = array(array('key' => 'date',
                           'title' => OSCOM::getDef('field_server_date'),
                           'value' => DateTime::getShort(null, true)),
@@ -31,7 +40,7 @@
                           'value' => php_uname('n') . ' (' . gethostbyname(php_uname('n')) . ')'),
                     array('key' => 'uptime',
                           'title' => OSCOM::getDef('field_server_up_time'),
-                          'value' => @exec('uptime')),
+                          'value' => $uptime),
                     array('key' => 'http_server',
                           'title' => OSCOM::getDef('field_http_server'),
                           'value' => $_SERVER['SERVER_SOFTWARE']),
