@@ -45,7 +45,7 @@
        '      <li><a href="http://www.oscommerce.info" target="_blank">Online Documentation</a></li>' .
        '      <li><a href="http://forums.oscommerce.com" target="_blank">Community Support Forums</a></li>' .
        '      <li><a href="http://addons.oscommerce.com" target="_blank">Add-Ons Site</a></li>' .
-       '      <li><a href="http://forums.oscommerce.com/tracker/" target="_blank">Bug Reporter</a></li>' .
+       '      <li><a href="http://forums.oscommerce.com/tracker/project-4-oscommerce-online-merchant-v3x/" target="_blank">Bug Reporter</a></li>' .
        '    </ul>' .
        '  </li>';
 ?>
