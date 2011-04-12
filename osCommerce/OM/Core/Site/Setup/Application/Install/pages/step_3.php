@@ -50,6 +50,12 @@
     $http_dir_ws .= '/';
   }
 
+  $http_cookie_domain = '';
+
+  if ( (substr_count($http_url['host'], '.') > 1) && !filter_var($http_url['host'], FILTER_VALIDATE_IP) ) {
+    $http_cookie_domain = $http_url['host'];
+  }
+
   $dir_fs_document_root = realpath(OSCOM::BASE_DIRECTORY . '../../') . '/';
 
   $DL_Cache = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Work/Cache');
@@ -73,8 +79,8 @@ dir_fs_public = "{$dir_fs_document_root}public/"
 enable_ssl = "false"
 http_server = "$http_server"
 https_server = "$http_server"
-http_cookie_domain = ""
-https_cookie_domain = ""
+http_cookie_domain = "$http_cookie_domain"
+https_cookie_domain = "$http_cookie_domain"
 http_cookie_path = "$http_dir_ws"
 https_cookie_path = "$http_dir_ws"
 dir_ws_http_server = "$http_dir_ws"
@@ -93,8 +99,8 @@ store_sessions = "Database"
 enable_ssl = "false"
 http_server = "$http_server"
 https_server = "$http_server"
-http_cookie_domain = ""
-https_cookie_domain = ""
+http_cookie_domain = "$http_cookie_domain"
+https_cookie_domain = "$http_cookie_domain"
 http_cookie_path = "$http_dir_ws"
 https_cookie_path = "$http_dir_ws"
 dir_ws_http_server = "$http_dir_ws"
