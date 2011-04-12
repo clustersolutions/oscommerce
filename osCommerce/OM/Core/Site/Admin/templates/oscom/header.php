@@ -53,6 +53,8 @@
   </ul>
 
 <?php
+  $total_shortcuts = 0;
+
   if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
     echo '<ul class="apps" style="float: right;">';
 
@@ -69,6 +71,8 @@
 
       foreach ( Access::getShortcuts() as $shortcut ) {
         echo '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '" id="shortcut-' . $shortcut['module'] . '">' . $OSCOM_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '<div class="notBubble"></div></a>';
+
+        $total_shortcuts++;
       }
 
       echo '  </li>';
@@ -95,6 +99,7 @@
 ?>
 
 <script type="text/javascript">
+  var totalShortcuts = <?php echo $total_shortcuts; ?>;
   var wkn = new Object;
 
   if ( $.cookie('wkn') ) {
@@ -136,9 +141,11 @@
   }
 
   $(document).ready(function() {
-    updateShortcutNotifications(typeof resetShortcutNotification != 'undefined' ? '<?php echo OSCOM::getSiteApplication(); ?>' : null);
+    if ( totalShortcuts > 0 ) {
+      updateShortcutNotifications(typeof resetShortcutNotification != 'undefined' ? '<?php echo OSCOM::getSiteApplication(); ?>' : null);
 
-    setInterval('updateShortcutNotifications()', 10000);
+      setInterval('updateShortcutNotifications()', 10000);
+    }
   });
 
   if (window.external.msIsSiteMode()) {
