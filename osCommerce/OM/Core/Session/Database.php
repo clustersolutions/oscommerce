@@ -12,6 +12,8 @@
 
 /**
  * The Session\Database class stores the session data in the database
+ * 
+ * @since v3.0.0
  */
 
   class Database extends \osCommerce\OM\Core\SessionAbstract {
@@ -20,7 +22,7 @@
  * Initialize database based session storage handler
  *
  * @param string $name The name of the session
- * @access public
+ * @since v3.0.0
  */
 
     public function __construct($name) {
@@ -35,9 +37,22 @@
     }
 
 /**
+ * Checks if a session exists
+ *
+ * @param string $id The ID of the session
+ * @since v3.0.2
+ */
+
+    public function exists($id) {
+      $data = array('id' => $id);
+
+      return OSCOM::callDB('Session\Database\Check', $data, 'Core');
+    }
+
+/**
  * Opens the database based session storage handler
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerOpen() {
@@ -47,7 +62,7 @@
 /**
  * Closes the database based session storage handler
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerClose() {
@@ -58,7 +73,7 @@
  * Read session data from the database based session storage handler
  *
  * @param string $id The ID of the session
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerRead($id) {
@@ -82,7 +97,7 @@
  *
  * @param string $id The ID of the session
  * @param string $value The session data to store
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerWrite($id, $value) {
@@ -97,7 +112,7 @@
  * Destroys the session data from the database based session storage handler
  *
  * @param string $id The ID of the session
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerDestroy($id) {
@@ -108,7 +123,7 @@
  * Garbage collector for the database based session storage handler
  *
  * @param string $max_life_time The maxmimum time a session should exist
- * @access public
+ * @since v3.0.0
  */
 
     public function handlerClean($max_life_time) {
@@ -123,7 +138,7 @@
  * Deletes the session data from the database based session storage handler
  *
  * @param string $id The ID of the session
- * @access public
+ * @since v3.0.0
  */
 
     public function delete($id = null) {
