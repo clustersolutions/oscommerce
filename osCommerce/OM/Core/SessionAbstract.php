@@ -12,6 +12,8 @@
 
 /**
  * The Session class manages the session data and custom storage handlers
+ * 
+ * @since v3.0.0
  */
 
   abstract class SessionAbstract {
@@ -20,7 +22,7 @@
  * Holds the session cookie parameters (lifetime, path, domain, secure, httponly)
  *
  * @var array
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_cookie_parameters = array();
@@ -29,7 +31,7 @@
  * Defines if the session has been started or not
  *
  * @var boolean
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_is_started = false;
@@ -38,7 +40,7 @@
  * Holds the name of the session
  *
  * @var string
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_name = 'sid';
@@ -47,7 +49,7 @@
  * Holds the session id
  *
  * @var string
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_id = null;
@@ -56,7 +58,7 @@
  * Holds the life time in seconds of the session
  *
  * @var string
- * @access protected
+ * @since v3.0.0
  */
 
     protected $_life_time;
@@ -64,8 +66,8 @@
 /**
  * Verify an existing session ID and create or resume the session if the existing session ID is valid
  *
- * @access public
  * @return boolean
+ * @since v3.0.0
  */
 
     public function start() {
@@ -77,29 +79,21 @@
 
       session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')));
 
-      $sane_session_id = true;
-
-      if ( isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name])) ) {
-        $sane_session_id = false;
-      } elseif ( isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || !ctype_alnum($_POST[$this->_name])) ) {
-        $sane_session_id = false;
-      } elseif ( isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || !ctype_alnum($_COOKIE[$this->_name])) ) {
-        $sane_session_id = false;
-
+      if ( isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name]) || !$this->exists($_GET[$this->_name])) ) {
+        unset($_GET[$this->_name]);
+      } elseif ( isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || !ctype_alnum($_POST[$this->_name]) || !$this->exists($_POST[$this->_name])) ) {
+        unset($_POST[$this->_name]);
+      } elseif ( isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || !ctype_alnum($_COOKIE[$this->_name]) || !$this->exists($_COOKIE[$this->_name])) ) {
         setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
       }
 
-      if ( $sane_session_id === false ) {
-        OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication(), null, 'NONSSL', false));
-      } else {
-        if ( session_start() ) {
-          register_shutdown_function(array($this, 'close'));
+      if ( session_start() ) {
+        register_shutdown_function(array($this, 'close'));
 
-          $this->_is_started = true;
-          $this->_id = session_id();
+        $this->_is_started = true;
+        $this->_id = session_id();
 
-          return true;
-        }
+        return true;
       }
 
       return false;
@@ -108,8 +102,8 @@
 /**
  * Checks if the session has been started or not
  *
- * @access public
  * @return boolean
+ * @since v3.0.0
  */
 
     public function hasStarted() {
@@ -119,7 +113,7 @@
 /**
  * Closes the session and writes the session data to the storage handler
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function close() {
@@ -133,7 +127,7 @@
 /**
  * Deletes an existing session
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function destroy() {
@@ -149,7 +143,7 @@
 /**
  * Delete an existing session and move the session data to a new session with a new session ID
  *
- * @access public
+ * @since v3.0.0
  */
 
     public function recreate() {
@@ -161,8 +155,8 @@
 /**
  * Return the session ID
  *
- * @access public
  * @return string
+ * @since v3.0.0
  */
 
     public function getID() {
@@ -172,8 +166,8 @@
 /**
  * Return the name of the session
  *
- * @access public
  * @return string
+ * @since v3.0.0
  */
 
     public function getName() {
@@ -184,7 +178,7 @@
  * Sets the name of the session
  *
  * @param string $name The name of the session
- * @access public
+ * @since v3.0.0
  */
 
     public function setName($name) {
@@ -201,7 +195,7 @@
  * Sets the life time of the session (in seconds)
  *
  * @param int $time The life time of the session (in seconds)
- * @access public
+ * @since v3.0.0
  */
 
     public function setLifeTime($time) {
@@ -212,7 +206,7 @@
  * Returns the cookie parameters for the session (lifetime, path, domain, secure, httponly)
  *
  * @param string $key If specified, return only the value of this cookie parameter setting
- * @access public
+ * @since v3.0.0
  */
 
     public function getCookieParameters($key = null) {
