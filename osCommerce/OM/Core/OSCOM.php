@@ -55,20 +55,20 @@
           $site = static::getDefaultSite();
         }
       } else {
-        $site = static::getDefaultSite();
-
         if ( !empty($_GET) ) {
           $requested_site = HTML::sanitize(basename(key(array_slice($_GET, 0, 1, true))));
 
           if ( static::siteExists($requested_site) ) {
             $site = $requested_site;
+          } else {
+            $site = static::getDefaultSite();
           }
+        } else {
+          $site = static::getDefaultSite();
         }
       }
 
-      if ( !empty($site) ) {
-        static::$_site = $site;
-      }
+      static::$_site = $site;
     }
 
     public static function getSite() {
@@ -76,7 +76,26 @@
     }
 
     public static function getDefaultSite() {
-      return static::getConfig('default_site', 'OSCOM');
+      $site = static::getConfig('default_site', 'OSCOM');
+      $server = HTML::sanitize($_SERVER['SERVER_NAME']);
+
+      $sites = array();
+
+      foreach ( static::$_config as $group => $key ) {
+        if ( isset($key['http_server']) && isset($key['https_server']) ) {
+          if ( ('http://' . $server == $key['http_server']) || ('https://' . $server == $key['https_server']) ) {
+            $sites[] = $group;
+          }
+        }
+      }
+
+      if ( count($sites) > 0 ) {
+        if ( !in_array($site, $sites) ) {
+          $site = $sites[0];
+        }
+      }
+
+      return $site;
     }
 
     public static function siteApplicationExists($application) {
@@ -213,16 +232,19 @@
         $search_engine_safe = true;
       }
 
+// Wrapper for RPC links; RPC cannot perform cross domain requests
+      $real_site = ($site == 'RPC') ? $application : $site;
+
       if ( $connection == 'AUTO' ) {
-        if ( (static::getRequestType() == 'SSL') && (static::getConfig('enable_ssl', $site) == 'true') ) {
-          $link = static::getConfig('https_server', $site) . static::getConfig('dir_ws_https_server', $site);
+        if ( (static::getRequestType() == 'SSL') && (static::getConfig('enable_ssl', $real_site) == 'true') ) {
+          $link = static::getConfig('https_server', $real_site) . static::getConfig('dir_ws_https_server', $real_site);
         } else {
-          $link = static::getConfig('http_server', $site) . static::getConfig('dir_ws_http_server', $site);
+          $link = static::getConfig('http_server', $real_site) . static::getConfig('dir_ws_http_server', $real_site);
         }
-      } elseif ( ($connection == 'SSL') && (static::getConfig('enable_ssl', $site) == 'true') ) {
-        $link = static::getConfig('https_server', $site) . static::getConfig('dir_ws_https_server', $site);
+      } elseif ( ($connection == 'SSL') && (static::getConfig('enable_ssl', $real_site) == 'true') ) {
+        $link = static::getConfig('https_server', $real_site) . static::getConfig('dir_ws_https_server', $real_site);
       } else {
-        $link = static::getConfig('http_server', $site) . static::getConfig('dir_ws_http_server', $site);
+        $link = static::getConfig('http_server', $real_site) . static::getConfig('dir_ws_http_server', $real_site);
       }
 
       $link .= static::getConfig('bootstrap_file', 'OSCOM') . '?';
