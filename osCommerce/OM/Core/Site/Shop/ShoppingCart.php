@@ -589,7 +589,7 @@
       $Qstock->bindInt(':products_id', $this->_contents[$item_id]['id']);
       $Qstock->execute();
 
-      if ( ($Qstock->valueInt('products_quantity') - $this->_contents[$item_id]['quantity']) > 0 ) {
+      if ( ($Qstock->valueInt('products_quantity') - $this->_contents[$item_id]['quantity']) >= 0 ) {
         return true;
       } elseif ( $this->_products_in_stock === true ) {
         $this->_products_in_stock = false;
