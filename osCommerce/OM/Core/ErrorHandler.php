@@ -17,6 +17,7 @@
 
     public static function initialize() {
       ini_set('display_errors', false);
+      ini_set('html_errors', false);
 
       if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         ini_set('log_errors', true);
