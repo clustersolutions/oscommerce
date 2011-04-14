@@ -22,11 +22,8 @@
 
       $uptime = '---';
 
-      $php_ini = ini_get('disable_functions');
-      $find = strstr($php_ini, 'exec');
-
-      if ( !$find ) {
-         $uptime = @exec('uptime');
+      if ( !in_array('exec', explode(',', str_replace(' ', '', ini_get('disable_functions')))) ) {
+        $uptime = @exec('uptime');
       }
 
       $data = array(array('key' => 'date',
