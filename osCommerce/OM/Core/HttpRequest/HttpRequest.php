@@ -16,7 +16,11 @@
       $h = new \HttpRequest($parameters['server']['scheme'] . '://' . $parameters['server']['host'] . $parameters['server']['path'] . (isset($parameters['server']['query']) ? '?' . $parameters['server']['query'] : ''), static::$_methods[$parameters['method']], array('redirect' => 5));
 
       if ( $parameters['method'] == 'post' ) {
-        $h->setRawPostData($parameters['parameters']);
+        $post_params = array();
+
+        parse_str($parameters['parameters'], $post_params);
+
+        $h->setPostFields($post_params);
       }
 
       $h->send();
