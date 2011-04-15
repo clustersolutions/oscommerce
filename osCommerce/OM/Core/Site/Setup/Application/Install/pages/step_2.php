@@ -72,11 +72,11 @@
     $('#mBox').css('visibility', 'visible').show();
     $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_store_configuration'); ?></p>');
 
-    shopName = $('#CFG_STORE_NAME').val();
-    shopOwnerName = $('#CFG_STORE_OWNER_NAME').val();
-    shopOwnerEmail = $('#CFG_STORE_OWNER_EMAIL_ADDRESS').val();
-    adminUsername = $('#CFG_ADMINISTRATOR_USERNAME').val();
-    adminPassword = $('#CFG_ADMINISTRATOR_PASSWORD').val();
+    shopName = encodeURIComponent($('#CFG_STORE_NAME').val());
+    shopOwnerName = encodeURIComponent($('#CFG_STORE_OWNER_NAME').val());
+    shopOwnerEmail = encodeURIComponent($('#CFG_STORE_OWNER_EMAIL_ADDRESS').val());
+    adminUsername = encodeURIComponent($('#CFG_ADMINISTRATOR_USERNAME').val());
+    adminPassword = encodeURIComponent($('#CFG_ADMINISTRATOR_PASSWORD').val());
 
     $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBConfigureShop'); ?>',
            'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass + '&prefix=' + dbPrefix + '&shop_name=' + shopName + '&shop_owner_name=' + shopOwnerName + '&shop_owner_email=' + shopOwnerEmail + '&admin_username=' + adminUsername + '&admin_password=' + adminPassword,

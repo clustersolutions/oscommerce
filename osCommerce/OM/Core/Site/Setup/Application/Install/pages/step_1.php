@@ -73,13 +73,13 @@
     $('#mBox').css('visibility', 'visible').show();
     $('#mBoxContents').html('<p><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/progress.gif'); ?>" align="right" hspace="5" vspace="5" border="0" /><?php echo OSCOM::getDef('rpc_database_connection_test'); ?></p>');
 
-    dbServer = $('#DB_SERVER').val();
-    dbUsername = $('#DB_SERVER_USERNAME').val();
-    dbPassword = $('#DB_SERVER_PASSWORD').val();
-    dbName = $('#DB_DATABASE').val();
-    dbPort = $('#DB_SERVER_PORT').val();
-    dbClass = $('#DB_DATABASE_CLASS').val();
-    dbPrefix = $('#DB_TABLE_PREFIX').val();
+    dbServer = encodeURIComponent($('#DB_SERVER').val());
+    dbUsername = encodeURIComponent($('#DB_SERVER_USERNAME').val());
+    dbPassword = encodeURIComponent($('#DB_SERVER_PASSWORD').val());
+    dbName = encodeURIComponent($('#DB_DATABASE').val());
+    dbPort = encodeURIComponent($('#DB_SERVER_PORT').val());
+    dbClass = encodeURIComponent($('#DB_DATABASE_CLASS').val());
+    dbPrefix = encodeURIComponent($('#DB_TABLE_PREFIX').val());
 
     $.post('<?php echo OSCOM::getRPCLink(null, null, 'DBCheck'); ?>',
            'server=' + dbServer + '&username=' + dbUsername + '&password=' + dbPassword + '&name=' + dbName + '&port=' + dbPort + '&class=' + dbClass,
