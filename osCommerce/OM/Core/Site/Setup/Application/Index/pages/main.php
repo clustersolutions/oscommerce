@@ -58,9 +58,9 @@
           <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('register_globals') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
-          <td><?php echo OSCOM::getDef('box_server_magic_quotes'); ?></td>
-          <td align="right"><?php echo (((int)ini_get('magic_quotes') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
-          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('magic_quotes') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
+          <td><?php echo OSCOM::getDef('box_server_magic_quotes_gpc'); ?></td>
+          <td align="right"><?php echo (((int)ini_get('magic_quotes_gpc') === 0) ? OSCOM::getDef('box_server_off') : OSCOM::getDef('box_server_on')); ?></td>
+          <td align="right"><img src="<?php echo OSCOM::getPublicSiteLink('templates/default/images/' . (((int)ini_get('magic_quotes_gpc') === 0) ? 'tick.gif' : 'cross.gif')); ?>" alt="" border="0" width="16" height="16" /></td>
         </tr>
         <tr>
           <td><?php echo OSCOM::getDef('box_server_file_uploads'); ?></td>
