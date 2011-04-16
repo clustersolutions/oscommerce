@@ -124,6 +124,8 @@
 ?>
 
 <div class="moduleBox">
+  <em style="float: right; margin-top: 10px;"><?php echo OSCOM::getDef('form_required_information'); ?></em>
+
   <h6><?php echo OSCOM::getDef('new_billing_address_title'); ?></h6>
 
   <div class="content">
