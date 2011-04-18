@@ -9,6 +9,7 @@
   namespace osCommerce\OM\Core;
 
   use osCommerce\OM\Core\DateTime;
+  use osCommerce\OM\Core\Language;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\PDO;
 
@@ -55,6 +56,8 @@
           $errors = "Unknown";
           break;
       }
+
+      $errstr = Language::toUTF8($errstr);
 
       $error_msg = sprintf('PHP %s:  %s in %s on line %d', $errors, $errstr, $errfile, $errline);
 
@@ -159,6 +162,8 @@
       unlink($filename);
 
       foreach ( $error_log as $error ) {
+        $error = Language::toUTF8($error);
+
         if ( preg_match('/^\[([0-9]{2})-([A-Za-z]{3})-([0-9]{4}) ([0-9]{2}):([0-5][0-9]):([0-5][0-9])\] (.*)$/', $error) ) {
           $timestamp = DateTime::getTimestamp(substr($error, 1, 20), 'd-M-Y H:i:s');
           $message = substr($error, 23);
