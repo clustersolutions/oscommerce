@@ -12,7 +12,7 @@
 
   class Delete {
     public static function execute(ApplicationAbstract $application) {
-      $application->setPageContent('delete.php');
+// Does nothing; placeholder for Delete/Process
     }
   }
 ?>

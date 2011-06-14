@@ -21,7 +21,7 @@
 <form id="liveSearchForm">
   <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
 
-  <span style="float: right;"><?php echo HTML::button(array('href' => OSCOM::getLink(null, null, 'Delete'), 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
+  <span style="float: right;"><?php echo HTML::button(array('params' => 'onclick="$(\'#dialogDeleteConfirm\').dialog(\'open\'); return false;"', 'icon' => 'trash', 'title' => OSCOM::getDef('button_delete'))); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -92,4 +92,26 @@
       rowCounter++;
     }
   }
+</script>
+
+<div id="dialogDeleteConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_delete_error_log_title')); ?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_delete_error_log_desc'); ?></p>
+</div>
+
+<script type="text/javascript">
+$(function() {
+  $('#dialogDeleteConfirm').dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    buttons: {
+      '<?php echo addslashes(OSCOM::getDef('button_delete')); ?>': function() {
+        window.location.href='<?php echo OSCOM::getLink(null, null, 'Delete&Process'); ?>';
+      },
+      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+        $(this).dialog('close');
+      }
+    }
+  });
+});
 </script>
