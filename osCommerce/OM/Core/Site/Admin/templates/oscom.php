@@ -35,9 +35,16 @@
 <script type="text/javascript" src="public/external/jquery/jquery.hoverIntent.minified.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.droppy.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.blockUI.js"></script>
 
 <script type="text/javascript" src="public/external/jquery/tipsy/jquery.tipsy.js"></script>
 <link rel="stylesheet" type="text/css" href="public/external/jquery/tipsy/tipsy.css" />
+
+<script src="public/external/jquery/jquery.netchanger.min.js"></script>
+<script src="public/external/jquery/jquery.safetynet.js"></script>
+
+<script src="public/sites/Admin/javascript/jquery/jquery.buttonsetTabs.js"></script>
+<script src="public/sites/Admin/javascript/jquery/jquery.equalResize.js"></script>
 
 <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.11.custom.css" />
 <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
