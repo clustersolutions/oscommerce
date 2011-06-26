@@ -46,8 +46,8 @@
 <script src="public/sites/Admin/javascript/jquery/jquery.buttonsetTabs.js"></script>
 <script src="public/sites/Admin/javascript/jquery/jquery.equalResize.js"></script>
 
-<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.11.custom.css" />
-<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.11.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.13.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.13.custom.min.js"></script>
 
 <script type="text/javascript" src="public/external/alexei/sprintf.js"></script>
 
