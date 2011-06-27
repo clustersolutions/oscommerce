@@ -36,6 +36,7 @@
 <script type="text/javascript" src="public/external/jquery/jquery.placeholder.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.droppy.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.blockUI.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery.md5.js"></script>
 
 <script type="text/javascript" src="public/external/jquery/tipsy/jquery.tipsy.js"></script>
 <link rel="stylesheet" type="text/css" href="public/external/jquery/tipsy/tipsy.css" />
