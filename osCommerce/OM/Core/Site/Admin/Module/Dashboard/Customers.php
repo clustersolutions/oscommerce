@@ -8,9 +8,10 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Dashboard;
 
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Access;
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
 
   class Customers extends \osCommerce\OM\Core\Site\Admin\IndexModulesAbstract {
     public function __construct() {
@@ -36,26 +37,26 @@
         $counter = 0;
 
         while ( $Qcustomers->fetch() ) {
-          $customer_icon = osc_icon('people.png');
+          $customer_icon = HTML::icon('people.png');
 
           if ( ACCOUNT_GENDER > -1 ) {
             switch ( $Qcustomers->value('customers_gender') ) {
               case 'm':
-                $customer_icon = osc_icon('user_male.png');
+                $customer_icon = HTML::icon('user_male.png');
 
                 break;
 
               case 'f':
-                $customer_icon = osc_icon('user_female.png');
+                $customer_icon = HTML::icon('user_female.png');
 
                 break;
             }
           }
 
           $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                          '      <td>' . osc_link_object(OSCOM::getLink(null, 'Customers', 'cID=' . $Qcustomers->valueInt('customers_id') . '&action=save'), $customer_icon . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
+                          '      <td>' . HTML::link(OSCOM::getLink(null, 'Customers', 'Save&id=' . $Qcustomers->valueInt('customers_id')), $customer_icon . '&nbsp;' . $Qcustomers->valueProtected('customers_firstname') . ' ' . $Qcustomers->valueProtected('customers_lastname')) . '</td>' .
                           '      <td>' . $Qcustomers->value('date_account_created') . '</td>' .
-                          '      <td align="center">' . osc_icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
+                          '      <td align="center">' . HTML::icon(($Qcustomers->valueInt('customers_status') === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                           '    </tr>';
 
           $counter++;
