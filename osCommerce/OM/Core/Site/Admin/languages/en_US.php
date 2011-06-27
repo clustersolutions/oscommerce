@@ -29,6 +29,7 @@ batch_results_number_of_entries = Displaying <b>%d</b> to <b>%d</b> (of <b>%d</b
 result_set_current_page = Page %s of %d
 maximum_file_upload_size = Max: %s
 
+button_add = Add
 button_approve = Approve
 button_back = Back
 button_backup = Backup
@@ -95,6 +96,7 @@ icon_shortcut_add = Add Shortcut
 icon_shortcut_remove = Remove Shortcut
 icon_statistics = Statistics
 icon_trash = Delete
+icon_undo = Undo
 icon_uninstall = Uninstall
 icon_unlocked = Unlocked
 icon_update = Update
