@@ -213,7 +213,7 @@
         if ( isset($params['newwindow']) ) {
           $button .= ' onclick="window.open(\'' . $params['href'] . '\');"';
         } else {
-          $button .= ' onclick="document.location.href=\'' . $params['href'] . '\';"';
+          $button .= ' onclick="window.location.href=\'' . $params['href'] . '\';"';
         }
       }
 
@@ -473,7 +473,7 @@
 
         if ( is_array($value) ) {
           $selection_value = $value['id'];
-          $selection_text = '&nbsp;' . $value['text'];
+          $selection_text = $value['text'];
         } else {
           $selection_value = $value;
           $selection_text = '';
@@ -503,7 +503,7 @@
         $field .= ' />';
 
         if ( !empty($selection_text) ) {
-          $field .= '<label for="' . static::output($name) . (count($values) > 1 ? $counter : '') . '" class="fieldLabel">' . $selection_text . '</label>';
+          $field .= '<label for="' . static::output($name) . (count($values) > 1 ? '_' . $counter : '') . '" class="fieldLabel">' . $selection_text . '</label>';
         }
 
         $field .= $separator;
