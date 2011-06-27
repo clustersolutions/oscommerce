@@ -243,6 +243,25 @@
     }
 
 /**
+ * Check if a country has zones
+ *
+ * @param int $id The ID of the country
+ * @access public
+ * @return boolean
+ * @since v3.0.2
+ */
+
+    public static function hasZones($id) {
+      $OSCOM_PDO = Registry::get('PDO');
+
+      $Qzones = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id limit 1');
+      $Qzones->bindInt(':zone_country_id', $id);
+      $Qzones->execute();
+
+      return ( $Qzones->fetch() !== false );
+    }
+
+/**
  * Return the zones belonging to a country, or all zones
  *
  * @param int $id The ID of the country
