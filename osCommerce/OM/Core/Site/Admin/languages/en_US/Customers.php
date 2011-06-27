@@ -7,19 +7,18 @@ app_title = Customers
 
 heading_title = Customers
 
-operation_title_search = Search:
-operation_new_address_book_entry = New Address Book Entry
-
 table_heading_customers = Customers
 table_heading_date_created = Date Created
 table_heading_action = Action
 
 action_heading_new_customer = New Customer
-action_heading_new_address_book_entry = New Address Book Entry
-action_heading_batch_delete_customers = Batch Delete Customers
 
 section_personal = Personal
+section_password = Password
 section_address_book = Address Book
+section_newsletters = Newsletters
+section_map = Map
+section_social = Social
 
 field_gender = Gender:
 field_first_name = First Name:
@@ -27,8 +26,6 @@ field_last_name = Last Name:
 field_date_of_birth = Date of Birth:
 field_email_address = E-Mail Address:
 field_newsletter_subscription = Newsletter Subscription:
-field_password = Password:
-field_password_confirmation = Password Confirmation:
 field_new_password = New Password:
 field_new_password_confirmation = New Password Confirmation:
 field_status = Status:
@@ -42,19 +39,23 @@ field_country = Country:
 field_telephone_number = Telephone Number:
 field_fax_number = Fax Number:
 field_set_as_primary = Set as Primary Address:
-field_delete_reviews = Delete Reviews?
 
-total_reviews = %s Reviews
-primary_address = primary
-no_telephone_number = no telephone number
-no_fax_number = no fax number
+primary_address = Primary Address
 
-introduction_delete_customer = Please verify the removal of this customer.
+dialog_delete_customer_title = Delete Customer
+dialog_delete_customer_desc = The selected customer will be permanently deleted and cannot be recovered. Are you sure?
 
-introduction_batch_delete_customers = Please verify the removal of the following customers.
+dialog_batch_delete_customer_title = Batch Delete Customer
+dialog_batch_delete_customer_desc = The selected customers will be permanently deleted and cannot be recovered. Are you sure?
 
-introduction_delete_address_book_entry = Please verify the removal of this address book entry.
-delete_warning_primary_address_book_entry = Warning: The primary address of this customer cannot be removed. Please assign another address as the primary address and try again.
+dialog_delete_address_title = Delete Address
+dialog_delete_address_desc = The selected address will be flagged for removal. Are you sure?
+
+dialog_delete_new_address_title = Delete New Address
+dialog_delete_new_address_desc = The new address will be permanently deleted and cannot be recovered. Are you sure?
+
+dialog_delete_default_address_title = Delete Address
+dialog_delete_default_address_desc = The primary address cannot be deleted. Please set another primary address and try again.
 
 ms_error_gender = Please select the customers gender.
 ms_error_first_name = The customers first name must contain a minimum of %s characters.
@@ -74,22 +75,3 @@ ms_error_state = The customers state must contain a minimum of %s characters.
 ms_error_country = Please select the correct country from the Countries pull down menu.
 ms_error_telephone_number = The customers telephone number must contain a minimum of %s characters.
 ms_error_fax_number = The customers fax number must contain a minimum of %s characters.
-
-ms_warning_state_select_from_list = Please select the correct state from the States pull down menu.
-
-email_subject = Welcome to %s
-email_greet_general = Dear %s,
-email_greet_mr = Dear Mr. %s,
-email_greet_ms = Dear Ms. %s,
-email_text = We welcome you to %s.
-
-You can now take part in the various services we have to offer you. Some of these services include:
-
-* Permanent Shopping Cart - Any products added to your online shopping cart remain there until you purchase or remove them
-* Address Book - Products can be delivered to any addresses you define in your addres book! This is perfect for sending gifts direct to the person themself.
-* Order History - The previous orders you have made can be viewed online.
-* Product Reviews - Share your opinions on products with other customers.
-
-For help with any of our online services please e-mail us at: %s
-
-Please note: This account has been created for you by the store owner. Please use your e-mail address with the following password as your login account: %s
