@@ -27,7 +27,7 @@
 <meta name="generator" value="osCommerce Online Merchant" />
 <meta name="robots" content="noindex,nofollow" />
 
-<script type="text/javascript" src="public/external/jquery/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="public/external/jquery/jquery-1.6.1.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.cookie.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.json-2.2.min.js"></script>
 <script type="text/javascript" src="public/external/jquery/jquery.tinysort.min.js"></script>
