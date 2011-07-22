@@ -277,7 +277,7 @@
       return false;
     }
 
-    function getChildren($category_id, &$array) {
+    function getChildren($category_id, &$array = array()) {
       foreach ($this->_data as $parent => $categories) {
         if ($parent == $category_id) {
           foreach ($categories as $id => $info) {
@@ -290,21 +290,43 @@
       return $array;
     }
 
-    function getData($id) {
-      foreach ($this->_data as $parent => $categories) {
-        foreach ($categories as $category_id => $info) {
-          if ($id == $category_id) {
-            return array('id' => $id,
-                         'name' => $info['name'],
-                         'parent_id' => $parent,
-                         'image' => $info['image'],
-                         'count' => $info['count']
-                        );
+/**
+ * Return category information
+ *
+ * @param int $id The category ID to return information of
+ * @param string $key The key information to return (since v3.0.2)
+ * @return mixed
+ * @since v3.0.0
+ */
+
+    public function getData($id, $key = null) {
+      foreach ( $this->_data as $parent => $categories ) {
+        foreach ( $categories as $category_id => $info ) {
+          if ( $id == $category_id ) {
+            $data = array('id' => $id,
+                          'name' => $info['name'],
+                          'parent_id' => $parent,
+                          'image' => $info['image'],
+                          'count' => $info['count']);
+
+            return ( isset($key) ? $data[$key] : $data );
           }
         }
       }
 
       return false;
+    }
+
+/**
+ * Return the parent ID of a category
+ *
+ * @param int $id The category ID to return the parent ID of
+ * @return int
+ * @since v3.0.2
+ */
+
+    public function getParentID($id) {
+      return $this->getData($id, 'parent_id');
     }
 
 /**

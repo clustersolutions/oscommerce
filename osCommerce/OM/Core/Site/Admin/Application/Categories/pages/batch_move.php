@@ -1,67 +1,58 @@
 <?php
-/*
-  $Id: $
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
-
-  $categories_array = array(array('id' => '0',
-                                  'text' => $osC_Language->get('top_category')));
-
-  foreach ( $osC_CategoryTree->getArray() as $value ) {
-    $categories_array[] = array('id' => $value['id'],
-                                'text' => $value['title']);
-  }
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<script>
+$(function() {
+  $('#cMoveBatchForm input, #cMoveBatchForm select, #cMoveBatchForm textarea, #cMoveBatchForm fileupload').safetynet();
+});
+</script>
+
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('move.png') . ' ' . $osC_Language->get('action_heading_batch_move_categories'); ?></div>
-<div class="infoBoxContent">
-  <form name="cMoveBatch" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=batch_move'); ?>" method="post">
+<form id="cMoveBatchForm" name="cMoveBatch" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'BatchMove&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>" method="post">
 
-  <p><?php echo $osC_Language->get('introduction_batch_move_categories'); ?></p>
+<div id="formButtons" style="float: right;"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink(null, null, 'cid=' . $OSCOM_Application->getCurrentCategoryID()) . '\';"')); ?></div>
+
+<div style="clear: both;"></div>
+
+<div class="infoBox">
+  <h3><?php echo HTML::icon('move.png') . ' ' . OSCOM::getDef('action_heading_batch_move_categories'); ?></h3>
+
+  <p><?php echo OSCOM::getDef('introduction_batch_move_categories'); ?></p>
 
   <fieldset>
 
 <?php
-  $Qcategories = $osC_Database->query('select c.categories_id, cd.categories_name from :table_categories c, :table_categories_description cd where c.categories_id in (":categories_id") and c.categories_id = cd.categories_id and cd.language_id = :language_id order by cd.categories_name');
-  $Qcategories->bindTable(':table_categories', TABLE_CATEGORIES);
-  $Qcategories->bindTable(':table_categories_description', TABLE_CATEGORIES_DESCRIPTION);
-  $Qcategories->bindRaw(':categories_id', implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))));
-  $Qcategories->bindInt(':language_id', $osC_Language->getID());
-  $Qcategories->execute();
+  $categories = '';
 
-  $names_string = '';
-
-  while ( $Qcategories->next() ) {
-    $names_string .= osc_draw_hidden_field('batch[]', $Qcategories->valueInt('categories_id')) . '<b>' . $Qcategories->value('categories_name') . '</b>, ';
+  foreach ( $_POST['batch'] as $c ) {
+    $categories .= HTML::hiddenField('batch[]', $c) . '<b>' . $OSCOM_CategoryTree->getData($c, 'name') . '</b>, ';
   }
 
-  if ( !empty($names_string) ) {
-    $names_string = substr($names_string, 0, -2);
+  if ( !empty($categories) ) {
+    $categories = substr($categories, 0, -2);
   }
 
-  echo '<p>' . $names_string . '</p>';
+  echo '<p>' . $categories . '</p>';
 ?>
 
-    <div><label for="new_category_id"><?php echo $osC_Language->get('field_parent_category'); ?></label><?php echo osc_draw_pull_down_menu('new_category_id', $categories_array); ?></div>
+    <p><label for="parent_id"><?php echo OSCOM::getDef('field_parent_category'); ?></label><?php echo HTML::selectMenu('parent_id', array_merge(array(array('id' => '0', 'text' => OSCOM::getDef('top_category'))), $OSCOM_Application->getCategoryList()), $OSCOM_Application->getCurrentCategoryID()); ?></p>
   </fieldset>
-
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_move') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
-
-  </form>
 </div>
+
+</form>
