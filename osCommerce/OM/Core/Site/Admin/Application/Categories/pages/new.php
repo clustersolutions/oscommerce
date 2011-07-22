@@ -1,59 +1,50 @@
 <?php
-/*
-  $Id: $
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
-
-  $categories_array = array(array('id' => '0',
-                                  'text' => $osC_Language->get('top_category')));
-
-  foreach ( $osC_CategoryTree->getArray() as $value ) {
-    $id = explode('_', $value['id']);
-    $id = end($id);
-
-    $categories_array[] = array('id' => $id,
-                                'text' => $value['title']);
-  }
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo osc_link_object(osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule()), $osC_Template->getPageTitle()); ?></h1>
+<script>
+$(function() {
+  $('#cNewForm input, #cNewForm select, #cNewForm textarea, #cNewForm fileupload').safetynet();
+});
+</script>
+
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
-  if ( $osC_MessageStack->exists($osC_Template->getModule()) ) {
-    echo $osC_MessageStack->get($osC_Template->getModule());
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
   }
 ?>
 
-<div class="infoBoxHeading"><?php echo osc_icon('new.png') . ' ' . $osC_Language->get('action_heading_new_category'); ?></div>
-<div class="infoBoxContent">
-  <form name="cNew" class="dataForm" action="<?php echo osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()] . '&action=save'); ?>" method="post" enctype="multipart/form-data">
+<form id="cNewForm" name="cNew" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>" method="post" enctype="multipart/form-data">
 
-  <p><?php echo $osC_Language->get('introduction_new_category'); ?></p>
+<div id="formButtons" style="float: right;"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink(null, null, 'cid=' . $OSCOM_Application->getCurrentCategoryID()) . '\';"')); ?></div>
+
+<div style="clear: both;"></div>
+
+<div class="infoBox">
+  <h3><?php echo HTML::icon('new.png') . ' ' . OSCOM::getDef('action_heading_new_category'); ?></h3>
 
   <fieldset>
-    <div><label for="parent_id"><?php echo $osC_Language->get('field_parent_category'); ?></label><?php echo osc_draw_pull_down_menu('parent_id', $categories_array, $current_category_id); ?></div>
-    <div><label><?php echo $osC_Language->get('field_name'); ?></label>
+    <p><label for="parent_id"><?php echo OSCOM::getDef('field_parent_category'); ?></label><?php echo HTML::selectMenu('parent_id', array_merge(array(array('id' => '0', 'text' => OSCOM::getDef('top_category'))), $OSCOM_Application->getCategoryList()), $OSCOM_Application->getCurrentCategoryID()); ?></p>
+    <p><label><?php echo OSCOM::getDef('field_name'); ?></label></p>
 
 <?php
-  foreach ( $osC_Language->getAll() as $l ) {
-    echo '<p>' . $osC_Language->showImage($l['code']) . '&nbsp;' . $l['name'] . '<br />' . osc_draw_input_field('categories_name[' . $l['id'] . ']') . '</p>';
+  foreach ( $OSCOM_Language->getAll() as $l ) {
+    echo '<p>' . $OSCOM_Language->showImage($l['code']) . '&nbsp;' . $l['name'] . '<br />' . HTML::inputField('categories_name[' . $l['id'] . ']') . '</p>';
   }
 ?>
 
-    </div>
-    <div><label for="categories_image"><?php echo $osC_Language->get('field_image'); ?></label><?php echo osc_draw_file_field('categories_image', true); ?></div>
-    <div><label for="sort_order"><?php echo $osC_Language->get('field_sort_order'); ?></label><?php echo osc_draw_input_field('sort_order'); ?></div>
+    <p><label for="categories_image"><?php echo OSCOM::getDef('field_image'); ?></label><?php echo HTML::fileField('categories_image'); ?></p>
   </fieldset>
-
-  <p align="center"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '=' . $_GET[$osC_Template->getModule()]) . '\';" class="operationButton" />'; ?></p>
-
-  </form>
 </div>
+
+</form>

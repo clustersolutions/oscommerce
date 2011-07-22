@@ -79,7 +79,7 @@ var osC_DataTable = function() {
       batchCurrentPage = page;
       moduleParams['search'] = search;
 
-      $('#batchTotalPages').html(batchIconProgress + '&nbsp;Loading...');
+      $('#batchTotalPages').html(batchIconProgress + '&nbsp;Loading&hellip;');
 
       $.getJSON(dataTableDataURL + '&' + $.param(moduleParams),
         function (response) {
@@ -107,7 +107,32 @@ var osC_DataTable = function() {
 
             feedDataTable(response);
 
+// Add alternating row background colours
             $('#' + dataTableName + ' tbody tr:odd').addClass('alt');
+
+// Check if table listing is jQuery.sortable()
+            if ( $('#' + dataTableName + ' tbody:data(sortable)').length > 0 ) {
+// Attach a helper function to properly resize the dragged item
+              $('#' + dataTableName + ' tbody').sortable({
+                helper: function(e, tr) {
+                  var $originals = tr.children();
+                  var $helper = tr.clone();
+
+                  $helper.children().each(function(index) {
+// Set helper cell sizes to match the original sizes
+                    $(this).width($originals.eq(index).width());
+                  });
+
+                  return $helper;
+                }
+              });
+
+// Automatically refresh alternating row background colours on change
+              $('#' + dataTableName + ' tbody').bind('sortupdate', function(event, ui) {
+                $('#' + dataTableName + ' tbody tr').removeClass('alt');
+                $('#' + dataTableName + ' tbody tr:odd').addClass('alt');
+              });
+            }
 
             $('#batchTotalPages').html(batchTotalPagesText.sprintf(batchFrom, batchTo, batchTotalRecords));
 

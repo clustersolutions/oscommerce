@@ -540,7 +540,8 @@
  * @param string $default The default value for the radio field
  * @param string $parameters Additional parameters for the radio field
  * @param string $separator The separator to use between multiple options for the radio field
- * @access public
+ * @return string
+ * @since v3.0.0
  */
 
     public static function radioField($name, $values, $default = null, $parameters = null, $separator = '&nbsp;&nbsp;') {
@@ -587,6 +588,18 @@
         return static::hiddenField($OSCOM_Session->getName(), $OSCOM_Session->getID());
       }
     }
+
+/**
+ * Generate a form file upload field
+ *
+ * @param string $name The name and ID of the file upload field
+ * @return string
+ * @since v3.0.2
+ */
+
+  public static function fileField($name) {
+    return static::inputField($name, null, null, false, 'file');
+  }
 
 /**
  * Generate a label for form field elements
