@@ -141,7 +141,7 @@
 <?php
   }
 
-  if ( $OSCOM_Customer->hasDefaultAddress() && ((isset($_GET['Edit']) && ($OSCOM_Customer->getDefaultAddressID() != $_GET['AddressBook'])) || isset($_GET['New'])) ) {
+  if ( $OSCOM_Customer->hasDefaultAddress() && ((isset($_GET['Edit']) && ($OSCOM_Customer->getDefaultAddressID() != $_GET['Edit'])) || isset($_GET['Create'])) ) {
 ?>
 
   <li><?php echo HTML::checkboxField('primary', array(array('id' => 'on', 'text' => OSCOM::getDef('set_as_primary'))), false); ?></li>

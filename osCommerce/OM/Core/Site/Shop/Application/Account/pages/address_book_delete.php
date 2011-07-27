@@ -10,8 +10,6 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\Address;
   use osCommerce\OM\Core\Site\Shop\AddressBook;
-
-  $Qentry = AddressBook::getEntry($_GET['Delete']);
 ?>
 
 <h1><?php echo $OSCOM_Template->getPageTitle(); ?></h1>
