@@ -19,32 +19,32 @@
                           array('id' => 'f', 'text' => OSCOM::getDef('gender_female')));
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), null, 'fake', (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array, (isset($osC_oiAddress) && $osC_oiAddress->exists('gender') ? $osC_oiAddress->get('gender') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getGender() : null))); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), 'gender_1', null, (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array, (isset($osC_oiAddress) && $osC_oiAddress->exists('gender') ? $osC_oiAddress->get('gender') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getGender() : null))); ?></li>
 
 <?php
   }
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_first_name'), null, 'firstname', true) . HTML::inputField('firstname', (isset($osC_oiAddress) && $osC_oiAddress->exists('firstname') ? $osC_oiAddress->get('firstname') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getFirstName() : null))); ?></tli>
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_last_name'), null, 'lastname', true) . HTML::inputField('lastname', (isset($osC_oiAddress) && $osC_oiAddress->exists('lastname') ? $osC_oiAddress->get('lastname') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getLastName() : null))); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_first_name'), 'firstname', null, true) . HTML::inputField('firstname', (isset($osC_oiAddress) && $osC_oiAddress->exists('firstname') ? $osC_oiAddress->get('firstname') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getFirstName() : null))); ?></tli>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_last_name'), 'lastname', null, true) . HTML::inputField('lastname', (isset($osC_oiAddress) && $osC_oiAddress->exists('lastname') ? $osC_oiAddress->get('lastname') : (!$OSCOM_Customer->hasDefaultAddress() ? $OSCOM_Customer->getLastName() : null))); ?></li>
 
 <?php
   if ( ACCOUNT_COMPANY > -1 ) {
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_company'), null, 'company', (ACCOUNT_COMPANY > 0)) . HTML::inputField('company', (isset($osC_oiAddress) && $osC_oiAddress->exists('company') ? $osC_oiAddress->get('company') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_company'), 'company', null, (ACCOUNT_COMPANY > 0)) . HTML::inputField('company', (isset($osC_oiAddress) && $osC_oiAddress->exists('company') ? $osC_oiAddress->get('company') : null)); ?></li>
 
 <?php
   }
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_street_address'), null, 'street_address', true) . HTML::inputField('street_address', (isset($osC_oiAddress) && $osC_oiAddress->exists('street_address') ? $osC_oiAddress->get('street_address') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_street_address'), 'street_address', null, true) . HTML::inputField('street_address', (isset($osC_oiAddress) && $osC_oiAddress->exists('street_address') ? $osC_oiAddress->get('street_address') : null)); ?></li>
 
 <?php
   if ( ACCOUNT_SUBURB > -1 ) {
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_suburb'), null, 'suburb', (ACCOUNT_SUBURB > 0)) . HTML::inputField('suburb', (isset($osC_oiAddress) && $osC_oiAddress->exists('suburb') ? $osC_oiAddress->get('suburb') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_suburb'), 'suburb', null, (ACCOUNT_SUBURB > 0)) . HTML::inputField('suburb', (isset($osC_oiAddress) && $osC_oiAddress->exists('suburb') ? $osC_oiAddress->get('suburb') : null)); ?></li>
 
 <?php
   }
@@ -52,13 +52,13 @@
   if ( ACCOUNT_POST_CODE > -1 ) {
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_post_code'), null, 'postcode', (ACCOUNT_POST_CODE > 0)) . HTML::inputField('postcode', (isset($osC_oiAddress) && $osC_oiAddress->exists('postcode') ? $osC_oiAddress->get('postcode') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_post_code'), 'postcode', null, (ACCOUNT_POST_CODE > 0)) . HTML::inputField('postcode', (isset($osC_oiAddress) && $osC_oiAddress->exists('postcode') ? $osC_oiAddress->get('postcode') : null)); ?></li>
 
 <?php
   }
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_city'), null, 'city', true) . HTML::inputField('city', (isset($osC_oiAddress) && $osC_oiAddress->exists('city') ? $osC_oiAddress->get('city') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_city'), 'city', null, true) . HTML::inputField('city', (isset($osC_oiAddress) && $osC_oiAddress->exists('city') ? $osC_oiAddress->get('city') : null)); ?></li>
 
 <?php
   if ( ACCOUNT_STATE > -1 ) {
@@ -67,7 +67,7 @@
   <li>
 
 <?php
-    echo HTML::label(OSCOM::getDef('field_customer_state'), null, 'state', (ACCOUNT_STATE > 0));
+    echo HTML::label(OSCOM::getDef('field_customer_state'), 'state', null, (ACCOUNT_STATE > 0));
 
     if ( isset($entry_state_has_zones) ) { // HPDL
       if ( $entry_state_has_zones === true ) {
@@ -109,7 +109,7 @@
   <li>
 
 <?php
-  echo HTML::label(OSCOM::getDef('field_customer_country'), null, 'country', true);
+  echo HTML::label(OSCOM::getDef('field_customer_country'), 'country', null, true);
 
   $countries_array = array(array('id' => '',
                                  'text' => OSCOM::getDef('pull_down_default')));
@@ -128,7 +128,7 @@
   if ( ACCOUNT_TELEPHONE > -1 ) {
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_telephone_number'), null, 'telephone', (ACCOUNT_TELEPHONE > 0)) . HTML::inputField('telephone', (isset($osC_oiAddress) && $osC_oiAddress->exists('telephone') ? $osC_oiAddress->get('telephone') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_telephone_number'), 'telephone', null, (ACCOUNT_TELEPHONE > 0)) . HTML::inputField('telephone', (isset($osC_oiAddress) && $osC_oiAddress->exists('telephone') ? $osC_oiAddress->get('telephone') : null)); ?></li>
 
 <?php
   }
@@ -136,7 +136,7 @@
   if ( ACCOUNT_FAX > -1 ) {
 ?>
 
-  <li><?php echo HTML::label(OSCOM::getDef('field_customer_fax_number'), null, 'fax', (ACCOUNT_FAX > 0)) . HTML::inputField('fax', (isset($osC_oiAddress) && $osC_oiAddress->exists('fax') ? $osC_oiAddress->get('fax') : null)); ?></li>
+  <li><?php echo HTML::label(OSCOM::getDef('field_customer_fax_number'), 'fax', null, (ACCOUNT_FAX > 0)) . HTML::inputField('fax', (isset($osC_oiAddress) && $osC_oiAddress->exists('fax') ? $osC_oiAddress->get('fax') : null)); ?></li>
 
 <?php
   }

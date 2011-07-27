@@ -29,8 +29,8 @@
 
   <div class="content">
     <ol>
-      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_customer_name'), null, 'from_name', true) . HTML::inputField('from_name', ($OSCOM_Customer->isLoggedOn() ? $OSCOM_Customer->getName() : null)); ?></li>
-      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_customer_email_address'), null, 'from_email_address', true) . HTML::inputField('from_email_address', ($OSCOM_Customer->isLoggedOn() ? $OSCOM_Customer->getEmailAddress() : null)); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_customer_name'), 'from_name', null, true) . HTML::inputField('from_name', ($OSCOM_Customer->isLoggedOn() ? $OSCOM_Customer->getName() : null)); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_customer_email_address'), 'from_email_address', null, true) . HTML::inputField('from_email_address', ($OSCOM_Customer->isLoggedOn() ? $OSCOM_Customer->getEmailAddress() : null)); ?></li>
     </ol>
   </div>
 </div>
@@ -40,8 +40,8 @@
 
   <div class="content">
     <ol>
-      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_friends_name'), null, 'to_name', true) . HTML::inputField('to_name'); ?></li>
-      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_friends_email_address'), null, 'to_email_address', true) . HTML::inputField('to_email_address'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_friends_name'), 'to_name', null, true) . HTML::inputField('to_name'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_tell_a_friend_friends_email_address'), 'to_email_address', null, true) . HTML::inputField('to_email_address'); ?></li>
     </ol>
   </div>
 </div>

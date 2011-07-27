@@ -34,8 +34,8 @@
   if ( $OSCOM_Customer->isLoggedOn() === false ) {
 ?>
 
-      <li><?php echo HTML::label(ENTRY_NAME, null, 'customer_name') . HTML::inputField('customer_name'); ?></li>
-      <li><?php echo HTML::label(OSCOM::getDef('field_customer_email_address'), null, 'customer_email_address') . HTML::inputField('customer_email_address'); ?></li>
+      <li><?php echo HTML::label(ENTRY_NAME, 'customer_name') . HTML::inputField('customer_name'); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_email_address'), 'customer_email_address') . HTML::inputField('customer_email_address'); ?></li>
 
 <?php
   }
