@@ -69,6 +69,15 @@
       if ( !OSCOM::configExists('dir_fs_public', 'OSCOM') || !file_exists(OSCOM::getConfig('dir_fs_public', 'OSCOM')) ) {
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_dir_fs_public_not_defined'), 'warning');
       }
+
+// check if the upload directory exists
+      if ( is_dir(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'upload') ) {
+        if ( !is_writeable(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'upload') ) {
+          Registry::get('MessageStack')->add('header', sprintf(OSCOM::getDef('ms_error_upload_directory_not_writable'), OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'upload'), 'error');
+        }
+      } else {
+        Registry::get('MessageStack')->add('header', sprintf(OSCOM::getDef('ms_error_upload_directory_non_existant'), OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'upload'), 'error');
+      }
     }
 
     public static function getDefaultApplication() {
