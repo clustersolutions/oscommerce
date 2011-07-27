@@ -121,3 +121,5 @@ ms_error_upload_file_not_saved = Error: The file upload was not saved.
 ms_error_upload_file_type_prohibited = Error: The type of file uploaded is not allowed.
 ms_error_file_not_removable = Error: This file cannot be removed: %s
 ms_error_directory_not_removable = Error: This directory cannot be removed: %s
+ms_error_upload_directory_not_writable = Error: The upload directory is not writable: %s
+ms_error_upload_directory_non_existant = Error: The upload directory does not exist: %s
