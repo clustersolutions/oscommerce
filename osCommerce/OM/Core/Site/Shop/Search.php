@@ -273,7 +273,9 @@
 
       if ( $this->hasCategory() ) {
         if ( $this->isRecursive() ) {
-          $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (' . implode(',', $OSCOM_CategoryTree->getChildren($this->_category, array($this->_category))) . ')';
+          $subcategories_array = array($this->_category);
+
+          $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and p2c.categories_id in (' . implode(',', $OSCOM_CategoryTree->getChildren($this->_category, $subcategories_array)) . ')';
         } else {
           $sql_query .= ' and p2c.products_id = p.products_id and p2c.products_id = pd.products_id and pd.language_id = :language_id_c and p2c.categories_id = :categories_id';
         }
