@@ -45,18 +45,49 @@ $(function() {
   foreach ( $OSCOM_Language->getAll() as $l ) {
     echo '<p>' . $OSCOM_Language->showImage($l['code']) . '&nbsp;' . $l['name'] . '<br />' . HTML::inputField('categories_name[' . $l['id'] . ']', Categories::get($OSCOM_ObjectInfo->getInt('categories_id'), 'categories_name', $l['id'])) . '</p>';
   }
-
-  if ( strlen($OSCOM_ObjectInfo->get('categories_image')) > 0 ) {
 ?>
 
-    <p><?php echo HTML::link('public/categories/' . $OSCOM_ObjectInfo->get('categories_image'), HTML::image('public/categories/' . $OSCOM_ObjectInfo->get('categories_image'), $OSCOM_ObjectInfo->get('categories_name'), null, null, 'style="max-width: 64px; max-height: 64px;"'), 'target="_blank"') . '<br />public/categories/' . $OSCOM_ObjectInfo->getProtected('categories_image'); ?></p>
+    <p><label><?php echo OSCOM::getDef('field_image'); ?></label></p>
+    <p id="cImage" class="imageSelectorPlaceholder"></p>
 
-<?php
-  }
-?>
+    <p><label><?php echo OSCOM::getDef('field_image_browser'); ?></label></p>
+    <div class="imageSelector">
+      <ul id="cImages"></ul>
 
-    <p><label for="categories_image"><?php echo OSCOM::getDef('field_image'); ?></label><?php echo HTML::fileField('categories_image'); ?></p>
+      <div id="fileUploader" style="padding-top: 50px; padding-left: 20px;"></div>
+    </div>
   </fieldset>
 </div>
 
 </form>
+
+<script>
+function loadImageSelector() {
+  $('#cImages').imageSelector({
+    json: '<?php echo OSCOM::getRPCLink(null, null, 'GetAvailableImages'); ?>',
+    imagePath: 'public/upload',
+    show: 5,
+    selector: 'cImage',
+    images: <?php echo ( (strlen($OSCOM_ObjectInfo->get('categories_image')) > 0) ? '\'public/categories/' . $OSCOM_ObjectInfo->get('categories_image') . '\'' : 'null' ); ?>
+  });
+}
+
+$(function() {
+  loadImageSelector();
+
+  var uploader = new qq.FileUploader({
+    element: document.getElementById('fileUploader'),
+    action: '<?php echo OSCOM::getRPCLink(null, null, 'SaveUploadedImage'); ?>',
+    allowedExtensions: ['gif', 'jpg', 'png'],
+    textUpload: '<?php echo OSCOM::getDef('button_upload_new_file'); ?>',
+    onComplete: function(id, fileName, responseJSON) {
+      fileName = responseJSON.filename;
+
+      loadImageSelector();
+
+      $('#cImage').html('<img src="public/upload/' + fileName + '" alt="' + fileName + '" title="' + fileName + '" onclick="window.open(this.src);" /><input type="hidden" name="cImageSelected" value="' + fileName + '" />');
+    }
+  });
+});
+
+</script>

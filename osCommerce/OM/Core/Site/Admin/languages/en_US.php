@@ -59,6 +59,7 @@ button_uninstall = Uninstall
 button_update = Update
 button_update_currency_exchange_rates = Update Currency Exchange Rates
 button_upload = Upload
+button_upload_new_file = Upload New File
 
 placeholder_search = Search..
 

@@ -43,8 +43,45 @@ $(function() {
   }
 ?>
 
-    <p><label for="categories_image"><?php echo OSCOM::getDef('field_image'); ?></label><?php echo HTML::fileField('categories_image'); ?></p>
+    <p><label><?php echo OSCOM::getDef('field_image'); ?></label></p>
+    <p id="cImage" class="imageSelectorPlaceholder"></p>
+
+    <p><label><?php echo OSCOM::getDef('field_image_browser'); ?></label></p>
+    <div class="imageSelector">
+      <ul id="cImages"></ul>
+
+      <div id="fileUploader" style="padding-top: 50px; padding-left: 20px;"></div>
+    </div>
   </fieldset>
 </div>
 
 </form>
+
+<script>
+function loadImageSelector() {
+  $('#cImages').imageSelector({
+    json: '<?php echo OSCOM::getRPCLink(null, null, 'GetAvailableImages'); ?>',
+    imagePath: 'public/upload',
+    show: 5,
+    selector: 'cImage'
+  });
+}
+
+$(function() {
+  loadImageSelector();
+
+  var uploader = new qq.FileUploader({
+    element: document.getElementById('fileUploader'),
+    action: '<?php echo OSCOM::getRPCLink(null, null, 'SaveUploadedImage'); ?>',
+    allowedExtensions: ['gif', 'jpg', 'png'],
+    textUpload: '<?php echo OSCOM::getDef('button_upload_new_file'); ?>',
+    onComplete: function(id, fileName, responseJSON) {
+      fileName = responseJSON.filename;
+
+      loadImageSelector();
+
+      $('#cImage').html('<img src="public/upload/' + fileName + '" alt="' + fileName + '" title="' + fileName + '" onclick="window.open(this.src);" /><input type="hidden" name="cImageSelected" value="' + fileName + '" />');
+    }
+  });
+});
+</script>

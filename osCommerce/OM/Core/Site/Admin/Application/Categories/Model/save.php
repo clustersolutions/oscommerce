@@ -12,7 +12,7 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
-  use osCommerce\OM\Core\Upload;
+  use osCommerce\OM\Core\Site\Admin\Application\Categories\Categories;
 
   class save {
     public static function execute($id = null, $data) {
@@ -34,11 +34,23 @@
         }
       }
 
-      if ( isset($data['upload_image']) ) {
-        $image = new Upload($data['upload_image'], OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories');
+      if ( isset($data['image']) ) {
+        $new_image = $data['image'];
 
-        if ( $image->exists() && $image->parse() && $image->save() ) {
-          $data['image'] = $image->getFilename();
+        while ( file_exists(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories/' . $new_image) ) {
+          $new_image = rand(10, 99) . $new_image;
+        }
+
+        if ( rename(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'upload/' . $data['image'], OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories/' . $new_image) ) {
+          if ( is_numeric($id) ) {
+            $old_image = Categories::get($id, 'categories_image');
+
+            unlink(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'categories/' . $old_image);
+          }
+
+          $data['image'] = $new_image;
+        } else {
+          $data['image'] = null;
         }
       }
 

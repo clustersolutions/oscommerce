@@ -16,7 +16,7 @@
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $data = array('name' => $_POST['categories_name'],
-                    'upload_image' => isset($_FILES['categories_image']) ? $_FILES['categories_image'] : null,
+                    'image' => isset($_POST['cImageSelected']) ? $_POST['cImageSelected'] : null,
                     'parent_id' => $_POST['parent_id']);
 
       if ( Categories::save((isset($_GET['id']) && is_numeric($_GET['id']) ? $_GET['id'] : null), $data) ) {

@@ -46,6 +46,10 @@
 
 <script src="public/sites/Admin/javascript/jquery/jquery.buttonsetTabs.js"></script>
 <script src="public/sites/Admin/javascript/jquery/jquery.equalResize.js"></script>
+<script src="public/sites/Admin/javascript/jquery/jquery.imageSelector.js"></script>
+
+<link rel="stylesheet" type="text/css" href="public/external/fileuploader/fileuploader.css" />
+<script src="public/external/fileuploader/fileuploader.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.13.custom.css" />
 <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.13.custom.min.js"></script>
@@ -68,6 +72,7 @@
   var batchIconNavigationBackGrey = '<?php echo HTML::icon('nav_back_grey.png'); ?>';
   var batchIconNavigationForward = '<?php echo HTML::icon('nav_forward.png'); ?>';
   var batchIconNavigationForwardGrey = '<?php echo HTML::icon('nav_forward_grey.png'); ?>';
+  var batchIconNavigationReload = '<?php echo HTML::icon('reload.png'); ?>';
   var batchIconProgress = '<?php echo HTML::icon('progress_ani.gif'); ?>';
 
   var taxDecimalPlaces = parseInt('<?php echo TAX_DECIMAL_PLACES; ?>');
