@@ -258,7 +258,7 @@
       }
 
       if ( !empty($parameters) ) {
-        $link .= $parameters . '&';
+        $link .= HTML::output($parameters) . '&';
       }
 
       if ( ($add_session_id === true) && Registry::exists('Session') && Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
@@ -303,7 +303,7 @@
       $link = 'public/sites/' . $site . '/' . $url;
 
       if ( !empty($parameters) ) {
-        $link .= '?' . $parameters;
+        $link .= '?' . HTML::output($parameters);
       }
 
       while ( (substr($link, -1) == '&') || (substr($link, -1) == '?') ) {
