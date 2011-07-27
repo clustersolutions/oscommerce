@@ -34,7 +34,7 @@
                           array('id' => 'f', 'text' => OSCOM::getDef('gender_female')));
 ?>
 
-      <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), 'fake', null, (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_customer_gender'), 'gender_1', null, (ACCOUNT_GENDER > 0)) . HTML::radioField('gender', $gender_array); ?></li>
 
 <?php
   }

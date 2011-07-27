@@ -84,8 +84,8 @@
       </li>
       <li><?php echo HTML::label(OSCOM::getDef('field_search_price_from'), 'pfrom') . HTML::inputField('pfrom'); ?></li>
       <li><?php echo HTML::label(OSCOM::getDef('field_search_price_to'), 'pto') . HTML::inputField('pto'); ?></li>
-      <li><?php echo HTML::label(OSCOM::getDef('field_search_date_from'), 'datefrom') . HTML::dateSelectMenu('datefrom', null, false, null, null, date('Y') - $OSCOM_Search->getMinYear(), 0); ?></li>
-      <li><?php echo HTML::label(OSCOM::getDef('field_search_date_to'), 'dateto') . HTML::dateSelectMenu('dateto', null, null, null, null, date('Y') - $OSCOM_Search->getMaxYear(), 0); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_search_date_from'), 'datefrom_days') . HTML::dateSelectMenu('datefrom', null, false, null, null, date('Y') - $OSCOM_Search->getMinYear(), 0); ?></li>
+      <li><?php echo HTML::label(OSCOM::getDef('field_search_date_to'), 'dateto_days') . HTML::dateSelectMenu('dateto', null, null, null, null, date('Y') - $OSCOM_Search->getMaxYear(), 0); ?></li>
     </ol>
   </div>
 </div>
