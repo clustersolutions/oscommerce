@@ -28,7 +28,8 @@
 
       $this->_file = $file;
       $this->_destination = $destination;
-      $this->_permissions = $permissions;
+
+      $this->setPermissions($permissions);
 
       if ( isset($extensions) ) {
         $this->addExtensions($extensions);
@@ -120,7 +121,7 @@
     }
 
     public function setPermissions($permissions) {
-      $this->_permissions = $permissions;
+      $this->_permissions = octdec($permissions);
     }
 
     public function addExtensions($extensions) {
