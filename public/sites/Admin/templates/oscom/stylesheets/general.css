@@ -321,6 +321,60 @@ form.dataForm select optgroup { font-style: normal; font-weight: bold; }
 
 form.dataForm fieldset legend { padding: 3px 10px; border-bottom: 1px solid black; font-weight: bold; width: 80%; }
 
+/* Image Selector */
+
+.imageSelectorPlaceholder {
+  width: 100px;
+  height: 100px;
+  border: 1px solid #BFBFBF;
+  text-align: center;
+  background: url('../images/no_image_placeholder.gif') no-repeat center #fff;
+}
+
+.imageSelectorPlaceholder img {
+  max-width: 90px;
+  max-height: 90px;
+  vertical-align: middle;
+}
+
+.imageSelector {
+  margin-left: 15px !important;
+  padding: 10px;
+  background-color: #fff;
+  width: 56%;
+  border: 1px solid #BFBFBF;
+}
+
+.imageSelector ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  width: 465px;
+}
+
+.imageSelector li {
+  float: left;
+  padding: 0;
+  margin: 0 5px 10px 5px;
+}
+
+.imageSelector li a {
+  display: block;
+}
+
+.imageSelector li img {
+  background-color: #fff;
+  padding: 7px; margin: 0;
+  border: 1px dotted #BFBFBF;
+  width: 30px;
+  height: 30px;
+}
+
+.imageSelector li img:hover {
+  border: 1px solid #BFBFBF;
+}
+
+
 
 
 

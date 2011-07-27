@@ -16,6 +16,7 @@ action_heading_batch_move_categories = Move Categories
 field_parent_category = Parent Category:
 field_name = Name:
 field_image = Image:
+field_image_browser = Image Browser:
 
 top_category = -- Top --
 
