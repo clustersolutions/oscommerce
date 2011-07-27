@@ -97,35 +97,35 @@
       }
 
       if ( $OSCOM_Customer->isLoggedOn() ) {
-        $customer_address = AddressBook::getEntry($OSCOM_Customer->getDefaultAddressID())->toArray();
+        $customer_address = AddressBook::getEntry($OSCOM_Customer->getDefaultAddressID());
       } else {
-        $customer_address = array('entry_company' => $OSCOM_ShoppingCart->getShippingAddress('company'),
-                                  'entry_street_address' => $OSCOM_ShoppingCart->getShippingAddress('street_address'),
-                                  'entry_suburb' => $OSCOM_ShoppingCart->getShippingAddress('suburb'),
-                                  'entry_city' => $OSCOM_ShoppingCart->getShippingAddress('city'),
-                                  'entry_postcode' => $OSCOM_ShoppingCart->getShippingAddress('postcode'),
-                                  'entry_state' => $OSCOM_ShoppingCart->getShippingAddress('state'),
-                                  'entry_zone_id' => $OSCOM_ShoppingCart->getShippingAddress('zone_id'),
-                                  'entry_country_id' => $OSCOM_ShoppingCart->getShippingAddress('country_id'),
-                                  'entry_telephone' => $OSCOM_ShoppingCart->getShippingAddress('telephone'));
+        $customer_address = array('company' => $OSCOM_ShoppingCart->getShippingAddress('company'),
+                                  'street_address' => $OSCOM_ShoppingCart->getShippingAddress('street_address'),
+                                  'suburb' => $OSCOM_ShoppingCart->getShippingAddress('suburb'),
+                                  'city' => $OSCOM_ShoppingCart->getShippingAddress('city'),
+                                  'postcode' => $OSCOM_ShoppingCart->getShippingAddress('postcode'),
+                                  'state' => $OSCOM_ShoppingCart->getShippingAddress('state'),
+                                  'zone_id' => $OSCOM_ShoppingCart->getShippingAddress('zone_id'),
+                                  'country_id' => $OSCOM_ShoppingCart->getShippingAddress('country_id'),
+                                  'telephone' => $OSCOM_ShoppingCart->getShippingAddress('telephone'));
       }
 
       $Qorder = $OSCOM_PDO->prepare('insert into :table_orders (customers_id, customers_name, customers_company, customers_street_address, customers_suburb, customers_city, customers_postcode, customers_state, customers_state_code, customers_country, customers_country_iso2, customers_country_iso3, customers_telephone, customers_email_address, customers_address_format, customers_ip_address, delivery_name, delivery_company, delivery_street_address, delivery_suburb, delivery_city, delivery_postcode, delivery_state, delivery_state_code, delivery_country, delivery_country_iso2, delivery_country_iso3, delivery_address_format, billing_name, billing_company, billing_street_address, billing_suburb, billing_city, billing_postcode, billing_state, billing_state_code, billing_country, billing_country_iso2, billing_country_iso3, billing_address_format, payment_method, payment_module, date_purchased, orders_status, currency, currency_value) values (:customers_id, :customers_name, :customers_company, :customers_street_address, :customers_suburb, :customers_city, :customers_postcode, :customers_state, :customers_state_code, :customers_country, :customers_country_iso2, :customers_country_iso3, :customers_telephone, :customers_email_address, :customers_address_format, :customers_ip_address, :delivery_name, :delivery_company, :delivery_street_address, :delivery_suburb, :delivery_city, :delivery_postcode, :delivery_state, :delivery_state_code, :delivery_country, :delivery_country_iso2, :delivery_country_iso3, :delivery_address_format, :billing_name, :billing_company, :billing_street_address, :billing_suburb, :billing_city, :billing_postcode, :billing_state, :billing_state_code, :billing_country, :billing_country_iso2, :billing_country_iso3, :billing_address_format, :payment_method, :payment_module, now(), :orders_status, :currency, :currency_value)');
       $Qorder->bindInt(':customers_id', $OSCOM_Customer->getID());
       $Qorder->bindValue(':customers_name', $OSCOM_Customer->getName());
-      $Qorder->bindValue(':customers_company', $customer_address['entry_company']);
-      $Qorder->bindValue(':customers_street_address', $customer_address['entry_street_address']);
-      $Qorder->bindValue(':customers_suburb', $customer_address['entry_suburb']);
-      $Qorder->bindValue(':customers_city', $customer_address['entry_city']);
-      $Qorder->bindValue(':customers_postcode', $customer_address['entry_postcode']);
-      $Qorder->bindValue(':customers_state', $customer_address['entry_state']);
-      $Qorder->bindValue(':customers_state_code', Address::getZoneCode($customer_address['entry_zone_id']));
-      $Qorder->bindValue(':customers_country', Address::getCountryName($customer_address['entry_country_id']));
-      $Qorder->bindValue(':customers_country_iso2', Address::getCountryIsoCode2($customer_address['entry_country_id']));
-      $Qorder->bindValue(':customers_country_iso3', Address::getCountryIsoCode3($customer_address['entry_country_id']));
-      $Qorder->bindValue(':customers_telephone', $customer_address['entry_telephone']);
+      $Qorder->bindValue(':customers_company', $customer_address['company']);
+      $Qorder->bindValue(':customers_street_address', $customer_address['street_address']);
+      $Qorder->bindValue(':customers_suburb', $customer_address['suburb']);
+      $Qorder->bindValue(':customers_city', $customer_address['city']);
+      $Qorder->bindValue(':customers_postcode', $customer_address['postcode']);
+      $Qorder->bindValue(':customers_state', $customer_address['state']);
+      $Qorder->bindValue(':customers_state_code', Address::getZoneCode($customer_address['zone_id']));
+      $Qorder->bindValue(':customers_country', Address::getCountryName($customer_address['country_id']));
+      $Qorder->bindValue(':customers_country_iso2', Address::getCountryIsoCode2($customer_address['country_id']));
+      $Qorder->bindValue(':customers_country_iso3', Address::getCountryIsoCode3($customer_address['country_id']));
+      $Qorder->bindValue(':customers_telephone', $customer_address['telephone']);
       $Qorder->bindValue(':customers_email_address', $OSCOM_Customer->getEmailAddress());
-      $Qorder->bindValue(':customers_address_format', Address::getFormat($customer_address['entry_country_id']));
+      $Qorder->bindValue(':customers_address_format', Address::getFormat($customer_address['country_id']));
       $Qorder->bindValue(':customers_ip_address', OSCOM::getIPAddress());
       $Qorder->bindValue(':delivery_name', $OSCOM_ShoppingCart->getShippingAddress('firstname') . ' ' . $OSCOM_ShoppingCart->getShippingAddress('lastname'));
       $Qorder->bindValue(':delivery_company', $OSCOM_ShoppingCart->getShippingAddress('company'));

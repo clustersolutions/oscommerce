@@ -7,11 +7,12 @@
  */
 
   use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\ObjectInfo;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Shop\AddressBook;
 
   if ( isset($_GET['Edit']) ) {
-    $Qentry = AddressBook::getEntry($_GET['Edit']); // HPDL conflict with $osC_oiAddress
+    $osC_oiAddress = new ObjectInfo(AddressBook::getEntry($_GET['Edit']));
   } else {
     if ( AddressBook::numberOfEntries() >= MAX_ADDRESS_BOOK_ENTRIES ) {
       $OSCOM_MessageStack->add('AddressBook', OSCOM::getDef('error_address_book_full'));
@@ -26,7 +27,7 @@
     echo $OSCOM_MessageStack->get('AddressBook');
   }
 
-  if ( ($OSCOM_Customer->hasDefaultAddress() === false) || (isset($_GET['Create']) && (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($Qentry) && ($Qentry !== false)) ) {
+  if ( ($OSCOM_Customer->hasDefaultAddress() === false) || (isset($_GET['Create']) && (AddressBook::numberOfEntries() < MAX_ADDRESS_BOOK_ENTRIES)) || (isset($osC_oiAddress) && !empty($osC_oiAddress)) ) {
 ?>
 
 <form name="address_book" action="<?php echo OSCOM::getLink(null, null, 'AddressBook&' . (isset($_GET['Edit']) ? 'Edit=' . $_GET['Edit'] : 'Create') . '&Process', 'SSL'); ?>" method="post" onsubmit="return check_form(address_book);">
