@@ -123,3 +123,4 @@ ms_error_file_not_removable = Error: This file cannot be removed: %s
 ms_error_directory_not_removable = Error: This directory cannot be removed: %s
 ms_error_upload_directory_not_writable = Error: The upload directory is not writable: %s
 ms_error_upload_directory_non_existant = Error: The upload directory does not exist: %s
+ms_error_work_directories_not_writable = Error: The following work directories are not writable in %s: %s

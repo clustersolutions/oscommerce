@@ -62,6 +62,19 @@
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_uploads_disabled'), 'warning');
       }
 
+// check if Work directories are writable
+      $work_dirs = array();
+
+      foreach ( array('Cache', 'CoreUpdate', 'Database', 'Logs', 'Session', 'Temp') as $w ) {
+        if ( !is_writable(OSCOM::BASE_DIRECTORY . 'Work/' . $w) ) {
+          $work_dirs[] = $w;
+        }
+      }
+
+      if ( !empty($work_dirs) ) {
+        Registry::get('MessageStack')->add('header', sprintf(OSCOM::getDef('ms_error_work_directories_not_writable'), OSCOM::BASE_DIRECTORY, implode(', ', $work_dirs)), 'error');
+      }
+
       if ( !OSCOM::configExists('time_zone', 'OSCOM') ) {
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_warning_time_zone_not_defined'), 'warning');
       }
