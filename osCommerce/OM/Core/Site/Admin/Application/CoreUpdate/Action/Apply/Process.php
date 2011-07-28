@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\Action\Apply;
 
+  use osCommerce\OM\Core\Access;
   use osCommerce\OM\Core\ApplicationAbstract;
   use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;;
   use osCommerce\OM\Core\Registry;
@@ -24,6 +25,9 @@
       if ( CoreUpdate::canApplyPackage() ) {
         if ( CoreUpdate::applyPackage() ) {
           CoreUpdate::deletePackage();
+
+// Refresh access list for new/deleted Applications
+          $_SESSION[OSCOM::getSite()]['access'] = Access::getUserLevels($_SESSION[OSCOM::getSite()]['id']);
 
           Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
         } else {
