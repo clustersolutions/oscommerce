@@ -8,6 +8,8 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\OSCOM;
+
   class Upload {
     protected $_file,
               $_destination,
@@ -34,14 +36,21 @@
       if ( isset($extensions) ) {
         $this->addExtensions($extensions);
       }
+
+      $this->_replace = $replace;
     }
 
     public function check() {
       if ( isset($_GET[$this->_file]) ) {
-        $input = fopen('php://input', 'r');
-        $temp = tmpfile();
+        $temp_filename = 'temp_' . mt_rand();
 
-        $size = stream_copy_to_stream($input, $temp);
+        while ( file_exists(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $temp_filename) ) {
+          $temp_filename = 'temp_' . mt_rand();
+        }
+
+        $input = fopen('php://input', 'r');
+
+        $size = file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $temp_filename, $input);
 
         fclose($input);
 
@@ -49,7 +58,7 @@
           $this->_upload = array('type' => 'PUT',
                                  'name' => $_GET[$this->_file],
                                  'size' => $size,
-                                 'data' => $temp);
+                                 'temp_filename' => $temp_filename);
         } else {
           trigger_error('File Upload [PUT]: $_SERVER[\'CONTENT_LENGTH\'] (' . (int)$_SERVER['CONTENT_LENGTH'] . ') not set or not equal to stream size (' . (int)$size . ')');
         }
@@ -99,12 +108,9 @@
       }
 
       if ( $this->_upload['type'] == 'PUT' ) {
-        $target = fopen($this->_destination . '/' . $this->_upload['name'], 'w');
-        fseek($this->_upload['data'], 0, SEEK_SET);
-        $bytes_copied = stream_copy_to_stream($this->_upload['data'], $target);
-        fclose($target);
+        if ( rename(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $this->_upload['temp_filename'], $this->_destination . '/' . $this->_upload['name']) ) {
+          chmod($this->_destination . '/' . $this->_upload['name'], $this->_permissions);
 
-        if ( $bytes_copied > 0 ) {
           return true;
         }
       } elseif ( $this->_upload['type'] == 'POST' ) {
@@ -148,6 +154,12 @@
 
     public function getPermissions() {
       return $this->_permissions;
+    }
+
+    public function __destruct() {
+      if ( isset($this->_upload['temp_filename']) && file_exists(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $this->_upload['temp_filename']) ) {
+        unlink(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $this->_upload['temp_filename']);
+      }
     }
   }
 ?>
