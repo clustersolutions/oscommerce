@@ -373,7 +373,7 @@
  * Generate a form select menu field
  *
  * @param string $name The name of the pull down menu field
- * @param array $values Defined values for the pull down menu field
+ * @param array $values Defined values for the pull down menu field [ id, text, group, params (since v3.0.2) ]
  * @param string $default The default value for the pull down menu field
  * @param string $parameters Additional parameters for the pull down menu field
  * @return string
@@ -414,6 +414,10 @@
 
         if ( (!is_null($default) && !is_array($default) && ((string)$default == (string)$values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
           $field .= ' selected="selected"';
+        }
+
+        if ( isset($values[$i]['params']) ) {
+          $field .= ' ' . $values[$i]['params'];
         }
 
         $field .= '>' . static::output($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
