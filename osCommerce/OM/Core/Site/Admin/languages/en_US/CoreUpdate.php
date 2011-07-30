@@ -15,6 +15,11 @@ table_heading_files = Files
 table_heading_file_writable = Writable
 table_heading_file_custom = Custom
 
+table_heading_log_date = Date
+table_heading_log_message = Message
+
+select_log_to_view = Select Log to View
+
 legend_new = NEW
 legend_modified = MODIFIED
 legend_to_delete = TO DELETE
@@ -32,3 +37,4 @@ ms_error_select_version_to_view = Error: Please select an available package vers
 ms_error_local_update_package_does_not_exist = Error: Cannot download and save the update package. Please verify the osCommerce/OM/Work/CoreUpdate directory permissions and try again.
 ms_error_wrong_version_to_update_from = Error: Please verify the package to update from.
 ms_error_check_target_permissions = Error: Please verify the file and directory permissions before applying the update package again.
+ms_error_log_file_does_not_exist = Error: Log file does not exist.

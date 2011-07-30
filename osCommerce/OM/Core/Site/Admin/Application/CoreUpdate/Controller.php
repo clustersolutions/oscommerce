@@ -9,6 +9,7 @@
   namespace osCommerce\OM\Core\Site\Admin\Application\CoreUpdate;
 
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
 
   class Controller extends \osCommerce\OM\Core\Site\Admin\ApplicationAbstract {
     protected $_group = 'tools';
@@ -21,6 +22,19 @@
 
     protected function process() {
       $this->_page_title = OSCOM::getDef('heading_title');
+    }
+
+    public function getLogList() {
+      $array = array(array('id' => '',
+                           'text' => OSCOM::getDef('select_log_to_view'),
+                           'params' => 'disabled="disabled"'));
+
+      foreach ( CoreUpdate::getLogs() as $f ) {
+        $array[] = array('id' => substr($f, 0, -4),
+                         'text' => substr($f, 0, -4));
+      }
+
+      return $array;
     }
   }
 ?>
