@@ -20,6 +20,8 @@
 
 <form id="liveSearchForm">
   <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
+
+  <span style="float: right;"><?php echo HTML::selectMenu('logs', $OSCOM_Application->getLogList(), null, 'onchange="viewLog();"'); ?></span>
 </form>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
@@ -120,5 +122,9 @@
       newCell.colSpan = 3;
       newCell.innerHTML = '<?php echo HTML::icon('tick.png') . ' '; ?>' + htmlSpecialChars("<?php echo OSCOM::getDef('up_to_date'); ?>");
     }
+  }
+
+  function viewLog() {
+    window.location.href = '<?php echo OSCOM::getLink(null, null, 'ViewLog&log=LOGID'); ?>'.replace('LOGID', $('#logs option:selected').val());
   }
 </script>
