@@ -28,6 +28,15 @@
         }
       }
 
+      $DLcapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Application');
+      $DLcapps->setIncludeFiles(false);
+
+      foreach ( $DLcapps->getFiles() as $file ) {
+        if ( !in_array($file['name'], $module_files) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Controller', 'getGuestApplications'))) && file_exists($DLcapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) {
+          $module_files[] = $file['name'];
+        }
+      }
+
       $modules = array();
 
       foreach ( $module_files as $module ) {

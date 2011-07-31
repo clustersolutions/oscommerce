@@ -32,21 +32,29 @@
       }
 
       if ( is_null($filename) ) {
-        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
+          $contents = file(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php');
+        } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php') ) {
           $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '.php');
         } else {
           return array();
         }
       } else {
+        if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code) ) {
+          return array();
+        }
+
         if ( substr(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename), 0, strlen(realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code))) != realpath(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSiteApplication() . '/languages/' . $language_code) ) {
           return array();
         }
 
-        if ( !file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
+        if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
+          $contents = file(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
+        } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename) ) {
+          $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
+        } else {
           return array();
         }
-
-        $contents = file(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/languages/' . $language_code . '/' . $filename);
       }
 
       $ini_array = array();
@@ -92,9 +100,13 @@
     public static function extractDefinitions($xml) {
       $definitions = array();
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $xml) ) {
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/Shop/Languages/' . $xml) ) {
+        $definitions = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'Custom/Site/Shop/Languages/' . $xml));
+      } elseif ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $xml) ) {
         $definitions = XML::toArray(simplexml_load_file(OSCOM::BASE_DIRECTORY . 'Core/Site/Shop/Languages/' . $xml));
+      }
 
+      if ( !empty($definitions) ) {
         if ( !isset($definitions['language']) ) { // create root element (simpleXML does not use root element)
           $definitions = array('language' => $definitions);
         }
