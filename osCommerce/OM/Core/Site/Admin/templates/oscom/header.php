@@ -148,7 +148,7 @@
     }
   });
 
-  if (window.external.msIsSiteMode()) {
+  if ( (typeof window.external.msAddSiteMode != 'undefined') && window.external.msIsSiteMode() ) {
 
 <?php
     if ( Access::hasShortcut() ) {
