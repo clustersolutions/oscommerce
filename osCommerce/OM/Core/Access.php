@@ -82,6 +82,15 @@
             $applications[] = $file['name'];
           }
         }
+
+        $DLcapps = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Application');
+        $DLcapps->setIncludeFiles(false);
+
+        foreach ( $DLcapps->getFiles() as $file ) {
+          if ( !in_array($file['name'], $applications) && !in_array($file['name'], call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'getGuestApplications'))) && file_exists($DLcapps->getDirectory() . '/' . $file['name'] . '/Controller.php') ) {
+            $applications[] = $file['name'];
+          }
+        }
       }
 
       $shortcuts = array();
