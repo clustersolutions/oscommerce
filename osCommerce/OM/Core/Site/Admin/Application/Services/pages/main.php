@@ -54,7 +54,7 @@
   <span id="batchPullDownMenu"></span>
 </div>
 
-<script type="text/javascript">
+<script>
   var moduleParamsCookieName = 'oscom_admin_' + pageModule;
   var dataTablePageSetName = 'page';
 
@@ -72,7 +72,6 @@
   var smEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&code=SMCODE'); ?>';
   var smEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
 
-  var smUninstallLink = '<?php echo OSCOM::getLink(null, null, 'Uninstall&code=SMCODE'); ?>';
   var smUninstallLinkIcon = '<?php echo HTML::icon('uninstall.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
@@ -101,7 +100,7 @@
       }
 
       if ( record.uninstallable == true ) {
-        actions += '&nbsp;<a href="' + smUninstallLink.replace('SMCODE', htmlSpecialChars(record.code)) + '">' + smUninstallLinkIcon + '</a>';
+        actions += '&nbsp;<a href="#" onclick="$(\'#dialogUninstallConfirm\').data(\'code\', \'' + record.code + '\').dialog(\'open\'); return false;">' + smUninstallLinkIcon + '</a>';
       } else {
         actions += '&nbsp;<span style="padding: 8px;"></span>';
       }
@@ -113,4 +112,26 @@
       rowCounter++;
     }
   }
+</script>
+
+<div id="dialogUninstallConfirm" title="<?php echo HTML::output(OSCOM::getDef('dialog_uninstall_module_title')); ?>">
+  <p><span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span><?php echo OSCOM::getDef('dialog_uninstall_module_desc'); ?></p>
+</div>
+
+<script>
+$(function() {
+  $('#dialogUninstallConfirm').dialog({
+    autoOpen: false,
+    resizable: false,
+    modal: true,
+    buttons: {
+      '<?php echo addslashes(OSCOM::getDef('button_uninstall')); ?>': function() {
+        window.location.href='<?php echo OSCOM::getLink(null, null, 'Uninstall&Process&code=SMCODE'); ?>'.replace('SMCODE', $(this).data('code'));
+      },
+      '<?php echo addslashes(OSCOM::getDef('button_cancel')); ?>': function() {
+        $(this).dialog('close');
+      }
+    }
+  });
+});
 </script>

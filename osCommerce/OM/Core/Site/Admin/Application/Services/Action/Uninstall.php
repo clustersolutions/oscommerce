@@ -13,13 +13,15 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Admin\Application\Services\Services;
 
+/**
+ * @since v3.0.2
+ */
+
   class Uninstall {
     public static function execute(ApplicationAbstract $application) {
       $data = HTML::sanitize(basename($_GET['code']));
 
-      if ( Services::exists($data) && (Services::get($data, 'uninstallable') === true) ) {
-        $application->setPageContent('uninstall.php');
-      } else {
+      if ( !Services::exists($data) || (Services::get($data, 'uninstallable') !== true) ) {
         OSCOM::redirect(OSCOM::getLink());
       }
     }
