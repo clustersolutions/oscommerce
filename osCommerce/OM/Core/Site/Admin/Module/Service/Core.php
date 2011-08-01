@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class Core extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
     var $uninstallable = false;
     var $depends = 'Currencies';
