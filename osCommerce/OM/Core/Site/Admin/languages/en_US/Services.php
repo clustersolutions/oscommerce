@@ -12,4 +12,5 @@ table_heading_action = Action
 
 introduction_edit_service_module = Please make the necessary changes for this service module.
 
-introduction_uninstall_service_module = Please verify the uninstallation of this service module.
+dialog_uninstall_module_title = Uninstall Module
+dialog_uninstall_module_desc = The selected module will be uninstalled. Are you sure?
