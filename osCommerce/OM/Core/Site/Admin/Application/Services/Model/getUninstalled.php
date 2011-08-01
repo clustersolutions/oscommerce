@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\Application\Services\Services;
 
+/**
+ * @since v3.0.2
+ */
+
   class getUninstalled {
     public static function execute() {
       $installed_modules = Services::getInstalled();

@@ -14,6 +14,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\Application\Services\Services;
 
+/**
+ * @since v3.0.2
+ */
+
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $data = HTML::sanitize(basename($_GET['code']));

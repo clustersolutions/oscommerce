@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Cache;
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class install {
     public static function execute($module) {
       $class = 'osCommerce\\OM\\Core\\Site\\Admin\\Module\\Service\\' . $module;

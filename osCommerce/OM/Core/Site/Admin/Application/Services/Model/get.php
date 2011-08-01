@@ -8,6 +8,10 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Services\Model;
 
+/**
+ * @since v3.0.2
+ */
+
   class get {
     public static function execute($code, $key = null) {
       $class = 'osCommerce\\OM\\Core\\Site\\Admin\\Module\\Service\\' . $code;
