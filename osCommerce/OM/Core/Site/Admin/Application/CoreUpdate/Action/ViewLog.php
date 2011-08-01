@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
 
+/**
+ * @since v3.0.2
+ */
+
   class ViewLog {
     public static function execute(ApplicationAbstract $application) {
       if ( !isset($_GET['log']) || empty($_GET['log']) ) {

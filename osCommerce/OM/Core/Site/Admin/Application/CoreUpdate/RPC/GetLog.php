@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
   use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
+/**
+ * @since v3.0.2
+ */
+
   class GetLog {
     public static function execute() {
       if ( !isset($_GET['search']) ) {

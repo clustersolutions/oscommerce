@@ -12,6 +12,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\Admin\Application\CoreUpdate\CoreUpdate;
 
+/**
+ * @since v3.0.2
+ */
+
   class findLog {
     public static function execute($log, $search) {
       $data = CoreUpdate::getLog($log);

@@ -12,6 +12,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class getLogs {
     public static function execute() {
       $result = array();
