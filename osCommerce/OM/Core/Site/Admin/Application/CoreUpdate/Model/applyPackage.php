@@ -20,6 +20,7 @@
     public static function execute() {
       $phar_can_open = true;
 
+      $meta = array();
       $pro_hart = array();
 
       try {
@@ -111,14 +112,12 @@
             }
           }
         }
-
-        self::log('##### UPDATE TO ' . self::$_to_version . ' COMPLETED');
       } catch ( \Exception $e ) {
         $phar_can_open = false;
 
         self::log('##### ERROR: ' . $e->getMessage());
 
-        self::log('##### REVERTING');
+        self::log('##### REVERTING STARTED');
 
         foreach ( array_reverse($pro_hart, true) as $mess ) {
           if ( $mess['type'] == 'directory' ) {
@@ -138,11 +137,35 @@
           self::log('Reverted: ' . str_replace('/.CU_', '/', $mess['path']));
         }
 
-        self::log('##### REVERTING COMPLETED');
+        self::log('##### REVERTING COMPLETE');
         self::log('##### UPDATE TO ' . self::$_to_version . ' FAILED');
 
         trigger_error($e->getMessage());
         trigger_error('Please review the update log at: ' . OSCOM::BASE_DIRECTORY . 'Work/Logs/update-' . self::$_to_version . '.txt');
+      }
+
+      if ( $phar_can_open === true ) {
+        if ( isset($meta['run']) && method_exists('osCommerce\\OM\\Work\\CoreUpdate\\' . $meta['run'] . '\\Controller', 'runAfter') ) {
+          $results = call_user_func(array('osCommerce\\OM\\Work\\CoreUpdate\\' . $meta['run'] . '\\Controller', 'runAfter'));
+
+          if ( !empty($results) ) {
+            self::log('##### RAN AFTER');
+
+            foreach ( $results as $r ) {
+              self::log($r);
+            }
+          }
+
+          self::log('##### CLEANUP');
+
+          if ( self::rmdir_r(OSCOM::BASE_DIRECTORY . 'Work/CoreUpdate/' . $meta['run']) ) {
+            self::log('Deleted: osCommerce/OM/Work/CoreUpdate/' . $meta['run']);
+          } else {
+            self::log('*** Could Not Delete: osCommerce/OM/Work/CoreUpdate/' . $meta['run']);
+          }
+        }
+
+        self::log('##### UPDATE TO ' . self::$_to_version . ' COMPLETE');
       }
 
       return $phar_can_open;
