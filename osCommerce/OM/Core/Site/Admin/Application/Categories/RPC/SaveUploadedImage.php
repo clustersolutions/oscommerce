@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Upload;
 
+/**
+ * @since v3.0.2
+ */
+
   class SaveUploadedImage {
     public static function execute() {
       $error = true;

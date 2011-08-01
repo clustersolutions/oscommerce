@@ -12,6 +12,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
+/**
+ * @since v3.0.2
+ */
+
   class GetAvailableImages {
     public static function execute() {
       $result = array('images' => array());

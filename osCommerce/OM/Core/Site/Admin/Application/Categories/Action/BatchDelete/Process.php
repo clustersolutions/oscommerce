@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $error = false;

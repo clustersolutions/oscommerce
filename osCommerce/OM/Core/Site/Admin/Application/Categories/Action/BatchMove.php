@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\ApplicationAbstract;
 
+/**
+ * @since v3.0.2
+ */
+
   class BatchMove {
     public static function execute(ApplicationAbstract $application) {
       $application->setPageContent('batch_move.php');

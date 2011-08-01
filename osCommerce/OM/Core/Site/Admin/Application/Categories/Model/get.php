@@ -12,6 +12,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
 
+/**
+ * @since v3.0.2
+ */
+
   class get {
     public static function execute($id, $key = null, $language_id = null) {
       $OSCOM_Language = Registry::get('Language');

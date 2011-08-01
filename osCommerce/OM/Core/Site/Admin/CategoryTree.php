@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.2
+ */
+
   class CategoryTree extends \osCommerce\OM\Core\Site\Shop\CategoryTree {
     protected $_show_total_products = true;
 

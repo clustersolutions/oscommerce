@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\ApplicationAbstract;
 
+/**
+ * @since v3.0.2
+ */
+
   class Save {
     public static function execute(ApplicationAbstract $application) {
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {

@@ -14,6 +14,10 @@
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
   use osCommerce\OM\Core\Site\Admin\Application\Categories\Categories;
 
+/**
+ * @since v3.0.2
+ */
+
   class save {
     public static function execute($id = null, $data) {
       if ( Registry::exists('CategoryTree') ) {

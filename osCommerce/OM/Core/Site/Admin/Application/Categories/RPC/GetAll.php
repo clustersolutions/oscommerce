@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Site\Admin\Application\Categories\Categories;
   use osCommerce\OM\Core\Site\RPC\Controller as RPC;
 
+/**
+ * @since v3.0.2
+ */
+
   class GetAll {
     public static function execute() {
       if ( !isset($_GET['search']) ) {
