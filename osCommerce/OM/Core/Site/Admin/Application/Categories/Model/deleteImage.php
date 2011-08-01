@@ -12,6 +12,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
 
+/**
+ * @since v3.0.2
+ */
+
   class deleteImage {
     public static function execute($id) {
       if ( Registry::exists('CategoryTree') ) {

@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
 
+/**
+ * @since v3.0.2
+ */
+
   class getAll {
     public static function execute($parent_id = 0) {
       if ( Registry::exists('CategoryTree') ) {

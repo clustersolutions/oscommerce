@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
 
+/**
+ * @since v3.0.2
+ */
+
   class move {
     public static function execute($id, $parent_id) {
       if ( Registry::exists('CategoryTree') ) {

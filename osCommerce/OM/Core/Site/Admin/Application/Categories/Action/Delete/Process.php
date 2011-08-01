@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class Process {
     public static function execute(ApplicationAbstract $application) {
       $parent_id = $application->getTree()->getParentID($_GET['id']);

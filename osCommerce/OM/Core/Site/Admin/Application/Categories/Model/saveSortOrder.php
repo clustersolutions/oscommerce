@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Cache;
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class saveSortOrder {
     public static function execute($data) {
       if ( OSCOM::callDB('Admin\Categories\SaveSortOrder', $data) ) {
