@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.2
+ */
+
   abstract class ServiceAbstract {
     protected $code;
     protected $title;

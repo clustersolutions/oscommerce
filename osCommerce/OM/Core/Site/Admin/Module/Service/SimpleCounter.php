@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class SimpleCounter extends \osCommerce\OM\Core\Site\Admin\ServiceAbstract {
     protected function initialize() {
       $this->title = OSCOM::getDef('services_simple_counter_title');
