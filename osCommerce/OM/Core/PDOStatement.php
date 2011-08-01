@@ -12,6 +12,13 @@
   use osCommerce\OM\Core\PDO;
   use osCommerce\OM\Core\Registry;
 
+/**
+ * Represents a prepared statement and, after the statement is executed, an
+ * associated result set.
+ *
+ * @since v3.0.0
+ */
+
   class PDOStatement extends \PDOStatement {
     protected $_is_error = false;
     protected $_binded_params = array();
@@ -149,6 +156,17 @@
 
     public function isError() {
       return $this->_is_error;
+    }
+
+/**
+ * Return the query string
+ *
+ * @return string
+ * @since v3.0.2
+ */
+
+    public function getQuery() {
+      return $this->queryString;
     }
 
     public function __destruct() {
