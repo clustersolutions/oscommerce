@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class getAll {
     public static function execute($pageset = 1) {
       $data = array('batch_pageset' => $pageset,

@@ -13,6 +13,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.2
+ */
+
   class Customers extends \osCommerce\OM\Core\Site\Admin\IndexModulesAbstract {
     public function __construct() {
       Registry::get('Language')->loadIniFile('modules/Dashboard/Customers.php');

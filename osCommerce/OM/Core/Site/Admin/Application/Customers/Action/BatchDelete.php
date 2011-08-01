@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\ApplicationAbstract;
 
+/**
+ * @since v3.0.2
+ */
+
   class BatchDelete {
     public static function execute(ApplicationAbstract $application) {
 // Does nothing; placeholder for BatchDelete/Process

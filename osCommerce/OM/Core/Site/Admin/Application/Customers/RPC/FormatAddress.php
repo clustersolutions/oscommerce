@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\Site\RPC\Controller as RPC;
   use osCommerce\OM\Core\Site\Shop\Address;
 
+/**
+ * @since v3.0.2
+ */
+
   class FormatAddress {
     public static function execute() {
       $data = array('firstname' => $_GET['firstname'],

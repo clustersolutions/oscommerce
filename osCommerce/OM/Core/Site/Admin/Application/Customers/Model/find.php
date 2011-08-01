@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class find {
     public static function execute($search, $pageset = 1) {
       $data = array('keywords' => $search,

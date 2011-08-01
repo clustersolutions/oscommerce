@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.2
+ */
+
   class GetAddressBook {
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
