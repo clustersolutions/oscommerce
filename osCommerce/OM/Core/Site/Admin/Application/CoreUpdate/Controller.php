@@ -24,6 +24,10 @@
       $this->_page_title = OSCOM::getDef('heading_title');
     }
 
+/**
+ * @since v3.0.2
+ */
+
     public function getLogList() {
       $array = array(array('id' => '',
                            'text' => OSCOM::getDef('select_log_to_view'),

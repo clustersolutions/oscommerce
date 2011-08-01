@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class logExists {
     public static function execute($log) {
       $log = basename($log);

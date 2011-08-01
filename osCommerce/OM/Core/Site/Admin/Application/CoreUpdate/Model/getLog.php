@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\DateTime;
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class getLog {
     public static function execute($log) {
       $log = basename($log);
