@@ -8,6 +8,10 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Services\Model;
 
+/**
+ * @since v3.0.2
+ */
+
   class getInstalled {
     public static function execute() {
       $result = array();

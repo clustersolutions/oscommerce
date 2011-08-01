@@ -11,6 +11,10 @@
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Cache;
 
+/**
+ * @since v3.0.2
+ */
+
   class save {
     public static function execute($data) {
       if ( OSCOM::callDB('Admin\Services\Save', $data) ) {

@@ -8,5 +8,9 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Services;
 
+/**
+ * @since v3.0.2
+ */
+
   class Services extends \osCommerce\OM\Core\ApplicationModelAbstract { }
 ?>

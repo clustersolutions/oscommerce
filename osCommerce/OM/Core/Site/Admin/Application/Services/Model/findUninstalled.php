@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\Site\Admin\Application\Services\Services;
 
+/**
+ * @since v3.0.2
+ */
+
   class findUninstalled {
     public static function execute($search) {
       $modules = Services::getUninstalled();
