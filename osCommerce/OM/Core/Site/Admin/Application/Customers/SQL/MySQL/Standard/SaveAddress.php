@@ -44,7 +44,13 @@
       $Qab->bindValue(':entry_city', $data['city']);
       $Qab->bindValue(':entry_state', $data['state']);
       $Qab->bindInt(':entry_country_id', $data['country_id']);
-      $Qab->bindInt(':entry_zone_id', $data['zone_id']);
+
+      if ( is_numeric($data['zone_id']) ) {
+        $Qab->bindInt(':entry_zone_id', $data['zone_id']);
+      } else {
+        $Qab->bindNull(':entry_zone_id');
+      }
+
       $Qab->bindValue(':entry_telephone', $data['telephone']);
       $Qab->bindValue(':entry_fax', $data['fax']);
       $Qab->execute();

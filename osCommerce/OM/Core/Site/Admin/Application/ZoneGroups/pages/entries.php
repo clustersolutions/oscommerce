@@ -91,12 +91,12 @@
       var record = data.entries[r];
 
       var countryName = record.countries_name;
-      if ( parseInt(record.zone_country_id) < 1 ) {
+      if ( isNaN(parseInt(record.zone_country_id)) || parseInt(record.zone_country_id) < 1 ) {
         countryName = allCountries;
       }
 
       var zoneName = record.zone_name;
-      if ( parseInt(record.zone_id) < 1 ) {
+      if ( isNaN(parseInt(record.zone_id)) || parseInt(record.zone_id) < 1 ) {
         zoneName = allZones;
       }
 

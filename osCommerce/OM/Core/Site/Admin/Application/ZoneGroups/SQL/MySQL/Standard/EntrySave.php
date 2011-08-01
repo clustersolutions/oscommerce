@@ -22,8 +22,18 @@
         $Qentry->bindInt(':geo_zone_id', $data['group_id']);
       }
 
-      $Qentry->bindInt(':zone_country_id', $data['country_id']);
-      $Qentry->bindInt(':zone_id', $data['zone_id']);
+      if ( is_numeric($data['country_id']) ) {
+        $Qentry->bindInt(':zone_country_id', $data['country_id']);
+      } else {
+        $Qentry->bindNull(':zone_country_id');
+      }
+
+      if ( is_numeric($data['zone_id']) ) {
+        $Qentry->bindInt(':zone_id', $data['zone_id']);
+      } else {
+        $Qentry->bindNull(':zone_id');
+      }
+
       $Qentry->execute();
 
       return ( ($Qentry->rowCount() === 1) || !$Qentry->isError() );
