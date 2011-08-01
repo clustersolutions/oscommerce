@@ -367,7 +367,7 @@
  *
  * @param string $procedure The name of the database query to execute
  * @param array $data Parameters passed to the database query
- * @param string $ns The namespace the database query is stored in
+ * @param string $type The namespace type the database query is stored in [ Core, Site, CoreUpdate (@since v3.0.2), Application (default) ]
  * @return mixed The result of the database query
  */
     public static function callDB($procedure, $data = null, $type = 'Application') {
@@ -390,6 +390,13 @@
         case 'Site':
 
           $ns = 'osCommerce\\OM\\Core\\Site\\' . $call[0];
+          $procedure = $call[1];
+
+          break;
+
+        case 'CoreUpdate':
+
+          $ns = 'osCommerce\\OM\\Work\\CoreUpdate\\' . $call[0];
           $procedure = $call[1];
 
           break;
