@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class delete {
     public static function execute($id) {
       $data = array('id' => $id);

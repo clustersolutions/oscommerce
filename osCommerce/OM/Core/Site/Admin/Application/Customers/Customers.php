@@ -8,5 +8,9 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Application\Customers;
 
+/**
+ * @since v3.0.2
+ */
+
   class Customers extends \osCommerce\OM\Core\ApplicationModelAbstract { }
 ?>

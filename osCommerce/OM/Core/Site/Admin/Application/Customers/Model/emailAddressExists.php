@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class emailAddressExists {
     public static function execute($email_address, $customer_id = null) {
       $data = array('email_address' => $email_address);

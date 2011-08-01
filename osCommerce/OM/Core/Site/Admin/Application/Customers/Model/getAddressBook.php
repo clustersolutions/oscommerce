@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class getAddressBook {
     public static function execute($customer_id) {
       $data = array('customer_id' => $customer_id);

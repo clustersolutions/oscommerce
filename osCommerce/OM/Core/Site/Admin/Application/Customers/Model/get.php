@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class get {
     public static function execute($id, $key = null) {
       $data = array('id' => $id);

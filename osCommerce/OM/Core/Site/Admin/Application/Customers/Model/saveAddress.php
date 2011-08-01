@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\OSCOM;
 
+/**
+ * @since v3.0.2
+ */
+
   class saveAddress {
     public static function execute($data) {
       return OSCOM::callDB('Admin\Customers\SaveAddress', $data);
