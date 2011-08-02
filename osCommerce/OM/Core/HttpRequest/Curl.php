@@ -8,8 +8,6 @@
 
   namespace osCommerce\OM\Core\HttpRequest;
 
-  use osCommerce\OM\Core\HttpRequest;
-
   class Curl {
     public static function execute($parameters) {
       $curl = curl_init($parameters['server']['scheme'] . '://' . $parameters['server']['host'] . $parameters['server']['path'] . (isset($parameters['server']['query']) ? '?' . $parameters['server']['query'] : ''));
@@ -58,9 +56,10 @@
           $parameters['redir_counter']++;
 
           $redir_params = array('url' => $redir_url,
+                                'method' => $parameters['method'],
                                 'redir_counter', $parameters['redir_counter']);
 
-          $body = HttpRequest::getResponse($redir_params, 'Curl');
+          $body = \osCommerce\OM\Core\HttpRequest::getResponse($redir_params, 'Curl');
         }
       }
 
