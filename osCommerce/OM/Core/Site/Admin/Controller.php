@@ -72,7 +72,7 @@
       }
 
       if ( !empty($work_dirs) ) {
-        Registry::get('MessageStack')->add('header', sprintf(OSCOM::getDef('ms_error_work_directories_not_writable'), OSCOM::BASE_DIRECTORY, implode(', ', $work_dirs)), 'error');
+        Registry::get('MessageStack')->add('header', sprintf(OSCOM::getDef('ms_error_work_directories_not_writable'), OSCOM::BASE_DIRECTORY . 'Work/', implode(', ', $work_dirs)), 'error');
       }
 
       if ( !OSCOM::configExists('time_zone', 'OSCOM') ) {
