@@ -13,7 +13,7 @@
   class Controller extends \osCommerce\OM\Core\Site\Setup\ApplicationAbstract {
     protected function initialize() {
       $this->_page_contents = 'step_1.php';
-      $this->_page_title = OSCOM::getDef('heading_title');
+      $this->_page_title = OSCOM::getDef('page_title_installation');
 
       if ( isset($_GET['step']) && is_numeric($_GET['step']) ) {
         switch ( $_GET['step'] ) {

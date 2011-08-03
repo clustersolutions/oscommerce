@@ -118,6 +118,9 @@ db_driver = "$db_class"
 db_table_prefix = "{$_POST['DB_TABLE_PREFIX']}"
 db_server_persistent_connections = "false"
 store_sessions = "Database"
+
+[Setup]
+offline = "true"
 EOT;
 
   if ( is_writable(OSCOM::BASE_DIRECTORY . 'Config/settings.ini') ) {

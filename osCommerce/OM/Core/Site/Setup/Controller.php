@@ -18,6 +18,10 @@
       Registry::set('Language', new Language());
       Registry::set('osC_Language', Registry::get('Language')); // HPDL to remove
 
+      if ( !self::hasAccess(OSCOM::getSiteApplication()) ) {
+        OSCOM::redirect(OSCOM::getLink(null, 'Offline'));
+      }
+
       $application = 'osCommerce\\OM\\Core\\Site\\Setup\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
@@ -30,6 +34,10 @@
     }
 
     public static function hasAccess($application) {
+      if ( OSCOM::configExists('offline') && (OSCOM::getConfig('offline') == 'true') && ($application != 'Offline') ) {
+        return false;
+      }
+
       return true;
     }
   }
