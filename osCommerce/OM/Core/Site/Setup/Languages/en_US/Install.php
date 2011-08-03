@@ -72,6 +72,9 @@ rpc_database_importing = The database structure is now being imported. Please be
 rpc_database_imported = Database imported successfully.
 rpc_database_import_error = There was a problem importing the database. The following error had occured:</p><p><b>%s</b></p><p>Please verify the connection parameters and try again.
 
+rpc_database_store_configuration = The store settings are now being saved to the database. Please be patient during this procedure.
+rpc_database_store_configuration_error = There was a problem saving the store settings to the database. The following error had occured:</p><p><b>%s</b></p><p>Please verify the store settings and try again.
+
 rpc_database_sample_data_importing = The sample data is now being imported into the database. Please be patient during this procedure.
 rpc_database_sample_data_imported = Database sample data imported successfully.
 rpc_database_sample_data_import_error = There was a problem importing the database sample data. The following error had occured:</p><p><b>%s</b></p><p>Please verify the database server and try again.
