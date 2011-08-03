@@ -33,10 +33,16 @@
     }
 
     public function connect() {
-      $dsn = 'mysql:dbname=' . $this->_database . ';host=' . $this->_server;
+      $dsn = 'mysql:dbname=' . $this->_database;
 
-      if ( !empty($this->_port) ) {
-        $dsn .= ';port=' . $this->_port;
+      if ( (strpos($this->_server, '/') !== false) || (strpos($this->_server, '\\') !== false) ) {
+        $dsn .= ';unix_socket=' . $this->_server;
+      } else {
+        $dsn .= ';host=' . $this->_server;
+
+        if ( !empty($this->_port) ) {
+          $dsn .= ';port=' . $this->_port;
+        }
       }
 
       $this->_connected = true;
