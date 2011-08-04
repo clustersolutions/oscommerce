@@ -175,7 +175,7 @@
       core.targetElementId = $(this).attr('id');
 
       if ( settings.images != null ) {
-        $('#' + settings.selector).css('backgroundImage', '');
+        $('#' + settings.selector).css('backgroundImage', 'none');
         $('#' + settings.selector).html('<img src="' + settings.images + '" alt="' + settings.images + '" title="' + settings.images + '" style="max-width: 90px; max-height: 90px; vertical-align: middle;" onclick="window.open(this.src);" />');
       }
         
