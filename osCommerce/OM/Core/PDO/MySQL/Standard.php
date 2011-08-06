@@ -33,17 +33,23 @@
     }
 
     public function connect() {
-      $dsn = 'mysql:dbname=' . $this->_database;
+      $dsn_array = array();
+
+      if ( !empty($this->_database) ) {
+        $dsn_array[] = 'dbname=' . $this->_database;
+      }
 
       if ( (strpos($this->_server, '/') !== false) || (strpos($this->_server, '\\') !== false) ) {
-        $dsn .= ';unix_socket=' . $this->_server;
+        $dsn_array[] = 'unix_socket=' . $this->_server;
       } else {
-        $dsn .= ';host=' . $this->_server;
+        $dsn_array[] = 'host=' . $this->_server;
 
         if ( !empty($this->_port) ) {
-          $dsn .= ';port=' . $this->_port;
+          $dsn_array[] = 'port=' . $this->_port;
         }
       }
+
+      $dsn = 'mysql:' . implode(';', $dsn_array);
 
       $this->_connected = true;
 
