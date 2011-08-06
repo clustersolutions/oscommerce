@@ -13,6 +13,8 @@
 
   error_reporting(E_ALL | E_STRICT);
 
+  define('OSCOM_PUBLIC_BASE_DIRECTORY', __DIR__ . '/');
+
   require('osCommerce/OM/Core/Autoloader.php');
   $OSCOM_Autoloader = new Autoloader('osCommerce\OM');
   $OSCOM_Autoloader->register();
