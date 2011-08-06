@@ -18,7 +18,6 @@
   class OSCOM {
     const TIMESTAMP_START = OSCOM_TIMESTAMP_START;
     const BASE_DIRECTORY = OSCOM_BASE_DIRECTORY;
-    const PUBLIC_BASE_DIRECTORY = OSCOM_PUBLIC_BASE_DIRECTORY;
 
     protected static $_version;
     protected static $_request_type;

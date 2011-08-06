@@ -56,7 +56,7 @@
     $http_cookie_domain = $http_url['host'];
   }
 
-  $dir_fs_document_root = OSCOM::PUBLIC_BASE_DIRECTORY;
+  $dir_fs_document_root = OSCOM_PUBLIC_BASE_DIRECTORY;
 
   $DL_Cache = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Work/Cache');
   $DL_Cache->setIncludeDirectories(false);
