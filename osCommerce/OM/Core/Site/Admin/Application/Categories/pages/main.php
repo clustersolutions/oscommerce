@@ -119,7 +119,7 @@ $(function() {
 
       var newCell = newRow.insertCell(0);
       var categoryColumn = '';
-      if ( $('#liveSearchField').val().length < 1 ) {
+      if ( ($('#liveSearchField').val().length < 1) || ($('#liveSearchField').val() == $('#liveSearchField').attr('placeholder')) ) {
         categoryColumn += dragIcon + '&nbsp;';
       }
       categoryColumn += categoryLinkIcon + '&nbsp;<a href="' + categoryLink.replace('CATEGORYID', parseInt(record.id)) + '" class="parent">' + htmlSpecialChars(record.title) + '</a><span style="float: right;">(' + parseInt(record.products) + ')</span>';
