@@ -1,28 +1,33 @@
 <?php
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
+
+  namespace osCommerce\OM\Core\Site\Admin\Application\Products\Action;
+
+  use osCommerce\OM\Core\ApplicationAbstract;
+
+/**
+ * @since v3.0.3
+ */
+
+  class Save {
+    public static function execute(ApplicationAbstract $application) {
+      if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
+        $application->setPageContent('edit.php');
+      } else {
+        $application->setPageContent('new.php');
+      }
+    }
+  }
+
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
-
   class osC_Application_Products_Actions_save extends osC_Application_Products {
     public function __construct() {
       global $osC_Language, $osC_MessageStack;
-
-      parent::__construct();
-
-      $this->_page_contents = 'edit.php';
-
-      if ( (osc_empty(CFG_APP_IMAGEMAGICK_CONVERT) || !file_exists(CFG_APP_IMAGEMAGICK_CONVERT)) && !osC_Image_Admin::hasGDSupport() ) {
-        $osC_MessageStack->add('header', $osC_Language->get('ms_warning_image_processor_not_available'), 'warning');
-      }
 
       if ( isset($_POST['subaction']) && ($_POST['subaction'] == 'confirm') ) {
         $error = false;
@@ -122,4 +127,5 @@
       }
     }
   }
+*/
 ?>

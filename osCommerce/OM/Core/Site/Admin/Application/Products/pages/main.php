@@ -91,17 +91,17 @@ $(function() {
   var dataTableName = 'productsDataTable';
   var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>';
 
-  var productLink = '<?php echo OSCOM::getLink(null, null, 'Preview&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&pid=PRODUCTID'); ?>';
+  var productLink = '<?php echo OSCOM::getLink(null, null, 'Preview&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&id=PRODUCTID'); ?>';
   var productLinkIcon = '<?php echo HTML::icon('products.png'); ?>';
   var productVariantLinkIcon = '<?php echo HTML::icon('attach.png'); ?>';
 
-  var productEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&pid=PRODUCTID'); ?>';
+  var productEditLink = '<?php echo OSCOM::getLink(null, null, 'Save&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&id=PRODUCTID'); ?>';
   var productEditLinkIcon = '<?php echo HTML::icon('edit.png'); ?>';
 
-  var productCopyLink = '<?php echo OSCOM::getLink(null, null, 'Copy&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&pid=PRODUCTID'); ?>';
+  var productCopyLink = '<?php echo OSCOM::getLink(null, null, 'Copy&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&id=PRODUCTID'); ?>';
   var productCopyLinkIcon = '<?php echo HTML::icon('copy.png'); ?>';
 
-  var productDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&pid=PRODUCTID'); ?>';
+  var productDeleteLink = '<?php echo OSCOM::getLink(null, null, 'Delete&cid=' . $OSCOM_Application->getCurrentCategoryID() . '&id=PRODUCTID'); ?>';
   var productDeleteLinkIcon = '<?php echo HTML::icon('trash.png'); ?>';
 
   var osC_DataTable = new osC_DataTable();
