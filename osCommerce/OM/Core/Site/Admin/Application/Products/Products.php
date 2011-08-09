@@ -1,30 +1,29 @@
 <?php
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
+
+  namespace osCommerce\OM\Core\Site\Admin\Application\Products;
+
+/**
+ * @since v3.0.3
+ */
+
+  class Products extends \osCommerce\OM\Core\ApplicationModelAbstract { }
+
 /*
-  $Id: $
-
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
-
-  Copyright (c) 2009 osCommerce
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
-
   require('includes/applications/products/classes/products.php');
   require('includes/applications/product_attributes/classes/product_attributes.php');
   require('../includes/classes/variants.php');
 
   class osC_Application_Products extends osC_Template_Admin {
 
-/* Protected variables */
-
     protected $_module = 'products',
               $_page_title,
               $_page_contents = 'main.php';
-
-/* Class constructor */
 
     function __construct() {
       global $osC_Language, $osC_MessageStack, $osC_Currencies, $osC_Tax, $osC_CategoryTree, $osC_Image, $current_category_id;
@@ -62,4 +61,5 @@
       }
     }
   }
+*/
 ?>
