@@ -1,17 +1,14 @@
-# $Id: $
+# osCommerce Online Merchant
 #
-# osCommerce, Open Source E-Commerce Solutions
-# http://www.oscommerce.com
-#
-# Copyright (c) 2007 osCommerce
-#
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License v2 (1991)
-# as published by the Free Software Foundation.
+# @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+# @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+
+app_title = Product Attributes
 
 heading_title = Product Attributes
 
-table_heading_product_attribute_modules = Product Attribute Modules
+table_heading_product_attributes = Product Attributes
 table_heading_action = Action
 
-introduction_uninstall_product_attribute_module = Please verify the uninstallation of this product attribute module.
+dialog_uninstall_product_attribute_title = Uninstall Product Attribute
+dialog_uninstall_product_attribute_desc = The selected product attribute will be uninstalled. Are you sure?
