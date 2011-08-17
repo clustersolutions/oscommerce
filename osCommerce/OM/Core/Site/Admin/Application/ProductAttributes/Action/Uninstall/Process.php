@@ -22,7 +22,7 @@
     public static function execute(ApplicationAbstract $application) {
       $data = HTML::sanitize(basename($_GET['code']));
 
-      if (ProductAttributes::uninstall($data) ) {
+      if ( ProductAttributes::uninstall($data) ) {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_success_action_performed'), 'success');
       } else {
         Registry::get('MessageStack')->add(null, OSCOM::getDef('ms_error_action_not_performed'), 'error');
