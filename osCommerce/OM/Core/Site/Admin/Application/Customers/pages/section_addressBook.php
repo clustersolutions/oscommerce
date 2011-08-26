@@ -116,7 +116,6 @@
 
 <div id="addressBookForm" style="display: none;">
   <div class="infoBox">
-    <form name="abForm" class="dataForm" action="#">
 
 <?php
   if ( $new_customer ) {
@@ -234,8 +233,6 @@ $('#ab_lastname').val($('#lastname').val());
 
     <p id="abSubmitButtonsNew"><?php echo HTML::button(array('type' => 'button', 'params' => 'onclick="processAddress();"', 'priority' => 'primary', 'icon' => 'plus', 'title' => OSCOM::getDef('button_add'))) . ' ' . HTML::button(array('type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
     <p id="abSubmitButtonsEdit"><?php echo HTML::button(array('type' => 'button', 'params' => 'data-abButtonType="henrysBucket"', 'priority' => 'primary', 'icon' => 'arrowrefresh-1-n', 'title' => OSCOM::getDef('button_update'))) . ' ' . HTML::button(array('type' => 'button', 'params' => 'onclick="cancelAddressForm();"', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
-
-    </form>
   </div>
 </div>
 
