@@ -25,7 +25,7 @@
       Registry::set('PDO', PDO::initialize());
 
       foreach ( OSCOM::callDB('Shop\GetConfiguration', null, 'Site') as $param ) {
-        define($param['cfgKey'], $param['cfgValue']);
+        define($param['cfgkey'], $param['cfgvalue']);
       }
 
       Registry::set('Session', Session::load('adminSid'));

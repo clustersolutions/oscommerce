@@ -6,15 +6,19 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Shop\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Shop\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
+
+/**
+ * @since v3.0.3
+ */
 
   class GetConfiguration {
     public static function execute() {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $Qcfg = $OSCOM_PDO->query('select configuration_key as cfgKey, configuration_value as cfgValue from :table_configuration');
+      $Qcfg = $OSCOM_PDO->query('select configuration_key as cfgkey, configuration_value as cfgvalue from :table_configuration');
       $Qcfg->setCache('configuration');
       $Qcfg->execute();
 

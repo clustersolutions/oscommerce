@@ -8,32 +8,30 @@
 
   namespace osCommerce\OM\Core\Session\Database\SQL\ANSI;
 
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
 /**
  * @since v3.0.3
  */
 
-  class Get {
+  class Save {
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $sql_query = 'select value from :table_sessions where id = :id';
-
-      if ( isset($data['expiry']) ) {
-        $sql_query .= ' and expiry >= :expiry';
+      if ( OSCOM::callDB('Session\Database\Check', array('id' => $data['id']), 'Core') ) {
+        $sql_query = 'update :table_sessions set expiry = :expiry, value = :value where id = :id';
+      } else {
+        $sql_query = 'insert into :table_sessions values (:id, :expiry, :value)';
       }
 
       $Qsession = $OSCOM_PDO->prepare($sql_query);
       $Qsession->bindValue(':id', $data['id']);
-
-      if ( isset($data['expiry']) ) {
-        $Qsession->bindInt(':expiry', $data['expiry']);
-      }
-
+      $Qsession->bindInt(':expiry', $data['expiry']);
+      $Qsession->bindValue(':value', $data['value']);
       $Qsession->execute();
 
-      return $Qsession->fetch();
+      return ( ($Qsession->rowCount() === 1) || !$Qsession->isError() );
     }
   }
 ?>
