@@ -414,7 +414,7 @@
         if ( $OSCOM_PDO->hasDriverParent() && class_exists($ns . '\\SQL\\' . $OSCOM_PDO->getDriverParent() . '\\' . $procedure) ) {
           $db_driver = $OSCOM_PDO->getDriverParent();
         } else {
-          $db_driver = 'SqlBuilder';
+          $db_driver = 'ANSI';
         }
       }
 

@@ -124,7 +124,7 @@
 
       for ( $i=$pos; $i<$sql_length; $i++ ) {
 // remove comments
-        if ( $import_queries[0] == '#' ) {
+        if ( ($import_queries[0] == '#') || (substr($import_queries, 0, 2) == '--') ) {
           $import_queries = ltrim(substr($import_queries, strpos($import_queries, "\n")));
           $sql_length = strlen($import_queries);
           $i = strpos($import_queries, ';')-1;
@@ -138,7 +138,7 @@
             if ( !empty($import_queries[$j]) ) {
               $next = substr($import_queries, $j, 6);
 
-              if ( $next[0] == '#' ) {
+              if ( ($next[0] == '#') || (substr($next, 0, 2) == '--') ) {
 // find out where the break position is so we can remove this line (#comment line)
                 for ( $k=$j; $k<$sql_length; $k++ ) {
                   if ( $import_queries[$k] == "\n" ) {
@@ -177,6 +177,8 @@
                 $sql_query = 'CREATE TABLE ' . $table_prefix . substr($sql_query, 17);
               } elseif ( strtoupper(substr($sql_query, 0, 16)) == 'INSERT INTO OSC_' ) {
                 $sql_query = 'INSERT INTO ' . $table_prefix . substr($sql_query, 16);
+              } elseif ( strtoupper(substr($sql_query, 0, 12)) == 'CREATE INDEX' ) {
+                $sql_query = substr($sql_query, 0, stripos($sql_query, ' on osc_')) . ' on ' . $table_prefix . substr($sql_query, stripos($sql_query, ' on osc_') + 8);
               }
             }
 

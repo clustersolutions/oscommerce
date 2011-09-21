@@ -21,6 +21,10 @@
 
   $db_table_types = array(array('id' => 'MySQL_Standard', 'text' => 'MySQL Standard'),
                           array('id' => 'MySQL_V5', 'text' => 'MySQL v5'));
+
+  if ( isset($_GET['with-pgsql']) && ($_GET['with-pgsql'] == '1') ) {
+    array_unshift($db_table_types, array('id' => 'PostgreSQL', 'text' => 'PostgreSQL'));
+  }
 ?>
 
 <script language="javascript" type="text/javascript">

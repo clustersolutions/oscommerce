@@ -8,7 +8,7 @@
 
   namespace osCommerce\OM\Core\Site\Setup\Application\Install\SQL\PostgreSQL;
 
-  class ImportFK {
+  class CreateDB {
     public static function execute($data) {
       return true;
     }
