@@ -173,6 +173,10 @@ function flagCheckboxes(element) {
 }
 
 function htmlSpecialChars(string) {
+  if ( string == null ) {
+    string = '';
+  }
+
   return $('<span>').text(string).html();
 };
 
