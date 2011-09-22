@@ -6,10 +6,14 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Configuration\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Configuration\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\Application\Configuration\Configuration;
+
+/**
+ * @since v3.0.3
+ */
 
   class EntryGetAll {
     public static function execute($data) {
