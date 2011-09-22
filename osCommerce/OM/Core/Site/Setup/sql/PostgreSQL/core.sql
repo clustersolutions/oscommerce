@@ -31,7 +31,7 @@ DROP TABLE IF EXISTS osc_administrator_shortcuts CASCADE;
 CREATE TABLE osc_administrator_shortcuts (
   administrators_id integer NOT NULL,
   module varchar(255) NOT NULL,
-  last_viewed timestamp,
+  last_viewed timestamp(0),
   PRIMARY KEY (administrators_id, module)
 );
 
@@ -67,7 +67,7 @@ CREATE TABLE osc_administrators_log (
   new_value text,
   action varchar(255) NOT NULL,
   administrators_id integer NOT NULL,
-  datestamp timestamp NOT NULL
+  datestamp timestamp(0) NOT NULL
 );
 
 CREATE INDEX osc_administrators_log_id_idx ON osc_administrators_log USING btree (id);
@@ -83,10 +83,10 @@ CREATE TABLE osc_banners (
   banners_group varchar(255) NOT NULL,
   banners_html_text text,
   expires_impressions integer DEFAULT 0,
-  expires_date timestamp DEFAULT NULL,
-  date_scheduled timestamp DEFAULT NULL,
-  date_added timestamp NOT NULL,
-  date_status_change timestamp DEFAULT NULL,
+  expires_date timestamp(0) DEFAULT NULL,
+  date_scheduled timestamp(0) DEFAULT NULL,
+  date_added timestamp(0) NOT NULL,
+  date_status_change timestamp(0) DEFAULT NULL,
   status integer NOT NULL DEFAULT 1,
   PRIMARY KEY (banners_id)
 );
@@ -100,7 +100,7 @@ CREATE TABLE osc_banners_history (
   banners_id integer NOT NULL,
   banners_shown integer NOT NULL DEFAULT 0,
   banners_clicked integer NOT NULL DEFAULT 0,
-  banners_history_date timestamp NOT NULL,
+  banners_history_date timestamp(0) NOT NULL,
   PRIMARY KEY (banners_history_id)
 );
 
@@ -112,8 +112,8 @@ CREATE TABLE osc_categories (
   categories_image varchar(255),
   parent_id integer,
   sort_order integer,
-  date_added timestamp,
-  last_modified timestamp,
+  date_added timestamp(0),
+  last_modified timestamp(0),
   PRIMARY KEY (categories_id)
 );
 
@@ -140,8 +140,8 @@ CREATE TABLE osc_configuration (
   configuration_description varchar(255) NOT NULL,
   configuration_group_id integer NOT NULL,
   sort_order integer,
-  last_modified timestamp,
-  date_added timestamp NOT NULL,
+  last_modified timestamp(0),
+  date_added timestamp(0) NOT NULL,
   use_function varchar(255) NULL,
   set_function varchar(255) NULL,
   PRIMARY KEY (configuration_id)
@@ -161,7 +161,7 @@ CREATE TABLE osc_configuration_group (
 
 DROP TABLE IF EXISTS osc_counter CASCADE;
 CREATE TABLE osc_counter (
-  startdate timestamp,
+  startdate timestamp(0),
   counter integer
 );
 
@@ -198,7 +198,7 @@ CREATE TABLE osc_currencies (
   symbol_right varchar(12),
   decimal_places char(1),
   value numeric(13,8),
-  last_updated timestamp,
+  last_updated timestamp(0),
   PRIMARY KEY (currencies_id)
 );
 
@@ -210,7 +210,7 @@ CREATE TABLE osc_customers (
   customers_gender char(1),
   customers_firstname varchar(255) NOT NULL,
   customers_lastname varchar(255) NOT NULL,
-  customers_dob timestamp,
+  customers_dob timestamp(0),
   customers_email_address varchar(255) NOT NULL,
   customers_default_address_id integer,
   customers_telephone varchar(255),
@@ -219,10 +219,10 @@ CREATE TABLE osc_customers (
   customers_newsletter char(1),
   customers_status integer DEFAULT 1,
   customers_ip_address varchar(15),
-  date_last_logon timestamp,
+  date_last_logon timestamp(0),
   number_of_logons integer DEFAULT 0,
-  date_account_created timestamp,
-  date_account_last_modified timestamp,
+  date_account_created timestamp(0),
+  date_account_last_modified timestamp(0),
   global_product_notifications integer DEFAULT 0,
   PRIMARY KEY (customers_id)
 );
@@ -246,8 +246,8 @@ CREATE TABLE osc_geo_zones (
   geo_zone_id serial NOT NULL,
   geo_zone_name varchar(255) NOT NULL,
   geo_zone_description varchar(255) NOT NULL,
-  last_modified timestamp,
-  date_added timestamp NOT NULL,
+  last_modified timestamp(0),
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (geo_zone_id)
 );
 
@@ -292,8 +292,8 @@ CREATE TABLE osc_manufacturers (
   manufacturers_id serial NOT NULL,
   manufacturers_name varchar(255) NOT NULL,
   manufacturers_image varchar(255),
-  date_added timestamp,
-  last_modified timestamp,
+  date_added timestamp(0),
+  last_modified timestamp(0),
   PRIMARY KEY (manufacturers_id)
 );
 
@@ -305,7 +305,7 @@ CREATE TABLE osc_manufacturers_info (
   languages_id integer NOT NULL,
   manufacturers_url varchar(255) NOT NULL,
   url_clicked integer DEFAULT 0,
-  date_last_click timestamp,
+  date_last_click timestamp(0),
   PRIMARY KEY (manufacturers_id, languages_id)
 );
 
@@ -329,8 +329,8 @@ CREATE TABLE osc_newsletters (
   title varchar(255) NOT NULL,
   content text NOT NULL,
   module varchar(255) NOT NULL,
-  date_added timestamp NOT NULL,
-  date_sent timestamp,
+  date_added timestamp(0) NOT NULL,
+  date_sent timestamp(0),
   status integer,
   locked integer DEFAULT 0,
   PRIMARY KEY (newsletters_id)
@@ -340,7 +340,7 @@ DROP TABLE IF EXISTS osc_newsletters_log CASCADE;
 CREATE TABLE osc_newsletters_log (
   newsletters_id integer NOT NULL,
   email_address varchar(255) NOT NULL,
-  date_sent timestamp
+  date_sent timestamp(0)
 );
 
 CREATE INDEX osc_newsletters_log_newsletters_id_idx ON osc_newsletters_log USING btree (newsletters_id);
@@ -391,10 +391,10 @@ CREATE TABLE osc_orders (
   billing_address_format varchar(255) NOT NULL,
   payment_method varchar(255) NOT NULL,
   payment_module varchar(255) NOT NULL,
-  last_modified timestamp,
-  date_purchased timestamp,
+  last_modified timestamp(0),
+  date_purchased timestamp(0),
   orders_status integer NOT NULL,
-  orders_date_finished timestamp,
+  orders_date_finished timestamp(0),
   currency char(3),
   currency_value numeric(14,6),
   PRIMARY KEY (orders_id)
@@ -462,7 +462,7 @@ CREATE TABLE osc_orders_status_history (
   orders_status_history_id serial NOT NULL,
   orders_id integer NOT NULL,
   orders_status_id integer NOT NULL,
-  date_added timestamp NOT NULL,
+  date_added timestamp(0) NOT NULL,
   customer_notified integer DEFAULT 0,
   comments text,
   PRIMARY KEY (orders_status_history_id)
@@ -492,7 +492,7 @@ CREATE TABLE osc_orders_transactions_history (
   transaction_code integer NOT NULL,
   transaction_return_value text NOT NULL,
   transaction_return_status integer NOT NULL,
-  date_added timestamp,
+  date_added timestamp(0),
   PRIMARY KEY (id)
 );
 
@@ -550,8 +550,8 @@ CREATE TABLE osc_products (
   products_quantity integer NOT NULL,
   products_price numeric(15,4) NOT NULL,
   products_model varchar(255),
-  products_date_added timestamp NOT NULL,
-  products_last_modified timestamp,
+  products_date_added timestamp(0) NOT NULL,
+  products_last_modified timestamp(0),
   products_weight numeric(5,2),
   products_weight_class integer,
   products_status smallint NOT NULL,
@@ -595,7 +595,7 @@ CREATE TABLE osc_products_images (
   image varchar(255) NOT NULL,
   default_flag smallint NOT NULL,
   sort_order integer NOT NULL,
-  date_added timestamp NOT NULL,
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -619,7 +619,7 @@ DROP TABLE IF EXISTS osc_products_notifications CASCADE;
 CREATE TABLE osc_products_notifications (
   products_id integer NOT NULL,
   customers_id integer NOT NULL,
-  date_added timestamp NOT NULL,
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (products_id, customers_id)
 );
 
@@ -681,8 +681,8 @@ CREATE TABLE osc_reviews (
   reviews_rating integer,
   languages_id integer NOT NULL,
   reviews_text text NOT NULL,
-  date_added timestamp,
-  last_modified timestamp,
+  date_added timestamp(0),
+  last_modified timestamp(0),
   reviews_read integer NOT NULL DEFAULT '0',
   reviews_status smallint NOT NULL,
   PRIMARY KEY (reviews_id)
@@ -717,7 +717,7 @@ CREATE TABLE osc_shopping_carts (
   item_id smallint NOT NULL,
   products_id integer NOT NULL,
   quantity smallint NOT NULL,
-  date_added timestamp
+  date_added timestamp(0)
 );
 
 CREATE INDEX osc_shopping_carts_customers_id_idx ON osc_shopping_carts USING btree (customers_id);
@@ -743,11 +743,11 @@ CREATE TABLE osc_specials (
   specials_id serial NOT NULL,
   products_id integer NOT NULL,
   specials_new_products_price numeric(15,4) NOT NULL,
-  specials_date_added timestamp,
-  specials_last_modified timestamp,
-  start_date timestamp,
-  expires_date timestamp,
-  date_status_change timestamp,
+  specials_date_added timestamp(0),
+  specials_last_modified timestamp(0),
+  start_date timestamp(0),
+  expires_date timestamp(0),
+  date_status_change timestamp(0),
   status smallint NOT NULL DEFAULT '1',
   PRIMARY KEY (specials_id)
 );
@@ -759,8 +759,8 @@ CREATE TABLE osc_tax_class (
   tax_class_id serial NOT NULL,
   tax_class_title varchar(255) NOT NULL,
   tax_class_description varchar(255) NOT NULL,
-  last_modified timestamp,
-  date_added timestamp NOT NULL,
+  last_modified timestamp(0),
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (tax_class_id)
 );
 
@@ -772,8 +772,8 @@ CREATE TABLE osc_tax_rates (
   tax_priority int DEFAULT 1,
   tax_rate numeric(7,4) NOT NULL,
   tax_description varchar(255) NOT NULL,
-  last_modified timestamp,
-  date_added timestamp NOT NULL,
+  last_modified timestamp(0),
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (tax_rates_id)
 );
 
@@ -876,8 +876,8 @@ CREATE TABLE osc_zones_to_geo_zones (
   zone_country_id integer NOT NULL,
   zone_id integer,
   geo_zone_id integer NOT NULL,
-  last_modified timestamp,
-  date_added timestamp NOT NULL,
+  last_modified timestamp(0),
+  date_added timestamp(0) NOT NULL,
   PRIMARY KEY (association_id)
 );
 
