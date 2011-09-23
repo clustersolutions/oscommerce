@@ -6,10 +6,14 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Administrators\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Administrators\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\Application\Administrators\Administrators;
+
+/**
+ * @since v3.0.3
+ */
 
   class SavePermissions { // HPDL Albert would proudly say "Hey, hey, hey, it's a faattt SQL module!"; abstraction needed
     public static function execute($data) {
@@ -62,10 +66,10 @@
 
             if ( $data['mode'] == Administrators::ACCESS_MODE_REMOVE ) {
               if ( !in_array('*', $data['modules']) ) {
-                $sql_query .= ' and module in ("' . implode('", "', $data['modules']) . '")'; // HPDL create bindRaw()?
+                $sql_query .= ' and module in (\'' . implode('\', \'', $data['modules']) . '\')'; // HPDL create bindRaw()?
               }
             } else {
-              $sql_query .= ' and module not in ("' . implode('", "', $data['modules']) . '")'; // HPDL create bindRaw()?
+              $sql_query .= ' and module not in (\'' . implode('\', \'', $data['modules']) . '\')'; // HPDL create bindRaw()?
             }
 
             $Qdel = $OSCOM_PDO->prepare($sql_query);

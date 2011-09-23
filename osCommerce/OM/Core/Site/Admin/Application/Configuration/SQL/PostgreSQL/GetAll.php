@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $Qgroups = $OSCOM_PDO->query('select cg.configuration_group_id, cg.configuration_group_title, count(c.configuration_id) as total_entries from :table_configuration_group cg, :table_configuration c where cg.visible = 1 and cg.configuration_group_id = c.configuration_group_id group by cg.configuration_group_id, cg.configuration_group_title, cg.sort_order order by cg.sort_order, cg.configuration_group_title');
+      $Qgroups = $OSCOM_PDO->query('select cg.configuration_group_id, cg.configuration_group_title, (select count(*) from :table_configuration c where c.configuration_group_id = cg.configuration_group_id) as total_entries from :table_configuration_group cg where cg.visible = 1 order by cg.sort_order, cg.configuration_group_title');
       $Qgroups->execute();
 
       $result['entries'] = $Qgroups->fetchAll();
