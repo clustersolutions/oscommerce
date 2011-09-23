@@ -6,9 +6,13 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Languages\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
+
+/**
+ * @since v3.0.3
+ */
 
   class GetDefinitions {
     public static function execute($data) {
@@ -19,7 +23,7 @@
       $sql_query = 'select * from :table_languages_definitions where languages_id = :languages_id and';
 
       if ( is_array($data['group']) ) {
-        $sql_query .= ' content_group in ("' . implode('", "', $data['group']) . '")';
+        $sql_query .= ' content_group in (\'' . implode('\', \'', $data['group']) . '\')';
       } else {
         $sql_query .= ' content_group = :content_group';
       }
