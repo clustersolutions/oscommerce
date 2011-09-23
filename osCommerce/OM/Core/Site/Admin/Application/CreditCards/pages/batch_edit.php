@@ -26,7 +26,7 @@
   <p><?php echo OSCOM::getDef('introduction_batch_edit_cards'); ?></p>
 
 <?php
-  $Qcc = $OSCOM_PDO->query('select id, credit_card_name from :table_credit_cards where id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by credit_card_name');
+  $Qcc = $OSCOM_PDO->query('select id, credit_card_name from :table_credit_cards where id in (\'' . implode('\', \'', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '\') order by credit_card_name');
   $Qcc->execute();
 
   $names_string = '';
