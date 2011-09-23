@@ -73,7 +73,7 @@
 
         if ( !$Qadmin->isError() ) {
           if ( !is_numeric($data['id']) ) {
-            $data['id'] = $Qadmin->value('id');
+            $data['id'] = $Qadmin->valueInt('id');
           }
         } else {
           $error = true;
