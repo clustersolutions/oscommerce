@@ -10,6 +10,10 @@
 
   use osCommerce\OM\Core\Registry;
 
+/**
+ * @since v3.0.3
+ */
+
   class Delete {
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
