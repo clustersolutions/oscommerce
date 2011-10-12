@@ -9,7 +9,7 @@
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
-  $Qzones = $OSCOM_PDO->query('select zone_id, zone_name from :table_zones where zone_id in ("' . implode('", "', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . '") order by zone_name');
+  $Qzones = $OSCOM_PDO->query('select zone_id, zone_name from :table_zones where zone_id in (\'' . implode('\', \'', array_unique(array_filter($_POST['batch'], 'is_numeric'))) . '\') order by zone_name');
   $Qzones->execute();
 
   $names_string = '';

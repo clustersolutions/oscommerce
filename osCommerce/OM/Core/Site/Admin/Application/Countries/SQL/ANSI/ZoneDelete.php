@@ -6,7 +6,7 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Countries\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Countries\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
 

@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $sql_query = 'select c.*, (select count(*) from :table_zones z where z.zone_country_id = c.countries_id) as total_zones from :table_countries c';
+      $sql_query = 'select c.*, (select count(*) from :table_zones z where z.zone_country_id = c.countries_id) as total_zones from :table_countries c order by c.countries_name';
 
       if ( $data['batch_pageset'] !== -1 ) {
         $sql_query .= ' limit :batch_max_results offset :batch_pageset';
