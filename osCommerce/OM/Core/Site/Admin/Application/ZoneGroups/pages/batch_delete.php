@@ -29,7 +29,7 @@
 <?php
   $check_tax_zones_flag = array();
 
-  $Qzones = $OSCOM_PDO->query('select geo_zone_id, geo_zone_name from :table_geo_zones where geo_zone_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by geo_zone_name');
+  $Qzones = $OSCOM_PDO->query('select geo_zone_id, geo_zone_name from :table_geo_zones where geo_zone_id in (\'' . implode('\', \'', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '\') order by geo_zone_name');
   $Qzones->execute();
 
   $names_string = '';
