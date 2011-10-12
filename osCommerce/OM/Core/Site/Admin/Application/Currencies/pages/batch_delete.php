@@ -28,7 +28,7 @@
 <?php
   $check_default_flag = false;
 
-  $Qcurrencies = $OSCOM_PDO->query('select currencies_id, title, code from :table_currencies where currencies_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by title');
+  $Qcurrencies = $OSCOM_PDO->query('select currencies_id, title, code from :table_currencies where currencies_id in (\'' . implode('\', \'', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '\') order by title');
   $Qcurrencies->execute();
 
   $names_string = '';
