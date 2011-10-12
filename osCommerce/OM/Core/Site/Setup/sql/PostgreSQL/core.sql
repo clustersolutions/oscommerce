@@ -999,6 +999,8 @@ INSERT INTO osc_configuration_group VALUES ('16', 'Regulations', 'Regulation opt
 INSERT INTO osc_configuration_group VALUES ('17', 'Credit Cards', 'Credit card options', '17', '1');
 INSERT INTO osc_configuration_group VALUES ('18', 'Program Locations', 'Locations to certain programs on the server.', '18', '1');
 
+ALTER SEQUENCE osc_configuration_group_configuration_group_id_seq RESTART 19;
+
 INSERT INTO osc_countries VALUES (1,'Afghanistan','AF','AFG',null);
 
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (1,'BDS','بد خشان');
@@ -5926,26 +5928,28 @@ INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (239,'MS','
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (239,'MV','Masvingo');
 INSERT INTO osc_zones (zone_country_id, zone_code, zone_name) VALUES (239,'MW','Mashonaland West');
 
+ALTER SEQUENCE osc_countries_countries_id_seq RESTART 240;
+
 -- Regular expression patterns from http://www.creditcardcode.net
-INSERT INTO osc_credit_cards VALUES (1,'American Express',E'/^(34|37)\\d{13}$/','0','0');
-INSERT INTO osc_credit_cards VALUES (2,'Diners Club',E'/^(30|36|38)\\d{12}$/','0','0');
-INSERT INTO osc_credit_cards VALUES (3,'JCB',E'/^((2131|1800)\\d{11}|3[0135]\\d{14})$/','0','0');
-INSERT INTO osc_credit_cards VALUES (4,'MasterCard',E'/^5[1-5]\\d{14}$/','1','0');
-INSERT INTO osc_credit_cards VALUES (5,'Visa',E'/^4\\d{12}(\\d{3})?$/','1','0');
-INSERT INTO osc_credit_cards VALUES (6,'Discover Card',E'/^6011\\d{12}$/','0','0');
-INSERT INTO osc_credit_cards VALUES (7,'Solo',E'/^(63|67)\\d{14}(\\d{2,3})?$/','0','0');
-INSERT INTO osc_credit_cards VALUES (8,'Switch',E'/^(49|56|63|67)\\d{14}(\\d{2,3})?$/','0','0');
-INSERT INTO osc_credit_cards VALUES (9,'Australian Bankcard',E'/^5610\\d{12}$/','0','0');
-INSERT INTO osc_credit_cards VALUES (10,'enRoute',E'/^(2014|2149)\\d{11}$/','0','0');
-INSERT INTO osc_credit_cards VALUES (11,'Laser',E'/^6304\\d{12}(\\d{2,3})?$/','0','0');
-INSERT INTO osc_credit_cards VALUES (12,'Maestro','/^(50|56|57|58|6)/','0','0');
-INSERT INTO osc_credit_cards VALUES (13,'Saferpay Test Card','/^9451123100000004$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'American Express',E'/^(34|37)\\d{13}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Diners Club',E'/^(30|36|38)\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'JCB',E'/^((2131|1800)\\d{11}|3[0135]\\d{14})$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'MasterCard',E'/^5[1-5]\\d{14}$/','1','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Visa',E'/^4\\d{12}(\\d{3})?$/','1','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Discover Card',E'/^6011\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Solo',E'/^(63|67)\\d{14}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Switch',E'/^(49|56|63|67)\\d{14}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Australian Bankcard',E'/^5610\\d{12}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'enRoute',E'/^(2014|2149)\\d{11}$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Laser',E'/^6304\\d{12}(\\d{2,3})?$/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Maestro','/^(50|56|57|58|6)/','0','0');
+INSERT INTO osc_credit_cards VALUES (DEFAULT,'Saferpay Test Card','/^9451123100000004$/','0','0');
 
-INSERT INTO osc_currencies VALUES (1,'US Dollar','USD','$',null,'2','1.0000', now());
-INSERT INTO osc_currencies VALUES (2,'Euro','EUR','€',null,'2','1.2076', now());
-INSERT INTO osc_currencies VALUES (3,'British Pounds','GBP','£',null,'2','1.7587', now());
+INSERT INTO osc_currencies VALUES (DEFAULT,'US Dollar','USD','$',null,'2','1.0000', now());
+INSERT INTO osc_currencies VALUES (DEFAULT,'Euro','EUR','€',null,'2','1.2076', now());
+INSERT INTO osc_currencies VALUES (DEFAULT,'British Pounds','GBP','£',null,'2','1.7587', now());
 
-INSERT INTO osc_languages VALUES (1,'English','en_US','en_US.UTF-8,en_US,english','utf-8','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr',1,'.',',',0,1);
+INSERT INTO osc_languages VALUES (DEFAULT,'English','en_US','en_US.UTF-8,en_US,english','utf-8','%m/%d/%Y','%A %d %B, %Y','%H:%M:%S','ltr',1,'.',',',0,1);
 
 INSERT INTO osc_orders_status VALUES ( '1', '1', 'Pending');
 INSERT INTO osc_orders_status VALUES ( '2', '1', 'Processing');
@@ -5957,9 +5961,9 @@ INSERT INTO osc_orders_transactions_status VALUES ( '2', '1', 'Cancel');
 INSERT INTO osc_orders_transactions_status VALUES ( '3', '1', 'Approve');
 INSERT INTO osc_orders_transactions_status VALUES ( '4', '1', 'Inquiry');
 
-INSERT INTO osc_product_types values (1, 'Shippable');
-INSERT INTO osc_product_types_assignments values (1, 1, 'PerformOrder', 'RequireShipping', 100);
-INSERT INTO osc_product_types_assignments values (2, 1, 'PerformOrder', 'RequireBilling', 200);
+INSERT INTO osc_product_types values (DEFAULT, 'Shippable');
+INSERT INTO osc_product_types_assignments values (DEFAULT, 1, 'PerformOrder', 'RequireShipping', 100);
+INSERT INTO osc_product_types_assignments values (DEFAULT, 1, 'PerformOrder', 'RequireBilling', 200);
 
 INSERT INTO osc_products_images_groups values (1, 1, 'Originals', 'originals', 0, 0, 0);
 INSERT INTO osc_products_images_groups values (2, 1, 'Thumbnails', 'thumbnails', 100, 80, 0);
@@ -5967,59 +5971,59 @@ INSERT INTO osc_products_images_groups values (3, 1, 'Product Information Page',
 INSERT INTO osc_products_images_groups values (4, 1, 'Large', 'large', 375, 300, 0);
 INSERT INTO osc_products_images_groups values (5, 1, 'Mini', 'mini', 50, 40, 0);
 
-INSERT INTO osc_tax_class VALUES (1, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
+INSERT INTO osc_tax_class VALUES (DEFAULT, 'Taxable Goods', 'The following types of products are included non-food, services, etc', now(), now());
 
 -- USA/Florida
-INSERT INTO osc_tax_rates VALUES (1, 1, 1, 1, 7.0, 'FL TAX 7.0%', now(), now());
-INSERT INTO osc_geo_zones (geo_zone_id,geo_zone_name,geo_zone_description,date_added) VALUES (1,'Florida','Florida local sales tax zone',now());
-INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_zone_id,date_added) VALUES (1,223,4031,1,now());
+INSERT INTO osc_tax_rates VALUES (DEFAULT, 1, 1, 1, 7.0, 'FL TAX 7.0%', now(), now());
+INSERT INTO osc_geo_zones (geo_zone_id,geo_zone_name,geo_zone_description,date_added) VALUES (DEFAULT,'Florida','Florida local sales tax zone',now());
+INSERT INTO osc_zones_to_geo_zones (association_id,zone_country_id,zone_id,geo_zone_id,date_added) VALUES (DEFAULT,223,4031,1,now());
 
 -- Templates
 
-INSERT INTO osc_templates VALUES (1, 'osCommerce Online Merchant', 'oscom', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
+INSERT INTO osc_templates VALUES (DEFAULT, 'osCommerce Online Merchant', 'oscom', 'osCommerce', 'http://www.oscommerce.com', 'XHTML 1.0 Transitional', 1, 'Screen');
 
-INSERT INTO osc_templates_boxes VALUES (1, 'Best Sellers', 'BestSellers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (2, 'Categories', 'Categories', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (3, 'Currencies', 'Currencies', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (4, 'Information', 'Information', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (5, 'Languages', 'Languages', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (6, 'Manufacturer Info', 'ManufacturerInfo', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (7, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (8, 'Order History', 'OrderHistory', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (9, 'Product Notifications', 'ProductNotifications', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (10, 'Reviews', 'Reviews', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (11, 'Search', 'Search', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (12, 'Shopping Cart', 'ShoppingCart', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (13, 'Specials', 'Specials', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (14, 'Tell a Friend', 'TellAFriend', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (15, 'What''s New', 'WhatsNew', 'osCommerce', 'http://www.oscommerce.com', 'Box');
-INSERT INTO osc_templates_boxes VALUES (16, 'New Products', 'NewProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
-INSERT INTO osc_templates_boxes VALUES (17, 'Upcoming Products', 'UpcomingProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
-INSERT INTO osc_templates_boxes VALUES (18, 'Recently Visited', 'RecentlyVisited', 'osCommerce', 'http://www.oscommerce.com', 'Content');
-INSERT INTO osc_templates_boxes VALUES (19, 'Also Purchased Products', 'AlsoPurchasedProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
-INSERT INTO osc_templates_boxes VALUES (20, 'Date Available', 'DateAvailable', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
-INSERT INTO osc_templates_boxes VALUES (21, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Best Sellers', 'BestSellers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Categories', 'Categories', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Currencies', 'Currencies', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Information', 'Information', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Languages', 'Languages', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Manufacturer Info', 'ManufacturerInfo', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Order History', 'OrderHistory', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Product Notifications', 'ProductNotifications', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Reviews', 'Reviews', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Search', 'Search', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Shopping Cart', 'ShoppingCart', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Specials', 'Specials', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Tell a Friend', 'TellAFriend', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'What''s New', 'WhatsNew', 'osCommerce', 'http://www.oscommerce.com', 'Box');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'New Products', 'NewProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Upcoming Products', 'UpcomingProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Recently Visited', 'RecentlyVisited', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Also Purchased Products', 'AlsoPurchasedProducts', 'osCommerce', 'http://www.oscommerce.com', 'Content');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Date Available', 'DateAvailable', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
+INSERT INTO osc_templates_boxes VALUES (DEFAULT, 'Manufacturers', 'Manufacturers', 'osCommerce', 'http://www.oscommerce.com', 'ProductAttribute');
 
-INSERT INTO osc_templates_boxes_to_pages VALUES (1, 2, 1, '*', 'left', 100, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (2, 7, 1, '*', 'left', 200, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (3, 15, 1, '*', 'left', 300, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (4, 11, 1, '*', 'left', 400, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (5, 4, 1, '*', 'left', 500, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (6, 12, 1, '*', 'right', 100, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (7, 6, 1, 'Products/main', 'right', 200, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (8, 8, 1, '*', 'right', 300, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (9, 1, 1, '*', 'right', 400, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (10, 9, 1, 'Products/main', 'right', 500, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (11, 14, 1, 'Products/main','right', 600, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (12, 13, 1, '*', 'right', 700, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (13, 10, 1, '*', 'right', 800, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (14, 5, 1, '*', 'right', 900, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (15, 3, 1, '*', 'right', 1000, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (16, 16, 1, 'Index/category_listing', 'after', 400, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (17, 16, 1, 'Index/main','after', 400, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (18, 17, 1, 'Index/main','after', 450, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (19, 18, 1, '*', 'after', 500, 0);
-INSERT INTO osc_templates_boxes_to_pages VALUES (20, 19, 1, 'Products/main', 'after', 100, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 2, 1, '*', 'left', 100, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 7, 1, '*', 'left', 200, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 15, 1, '*', 'left', 300, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 11, 1, '*', 'left', 400, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 4, 1, '*', 'left', 500, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 12, 1, '*', 'right', 100, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 6, 1, 'Products/main', 'right', 200, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 8, 1, '*', 'right', 300, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 1, 1, '*', 'right', 400, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 9, 1, 'Products/main', 'right', 500, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 14, 1, 'Products/main','right', 600, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 13, 1, '*', 'right', 700, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 10, 1, '*', 'right', 800, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 5, 1, '*', 'right', 900, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 3, 1, '*', 'right', 1000, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 16, 1, 'Index/category_listing', 'after', 400, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 16, 1, 'Index/main','after', 400, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 17, 1, 'Index/main','after', 450, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 18, 1, '*', 'after', 500, 0);
+INSERT INTO osc_templates_boxes_to_pages VALUES (DEFAULT, 19, 1, 'Products/main', 'after', 100, 0);
 
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Minimum List Size', 'BOX_BEST_SELLERS_MIN_LIST', '3', 'Minimum amount of products that must be shown in the listing', '6', '0', now());
 INSERT INTO osc_configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Maximum List Size', 'BOX_BEST_SELLERS_MAX_LIST', '10', 'Maximum amount of products to show in the listing', '6', '0', now());
