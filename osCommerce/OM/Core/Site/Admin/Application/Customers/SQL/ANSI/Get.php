@@ -6,12 +6,12 @@
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Site\Admin\Application\Customers\SQL\MySQL\Standard;
+  namespace osCommerce\OM\Core\Site\Admin\Application\Customers\SQL\ANSI;
 
   use osCommerce\OM\Core\Registry;
 
 /**
- * @since v3.0.2
+ * @since v3.0.3
  */
 
   class Get {
