@@ -10,7 +10,7 @@
   use osCommerce\OM\Core\OSCOM;
 ?>
 
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::object(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
 
 <?php
   if ( $OSCOM_MessageStack->exists() ) {
@@ -26,7 +26,7 @@
   <p><?php echo OSCOM::getDef('introduction_batch_delete_tax_rates'); ?></p>
 
 <?php
-  $Qentries = $OSCOM_PDO->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by tax_description');
+  $Qentries = $OSCOM_PDO->query('select tax_rates_id, tax_description from :table_tax_rates where tax_rates_id in (\'' . implode('\', \'', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '\') order by tax_description');
   $Qentries->execute();
 
   $names_string = '';

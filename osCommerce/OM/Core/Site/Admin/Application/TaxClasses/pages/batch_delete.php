@@ -29,7 +29,7 @@
 <?php
   $check_tax_classes_flag = array();
 
-  $Qclasses = $OSCOM_PDO->query('select tax_class_id, tax_class_title from :table_tax_class where tax_class_id in ("' . implode('", "', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '") order by tax_class_title');
+  $Qclasses = $OSCOM_PDO->query('select tax_class_id, tax_class_title from :table_tax_class where tax_class_id in (\'' . implode('\', \'', array_unique(array_filter(array_slice($_POST['batch'], 0, MAX_DISPLAY_SEARCH_RESULTS), 'is_numeric'))) . '\') order by tax_class_title');
   $Qclasses->execute();
 
   $names_string = '';
