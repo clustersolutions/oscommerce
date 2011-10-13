@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $sql_query = 'select distinct l.*, (select count(*) from :table_languages_definitions ld where ld.languages_id = l.languages_id) as total_definitions from :table_languages l join :table_languages_definitions ld on (ld.languages_id = l.languages_id) where (l.name ilike :name or l.code ilike :code or ld.definition_key ilike :definition_key or ld.definition_value ilike :definition_value) order by l.name';
+      $sql_query = 'select distinct l.*, (select count(*) from :table_languages_definitions ld where ld.languages_id = l.languages_id) as total_definitions from :table_languages l left join :table_languages_definitions ld on (ld.languages_id = l.languages_id) where (l.name ilike :name or l.code ilike :code or ld.definition_key ilike :definition_key or ld.definition_value ilike :definition_value) order by l.name';
 
       if ( $data['batch_pageset'] !== -1 ) {
         $sql_query .= ' limit :batch_max_results offset :batch_pageset';
@@ -41,7 +41,7 @@
 
       $result['entries'] = $Qlanguages->fetchAll();
 
-      $Qtotal = $OSCOM_PDO->prepare('select count(distinct l.languages_id) from :table_languages l join :table_languages_definitions ld on (ld.languages_id = l.languages_id) where (l.name ilike :name or l.code ilike :code or ld.definition_key ilike :definition_key or ld.definition_value ilike :definition_value)');
+      $Qtotal = $OSCOM_PDO->prepare('select count(distinct l.languages_id) from :table_languages l left join :table_languages_definitions ld on (ld.languages_id = l.languages_id) where (l.name ilike :name or l.code ilike :code or ld.definition_key ilike :definition_key or ld.definition_value ilike :definition_value)');
       $Qtotal->bindValue(':name', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':code', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':definition_key', '%' . $data['keywords'] . '%');

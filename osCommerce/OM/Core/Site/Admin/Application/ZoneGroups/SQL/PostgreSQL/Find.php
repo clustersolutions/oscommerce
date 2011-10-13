@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $sql_query = 'select distinct gz.*, (select count(*) from :table_zones_to_geo_zones z2gz where z2gz.geo_zone_id = gz.geo_zone_id) as total_entries from :table_geo_zones gz join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id), :table_countries c, :table_zones z where z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name ilike :geo_zone_name or gz.geo_zone_description ilike :geo_zone_description or c.countries_name ilike :countries_name or z.zone_name ilike :zone_name) order by gz.geo_zone_name';
+      $sql_query = 'select distinct gz.*, (select count(*) from :table_zones_to_geo_zones z2gz where z2gz.geo_zone_id = gz.geo_zone_id) as total_entries from :table_geo_zones gz left join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id), :table_countries c, :table_zones z where z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name ilike :geo_zone_name or gz.geo_zone_description ilike :geo_zone_description or c.countries_name ilike :countries_name or z.zone_name ilike :zone_name) order by gz.geo_zone_name';
 
       if ( $data['batch_pageset'] !== -1 ) {
         $sql_query .= ' limit :batch_max_results offset :batch_pageset';
@@ -41,7 +41,7 @@
 
       $result['entries'] = $Qgroups->fetchAll();
 
-      $Qtotal = $OSCOM_PDO->prepare('select count(distinct gz.geo_zone_id) from :table_geo_zones gz join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id), :table_countries c, :table_zones z where z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name ilike :geo_zone_name or gz.geo_zone_description ilike :geo_zone_description or c.countries_name ilike :countries_name or z.zone_name ilike :zone_name)');
+      $Qtotal = $OSCOM_PDO->prepare('select count(distinct gz.geo_zone_id) from :table_geo_zones gz left join :table_zones_to_geo_zones z2gz on (gz.geo_zone_id = z2gz.geo_zone_id), :table_countries c, :table_zones z where z2gz.zone_country_id = c.countries_id and z2gz.zone_id = z.zone_id and (gz.geo_zone_name ilike :geo_zone_name or gz.geo_zone_description ilike :geo_zone_description or c.countries_name ilike :countries_name or z.zone_name ilike :zone_name)');
       $Qtotal->bindValue(':geo_zone_name', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':geo_zone_description', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':countries_name', '%' . $data['keywords'] . '%');

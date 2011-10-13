@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $sql_query = 'select distinct c.*, (select count(*) from :table_zones z where z.zone_country_id = c.countries_id) as total_zones from :table_countries c join :table_zones z on (c.countries_id = z.zone_country_id) where (c.countries_name ilike :countries_name or c.countries_iso_code_2 ilike :countries_iso_code_2 or c.countries_iso_code_3 ilike :countries_iso_code_3 or z.zone_name ilike :zone_name or z.zone_code ilike :zone_code) order by c.countries_name';
+      $sql_query = 'select distinct c.*, (select count(*) from :table_zones z where z.zone_country_id = c.countries_id) as total_zones from :table_countries c left join :table_zones z on (c.countries_id = z.zone_country_id) where (c.countries_name ilike :countries_name or c.countries_iso_code_2 ilike :countries_iso_code_2 or c.countries_iso_code_3 ilike :countries_iso_code_3 or z.zone_name ilike :zone_name or z.zone_code ilike :zone_code) order by c.countries_name';
 
       if ( $data['batch_pageset'] !== -1 ) {
         $sql_query .= ' limit :batch_max_results offset :batch_pageset';
@@ -42,7 +42,7 @@
 
       $result['entries'] = $Qcountries->fetchAll();
 
-      $Qtotal = $OSCOM_PDO->prepare('select count(distinct c.countries_id) from :table_countries c join :table_zones z on (c.countries_id = z.zone_country_id) where (c.countries_name ilike :countries_name or c.countries_iso_code_2 ilike :countries_iso_code_2 or c.countries_iso_code_3 ilike :countries_iso_code_3 or z.zone_name ilike :zone_name or z.zone_code ilike :zone_code)');
+      $Qtotal = $OSCOM_PDO->prepare('select count(distinct c.countries_id) from :table_countries c left join :table_zones z on (c.countries_id = z.zone_country_id) where (c.countries_name ilike :countries_name or c.countries_iso_code_2 ilike :countries_iso_code_2 or c.countries_iso_code_3 ilike :countries_iso_code_3 or z.zone_name ilike :zone_name or z.zone_code ilike :zone_code)');
       $Qtotal->bindValue(':countries_name', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':countries_iso_code_2', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':countries_iso_code_3', '%' . $data['keywords'] . '%');

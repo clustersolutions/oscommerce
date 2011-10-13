@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $sql_query = 'select distinct tc.*, (select count(*) from :table_tax_rates tr where tr.tax_class_id = tc.tax_class_id) as total_tax_rates from :table_tax_class tc join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where (tc.tax_class_title ilike :tax_class_title or tr.tax_description ilike :tax_description) order by tc.tax_class_title';
+      $sql_query = 'select distinct tc.*, (select count(*) from :table_tax_rates tr where tr.tax_class_id = tc.tax_class_id) as total_tax_rates from :table_tax_class tc left join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where (tc.tax_class_title ilike :tax_class_title or tr.tax_description ilike :tax_description) order by tc.tax_class_title';
 
       if ( $data['batch_pageset'] !== -1 ) {
         $sql_query .= ' limit :batch_max_results offset :batch_pageset';
@@ -39,7 +39,7 @@
 
       $result['entries'] = $Qclasses->fetchAll();
 
-      $Qtotal = $OSCOM_PDO->prepare('select count(distinct tc.tax_class_id) from :table_tax_class tc join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where (tc.tax_class_title ilike :tax_class_title or tr.tax_description ilike :tax_description)');
+      $Qtotal = $OSCOM_PDO->prepare('select count(distinct tc.tax_class_id) from :table_tax_class tc left join :table_tax_rates tr on (tc.tax_class_id = tr.tax_class_id) where (tc.tax_class_title ilike :tax_class_title or tr.tax_description ilike :tax_description)');
       $Qtotal->bindValue(':tax_class_title', '%' . $data['keywords'] . '%');
       $Qtotal->bindValue(':tax_description', '%' . $data['keywords'] . '%');
       $Qtotal->execute();
