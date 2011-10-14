@@ -8,26 +8,46 @@
 
   namespace osCommerce\OM\Core\Site\Admin\Module\Dashboard;
 
-  use osCommerce\OM\Core\Registry;
-  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Access;
-
-//  require('includes/sites/Admin/applications/products/classes/products.php'); HPDL
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
+  use osCommerce\OM\Core\Site\Shop\Currencies;
 
   class Products extends \osCommerce\OM\Core\Site\Admin\IndexModulesAbstract {
     public function __construct() {
-      Registry::get('Language')->loadIniFile('modules/Dashboard/Products.php');
+      $OSCOM_Language = Registry::get('Language');
+
+      $OSCOM_Language->loadIniFile('modules/Dashboard/Products.php');
 
       $this->_title = OSCOM::getDef('admin_indexmodules_products_title');
       $this->_title_link = OSCOM::getLink(null, 'Products');
 
       if ( Access::hasAccess(OSCOM::getSite(), 'Products') ) {
-        if ( !isset($osC_Currencies) ) {
-          if ( !class_exists('osC_Currencies') ) {
-            include('includes/classes/currencies.php');
-          }
+        if ( !Registry::exists('Currencies') ) {
+          Registry::set('Currencies', new Currencies());
+        }
 
-          $osC_Currencies = new osC_Currencies();
+        $OSCOM_Currencies = Registry::get('Currencies');
+
+        $data = array('language_id' => $OSCOM_Language->getID(),
+                      'batch_pageset' => 1,
+                      'batch_max_results' => 6);
+
+        $result = OSCOM::callDB('Admin\Products\GetAll', $data);
+
+        foreach ( $result['entries'] as &$p ) {
+          if ( $p['has_children'] === 1 ) {
+            $p['products_price_formatted'] = $OSCOM_Currencies->format($p['products_price_min']);
+
+            if ( $p['products_price_min'] != $p['products_price_max'] ) {
+              $p['products_price_formatted'] .= ' - ' . $OSCOM_Currencies->format($p['products_price_max']);
+            }
+
+            $p['products_quantity'] = '(' . $p['products_quantity_variants'] . ')';
+          } else {
+            $p['products_price_formatted'] = $OSCOM_Currencies->format($p['products_price']);
+          }
         }
 
         $this->_data = '<table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable">' .
@@ -41,6 +61,7 @@
                        '  </thead>' .
                        '  <tbody>';
 
+/*
         $Qproducts = Registry::get('PDO')->query('select products_id, greatest(products_date_added, products_last_modified) as date_last_modified from :table_products where parent_id is null order by date_last_modified desc limit 6');
         $Qproducts->execute();
 
@@ -66,12 +87,22 @@
               $products_price = 0;
             }
           }
+*/
+
+        $counter = 0;
+
+        foreach ( $result['entries'] as $p ) {
+          if ( $p['has_children'] === 1 ) {
+            $products_icon = HTML::icon('products.png');
+          } else {
+            $products_icon = HTML::icon('attach.png');
+          }
 
           $this->_data .= '    <tr onmouseover="$(this).addClass(\'mouseOver\');" onmouseout="$(this).removeClass(\'mouseOver\');"' . ($counter % 2 ? ' class="alt"' : '') . '>' .
-                          '      <td>' . osc_link_object(OSCOM::getLink(null, 'Products', 'id=' . (int)$data['products_id'] . '&action=save'), $products_icon . '&nbsp;' . osc_output_string_protected($data['products_name'])) . '</td>' .
-                          '      <td>' . ( !empty($data['variants']) ? 'from ' : '' ) . $osC_Currencies->format($products_price) . '</td>' .
-                          '      <td>' . $Qproducts->value('date_last_modified') . '</td>' .
-                          '      <td align="center">' . osc_icon(((int)$data['products_status'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
+                          '      <td>' . HTML::link(OSCOM::getLink(null, 'Products', 'Save&id=' . (int)$p['products_id']), $products_icon . '&nbsp;' . HTML::outputProtected($p['products_name'])) . '</td>' .
+                          '      <td>' . $p['products_price_formatted'] . '</td>' .
+                          '      <td>' . $p['products_last_modified'] . '</td>' .
+                          '      <td align="center">' . HTML::icon(((int)$p['products_status'] === 1) ? 'checkbox_ticked.gif' : 'checkbox_crossed.gif', null, null) . '</td>' .
                           '    </tr>';
 
           $counter++;
