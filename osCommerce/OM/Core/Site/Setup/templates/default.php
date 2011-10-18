@@ -24,10 +24,10 @@
     <meta name="generator" value="osCommerce Online Merchant" />
     <meta name="robots" content="noindex,nofollow" />
 
-    <script type="text/javascript" src="public/external/jquery/jquery-1.6.1.min.js"></script>
+    <script type="text/javascript" src="public/external/jquery/jquery-1.6.4.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.13.custom.css" />
-    <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.13.custom.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.16.custom.css" />
+    <script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.16.custom.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="<?php echo OSCOM::getPublicSiteLink('templates/default/stylesheets/general.css'); ?>" />
 
