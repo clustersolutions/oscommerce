@@ -274,10 +274,19 @@ a:hover {
   margin: 0 0 15px 0;
   padding: 5px 5px 5px 10px;
   font-size: 16px;
+  font-weight: normal;
   border-bottom: 1px solid #e0e0e0;
 }
 
-.infoBox h3 img {
+.infoBox h4 {
+  margin: 0 0 15px 0;
+  padding: 5px 5px 5px 10px;
+  font-size: 14px;
+  font-weight: normal;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.infoBox h3 img, .infoBox h4 img {
   vertical-align: middle;
 }
 
@@ -536,7 +545,7 @@ a:hover {
   font-size: 11px;
 }
 
-/* jQuery Overrides */
+/* jQuery UI Overrides */
 
 .ui-button .ui-button-text {
   font-size: 13px;
@@ -544,4 +553,8 @@ a:hover {
 
 .dataForm fieldset label[role="button"] {
   display: inline-block;
+}
+
+.infoBox .ui-tabs-panel {
+  padding: 10px 0 0 0;
 }
