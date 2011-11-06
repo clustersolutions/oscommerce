@@ -579,7 +579,7 @@ function cancelAddressForm() {
   $('#ab_lastname').val($('#lastname').val());
   $('#ab_street_address,#ab_postcode,#ab_city,#ab_company,#ab_suburb,#ab_telephone,#ab_fax').val('');
   $('#ab_country').val('<?php echo STORE_COUNTRY; ?>').change();
-  $('#ab_default').removeAttr('checked').removeAttr('disabled');
+  $('#ab_default').removeAttr('checked disabled');
 
   $('#sectionMenu_addressBook').show();
   $('#sectionMenu_addressBook ul').equalResize();
