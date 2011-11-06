@@ -358,7 +358,7 @@ function showEditAddressForm(id) {
   $('#addressBookForm #abSubmitButtonsNew').hide();
 
 // Replace onclick handler to pass the address book id as a function parameter
-  $('#addressBookForm #abSubmitButtonsEdit button[data-abButtonType="henrysBucket"]').unbind('click').click(function() {
+  $('#addressBookForm #abSubmitButtonsEdit button[data-abButtonType="henrysBucket"]').off('click').click(function() {
     processAddress(id);
   });
 
