@@ -128,7 +128,7 @@ var osC_DataTable = function() {
               });
 
 // Automatically refresh alternating row background colours on change
-              $('#' + dataTableName + ' tbody').bind('sortupdate', function(event, ui) {
+              $('#' + dataTableName + ' tbody').on('sortupdate', function(event, ui) {
                 $('#' + dataTableName + ' tbody tr').removeClass('alt');
                 $('#' + dataTableName + ' tbody tr:odd').addClass('alt');
               });
