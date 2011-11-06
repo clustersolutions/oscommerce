@@ -412,7 +412,7 @@
 
         $field .= '<option value="' . static::output($values[$i]['id']) . '"';
 
-        if ( (!is_null($default) && !is_array($default) && ((string)$default == (string)$values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default)) ) {
+        if ( isset($default) && ((!is_array($default) && ((string)$default == (string)$values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default))) ) {
           $field .= ' selected="selected"';
         }
 
@@ -492,11 +492,11 @@
           $field .= ' id="' . static::output(substr($parameters, $offset+4, strpos($parameters, '"', $offset+4)-($offset+4))) . '_' . $counter . '"';
         }
 
-        if ( !empty($selection_value) ) {
+        if ( !is_null($selection_value) ) {
           $field .= ' value="' . static::output($selection_value) . '"';
         }
 
-        if ( (is_bool($default) && $default === true) || ((is_string($default) && (trim($default) == trim($selection_value))) || (is_array($default) && in_array(trim($selection_value), $default))) ) {
+        if ( isset($default) && (($default === true) || (!is_array($default) && ((string)$default == (string)$selection_value)) || (is_array($default) && in_array($selection_value, $default))) ) {
           $field .= ' checked="checked"';
         }
 
