@@ -257,7 +257,7 @@ function openEditVariantForm(id, isNew) {
   $('#vstatus').buttonset('refresh');
 
 // Replace onclick handler to pass the product variant id as a function parameter
-  $('#variantSubmitButtonsEdit button[data-vButtonType="henrysBucket"]').unbind('click').click(function() {
+  $('#variantSubmitButtonsEdit button[data-vButtonType="henrysBucket"]').off('click').click(function() {
     processVariantForm(isNew, id);
   });
 
@@ -278,7 +278,7 @@ function closeVariantForm() {
   $('#variants_weight_class option[value="' + defaultWeightClass + '"]').attr('selected', true);
   $('input[name="variants_status"]').removeAttr('checked');
   $('#vstatus').buttonset('refresh');
-  $('#variants_default').removeAttr('checked').removeAttr('disabled');
+  $('#variants_default').removeAttr('checked disabled');
 
   $('#variantListing').show();
 
