@@ -20,7 +20,7 @@
 
       $result = array();
 
-      $Qpa = $OSCOM_PDO->prepare('select code from :table_templates_boxes where modules_group = :modules_group order by code');
+      $Qpa = $OSCOM_PDO->prepare('select id, code from :table_templates_boxes where modules_group = :modules_group order by code');
       $Qpa->bindValue(':modules_group', 'ProductAttribute');
       $Qpa->execute();
 

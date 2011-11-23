@@ -17,7 +17,7 @@
  */
 
   class Manufacturer extends \osCommerce\OM\Core\Site\Admin\ProductAttributeModuleAbstract {
-    public function setFunction($value) {
+    public function getInputField($value) {
       $OSCOM_PDO = Registry::get('PDO');
 
       $array = array(array('id' => '',
@@ -25,7 +25,7 @@
 
       $Qm = $OSCOM_PDO->query('select manufacturers_id, manufacturers_name from :table_manufacturers order by manufacturers_name');
 
-      while ( $Qmanufacturers->fetch() ) {
+      while ( $Qm->fetch() ) {
         $array[] = array('id' => $Qm->valueInt('manufacturers_id'),
                          'text' => $Qm->value('manufacturers_name'));
       }

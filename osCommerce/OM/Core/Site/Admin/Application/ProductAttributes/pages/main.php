@@ -83,10 +83,6 @@
       var newRow = $('#' + dataTableName)[0].tBodies[0].insertRow(rowCounter);
       newRow.id = 'row' + record.code;
 
-      if ( record.status != true ) {
-        $('#row' + record.code).addClass('deactivatedRow');
-      }
-
       $('#row' + record.code).hover( function() { $(this).addClass('mouseOver'); }, function() { $(this).removeClass('mouseOver'); }).css('cursor', 'pointer');
 
       var newCell = newRow.insertCell(0);

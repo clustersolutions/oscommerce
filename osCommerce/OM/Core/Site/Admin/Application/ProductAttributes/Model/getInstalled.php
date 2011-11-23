@@ -24,9 +24,7 @@
 
         $OSCOM_PA = new $class();
 
-        $module['code'] = $OSCOM_PA->getCode();
         $module['title'] = $OSCOM_PA->getTitle();
-        $module['status'] = true;
       }
 
       return $result;

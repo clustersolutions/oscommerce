@@ -18,7 +18,7 @@
   abstract class ProductAttributeModuleAbstract {
     protected $_title;
 
-    abstract public function setFunction($value);
+    abstract public function getInputField($value);
 
     public function __construct() {
       $OSCOM_Language = Registry::get('Language');

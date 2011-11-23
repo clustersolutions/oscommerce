@@ -17,7 +17,7 @@
  */
 
   class ShippingAvailability extends \osCommerce\OM\Core\Site\Admin\ProductAttributeModuleAbstract {
-    public function setFunction($value) {
+    public function getInputField($value) {
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_PDO = Registry::get('PDO');
 
@@ -27,7 +27,7 @@
       $Qstatus->bindInt(':languages_id', $OSCOM_Language->getID());
       $Qstatus->execute();
 
-      while ( $Qstatus->next() ) {
+      while ( $Qstatus->fetch() ) {
         $array[] = array('id' => $Qstatus->valueInt('id'),
                          'text' => $Qstatus->value('title'));
       }

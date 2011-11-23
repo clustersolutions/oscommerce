@@ -40,8 +40,7 @@
           $OSCOM_PA = new $class();
 
           $result['entries'][] = array('code' => $OSCOM_PA->getCode(),
-                                       'title' => $OSCOM_PA->getTitle(),
-                                       'status' => false);
+                                       'title' => $OSCOM_PA->getTitle());
         }
       }
 

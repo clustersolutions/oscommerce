@@ -15,7 +15,7 @@
  */
 
   class DateAvailable extends \osCommerce\OM\Core\Site\Admin\ProductAttributeModuleAbstract {
-    public function setFunction($value) {
+    public function getInputField($value) {
       return HTML::inputField('attributes[' . self::getID() . ']', $value, 'id="attributes_' . self::getID() . '"') . '<script>$(function() { $("#attributes_' . self::getID() . '").datepicker( { dateFormat: "yy-mm-dd", changeMonth: true, changeYear: true } ); });</script>';
     }
   }
