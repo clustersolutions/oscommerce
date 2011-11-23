@@ -15,10 +15,11 @@
     protected $tax_rates = array();
 
     public function getTaxRate($class_id, $country_id = -1, $zone_id = -1) {
-      $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
       $OSCOM_PDO = Registry::get('PDO');
 
       if ( ($country_id == -1) && ($zone_id == -1) ) {
+        $OSCOM_ShoppingCart = Registry::get('ShoppingCart');
+
         $country_id = $OSCOM_ShoppingCart->getTaxingAddress('country_id');
         $zone_id = $OSCOM_ShoppingCart->getTaxingAddress('zone_id');
       }

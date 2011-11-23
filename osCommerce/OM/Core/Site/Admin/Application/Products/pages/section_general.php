@@ -8,6 +8,26 @@
 
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
+
+  $products_name = array();
+  $products_description = array();
+  $products_keyword = array();
+  $products_tags = array();
+  $products_url = array();
+
+  if ( !$new_product ) {
+    $Qpd = $OSCOM_PDO->prepare('select products_name, products_description, products_keyword, products_tags, products_url, language_id from :table_products_description where products_id = :products_id');
+    $Qpd->bindInt(':products_id', $OSCOM_ObjectInfo->getInt('products_id'));
+    $Qpd->execute();
+
+    while ( $Qpd->fetch() ) {
+      $products_name[$Qpd->valueInt('language_id')] = $Qpd->value('products_name');
+      $products_description[$Qpd->valueInt('language_id')] = $Qpd->value('products_description');
+      $products_keyword[$Qpd->valueInt('language_id')] = $Qpd->value('products_keyword');
+      $products_tags[$Qpd->valueInt('language_id')] = $Qpd->value('products_tags');
+      $products_url[$Qpd->valueInt('language_id')] = $Qpd->value('products_url');
+    }
+  }
 ?>
 
 <div id="sectionMenu_general">

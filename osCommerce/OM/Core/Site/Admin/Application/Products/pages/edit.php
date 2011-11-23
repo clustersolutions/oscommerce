@@ -1,17 +1,67 @@
 <?php
-/*
-  $Id: $
+/**
+ * osCommerce Online Merchant
+ * 
+ * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ */
 
-  osCommerce, Open Source E-Commerce Solutions
-  http://www.oscommerce.com
+  use osCommerce\OM\Core\HTML;
+  use osCommerce\OM\Core\ObjectInfo;
+  use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Site\Admin\Application\Products\Products;
 
-  Copyright (c) 2009 osCommerce
+  $new_product = false;
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License v2 (1991)
-  as published by the Free Software Foundation.
-*/
+  $OSCOM_ObjectInfo = new ObjectInfo(Products::get($_GET['id']));
 ?>
+
+<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
+
+<?php
+  if ( $OSCOM_MessageStack->exists() ) {
+    echo $OSCOM_MessageStack->get();
+  }
+?>
+
+<div id="sectionMenuContainer" style="float: left; padding-bottom: 10px;">
+  <span class="ui-widget-header ui-corner-all" style="padding: 10px 4px;">
+    <span id="sectionMenu"><?php echo HTML::radioField('sections', array(array('id' => 'general', 'text' => OSCOM::getDef('section_general')), array('id' => 'data', 'text' => OSCOM::getDef('section_data')), array('id' => 'images', 'text' => OSCOM::getDef('section_images')), array('id' => 'variants', 'text' => OSCOM::getDef('section_variants')), array('id' => 'categories', 'text' => OSCOM::getDef('section_categories'))), (isset($_GET['tabIndex']) ? $_GET['tabIndex'] : null), null, ''); ?></span>
+  </span>
+</div>
+
+<form id="pEditForm" name="product" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>" method="post">
+
+<div id="formButtons" style="float: right;"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink(null, null, 'cid=' . $OSCOM_Application->getCurrentCategoryID()) . '\';"')); ?></div>
+
+<div style="clear: both;"></div>
+
+<?php
+// HPDL Modularize, zack zack!
+  include('section_general.php');
+  include('section_data.php');
+  include('section_images.php');
+  include('section_variants.php');
+  include('section_categories.php');
+?>
+
+</form>
+
+<script>
+$(function() {
+  $('#sectionMenu').buttonsetTabs();
+
+  $('#pEditForm input, #pEditForm select, #pEditForm textarea, #pEditForm fileupload').safetynet();
+});
+</script>
+
+
+
+
+
+
+<?php
+/*
 
 <script type="text/javascript" src="../ext/tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript">
@@ -1124,3 +1174,6 @@ $(document).ready(function(){
 <p align="right"><?php echo osc_draw_hidden_field('subaction', 'confirm') . '<input type="submit" value="' . $osC_Language->get('button_save') . '" class="operationButton" /> <input type="button" value="' . $osC_Language->get('button_cancel') . '" onclick="document.location.href=\'' . osc_href_link_admin(FILENAME_DEFAULT, $osC_Template->getModule() . '&cID=' . $_GET['cID']) . '\';" class="operationButton" />'; ?></p>
 
 </form>
+
+*/
+?>

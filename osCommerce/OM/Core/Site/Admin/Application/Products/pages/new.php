@@ -26,7 +26,7 @@
   </span>
 </div>
 
-<form id="pEditForm" name="pEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>" method="post">
+<form id="pEditForm" name="product" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'Save&Process&cid=' . $OSCOM_Application->getCurrentCategoryID()); ?>" method="post">
 
 <div id="formButtons" style="float: right;"><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('type' => 'button', 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'), 'params' => 'onclick="$.safetynet.suppressed(true); window.location.href=\'' . OSCOM::getLink(null, null, 'cid=' . $OSCOM_Application->getCurrentCategoryID()) . '\';"')); ?></div>
 
@@ -35,11 +35,10 @@
 <?php
 // HPDL Modularize, zack zack!
   include('section_general.php');
-//  include('section_password.php');
-//  include('section_addressBook.php');
-//  include('section_newsletters.php');
-//  include('section_map.php');
-//  include('section_social.php');
+  include('section_data.php');
+  include('section_images.php');
+  include('section_variants.php');
+  include('section_categories.php');
 ?>
 
 </form>

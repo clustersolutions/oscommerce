@@ -12,7 +12,10 @@
   use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Site\Admin\CategoryTree;
   use osCommerce\OM\Core\Site\Admin\Image;
+  use osCommerce\OM\Core\Site\Admin\Tax;
   use osCommerce\OM\Core\Site\Shop\Currencies;
+  use osCommerce\OM\Core\Site\Shop\ProductVariants;
+  use osCommerce\OM\Core\Site\Shop\Weight;
 
 /**
  * @since v3.0.3
@@ -43,6 +46,10 @@
       Registry::set('CategoryTree', $this->_tree);
 
       Registry::set('Currencies', new Currencies());
+
+      Registry::set('Tax', new Tax());
+
+      Registry::set('Image', new Image());
 
 // check if the products image directory exists
       if ( is_dir(OSCOM::getConfig('dir_fs_public', 'OSCOM') . 'products') ) {
@@ -83,6 +90,84 @@
       }
 
       return $categories_array;
+    }
+
+    public function getTaxClassesList() {
+      $result = array(array('id' => '0',
+                            'text' => OSCOM::getDef('none')));
+
+      foreach ( Tax::getClasses() as $c ) {
+        $result[] = array('id' => $c['tax_class_id'],
+                          'text' => $c['tax_class_title']);
+      }
+
+      return $result;
+    }
+
+    public function getWeightClassesList() {
+      $weight_class_array = array();
+
+      foreach ( Weight::getClasses() as $wc ) {
+        $weight_class_array[] = array('id' => $wc['id'],
+                                      'text' => $wc['title']);
+      }
+
+      return $weight_class_array;
+    }
+
+    public function getProductVariants($id) {
+      $OSCOM_Language = Registry::get('Language');
+
+      $data = array('id' => $id,
+                    'language_id' => $OSCOM_Language->getID());
+
+      $result = OSCOM::callDB('Admin\Products\GetProductVariants', $data);
+
+      $variants = array();
+
+      foreach ( $result as $pv ) {
+        $variants[(int)$pv['products_id']] = array('combos' => $pv['combos'],
+                                                   'default' => $pv['default'],
+                                                   'tax_class_id' => (int)$pv['products_tax_class_id'],
+                                                   'price' => $pv['products_price'],
+                                                   'model' => $pv['products_model'],
+                                                   'quantity' => (int)$pv['products_quantity'],
+                                                   'weight' => $pv['products_weight'],
+                                                   'weight_class_id' => (int)$pv['products_weight_class'],
+                                                   'status' => (int)$pv['products_status']);
+      }
+
+      return $variants;
+    }
+
+    public function getVariantGroups() {
+      $OSCOM_PDO = Registry::get('PDO');
+      $OSCOM_Language = Registry::get('Language');
+
+      $vg = array();
+
+      $Qvgroups = $OSCOM_PDO->prepare('select id, title, module from :table_products_variants_groups where languages_id = :languages_id order by sort_order, title');
+      $Qvgroups->bindInt(':languages_id', $OSCOM_Language->getID());
+      $Qvgroups->execute();
+
+      while ( $Qvgroups->fetch() ) {
+        $has_multiple_value_groups = ProductVariants::allowsMultipleValues($Qvgroups->value('module'));
+
+        $vg[$Qvgroups->valueInt('id')] = array('title' => $Qvgroups->value('title'),
+                                               'values' => array(),
+                                               'allow_multiple_values' => $has_multiple_value_groups);
+
+        $Qvvalues = $OSCOM_PDO->prepare('select id, title from :table_products_variants_values where products_variants_groups_id = :products_variants_groups_id and languages_id = :languages_id order by sort_order, title');
+        $Qvvalues->bindInt(':products_variants_groups_id', $Qvgroups->valueInt('id'));
+        $Qvvalues->bindInt(':languages_id', $OSCOM_Language->getID());
+        $Qvvalues->execute();
+
+        while ( $Qvvalues->fetch() ) {
+          $vg[$Qvgroups->valueInt('id')]['values'][$Qvvalues->valueInt('id')] = array('title' => $Qvvalues->value('title'));
+        }
+      }
+
+      return $vg;
     }
   }
 ?>

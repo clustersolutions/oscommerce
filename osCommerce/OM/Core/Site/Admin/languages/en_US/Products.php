@@ -6,14 +6,13 @@
 app_title = Products
 
 heading_title = Products
-heading_title_new_product = New Product
-
-operation_title_search = Search:
+action_heading_new_product = New Product
 
 table_heading_products = Products
 table_heading_price = Price
 table_heading_quantity = Quantity
 table_heading_action = Action
+table_heading_variants = Variants
 table_heading_categories = Categories
 
 action_heading_delete_image = Delete Image
@@ -28,11 +27,12 @@ section_categories = Categories
 
 subsection_price = Price
 subsection_data = Data
+subsection_attributes = Attributes
 subsection_information = Information
 subsection_new_image = New Image
 subsection_original_images = Original Images
 subsection_images = Images
-subsection_assigned_variants = Assigned Variants
+subsection_variants = Variants
 
 field_name = Name:
 field_description = Description:
@@ -67,6 +67,15 @@ images_loading_from_server = Loading images from server..
 copy_method_link = Link Product
 copy_method_duplicate = Duplicate Product
 toggle_html_editor = Toggle HTML Editor
+
+dialog_delete_variant_title = Delete Variant
+dialog_delete_variant_desc = The selected variant will be flagged for removal. Are you sure?
+
+dialog_delete_new_variant_title = Delete New Variant
+dialog_delete_new_variant_desc = The new variant will be permanently deleted and cannot be recovered. Are you sure?
+
+dialog_delete_default_variant_title = Delete Variant
+dialog_delete_default_variant_desc = The default variant cannot be deleted. Please set another default variant and try again.
 
 introduction_select_local_images = The following images are available on the server where additional images can be uploaded via FTP. The listing can be refreshed by clicking on the Local Files link.<br /><br />Please select from the following listing which images to assign to this product.
 

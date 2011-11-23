@@ -22,7 +22,7 @@
       $this->prepareRules();
     }
 
-    public function getTitle($id) {
+    public static function getTitle($id) {
       $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
@@ -73,7 +73,7 @@
       return number_format($value, $this->precision, $OSCOM_Language->getNumericDecimalSeparator(), $OSCOM_Language->getNumericThousandsSeparator()) . $this->weight_classes[$class]['key'];
     }
 
-    public function getClasses() {
+    public static function getClasses() {
       $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
