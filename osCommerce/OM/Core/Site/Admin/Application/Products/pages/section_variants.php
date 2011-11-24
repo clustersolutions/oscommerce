@@ -387,7 +387,13 @@ function processVariantForm(isNew, id) {
 }
 
 function deleteVariant(id) {
-  if ( v['db'][id]['default'] === true ) {
+  var vcount = Object.keys(v['db']).length;
+
+  if ( typeof v['new'] != 'undefined' ) {
+    vcount += Object.keys(v['new']).length;
+  }
+
+  if ( (v['db'][id]['default'] === true) && (vcount > 1) ) {
     $('#dialogDeleteDefaultVariant').dialog('open');
   } else {
     $('#dialogDeleteVariant').data('id', id).dialog('open');
@@ -395,7 +401,7 @@ function deleteVariant(id) {
 }
 
 function deleteNewVariant(id) {
-  if ( (v['new'][id]['default'] === true) && ((variant_default_orig in delete_variant_combos) ||  (typeof variant_default_orig == 'undefined')) ) {
+  if ( (v['new'][id]['default'] === true) && Object.keys(v['new']).length > 1 && ((variant_default_orig in delete_variant_combos) ||  (typeof variant_default_orig == 'undefined')) ) {
     $('#dialogDeleteDefaultVariant').dialog('open');
   } else {
     $('#dialogDeleteNewVariant').data('id', id).dialog('open');
@@ -481,10 +487,10 @@ $(function() {
           $.safetynet.clearChange('variantEntry_new_' + parseInt($(this).data('id')));
 
           if ( (variant_default_new['key'] == 'new') && (variant_default_new['index'] == parseInt($(this).data('id'))) ) {
+            variant_default_new = undefined;
+
             if ( typeof variant_default_orig != 'undefined' ) {
               v['db'][variant_default_orig]['default'] = true;
-
-              variant_default_new = undefined;
 
               $('#dbVariant' + variant_default_orig + ' td:first').append(defaultVariantMarker);
             }
