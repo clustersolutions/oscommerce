@@ -67,7 +67,7 @@
         if ( !empty($line) && ( $firstchar != $comment) ) {
           $delimiter = strpos($line, '=');
 
-          if ( $delimiter !== false ) {
+          if ( ($delimiter !== false) && ( substr_count(substr($line, 0, $delimiter), ' ') == 1 ) ) {
             $key = trim(substr($line, 0, $delimiter));
             $value = trim(substr($line, $delimiter + 1));
 
