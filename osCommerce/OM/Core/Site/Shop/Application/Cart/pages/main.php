@@ -57,7 +57,7 @@
 
       if ( $OSCOM_ShoppingCart->isVariant($products['item_id']) ) {
         foreach ( $OSCOM_ShoppingCart->getVariant($products['item_id']) as $variant) {
-          echo '<br />- ' . $variant['group_title'] . ': ' . $variant['value_title'];
+          echo '<br />- ' . $variant['group_title'] . ': ' . HTML::outputProtected($variant['value_title']);
         }
       }
 ?>
