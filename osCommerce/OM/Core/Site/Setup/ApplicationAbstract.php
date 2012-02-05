@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -12,6 +12,8 @@
   use osCommerce\OM\Core\OSCOM;
 
   abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
+    abstract protected function initialize();
+
     public function __construct() {
       $this->initialize();
 

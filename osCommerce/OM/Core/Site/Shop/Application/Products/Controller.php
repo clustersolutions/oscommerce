@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -13,9 +13,7 @@
   use osCommerce\OM\Core\OSCOM;
 
   class Controller extends \osCommerce\OM\Core\Site\Shop\ApplicationAbstract {
-    protected function initialize() {}
-
-    protected function process() {
+    protected function initialize() {
       $OSCOM_Language = Registry::get('Language');
       $OSCOM_Session = Registry::get('Session');
       $OSCOM_Template = Registry::get('Template');

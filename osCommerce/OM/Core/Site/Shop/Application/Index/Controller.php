@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -13,10 +13,7 @@
   use osCommerce\OM\Core\Site\Shop\Products;
 
   class Controller extends \osCommerce\OM\Core\Site\Shop\ApplicationAbstract {
-
-    protected function initialize() {}
-
-    protected function process() {
+    protected function initialize() {
       $OSCOM_Category = Registry::get('Category');
       $OSCOM_Service = Registry::get('Service');
       $OSCOM_PDO = Registry::get('PDO');
