@@ -58,7 +58,7 @@
         if ( !empty($_GET) ) {
           $requested_site = HTML::sanitize(basename(key(array_slice($_GET, 0, 1, true))));
 
-          if ( static::siteExists($requested_site) ) {
+          if ( preg_match('/^[A-Z][A-Za-z0-9-_]*$/', $requested_site) && static::siteExists($requested_site) ) {
             $site = $requested_site;
           } else {
             $site = static::getDefaultSite();
