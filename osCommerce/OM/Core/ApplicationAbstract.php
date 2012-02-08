@@ -11,7 +11,18 @@
   abstract class ApplicationAbstract {
     protected $_page_contents = 'main.php';
     protected $_page_title;
+
+/**
+ * @since v3.0.3
+ */
+
     protected $_ignored_actions = array();
+
+/**
+ * @since v3.0.3
+ */
+
+    protected $_current_action;
 
     public function __construct() {
       $this->initialize();
@@ -39,9 +50,17 @@
       return class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action);
     }
 
+/**
+ * @since v3.0.3
+ */
+
     public function ignoreAction($key) {
       $this->_ignored_actions[] = $key;
     }
+
+/**
+ * @since v3.0.3
+ */
 
     public function runActions() {
       $action = null;
@@ -61,7 +80,7 @@
         }
 
         if ( !empty($requested_action) && self::siteApplicationActionExists($requested_action) ) {
-          $action = $requested_action;
+          $this->_current_action = $action = $requested_action;
         }
       }
 
@@ -80,12 +99,22 @@
               call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $action) . '\\' . $subaction, 'execute'), $this);
 
               $action[] = $subaction;
+
+              $this->_current_action = $subaction;
             } else {
               break;
             }
           }
         }
       }
+    }
+
+/**
+ * @since v3.0.3
+ */
+
+    public function getCurrentAction() {
+      return $this->_current_action;
     }
   }
 ?>
