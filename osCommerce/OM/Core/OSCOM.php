@@ -208,11 +208,10 @@
  * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: NONSSL.
  * @param bool $add_session_id Add the session ID to the link. Default: True.
  * @param bool $search_engine_safe Use search engine safe URLs. Default: True.
- * @param bool $use_amp Use html safe &amp; as argument separator. Default: True. Since v3.0.3
  * @return string The URL address.
  */
 
-    public static function getLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_amp = true) {
+    public static function getLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
       if ( empty($site) ) {
         $site = static::getSite();
       }
@@ -231,10 +230,6 @@
 
       if ( !is_bool($search_engine_safe) ) {
         $search_engine_safe = true;
-      }
-
-      if ( !is_bool($use_amp) ) {
-        $use_amp = true;
       }
 
 // Wrapper for RPC links; RPC cannot perform cross domain requests
@@ -286,8 +281,6 @@
 
       if ( ($search_engine_safe === true) && Registry::exists('osC_Services') && Registry::get('osC_Services')->isStarted('sefu') ) {
         $link = str_replace(array('?', '&', '='), array('/', '/', ','), $link);
-      } elseif ( $use_amp === true ) {
-        $link = str_replace('&', '&amp;', $link);
       }
 
       return $link;
@@ -317,8 +310,6 @@
         $link = substr($link, 0, -1);
       }
 
-      $link = str_replace('&', '&amp;', $link);
-
       return $link;
     }
 
@@ -331,11 +322,10 @@
  * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: NONSSL.
  * @param bool $add_session_id Add the session ID to the link. Default: True.
  * @param bool $search_engine_safe Use search engine safe URLs. Default: True.
- * @param bool $use_amp Use html safe &amp; as argument separator. Default: False. Since v3.0.3
  * @return string The URL address.
  */
 
-    public static function getRPCLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true, $use_amp = false) {
+    public static function getRPCLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
       if ( empty($site) ) {
         $site = static::getSite();
       }
@@ -344,7 +334,7 @@
         $application = static::getSiteApplication();
       }
 
-      return static::getLink('RPC', $site, $application . '&' . $parameters, $connection, $add_session_id, $search_engine_safe, $use_amp);
+      return static::getLink('RPC', $site, $application . '&' . $parameters, $connection, $add_session_id, $search_engine_safe);
     }
 
     public static function redirect($url) {
