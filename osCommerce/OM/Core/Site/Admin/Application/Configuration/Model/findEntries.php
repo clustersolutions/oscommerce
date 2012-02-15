@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -15,7 +15,15 @@
       $data = array('group_id' => $group_id,
                     'search' => $search);
 
-      return OSCOM::callDB('Admin\Configuration\EntryFind', $data);
+      $result = OSCOM::callDB('Admin\Configuration\EntryFind', $data);
+
+      foreach ( $result['entries'] as &$row ) {
+        if ( !empty($row['use_function']) ) {
+          $row['configuration_value'] = callUserFunc::execute($row['use_function'], $row['configuration_value']);
+        }
+      }
+
+      return $result;
     }
   }
 ?>
