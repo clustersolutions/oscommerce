@@ -51,8 +51,8 @@
 <link rel="stylesheet" type="text/css" href="public/external/fileuploader/fileuploader.css" />
 <script src="public/external/fileuploader/fileuploader.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.16.custom.css" />
-<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.16.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="public/external/jquery/ui/themes/smoothness/jquery-ui-1.8.17.custom.css" />
+<script type="text/javascript" src="public/external/jquery/ui/jquery-ui-1.8.17.custom.min.js"></script>
 
 <script type="text/javascript" src="public/external/alexei/sprintf.js"></script>
 
