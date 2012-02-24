@@ -39,6 +39,10 @@
         OSCOM::redirect(OSCOM::getLink(null, $to_application));
       } else {
         Registry::get('MessageStack')->add('header', OSCOM::getDef('ms_error_login_invalid'), 'error');
+
+        if ( !empty($_POST['user_name']) && !empty($_POST['user_password']) ) {
+          Registry::get('Template')->setValue('show_password', true);
+        }
       }
     }
   }

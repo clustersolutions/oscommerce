@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -41,11 +41,13 @@
         OSCOM::redirect(OSCOM::getLink(null, OSCOM::getDefaultSiteApplication()));
       }
 
+      Registry::set('Template', new Template());
+
       $application = 'osCommerce\\OM\\Core\\Site\\Admin\\Application\\' . OSCOM::getSiteApplication() . '\\Controller';
       Registry::set('Application', new $application());
 
-      Registry::set('Template', new Template());
-      Registry::get('Template')->setApplication(Registry::get('Application'));
+      $OSCOM_Template = Registry::get('Template');
+      $OSCOM_Template->setApplication(Registry::get('Application'));
 
 // HPDL move following checks elsewhere
 // check if a default currency is set

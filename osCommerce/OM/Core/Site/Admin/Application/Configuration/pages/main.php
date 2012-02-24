@@ -1,26 +1,14 @@
-<?php
-/**
- * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
- * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
- */
+<h1>{value}page_icon{value}<a href="{link}{link}">{value}page_title{value}</a></h1>
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\OSCOM;
-?>
-
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
-
-<?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
-  }
-?>
+{widget}message_stack{widget}
 
 <form id="liveSearchForm">
-  <?php echo HTML::inputField('search', null, 'id="liveSearchField" class="searchField" placeholder="' . OSCOM::getDef('placeholder_search') . '"') . HTML::button(array('type' => 'button', 'params' => 'onclick="osC_DataTable.reset();"', 'title' => OSCOM::getDef('button_reset'))); ?>
+  <input type="text" name="search" id="liveSearchField" class="searchField" placeholder="{lang}placeholder_search{lang}" /><button type="button" id="buttonReset" onclick="osC_DataTable.reset();">{lang}button_reset{lang}</button>
 </form>
+
+<script>
+$('#buttonReset').button();
+</script>
 
 <div style="padding: 20px 5px 5px 5px; height: 16px;">
   <span id="batchTotalPages"></span>
@@ -32,7 +20,7 @@
 <table border="0" width="100%" cellspacing="0" cellpadding="2" class="dataTable" id="configurationDataTable">
   <thead>
     <tr>
-      <th><?php echo OSCOM::getDef('table_heading_groups'); ?></th>
+      <th>{lang}table_heading_groups{lang}</th>
     </tr>
   </thead>
   <tfoot>
@@ -51,7 +39,7 @@
   <span id="batchPullDownMenu"></span>
 </div>
 
-<script type="text/javascript">
+<script>
   var moduleParamsCookieName = 'oscom_admin_' + pageModule;
   var dataTablePageSetName = 'page';
 
@@ -64,10 +52,10 @@
   }
 
   var dataTableName = 'configurationDataTable';
-  var dataTableDataURL = '<?php echo OSCOM::getRPCLink(null, null, 'GetAll'); ?>';
+  var dataTableDataURL = '{rpclink}GetAll{rpclink}';
 
-  var groupLink = '<?php echo OSCOM::getLink(null, null, 'id=GROUPID'); ?>';
-  var groupLinkIcon = '<?php echo HTML::icon('folder.png'); ?>';
+  var groupLink = '{link}||id=GROUPID{link}';
+  var groupLinkIcon = '{icon}folder.png{icon}';
 
   var osC_DataTable = new osC_DataTable();
   osC_DataTable.load();

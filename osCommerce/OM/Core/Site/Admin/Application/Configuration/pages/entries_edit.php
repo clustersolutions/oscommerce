@@ -1,46 +1,37 @@
-<?php
-/**
- * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
- * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
- */
+<h1>{value}page_icon{value}<a href="{link}{link}">{value}page_title{value}</a></h1>
 
-  use osCommerce\OM\Core\HTML;
-  use osCommerce\OM\Core\ObjectInfo;
-  use osCommerce\OM\Core\OSCOM;
-  use osCommerce\OM\Core\Site\Admin\Application\Configuration\Configuration;
-
-  $OSCOM_ObjectInfo = new ObjectInfo(Configuration::getEntry($_GET['pID']));
-?>
-
-<h1><?php echo $OSCOM_Template->getIcon(32) . HTML::link(OSCOM::getLink(), $OSCOM_Template->getPageTitle()); ?></h1>
-
-<?php
-  if ( $OSCOM_MessageStack->exists() ) {
-    echo $OSCOM_MessageStack->get();
-  }
-
-  if ( strlen($OSCOM_ObjectInfo->get('set_function')) > 0 ) {
-    $value_field = Configuration::callUserFunc($OSCOM_ObjectInfo->get('set_function'), $OSCOM_ObjectInfo->get('configuration_value'), $OSCOM_ObjectInfo->get('configuration_key'));
-  } else {
-    $value_field = HTML::inputField('configuration[' . $OSCOM_ObjectInfo->get('configuration_key') . ']', $OSCOM_ObjectInfo->get('configuration_value'));
-  }
-?>
+{widget}message_stack{widget}
 
 <div class="infoBox">
-  <h3><?php echo HTML::icon('edit.png') . ' ' . $OSCOM_ObjectInfo->getProtected('configuration_title'); ?></h3>
+  <h3>{icon}edit.png{icon} {value}cfg_title{value}</h3>
 
-  <form name="cEdit" class="dataForm" action="<?php echo OSCOM::getLink(null, null, 'EntrySave&Process&id=' . $_GET['id']); ?>" method="post">
+  <form name="cEdit" class="dataForm" action="{link}||EntrySave&Process&id={value}group_id{value}&pID={value}cfg_id{value}{link}" method="post">
 
-  <p><?php echo OSCOM::getDef('introduction_edit_parameter'); ?></p>
+  <p>{lang}introduction_edit_parameter{lang}</p>
 
   <fieldset>
-    <p><label for="configuration[<?php echo $OSCOM_ObjectInfo->get('configuration_key'); ?>]"><?php echo $OSCOM_ObjectInfo->getProtected('configuration_title'); ?></label><?php echo $value_field; ?></p>
-    <p><?php echo $OSCOM_ObjectInfo->get('configuration_description'); ?></p>
+    <p><label for="configuration[{value}cfg_key{value}]">{value}cfg_title{value}</label>{value}cfg_input_field{value}</p>
+    <p>{value}cfg_description{value}</p>
   </fieldset>
 
-  <p><?php echo HTML::button(array('priority' => 'primary', 'icon' => 'check', 'title' => OSCOM::getDef('button_save'))) . ' ' . HTML::button(array('href' => OSCOM::getLink(null, null, 'id=' . $_GET['id']), 'priority' => 'secondary', 'icon' => 'close', 'title' => OSCOM::getDef('button_cancel'))); ?></p>
+  <p>
+    <button type="submit" id="buttonSave" class="ui-priority-primary">{lang}button_save{lang}</button>
+    <button type="button" id="buttonCancel" class="ui-priority-secondary" onclick="window.location.href='{link}||id={value}group_id{value}{link}';">{lang}button_cancel{lang}</button>
+  </p>
 
   </form>
 </div>
+
+<script>
+$('#buttonSave').button({
+  icons: {
+    primary: 'ui-icon-check'
+  }
+});
+
+$('#buttonCancel').button({
+  icons: {
+    primary: 'ui-icon-close'
+  }
+});
+</script>
