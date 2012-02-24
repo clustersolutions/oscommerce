@@ -18,7 +18,7 @@
       if ( isset($_POST['batch']) && is_array($_POST['batch']) && !empty($_POST['batch']) ) {
         $OSCOM_Template = Registry::get('Template');
 
-        $application->setPageContent('entries_batch_edit.php');
+        $application->setPageContent('entries_batch_edit.html');
 
         $cfg_input_fields = array();
 

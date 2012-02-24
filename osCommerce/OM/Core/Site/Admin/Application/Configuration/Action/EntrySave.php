@@ -18,7 +18,7 @@
     public static function execute(ApplicationAbstract $application) {
       $OSCOM_Template = Registry::get('Template');
 
-      $application->setPageContent('entries_edit.php');
+      $application->setPageContent('entries_edit.html');
 
       $OSCOM_ObjectInfo = new ObjectInfo(Configuration::getEntry($_GET['pID']));
 

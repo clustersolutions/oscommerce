@@ -15,6 +15,7 @@
     protected $_group = 'configuration';
     protected $_icon = 'configuration.png';
     protected $_sort_order = 200;
+    protected $_page_contents = 'main.html'; // HPDL (html should be the default)
 
     protected function initialize() {
       $this->_title = OSCOM::getDef('app_title');
@@ -26,7 +27,7 @@
       $this->_page_title = OSCOM::getDef('heading_title');
 
       if ( isset($_GET['id']) && is_numeric($_GET['id']) ) {
-        $this->_page_contents = 'entries.php';
+        $this->_page_contents = 'entries.html';
         $this->_page_title .= ': ' . Configuration::get($_GET['id'], 'configuration_group_title');
 
         $OSCOM_Template->setValue('group_id', $_GET['id']);

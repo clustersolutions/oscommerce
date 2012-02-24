@@ -14,6 +14,7 @@
   class Controller extends \osCommerce\OM\Core\Site\Admin\ApplicationAbstract {
     protected $_link_to = false;
     protected $_icon = 'login.png';
+    protected $_page_contents = 'main.html'; // HPDL (html should be the default)
 
     protected function initialize() {}
 

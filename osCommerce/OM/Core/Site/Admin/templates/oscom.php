@@ -101,7 +101,13 @@
     echo Registry::get('MessageStack')->get('header');
   }
 
-  require($OSCOM_Template->getPageContentsFile());
+// HPDL use only file_get_contents() when content pages no longer contain PHP
+  $page_contents_file = $OSCOM_Template->getPageContentsFile();
+  if ( substr($page_contents_file, strrpos($page_contents_file, '.')+1) == 'html' ) {
+    echo file_get_contents($OSCOM_Template->getPageContentsFile());
+  } else {
+    include($OSCOM_Template->getPageContentsFile());
+  }
 ?>
 
 </div>
