@@ -637,7 +637,11 @@
  * @since HPDL
  */
 
-    public function getContent() {
+    public function getContent($file = null) {
+      if ( !isset($file) ) {
+        $file = $this->getTemplateFile();
+      }
+
 // The following is only needed until content pages no longer contain PHP; HPDL
       $rick_astley = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_SESSION', '_FILES', '_SERVER');
       $never_gonna_give_you_up = array();
@@ -652,7 +656,7 @@
 
       ob_start();
 
-      require($this->getTemplateFile());
+      include($file);
 
       $content = ob_get_clean();
 
@@ -668,9 +672,7 @@
 
       $pattern = '/{([[:alpha:]][[:alnum:]]*)\b( .*?)?}(.*?)?{\1}/s';
 
-      $template_file = $this->getTemplateFile();
-
-      $le = function ($matches) use (&$le, &$pattern, &$template_file) {
+      $le = function ($matches) use (&$le, &$pattern) {
         $string = $matches[3];
 
         if ( preg_match($pattern, $string) > 0 ) {
@@ -698,7 +700,7 @@
             trigger_error('Template Tag {' . $matches[1] . '} module does not implement TagInterface');
           }
         } else {
-          trigger_error('Template Tag {' . $matches[1] . '} module not found in ' . $template_file);
+          trigger_error('Template Tag {' . $matches[1] . '} module does not exist');
 
           return $matches[0];
         }
