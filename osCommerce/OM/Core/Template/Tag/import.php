@@ -8,12 +8,19 @@
 
   namespace osCommerce\OM\Core\Template\Tag;
 
+  use osCommerce\OM\Core\Registry;
+
   class import extends \osCommerce\OM\Core\Template\TagAbstract {
-    static public function execute($string) {
-      if ( file_exists($string) ) {
-        return file_get_contents($string);
+    static public function execute($file) {
+      if ( file_exists($file) ) {
+// use only file_get_contents() when content pages no longer contain PHP; HPDL
+        if ( substr($file, strrpos($file, '.')+1) == 'html' ) {
+          return file_get_contents($file);
+        } else {
+          return Registry::get('Template')->getContent($file);
+        }
       } else {
-        trigger_error('Template Tag {import}: File does not exist: ' . $string);
+        trigger_error('Template Tag {import}: File does not exist: ' . $file);
       }
 
       return false;
