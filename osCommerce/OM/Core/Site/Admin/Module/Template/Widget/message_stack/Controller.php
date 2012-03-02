@@ -11,11 +11,11 @@
   use osCommerce\OM\Core\Registry;
 
   class Controller extends \osCommerce\OM\Core\Template\WidgetAbstract {
-    static public function execute() {
+    static public function execute($group = null) {
       $OSCOM_MessageStack = Registry::get('MessageStack');
 
-      if ( $OSCOM_MessageStack->exists() ) {
-        return $OSCOM_MessageStack->get();
+      if ( $OSCOM_MessageStack->exists($group) ) {
+        return $OSCOM_MessageStack->get($group);
       }
     }
   }
