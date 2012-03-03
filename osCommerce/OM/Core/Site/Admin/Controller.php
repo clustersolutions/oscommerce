@@ -10,7 +10,6 @@
 
   use osCommerce\OM\Core\Access;
   use osCommerce\OM\Core\Cache;
-  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\PDO;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
@@ -49,98 +48,6 @@
 
       $OSCOM_Template = Registry::get('Template');
       $OSCOM_Template->setApplication(Registry::get('Application'));
-
-      $OSCOM_Template->setValue('html_text_direction', Registry::get('Language')->getTextDirection());
-      $OSCOM_Template->setValue('html_lang', OSCOM::getDef('html_lang_code')); // HPDL A better solution is to define the ISO 639-1 value at the language level
-      $OSCOM_Template->setValue('html_character_set', Registry::get('Language')->getCharacterSet());
-      $OSCOM_Template->setValue('html_page_title', 'OSCOMMERCE' . ($OSCOM_Template->hasPageTitle() ? ': ' . $OSCOM_Template->getPageTitle() : ''));
-      $OSCOM_Template->setValue('default_site_application', OSCOM::getDefaultSiteApplication());
-      $OSCOM_Template->setValue('current_site_application', OSCOM::getSiteApplication());
-      $OSCOM_Template->setValue('batch_size', MAX_DISPLAY_SEARCH_RESULTS);
-      $OSCOM_Template->setValue('tax_decimal_places', TAX_DECIMAL_PLACES);
-      $OSCOM_Template->setValue('content_page_file', $OSCOM_Template->getPageContentsFile());
-      $OSCOM_Template->setValue('template_header_file', $OSCOM_Template->getTemplateFile('header.php'));
-      $OSCOM_Template->setValue('template_footer_file', $OSCOM_Template->getTemplateFile('footer.php'));
-      $OSCOM_Template->setValue('template_has_header', $OSCOM_Template->hasPageHeader());
-      $OSCOM_Template->setValue('template_has_footer', $OSCOM_Template->hasPageFooter());
-      $OSCOM_Template->setValue('oscom_version', OSCOM::getVersion());
-      $OSCOM_Template->setValue('logged_in', isset($_SESSION[OSCOM::getSite()]['id']));
-
-      $apps_links = '';
-
-      if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
-        $apps_links .= '<ul>';
-
-        foreach ( Access::getLevels() as $group => $links ) {
-          $application = current($links);
-
-          $apps_links .= '  <li><a href="' . OSCOM::getLink(null, $application['module']) . '"><span style="float: right;">&#9656;</span>' . Access::getGroupTitle($group) . '</a>' .
-                         '    <ul>';
-
-          foreach ( $links as $link ) {
-            $apps_links .= '      <li><a href="' . OSCOM::getLink(null, $link['module']) . '">' . $OSCOM_Template->getIcon(16, $link['icon']) . '&nbsp;' . $link['title'] . '</a></li>';
-          }
-
-          $apps_links .= '    </ul>' .
-                         '  </li>';
-        }
-
-        $apps_links .= '</ul>';
-      }
-
-      $OSCOM_Template->setValue('apps_links', $apps_links);
-
-      $total_shortcuts = 0;
-      $shortcut_links = '';
-
-      if ( isset($_SESSION[OSCOM::getSite()]['id']) ) {
-        $shortcut_links .= '<ul class="apps" style="float: right;">';
-
-        if ( Registry::get('Application')->canLinkTo() ) {
-          if ( Access::isShortcut(OSCOM::getSiteApplication()) ) {
-            $shortcut_links .= '  <li class="shortcuts">' . HTML::link(OSCOM::getLink(null, 'Dashboard', 'RemoveShortcut&shortcut=' . OSCOM::getSiteApplication()), HTML::icon('shortcut_remove.png')) . '</li>';
-          } else {
-            $shortcut_links .= '  <li class="shortcuts">' . HTML::link(OSCOM::getLink(null, 'Dashboard', 'AddShortcut&shortcut=' . OSCOM::getSiteApplication()), HTML::icon('shortcut_add.png')) . '</li>';
-          }
-        }
-
-        if ( Access::hasShortcut() ) {
-          $shortcut_links .= '  <li class="shortcuts">';
-
-          foreach ( Access::getShortcuts() as $shortcut ) {
-            $shortcut_links .= '<a href="' . OSCOM::getLink(null, $shortcut['module']) . '" id="shortcut-' . $shortcut['module'] . '">' . $OSCOM_Template->getIcon(16, $shortcut['icon'], $shortcut['title']) . '<div class="notBubble"></div></a>';
-
-            $total_shortcuts++;
-          }
-
-          $shortcut_links .= '  </li>';
-        }
-
-        $shortcut_links .= '  <li><a href="#">' . HTML::outputProtected($_SESSION[OSCOM::getSite()]['username']) . ' &#9662;</a>' .
-                           '    <ul>' .
-                           '      <li><a href="' . OSCOM::getLink(null, 'Login', 'Logoff') . '">' . OSCOM::getDef('header_title_logoff') . '</a></li>' .
-                           '    </ul>' .
-                           '  </li>' .
-                           '</ul>';
-      }
-
-      $OSCOM_Template->setValue('total_shortcuts', $total_shortcuts);
-      $OSCOM_Template->setValue('shortcut_links', $shortcut_links);
-
-      $ms_pinned_sites = '';
-
-      if ( Access::hasShortcut() ) {
-        $ms_pinned_sites .= 'window.external.msSiteModeClearJumplist();' . "\n" .
-                            'window.external.msSiteModeCreateJumplist("Shortcuts");' . "\n";
-
-        foreach ( Access::getShortcuts() as $shortcut ) {
-          $ms_pinned_sites .= 'window.external.msSiteModeAddJumpListItem("' . $shortcut['title'] . '", "' . OSCOM::getLink(null, $shortcut['module']) . '", "", "self");' . "\n";
-        }
-
-        $ms_pinned_sites .= 'window.external.msSiteModeShowJumplist();' . "\n";
-      }
-
-      $OSCOM_Template->setValue('ms_pinned_sites', $ms_pinned_sites);
 
 // HPDL move following checks elsewhere
 // check if a default currency is set
