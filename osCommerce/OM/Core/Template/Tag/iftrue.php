@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core\Template\Tag;
 
+  use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
   class iftrue extends \osCommerce\OM\Core\Template\TagAbstract {
@@ -18,14 +19,20 @@
 
       $OSCOM_Template = Registry::get('Template');
 
+      $key = trim($args[1]);
+
       $result = '';
 
-      if ( $OSCOM_Template->valueExists(trim($args[1])) ) {
-        $data = $OSCOM_Template->getValue(trim($args[1]));
-
-        if ( $data === true ) {
-          $result = $string;
+      if ( !$OSCOM_Template->valueExists($key) ) {
+        if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract') ) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
+        } elseif ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract') ) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
         }
+      }
+
+      if ( $OSCOM_Template->getValue(trim($args[1])) === true ) {
+        $result = $string;
       }
 
       return $result;
