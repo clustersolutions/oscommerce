@@ -18,21 +18,21 @@
 </div>
 
 <script>
-  $('input[name="user_name"]').focus();
+$('input[name="user_name"]').focus();
 
-  if (typeof webkitNotifications != 'undefined') {
-    $('#formLogin').submit(function() {
-      if ( webkitNotifications.checkPermission() == 1 ) {
-        webkitNotifications.requestPermission();
-      }
-    });
-  }
+if ( typeof webkitNotifications != 'undefined' ) {
+  $('#formLogin').submit(function() {
+    if ( webkitNotifications.checkPermission() == 1 ) {
+      webkitNotifications.requestPermission();
+    }
+  });
+}
 </script>
 
 {iftrue show_password}
 <script src="public/external/jquery/jquery.showPasswordCheckbox.js"></script>
 <script>
-  var showPasswordText = '{value}lang_field_show_password{value}';
-  $('input[name="user_password"]').showPasswordCheckbox().focus();
+var showPasswordText = '{lang addslashes}field_show_password{lang}';
+$('input[name="user_password"]').showPasswordCheckbox().focus();
 </script>
 {iftrue}
