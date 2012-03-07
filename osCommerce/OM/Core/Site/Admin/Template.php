@@ -8,6 +8,7 @@
 
   namespace osCommerce\OM\Core\Site\Admin;
 
+  use osCommerce\OM\Core\DirectoryListing;
   use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
 
@@ -17,11 +18,41 @@
     protected $_default_template = 'Sail';
 
     public function __construct() {
-      $this->_templates = array('id' => 0,
-                                'code' => 'Sail',
-                                'title' => 'Sail');
+      $templates = array();
 
-      $this->set($this->_default_template);
+      $OSCOM_DL = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Template');
+      $OSCOM_DL->setIncludeFiles(false);
+      $OSCOM_DL->setIncludeDirectories(true);
+
+      foreach ( $OSCOM_DL->getFiles() as $file ) {
+        if ( !in_array($file['name'], $templates) ) {
+          $templates[] = $file['name'];
+        }
+      }
+
+      $OSCOM_DL = new DirectoryListing(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Template');
+      $OSCOM_DL->setIncludeFiles(false);
+      $OSCOM_DL->setIncludeDirectories(true);
+
+      foreach ( $OSCOM_DL->getFiles() as $file ) {
+        if ( !in_array($file['name'], $templates) ) {
+          $templates[] = $file['name'];
+        }
+      }
+
+      sort($templates);
+
+      $counter = 1;
+
+      foreach ( $templates as $t ) {
+        $this->_templates[] = array('id' => $counter,
+                                    'code' => $t,
+                                    'title' => $t);
+
+        $counter++;
+      }
+
+      $this->set();
     }
 
     public static function getTemplates() {
