@@ -150,7 +150,11 @@
         $template = $_SESSION[OSCOM::getSite()]['template'];
       }
 
-      if ( $template != $this->_default_template ) {
+      if ( $template == $this->_default_template ) {
+        if ( isset($_SESSION[OSCOM::getSite()]['template']) ) {
+          unset($_SESSION[OSCOM::getSite()]['template']);
+        }
+      } else {
         if ( !isset($_SESSION[OSCOM::getSite()]['template']) || ($_SESSION[OSCOM::getSite()]['template'] != $template) ) {
           $_SESSION[OSCOM::getSite()]['template'] = $template;
         }
