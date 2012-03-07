@@ -642,23 +642,28 @@
         $file = $this->getTemplateFile();
       }
 
+// use only file_get_contents() when content pages no longer contain PHP; HPDL
+      if ( substr($file, strrpos($file, '.')+1) == 'html' ) {
+        $content = file_get_contents($file);
+      } else {
 // The following is only needed until content pages no longer contain PHP; HPDL
-      $rick_astley = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_SESSION', '_FILES', '_SERVER');
-      $never_gonna_give_you_up = array();
+        $rick_astley = array('GLOBALS', '_GET', '_POST', '_COOKIE', '_SESSION', '_FILES', '_SERVER');
+        $never_gonna_give_you_up = array();
 
-      foreach ( array_keys($GLOBALS) as $k ) {
-        if ( !in_array($k, $rick_astley) ) {
-          $never_gonna_give_you_up[$k] = $GLOBALS[$k];
+        foreach ( array_keys($GLOBALS) as $k ) {
+          if ( !in_array($k, $rick_astley) ) {
+            $never_gonna_give_you_up[$k] = $GLOBALS[$k];
+          }
         }
+
+        extract($never_gonna_give_you_up);
+
+        ob_start();
+
+        include($file);
+
+        $content = ob_get_clean();
       }
-
-      extract($never_gonna_give_you_up);
-
-      ob_start();
-
-      include($file);
-
-      $content = ob_get_clean();
 
       return $this->parseContent($content);
     }

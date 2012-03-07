@@ -14,7 +14,7 @@
     static public function execute() {
       $OSCOM_Template = Registry::get('Template');
 
-      return $OSCOM_Template->getTemplateFile('footer.php');
+      return $OSCOM_Template->getTemplateFile('footer.html');
     }
   }
 ?>
