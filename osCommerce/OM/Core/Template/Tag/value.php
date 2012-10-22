@@ -25,7 +25,15 @@
         }
       }
 
-      return $OSCOM_Template->getValue($string);
+      if ( strpos($string, ' ') === false ) {
+        return $OSCOM_Template->getValue($string);
+      } else {
+        list($array, $key) = explode(' ', $string, 2);
+
+        $data = $OSCOM_Template->getValue($array);
+
+        return $data[$key];
+      }
     }
   }
 ?>
