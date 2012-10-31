@@ -360,11 +360,18 @@
  * Return a language definition
  *
  * @param string $key The language definition to return
+ * @param array $values Replace keywords with values (@since v3.0.3)
  * @return string The language definition
  */
 
-    public static function getDef($key) {
-      return Registry::get('Language')->get($key);
+    public static function getDef($key, $values = null) {
+      $def = Registry::get('Language')->get($key);
+
+      if ( is_array($values) ) {
+        $def = str_replace(array_keys($values), array_values($values), $def);
+      }
+
+      return $def;
     }
 
 /**
