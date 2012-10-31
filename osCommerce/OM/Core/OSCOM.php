@@ -168,18 +168,28 @@
       static::$_config[$group][$key] = $value;
     }
 
-    public static function getVersion() {
-      if ( !isset(static::$_version) ) {
-        $v = trim(file_get_contents(static::BASE_DIRECTORY . 'version.txt'));
+    public static function getVersion($site = null) {
+      if ( !isset($site) ) {
+        $site = 'OSCOM';
+      }
+
+      if ( !isset(static::$_version[$site]) ) {
+        if ( $site == 'OSCOM' ) {
+          $file = static::BASE_DIRECTORY . 'version.txt';
+        } else {
+          $file = static::BASE_DIRECTORY . 'Custom/Site/' . $site . '/version.txt';
+        }
+
+        $v = trim(file_get_contents($file));
 
         if ( preg_match('/^(\d+\.)?(\d+\.)?(\d+)$/', $v) ) {
-          static::$_version = $v;
+          static::$_version[$site] = $v;
         } else {
-          trigger_error('Version number is not numeric. Please verify: ' . static::BASE_DIRECTORY . 'version.txt');
+          trigger_error('Version number is not numeric. Please verify: ' . $file);
         }
       }
 
-      return static::$_version;
+      return static::$_version[$site];
     }
 
     protected static function setRequestType() {
