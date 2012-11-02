@@ -68,25 +68,25 @@
 <meta name="msapplication-tooltip" content="osCommerce Administration Dashboard" />
 <meta name="msapplication-window" content="width=1024;height=768" />
 <meta name="msapplication-navbutton-color" content="#ff7900" />
-<meta name="msapplication-starturl" content="{link}{value}default_site_application{value}{link}" />
+<meta name="msapplication-starturl" content="{link}{raw}default_site_application{raw}{link}" />
 
 </head>
 
 <body>
 
 {iftrue template_has_header}
-  {import}{value}template_header_file{value}{import}
+  {import}{raw}template_header_file{raw}{import}
 {iftrue}
 
 <div id="appContent">
   {widget}message_stack|header{widget}
 
-  {import}{value}content_page_file{value}{import}
+  {import}{raw}content_page_file{raw}{import}
 </div>
 
 {iftrue template_has_footer}
 <div id="footer">
-  {import}{value}template_footer_file{value}{import}
+  {import}{raw}template_footer_file{raw}{import}
 </div>
 {iftrue}
 

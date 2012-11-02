@@ -10,9 +10,9 @@
 
   use osCommerce\OM\Core\HTML;
 
-  class escape extends \osCommerce\OM\Core\Template\Tag\value {
+  class escape extends \osCommerce\OM\Core\Template\TagAbstract {
     static public function execute($string) {
-      return HTML::outputProtected(parent::execute($string));
+      return HTML::outputProtected($string);
     }
   }
 ?>

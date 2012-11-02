@@ -1,4 +1,4 @@
-<h1>{value}page_icon{value}<a href="{link}{link}">{value}page_title{value}</a></h1>
+<h1>{raw}page_icon{raw}<a href="{link}{link}">{value}page_title{value}</a></h1>
 
 {widget}message_stack{widget}
 
@@ -35,7 +35,7 @@ $('#buttonBack').button({
   </thead>
   <tfoot>
     <tr>
-      <th align="right" colspan="3"><input type="image" src="{iconraw}edit.png{iconraw}" title="{lang}icon_edit{lang}" onclick="document.batch.action='{link}||BatchSaveEntries&id={value}group_id{value}{link}';" /></th>
+      <th align="right" colspan="3"><input type="image" src="{iconraw}edit.png{iconraw}" title="{lang}icon_edit{lang}" onclick="document.batch.action='{link}||BatchSaveEntries&id={raw}group_id{raw}{link}';" /></th>
       <th align="center" width="20"><input type="checkbox" name="batchFlag" onclick="flagCheckboxes(this);" /></th>
     </tr>
   </tfoot>
@@ -63,9 +63,9 @@ $('#buttonBack').button({
   }
 
   var dataTableName = 'configurationDataTable';
-  var dataTableDataURL = '{rpclink}GetAllEntries&id={value}group_id{value}{rpclink}';
+  var dataTableDataURL = '{rpclink}GetAllEntries&id={raw}group_id{raw}{rpclink}';
 
-  var configEditLink = '{link}||EntrySave&id={value}group_id{value}&pID=CONFIGID{link}';
+  var configEditLink = '{link}||EntrySave&id={raw}group_id{raw}&pID=CONFIGID{link}';
   var configEditLinkIcon = '{icon}edit.png{icon}';
 
   var osC_DataTable = new osC_DataTable();

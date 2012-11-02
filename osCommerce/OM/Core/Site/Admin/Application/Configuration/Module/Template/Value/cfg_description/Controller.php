@@ -15,7 +15,7 @@
     static public function execute() {
       $OSCOM_ObjectInfo = new ObjectInfo(Configuration::getEntry($_GET['pID']));
 
-      return $OSCOM_ObjectInfo->getProtected('configuration_description');
+      return $OSCOM_ObjectInfo->get('configuration_description');
     }
   }
 ?>

@@ -10,11 +10,9 @@
 
   use osCommerce\OM\Core\HTML;
 
-  class value extends \osCommerce\OM\Core\Template\TagAbstract {
-    static protected $_parse_result = false;
-
+  class nl2br extends \osCommerce\OM\Core\Template\TagAbstract {
     static public function execute($string) {
-      return HTML::outputProtected(raw::execute($string));
+      return nl2br($string);
     }
   }
 ?>

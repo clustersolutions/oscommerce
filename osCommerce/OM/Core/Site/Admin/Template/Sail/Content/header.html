@@ -1,10 +1,10 @@
 <div id="adminMenu">
   <ul class="apps">
-    <li class="shortcuts"><a href="{link}{value}default_site_application{value}{link}"><img src="{publiclink}images/oscommerce_icon.png{publiclink}" /></a></li>
+    <li class="shortcuts"><a href="{link}{raw}default_site_application{raw}{link}"><img src="{publiclink}images/oscommerce_icon.png{publiclink}" /></a></li>
 
 {iftrue logged_in}
     <li><a href="#">Applications &#9662;</a>
-      {value}apps_links{value}
+      {raw}apps_links{raw}
     </li>
 {iftrue}
 
@@ -22,7 +22,7 @@
   </ul>
 
 {iftrue logged_in}
-  {value}shortcut_links{value}
+  {raw}shortcut_links{raw}
 {iftrue}
 
 </div>
@@ -86,7 +86,7 @@ $(function() {
 });
 
 if ( (typeof window.external.msAddSiteMode != 'undefined') && window.external.msIsSiteMode() ) {
-  {value}ms_pinned_sites{value}
+  {raw}ms_pinned_sites{raw}
 }
 </script>
 {iftrue}

@@ -8,11 +8,10 @@
 
   namespace osCommerce\OM\Core\Template\Tag;
 
-  use osCommerce\OM\Core\HTML;
   use osCommerce\OM\Core\OSCOM;
   use osCommerce\OM\Core\Registry;
 
-  class loop extends \osCommerce\OM\Core\Template\TagAbstract {
+  class ifvalue extends \osCommerce\OM\Core\Template\TagAbstract {
     static protected $_parse_result = false;
 
     static public function execute($string) {
@@ -22,6 +21,12 @@
 
       $key = trim($args[1]);
 
+      if ( strpos($key, ' ') !== false ) {
+        list($key, $entry) = explode(' ', $key, 2);
+      }
+
+      $result = '';
+
       if ( !$OSCOM_Template->valueExists($key) ) {
         if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract') ) {
           call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
@@ -30,19 +35,19 @@
         }
       }
 
-      $data = $OSCOM_Template->getValue($key);
+      if ( $OSCOM_Template->valueExists($key) ) {
+        $value = $OSCOM_Template->getValue($key);
 
-      $result = '';
+        if ( isset($entry) ) {
+          if ( isset($value[$entry]) ) {
+            $value = $value[$entry];
+          } else {
+            unset($value);
+          }
+        }
 
-      if ( !empty($data) ) {
-        foreach ( $data as $d ) {
-          $result .= preg_replace_callback('/[#|%](.*?)\b[#|%]/', function ($matches) use (&$d) {
-                       if ( substr($matches[0], 0, 1) == '%' ) {
-                         return ( isset($d[$matches[1]]) ? $d[$matches[1]] : $matches[0] );
-                       } else {
-                         return ( isset($d[$matches[1]]) ? HTML::outputProtected($d[$matches[1]]) : $matches[0] );
-                       }
-                     }, $string);
+        if ( isset($value) && ((is_string($value) && (strlen($value) > 0)) || (is_array($value) && (count($value) > 0))) ) {
+          $result = $string;
         }
       }
 
