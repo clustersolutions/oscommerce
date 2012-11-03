@@ -159,6 +159,16 @@
     protected $_show_debug_messages = true;
 
 /**
+ * The base URL
+ * 
+ * @var string
+ * @access protected
+ * @since HPDL
+ */
+
+    protected $_base_url;
+
+/**
  * Values to make available to pages
  * 
  * @var array
@@ -748,6 +758,22 @@
 
     public function valueExists($key) {
       return array_key_exists($key, $this->_values);
+    }
+
+/**
+ * @since HPDL
+ */
+
+    public function getBaseUrl() {
+      if ( !isset($this->_base_url) ) {
+        if ( (OSCOM::getRequestType() == 'SSL') && (OSCOM::getConfig('enable_ssl') == 'true') ) {
+          $this->_base_url = OSCOM::getConfig('https_server') . OSCOM::getConfig('dir_ws_https_server');
+        } else {
+          $this->_base_url = OSCOM::getConfig('http_server') . OSCOM::getConfig('dir_ws_http_server');
+        }
+      }
+
+      return $this->_base_url;
     }
   }
 ?>
