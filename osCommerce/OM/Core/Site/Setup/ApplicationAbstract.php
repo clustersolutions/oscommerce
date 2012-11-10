@@ -12,8 +12,6 @@
   use osCommerce\OM\Core\OSCOM;
 
   abstract class ApplicationAbstract extends \osCommerce\OM\Core\ApplicationAbstract {
-    abstract protected function initialize();
-
     public function __construct() {
       $this->initialize();
 

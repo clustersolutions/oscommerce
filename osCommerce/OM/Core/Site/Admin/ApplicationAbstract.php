@@ -17,7 +17,6 @@
     protected $_title;
     protected $_sort_order;
 
-    abstract protected function initialize();
     abstract protected function process();
 
     public function __construct($process = true) {

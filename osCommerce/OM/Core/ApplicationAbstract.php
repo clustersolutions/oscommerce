@@ -24,6 +24,8 @@
 
     protected $_current_action;
 
+    abstract protected function initialize();
+
     public function __construct() {
       $this->initialize();
 
