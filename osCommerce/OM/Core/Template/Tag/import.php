@@ -12,15 +12,17 @@
 
   class import extends \osCommerce\OM\Core\Template\TagAbstract {
     static public function execute($file) {
-      if ( file_exists($file) ) {
+      if ( !empty($file) ) {
+        if ( file_exists($file) ) {
 // use only file_get_contents() when content pages no longer contain PHP; HPDL
-        if ( substr($file, strrpos($file, '.')+1) == 'html' ) {
-          return file_get_contents($file);
+          if ( substr($file, strrpos($file, '.')+1) == 'html' ) {
+            return file_get_contents($file);
+          } else {
+            return Registry::get('Template')->getContent($file);
+          }
         } else {
-          return Registry::get('Template')->getContent($file);
+          trigger_error('Template Tag {import}: File does not exist: ' . $file);
         }
-      } else {
-        trigger_error('Template Tag {import}: File does not exist: ' . $file);
       }
 
       return false;
