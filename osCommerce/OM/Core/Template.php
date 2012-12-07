@@ -694,15 +694,23 @@
           $string = preg_replace_callback($pattern, $le, $string);
         }
 
-        if ( class_exists('osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1]) ) {
-          if ( (isset($loaded_tags[$matches[1]]) && ($loaded_tags[$matches[1]] === true) ) || is_subclass_of('osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1], 'osCommerce\\OM\\Core\\Template\\TagAbstract') ) {
+        $tag_class = null;
+
+        if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Tag\\' . $matches[1]) ) {
+          $tag_class = 'osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Tag\\' . $matches[1];
+        } elseif ( class_exists('osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1]) ) {
+          $tag_class = 'osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1];
+        }
+
+        if ( isset($tag_class) ) {
+          if ( (isset($loaded_tags[$matches[1]]) && ($loaded_tags[$matches[1]] === true) ) || is_subclass_of($tag_class, 'osCommerce\\OM\\Core\\Template\\TagAbstract') ) {
             if ( !isset($loaded_tags[$matches[1]]) ) {
               $loaded_tags[$matches[1]] = true;
             }
 
-            $output = call_user_func(array('osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1], 'execute'), $string, $matches[2]);
+            $output = call_user_func(array($tag_class, 'execute'), $string, $matches[2]);
 
-            if ( call_user_func(array('osCommerce\\OM\\Core\\Template\\Tag\\' . $matches[1], 'parseResult')) === true ) {
+            if ( call_user_func(array($tag_class, 'parseResult')) === true ) {
               $output = preg_replace_callback($pattern, $le, $output);
             }
 
