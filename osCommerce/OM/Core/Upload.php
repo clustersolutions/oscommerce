@@ -16,6 +16,7 @@
 
   class Upload {
     protected $_file,
+              $_filename,
               $_destination,
               $_permissions,
               $_extensions = array(),
@@ -106,20 +107,20 @@
 
     public function save() {
       if ( $this->_replace === false ) {
-        while ( file_exists($this->_destination . '/' . $this->_upload['name']) ) {
-          $this->_upload['name'] = rand(10, 99) . $this->_upload['name'];
+        while ( file_exists($this->_destination . '/' . $this->getFilename()) ) {
+          $this->setFilename(rand(10, 99) . $this->getFilename());
         }
       }
 
       if ( $this->_upload['type'] == 'PUT' ) {
-        if ( rename(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $this->_upload['temp_filename'], $this->_destination . '/' . $this->_upload['name']) ) {
-          chmod($this->_destination . '/' . $this->_upload['name'], $this->_permissions);
+        if ( rename(OSCOM::BASE_DIRECTORY . 'Work/Temp/' . $this->_upload['temp_filename'], $this->_destination . '/' . $this->getFilename()) ) {
+          chmod($this->_destination . '/' . $this->getFilename(), $this->_permissions);
 
           return true;
         }
       } elseif ( $this->_upload['type'] == 'POST' ) {
-        if ( move_uploaded_file($this->_upload['tmp_name'], $this->_destination . '/' . $this->_upload['name']) ) {
-          chmod($this->_destination . '/' . $this->_upload['name'], $this->_permissions);
+        if ( move_uploaded_file($this->_upload['tmp_name'], $this->_destination . '/' . $this->getFilename()) ) {
+          chmod($this->_destination . '/' . $this->getFilename(), $this->_permissions);
 
           return true;
         }
@@ -152,8 +153,28 @@
       return $this->_destination;
     }
 
+/**
+  * @since v3.0.3
+  */
+
+    public function setFilename($filename) {
+      $this->_filename = $filename;
+    }
+
     public function getFilename() {
+      if ( isset($this->_filename) ) {
+        return $this->_filename;
+      }
+
       return $this->_upload['name'];
+    }
+
+/**
+  * @since v3.0.3
+  */
+
+    public function getExtension() {
+      return strtolower(substr($this->getFilename(), strrpos($this->getFilename(), '.')+1));
     }
 
     public function getPermissions() {
