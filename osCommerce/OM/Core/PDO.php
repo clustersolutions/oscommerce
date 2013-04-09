@@ -91,6 +91,120 @@
       }
     }
 
+/**
+  * @since 3.0.3
+  */
+
+    public function save($table, $data, $where_condition = null) {
+      if ( empty($data) || !is_array($data) ) {
+        return false;
+      }
+
+      if ( (strlen($table) < 7) || (substr($table, 0, 7) != ':table_') ) {
+        $table = ':table_' . $table;
+      }
+
+      if ( isset($where_condition) ) {
+        $statement = 'update ' . $table . ' set ';
+
+        foreach ( $data as $c => $v ) {
+          if ( $v == 'now()' || $v == 'null' ) {
+            $statement .= $c . ' = ' . $v . ', ';
+          } else {
+            $statement .= $c . ' = :new_' . $c . ', ';
+          }
+        }
+
+        $statement = substr($statement, 0, -2) . ' where ';
+
+        foreach ( array_keys($where_condition) as $c ) {
+          $statement .= $c . ' = :cond_' . $c . ' and ';
+        }
+
+        $statement = substr($statement, 0, -5);
+
+        $Q = $this->prepare($statement);
+
+        foreach ( $data as $c => $v ) {
+          if ( $v != 'now()' && $v != 'null' ) {
+            $Q->bindValue(':new_' . $c, $v);
+          }
+        }
+
+        foreach ( $where_condition as $c => $v ) {
+          $Q->bindValue(':cond_' . $c, $v);
+        }
+
+        $Q->execute();
+
+        return $Q->rowCount();
+      } else {
+        $is_prepared = false;
+
+        $statement = 'insert into ' . $table . ' (' . implode(', ', array_keys($data)) . ') values (';
+
+        foreach ( $data as $c => $v ) {
+          if ( $v == 'now()' || $v == 'null' ) {
+            $statement .= $v . ', ';
+          } else {
+            if ( $is_prepared === false ) {
+              $is_prepared = true;
+            }
+
+            $statement .= ':' . $c . ', ';
+          }
+        }
+
+        $statement = substr($statement, 0, -2) . ')';
+
+        if ( $is_prepared === true ) {
+          $Q = $this->prepare($statement);
+
+          foreach ( $data as $c => $v ) {
+            if ( $v != 'now()' && $v != 'null' ) {
+              $Q->bindValue(':' . $c, $v);
+            }
+          }
+
+          $Q->execute();
+
+          return $Q->rowCount();
+        } else {
+          return $this->exec($statement);
+        }
+      }
+
+      return false;
+    }
+
+/**
+  * @since 3.0.3
+  */
+
+    public function delete($table, $where_condition) {
+      if ( (strlen($table) < 7) || (substr($table, 0, 7) != ':table_') ) {
+        $table = ':table_' . $table;
+      }
+
+      $statement = 'delete from ' . $table . ' where ';
+
+      foreach ( array_keys($where_condition) as $c ) {
+        $statement .= $c . ' = :cond_' . $c . ' and ';
+      }
+
+      $statement = substr($statement, 0, -5);
+
+      $Q = $this->prepare($statement);
+
+      foreach ( $where_condition as $c => $v ) {
+        $Q->bindValue(':cond_' . $c, $v);
+      }
+
+      $Q->execute();
+
+      return $Q->rowCount();
+    }
+
     public function getBatchFrom($pageset, $max_results) {
       return max(($pageset * $max_results) - $max_results, 0);
     }
