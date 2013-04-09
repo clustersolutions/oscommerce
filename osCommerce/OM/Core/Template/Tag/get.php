@@ -10,7 +10,7 @@
 
   use osCommerce\OM\Core\HTML;
 
-  class gp extends \osCommerce\OM\Core\Template\TagAbstract {
+  class get extends \osCommerce\OM\Core\Template\TagAbstract {
     static protected $_parse_result = false;
 
     static public function execute($string) {
@@ -20,8 +20,6 @@
 
       if ( isset($_GET[$string]) ) {
         return HTML::outputProtected($_GET[$string]);
-      } elseif ( isset($_POST[$string]) ) {
-        return HTML::outputProtected($_POST[$string]);
       } elseif ( isset($default) ) {
         return value::execute($default);
       }
