@@ -682,16 +682,20 @@
  * @since HPDL
  */
 
-    public function parseContent($content) {
+    public function parseContent($content, $whitelist = null) {
       static $loaded_tags = array();
 
       $pattern = '/{([[:alpha:]][[:alnum:]]*)\b( .*?)?}(.*?)?{\1}/s';
 
-      $le = function ($matches) use (&$le, &$pattern) {
+      $le = function ($matches) use (&$le, &$pattern, $whitelist) {
         $string = $matches[3];
 
         if ( preg_match($pattern, $string) > 0 ) {
           $string = preg_replace_callback($pattern, $le, $string);
+        }
+
+        if ( isset($whitelist) && is_array($whitelist) && !in_array($matches[1], $whitelist) ) {
+          return $string;
         }
 
         $tag_class = null;
