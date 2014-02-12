@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -22,7 +22,7 @@
         $_headers = array('X-Mailer' => 'osCommerce'),
         $_body,
         $_content_transfer_encoding = '7bit',
-        $_charset = 'iso-8859-1';
+        $_charset = 'utf-8';
 
     public function __construct($to = null, $to_email_address = null, $from = null, $from_email_address = null, $subject = null) {
       if ( !empty($to_email_address) ) {
