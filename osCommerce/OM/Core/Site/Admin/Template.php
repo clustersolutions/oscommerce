@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -95,8 +95,10 @@
       return false;
     }
 
-    public function getPageContentsFile() {
-      $file = $this->getPageContentsFilename();
+    public function getPageContentsFile($file = null) {
+      if ( !isset($file) ) {
+        $file = $this->getPageContentsFilename();
+      }
 
       $template = $this->_template;
 
