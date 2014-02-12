@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -77,13 +77,13 @@
         $this->_life_time = ini_get('session.gc_maxlifetime');
       }
 
-      session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')));
+      session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')), (bool)ini_get('session.cookie_secure'), (bool)ini_get('session.cookie_httponly'));
 
-      if ( isset($_GET[$this->_name]) && (empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name]) || !$this->exists($_GET[$this->_name])) ) {
+      if ( isset($_GET[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name]) || !$this->exists($_GET[$this->_name])) ) {
         unset($_GET[$this->_name]);
       }
 
-      if ( isset($_POST[$this->_name]) && (empty($_POST[$this->_name]) || !ctype_alnum($_POST[$this->_name]) || !$this->exists($_POST[$this->_name])) ) {
+      if ( isset($_POST[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_POST[$this->_name]) || !ctype_alnum($_POST[$this->_name]) || !$this->exists($_POST[$this->_name])) ) {
         unset($_POST[$this->_name]);
       }
 

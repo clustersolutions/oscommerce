@@ -266,7 +266,7 @@
         $link .= HTML::output($parameters) . '&';
       }
 
-      if ( ($add_session_id === true) && Registry::exists('Session') && Registry::get('Session')->hasStarted() && (SERVICE_SESSION_FORCE_COOKIE_USAGE == '-1') ) {
+      if ( ($add_session_id === true) && Registry::exists('Session') && Registry::get('Session')->hasStarted() && ((bool)ini_get('session.use_only_cookies') === false) ) {
         if ( strlen(SID) > 0 ) {
           $_sid = SID;
         } elseif ( ((static::getRequestType() == 'NONSSL') && ($connection == 'SSL') && (static::getConfig('enable_ssl', $site) == 'true')) || ((static::getRequestType() == 'SSL') && ($connection != 'SSL')) ) {

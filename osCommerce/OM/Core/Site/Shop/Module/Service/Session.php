@@ -1,15 +1,15 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
   namespace osCommerce\OM\Core\Site\Shop\Module\Service;
 
-  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\OSCOM;
+  use osCommerce\OM\Core\Registry;
   use osCommerce\OM\Core\Session as SessionClass;
 
   class Session implements \osCommerce\OM\Core\Site\Shop\ServiceInterface {
@@ -19,7 +19,13 @@
       $OSCOM_Session = Registry::get('Session');
       $OSCOM_Session->setLifeTime(SERVICE_SESSION_EXPIRATION_TIME * 60);
 
-      if ( (SERVICE_SESSION_FORCE_COOKIE_USAGE == '1') || ((bool)ini_get('session.use_only_cookies') === true) ) {
+      if ( SERVICE_SESSION_FORCE_COOKIE_USAGE == '1' ) {
+        ini_set('session.use_only_cookies', 1);
+      } else{
+        ini_set('session.use_only_cookies', 0);
+      }
+
+      if ( (bool)ini_get('session.use_only_cookies') ) {
         OSCOM::setCookie('cookie_test', 'please_accept_for_session', time()+60*60*24*90);
 
         if ( isset($_COOKIE['cookie_test']) ) {
