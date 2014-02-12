@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -21,8 +21,6 @@
 
       $key = trim($args[1]);
 
-      $result = '';
-
       if ( !$OSCOM_Template->valueExists($key) ) {
         if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract') ) {
           call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
@@ -31,7 +29,18 @@
         }
       }
 
-      if ( $OSCOM_Template->getValue(trim($args[1])) === true ) {
+      $is_true = $OSCOM_Template->valueExists($key) && ($OSCOM_Template->getValue($key) === true);
+      $has_else = strpos($string, '{else}');
+
+      $result = '';
+
+      if ( $has_else !== false ) {
+        if ( $is_true === true ) {
+          $result = substr($string, 0, $has_else);
+        } else {
+          $result = substr($string, $has_else + 6); // strlen('{else}')==6
+        }
+      } elseif ( $is_true === true ) {
         $result = $string;
       }
 
