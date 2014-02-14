@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -16,13 +16,13 @@
  * @since v3.0.3
  */
 
-    protected $_ignored_actions = array();
+    protected $_ignored_actions = [];
 
 /**
  * @since v3.0.3
  */
 
-    protected $_current_action;
+    protected $_actions_run = [];
 
     abstract protected function initialize();
 
@@ -65,48 +65,31 @@
  */
 
     public function runActions() {
-      $action = null;
-      $action_index = 1;
+      $furious_pete = [ ];
 
+// URL is built as Site&Application&Action1&Action2.. or Application&Action1&Action2.. so we need
+// to detect where the first action is called
       if ( count($_GET) > 1 ) {
         $requested_action = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
 
-        if ( $requested_action == OSCOM::getSiteApplication() ) {
-          $requested_action = null;
+        $index = ($requested_action == OSCOM::getSiteApplication()) ? 2 : 1;
 
-          if ( count($_GET) > 2 ) {
-            $requested_action = HTML::sanitize(basename(key(array_slice($_GET, 2, 1, true))));
-
-            $action_index = 2;
-          }
-        }
-
-        if ( !empty($requested_action) && self::siteApplicationActionExists($requested_action) ) {
-          $this->_current_action = $action = $requested_action;
+        if ( count($_GET) > $index ) {
+          $furious_pete = array_keys(array_slice($_GET, $index, null, true));
         }
       }
 
-      if ( isset($action) ) {
-        call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . $action, 'execute'), $this);
+      foreach ( $furious_pete as $action ) {
+        $action = HTML::sanitize(basename($action));
 
-        $action_index++;
+        $this->_actions_run[] = $action;
 
-        if ( $action_index < count($_GET) ) {
-          $action = array($action);
+        if ( !in_array($action, $this->_ignored_actions) && static::siteApplicationActionExists(implode('\\', $this->_actions_run)) ) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $this->_actions_run), 'execute'), $this);
+        } else {
+          array_pop($this->_actions_run);
 
-          for ( $i = $action_index, $n = count($_GET); $i < $n; $i++ ) {
-            $subaction = HTML::sanitize(basename(key(array_slice($_GET, $i, 1, true))));
-
-            if ( !in_array($subaction, $this->_ignored_actions) && self::siteApplicationActionExists(implode('\\', $action) . '\\' . $subaction) ) {
-              call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Action\\' . implode('\\', $action) . '\\' . $subaction, 'execute'), $this);
-
-              $action[] = $subaction;
-
-              $this->_current_action = $subaction;
-            } else {
-              break;
-            }
-          }
+          break;
         }
       }
     }
@@ -116,7 +99,15 @@
  */
 
     public function getCurrentAction() {
-      return $this->_current_action;
+      return end($this->_actions_run);
+    }
+
+/**
+ * @since v3.0.3
+ */
+
+    public function getActionsRun() {
+      return $this->_actions_run;
     }
   }
 ?>
