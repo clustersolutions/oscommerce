@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -25,8 +25,6 @@
         list($key, $entry) = explode(' ', $key, 2);
       }
 
-      $result = '';
-
       if ( !$OSCOM_Template->valueExists($key) ) {
         if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract') ) {
           call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
@@ -35,20 +33,31 @@
         }
       }
 
+      $has_value = false;
+      $has_else = strpos($string, '{else}');
+
+      $result = '';
+
       if ( $OSCOM_Template->valueExists($key) ) {
-        $value = $OSCOM_Template->getValue($key);
+        $has_value = true;
 
         if ( isset($entry) ) {
-          if ( isset($value[$entry]) ) {
-            $value = $value[$entry];
-          } else {
-            unset($value);
+          $value = $OSCOM_Template->getValue($key);
+
+          if ( !isset($value[$entry]) || ((is_string($value[$entry]) && (strlen($value[$entry]) < 1)) || (is_array($value[$entry]) && (count($value[$entry]) < 1))) ) {
+            $has_value = false;
           }
         }
+      }
 
-        if ( isset($value) && ((is_string($value) && (strlen($value) > 0)) || (is_array($value) && (count($value) > 0))) ) {
-          $result = $string;
+      if ( $has_else !== false ) {
+        if ( $has_value === true ) {
+          $result = substr($string, 0, $has_else);
+        } else {
+          $result = substr($string, $has_else + 6); // strlen('{else}')==6
         }
+      } elseif ( $has_value === true ) {
+        $result = $string;
       }
 
       return $result;
