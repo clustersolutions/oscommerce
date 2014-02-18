@@ -99,15 +99,7 @@
 
       $result = '';
 
-      if ( @is_readable('/dev/urandom') && ($fh = @fopen('/dev/urandom', 'rb')) ) {
-        if ( function_exists('stream_set_read_buffer') ) {
-          stream_set_read_buffer($fh, 0);
-        }
-
-        $result = fread($fh, $length);
-
-        fclose($fh);
-      } elseif ( function_exists('openssl_random_pseudo_bytes') ) {
+      if ( function_exists('openssl_random_pseudo_bytes') ) {
         $result = openssl_random_pseudo_bytes($length, $orpb_secure);
 
         if ( $orpb_secure != true ) {
@@ -115,6 +107,14 @@
         }
       } elseif ( defined('MCRYPT_DEV_URANDOM') ) {
         $result = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
+      } elseif ( @is_readable('/dev/urandom') && ($fh = @fopen('/dev/urandom', 'rb')) ) {
+        if ( function_exists('stream_set_read_buffer') ) {
+          stream_set_read_buffer($fh, 0);
+        }
+
+        $result = fread($fh, $length);
+
+        fclose($fh);
       }
 
       if ( strlen($result) < $length) {
