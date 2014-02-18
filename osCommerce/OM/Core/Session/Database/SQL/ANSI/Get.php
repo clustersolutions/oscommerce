@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -18,19 +18,8 @@
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $sql_query = 'select value from :table_sessions where id = :id';
-
-      if ( isset($data['expiry']) ) {
-        $sql_query .= ' and expiry >= :expiry';
-      }
-
-      $Qsession = $OSCOM_PDO->prepare($sql_query);
+      $Qsession = $OSCOM_PDO->prepare('select value from :table_sessions where id = :id');
       $Qsession->bindValue(':id', $data['id']);
-
-      if ( isset($data['expiry']) ) {
-        $Qsession->bindInt(':expiry', $data['expiry']);
-      }
-
       $Qsession->execute();
 
       return $Qsession->fetch();

@@ -71,7 +71,7 @@
  */
 
     public function start() {
-      if ( $this->_life_time > 0 ) {
+      if ( isset($this->_life_time) ) {
         ini_set('session.gc_maxlifetime', $this->_life_time);
       } else {
         $this->_life_time = ini_get('session.gc_maxlifetime');

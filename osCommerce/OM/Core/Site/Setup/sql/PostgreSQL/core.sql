@@ -1,6 +1,6 @@
 -- osCommerce Online Merchant
 --
--- @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+-- @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
 -- @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
 DROP TABLE IF EXISTS osc_address_book CASCADE;
@@ -694,7 +694,7 @@ CREATE INDEX osc_reviews_languages_id_idx ON osc_reviews USING btree (languages_
 
 DROP TABLE IF EXISTS osc_sessions CASCADE;
 CREATE TABLE osc_sessions (
-  id char(32) NOT NULL,
+  id char(128) NOT NULL,
   expiry integer NOT NULL,
   value text NOT NULL,
   PRIMARY KEY (id)

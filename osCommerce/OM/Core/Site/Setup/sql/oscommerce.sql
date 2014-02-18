@@ -1,6 +1,6 @@
 # osCommerce Online Merchant
 #
-# @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+# @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
 # @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
 SET FOREIGN_KEY_CHECKS = 0;
@@ -656,7 +656,7 @@ CREATE TABLE osc_reviews (
 
 DROP TABLE IF EXISTS osc_sessions;
 CREATE TABLE osc_sessions (
-  id char(32) NOT NULL,
+  id char(128) NOT NULL,
   expiry int unsigned NOT NULL,
   value text NOT NULL,
   PRIMARY KEY (id)

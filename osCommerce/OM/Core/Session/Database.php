@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -79,10 +79,6 @@
     public function handlerRead($id) {
       $data = array('id' => $id);
 
-      if ( $this->_life_time > 0 ) {
-        $data['expiry'] = time();
-      }
-
       $result = OSCOM::callDB('Session\Database\Get', $data, 'Core');
 
       if ( $result !== false ) {
@@ -102,7 +98,7 @@
 
     public function handlerWrite($id, $value) {
       $data = array('id' => $id,
-                    'expiry' => time() + $this->_life_time,
+                    'expiry' => time(),
                     'value' => base64_encode($value));
 
       return OSCOM::callDB('Session\Database\Save', $data, 'Core');
@@ -127,9 +123,7 @@
  */
 
     public function handlerClean($max_life_time) {
-// $max_life_time is already added to the time in the _custom_write method
-
-      $data = array('expiry' => time());
+      $data = array('expiry' => $max_life_time);
 
       return OSCOM::callDB('Session\Database\DeleteExpired', $data, 'Core');
     }
