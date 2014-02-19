@@ -79,15 +79,15 @@
 
       session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')), (bool)ini_get('session.cookie_secure'), (bool)ini_get('session.cookie_httponly'));
 
-      if ( isset($_GET[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_GET[$this->_name]) || !ctype_alnum($_GET[$this->_name]) || !$this->exists($_GET[$this->_name])) ) {
+      if ( isset($_GET[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_GET[$this->_name]) || !(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_GET[$this->_name]) || !$this->exists($_GET[$this->_name])) ) {
         unset($_GET[$this->_name]);
       }
 
-      if ( isset($_POST[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_POST[$this->_name]) || !ctype_alnum($_POST[$this->_name]) || !$this->exists($_POST[$this->_name])) ) {
+      if ( isset($_POST[$this->_name]) && ((bool)ini_get('session.use_only_cookies') || empty($_POST[$this->_name]) || !(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_POST[$this->_name]) || !$this->exists($_POST[$this->_name])) ) {
         unset($_POST[$this->_name]);
       }
 
-      if ( isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || !ctype_alnum($_COOKIE[$this->_name]) || !$this->exists($_COOKIE[$this->_name])) ) {
+      if ( isset($_COOKIE[$this->_name]) && (empty($_COOKIE[$this->_name]) || !(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_COOKIE[$this->_name]) || !$this->exists($_COOKIE[$this->_name])) ) {
         setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
       }
 
