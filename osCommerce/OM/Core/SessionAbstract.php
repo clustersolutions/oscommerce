@@ -88,7 +88,7 @@
       }
 
       if ( isset($_COOKIE[$this->_name]) && !(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_COOKIE[$this->_name]) ) {
-        setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
+        setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
         unset($_COOKIE[$this->_name]);
       }
 
@@ -138,10 +138,17 @@
     public function destroy() {
       if ( $this->_is_started === true ) {
         if ( isset($_COOKIE[$this->_name]) ) {
-          setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'));
+          setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
+          unset($_COOKIE[$this->_name]);
         }
 
-        return session_destroy();
+        $result = session_destroy();
+
+        if ( $result === true ) {
+          $this->_is_started = false;
+        }
+
+        return $result;
       }
     }
 
