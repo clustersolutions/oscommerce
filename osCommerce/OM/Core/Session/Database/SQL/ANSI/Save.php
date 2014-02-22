@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -22,7 +22,7 @@
       if ( OSCOM::callDB('Session\Database\Check', array('id' => $data['id']), 'Core') ) {
         $sql_query = 'update :table_sessions set expiry = :expiry, value = :value where id = :id';
       } else {
-        $sql_query = 'insert into :table_sessions values (:id, :expiry, :value)';
+        $sql_query = 'insert into :table_sessions (id, expiry, value) values (:id, :expiry, :value)';
       }
 
       $Qsession = $OSCOM_PDO->prepare($sql_query);

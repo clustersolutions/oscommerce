@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -18,7 +18,7 @@
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $Qsession = $OSCOM_PDO->prepare('select 1 from :table_sessions where id = :id');
+      $Qsession = $OSCOM_PDO->prepare('select 1 from :table_sessions where id = :id limit 1');
       $Qsession->bindValue(':id', $data['id']);
       $Qsession->execute();
 

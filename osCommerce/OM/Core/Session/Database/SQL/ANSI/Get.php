@@ -18,7 +18,7 @@
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $Qsession = $OSCOM_PDO->prepare('select value from :table_sessions where id = :id');
+      $Qsession = $OSCOM_PDO->prepare('select value from :table_sessions where id = :id limit 1');
       $Qsession->bindValue(':id', $data['id']);
       $Qsession->execute();
 
