@@ -1,14 +1,12 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
   namespace osCommerce\OM\Core;
-
-  define('OSCOM_BASE_DIRECTORY', realpath(__DIR__ . '/../') . '/');
 
   class OSCOM {
     const TIMESTAMP_START = OSCOM_TIMESTAMP_START;

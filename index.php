@@ -1,12 +1,11 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  use osCommerce\OM\Core\Autoloader;
   use osCommerce\OM\Core\OSCOM;
 
   define('OSCOM_TIMESTAMP_START', microtime());
@@ -16,8 +15,7 @@
   define('OSCOM_PUBLIC_BASE_DIRECTORY', __DIR__ . '/');
 
   require('osCommerce/OM/Core/Autoloader.php');
-  $OSCOM_Autoloader = new Autoloader('osCommerce\OM');
-  $OSCOM_Autoloader->register();
+  spl_autoload_register('osCommerce\\OM\\Core\\Autoloader::load');
 
   OSCOM::initialize();
 
