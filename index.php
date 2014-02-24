@@ -14,8 +14,8 @@
 
   define('OSCOM_PUBLIC_BASE_DIRECTORY', __DIR__ . '/');
 
-  require('osCommerce/OM/Core/Autoloader.php');
-  spl_autoload_register('osCommerce\\OM\\Core\\Autoloader::load');
+  require('osCommerce/OM/Core/OSCOM.php');
+  spl_autoload_register('osCommerce\\OM\\Core\\OSCOM::autoload');
 
   OSCOM::initialize();
 
