@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -19,7 +19,7 @@
   class File extends \osCommerce\OM\Core\SessionAbstract {
 
 /**
- * Holds the file system path where sessions are saved.
+ * Holds the file system path where sessions are saved
  *
  * @var string
  * @since v3.0.0
@@ -28,15 +28,15 @@
     protected $_save_path;
 
 /**
- * Initialize file based session storage handler
+ * Initialize file storage handler
  *
- * @param string $name The name of the session
  * @since v3.0.0
  */
 
-    public function __construct($name) {
-      $this->setName($name);
+    public function __construct() {
       $this->setSavePath(OSCOM::BASE_DIRECTORY . 'Work/Session');
+
+      register_shutdown_function('session_write_close');
     }
 
 /**
@@ -47,40 +47,30 @@
  */
 
     public function exists($id) {
-      return file_exists($this->_save_path . '/' . $id);
+      $id = basename($id);
+
+      return file_exists($this->_save_path . '/sess_' . $id);
     }
 
 /**
- * Deletes an existing session
- *
- * @since v3.0.0
- */
-
-    public function destroy() {
-      $this->delete();
-
-      parent::destroy();
-    }
-
-/**
- * Deletes an existing session from the storage handler
+ * Deletes the session data from the file storage handler
  *
  * @param string $id The ID of the session
  * @since v3.0.0
  */
 
-    public function delete($id = null) {
-      if ( empty($id) ) {
-        $id = $this->_id;
-      }
+    public function destroy($id) {
+      $id = basename($id);
 
       if ( $this->exists($id) ) {
-        unlink($this->_save_path . '/' . $id);
+        return unlink($this->_save_path . '/sess_' . $id);
       }
+
+      return false;
     }
 
 /**
- * Return the session file based storage location
+ * Return the session file storage location
  *
  * @return string
  * @since v3.0.0
@@ -91,7 +81,7 @@
     }
 
 /**
- * Sets the storage location for the file based storage handler
+ * Sets the storage location for the file storage handler
  *
  * @param string $path The file path to store the session data in
  * @since v3.0.0

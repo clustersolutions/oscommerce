@@ -28,22 +28,13 @@
     protected $_cookie_parameters = array();
 
 /**
- * Defines if the session has been started or not
- *
- * @var boolean
- * @since v3.0.0
- */
-
-    protected $_is_started = false;
-
-/**
  * Holds the name of the session
  *
  * @var string
  * @since v3.0.0
  */
 
-    protected $_name = 'sid';
+    protected $_name;
 
 /**
  * Holds the session id
@@ -52,16 +43,25 @@
  * @since v3.0.0
  */
 
-    protected $_id = null;
+    protected $_id;
 
 /**
  * Holds the life time in seconds of the session
  *
- * @var string
+ * @var int
  * @since v3.0.0
  */
 
     protected $_life_time;
+
+/**
+ * Checks if a session exists
+ *
+ * @param string $id The ID of the session
+ * @since v3.0.2
+ */
+
+    abstract protected function exists($id);
 
 /**
  * Verify an existing session ID and create or resume the session if the existing session ID is valid
@@ -71,10 +71,9 @@
  */
 
     public function start() {
-      if ( isset($this->_life_time) ) {
-        ini_set('session.gc_maxlifetime', $this->_life_time);
-      } else {
-        $this->_life_time = ini_get('session.gc_maxlifetime');
+// this is performed manually
+      if ( (bool)ini_get('session.use_strict_mode') ) {
+        ini_set('session.use_strict_mode', 0);
       }
 
       session_set_cookie_params(0, ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_path') : OSCOM::getConfig('https_cookie_path')), ((OSCOM::getRequestType() == 'NONSSL') ? OSCOM::getConfig('http_cookie_domain') : OSCOM::getConfig('https_cookie_domain')), (bool)ini_get('session.cookie_secure'), (bool)ini_get('session.cookie_httponly'));
@@ -87,15 +86,12 @@
         unset($_POST[$this->_name]);
       }
 
-      if ( isset($_COOKIE[$this->_name]) && !(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_COOKIE[$this->_name]) ) {
+      if ( isset($_COOKIE[$this->_name]) && (!(bool)preg_match('/^[a-zA-Z0-9,-]+$/', $_COOKIE[$this->_name]) || !$this->exists($_COOKIE[$this->_name])) ) {
         setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
         unset($_COOKIE[$this->_name]);
       }
 
       if ( session_start() ) {
-        register_shutdown_function(array($this, 'close'));
-
-        $this->_is_started = true;
         $this->_id = session_id();
 
         return true;
@@ -112,44 +108,22 @@
  */
 
     public function hasStarted() {
-      return $this->_is_started;
-    }
-
-/**
- * Closes the session and writes the session data to the storage handler
- *
- * @since v3.0.0
- */
-
-    public function close() {
-      if ( $this->_is_started === true ) {
-        $this->_is_started = false;
-
-        return session_write_close();
-      }
+      return session_status() === PHP_SESSION_ACTIVE;
     }
 
 /**
  * Deletes an existing session
  *
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function destroy() {
-      if ( $this->_is_started === true ) {
-        if ( isset($_COOKIE[$this->_name]) ) {
-          setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
-          unset($_COOKIE[$this->_name]);
-        }
-
-        $result = session_destroy();
-
-        if ( $result === true ) {
-          $this->_is_started = false;
-        }
-
-        return $result;
+    public function kill() {
+      if ( isset($_COOKIE[$this->_name]) ) {
+        setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
+        unset($_COOKIE[$this->_name]);
       }
+
+      return session_destroy();
     }
 
 /**
@@ -159,9 +133,7 @@
  */
 
     public function recreate() {
-      if ( $this->_is_started === true ) {
-        return session_regenerate_id(true);
-      }
+      return session_regenerate_id(true);
     }
 
 /**
@@ -194,12 +166,7 @@
  */
 
     public function setName($name) {
-      if ( empty($name) ) {
-        $name = $this->_name;
-      }
-
       session_name($name);
-
       $this->_name = session_name();
     }
 
@@ -211,6 +178,7 @@
  */
 
     public function setLifeTime($time) {
+      ini_set('session.gc_maxlifetime', $time);
       $this->_life_time = $time;
     }
 

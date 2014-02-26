@@ -63,7 +63,7 @@
           }
 
           if ( $_SESSION['SESSION_SSL_ID'] != $_SERVER['SSL_SESSION_ID'] ) {
-            $OSCOM_Session->destroy();
+            $OSCOM_Session->kill();
 
             OSCOM::redirect(OSCOM::getLink(null, 'Info', 'SSLcheck', 'AUTO'));
           }
@@ -79,7 +79,7 @@
         }
 
         if ( $_SESSION['SESSION_USER_AGENT'] != $http_user_agent ) {
-          $OSCOM_Session->destroy();
+          $OSCOM_Session->kill();
 
           OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
         }
@@ -92,7 +92,7 @@
         }
 
         if ( $_SESSION['SESSION_IP_ADDRESS'] != OSCOM::getIPAddress() ) {
-          $OSCOM_Session->destroy();
+          $OSCOM_Session->kill();
 
           OSCOM::redirect(OSCOM::getLink(null, 'Account', 'LogIn', 'SSL'));
         }

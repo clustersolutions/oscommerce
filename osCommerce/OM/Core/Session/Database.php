@@ -16,24 +16,16 @@
  * @since v3.0.0
  */
 
-  class Database extends \osCommerce\OM\Core\SessionAbstract {
+  class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHandlerInterface {
 
 /**
- * Initialize database based session storage handler
+ * Initialize database storage handler
  *
- * @param string $name The name of the session
  * @since v3.0.0
  */
 
-    public function __construct($name) {
-      $this->setName($name);
-
-      session_set_save_handler(array($this, 'handlerOpen'),
-                               array($this, 'handlerClose'),
-                               array($this, 'handlerRead'),
-                               array($this, 'handlerWrite'),
-                               array($this, 'handlerDestroy'),
-                               array($this, 'handlerClean'));
+    public function __construct() {
+      session_set_save_handler($this, true);
     }
 
 /**
@@ -50,99 +42,84 @@
     }
 
 /**
- * Opens the database based session storage handler
+ * Opens the database storage handler
  *
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function handlerOpen() {
+    public function open($save_path, $id) {
       return true;
     }
 
 /**
- * Closes the database based session storage handler
+ * Closes the database storage handler
  *
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function handlerClose() {
+    public function close() {
       return true;
     }
 
 /**
- * Read session data from the database based session storage handler
+ * Read session data from the database storage handler
  *
  * @param string $id The ID of the session
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function handlerRead($id) {
+    public function read($id) {
       $data = array('id' => $id);
 
       $result = OSCOM::callDB('Session\Database\Get', $data, 'Core');
 
       if ( $result !== false ) {
-        return base64_decode($result['value']);
+        return $result['value'];
       }
 
       return false;
     }
 
 /**
- * Writes session data to the database based session storage handler
+ * Writes session data to the database storage handler
  *
  * @param string $id The ID of the session
  * @param string $value The session data to store
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function handlerWrite($id, $value) {
+    public function write($id, $value) {
       $data = array('id' => $id,
                     'expiry' => time(),
-                    'value' => base64_encode($value));
+                    'value' => $value);
 
       return OSCOM::callDB('Session\Database\Save', $data, 'Core');
     }
 
 /**
- * Destroys the session data from the database based session storage handler
+ * Deletes the session data from the database storage handler
  *
  * @param string $id The ID of the session
- * @since v3.0.0
+ * @since v3.0.3
  */
 
-    public function handlerDestroy($id) {
-      return $this->delete($id);
-    }
-
-/**
- * Garbage collector for the database based session storage handler
- *
- * @param string $max_life_time The maxmimum time a session should exist
- * @since v3.0.0
- */
-
-    public function handlerClean($max_life_time) {
-      $data = array('expiry' => $max_life_time);
-
-      return OSCOM::callDB('Session\Database\DeleteExpired', $data, 'Core');
-    }
-
-/**
- * Deletes the session data from the database based session storage handler
- *
- * @param string $id The ID of the session
- * @since v3.0.0
- */
-
-    public function delete($id = null) {
-      if ( empty($id) ) {
-        $id = $this->_id;
-      }
-
+    public function destroy($id) {
       $data = array('id' => $id);
 
       return OSCOM::callDB('Session\Database\Delete', $data, 'Core');
+    }
+
+/**
+ * Garbage collector for the database storage handler
+ *
+ * @param string $max_life_time The maxmimum time a session should exist
+ * @since v3.0.3
+ */
+
+    public function gc($max_life_time) {
+      $data = array('expiry' => $max_life_time);
+
+      return OSCOM::callDB('Session\Database\DeleteExpired', $data, 'Core');
     }
   }
 ?>

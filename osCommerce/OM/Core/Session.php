@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -26,13 +26,22 @@
     public static function load($name = null) {
       $class_name = 'osCommerce\\OM\\Core\\Session\\' . OSCOM::getConfig('store_sessions');
 
-      if ( class_exists($class_name) ) {
-        return new $class_name($name);
+      if ( !class_exists($class_name) ) {
+        trigger_error('Session Handler \'' . $class_name . '\' does not exist, using default \'osCommerce\\OM\\Core\\Session\\File\'', E_USER_ERROR);
+
+        $class_name = 'osCommerce\\OM\\Core\\Session\\File';
       }
 
-      trigger_error('Session Handler \'' . $class_name . '\' does not exist, using default \'osCommerce\\OM\\Core\\Session\\File\'', E_USER_ERROR);
+      $obj = new $class_name();
 
-      return new Session\File($name);
+      if ( !isset($name) ) {
+        $name = 'sid';
+      }
+
+      $obj->setName($name);
+      $obj->setLifeTime(ini_get('session.gc_maxlifetime'));
+
+      return $obj;
     }
   }
 ?>
