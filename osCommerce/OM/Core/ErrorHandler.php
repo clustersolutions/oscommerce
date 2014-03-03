@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -19,6 +19,7 @@
     public static function initialize() {
       ini_set('display_errors', false);
       ini_set('html_errors', false);
+      ini_set('ignore_repeated_errors', true);
 
       if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Logs') ) {
         ini_set('log_errors', true);
@@ -29,13 +30,13 @@
         set_error_handler(array('osCommerce\\OM\\Core\\ErrorHandler', 'execute'));
 
         if ( file_exists(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt') ) {
-          self::import(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
+          static::import(OSCOM::BASE_DIRECTORY . 'Work/Logs/errors.txt');
         }
       }
     }
 
     public static function execute($errno, $errstr, $errfile, $errline) {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return false;
       }
 
@@ -61,7 +62,7 @@
 
       $error_msg = sprintf('PHP %s:  %s in %s on line %d', $errors, $errstr, $errfile, $errline);
 
-      $Qinsert = self::$_dbh->prepare('insert into error_log (timestamp, message) values (:timestamp, :message)');
+      $Qinsert = static::$_dbh->prepare('insert into error_log (timestamp, message) values (:timestamp, :message)');
       $Qinsert->bindInt(':timestamp', time());
       $Qinsert->bindValue(':message', $error_msg);
       $Qinsert->execute();
@@ -74,8 +75,8 @@
       $result = false;
 
       try {
-        self::$_dbh = PDO::initialize(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3', null, null, null, null, 'SQLite3');
-        self::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
+        static::$_dbh = PDO::initialize(OSCOM::BASE_DIRECTORY . 'Work/Database/errors.sqlite3', null, null, null, null, 'SQLite3');
+        static::$_dbh->exec('create table if not exists error_log ( timestamp int, message text );');
 
         $result = true;
       } catch ( \Exception $e ) {
@@ -86,7 +87,7 @@
     }
 
     public static function getAll($limit = null, $pageset = null) {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return array();
       }
 
@@ -102,11 +103,11 @@
         }
       }
 
-      return self::$_dbh->query($query)->fetchAll();
+      return static::$_dbh->query($query)->fetchAll();
     }
 
     public static function getTotalEntries() {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return 0;
       }
 
@@ -116,7 +117,7 @@
     }
 
     public static function find($search, $limit = null, $pageset = null) {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return array();
       }
 
@@ -132,7 +133,7 @@
         }
       }
 
-      $Qlogs = self::$_dbh->prepare($query);
+      $Qlogs = static::$_dbh->prepare($query);
       $Qlogs->bindValue(':message', '%' . $search . '%');
       $Qlogs->execute();
 
@@ -140,11 +141,11 @@
     }
 
     public static function getTotalFindEntries($search) {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return 0;
       }
 
-      $Qlogs = self::$_dbh->prepare('select count(*) as total from error_log where message like :message');
+      $Qlogs = static::$_dbh->prepare('select count(*) as total from error_log where message like :message');
       $Qlogs->bindValue(':message', '%' . $search . '%');
       $Qlogs->execute();
 
@@ -154,34 +155,51 @@
     }
 
     public static function import($filename) {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return false;
       }
 
       $error_log = file($filename);
       unlink($filename);
 
+      $messages = [ ];
+
       foreach ( $error_log as $error ) {
-        $error = Language::toUTF8($error);
+        $error = Language::toUTF8(trim($error));
 
-        if ( preg_match('/^\[([0-9]{2})-([A-Za-z]{3})-([0-9]{4}) ([0-9]{2}):([0-5][0-9]):([0-5][0-9])\] (.*)$/', $error) ) {
-          $timestamp = DateTime::getTimestamp(substr($error, 1, 20), 'd-M-Y H:i:s');
-          $message = substr($error, 23);
+        if ( preg_match('/^\[([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-5][0-9]:[0-5][0-9].*?)\] (.*)$/', $error, $matches) ) {
+          if ( strlen($matches[1]) == 20 ) {
+            $timestamp = DateTime::getTimestamp($matches[1], 'd-M-Y H:i:s');
+          } else { // with timezone
+            $timestamp = DateTime::getTimestamp($matches[1], 'd-M-Y H:i:s e');
+          }
 
-          $Qinsert = self::$_dbh->prepare('insert into error_log (timestamp, message) values (:timestamp, :message)');
-          $Qinsert->bindInt(':timestamp', $timestamp);
-          $Qinsert->bindValue(':message', $message);
-          $Qinsert->execute();
+          $message = $matches[2];
+
+          $messages[] = [ 'timestamp' => $timestamp,
+                          'message' => $message ];
+        } elseif ( !empty($messages) ) {
+          $messages[(count($messages)-1)]['message'] .= "\n" . $error;
+        } else {
+          $messages[] = [ 'timestamp' => time(),
+                          'message' => $error ];
         }
+      }
+
+      foreach ( $messages as $error ) {
+        $Qinsert = static::$_dbh->prepare('insert into error_log (timestamp, message) values (:timestamp, :message)');
+        $Qinsert->bindInt(':timestamp', $error['timestamp']);
+        $Qinsert->bindValue(':message', $error['message']);
+        $Qinsert->execute();
       }
     }
 
     public static function clear() {
-      if ( !is_resource(self::$_dbh) && !self::connect() ) {
+      if ( !is_resource(static::$_dbh) && !static::connect() ) {
         return false;
       }
 
-      self::$_dbh->exec('drop table if exists error_log');
+      static::$_dbh->exec('drop table if exists error_log');
     }
   }
 ?>

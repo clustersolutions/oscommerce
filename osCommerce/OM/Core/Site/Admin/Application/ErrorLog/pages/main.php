@@ -87,7 +87,7 @@
       newCell.style.whiteSpace = 'nowrap';
 
       newCell = newRow.insertCell(1);
-      newCell.innerHTML = htmlSpecialChars(record.message);
+      newCell.innerHTML = htmlSpecialChars(record.message).replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1<br />$2');
 
       rowCounter++;
     }
