@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -76,7 +76,10 @@
     public function prepare($statement, $driver_options = array()) {
       $statement = $this->_autoPrefixTables($statement);
 
-      return parent::prepare($statement, $driver_options);
+      $PDOStatement = parent::prepare($statement, $driver_options);
+      $PDOStatement->setQueryCall('prepare');
+
+      return $PDOStatement;
     }
 
     public function query($statement) {
@@ -85,10 +88,14 @@
       $args = func_get_args();
 
       if ( count($args) > 1 ) {
-        return call_user_func_array(array($this, 'parent::query'), $args);
+        $PDOStatement = call_user_func_array(array($this, 'parent::query'), $args);
       } else {
-        return parent::query($statement);
+        $PDOStatement = parent::query($statement);
       }
+
+      $PDOStatement->setQueryCall('query');
+
+      return $PDOStatement;
     }
 
 /**

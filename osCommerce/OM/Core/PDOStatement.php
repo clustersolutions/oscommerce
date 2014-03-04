@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -21,11 +21,23 @@
 
   class PDOStatement extends \PDOStatement {
     protected $_is_error = false;
-    protected $_binded_params = array();
+    protected $_binded_params = [];
     protected $_cache_key;
     protected $_cache_expire;
     protected $_cache_data;
     protected $_cache_read = false;
+
+/**
+ * @since v3.0.3
+ */
+
+    protected $_cache_empty = false;
+
+/**
+ * @since v3.0.3
+ */
+
+    protected $_query_call;
 
     public function bindValue($parameter, $value, $data_type = PDO::PARAM_STR) {
       $this->_binded_params[$parameter] = array('value' => $value,
@@ -76,7 +88,11 @@
       } else {
         $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 
-        if ( isset($this->_cache_key) ) {
+        if ( isset($this->_cache_key) && ($this->result !== false) ) {
+          if ( !isset($this->_cache_data) ) {
+            $this->_cache_data = [];
+          }
+
           $this->_cache_data[] = $this->result;
         }
       }
@@ -96,7 +112,7 @@
           $this->result = parent::fetchAll($fetch_style);
         }
 
-        if ( isset($this->_cache_key) ) {
+        if ( isset($this->_cache_key) && ($this->result !== false) ) {
           $this->_cache_data = $this->result;
         }
       }
@@ -112,9 +128,21 @@
       return $this->result;
     }
 
-    public function setCache($key, $expire = 0) {
-      $this->_cache_key = $key;
+/**
+ * @param string $key The key name for the cache data
+ * @param int $expire The amount of minutes the cach data is active for
+ * @param bool $cache_empty Save empty cache data (@since v3.0.3)
+ * @access public
+ */
+
+    public function setCache($key, $expire = 0, $cache_empty = false) {
+      $this->_cache_key = basename($key);
       $this->_cache_expire = $expire;
+      $this->_cache_empty = $cache_empty;
+
+      if ( $this->_query_call != 'prepare' ) {
+        trigger_error('OSCOM_PDOStatement::setCache(): Cannot set cache (\'' . $this->_cache_key . '\') on a non-prepare query. Please change the query to a prepare() query.');
+      }
     }
 
     protected function valueMixed($column, $type = 'string') {
@@ -169,9 +197,25 @@
       return $this->queryString;
     }
 
+/**
+ * @since v3.0.3
+ */
+
+    public function setQueryCall($type) {
+      $this->_query_call = $type;
+    }
+
+/**
+ * @since v3.0.3
+ */
+
+    public function getQueryCall() {
+      return $this->_query_call;
+    }
+
     public function __destruct() {
-      if ( $this->_cache_read === false ) {
-        if ( isset($this->_cache_key) ) {
+      if ( ($this->_cache_read === false) && isset($this->_cache_key) && is_array($this->_cache_data) ) {
+        if ( $this->_cache_empty || ($this->_cache_data[0] !== false) ) {
           Registry::get('Cache')->write($this->_cache_data, $this->_cache_key);
         }
       }

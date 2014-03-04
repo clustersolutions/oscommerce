@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -30,7 +30,7 @@
 
       $this->_data = array();
 
-      $Qcc = $OSCOM_PDO->query('select id, credit_card_name as title, pattern from :table_credit_cards where credit_card_status = 1 order by sort_order, credit_card_name');
+      $Qcc = $OSCOM_PDO->prepare('select id, credit_card_name as title, pattern from :table_credit_cards where credit_card_status = 1 order by sort_order, credit_card_name');
       $Qcc->setCache('credit_cards');
       $Qcc->execute();
 

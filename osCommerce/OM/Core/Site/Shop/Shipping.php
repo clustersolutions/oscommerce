@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -35,7 +35,7 @@
       if ( $do_shipping === true ) {
         $this->_quotes =& $_SESSION['osC_ShoppingCart_data']['shipping_quotes'];
 
-        $Qmodules = $OSCOM_PDO->query('select code from :table_modules where modules_group = "Shipping"');
+        $Qmodules = $OSCOM_PDO->prepare('select code from :table_modules where modules_group = "Shipping"');
         $Qmodules->setCache('modules-shipping');
         $Qmodules->execute();
 

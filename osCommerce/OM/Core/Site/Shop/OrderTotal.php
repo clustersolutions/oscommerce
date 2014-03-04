@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -19,7 +19,7 @@
       $OSCOM_PDO = Registry::get('PDO');
       $OSCOM_Language = Registry::get('Language');
 
-      $Qmodules = $OSCOM_PDO->query('select code from :table_modules where modules_group = "OrderTotal"');
+      $Qmodules = $OSCOM_PDO->prepare('select code from :table_modules where modules_group = "OrderTotal"');
       $Qmodules->setCache('modules-order_total');
       $Qmodules->execute();
 

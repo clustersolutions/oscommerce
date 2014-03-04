@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -18,7 +18,7 @@
     public static function execute($data) {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $Qtemplates = $OSCOM_PDO->query('select id, code, title from :table_templates');
+      $Qtemplates = $OSCOM_PDO->prepare('select id, code, title from :table_templates');
       $Qtemplates->setCache('templates');
       $Qtemplates->execute();
 

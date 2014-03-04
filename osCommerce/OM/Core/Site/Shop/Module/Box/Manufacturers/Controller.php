@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -26,7 +26,7 @@
     public function initialize() {
       $OSCOM_PDO = Registry::get('PDO');
 
-      $Qmanufacturers = $OSCOM_PDO->query('select manufacturers_id as id, manufacturers_name as text from :table_manufacturers order by manufacturers_name');
+      $Qmanufacturers = $OSCOM_PDO->prepare('select manufacturers_id as id, manufacturers_name as text from :table_manufacturers order by manufacturers_name');
       $Qmanufacturers->setCache('manufacturers');
       $Qmanufacturers->execute();
 
