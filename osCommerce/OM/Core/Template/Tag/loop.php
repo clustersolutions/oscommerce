@@ -36,7 +36,7 @@
 
       if ( !empty($data) ) {
         foreach ( $data as $d ) {
-          $result .= preg_replace_callback('/[#|%](.*?)\b[#|%]/', function ($matches) use (&$d) {
+          $result .= preg_replace_callback('/[#|%]([a-zA-Z0-9_-]+)[#|%]/', function ($matches) use (&$d) {
                        if ( substr($matches[0], 0, 1) == '%' ) {
                          return ( isset($d[$matches[1]]) ? $d[$matches[1]] : $matches[0] );
                        } else {
