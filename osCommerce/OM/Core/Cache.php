@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -41,11 +41,19 @@
  */
 
     public function write($data, $key = null) {
-      if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Cache/') ) {
-        if ( empty($key) ) {
-          $key = $this->_key;
-        }
+      if ( !isset($key) ) {
+        $key = $this->_key;
+      }
 
+      $key = basename($key);
+
+      if ( !static::hasSafeName($key) ) {
+        trigger_error('OSCOM_Cache::write(): Invalid key name (\'' . $key . '\'). Valid characters are a-zA-Z0-9-_');
+
+        return false;
+      }
+
+      if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Cache/') ) {
         return ( file_put_contents(OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache', serialize($data), LOCK_EX) !== false );
       }
 
@@ -62,6 +70,14 @@
  */
 
     public function read($key, $expire = null) {
+      $key = basename($key);
+
+      if ( !static::hasSafeName($key) ) {
+        trigger_error('OSCOM_Cache::read(): Invalid key name (\'' . $key . '\'). Valid characters are a-zA-Z0-9-_');
+
+        return false;
+      }
+
       $this->_key = $key;
 
       $filename = OSCOM::BASE_DIRECTORY . 'Work/Cache/' . $key . '.cache';
@@ -88,6 +104,14 @@
 
     public function getCache() {
       return $this->_data;
+    }
+
+/**
+ * @since v3.0.3
+ */
+
+    public static function hasSafeName($key) {
+      return preg_match('/^[a-zA-Z0-9-_]+$/', $key) === 1;
     }
 
 /**
@@ -122,6 +146,14 @@
  */
 
     public static function clear($key) {
+      $key = basename($key);
+
+      if ( !static::hasSafeName($key) ) {
+        trigger_error('OSCOM_Cache::clear(): Invalid key name (\'' . $key . '\'). Valid characters are a-zA-Z0-9-_');
+
+        return false;
+      }
+
       if ( is_writable(OSCOM::BASE_DIRECTORY . 'Work/Cache/') ) {
         $key_length = strlen($key);
 
