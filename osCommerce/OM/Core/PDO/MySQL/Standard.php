@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -12,7 +12,7 @@
 
   class Standard extends \osCommerce\OM\Core\PDO {
     protected $_has_native_fk = false;
-    protected $_fkeys = array();
+    protected $_fkeys = [];
 
     public function __construct($server, $username, $password, $database, $port, $driver_options) {
       $this->_server = $server;
@@ -27,13 +27,11 @@
         $this->_driver_options[self::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
       }
 
-      $this->_driver_options[self::MYSQL_ATTR_INIT_COMMAND] = 'set names utf8';
-
       return $this->connect();
     }
 
     public function connect() {
-      $dsn_array = array();
+      $dsn_array = [];
 
       if ( !empty($this->_database) ) {
         $dsn_array[] = 'dbname=' . $this->_database;
@@ -48,6 +46,8 @@
           $dsn_array[] = 'port=' . $this->_port;
         }
       }
+
+      $dsn_array[] = 'charset=utf8';
 
       $dsn = 'mysql:' . implode(';', $dsn_array);
 
