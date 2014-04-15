@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -20,8 +20,20 @@
 
       $widget = $params[0];
 
-      if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller', 'osCommerce\\OM\\Core\\Template\\WidgetAbstract') ) {
-        return call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller', 'initialize'), $params[1]);
+      $class = null;
+
+      if ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller') ) {
+        $class = 'osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller';
+      } elseif ( class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller') ) {
+        $class = 'osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Widget\\' . $widget . '\\Controller';
+      }
+
+      if ( isset($class) ) {
+        if ( is_subclass_of($class, 'osCommerce\\OM\\Core\\Template\\WidgetAbstract') ) {
+          return call_user_func(array($class, 'initialize'), $params[1]);
+        } else {
+          trigger_error('Template Widget {' . $widget . '} is not subclass of osCommerce\\OM\\Core\\Template\\WidgetAbstract for ' . OSCOM::getSite());
+        }
       } else {
         trigger_error('Template Widget {' . $widget . '} does not exist for ' . OSCOM::getSite());
       }
