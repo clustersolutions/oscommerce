@@ -1,8 +1,8 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ *
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -32,15 +32,19 @@
 
       $data = $OSCOM_Template->getValue($key);
 
+      if ( isset($args[2]) ) {
+        $data = $data[$args[2]];
+      }
+
       $result = '';
 
       if ( !empty($data) ) {
         foreach ( $data as $d ) {
-          $result .= preg_replace_callback('/[#|%]([a-zA-Z0-9_-]+)[#|%]/', function ($matches) use (&$d) {
+          $result .= preg_replace_callback('/([#|%])([a-zA-Z0-9_-]+)\1/', function ($matches) use (&$d) {
                        if ( substr($matches[0], 0, 1) == '%' ) {
-                         return ( isset($d[$matches[1]]) ? $d[$matches[1]] : $matches[0] );
+                         return ( isset($d[$matches[2]]) ? $d[$matches[2]] : $matches[0] );
                        } else {
-                         return ( isset($d[$matches[1]]) ? HTML::outputProtected($d[$matches[1]]) : $matches[0] );
+                         return ( isset($d[$matches[2]]) ? HTML::outputProtected($d[$matches[2]]) : $matches[0] );
                        }
                      }, $string);
         }
