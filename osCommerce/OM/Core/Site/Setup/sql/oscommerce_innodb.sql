@@ -1,13 +1,14 @@
 # osCommerce Online Merchant
 #
-# @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+# @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
 # @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
 ALTER TABLE osc_address_book engine = InnoDB;
 ALTER TABLE osc_administrator_shortcuts engine = InnoDB;
 ALTER TABLE osc_administrators engine = InnoDB;
 ALTER TABLE osc_administrators_access engine = InnoDB;
-ALTER TABLE osc_administrators_log engine = InnoDB;
+ALTER TABLE osc_audit_log engine = InnoDB;
+ALTER TABLE osc_audit_log_rows engine = InnoDB;
 ALTER TABLE osc_banners engine = InnoDB;
 ALTER TABLE osc_banners_history engine = InnoDB;
 ALTER TABLE osc_categories engine = InnoDB;
@@ -75,7 +76,7 @@ ALTER TABLE osc_administrator_shortcuts add CONSTRAINT idx_admin_shortcuts_admin
 
 ALTER TABLE osc_administrators_access add CONSTRAINT idx_admin_access_admin_id FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE osc_administrators_log add CONSTRAINT idx_administrators_log_admin_id FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE osc_audit_log_rows add CONSTRAINT idx_audit_log_rows_audit_log_id FOREIGN KEY (audit_log_id) REFERENCES osc_audit_log (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE osc_banners_history add CONSTRAINT idx_banners_history_banners_id FOREIGN KEY (banners_id) REFERENCES osc_banners (banners_id) ON DELETE CASCADE ON UPDATE CASCADE;
 

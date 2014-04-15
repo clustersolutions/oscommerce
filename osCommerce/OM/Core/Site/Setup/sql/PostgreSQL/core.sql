@@ -56,23 +56,33 @@ CREATE TABLE osc_administrators_access (
 
 CREATE INDEX osc_administrators_access_administrators_id_idx ON osc_administrators_access USING btree (administrators_id);
 
-DROP TABLE IF EXISTS osc_administrators_log CASCADE;
-CREATE TABLE osc_administrators_log (
-  id integer NOT NULL,
+DROP TABLE IF EXISTS osc_audit_log CASCADE;
+CREATE TABLE osc_audit_log (
+  id serial NOT NULL,
   module varchar(255) NOT NULL,
-  module_action varchar(255),
-  module_id integer,
-  field_key varchar(255) NOT NULL,
-  old_value text,
-  new_value text,
+  row_id integer NOT NULL,
+  user_id integer NOT NULL,
+  ip_address integer NOT NULL,
   action varchar(255) NOT NULL,
-  administrators_id integer NOT NULL,
-  datestamp timestamp(0) NOT NULL
+  date_added timestamp(0) NOT NULL,
+  PRIMARY KEY (id)
 );
 
-CREATE INDEX osc_administrators_log_id_idx ON osc_administrators_log USING btree (id);
-CREATE INDEX osc_administrators_log_module_idx ON osc_administrators_log USING btree (module);
-CREATE INDEX osc_administrators_log_administrators_id_idx ON osc_administrators_log USING btree (administrators_id);
+CREATE INDEX osc_audit_log_module_idx ON osc_audit_log USING btree (module);
+CREATE INDEX osc_audit_log_row_id_idx ON osc_audit_log USING btree (row_id);
+CREATE INDEX osc_audit_log_user_id_idx ON osc_audit_log USING btree (user_id);
+
+DROP TABLE IF EXISTS osc_audit_log_rows CASCADE;
+CREATE TABLE osc_audit_log_rows (
+  id serial NOT NULL,
+  audit_log_id integer NOT NULL,
+  row_key varchar(255) NOT NULL,
+  old_value text NOT NULL,
+  new_value text NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE INDEX osc_audit_log_rows_audit_log_id_idx ON osc_audit_log_rows USING btree (audit_log_id);
 
 DROP TABLE IF EXISTS osc_banners CASCADE;
 CREATE TABLE osc_banners (
@@ -6071,7 +6081,7 @@ INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'address_book', 'customers', '
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'address_book', 'countries', 'entry_country_id', 'countries_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'address_book', 'zones', 'entry_zone_id', 'zone_id', 'cascade', 'set_DEFAULT');
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'administrators_access', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'administrators_log', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'audit_log_rows', 'audit_log', 'audit_log_id', 'id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'banners_history', 'banners', 'banners_id', 'banners_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'categories', 'categories', 'parent_id', 'categories_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (DEFAULT, 'categories_description', 'categories', 'categories_id', 'categories_id', 'cascade', 'cascade');

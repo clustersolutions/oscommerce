@@ -1,6 +1,6 @@
 -- osCommerce Online Merchant
 --
--- @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
+-- @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
 -- @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
 ALTER TABLE osc_address_book add CONSTRAINT osc_address_book_customers_id_fkey FOREIGN KEY (customers_id) REFERENCES osc_customers (customers_id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -11,7 +11,7 @@ ALTER TABLE osc_administrator_shortcuts add CONSTRAINT osc_administrator_shortcu
 
 ALTER TABLE osc_administrators_access add CONSTRAINT osc_administrators_access_administrators_id_fkey FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE osc_administrators_log add CONSTRAINT osc_administrators_log_admininistrators_id_fkey FOREIGN KEY (administrators_id) REFERENCES osc_administrators (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE osc_audit_log_rows add CONSTRAINT osc_audit_log_audit_log_id_fkey FOREIGN KEY (audit_log_id) REFERENCES osc_audit_log (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE osc_banners_history add CONSTRAINT osc_banners_history_banners_id_fkey FOREIGN KEY (banners_id) REFERENCES osc_banners (banners_id) ON DELETE CASCADE ON UPDATE CASCADE;
 

@@ -54,21 +54,30 @@ CREATE TABLE osc_administrators_access (
   KEY idx_admin_access_admin_id (administrators_id)
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
-DROP TABLE IF EXISTS osc_administrators_log;
-CREATE TABLE osc_administrators_log (
-  id int unsigned NOT NULL,
+DROP TABLE IF EXISTS osc_audit_log;
+CREATE TABLE osc_audit_log (
+  id int unsigned NOT NULL AUTO_INCREMENT,
   module varchar(255) NOT NULL,
-  module_action varchar(255),
-  module_id int unsigned,
-  field_key varchar(255) NOT NULL,
-  old_value text,
-  new_value text,
+  row_id int unsigned NOT NULL,
+  user_id int unsigned NOT NULL,
+  ip_address int unsigned NOT NULL,
   action varchar(255) NOT NULL,
-  administrators_id int unsigned NOT NULL,
-  datestamp datetime NOT NULL,
-  KEY idx_administrators_log_id (id),
-  KEY idx_administrators_log_module (module),
-  KEY idx_administrators_log_admin_id (administrators_id)
+  date_added datetime NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_audit_log_module (module),
+  KEY idx_audit_log_row_id (row_id),
+  KEY idx_audit_log_user_id (user_id)
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+DROP TABLE IF EXISTS osc_audit_log_rows;
+CREATE TABLE osc_audit_log_rows (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  audit_log_id int unsigned NOT NULL,
+  row_key varchar(255) NOT NULL,
+  old_value text NOT NULL,
+  new_value text NOT NULL,
+  PRIMARY KEY (id),
+  KEY idx_audit_log_rows_audit_log_id (audit_log_id)
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_banners;
@@ -6022,7 +6031,7 @@ INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'customers', 'cus
 INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'countries', 'entry_country_id', 'countries_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'address_book', 'zones', 'entry_zone_id', 'zone_id', 'cascade', 'set_null');
 INSERT INTO osc_fk_relationships VALUES (null, 'administrators_access', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
-INSERT INTO osc_fk_relationships VALUES (null, 'administrators_log', 'administrators', 'administrators_id', 'id', 'cascade', 'cascade');
+INSERT INTO osc_fk_relationships VALUES (null, 'audit_log_rows', 'audit_log', 'audit_log_id', 'id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'banners_history', 'banners', 'banners_id', 'banners_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'categories', 'categories', 'parent_id', 'categories_id', 'cascade', 'cascade');
 INSERT INTO osc_fk_relationships VALUES (null, 'categories_description', 'categories', 'categories_id', 'categories_id', 'cascade', 'cascade');
