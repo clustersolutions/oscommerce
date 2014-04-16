@@ -59,18 +59,20 @@ CREATE INDEX osc_administrators_access_administrators_id_idx ON osc_administrato
 DROP TABLE IF EXISTS osc_audit_log CASCADE;
 CREATE TABLE osc_audit_log (
   id serial NOT NULL,
-  module varchar(255) NOT NULL,
+  site varchar(32) NOT NULL,
+  application varchar(32) NOT NULL,
+  action varchar(160) NOT NULL,
   row_id integer NOT NULL,
   user_id integer NOT NULL,
   ip_address integer NOT NULL,
-  action varchar(255) NOT NULL,
+  action_type varchar(255) NOT NULL,
   date_added timestamp(0) NOT NULL,
   PRIMARY KEY (id)
 );
 
-CREATE INDEX osc_audit_log_module_idx ON osc_audit_log USING btree (module);
 CREATE INDEX osc_audit_log_row_id_idx ON osc_audit_log USING btree (row_id);
 CREATE INDEX osc_audit_log_user_id_idx ON osc_audit_log USING btree (user_id);
+CREATE INDEX osc_audit_log_req_idx ON osc_audit_log USING btree (site, application, action);
 
 DROP TABLE IF EXISTS osc_audit_log_rows CASCADE;
 CREATE TABLE osc_audit_log_rows (

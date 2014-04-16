@@ -57,16 +57,18 @@ CREATE TABLE osc_administrators_access (
 DROP TABLE IF EXISTS osc_audit_log;
 CREATE TABLE osc_audit_log (
   id int unsigned NOT NULL AUTO_INCREMENT,
-  module varchar(255) NOT NULL,
+  site varchar(32) NOT NULL,
+  application varchar(32) NOT NULL,
+  action varchar(160) NOT NULL,
   row_id int unsigned NOT NULL,
   user_id int unsigned NOT NULL,
   ip_address int unsigned NOT NULL,
-  action varchar(255) NOT NULL,
+  action_type varchar(255) NOT NULL,
   date_added datetime NOT NULL,
   PRIMARY KEY (id),
-  KEY idx_audit_log_module (module),
   KEY idx_audit_log_row_id (row_id),
-  KEY idx_audit_log_user_id (user_id)
+  KEY idx_audit_log_user_id (user_id),
+  KEY idx_audit_log_req (site, application, action)
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS osc_audit_log_rows;
