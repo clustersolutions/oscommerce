@@ -18,6 +18,7 @@
     protected static $_request_type;
     protected static $_site;
     protected static $_application;
+    protected static $_is_rpc = false;
     protected static $_config;
 
     public static function initialize() {
@@ -130,6 +131,14 @@
 
     public static function getDefaultSiteApplication() {
       return call_user_func(array('osCommerce\\OM\\Core\\Site\\' . static::getSite() . '\\Controller', 'getDefaultApplication'));
+    }
+
+    public static function setIsRPC() {
+      static::$_is_rpc = true;
+    }
+
+    public static function isRPC() {
+      return static::$_is_rpc;
     }
 
     public static function loadConfig() {

@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
+ * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -24,6 +24,8 @@
     protected static $_default_application = 'Index';
 
     public static function initialize() {
+      OSCOM::setIsRPC();
+
       header('Content-Type: application/json; charset=utf-8');
       header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
       header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
