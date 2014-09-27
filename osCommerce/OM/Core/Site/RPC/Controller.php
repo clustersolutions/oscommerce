@@ -36,21 +36,28 @@
       try {
         if ( empty($_GET) ) {
           throw new \Exception(self::STATUS_NO_MODULE);
-        } elseif ( count($_GET) < 3 ) {
+        } elseif ( count($_GET) < 2 ) {
           throw new \Exception(self::STATUS_NO_ACTION);
         }
 
-        $site = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
-        $application = HTML::sanitize(basename(key(array_slice($_GET, 2, 1,  true))));
+        $run_pos = 1;
 
-        if ( !OSCOM::siteExists($site) ) {
-          throw new \Exception(self::STATUS_CLASS_NONEXISTENT);
+        $site = HTML::sanitize(basename(key(array_slice($_GET, $run_pos, 1, true))));
+
+        if ( OSCOM::siteExists($site) ) {
+          $run_pos++;
+        } else {
+          $site = OSCOM::getDefaultSite();
         }
 
         OSCOM::setSite($site);
 
-        if ( !OSCOM::siteApplicationExists($application) ) {
-          throw new \Exception(self::STATUS_CLASS_NONEXISTENT);
+        $application = HTML::sanitize(basename(key(array_slice($_GET, $run_pos, 1,  true))));
+
+        if ( OSCOM::siteApplicationExists($application) ) {
+          $run_pos++;
+        } else {
+          $application = OSCOM::getDefaultSiteApplication();
         }
 
         OSCOM::setSiteApplication($application);
@@ -62,7 +69,7 @@
 
               \osCommerce\OM\Core\HttpRequest::setResponseCode(403);
 
-              $buffer = json_encode(array('rpcStatus' => constant('osCommerce\\OM\\Core\\Site\\RPC\\Controller::STATUS_REDIRECT_DETECTED')));
+              $buffer = json_encode([ 'rpcStatus' => constant('osCommerce\\OM\\Core\\Site\\RPC\\Controller::STATUS_REDIRECT_DETECTED') ]);
 
               break;
             }
@@ -71,25 +78,25 @@
           return $buffer;
         });
 
-        call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'initialize'));
+        call_user_func([ 'osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'initialize' ]);
 
         ob_end_flush();
 
-        if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'hasAccess'), $application)) {
+        if ( !call_user_func([ 'osCommerce\\OM\\Core\\Site\\' . $site . '\\Controller', 'hasAccess' ], $application) ) {
           throw new \Exception(self::STATUS_NO_ACCESS);
         }
 
         $rpc_called = false;
 
-        $rpc = array('RPC');
+        $rpc = [ ];
 
-        for ( $i = 3, $n = count($_GET); $i < $n; $i++ ) {
+        for ( $i = $run_pos, $n = count($_GET); $i < $n; $i++ ) {
           $subrpc = HTML::sanitize(basename(key(array_slice($_GET, $i, 1, true))));
 
-          if ( self::siteApplicationRPCExists(implode('\\', $rpc) . '\\' . $subrpc) ) {
-            call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\' . implode('\\', $rpc) . '\\' . $subrpc, 'execute'));
+          $rpc[] = $subrpc;
 
-            $rpc[] = $subrpc;
+          if ( static::siteApplicationRPCExists(implode('\\', $rpc)) ) {
+            call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\RPC\\' . implode('\\', $rpc), 'execute'));
 
             $rpc_called = true;
           } else {
@@ -103,7 +110,7 @@
       } catch ( \Exception $e ) {
         HttpRequest::setResponseCode(403);
 
-        echo json_encode(array('rpcStatus' => $e->getMessage()));
+        echo json_encode([ 'rpcStatus' => $e->getMessage() ]);
       }
 
       exit;
@@ -118,7 +125,7 @@
     }
 
     public static function siteApplicationRPCExists($rpc) {
-      return class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\' . $rpc);
+      return class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\RPC\\' . $rpc);
     }
   }
 ?>
