@@ -56,6 +56,14 @@
 
         if ( OSCOM::siteApplicationExists($application) ) {
           $run_pos++;
+
+          $rpc = HTML::sanitize(basename(key(array_slice($_GET, $run_pos, 1,  true))));
+
+          if ( empty($rpc) || !static::siteApplicationRPCExists($rpc, $application) ) {
+            $application = OSCOM::getDefaultSiteApplication();
+
+            $run_pos--;
+          }
         } else {
           $application = OSCOM::getDefaultSiteApplication();
         }
@@ -124,8 +132,12 @@
       return true;
     }
 
-    public static function siteApplicationRPCExists($rpc) {
-      return class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\RPC\\' . $rpc);
+    public static function siteApplicationRPCExists($rpc, $application = null) {
+      if ( !isset($application) ) {
+        $application = OSCOM::getSiteApplication();
+      }
+
+      return class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . $application . '\\RPC\\' . $rpc);
     }
   }
 ?>
