@@ -39,14 +39,14 @@
       $result = '';
 
       if ( $OSCOM_Template->valueExists($key) ) {
-        $has_value = true;
+        $value = $OSCOM_Template->getValue($key);
 
-        if ( isset($entry) ) {
-          $value = $OSCOM_Template->getValue($key);
-
-          if ( !isset($value[$entry]) || ((is_string($value[$entry]) && (strlen($value[$entry]) < 1)) || (is_array($value[$entry]) && (count($value[$entry]) < 1))) ) {
-            $has_value = false;
+        if ( isset($entry) && is_array($value) ) {
+          if ( isset($value[$entry]) && ((is_string($value[$entry]) && (strlen($value[$entry]) > 0)) || (is_array($value[$entry]) && (count($value[$entry]) > 0))) ) {
+            $has_value = true;
           }
+        } elseif ( (is_string($value) && (strlen($value) > 0)) || (is_array($value) && (count($value) > 0)) ) {
+          $has_value = true;
         }
       }
 
