@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -67,7 +67,7 @@
         if ( !empty($line) && ( $firstchar != $comment) ) {
           $delimiter = strpos($line, '=');
 
-          if ( ($delimiter !== false) && ( substr_count(substr($line, 0, $delimiter), ' ') == 1 ) ) {
+          if ( ($delimiter !== false) && ( preg_match('/^[A-Za-z0-9_]+$/', trim(substr($line, 0, $delimiter))) == 1 ) ) {
             $key = trim(substr($line, 0, $delimiter));
             $value = trim(substr($line, $delimiter + 1));
 
