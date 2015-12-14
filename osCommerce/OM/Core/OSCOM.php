@@ -213,6 +213,37 @@
       return static::$_request_type;
     }
 
+    public static function getBaseUrl($connection = 'AUTO')
+    {
+        if (!in_array($connection, [
+            'NONSSL',
+            'SSL',
+            'AUTO'
+        ])) {
+            $connection = 'AUTO';
+        }
+
+        $site = static::getSite();
+
+        $link = '';
+
+        if ($connection == 'AUTO') {
+            if ((static::getRequestType() == 'SSL') && (static::getConfig('enable_ssl', $site) == 'true')) {
+                $link = static::getConfig('https_server', $site) . static::getConfig('dir_ws_https_server', $site);
+            } else {
+                $link = static::getConfig('http_server', $site) . static::getConfig('dir_ws_http_server', $site);
+            }
+        } elseif (($connection == 'SSL') && (static::getConfig('enable_ssl', $site) == 'true')) {
+            $link = static::getConfig('https_server', $site) . static::getConfig('dir_ws_https_server', $site);
+        } else {
+            $link = static::getConfig('http_server', $site) . static::getConfig('dir_ws_http_server', $site);
+        }
+
+        $link .= static::getConfig('bootstrap_file', 'OSCOM');
+
+        return $link;
+    }
+
 /**
  * Return an internal URL address.
  *

@@ -54,6 +54,10 @@
         $parameters['header'][] = 'Authorization: Basic ' . base64_encode($parameters['server']['user'] . ':' . $parameters['server']['pass']);
       }
 
+      if ( !isset($parameters['cafile']) && file_exists(OSCOM::BASE_DIRECTORY . 'External/cacert.pem') ) {
+        $parameters['cafile'] = OSCOM::BASE_DIRECTORY . 'External/cacert.pem';
+      }
+
       return trim(call_user_func(array('osCommerce\\OM\\Core\\HttpRequest\\' . $driver, 'execute'), $parameters));
     }
 

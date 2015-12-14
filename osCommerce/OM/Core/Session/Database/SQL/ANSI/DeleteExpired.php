@@ -2,27 +2,24 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
- * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ * @copyright Copyright (c) 2015 osCommerce; http://www.oscommerce.com
+ * @license BSD; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Session\Database\SQL\ANSI;
+namespace osCommerce\OM\Core\Session\Database\SQL\ANSI;
 
-  use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\Registry;
 
-/**
- * @since v3.0.3
- */
+class DeleteExpired
+{
+    public static function execute(array $data) : bool
+    {
+        $OSCOM_PDO = Registry::get('PDO');
 
-  class DeleteExpired {
-    public static function execute($data) {
-      $OSCOM_PDO = Registry::get('PDO');
+        $Qsession = $OSCOM_PDO->prepare('delete from :table_sessions where expiry < :expiry');
+        $Qsession->bindInt(':expiry', time() - $data['expiry']);
+        $Qsession->execute();
 
-      $Qsession = $OSCOM_PDO->prepare('delete from :table_sessions where expiry < :expiry');
-      $Qsession->bindInt(':expiry', time() - $data['expiry']);
-      $Qsession->execute();
-
-      return ( $Qsession->rowCount() > 0 );
+        return $Qsession->rowCount() > 0;
     }
-  }
-?>
+}

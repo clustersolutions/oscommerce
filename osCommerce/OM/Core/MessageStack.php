@@ -1,49 +1,61 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
- * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ *
+ * @copyright Copyright (c) 2015 osCommerce; http://www.oscommerce.com
+ * @license BSD; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core;
+namespace osCommerce\OM\Core;
 
-  use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\Events;
+use osCommerce\OM\Core\HTML;
 
 /**
  * The MessageStack class manages information messages to be displayed.
  * Messages shown are automatically removed from the stack.
  * Core message types: info, success, warning, error
- * 
- * @since v3.0.0
  */
 
-  class MessageStack {
+class MessageStack
+{
 
 /**
  * The storage handler for the messages
  *
  * @var array
- * @since v3.0.0
  */
 
-    protected $_data = array();
+    protected $_data = [];
 
 /**
  * Constructor, registers a shutdown function to store the remaining messages
  * in the session
- *
- * @since v3.0.0
  */
 
-    public function __construct() {
-      register_shutdown_function(array($this, 'saveInSession'));
+    public function __construct()
+    {
+        register_shutdown_function(function() {
+            if (!empty($this->_data)) {
+                $_SESSION['osC_MessageStack_Data'] = $this->_data;
+            }
+        });
+
+        Events::watch('session_started', function() {
+            if (isset($_SESSION['osC_MessageStack_Data']) && !empty($_SESSION['osC_MessageStack_Data'])) {
+                foreach ($_SESSION['osC_MessageStack_Data'] as $group => $messages) {
+                    foreach ($messages as $message) {
+                        $this->_data[$group][] = $message;
+                    }
+                }
+
+                unset($_SESSION['osC_MessageStack_Data']);
+            }
+        });
     }
 
 /**
  * Loads messages stored in the session into the stack
- *
- * @since v3.0.0
  */
 
     public function loadFromSession() {
@@ -55,18 +67,6 @@
         }
 
         unset($_SESSION['osC_MessageStack_Data']);
-      }
-    }
-
-/**
- * Stores remaining messages in the session
- *
- * @since v3.0.0
- */
-
-    public function saveInSession() {
-      if ( !empty($this->_data) ) {
-        $_SESSION['osC_MessageStack_Data'] = $this->_data;
       }
     }
 
@@ -136,12 +136,12 @@
  * @since v3.0.0
  */
 
-    public function get($group = null) {
+    public function get(string $group = null) : string {
       if ( !isset($group) ) {
         $group = OSCOM::getSiteApplication();
       }
 
-      $result = false;
+      $result = '';
 
       if ( $this->exists($group) ) {
         $result = '<div class="messageStack"><ul>';

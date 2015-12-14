@@ -1,20 +1,21 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
- * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
- * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
+ *
+ * @copyright (c) 2015 osCommerce; http://www.oscommerce.com
+ * @license BSD; http://www.oscommerce.com/bsdlicense.txt
  */
 
-  namespace osCommerce\OM\Core\Template\Tag;
+namespace osCommerce\OM\Core\Template\Tag;
 
-  use osCommerce\OM\Core\HTML;
+use osCommerce\OM\Core\HTML;
 
-  class value extends \osCommerce\OM\Core\Template\TagAbstract {
+class value extends \osCommerce\OM\Core\Template\TagAbstract
+{
     static protected $_parse_result = false;
 
-    static public function execute($string) {
-      return HTML::outputProtected(raw::execute($string));
+    static public function execute($string, ...$args): string
+    {
+        return HTML::outputProtected(raw::execute($string, ...$args));
     }
-  }
-?>
+}

@@ -8,11 +8,12 @@
 
   namespace osCommerce\OM\Core;
 
+  use osCommerce\OM\Core\Events;
   use osCommerce\OM\Core\OSCOM;
 
 /**
  * The Session class manages the session data and custom storage handlers
- * 
+ *
  * @since v3.0.0
  */
 
@@ -57,11 +58,10 @@
 /**
  * Checks if a session exists
  *
- * @param string $id The ID of the session
- * @since v3.0.2
+ * @param string $session_id The ID of the session
  */
 
-    abstract protected function exists($id);
+    abstract public function exists(string $session_id);
 
 /**
  * Verify an existing session ID and create or resume the session if the existing session ID is valid
@@ -93,6 +93,10 @@
 
       if ( session_start() ) {
         $this->_id = session_id();
+
+        Events::fire('session_started', [
+            'id' => $this->_id
+        ]);
 
         return true;
       }
