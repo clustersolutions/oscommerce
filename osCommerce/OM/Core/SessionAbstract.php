@@ -122,12 +122,20 @@
  */
 
     public function kill() {
+      $result = true;
+
       if ( isset($_COOKIE[$this->_name]) ) {
         setcookie($this->_name, '', time()-42000, $this->getCookieParameters('path'), $this->getCookieParameters('domain'), $this->getCookieParameters('secure'), $this->getCookieParameters('httponly'));
         unset($_COOKIE[$this->_name]);
       }
 
-      return session_destroy();
+      if ($this->hasStarted()) {
+        $_SESSION = [];
+
+        $result = session_destroy();
+      }
+
+      return $result;
     }
 
 /**
