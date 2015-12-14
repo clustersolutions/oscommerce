@@ -14,9 +14,10 @@ use osCommerce\OM\Core\{
     Hash,
     OSCOM,
     PDO,
-    Registry,
-    Session
+    Registry
 };
+
+use osCommerce\OM\Core\Site\Admin\Session;
 
 class Controller implements \osCommerce\OM\Core\SiteInterface
 {
