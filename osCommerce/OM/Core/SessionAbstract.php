@@ -145,7 +145,13 @@
  */
 
     public function recreate() {
-      return session_regenerate_id(true);
+      $delete_flag = true;
+
+      if (!$this->exists($this->_id)) {
+        $delete_flag = false;
+      }
+
+      return session_regenerate_id($delete_flag);
     }
 
 /**
