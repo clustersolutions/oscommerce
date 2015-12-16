@@ -177,6 +177,11 @@ class PDOStatement extends \PDOStatement
         }
     }
 
+    public function hasValue(string $column): bool
+    {
+        return !is_null($this->result[$column]) && (strlen($this->result[$column]) > 0);
+    }
+
     public function value(string $column): string
     {
         return $this->valueMixed($column, 'string');
