@@ -407,7 +407,7 @@
     public static function getDef($key, $values = null) {
       $def = Registry::get('Language')->get($key);
 
-      if ( is_array($values) ) {
+      if ( is_array($values) && !empty($values) ) {
         $def = str_replace(array_keys($values), array_values($values), $def);
       }
 
