@@ -8,6 +8,8 @@
 
 namespace osCommerce\OM\Core;
 
+use osCommerce\OM\Core\OSCOM;
+
 abstract class ApplicationAbstract
 {
     protected $_page_contents = 'main.php';
@@ -96,32 +98,32 @@ abstract class ApplicationAbstract
 
     public function getRequestedActions()
     {
-        $result = $furious_pete = [];
+        $furious_pete = [];
 
-// URL is built as Site&Application&Action1&Action2.. or Application&Action1&Action2.. so we need
+// URL is built as Site&Application&Action1&Action2, Application&Action1&Action2, or Action1&Action2 so we need
 // to detect where the first action is called
-        if (count($_GET) > 1) {
-            $requested_action = HTML::sanitize(basename(key(array_slice($_GET, 1, 1, true))));
 
-            $index = ($requested_action == OSCOM::getSiteApplication()) ? 2 : 1;
+        foreach (array_keys($_GET) as $snack) {
+            $snack = HTML::sanitize(basename($snack));
 
-            if (count($_GET) > $index) {
-                $furious_pete = array_keys(array_slice($_GET, $index, null, true));
+            if (OSCOM::getSite() == $snack) {
+                continue;
             }
-        }
 
-        foreach ($furious_pete as $action) {
-            $action = HTML::sanitize(basename($action));
+            if (OSCOM::getSiteApplication() == $snack) {
+                continue;
+            }
 
-            $result[] = $action;
+            $furious_pete[] = $snack;
 
-            if (in_array($action, $this->_ignored_actions) || !static::siteApplicationActionExists(implode('\\', $result))) {
-                array_pop($result);
+            if (in_array($snack, $this->_ignored_actions) || !static::siteApplicationActionExists(implode('\\', $furious_pete))) {
+                array_pop($furious_pete);
 
                 break;
             }
+
         }
 
-        return $result;
+        return $furious_pete;
     }
 }
