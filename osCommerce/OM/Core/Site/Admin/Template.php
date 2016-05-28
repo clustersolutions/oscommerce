@@ -17,6 +17,8 @@
 
     protected $_default_template = 'Sail';
 
+    protected $_javascript_filenames = [];
+
     public function __construct() {
       $templates = array();
 
@@ -95,45 +97,55 @@
       return false;
     }
 
-    public function getPageContentsFile($file = null) {
+    public function getPageContentsFile($file = null, $template = null, $application = null, $site = null) {
       if ( !isset($file) ) {
         $file = $this->getPageContentsFilename();
       }
 
-      $template = $this->_template;
-
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-        return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+      if (!isset($application)) {
+        $application = OSCOM::getSiteApplication();
       }
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-        return OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+      if (!isset($site)) {
+        $site = OSCOM::getSite();
       }
 
-      if ( call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Template\\' . $template . '\\Controller', 'hasParent')) ) {
+      if (!isset($template)) {
+        $template = $this->_template;
+      }
+
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file) ) {
+        return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file;
+      }
+
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file) ) {
+        return OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file;
+      }
+
+      if ( call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Template\\' . $template . '\\Controller', 'hasParent')) ) {
         while ( true ) {
-          $template = call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Template\\' . $template . '\\Controller', 'getParent'));
+          $template = call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Template\\' . $template . '\\Controller', 'getParent'));
 
-          if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-            return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+          if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file) ) {
+            return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file;
           }
 
-          if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-            return OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Template/' . $template . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+          if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file) ) {
+            return OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Template/' . $template . '/Application/' . $application . '/pages/' . $file;
           }
 
-          if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Template\\' . $template . '\\Controller', 'hasParent')) ) {
+          if ( !call_user_func(array('osCommerce\\OM\\Core\\Site\\' . $site . '\\Template\\' . $template . '\\Controller', 'hasParent')) ) {
             break;
           }
         }
       }
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-        return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Application/' . $application . '/pages/' . $file) ) {
+        return OSCOM::BASE_DIRECTORY . 'Custom/Site/' . $site . '/Application/' . $application . '/pages/' . $file;
       }
 
-      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file) ) {
-        return OSCOM::BASE_DIRECTORY . 'Core/Site/' . OSCOM::getSite() . '/Application/' . OSCOM::getSiteApplication() . '/pages/' . $file;
+      if ( file_exists(OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Application/' . $application . '/pages/' . $file) ) {
+        return OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Application/' . $application . '/pages/' . $file;
       }
 
       trigger_error('Template::getPageContentsFile() $file does not exist: ' . $file);
@@ -181,6 +193,41 @@
       }
 
       return HTML::image(OSCOM::getPublicSiteLink('images/applications/' . $size . '/' . $icon), $title, $size, $size);
+    }
+
+    public function hasExternalJavascript()
+    {
+        return !empty($this->_javascript_filenames);
+    }
+
+    public function hasJavascriptBlock() {
+        return !empty($this->_javascript_blocks);
+    }
+
+    public function getExternalJavascript()
+    {
+        $output = '';
+
+        foreach ($this->_javascript_filenames as $js) {
+            $output .= '<script src="' . HTML::outputProtected($js) . '"></script>' . "\n";
+        }
+
+        return $output;
+    }
+
+    public function getJavascriptBlock()
+    {
+        return '<script>' . "\n" . implode("\n", $this->_javascript_blocks) . "\n" . '</script>' . "\n";
+    }
+
+    public function addExternalJavascript($filename)
+    {
+        $this->_javascript_filenames[] = $filename;
+    }
+
+    public function addJavascriptBlock($js)
+    {
+        $this->_javascript_blocks[] = $js;
     }
   }
 ?>
