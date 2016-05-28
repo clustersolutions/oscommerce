@@ -213,8 +213,12 @@
       return static::$_request_type;
     }
 
-    public static function getBaseUrl($connection = 'AUTO')
+    public static function getBaseUrl($site = null, $connection = 'SSL', $with_bootstrap = true)
     {
+        if (empty($site)) {
+            $site = static::getSite();
+        }
+
         if (!in_array($connection, [
             'NONSSL',
             'SSL',
@@ -222,8 +226,6 @@
         ])) {
             $connection = 'AUTO';
         }
-
-        $site = static::getSite();
 
         $link = '';
 
@@ -239,7 +241,9 @@
             $link = static::getConfig('http_server', $site) . static::getConfig('dir_ws_http_server', $site);
         }
 
-        $link .= static::getConfig('bootstrap_file', 'OSCOM');
+        if ($with_bootstrap === true) {
+            $link .= static::getConfig('bootstrap_file', 'OSCOM');
+        }
 
         return $link;
     }
@@ -250,13 +254,13 @@
  * @param string $site The Site to link to. Default: The currently used Site.
  * @param string $application The Site Application to link to. Default: The currently used Site Application.
  * @param string $parameters Parameters to add to the link. Example: key1=value1&key2=value2
- * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: NONSSL.
+ * @param string $connection The type of connection to use for the link. Values: NONSSL, SSL, AUTO. Default: SSL.
  * @param bool $add_session_id Add the session ID to the link. Default: True.
  * @param bool $search_engine_safe Use search engine safe URLs. Default: True.
  * @return string The URL address.
  */
 
-    public static function getLink($site = null, $application = null, $parameters = null, $connection = 'NONSSL', $add_session_id = true, $search_engine_safe = true) {
+    public static function getLink($site = null, $application = null, $parameters = null, $connection = 'SSL', $add_session_id = true, $search_engine_safe = true) {
       if ( empty($site) ) {
         $site = static::getSite();
       }

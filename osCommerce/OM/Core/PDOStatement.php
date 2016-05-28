@@ -39,12 +39,12 @@ class PDOStatement extends \PDOStatement
         return parent::bindValue($parameter, $value, $data_type);
     }
 
-    public function bindInt(string $parameter, int $value): bool
+    public function bindInt(string $parameter, $value): bool
     {
         return $this->bindValue($parameter, $value, \PDO::PARAM_INT);
     }
 
-    public function bindBool(string $parameter, bool $value): bool
+    public function bindBool(string $parameter, $value): bool
     {
         return $this->bindValue($parameter, $value, \PDO::PARAM_BOOL);
     }
@@ -229,7 +229,7 @@ class PDOStatement extends \PDOStatement
     public function __destruct()
     {
         if (($this->_cache_read === false) && isset($this->_cache_key) && is_array($this->_cache_data)) {
-            if ($this->_cache_empty || ($this->_cache_data[0] !== false)) {
+            if ($this->_cache_empty || !empty($this->_cache_data)) {
                 Registry::get('Cache')->write($this->_cache_data, $this->_cache_key);
             }
         }

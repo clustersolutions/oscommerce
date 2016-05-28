@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -160,7 +160,7 @@
 
 /**
  * The base URL
- * 
+ *
  * @var string
  * @access protected
  * @since HPDL
@@ -170,7 +170,7 @@
 
 /**
  * Values to make available to pages
- * 
+ *
  * @var array
  * @access protected
  * @since HPDL
@@ -741,6 +741,14 @@
  */
 
     public function getValue($key) {
+      if (!$this->valueExists($key)) {
+        if (class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract')) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
+        } elseif (class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract')) {
+          call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $key . '\\Controller', 'initialize'));
+        }
+      }
+
       if ( !$this->valueExists($key) ) {
         trigger_error('OSCOM_Template::getValue - ' . $key . ' is not set');
 

@@ -2,7 +2,7 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright (c) 2015 osCommerce; http://www.oscommerce.com
+ * @copyright (c) 2016 osCommerce; http://www.oscommerce.com
  * @license BSD; http://www.oscommerce.com/bsdlicense.txt
  */
 
@@ -20,14 +20,6 @@ class raw extends \osCommerce\OM\Core\Template\TagAbstract
         $args = func_get_args();
 
         $OSCOM_Template = Registry::get('Template');
-
-        if (!$OSCOM_Template->valueExists($string)) {
-            if (class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $string . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $string . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract')) {
-                call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Application\\' . OSCOM::getSiteApplication() . '\\Module\\Template\\Value\\' . $string . '\\Controller', 'initialize'));
-            } elseif (class_exists('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $string . '\\Controller') && is_subclass_of('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $string . '\\Controller', 'osCommerce\\OM\\Core\\Template\\ValueAbstract')) {
-                call_user_func(array('osCommerce\\OM\\Core\\Site\\' . OSCOM::getSite() . '\\Module\\Template\\Value\\' . $string . '\\Controller', 'initialize'));
-            }
-        }
 
         if (strpos($string, ' ') === false) {
             $value = $OSCOM_Template->getValue($string);
