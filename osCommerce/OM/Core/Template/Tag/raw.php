@@ -2,37 +2,49 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright (c) 2016 osCommerce; http://www.oscommerce.com
- * @license BSD; http://www.oscommerce.com/bsdlicense.txt
+ * @copyright (c) 2016 osCommerce; https://www.oscommerce.com
+ * @license BSD; https://www.oscommerce.com/bsdlicense.txt
  */
 
 namespace osCommerce\OM\Core\Template\Tag;
 
-use osCommerce\OM\Core\OSCOM;
-use osCommerce\OM\Core\Registry;
+use osCommerce\OM\Core\{
+    OSCOM,
+    Registry
+};
 
 class raw extends \osCommerce\OM\Core\Template\TagAbstract
 {
-    static protected $_parse_result = false;
+    protected static $_parse_result = false;
 
-    static public function execute($string)
+    public static function execute($string)
     {
         $args = func_get_args();
 
         $OSCOM_Template = Registry::get('Template');
 
+        $result = '';
+
         if (strpos($string, ' ') === false) {
-            $value = $OSCOM_Template->getValue($string);
+            if ($OSCOM_Template->valueExists($string)) {
+                $result = $OSCOM_Template->getValue($string);
+            }
         } else {
             list($array, $key) = explode(' ', $string, 2);
 
-            $value = $OSCOM_Template->getValue($array)[$key];
+            if ($OSCOM_Template->valueExists($array)) {
+                $value = $OSCOM_Template->getValue($array);
+
+                if (is_array($value) && isset($value[$key])) {
+                    $result = $value[$key];
+                }
+            }
         }
 
         if (isset($args[1]) && !empty($args[1])) {
-            return call_user_func(trim($args[1]), $value);
-        } else {
-            return $value;
+            $result = call_user_func(trim($args[1]), $result);
         }
+
+        return $result;
     }
 }
