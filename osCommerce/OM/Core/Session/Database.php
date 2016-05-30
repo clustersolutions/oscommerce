@@ -2,8 +2,8 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright Copyright (c) 2015 osCommerce; http://www.oscommerce.com
- * @license BSD; http://www.oscommerce.com/bsdlicense.txt
+ * @copyright (c) 2016 osCommerce; https://www.oscommerce.com
+ * @license BSD; https://www.oscommerce.com/bsdlicense.txt
  */
 
 namespace osCommerce\OM\Core\Session;
@@ -32,7 +32,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * @param string $session_id The ID of the session
  */
 
-    public function exists(string $session_id) : bool
+    public function exists(string $session_id): bool
     {
         return OSCOM::callDB('Session\Database\Check', [
             'id' => $session_id
@@ -43,7 +43,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * Opens the database storage handler
  */
 
-    public function open($save_path, $name) : bool
+    public function open($save_path, $name): bool
     {
         return true;
     }
@@ -52,7 +52,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * Closes the database storage handler
  */
 
-    public function close() : bool
+    public function close(): bool
     {
         return true;
     }
@@ -63,7 +63,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * @param string $session_id The ID of the session
  */
 
-    public function read($session_id) : string
+    public function read($session_id): string
     {
         $result = OSCOM::callDB('Session\Database\Get', [
             'id' => $session_id
@@ -83,7 +83,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * @param string $session_data The session data to store
  */
 
-    public function write($session_id, $session_data) : bool
+    public function write($session_id, $session_data): bool
     {
         return OSCOM::callDB('Session\Database\Save', [
             'id' => $session_id,
@@ -98,7 +98,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * @param string $session_id The ID of the session
  */
 
-    public function destroy($session_id) : bool
+    public function destroy($session_id): bool
     {
         return OSCOM::callDB('Session\Database\Delete', [
             'id' => $session_id
@@ -111,7 +111,7 @@ class Database extends \osCommerce\OM\Core\SessionAbstract implements \SessionHa
  * @param int $maxlifetime The maxmimum time a session should exist
  */
 
-    public function gc($maxlifetime) : bool
+    public function gc($maxlifetime): bool
     {
         return OSCOM::callDB('Session\Database\DeleteExpired', [
             'expiry' => $maxlifetime

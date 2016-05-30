@@ -6,7 +6,7 @@
  * @license BSD; https://www.oscommerce.com/bsdlicense.txt
  */
 
-namespace osCommerce\OM\Core\Session\Database\SQL\ANSI;
+namespace osCommerce\OM\Core\Session\Database\SQL\MySQL\Standard;
 
 use osCommerce\OM\Core\{
     OSCOM,
@@ -19,15 +19,7 @@ class Save
     {
         $OSCOM_PDO = Registry::get('PDO');
 
-        if (OSCOM::callDB('Session\Database\Check', [
-            'id' => $data['id']
-        ], 'Core')) {
-            $sql_query = 'update :table_sessions set expiry = :expiry, value = :value where id = :id';
-        } else {
-            $sql_query = 'insert into :table_sessions (id, expiry, value) values (:id, :expiry, :value)';
-        }
-
-        $Qsession = $OSCOM_PDO->prepare($sql_query);
+        $Qsession = $OSCOM_PDO->prepare('insert into :table_sessions (id, expiry, value) values (:id, :expiry, :value) on duplicate key update expiry = values(expiry), value = values(value)');
         $Qsession->bindValue(':id', $data['id']);
         $Qsession->bindInt(':expiry', $data['expiry']);
         $Qsession->bindValue(':value', $data['value']);

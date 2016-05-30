@@ -667,12 +667,10 @@ CREATE TABLE osc_reviews (
 
 DROP TABLE IF EXISTS osc_sessions;
 CREATE TABLE osc_sessions (
-  pk int unsigned NOT NULL AUTO_INCREMENT,
   id char(128) NOT NULL,
   expiry int unsigned NOT NULL,
   value text NOT NULL,
-  PRIMARY KEY (pk),
-  KEY idx_sessions_id (id),
+  PRIMARY KEY (id),
   KEY idx_sessions_expiry (expiry)
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
 

@@ -2,8 +2,8 @@
 /**
  * osCommerce Online Merchant
  *
- * @copyright Copyright (c) 2015 osCommerce; http://www.oscommerce.com
- * @license BSD; http://www.oscommerce.com/bsdlicense.txt
+ * @copyright (c) 2016 osCommerce; https://www.oscommerce.com
+ * @license BSD; https://www.oscommerce.com/bsdlicense.txt
  */
 
 namespace osCommerce\OM\Core\Session\Database\SQL\ANSI;
@@ -12,7 +12,7 @@ use osCommerce\OM\Core\Registry;
 
 class Delete
 {
-    public static function execute(array $data) : bool
+    public static function execute(array $data): bool
     {
         $OSCOM_PDO = Registry::get('PDO');
 
@@ -20,6 +20,6 @@ class Delete
         $Qsession->bindValue(':id', $data['id']);
         $Qsession->execute();
 
-        return $Qsession->rowCount() === 1;
+        return $Qsession->isError() === false;
     }
 }
