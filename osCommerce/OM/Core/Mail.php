@@ -330,7 +330,7 @@
         @ini_set('sendmail_from', '"' . $this->_from['name'] . '" <' . $this->_from['email_address'] . '>');
       }
 
-      @mail(implode(', ', $to_email_addresses), $this->_subject, $this->_body, $headers);
+      @mail(implode(', ', $to_email_addresses), $this->_subject, $this->_body, $headers, '-f' . $this->_from['email_address']);
 
       @ini_restore('sendmail_from');
     }
@@ -362,7 +362,7 @@
              'Content-Transfer-Encoding: base64' . "\n\n" .
               $attachment['data'] . "\n\n";
     }
-  
+
     function _build_image($image, $boundary) {
       return '--' . $boundary . "\n" .
              'Content-Type: ' . $image['mimetype'] . '; name="' . $image['filename'] . '"' . "\n" .
