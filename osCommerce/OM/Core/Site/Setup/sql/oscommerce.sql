@@ -5,6 +5,29 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS osc_action_recorder;
+CREATE TABLE osc_action_recorder (
+  id int unsigned NOT NULL AUTO_INCREMENT,
+  site varchar(32) NOT NULL,
+  application varchar(32) NOT NULL,
+  actions varchar(255),
+  action varchar(255) NOT NULL,
+  ip_address int unsigned NOT NULL,
+  success char(1) NOT NULL,
+  user_id int,
+  identifier varchar(255),
+  result text,
+  user_agent varchar(2048),
+  date_added datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  KEY idx_action_recorder_site (site),
+  KEY idx_action_recorder_app (application),
+  KEY idx_action_recorder_action (action),
+  KEY idx_action_recorder_ip (ip_address),
+  KEY idx_action_recorder_user_id (user_id),
+  KEY idx_action_recorder_date_added (date_added)
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;
+
 DROP TABLE IF EXISTS osc_address_book;
 CREATE TABLE osc_address_book (
   address_book_id int unsigned NOT NULL AUTO_INCREMENT,
@@ -76,8 +99,8 @@ CREATE TABLE osc_audit_log_rows (
   id int unsigned NOT NULL AUTO_INCREMENT,
   audit_log_id int unsigned NOT NULL,
   row_key varchar(255) NOT NULL,
-  old_value text NOT NULL,
-  new_value text NOT NULL,
+  old_value text,
+  new_value text,
   PRIMARY KEY (id),
   KEY idx_audit_log_rows_audit_log_id (audit_log_id)
 ) ENGINE=MyISAM CHARACTER SET utf8 COLLATE utf8_general_ci;

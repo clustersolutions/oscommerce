@@ -3,6 +3,7 @@
 # @copyright Copyright (c) 2014 osCommerce; http://www.oscommerce.com
 # @license BSD License; http://www.oscommerce.com/bsdlicense.txt
 
+ALTER TABLE osc_action_recorder engine = InnoDB;
 ALTER TABLE osc_address_book engine = InnoDB;
 ALTER TABLE osc_administrator_shortcuts engine = InnoDB;
 ALTER TABLE osc_administrators engine = InnoDB;
