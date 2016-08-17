@@ -68,7 +68,7 @@ class ActionRecorder
             $data['result'] = $action['result'];
         }
 
-        $user_agent = $action['user_agent'] ?? $_SERVER['HTTP_USER_AGENT'];
+        $user_agent = $action['user_agent'] ?? $_SERVER['HTTP_USER_AGENT'] ?? '';
         $user_agent = HTML::sanitize($user_agent);
 
         if (strlen($user_agent) > 2048) {
