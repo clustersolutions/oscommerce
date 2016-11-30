@@ -79,8 +79,8 @@
       $sites = array();
 
       foreach ( static::$_config as $group => $key ) {
-        if ( isset($key['http_server']) && isset($key['https_server']) ) {
-          if ( ('http://' . $server == $key['http_server']) || ('https://' . $server == $key['https_server']) ) {
+        if ( isset($key['http_server']) || isset($key['https_server']) ) {
+          if ( (isset($key['http_server']) && ('http://' . $server == $key['http_server'])) || (isset($key['https_server']) && ('https://' . $server == $key['https_server'])) ) {
             $sites[] = $group;
           }
         }
@@ -149,6 +149,34 @@
         $local = parse_ini_file(static::BASE_DIRECTORY . 'Config/local_settings.ini', true);
 
         $ini = array_merge($ini, $local);
+      }
+
+      $server = HTML::sanitize($_SERVER['SERVER_NAME']);
+
+      foreach ( $ini as $group => $key ) {
+        if (!isset($key['http_server']) && isset($key['urls'])) {
+          $urls = [];
+
+          foreach ($key['urls'] as $k => $v) {
+            list($alias, $param) = explode('.', $k, 2);
+
+            $urls[$alias][$param] = $v;
+          }
+
+          if (isset($urls['default'])) {
+            $url = $urls['default'];
+
+            foreach ($urls as $k => $v) {
+              if (((static::getRequestType() === 'NONSSL') && ('http://' . $server == $v['http_server'])) || (isset($v['enable_ssl']) && ($v['enable_ssl'] === 'true') && isset($v['https_server']) && ('https://' . $server == $v['https_server']))) {
+                $url = $urls[$k];
+                $url['urls_key'] = $k;
+                break;
+              }
+            }
+
+            $ini[$group] = array_merge($ini[$group], $url);
+          }
+        }
       }
 
       static::$_config = $ini;
