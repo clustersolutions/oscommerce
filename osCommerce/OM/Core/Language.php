@@ -249,6 +249,11 @@ class Language
         return $this->_languages[$this->_code]['numeric_separator_thousands'];
     }
 
+    public function formatNumber($number, $decimals = 0)
+    {
+        return number_format($number, $decimals, $this->getNumericDecimalSeparator(), $this->getNumericThousandsSeparator());
+    }
+
     public function showImage($code = null, $width = 16, $height = 10, $parameters = null)
     {
         if (!isset($code)) {
