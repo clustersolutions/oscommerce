@@ -16,7 +16,6 @@
       parent::__construct();
 
       header('Content-Type: text/html; charset=' . $this->getCharacterSet());
-      setlocale(LC_TIME, explode(',', $this->getLocale()));
 
       $this->loadIniFile();
       $this->loadIniFile(OSCOM::getSiteApplication() . '.php');

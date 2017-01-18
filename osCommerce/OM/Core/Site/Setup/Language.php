@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -44,7 +44,6 @@
       $this->set($language);
 
       header('Content-Type: text/html; charset=' . $this->getCharacterSet());
-      setlocale(LC_TIME, explode(',', $this->getLocale()));
 
       $this->loadIniFile();
       $this->loadIniFile(OSCOM::getSiteApplication() . '.php');

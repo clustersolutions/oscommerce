@@ -40,6 +40,10 @@ class Language
         }
 
         $this->set();
+
+        $system_locale_numeric = setlocale(LC_NUMERIC, 0);
+        setlocale(LC_ALL, explode(',', $this->getLocale()));
+        setlocale(LC_NUMERIC, $system_locale_numeric);
     }
 
     public function load($key, $language_code = null)
