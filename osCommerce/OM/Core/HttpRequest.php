@@ -37,7 +37,11 @@
       }
 
       if ( !isset($parameters['method']) ) {
-        $parameters['method'] = 'post';
+        if ( strlen($parameters['parameters']) > 0 ) {
+          $parameters['method'] = 'post';
+        } else {
+          $parameters['method'] = 'get';
+        }
       }
 
       $parameters['server'] = parse_url($parameters['url']);
