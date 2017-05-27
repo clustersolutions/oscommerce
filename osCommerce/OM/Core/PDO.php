@@ -21,6 +21,7 @@ class PDO extends \PDO
     protected $_password;
     protected $_database;
     protected $_port;
+    protected $_table_prefix;
     protected $_driver;
     protected $_driver_options = [];
     protected $_driver_parent;
@@ -207,6 +208,11 @@ class PDO extends \PDO
     public function getBatchFrom(int $pageset, int $max_results): int
     {
         return max(($pageset * $max_results) - $max_results, 0);
+    }
+
+    public function setTablePrefix(string $prefix)
+    {
+        $this->_table_prefix = $prefix;
     }
 
     public function getDriver(): string
@@ -439,9 +445,13 @@ class PDO extends \PDO
 
     protected function _autoPrefixTables(string $statement): string
     {
-        if (OSCOM::configExists('db_table_prefix')) {
-            $statement = str_replace(':table_', OSCOM::getConfig('db_table_prefix'), $statement);
+        if (!isset($this->_table_prefix) && OSCOM::configExists('db_table_prefix')) {
+            $this->_table_prefix = OSCOM::getConfig('db_table_prefix');
         }
+
+        $prefix = $this->_table_prefix ?? '';
+
+        $statement = str_replace(':table_', $prefix, $statement);
 
         return $statement;
     }
