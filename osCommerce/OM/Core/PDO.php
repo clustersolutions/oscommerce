@@ -101,10 +101,12 @@ class PDO extends \PDO
         return $PDOStatement;
     }
 
-    public function save(string $table, array $data, array $where_condition = null): int
+    public function save(string $table, array $data, array $where_condition = null, array $options = null): int
     {
-        if ((strlen($table) < 7) || (substr($table, 0, 7) != ':table_')) {
-            $table = ':table_' . $table;
+        if (!isset($options['prefix_tables']) || ($options['prefix_tables'] === true)) {
+            if ((strlen($table) < 7) || (substr($table, 0, 7) != ':table_')) {
+                $table = ':table_' . $table;
+            }
         }
 
         if (isset($where_condition)) {
@@ -180,10 +182,12 @@ class PDO extends \PDO
         return -1;
     }
 
-    public function delete(string $table, array $where_condition): int
+    public function delete(string $table, array $where_condition, array $options = null): int
     {
-        if ((strlen($table) < 7) || (substr($table, 0, 7) != ':table_')) {
-            $table = ':table_' . $table;
+        if (!isset($options['prefix_tables']) || ($options['prefix_tables'] === true)) {
+            if ((strlen($table) < 7) || (substr($table, 0, 7) != ':table_')) {
+                $table = ':table_' . $table;
+            }
         }
 
         $statement = 'delete from ' . $table . ' where ';
