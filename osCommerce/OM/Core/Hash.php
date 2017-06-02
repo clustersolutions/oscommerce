@@ -52,6 +52,12 @@ class Hash
             return '';
         }
 
+        if ($length < 1) {
+            trigger_error('osCommerce\\OM\\Core\\Hash::getRandomString() $length must be 1 or higher value', E_USER_ERROR);
+
+            return '';
+        }
+
         $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $digits = '0123456789';
 
@@ -65,22 +71,12 @@ class Hash
             $base .= $digits;
         }
 
+        $base_length = strlen($base) - 1;
+
         $rand_value = '';
 
-        do {
-           $random = base64_encode(random_bytes($length));
-
-            for ($i = 0, $n = strlen($random); $i < $n; $i++) {
-                $char = substr($random, $i, 1);
-
-                if (strpos($base, $char) !== false) {
-                    $rand_value .= $char;
-                }
-            }
-        } while (strlen($rand_value) < $length);
-
-        if (strlen($rand_value) > $length) {
-            $rand_value = substr($rand_value, 0, $length);
+        for ($i = 0; $i < $length; $i++) {
+            $rand_value .= $base[random_int(0, $base_length)];
         }
 
         return $rand_value;
