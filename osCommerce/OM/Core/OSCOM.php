@@ -594,9 +594,38 @@
     public static function autoload($class) {
       $prefix = 'osCommerce\\OM\\';
 
-// only auto load related classes
       $len = strlen($prefix);
-      if ( strncmp($prefix, $class, $len) !== 0 ) {
+      if ( strncmp($prefix, $class, $len) !== 0 ) { // try and autoload external classes
+        $class_path = str_replace('\\', DIRECTORY_SEPARATOR, $class);
+
+        $file = OSCOM_BASE_DIRECTORY . 'External' . DIRECTORY_SEPARATOR . $class_path . '.php';
+
+        if ( is_file($file) ) {
+          require($file);
+
+          return true;
+        }
+
+        $site_dirs = [
+          'Core',
+          'Custom'
+        ];
+
+        foreach ( $site_dirs as $site_dir ) {
+          $DL = new DirectoryListing(OSCOM_BASE_DIRECTORY . $site_dir . DIRECTORY_SEPARATOR . 'Site');
+          $DL->setIncludeFiles(false);
+
+          foreach ( $DL->getFiles() as $f ) {
+            $file = $DL->getDirectory() . DIRECTORY_SEPARATOR . $f['name'] . DIRECTORY_SEPARATOR . 'External' . DIRECTORY_SEPARATOR . $class_path . '.php';
+
+            if ( is_file($file) ) {
+              require($file);
+
+              return true;
+            }
+          }
+        }
+
         return false;
       }
 
@@ -605,9 +634,9 @@
       $file = OSCOM_BASE_DIRECTORY . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
       $custom = str_replace('osCommerce' . DIRECTORY_SEPARATOR . 'OM' . DIRECTORY_SEPARATOR . 'Core' . DIRECTORY_SEPARATOR, 'osCommerce' . DIRECTORY_SEPARATOR . 'OM' . DIRECTORY_SEPARATOR . 'Custom' . DIRECTORY_SEPARATOR, $file);
 
-      if ( file_exists($custom) ) {
+      if ( is_file($custom) ) {
         require($custom);
-      } else if ( file_exists($file) ) {
+      } else if ( is_file($file) ) {
         require($file);
       }
     }
