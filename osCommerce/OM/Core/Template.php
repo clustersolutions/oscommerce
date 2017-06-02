@@ -685,7 +685,7 @@
     public function parseContent($content, $whitelist = null) {
       static $loaded_tags = array();
 
-      $pattern = '/{([[:alpha:]][[:alnum:]]*)\b( .*?)?}(.*?)?{\1}/s';
+      $pattern = '/(?<!\{)\{([[:alpha:]][[:alnum:]]*)\b( .*?)?\}(.*?)?(?<!\{)\{\1\}/s';
 
       $le = function ($matches) use (&$le, &$pattern, $whitelist) {
         $string = $matches[3];
