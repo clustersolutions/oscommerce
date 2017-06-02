@@ -148,7 +148,9 @@
         return OSCOM::BASE_DIRECTORY . 'Core/Site/' . $site . '/Application/' . $application . '/pages/' . $file;
       }
 
-      trigger_error('Template::getPageContentsFile() $file does not exist: ' . $file);
+      if (!OSCOM::isRPC()) {
+        trigger_error('Template::getPageContentsFile() $file does not exist: ' . $file);
+      }
 
       return false;
     }
