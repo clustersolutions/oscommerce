@@ -149,8 +149,8 @@ class PDO extends \PDO
             $statement = 'insert into ' . $table . ' (' . implode(', ', array_keys($data)) . ') values (';
 
             foreach ($data as $c => $v) {
-                if ($v == 'now()' || $v == 'null') {
-                    $statement .= $v . ', ';
+                if ($v == 'now()' || $v == 'null' || is_null($v)) {
+                    $statement .= ($v ?? 'null') . ', ';
                 } else {
                     if ($is_prepared === false) {
                         $is_prepared = true;
@@ -166,7 +166,7 @@ class PDO extends \PDO
                 $Q = $this->prepare($statement);
 
                 foreach ($data as $c => $v) {
-                    if ($v != 'now()' && $v != 'null') {
+                    if ($v != 'now()' && $v != 'null' && !is_null($v)) {
                         $Q->bindValue(':' . $c, $v);
                     }
                 }
