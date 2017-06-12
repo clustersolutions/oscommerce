@@ -48,8 +48,9 @@
     public static function setSite($site = null) {
       if ( isset($site) ) {
         if ( !static::siteExists($site) ) {
-          trigger_error('Site \'' . $site . '\' does not exist, using default \'' . static::getDefaultSite() . '\'', E_USER_ERROR);
-          $site = static::getDefaultSite();
+          trigger_error('Site \'' . $site . '\' does not exist, using \'' . (static::$_site ?? static::getDefaultSite()) . '\'', E_USER_ERROR);
+
+          unset($site);
         }
       } else {
         if ( !empty($_GET) ) {
@@ -57,15 +58,11 @@
 
           if ( preg_match('/^[A-Z][A-Za-z0-9-_]*$/', $requested_site) && static::siteExists($requested_site) ) {
             $site = $requested_site;
-          } else {
-            $site = static::getDefaultSite();
           }
-        } else {
-          $site = static::getDefaultSite();
         }
       }
 
-      static::$_site = $site;
+      static::$_site = $site ?? static::$_site ?? static::getDefaultSite();
     }
 
     public static function getSite() {
@@ -74,21 +71,24 @@
 
     public static function getDefaultSite() {
       $site = static::getConfig('default_site', 'OSCOM');
-      $server = HTML::sanitize($_SERVER['SERVER_NAME']);
 
-      $sites = array();
+      if (isset($_SERVER['SERVER_NAME'])) {
+        $server = HTML::sanitize($_SERVER['SERVER_NAME']);
 
-      foreach ( static::$_config as $group => $key ) {
-        if ( isset($key['http_server']) || isset($key['https_server']) ) {
-          if ( (isset($key['http_server']) && ('http://' . $server == $key['http_server'])) || (isset($key['https_server']) && ('https://' . $server == $key['https_server'])) ) {
-            $sites[] = $group;
+        $sites = array();
+
+        foreach ( static::$_config as $group => $key ) {
+          if ( isset($key['http_server']) || isset($key['https_server']) ) {
+            if ( (isset($key['http_server']) && ('http://' . $server == $key['http_server'])) || (isset($key['https_server']) && ('https://' . $server == $key['https_server'])) ) {
+              $sites[] = $group;
+            }
           }
         }
-      }
 
-      if ( count($sites) > 0 ) {
-        if ( !in_array($site, $sites) ) {
-          $site = $sites[0];
+        if ( count($sites) > 0 ) {
+          if ( !in_array($site, $sites) ) {
+            $site = $sites[0];
+          }
         }
       }
 
@@ -151,7 +151,7 @@
         $ini = array_merge($ini, $local);
       }
 
-      $server = HTML::sanitize($_SERVER['SERVER_NAME']);
+      $server = isset($_SERVER['SERVER_NAME']) ? HTML::sanitize($_SERVER['SERVER_NAME']) : null;
 
       foreach ( $ini as $group => $key ) {
         if (!isset($key['http_server']) && isset($key['urls'])) {
