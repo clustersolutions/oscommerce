@@ -15,7 +15,7 @@ use osCommerce\OM\Core\{
 
 class PDO extends \PDO
 {
-    protected $_connected = false;
+    protected $_instance;
     protected $_server;
     protected $_username;
     protected $_password;
@@ -76,16 +76,24 @@ class PDO extends \PDO
 
     public function exec($statement): int
     {
+        if (!isset($this->_instance)) {
+            $this->connect();
+        }
+
         $statement = $this->_autoPrefixTables($statement);
 
-        return parent::exec($statement);
+        return $this->_instance->exec($statement);
     }
 
     public function prepare($statement, $driver_options = []): \PDOStatement
     {
+        if (!isset($this->_instance)) {
+            $this->connect();
+        }
+
         $statement = $this->_autoPrefixTables($statement);
 
-        $PDOStatement = parent::prepare($statement, $driver_options);
+        $PDOStatement = $this->_instance->prepare($statement, $driver_options);
         $PDOStatement->setQueryCall('prepare');
 
         return $PDOStatement;
@@ -93,9 +101,13 @@ class PDO extends \PDO
 
     public function query($statement, ...$params): \PDOStatement
     {
+        if (!isset($this->_instance)) {
+            $this->connect();
+        }
+
         $statement = $this->_autoPrefixTables($statement);
 
-        $PDOStatement = parent::query($statement, ...$params);
+        $PDOStatement = $this->_instance->query($statement, ...$params);
         $PDOStatement->setQueryCall('query');
 
         return $PDOStatement;

@@ -26,8 +26,6 @@
       if ( $this->_has_native_fk === false ) {
         $this->_driver_options[self::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
       }
-
-      return $this->connect();
     }
 
     public function connect() {
@@ -51,15 +49,11 @@
 
       $dsn = 'mysql:' . implode(';', $dsn_array);
 
-      $this->_connected = true;
-
-      $dbh = parent::__construct($dsn, $this->_username, $this->_password, $this->_driver_options);
+      $this->_instance = new \PDO($dsn, $this->_username, $this->_password, $this->_driver_options);
 
       if ( (OSCOM::getSite() != 'Setup') && $this->_has_native_fk === false ) {
         $this->setupForeignKeys();
       }
-
-      return $dbh;
     }
 
     public function getForeignKeys($table = null) {

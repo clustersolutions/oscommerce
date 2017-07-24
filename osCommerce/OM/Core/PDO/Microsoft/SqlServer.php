@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -16,10 +16,6 @@
       $this->_database = $database;
       $this->_port = $port;
       $this->_driver_options = $driver_options;
-
-      if ( $this->_connected === false ) {
-        $this->connect();
-      }
     }
 
     public function connect() {
@@ -31,9 +27,7 @@
 
       $dsn .= '; Database=' . $this->_database;
 
-      parent::__construct($dsn, $this->_username, $this->_password, $this->_driver_options);
-
-      $this->_connected = true;
+      $this->_instance = new \PDO($dsn, $this->_username, $this->_password, $this->_driver_options);
     }
   }
 ?>
