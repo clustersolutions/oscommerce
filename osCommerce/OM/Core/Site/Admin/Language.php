@@ -121,15 +121,17 @@
     }
 
     function getData($id, $key = null) {
-      $data = array('id' => $id);
-
-      $result = OSCOM::callDB('Admin\GetLanguage', $data, 'Site');
-
-      if ( empty($key) ) {
-        return $result;
-      } else {
-        return $result[$key];
+      foreach ($this->_languages as $l) {
+        if ($l['id'] == $id) {
+          if (empty($key)) {
+            return $l;
+          } else {
+            return $l[$key];
+          }
+        }
       }
+
+      return null;
     }
 
     function getID($code = null) {
