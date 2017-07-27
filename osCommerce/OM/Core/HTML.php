@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2012 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -184,7 +184,7 @@
 
 /**
  * Generate a jQuery UI button
- * 
+ *
  * @param array $params types(submit, button, reset), href, newwindow, params, title, icon, iconpos(left, right), priority(primary, secondary)
  * @return string
  * @since v3.0.0
@@ -401,28 +401,30 @@
 
       $field .= '>';
 
-      for ( $i=0, $n=count($values); $i<$n; $i++ ) {
-        if ( isset($values[$i]['group']) ) {
-          if ( $group != $values[$i]['group'] ) {
-            $group = $values[$i]['group'];
+      $vit = new \CachingIterator(new \ArrayIterator($values), \CachingIterator::TOSTRING_USE_CURRENT);
 
-            $field .= '<optgroup label="' . static::output($values[$i]['group']) . '">';
+      foreach ($vit as $v) {
+        if ( isset($v['group']) ) {
+          if ( $group != $v['group'] ) {
+            $group = $v['group'];
+
+            $field .= '<optgroup label="' . static::output($v['group']) . '">';
           }
         }
 
-        $field .= '<option value="' . static::output($values[$i]['id']) . '"';
+        $field .= '<option value="' . static::output($v['id']) . '"';
 
-        if ( isset($default) && ((!is_array($default) && ((string)$default == (string)$values[$i]['id'])) || (is_array($default) && in_array($values[$i]['id'], $default))) ) {
+        if ( isset($default) && ((!is_array($default) && ((string)$default == (string)$v['id'])) || (is_array($default) && in_array($v['id'], $default))) ) {
           $field .= ' selected="selected"';
         }
 
-        if ( isset($values[$i]['params']) ) {
-          $field .= ' ' . $values[$i]['params'];
+        if ( isset($v['params']) ) {
+          $field .= ' ' . $v['params'];
         }
 
-        $field .= '>' . static::output($values[$i]['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
+        $field .= '>' . static::output($v['text'], array('"' => '&quot;', '\'' => '&#039;', '<' => '&lt;', '>' => '&gt;')) . '</option>';
 
-        if ( ($group !== false) && (($group != $values[$i]['group']) || !isset($values[$i+1])) ) {
+        if ( ($group !== false) && (($group != $v['group']) || !$vit->hasNext()) ) {
           $group = false;
 
           $field .= '</optgroup>';
@@ -730,7 +732,7 @@
 
 /**
  * Generate a time zone selection menu
- * 
+ *
  * @param $name string The name of the selection field
  * @param $default The default value
  * @return string
