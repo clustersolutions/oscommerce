@@ -24,7 +24,7 @@
 
 // Override ATTR_STATEMENT_CLASS to automatically handle foreign key constraints
       if ( $this->_has_native_fk === false ) {
-        $this->_driver_options[self::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
+        $this->_driver_options[\PDO::ATTR_STATEMENT_CLASS] = array('osCommerce\\OM\\Core\\PDO\\MySQL\\Standard\\PDOStatement', array($this));
       }
     }
 

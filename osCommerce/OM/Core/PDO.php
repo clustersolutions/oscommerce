@@ -13,7 +13,7 @@ use osCommerce\OM\Core\{
     OSCOM
 };
 
-class PDO extends \PDO
+class PDO
 {
     protected $_instance;
     protected $_server;
@@ -26,7 +26,7 @@ class PDO extends \PDO
     protected $_driver_options = [];
     protected $_driver_parent;
 
-    public static function initialize(string $server = null, string $username = null, string $password = null, string $database = null, int $port = null, string $driver = null, array $driver_options = []): \PDO
+    public static function initialize(string $server = null, string $username = null, string $password = null, string $database = null, int $port = null, string $driver = null, array $driver_options = []): PDO
     {
         if (!isset($server)) {
             $server = OSCOM::getConfig('db_server');
@@ -52,16 +52,16 @@ class PDO extends \PDO
             $driver = OSCOM::getConfig('db_driver');
         }
 
-        if (!isset($driver_options[static::ATTR_ERRMODE])) {
-            $driver_options[static::ATTR_ERRMODE] = static::ERRMODE_WARNING;
+        if (!isset($driver_options[\PDO::ATTR_ERRMODE])) {
+            $driver_options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_WARNING;
         }
 
-        if (!isset($driver_options[static::ATTR_DEFAULT_FETCH_MODE])) {
-            $driver_options[static::ATTR_DEFAULT_FETCH_MODE] = static::FETCH_ASSOC;
+        if (!isset($driver_options[\PDO::ATTR_DEFAULT_FETCH_MODE])) {
+            $driver_options[\PDO::ATTR_DEFAULT_FETCH_MODE] = \PDO::FETCH_ASSOC;
         }
 
-        if (!isset($driver_options[static::ATTR_STATEMENT_CLASS])) {
-            $driver_options[static::ATTR_STATEMENT_CLASS] = [
+        if (!isset($driver_options[\PDO::ATTR_STATEMENT_CLASS])) {
+            $driver_options[\PDO::ATTR_STATEMENT_CLASS] = [
                 'osCommerce\\OM\\Core\\PDOStatement'
             ];
         }
@@ -470,5 +470,23 @@ class PDO extends \PDO
         $statement = str_replace(':table_', $prefix, $statement);
 
         return $statement;
+    }
+
+    public function __call(string $name, array $arguments)
+    {
+        if (isset($this->_instance)) {
+            return call_user_func_array([
+                $this->_instance,
+                $name
+            ], $arguments);
+        }
+    }
+
+    public static function __callStatic(string $name, array $arguments)
+    {
+        return forward_static_call_array([
+            '\PDO',
+            $name
+        ], $arguments);
     }
 }
