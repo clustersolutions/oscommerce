@@ -173,7 +173,7 @@ class PDOStatement extends \PDOStatement
 
             case 'string':
             default:
-                return $this->result[$column];
+                return $this->result[$column] ?? '';
         }
     }
 
