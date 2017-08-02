@@ -113,6 +113,155 @@ class PDO
         return $PDOStatement;
     }
 
+    public function get($table, $fields, array $where = null, $order = null, $limit = null, array $options = null): \PDOStatement
+    {
+        if (!is_array($table)) {
+            $table = [ $table ];
+        }
+
+        if (!isset($options['prefix_tables']) || ($options['prefix_tables'] === true)) {
+            $new_table = [];
+
+            array_walk($table, function($v, $k) use (&$new_table) { // array_walk cannot alter keys
+                if (is_array($v)) {
+                    if ((strlen($k) < 7) || (substr($k, 0, 7) != ':table_')) {
+                        $k = ':table_' . $k;
+                    }
+
+                    if ((strlen($v['rel']) < 7) || (substr($v['rel'], 0, 7) != ':table_')) {
+                        $v['rel'] = ':table_' . $v['rel'];
+                    }
+                } else {
+                    if ((strlen($v) < 7) || (substr($v, 0, 7) != ':table_')) {
+                        $v = ':table_' . $v;
+                    }
+                }
+
+                $new_table[$k] = $v;
+            });
+
+            $table = $new_table;
+        }
+
+        if (!is_array($fields)) {
+            $fields = [ $fields ];
+        }
+
+        if (isset($order) && !is_array($order)) {
+            $order = [ $order ];
+        }
+
+        if (isset($limit)) {
+            if (is_array($limit) && (count($limit) === 2) && is_numeric($limit[0]) && is_numeric($limit[1])) {
+                $limit = implode(', ', $limit);
+            } elseif (!is_numeric($limit)) {
+                $limit = null;
+            }
+        }
+
+        $statement = 'select ' . implode(', ', $fields) . ' from ';
+
+        $it_table = new \CachingIterator(new \ArrayIterator($table), \CachingIterator::TOSTRING_USE_CURRENT);
+
+        foreach ($it_table as $tk => $tv) {
+            if (is_array($tv)) {
+                $statement .= $tk . ' left join ' . $tv['rel'] . ' on (' . $tv['on'] . ')';
+            } else {
+                $statement .= $tv;
+            }
+
+            if ($it_table->hasNext()) {
+                $statement .= ', ';
+            }
+        }
+
+        if (!isset($where)) {
+            if (isset($order)) {
+                $statement .= ' order by ' . implode(', ', $order);
+            }
+
+            if (isset($limit)) {
+                $statement .= ' limit ' . $limit;
+            }
+
+            return $this->query($statement);
+        }
+
+        if (isset($where)) {
+            $statement .= ' where ';
+
+            $counter = 0;
+
+            $it_where = new \CachingIterator(new \ArrayIterator($where), \CachingIterator::TOSTRING_USE_CURRENT);
+
+            foreach ($it_where as $key => $value) {
+                if (is_array($value)) {
+                    if (isset($value['val'])) {
+                        $statement .= $key . ' ' . (isset($value['op']) ? $value['op'] : '=') . ' :cond_' . $counter;
+                    }
+
+                    if (isset($value['rel'])) {
+                        if (isset($value['val'])) {
+                            $statement .= ' and ';
+                        }
+
+                        if (is_array($value['rel'])) {
+                            $it_rel = new \CachingIterator(new \ArrayIterator($value['rel']), \CachingIterator::TOSTRING_USE_CURRENT);
+
+                            foreach ($it_rel as $rel) {
+                                $statement .= $key . ' = ' . $rel;
+
+                                if ($it_rel->hasNext()) {
+                                    $statement .= ' and ';
+                                }
+                            }
+                        } else {
+                            $statement .= $key . ' = ' . $value['rel'];
+                        }
+                    }
+                } else {
+                    $statement .= $key . ' = :cond_' . $counter;
+                }
+
+                if ($it_where->hasNext()) {
+                    $statement .= ' and ';
+                }
+
+                $counter++;
+            }
+        }
+
+        if (isset($order)) {
+            $statement .= ' order by ' . implode(', ', $order);
+        }
+
+        if (isset($limit)) {
+            $statement .= ' limit ' . $limit;
+        }
+
+        $Q = $this->prepare($statement);
+
+        if (isset($where)) {
+            $counter = 0;
+
+            foreach ($it_where as $value) {
+                if (is_array($value)) {
+                    if (isset($value['val'])) {
+                        $Q->bindValue(':cond_' . $counter, $value['val']);
+                    }
+                } else {
+                    $Q->bindValue(':cond_' . $counter, $value);
+                }
+
+                $counter++;
+            }
+        }
+
+        $Q->execute();
+
+        return $Q;
+    }
+
     public function save(string $table, array $data, array $where_condition = null, array $options = null): int
     {
         if (!isset($options['prefix_tables']) || ($options['prefix_tables'] === true)) {
