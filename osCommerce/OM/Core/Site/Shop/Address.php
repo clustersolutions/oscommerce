@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -70,32 +70,34 @@
       }
 
       if ( empty($address_format) ) {
-        $address_format = ":name\n:street_address\n:postcode :city\n:country";
+        $address_format = ":company\n:name\n:street_address\n:street_address_2\n:suburb\n:postcode :city\n:state\n:country";
       }
 
-      $find_array = array('/\:name\b/',
+      $find_array = array('/\:company\b/',
+                          '/\:name\b/',
                           '/\:street_address\b/',
+                          '/\:street_address_2\b/',
                           '/\:suburb\b/',
                           '/\:city\b/',
                           '/\:postcode\b/',
                           '/\:state\b/',
                           '/\:state_code\b/',
-                          '/\:country\b/');
+                          '/\:country\b/',
+                          '/' . "\n\n" . '+/s');
 
-      $replace_array = array(HTML::outputProtected($firstname . ' ' . $lastname),
+      $replace_array = array(defined('ACCOUNT_COMPANY') && (ACCOUNT_COMPANY > -1) && isset($address['company']) ? HTML::outputProtected($address['company']) : '',
+                             HTML::outputProtected($firstname . ' ' . $lastname),
                              HTML::outputProtected($address['street_address']),
-                             HTML::outputProtected($address['suburb']),
+                             HTML::outputProtected($address['street_address_2'] ?? ''),
+                             HTML::outputProtected($address['suburb'] ?? ''),
                              HTML::outputProtected($address['city']),
                              HTML::outputProtected($address['postcode']),
                              HTML::outputProtected($state),
                              HTML::outputProtected($state_code),
-                             HTML::outputProtected($country));
+                             HTML::outputProtected($country),
+                             "\n");
 
       $formated = preg_replace($find_array, $replace_array, $address_format);
-
-      if ( (ACCOUNT_COMPANY > -1) && !empty($address['company']) ) {
-        $formated = HTML::outputProtected($address['company']) . "\n" . $formated;
-      }
 
       if ( !empty($new_line) ) {
         $formated = str_replace("\n", $new_line, $formated);
@@ -132,6 +134,72 @@
       }
 
       return $countries;
+    }
+
+    public static function countryExists($id) {
+      $OSCOM_PDO = Registry::get('PDO');
+
+      if (!is_numeric($id) && !in_array(strlen($id), [2, 3])) {
+        return false;
+      }
+
+      $sql = 'select countries_id from :table_countries where ';
+
+      if (is_numeric($id)) {
+        $sql .= 'countries_id = :countries_id';
+      } elseif (strlen($id) === 2) {
+        $sql .= 'countries_iso_code_2 = :countries_iso_code_2';
+      } else {
+        $sql .= 'countries_iso_code_3 = :countries_iso_code_3';
+      }
+
+      $sql .= ' limit 1';
+
+      $Qcountry = $OSCOM_PDO->prepare($sql);
+
+      if (is_numeric($id)) {
+        $Qcountry->bindInt(':countries_id', $id);
+      } elseif (strlen($id) === 2) {
+        $Qcountry->bindValue(':countries_iso_code_2', $id);
+      } else {
+        $Qcountry->bindValue(':countries_iso_code_3', $id);
+      }
+
+      $Qcountry->execute();
+
+      return $Qcountry->fetch() !== false;
+    }
+
+    public static function getCountryId($code) {
+      $OSCOM_PDO = Registry::get('PDO');
+
+      if (in_array(strlen($code), [2, 3])) {
+        $sql = 'select countries_id from :table_countries where ';
+
+        if (strlen($code) === 2) {
+          $sql .= 'countries_iso_code_2 = :countries_iso_code_2';
+        } else {
+          $sql .= 'countries_iso_code_3 = :countries_iso_code_3';
+        }
+
+        $sql .= ' limit 1';
+
+        $Qcountry = $OSCOM_PDO->prepare($sql);
+
+        if (strlen($code) === 2) {
+          $Qcountry->bindValue(':countries_iso_code_2', $code);
+        } else {
+          $Qcountry->bindValue(':countries_iso_code_3', $code);
+        }
+
+        $Qcountry->execute();
+
+        if ($Qcountry->fetch() !== false) {
+          return $Qcountry->valueInt('countries_id');
+        }
+      }
+
+      return -1;
     }
 
 /**
@@ -206,6 +274,21 @@
       return $Qcountry->value('address_format');
     }
 
+    public static function getZoneId(int $country_id, string $zone_code) {
+      $OSCOM_PDO = Registry::get('PDO');
+
+      $Qzone = $OSCOM_PDO->prepare('select zone_id from :table_zones where zone_country_id = :zone_country_id and zone_code = :zone_code');
+      $Qzone->bindInt(':zone_country_id', $country_id);
+      $Qzone->bindValue(':zone_code', $zone_code);
+      $Qzone->execute();
+
+      if ($Qzone->fetch() !== false) {
+        return $Qzone->valueInt('zone_id');
+      }
+
+      return -1;
+    }
+
 /**
  * Return the zone name
  *
@@ -274,17 +357,38 @@
 
       $zones_array = array();
 
-      $sql_query = 'select z.zone_id, z.zone_country_id, z.zone_name, c.countries_name from :table_zones z, :table_countries c where';
+      $sql_query = 'select z.zone_id, z.zone_country_id, z.zone_name, z.zone_code, c.countries_name from :table_zones z, :table_countries c where z.zone_country_id = c.countries_id';
 
       if ( !empty($id) ) {
-        $sql_query .= ' z.zone_country_id = :zone_country_id and';
+        if ( is_array($id) ) {
+          $sql_query .= ' and c.countries_iso_code_2 in (';
+
+          for ( $i = 0, $n = count($id); $i < $n; $i++ ) {
+            $sql_query .= ':iso2_' . $i . ', ';
+          }
+
+          $sql_query = substr($sql_query, 0, -2) . ')';
+        } elseif ( is_numeric($id) ) {
+          $sql_query .= ' and c.countries_id = :countries_id';
+        } else {
+          $sql_query .= ' and c.countries_iso_code_2 = :countries_iso_code_2';
+        }
       }
 
-      $sql_query .= ' z.zone_country_id = c.countries_id order by c.countries_name, z.zone_name';
+      $sql_query .= ' order by c.countries_name, z.zone_name';
 
       if ( !empty($id) ) {
         $Qzones = $OSCOM_PDO->prepare($sql_query);
-        $Qzones->bindInt(':zone_country_id', $id);
+
+        if ( is_array($id) ) {
+          for ( $i = 0, $n = count($id); $i < $n; $i++ ) {
+            $Qzones->bindValue(':iso2_' . $i, $id[$i]);
+          }
+        } elseif ( is_numeric($id) ) {
+          $Qzones->bindInt(':countries_id', $id);
+        } else {
+          $Qzones->bindValue(':countries_iso_code_2', $id);
+        }
       } else {
         $Qzones = $OSCOM_PDO->query($sql_query);
       }
@@ -294,6 +398,7 @@
       while ( $Qzones->fetch() ) {
         $zones_array[] = array('id' => $Qzones->valueInt('zone_id'),
                                'name' => $Qzones->value('zone_name'),
+                               'code' => $Qzones->value('zone_code'),
                                'country_id' => $Qzones->valueInt('zone_country_id'),
                                'country_name' => $Qzones->value('countries_name'));
       }
