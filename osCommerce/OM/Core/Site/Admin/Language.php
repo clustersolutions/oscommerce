@@ -56,6 +56,28 @@
         }
       }
 
+      $this->parseIniContents($contents, $comment);
+    }
+
+    public function loadIniFileFromDirectory($directory, $filename, $comment = '#', $language_code = null) {
+      if ( is_null($language_code) ) {
+        $language_code = $this->_code;
+      }
+
+      if ( $this->_languages[$language_code]['parent_id'] > 0 ) {
+        $this->loadFromDirectory($directory, $filename, $comment, $this->getCodeFromID($this->_languages[$language_code]['parent_id']));
+      }
+
+      if ( is_file($directory . '/' . $language_code . '/' . $filename) ) {
+        $contents = file($directory . '/' . $language_code . '/' . $filename);
+      } else {
+        return array();
+      }
+
+      $this->parseIniContents($contents, $comment);
+    }
+
+    public function parseIniContents($contents, $comment = '#') {
       $ini_array = array();
 
       foreach ( $contents as $line ) {
@@ -76,8 +98,6 @@
           }
         }
       }
-
-      unset($contents);
 
       $this->_definitions = array_merge($this->_definitions, $ini_array);
     }
