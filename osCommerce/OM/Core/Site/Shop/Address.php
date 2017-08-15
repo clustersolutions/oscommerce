@@ -50,14 +50,14 @@
       }
 
       $state = $address['state'];
-      $state_code = $address['zone_code'];
+      $state_code = $address['zone_code'] ?? null;
 
       if ( isset($address['zone_id']) && is_numeric($address['zone_id']) && ($address['zone_id'] > 0) ) {
         $state = self::getZoneName($address['zone_id']);
         $state_code = self::getZoneCode($address['zone_id']);
       }
 
-      $country = $address['country_title'];
+      $country = $address['country_title'] ?? null;
 
       if ( empty($country) && isset($address['country_id']) && is_numeric($address['country_id']) && ($address['country_id'] > 0) ) {
         $country = self::getCountryName($address['country_id']);
@@ -85,7 +85,7 @@
                           '/\:country\b/',
                           '/' . "\n\n" . '+/s');
 
-      $replace_array = array(defined('ACCOUNT_COMPANY') && (ACCOUNT_COMPANY > -1) && isset($address['company']) ? HTML::outputProtected($address['company']) : '',
+      $replace_array = array(HTML::outputProtected($address['company']),
                              HTML::outputProtected($firstname . ' ' . $lastname),
                              HTML::outputProtected($address['street_address']),
                              HTML::outputProtected($address['street_address_2'] ?? ''),
