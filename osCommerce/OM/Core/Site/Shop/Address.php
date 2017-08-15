@@ -85,7 +85,7 @@
                           '/\:country\b/',
                           '/' . "\n\n" . '+/s');
 
-      $replace_array = array(HTML::outputProtected($address['company']),
+      $replace_array = array(HTML::outputProtected($address['company'] ?? ''),
                              HTML::outputProtected($firstname . ' ' . $lastname),
                              HTML::outputProtected($address['street_address']),
                              HTML::outputProtected($address['street_address_2'] ?? ''),
