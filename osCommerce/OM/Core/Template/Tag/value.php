@@ -16,6 +16,14 @@ class value extends \osCommerce\OM\Core\Template\TagAbstract
 
     static public function execute($string, ...$args): string
     {
-        return HTML::outputProtected(raw::execute($string, ...$args));
+        $result = '';
+
+        $value = raw::execute($string, ...$args);
+
+        if (is_string($value) && !empty($value)) {
+            $result = HTML::outputProtected($value);
+        }
+
+        return $result;
     }
 }

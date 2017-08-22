@@ -35,8 +35,16 @@ class raw extends \osCommerce\OM\Core\Template\TagAbstract
             if ($OSCOM_Template->valueExists($array)) {
                 $value = $OSCOM_Template->getValue($array);
 
-                if (is_array($value) && isset($value[$key])) {
-                    $result = $value[$key];
+                if (is_array($value)) {
+                    foreach (explode(' ', $key) as $k) {
+                        if (isset($value[$k])) {
+                            $value = $value[$k];
+                        } else {
+                            break;
+                        }
+                    }
+
+                    $result = $value;
                 }
             }
         }
