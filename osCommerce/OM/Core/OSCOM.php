@@ -415,7 +415,7 @@
       return static::getLink('RPC', $site, $application . '&' . $parameters, $connection, $add_session_id, $search_engine_safe);
     }
 
-    public static function redirect($url) {
+    public static function redirect(string $url, int $http_response_code = null) {
       if ( (strpos($url, "\n") !== false) || (strpos($url, "\r") !== false) ) {
         $url = static::getLink(OSCOM::getDefaultSite());
       }
@@ -424,7 +424,7 @@
         $url = str_replace('&amp;', '&', $url);
       }
 
-      header('Location: ' . $url);
+      header('Location: ' . $url, true, $http_response_code);
 
       exit;
     }
