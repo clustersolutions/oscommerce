@@ -20,7 +20,7 @@ class value extends \osCommerce\OM\Core\Template\TagAbstract
 
         $value = raw::execute($string, ...$args);
 
-        if (is_string($value) && !empty($value)) {
+        if (!empty($value)) {
             $result = HTML::outputProtected($value);
         }
 
