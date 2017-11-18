@@ -179,6 +179,10 @@ class PDOStatement extends \PDOStatement
 
     public function hasValue(string $column): bool
     {
+        if (!isset($this->result)) {
+            $this->fetch();
+        }
+
         return !is_null($this->result[$column]) && (strlen($this->result[$column]) > 0);
     }
 
