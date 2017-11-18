@@ -220,7 +220,11 @@ class PDO
                         }
                     }
                 } else {
-                    $statement .= $key . ' = :cond_' . $counter;
+                    if ($value == 'null') {
+                        $statement .= $key . ' is null';
+                    } else {
+                        $statement .= $key . ' = :cond_' . $counter;
+                    }
                 }
 
                 if ($it_where->hasNext()) {
@@ -250,7 +254,9 @@ class PDO
                         $Q->bindValue(':cond_' . $counter, $value['val']);
                     }
                 } else {
-                    $Q->bindValue(':cond_' . $counter, $value);
+                    if ($value != 'null') {
+                        $Q->bindValue(':cond_' . $counter, $value);
+                    }
                 }
 
                 $counter++;
