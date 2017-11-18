@@ -84,7 +84,11 @@ class PDOStatement extends \PDOStatement
     public function fetch($fetch_style = \PDO::FETCH_ASSOC, $cursor_orientation = \PDO::FETCH_ORI_NEXT, $cursor_offset = 0)
     {
         if ($this->_cache_read === true) {
-            list(, $this->result) = each($this->_cache_data);
+            $this->result = current($this->_cache_data);
+
+            if ($this->result !== false) {
+                next($this->_cache_data);
+            }
         } else {
             $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 
