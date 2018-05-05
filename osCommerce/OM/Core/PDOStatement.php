@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -72,7 +72,9 @@
 
     public function fetch($fetch_style = PDO::FETCH_ASSOC, $cursor_orientation = PDO::FETCH_ORI_NEXT, $cursor_offset = 0) {
       if ( $this->_cache_read === true ) {
-        list(, $this->result) = each($this->_cache_data);
+        //        list(, $this->result) = each($this->_cache_data);
+          $this->result = current($this->_cache_data);
+          next($this->_cache_data);
       } else {
         $this->result = parent::fetch($fetch_style, $cursor_orientation, $cursor_offset);
 
