@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -26,6 +26,7 @@
       $in_transaction = false;
 
       if ( count($data) > 1 ) {
+        $OSCOM_PDO->exec("SET autocommit=0;");
         $OSCOM_PDO->beginTransaction();
 
         $in_transaction = true;
