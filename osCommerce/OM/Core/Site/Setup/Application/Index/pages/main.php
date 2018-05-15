@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -20,7 +20,7 @@
 
     <li style="display: inline;"><?php echo '<a href="' . OSCOM::getLink(null, null, 'language=' . $available_language['code']) . '">' . $OSCOM_Language->showImage($available_language['code']) . '</a>'; ?></li>
 
-<?php      
+<?php
   }
 ?>
 
@@ -118,8 +118,8 @@
     <h2><?php echo OSCOM::getDef('page_heading_server_requirements'); ?></h2>
 
     <ul>
-      <li>PHP v5.3+ (with PDO MySQL extension)</li>
-      <li>MySQL v4.1.13+ or v5.0.7+</li>
+      <li>PHP v7+ (with PDO MySQL extension)</li>
+      <li>MySQL v5.0.7+</li>
     </ul>
 
     <h2><?php echo OSCOM::getDef('page_heading_installation_type'); ?></h2>

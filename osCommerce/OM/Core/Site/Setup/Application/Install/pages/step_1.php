@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -19,8 +19,7 @@
 
   $www_location = substr($www_location, 0, strpos($www_location, 'index.php'));
 
-  $db_table_types = array(array('id' => 'MySQL_Standard', 'text' => 'MySQL Standard'),
-                          array('id' => 'MySQL_V5', 'text' => 'MySQL v5'));
+  $db_table_types = array(array('id' => 'MySQL_V5', 'text' => 'MySQL v5'));
 
   if ( isset($_GET['with-pgsql']) && ($_GET['with-pgsql'] == '1') ) {
     array_unshift($db_table_types, array('id' => 'PostgreSQL', 'text' => 'PostgreSQL'));
