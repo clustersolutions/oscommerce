@@ -1,7 +1,7 @@
 <?php
 /**
  * osCommerce Online Merchant
- * 
+ *
  * @copyright Copyright (c) 2011 osCommerce; http://www.oscommerce.com
  * @license BSD License; http://www.oscommerce.com/bsdlicense.txt
  */
@@ -56,7 +56,7 @@
 
   if ( $OSCOM_Template->hasPageContentModules() ) {
     foreach ( $OSCOM_Service->getCallBeforePageContent() as $service ) {
-      Registry::get($service[0])->$service[1]();
+      Registry::get($service[0])->{$service[1]}();
     }
 
     foreach ( $OSCOM_Template->getContentModules('before') as $content_module ) {
