@@ -111,7 +111,7 @@
  */
 
     public static function hasSafeName($key) {
-      return preg_match('/^[a-zA-Z0-9-_]+$/', $key) === 1;
+      return preg_match('/^[a-zA-Z0-9-_.]+$/', $key) === 1;
     }
 
 /**
